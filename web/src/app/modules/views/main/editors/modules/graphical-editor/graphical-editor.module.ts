@@ -3,20 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { SpecmateSharedModule } from '../../../../../specmate/specmate.shared.module';
 import { MaximizeButtonModule } from '../maximize-button/maximize-button.module';
 import { ToolPalletteModule } from '../tool-pallette/tool-pallette.module';
-import { CEGGraphicalArc } from './components/ceg/ceg-graphical-arc.component';
-import { CEGGraphicalConnection } from './components/ceg/ceg-graphical-connection.component';
-import { CEGGraphicalNode } from './components/ceg/ceg-graphical-node.component';
-import { ArrowTip } from './components/common/arrow-tip.component';
-import { ConnectionLine } from './components/common/connection-line.component';
-import { GenericGraphicalConnection } from './components/common/generic-graphical-connection.component';
-import { GenericGraphicalNode } from './components/common/generic-graphical-node.component';
-import { TruncatedText } from './components/common/truncated-text.component';
 import { GraphicalEditor } from './components/graphical-editor.component';
-import { ProcessDecisionGraphicalNode } from './components/process/process-decision-graphical-node.component';
-import { ProcessEndGraphicalNode } from './components/process/process-end-graphical-node.component';
-import { ProcessGraphicalConnection } from './components/process/process-graphical-connection.component';
-import { ProcessStartGraphicalNode } from './components/process/process-start-graphical-node.component';
-import { ProcessStepGraphicalNode } from './components/process/process-step-graphical-node.component';
 
 @NgModule({
   imports: [
@@ -28,20 +15,7 @@ import { ProcessStepGraphicalNode } from './components/process/process-step-grap
   ],
   declarations: [
     // COMPONENTS IN THIS MODULE
-    GraphicalEditor,
-    GenericGraphicalNode,
-    GenericGraphicalConnection,
-    CEGGraphicalConnection,
-    CEGGraphicalNode,
-    CEGGraphicalArc,
-    ProcessGraphicalConnection,
-    ProcessStartGraphicalNode,
-    ProcessEndGraphicalNode,
-    ProcessStepGraphicalNode,
-    ProcessDecisionGraphicalNode,
-    ConnectionLine,
-    ArrowTip,
-    TruncatedText
+    GraphicalEditor
   ],
   exports: [
     // THE COMPONENTS VISIBLE TO THE OUTSIDE

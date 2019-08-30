@@ -1,9 +1,6 @@
-import { TranslateService } from '@ngx-translate/core';
 import { IContainer } from '../../../../../../../../model/IContainer';
 import { SpecmateDataService } from '../../../../../../../data/modules/data-service/services/specmate-data.service';
 import { SelectedElementService } from '../../../../../../side/modules/selected-element/services/selected-element.service';
-import { ClipboardService } from '../../../tool-pallette/services/clipboard-service';
-import { MultiselectionService } from '../../../tool-pallette/services/multiselection.service';
 import { CEGConnectionTool } from '../../../tool-pallette/tools/ceg/ceg-connection-tool';
 import { CEGDeleteTool } from '../../../tool-pallette/tools/ceg/ceg-delete-tool';
 import { CEGNodeTool } from '../../../tool-pallette/tools/ceg/ceg-node-tool';
@@ -23,10 +20,7 @@ export class ToolProvider extends ProviderBase {
     constructor(
         private model: IContainer,
         private dataService: SpecmateDataService,
-        private selectedElementService: SelectedElementService,
-        private translate: TranslateService,
-        private rectService: MultiselectionService,
-        private clipboardService: ClipboardService) {
+        private selectedElementService: SelectedElementService) {
         super(model);
     }
 

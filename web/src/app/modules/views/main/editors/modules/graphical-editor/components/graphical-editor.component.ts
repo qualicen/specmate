@@ -1,35 +1,22 @@
 import { ChangeDetectionStrategy, Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { mxgraph } from 'mxgraph'; // Typings only - no code!
-import { Config } from '../../../../../../../config/config';
-import { CEGModel } from '../../../../../../../model/CEGModel';
 import { IContainer } from '../../../../../../../model/IContainer';
 import { IModelConnection } from '../../../../../../../model/IModelConnection';
 import { IModelNode } from '../../../../../../../model/IModelNode';
-import { ISpecmatePositionableModelObject } from '../../../../../../../model/ISpecmatePositionableModelObject';
-import { Process } from '../../../../../../../model/Process';
-import { Arrays } from '../../../../../../../util/arrays';
 import { Id } from '../../../../../../../util/id';
-import { Type } from '../../../../../../../util/type';
 import { Url } from '../../../../../../../util/url';
 import { SpecmateDataService } from '../../../../../../data/modules/data-service/services/specmate-data.service';
 import { ValidationService } from '../../../../../../forms/modules/validation/services/validation.service';
 import { SelectedElementService } from '../../../../../side/modules/selected-element/services/selected-element.service';
-import { SelectionRect } from '../../../../../side/modules/selected-element/util/selection-rect';
-import { ClipboardService } from '../../tool-pallette/services/clipboard-service';
-import { MultiselectionService } from '../../tool-pallette/services/multiselection.service';
-import { ConnectionToolBase } from '../../tool-pallette/tools/connection-tool-base';
-import { CreateNodeToolBase } from '../../tool-pallette/tools/create-node-tool-base';
-import { ToolBase } from '../../tool-pallette/tools/tool-base';
 import { ConverterBase } from '../converters/converter-base';
 import { NodeNameConverterProvider } from '../providers/conversion/node-name-converter-provider';
 import { ElementProvider } from '../providers/properties/element-provider';
 import { NameProvider } from '../providers/properties/name-provider';
+import { ShapeData, ShapeProvider } from '../providers/properties/shape-provider';
 import { ToolProvider } from '../providers/properties/tool-provider';
-import { DeleteToolBase } from '../../tool-pallette/tools/delete-tool-base';
-import { ShapeProvider, ShapeData } from '../providers/properties/shape-provider';
-import { StyleChanger } from './util/style-changer';
 import { ChangeTranslator } from './util/change-translator';
+import { StyleChanger } from './util/style-changer';
 
 
 declare var require: any;
@@ -67,9 +54,7 @@ export class GraphicalEditor {
         private dataService: SpecmateDataService,
         private selectedElementService: SelectedElementService,
         private validationService: ValidationService,
-        private translate: TranslateService,
-        public multiselectionService: MultiselectionService,
-        private clipboardService: ClipboardService) {
+        private translate: TranslateService) {
         this.validationService.validationFinished.subscribe(() => {
             this.updateValidities();
         });
@@ -98,17 +83,20 @@ export class GraphicalEditor {
 
         this.graph.setTooltips(true);
 
-        this.graph.getModel().addListener(mx.mxEvent.CHANGE, (sender: mxgraph.mxEventSource, evt: mxgraph.mxEventObject) => {
+        this.graph.getModel().addListener(mx.mxEvent.CHANGE, async (sender: mxgraph.mxEventSource, evt: mxgraph.mxEventObject) => {
             const edit = evt.getProperty('edit') as mxgraph.mxUndoableEdit;
             const changes = edit.changes;
-            for (const change of changes) {
-                try {
-                    this.changeTranslator.translate(change);
-                } catch (e) {
-                    this.changeTranslator.preventDataUpdates = true;
-                    edit.undo();
-                    this.changeTranslator.preventDataUpdates = false;
+
+            try {
+                for (const change of changes) {
+                    await this.changeTranslator.translate(change).catch(() => {
+                        this.changeTranslator.preventDataUpdates = true;
+                        edit.undo();
+                        this.changeTranslator.preventDataUpdates = false;
+                    });
                 }
+            } catch (e) {
+                console.error(e);
             }
         });
 
@@ -146,10 +134,14 @@ export class GraphicalEditor {
 
     private initStyles(): void {
 
+
+        console.log(mx.mxConstants);
+
         mx.mxConstants.HANDLE_FILLCOLOR = '#99ccff';
         mx.mxConstants.HANDLE_STROKECOLOR = '#0088cf';
         mx.mxConstants.VERTEX_SELECTION_COLOR = '#00a8ff';
         mx.mxConstants.EDGE_SELECTION_COLOR = '#00a8ff';
+        mx.mxConstants.DEFAULT_FONTSIZE = 30;
 
         const stylesheet = this.graph.getStylesheet();
         const validStyle: {
@@ -225,7 +217,8 @@ export class GraphicalEditor {
             for (const connection of this.elementProvider.connections.map(element => element as IModelConnection)) {
                 const sourceVertex = vertexCache[connection.source.url];
                 const targetVertex = vertexCache[connection.target.url];
-                this.graph.insertEdge(parent, connection.url, '', sourceVertex, targetVertex);
+                const value = this.nodeNameConverter ? this.nodeNameConverter.convertTo(connection) : connection.name;
+                this.graph.insertEdge(parent, connection.url, value, sourceVertex, targetVertex);
             }
 
         } finally {
@@ -278,18 +271,10 @@ export class GraphicalEditor {
         return this._model;
     }
 
-    public get isRectShowing(): boolean {
-        return this.multiselectionService.selectionRect.isRectDrawing;
-    }
-
-    public get rect(): SelectionRect {
-        return this.multiselectionService.selectionRect;
-    }
 
     @Input()
     public set model(model: IContainer) {
-        this.toolProvider = new ToolProvider(
-            model, this.dataService, this.selectedElementService, this.translate, this.multiselectionService, this.clipboardService);
+        this.toolProvider = new ToolProvider(model, this.dataService, this.selectedElementService);
         this.shapeProvider = new ShapeProvider(model);
         this.nameProvider = new NameProvider(model, this.translate);
         this.changeTranslator = new ChangeTranslator(model, this.dataService, this.toolProvider);

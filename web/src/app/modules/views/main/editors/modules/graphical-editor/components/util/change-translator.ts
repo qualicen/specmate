@@ -36,6 +36,7 @@ export class ChangeTranslator {
         if (this.preventDataUpdates) {
             return;
         }
+
         this.contents = await this.dataService.readContents(this.model.url, true);
         if (change['cell'] === undefined && change['child'] !== undefined) {
             const childChange = change as mxgraph.mxChildChange;
@@ -47,9 +48,10 @@ export class ChangeTranslator {
         } else if (change['style']) {
             // We have a mxStyleChange, this should only be the case on validation.
         } else if (change['cell'] !== undefined) {
-            this.translateChange(change as mxgraph.mxTerminalChange);
+            await this.translateChange(change as mxgraph.mxTerminalChange);
         }
     }
+
 
     private async translateDelete(change: mxgraph.mxChildChange): Promise<void> {
         const deleteTool = this.toolProvider.tools.find(tool => (tool as DeleteToolBase).isDeleteTool === true) as DeleteToolBase;
@@ -79,7 +81,6 @@ export class ChangeTranslator {
         tool.source = this.contents.find(element => element.url === change.child.source.id) as IModelNode;
         tool.target = this.contents.find(element => element.url === change.child.target.id) as IModelNode;
         const connection = await tool.perform();
-        // this.contents = await this.dataService.readContents(this.model.url, true);
         change.child.id = connection.url;
         return connection;
     }
@@ -89,25 +90,24 @@ export class ChangeTranslator {
         tool.name = change.child.value;
         tool.coords = { x: change.child.geometry.x, y: change.child.geometry.y };
         const node = await tool.perform();
-        // this.contents = await this.dataService.readContents(this.model.url, true);
         return node;
     }
 
-    private translateChange(change: mxgraph.mxTerminalChange): void {
+    private async translateChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange): Promise<void> {
         const element = this.contents.find(element => element.url === change.cell.id);
         if (element === undefined) {
             return;
         }
         if (change.cell.edge) {
-            this.translateEdgeChange(change, element as IModelConnection);
+            await this.translateEdgeChange(change, element as IModelConnection);
         } else {
-            this.translateNodeChange(change, element as IModelNode);
+            await this.translateNodeChange(change, element as IModelNode);
         }
     }
 
-    private async translateNodeChange(change: mxgraph.mxTerminalChange, element: IModelNode): Promise<void> {
+    private async translateNodeChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange, element: IModelNode): Promise<void> {
         if (this.nodeNameConverter) {
-            const elementValues = this.nodeNameConverter.convertFrom(change.cell.value);
+            const elementValues = this.nodeNameConverter.convertFrom(change.cell.value, element);
             for (const key in elementValues) {
                 element[key] = elementValues[key];
             }
@@ -119,7 +119,29 @@ export class ChangeTranslator {
         await this.dataService.updateElement(element, true, Id.uuid);
     }
 
-    private async translateEdgeChange(change: mxgraph.mxTerminalChange, connection: IModelConnection): Promise<void> {
+    private async translateEdgeChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange,
+        connection: IModelConnection): Promise<void> {
+
+        if (change['terminal']) {
+            await this.translateEdgeEndsChange(change as mxgraph.mxTerminalChange, connection);
+        } else if (change['value']) {
+            await this.translateEdgeValueChange(change as mxgraph.mxValueChange, connection);
+        } else {
+            return Promise.reject('Could not determine edge change.');
+        }
+    }
+
+    private async translateEdgeValueChange(change: mxgraph.mxValueChange, connection: IModelConnection): Promise<void> {
+        const elementValues = this.nodeNameConverter.convertFrom(change.cell.value, connection);
+        for (const key in elementValues) {
+            connection[key] = elementValues[key];
+        }
+
+        const changeId = Id.uuid;
+        this.dataService.updateElement(connection, true, changeId);
+    }
+
+    private async translateEdgeEndsChange(change: mxgraph.mxTerminalChange, connection: IModelConnection): Promise<void> {
         if (change.cell.target === undefined
             || change.cell.target === null
             || change.cell.source === undefined

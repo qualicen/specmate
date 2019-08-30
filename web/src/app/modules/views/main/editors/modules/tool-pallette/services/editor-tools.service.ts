@@ -7,7 +7,6 @@ import { SelectedElementService } from '../../../../../side/modules/selected-ele
 import { ToolProvider } from '../../graphical-editor/providers/properties/tool-provider';
 import { ToolBase } from '../tools/tool-base';
 import { ClipboardService } from './clipboard-service';
-import { MultiselectionService } from './multiselection.service';
 
 
 @Injectable()
@@ -24,7 +23,6 @@ export class EditorToolsService {
         private navigator: NavigatorService,
         private selectedElementService: SelectedElementService,
         private translate: TranslateService,
-        private rectService: MultiselectionService,
         private clipboardService: ClipboardService) {
         this.init(this.navigator.currentElement);
         this.navigator.hasNavigated.subscribe((model: IContainer) => this.init(model));
@@ -45,8 +43,7 @@ export class EditorToolsService {
             this.providerMap = {};
         }
         if (!this.providerMap[this.model.url]) {
-            this.providerMap[this.model.url] = new ToolProvider(this.model, this.dataService,
-                this.selectedElementService, this.translate, this.rectService, this.clipboardService);
+            this.providerMap[this.model.url] = new ToolProvider(this.model, this.dataService, this.selectedElementService);
         }
         return this.providerMap[this.model.url];
     }

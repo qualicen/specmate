@@ -4,7 +4,6 @@ import { SpecmateSharedModule } from '../../../../../specmate/specmate.shared.mo
 import { ToolPallette } from './components/tool-pallette.component';
 import { ClipboardService } from './services/clipboard-service';
 import { EditorToolsService } from './services/editor-tools.service';
-import { MultiselectionService } from './services/multiselection.service';
 
 @NgModule({
   imports: [
@@ -23,7 +22,6 @@ import { MultiselectionService } from './services/multiselection.service';
   providers: [
     // SERVICES
     EditorToolsService,
-    MultiselectionService,
     ClipboardService
   ],
   bootstrap: [

@@ -397,8 +397,10 @@ public class CDOPersistencyService implements IPersistencyService, IListener {
 
 	private void postEvent(CDOView eventView, CDOID id, String className, int version,
 			Map<EStructuralFeature, Object> featureMapOrig, EChangeKind changeKind, int index) {
-		Map<EStructuralFeature,Object> featureMap = new HashMap<>();
-		featureMap.putAll(featureMapOrig);
+		Map<EStructuralFeature, Object> featureMap = new HashMap<>();
+		if (featureMapOrig != null) {
+			featureMap.putAll(featureMapOrig);
+		}
 
 		Optional<String> optUri;
 		if (changeKind == EChangeKind.DELETE) {

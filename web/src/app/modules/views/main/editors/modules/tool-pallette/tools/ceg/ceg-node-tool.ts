@@ -3,6 +3,7 @@ import { ElementFactoryBase } from '../../../../../../../../factory/element-fact
 import { CEGModel } from '../../../../../../../../model/CEGModel';
 import { CEGNode } from '../../../../../../../../model/CEGNode';
 import { CreateNodeToolBase } from '../create-node-tool-base';
+import { ShapeProvider } from '../../../graphical-editor/providers/properties/shape-provider';
 
 export class CEGNodeTool extends CreateNodeToolBase<CEGNode> {
 
@@ -10,7 +11,7 @@ export class CEGNodeTool extends CreateNodeToolBase<CEGNode> {
 
     public icon = 'square-o';
     public name = 'tools.addCegNode';
-    public style = 'shape=rounded';
+    public style = new ShapeProvider(CEGModel).getStyle(CEGNode);
 
     protected getElementFactory(coords: { x: number; y: number; }): ElementFactoryBase<CEGNode> {
         return new CEGNodeFactory(coords, this.dataService);

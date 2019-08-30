@@ -16,6 +16,6 @@ export abstract class ToolBase {
         protected parent: IContainer) { }
 
     public get elementId(): string {
-        return 'toolbar-' + name + '-button';
+        return 'toolbar-' + this.name + '-button';
     }
 }

@@ -11,7 +11,8 @@ export abstract class DeleteToolBase extends TypeAwareToolBase {
     public color = 'danger';
     public name = 'tools.delete';
     public style: string = undefined;
-    public isVertexTool = true;
+    public isVertexTool: boolean = undefined;
+    public isDeleteTool = true;
 
     private graphTransformer: GraphTransformer;
 

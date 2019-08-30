@@ -6,6 +6,7 @@ import { ProcessDecision } from '../../../../../../../../model/ProcessDecision';
 import { SpecmateDataService } from '../../../../../../../data/modules/data-service/services/specmate-data.service';
 import { SelectedElementService } from '../../../../../../side/modules/selected-element/services/selected-element.service';
 import { CreateNodeToolBase } from '../create-node-tool-base';
+import { ShapeProvider } from '../../../graphical-editor/providers/properties/shape-provider';
 
 export class DecisionTool extends CreateNodeToolBase<ProcessDecision> {
 
@@ -13,7 +14,7 @@ export class DecisionTool extends CreateNodeToolBase<ProcessDecision> {
 
     public name = 'tools.addDecision';
     public icon = 'plus';
-    public style = 'shape=rhombus';
+    public style = new ShapeProvider(Process).getStyle(ProcessDecision);
 
     constructor(parent: IContainer,
         dataService: SpecmateDataService,

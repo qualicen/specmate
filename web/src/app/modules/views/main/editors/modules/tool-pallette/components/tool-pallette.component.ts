@@ -17,36 +17,10 @@ import { ToolBase } from '../tools/tool-base';
 })
 export class ToolPallette {
 
-    constructor(private dataService: SpecmateDataService,
-        private editorToolsService: EditorToolsService,
-        private navigator: NavigatorService,
-        private modal: ConfirmationModal,
-        private selectedElementService: SelectedElementService,
-        private translate: TranslateService) { }
-
-    private get model(): IContainer {
-        return this.navigator.currentElement;
-    }
+    constructor(private editorToolsService: EditorToolsService) { }
 
     public get tools(): ToolBase[] {
-        return this.editorToolsService.tools;
-    }
-
-    public delete(event: MouseEvent): void {
-        event.preventDefault();
-        event.stopPropagation();
-        let message = this.translate.instant('doYouReallyWantToDeleteAll', {name: this.model.name});
-        let title = this.translate.instant('ConfirmationRequired');
-        this.modal.confirmDelete(title, message)
-            .then(() => this.dataService.readContents(this.model.url, true))
-            .then((contents: IContainer[]) => this.removeAllElements(contents))
-            .catch(() => {});
-    }
-
-    private removeAllElements(contents: IContainer[]): void {
-        this.selectedElementService.deselect();
-        let elementProvider = new ElementProvider(this.model, contents);
-        this.dataService.clearModel(elementProvider.nodes, elementProvider.connections);
+        return this.editorToolsService.tools.filter(tool => tool.isVertexTool === true);
     }
 
     public get isVisible(): boolean {

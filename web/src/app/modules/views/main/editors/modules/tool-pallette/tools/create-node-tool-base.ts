@@ -12,6 +12,7 @@ export abstract class CreateNodeToolBase<T extends IModelNode> extends CreateToo
     public isVertexTool = true;
 
     public coords: { x: number, y: number };
+    public name: string;
 
     public async perform(): Promise<T> {
         if (this.coords === undefined) {
@@ -21,8 +22,11 @@ export abstract class CreateNodeToolBase<T extends IModelNode> extends CreateToo
     }
 
     private async createNewNodeAtCoords(): Promise<T> {
+        if (this.name === undefined || this.coords === undefined) {
+            throw new Error('Necessary data undefined.');
+        }
         const factory = this.getElementFactory(this.coords);
-        const node = await factory.create(this.parent, false);
+        const node = await factory.create(this.parent, false, undefined, this.name);
         this.selectedElementService.select(node);
         return node;
     }

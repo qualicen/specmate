@@ -85,18 +85,18 @@ export class GraphicalEditor {
 
         this.graph.getModel().addListener(mx.mxEvent.CHANGE, async (sender: mxgraph.mxEventSource, evt: mxgraph.mxEventObject) => {
             const edit = evt.getProperty('edit') as mxgraph.mxUndoableEdit;
-            const changes = edit.changes;
 
+            if (edit.undone === true) {
+                return;
+            }
             try {
-                for (const change of changes) {
-                    await this.changeTranslator.translate(change).catch(() => {
-                        this.changeTranslator.preventDataUpdates = true;
-                        edit.undo();
-                        this.changeTranslator.preventDataUpdates = false;
-                    });
+                for (const change of edit.changes) {
+                    await this.changeTranslator.translate(change);
                 }
             } catch (e) {
-                console.error(e);
+                this.changeTranslator.preventDataUpdates = true;
+                edit.undo();
+                this.changeTranslator.preventDataUpdates = false;
             }
         });
 

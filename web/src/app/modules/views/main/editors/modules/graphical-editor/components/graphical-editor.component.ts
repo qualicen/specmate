@@ -141,7 +141,7 @@ export class GraphicalEditor {
         mx.mxConstants.HANDLE_STROKECOLOR = '#0088cf';
         mx.mxConstants.VERTEX_SELECTION_COLOR = '#00a8ff';
         mx.mxConstants.EDGE_SELECTION_COLOR = '#00a8ff';
-        mx.mxConstants.DEFAULT_FONTSIZE = 30;
+        mx.mxConstants.DEFAULT_FONTSIZE = 16;
 
         const stylesheet = this.graph.getStylesheet();
         const validStyle: {

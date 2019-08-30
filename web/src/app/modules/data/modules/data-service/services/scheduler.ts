@@ -15,21 +15,13 @@ export class Scheduler {
 
     public toBatchOperation(): BatchOperation {
         const batchOperation = new BatchOperation();
-        console.log('unresolved commands');
-        console.log(this.unresolvedCommands);
         batchOperation.operations = this.unresolvedCommands.map(command => command.operation);
         return batchOperation;
     }
 
     public resolveBatchOperation(batchOperation: BatchOperation): void {
-        console.log('unresolved commands');
-        console.log(this.unresolvedCommands);
-        console.log('batchOperations');
-        console.log(batchOperation.operations);
-        console.log('operations');
         batchOperation.operations.forEach(operation => {
             const command = this.commands.find(command => command.operation === operation);
-            console.log(this.commands.filter(command => !command.isResolved));
             command.resolve();
         });
     }

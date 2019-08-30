@@ -120,6 +120,7 @@ export class GraphicalEditor {
         this.initKeyHandler();
         this.initGraphicalModel();
         this.initTools();
+        this.validationService.refreshValidation(this.model);
     }
 
     private provideVertex(node: IModelNode, x?: number, y?: number): mxgraph.mxCell {

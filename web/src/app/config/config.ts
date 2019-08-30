@@ -76,7 +76,7 @@ export class Config {
     public static PROCESS_NEW_PROCESS_DESCRIPTION = '';
     public static PROCESS_NEW_STEP_NAME = 'New Activity';
     public static PROCESS_NEW_STEP_DESCRIPTION = '';
-    public static PROCESS_NEW_DECISION_NAME = '';
+    public static PROCESS_NEW_DECISION_NAME = 'Decision';
     public static PROCESS_NEW_DECISION_DESCRIPTION = '';
     public static PROCESS_NEW_START_NAME = '';
     public static PROCESS_NEW_START_DESCRIPTION = '';

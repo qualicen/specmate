@@ -134,9 +134,6 @@ export class GraphicalEditor {
 
     private initStyles(): void {
 
-
-        console.log(mx.mxConstants);
-
         mx.mxConstants.HANDLE_FILLCOLOR = '#99ccff';
         mx.mxConstants.HANDLE_STROKECOLOR = '#0088cf';
         mx.mxConstants.VERTEX_SELECTION_COLOR = '#00a8ff';
@@ -195,7 +192,7 @@ export class GraphicalEditor {
 
     private deleteSelectedCells(): void {
         if (this.graph.isEnabled()) {
-            const selectedCells = this.graph.getSelectionCells().filter(cell => !cell.edge);
+            const selectedCells = this.graph.getSelectionCells();
             this.graph.removeCells(selectedCells, true);
         }
     }

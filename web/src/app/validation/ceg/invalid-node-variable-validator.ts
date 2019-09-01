@@ -32,6 +32,7 @@ export class InvalidNodeVariableValidator extends ElementValidatorBase<CEGNode> 
             let message = ValidationMessage.ERROR_INVALID_VARIABLE;
             return new ValidationResult(message, false, invalidNodes, ValidationErrorSeverity.SAVE_DISABLED);
        }
+       return ValidationResult.VALID;
         
     }
 

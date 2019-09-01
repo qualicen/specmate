@@ -220,11 +220,14 @@ export abstract class DraggableElementBase<T extends ISpecmatePositionableModelO
     }
 
     public dropNode(): void {
+        let change = (this.prevX != undefined || this.prevY!=undefined);
         this.isGrabbed = false;
         this.isGrabTrigger = false;
         this.prevX = undefined;
         this.prevY = undefined;
-        this.dataService.updateElement(this.element, true, Id.uuid);
+        if(change){
+            this.dataService.updateElement(this.element, true, Id.uuid);
+        }
     }
 
     private dragEnd(): void {

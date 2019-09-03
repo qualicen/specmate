@@ -13,7 +13,7 @@ import java.util.Date;
  * representing the same time each week.
  */
 public class MonthlyIterator implements ScheduleIterator {
-	private ZonedDateTime zoneDate;
+	private ZonedDateTime zonedDateTime;
 
 	public MonthlyIterator(Date date, int... time) {
 		this(getHourOfDay(time), getMinute(time), getSecond(time), date);
@@ -26,26 +26,24 @@ public class MonthlyIterator implements ScheduleIterator {
 			      .atZone(ZoneId.systemDefault())
 			      .toLocalDate();
 		
-		
-		// Convert LocalDate to LocalDateTime with parameter of method  
 		LocalDateTime localDT = LocalDateTime.of(localDate, LocalTime.of(hourOfDay, minute, second, 0));
 		
 		ZoneId currentZone = ZoneId.systemDefault();
-		zoneDate = ZonedDateTime.of(localDT, currentZone);
+		zonedDateTime = ZonedDateTime.of(localDT, currentZone);
 	}
 
 	@Override
 	public Date next() {
 		// Add one month to the set date
-		zoneDate = zoneDate.plusMonths(1);
+		zonedDateTime = zonedDateTime.plusMonths(1);
 		/*	If last day of previous month was the 30th then plusMonths method returns the 30th of the next month
-		 * 	as we want our counter to reset at the last day of the month we call lastDayOfMonth to set the date to the 31th
-		 * 	if it exists in the current month
+		 * 	as we want our counter to reset at the last day of the month we call lastDayOfMonth 
+		 * 	to set the date to the 31th if it exists in the current month
 		 * */
-		zoneDate = zoneDate.with(TemporalAdjusters.lastDayOfMonth());
-		return Date.from(zoneDate.toInstant());
+		zonedDateTime = zonedDateTime.with(TemporalAdjusters.lastDayOfMonth());
+		return Date.from(zonedDateTime.toInstant());
 	}
-
+	
 	private static int getHourOfDay(int... time) {
 		int temp = SchedulerUtils.getNumberIfExistsOrZero(0, time);
 		return SchedulerUtils.normalizeInput(temp, 24);

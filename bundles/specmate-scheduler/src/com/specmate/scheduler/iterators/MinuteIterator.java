@@ -12,7 +12,7 @@ import java.util.Date;
  * representing the same time each day.
  */
 public class MinuteIterator implements ScheduleIterator {
-	private ZonedDateTime zoneDate;
+	private ZonedDateTime zonedDateTime;
 
 	public MinuteIterator(Date date, int... time) {
 		this(getSecond(time), date);
@@ -24,19 +24,18 @@ public class MinuteIterator implements ScheduleIterator {
 		LocalDate localDate = date.toInstant()
 				.atZone(ZoneId.systemDefault())
 				.toLocalDate();
-		// Convert LocalDate to LocalDateTime with parameter of method  
+ 
 		LocalDateTime localDT = LocalDateTime.of(localDate, LocalTime.now());
-		second = second%60;
 		localDT = localDT.withSecond(second).withNano(0);
 
 		ZoneId currentZone = ZoneId.systemDefault();
-		zoneDate = ZonedDateTime.of(localDT, currentZone);
+		zonedDateTime = ZonedDateTime.of(localDT, currentZone);
 	}
 
 	@Override
 	public Date next() {
-		zoneDate = zoneDate.plusMinutes(1);
-		return Date.from(zoneDate.toInstant());
+		zonedDateTime = zonedDateTime.plusMinutes(1);
+		return Date.from(zonedDateTime.toInstant());
 	}
 
 	private static int getSecond(int... time) {

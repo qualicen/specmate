@@ -25,8 +25,6 @@ public class YearlyIterator implements ScheduleIterator {
 			      .atZone(ZoneId.systemDefault())
 			      .toLocalDate();
 		
-		
-		// Convert LocalDate to LocalDateTime with parameter of method  
 		LocalDateTime localDT = LocalDateTime.of(localDate, LocalTime.of(hourOfDay, minute, second, 0));
 		
 		ZoneId currentZone = ZoneId.systemDefault();

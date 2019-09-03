@@ -24,14 +24,7 @@ public class WeeklyIterator implements ScheduleIterator {
 		LocalDate localDate = date.toInstant()
 			      .atZone(ZoneId.systemDefault())
 			      .toLocalDate();
-		// Set the date to the corresponding day in the week 1=Monday etc. 
-		//DayOfWeek dow = DayOfWeek.of(dayOfWeek);
-		// We get the next date where the day of the week is specified with the parameter dayOfWeek
-		// ATTENTION: if the current date is the specified dayOfWeek the date 7 days from the current day will be returned 
-		//localDate = localDate.with(TemporalAdjusters.next(dow));
 		
-		
-		// Convert LocalDate to LocalDateTime with parameter of method  
 		LocalDateTime localDT = LocalDateTime.of(localDate, LocalTime.of(hourOfDay, minute, second, 0));
 		
 		ZoneId currentZone = ZoneId.systemDefault();

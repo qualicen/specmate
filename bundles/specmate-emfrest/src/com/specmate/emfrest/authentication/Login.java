@@ -2,7 +2,6 @@ package com.specmate.emfrest.authentication;
 
 import javax.ws.rs.core.Response;
 
-import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.log.LogService;
@@ -11,8 +10,6 @@ import com.specmate.auth.api.IAuthenticationService;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.emfrest.api.IRestService;
 import com.specmate.emfrest.api.RestServiceBase;
-import com.specmate.metrics.ICounter;
-import com.specmate.metrics.IMetricsService;
 import com.specmate.rest.RestResult;
 import com.specmate.usermodel.User;
 import com.specmate.usermodel.UserSession;
@@ -24,14 +21,6 @@ public class Login extends RestServiceBase {
 
 	private IAuthenticationService authService;
 	private LogService logService;
-	private IMetricsService metricsService;
-	private ICounter logInCounter;
-	
-	@Activate
-	public void activate() throws SpecmateException {
-		this.logInCounter = metricsService.createCounter("login_counter", "Total number of login processes");
-	}
-	
 
 	@Override
 	public String getServiceName() {
@@ -50,7 +39,6 @@ public class Login extends RestServiceBase {
 		UserSession session = authService.authenticate(user.getUserName(), user.getPassWord(), user.getProjectName());
 		logService.log(LogService.LOG_INFO,
 				"Session " + session.getId() + " for user " + user.getUserName() + " created.");
-		this.logInCounter.inc();
 		return new RestResult<>(Response.Status.OK, session);
 	}
 
@@ -62,10 +50,5 @@ public class Login extends RestServiceBase {
 	@Reference
 	public void setLogService(LogService logService) {
 		this.logService = logService;
-	}
-	
-	@Reference
-	public void setMetricsService(IMetricsService metricsService) {
-		this.metricsService = metricsService;
 	}
 }

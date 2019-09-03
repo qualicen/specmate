@@ -12,58 +12,50 @@ public class TimeUtil {
 		LocalDateTime localNow = LocalDateTime.now();
 
 		ZoneId currentZone = ZoneId.systemDefault();
-		ZonedDateTime zonedNow = ZonedDateTime.of(localNow, currentZone);
+		ZonedDateTime zonedDateTime = ZonedDateTime.of(localNow, currentZone);
 
-		// Now we set the time of the current day to 00:00:00.000
-		ZonedDateTime zonedNextTarget = zonedNow.withHour(0).withMinute(0).withSecond(0).withNano(0);
+		// Go back to beginning of day
+		zonedDateTime = zonedDateTime.withHour(0).withMinute(0).withSecond(0).withNano(0);
 
-		long time = zonedNextTarget.toInstant().toEpochMilli(); 
-		
-		return time;
+		return zonedDateTime.toInstant().toEpochMilli(); 
 	}
 	
 	public static long getDiffWeek() {
 		LocalDateTime localNow = LocalDateTime.now();
 
 		ZoneId currentZone = ZoneId.systemDefault();
-		ZonedDateTime zonedNow = ZonedDateTime.of(localNow, currentZone);
+		ZonedDateTime zonedDateTime = ZonedDateTime.of(localNow, currentZone);
 		
 		// Go back to beginning of current week
-		zonedNow = zonedNow.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-		zonedNow = zonedNow.withHour(0).withMinute(0).withSecond(0).withNano(0);
+		zonedDateTime = zonedDateTime.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+		zonedDateTime = zonedDateTime.withHour(0).withMinute(0).withSecond(0).withNano(0);
 
-		long time = zonedNow.toInstant().toEpochMilli(); 
-		
-		return time;
+		return zonedDateTime.toInstant().toEpochMilli(); 
 	}
 	
 	public static long getDiffMonth() {
 		LocalDateTime localNow = LocalDateTime.now();
 
 		ZoneId currentZone = ZoneId.systemDefault();
-		ZonedDateTime zonedNow = ZonedDateTime.of(localNow, currentZone);
+		ZonedDateTime zonedDateTime = ZonedDateTime.of(localNow, currentZone);
 		
-		// Go back to beginning of current week
-		zonedNow = zonedNow.with(TemporalAdjusters.firstDayOfMonth());
-		zonedNow = zonedNow.withHour(0).withMinute(0).withSecond(0).withNano(0);
+		// Go back to beginning of current month
+		zonedDateTime = zonedDateTime.with(TemporalAdjusters.firstDayOfMonth());
+		zonedDateTime = zonedDateTime.withHour(0).withMinute(0).withSecond(0).withNano(0);
 
-		long time = zonedNow.toInstant().toEpochMilli(); 
-
-		return time;
+		return zonedDateTime.toInstant().toEpochMilli(); 
 	}
 	
 	public static long getDiffYear() {
 		LocalDateTime localNow = LocalDateTime.now();
 
 		ZoneId currentZone = ZoneId.systemDefault();
-		ZonedDateTime zonedNow = ZonedDateTime.of(localNow, currentZone);
+		ZonedDateTime zonedDateTime = ZonedDateTime.of(localNow, currentZone);
 		
-		// Go back to beginning of current week
-		zonedNow = zonedNow.with(TemporalAdjusters.firstDayOfYear());
-		zonedNow = zonedNow.withHour(0).withMinute(0).withSecond(0).withNano(0);
+		// Go back to beginning of current year
+		zonedDateTime = zonedDateTime.with(TemporalAdjusters.firstDayOfYear());
+		zonedDateTime = zonedDateTime.withHour(0).withMinute(0).withSecond(0).withNano(0);
 
-		long time = zonedNow.toInstant().toEpochMilli(); 
-		
-		return time;
+		return zonedDateTime.toInstant().toEpochMilli(); 
 	}
 }

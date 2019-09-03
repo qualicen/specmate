@@ -1,5 +1,11 @@
 package com.specmate.metrics.internal;
 
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.temporal.TemporalAdjusters;
+import java.util.Date;
 import java.util.List;
 
 import org.osgi.service.component.annotations.Activate;
@@ -18,14 +24,7 @@ import com.specmate.usermodel.UsermodelFactory;
 
 @Component(immediate=true)
 public class UserMetricService implements IUserMetricsService {
-	/*	
-	 * 1. When Specmate starts again initialize the counter 
-	 * 2. increase counter with isNewUserWeekly (check if the user was active the last 7 days) 
-	 * 3. schedule at Sunday 0:00 and at each Day 0:00 that the respective counter (day, week, month) is reseted 
-	 * 
-	 */
-	
-	
+
 	private IPersistencyService persistencyService;
 	private IMetricsService metricsService;
 	private IView sessionView;
@@ -58,56 +57,95 @@ public class UserMetricService implements IUserMetricsService {
 		}
 	}
 	
+	/**
+	 * 	initialize counter after restart with the currently active sessions
+	 * */
 	private void initializeAfterResart() {
-		// initialize counter after restart with the currently active sessions
 		initializeGaugeCurrentDay();
 		initializeGaugeCurrentWeek();
 		initializeGaugeCurrentMonth();
 		initializeGaugeCurrentYear();
 	}
 	
+	/**
+	 * 	Create different schedulers for reseting the different counters
+	 * */
 	private void activeScheduler() {
-		// Create different schedulers for the different counters
-		//TODO: change schedule Time
 		try {
-			String scheduleDay = "minute 15";
-			SchedulerTask metricRunnable = new MetricTask(specmate_current_day);
+			String scheduleDay = "day 23 59 59";
+			SchedulerTask dailyMetricTask = new MetricTask(specmate_current_day);
 			//metricRunnable.run();
 			Scheduler scheduler = new Scheduler();
-			scheduler.schedule(metricRunnable, SchedulerIteratorFactory.create(scheduleDay));
-			// Get the resetted counter back
-			specmate_current_day = ((MetricTask) metricRunnable).getGauge();
+			scheduler.schedule(dailyMetricTask, SchedulerIteratorFactory.create(scheduleDay));
+			// Get the reseted counter back
+			specmate_current_day = ((MetricTask) dailyMetricTask).getGauge();
 			
-			String scheduleWeek = "minute 30";
-			SchedulerTask metricRunnableWeek = new MetricTask(specmate_current_week);
+			String scheduleWeek = "week 23 59 59";
+			SchedulerTask weeklyMetricTask = new MetricTask(specmate_current_week);
 			//metricRunnableWeek.run();
 			Scheduler schedulerWeek = new Scheduler();
-			schedulerWeek.schedule(metricRunnableWeek, SchedulerIteratorFactory.create(scheduleWeek));
-			// Get the resetted counter back
-			specmate_current_week = ((MetricTask) metricRunnableWeek).getGauge();
+			schedulerWeek.schedule(weeklyMetricTask, SchedulerIteratorFactory.create(scheduleWeek, getNextSunday()));
+			// Get the reseted counter back
+			specmate_current_week = ((MetricTask) weeklyMetricTask).getGauge();
 
-			String scheduleMonth = "minute 45";
-			SchedulerTask metricRunnableMonth = new MetricTask(specmate_current_month);
+			String scheduleMonth = "month 23 59 59";
+			SchedulerTask monthlyMetricTask = new MetricTask(specmate_current_month);
 			//metricRunnableMonth.run();
 			Scheduler schedulerMonth = new Scheduler();
-			schedulerMonth.schedule(metricRunnableMonth, SchedulerIteratorFactory.create(scheduleMonth));
-			// Get the resetted counter back
-			specmate_current_month = ((MetricTask) metricRunnableMonth).getGauge();
+			schedulerMonth.schedule(monthlyMetricTask, SchedulerIteratorFactory.create(scheduleMonth, getLastDayOfMonth()));
+			// Get the reseted counter back
+			specmate_current_month = ((MetricTask) monthlyMetricTask).getGauge();
 			
-			String scheduleYear = "minute 60";
-			SchedulerTask metricRunnableYear = new MetricTask(specmate_current_year);
+			String scheduleYear = "year 23 59 59";
+			SchedulerTask yearlyMetricTask = new MetricTask(specmate_current_year);
 			//metricRunnableYear.run();
 			Scheduler schedulerYear = new Scheduler();
-			schedulerYear.schedule(metricRunnableYear, SchedulerIteratorFactory.create(scheduleYear));
-			// Get the resetted counter back
-			specmate_current_year = ((MetricTask) metricRunnableYear).getGauge();
+			schedulerYear.schedule(yearlyMetricTask, SchedulerIteratorFactory.create(scheduleYear, getLastDayOfYear()));
+			// Get the reseted counter back
+			specmate_current_year = ((MetricTask) yearlyMetricTask).getGauge();
 		} catch (SpecmateException e) {
 			e.printStackTrace();
 		}
 	}
 	
+	private Date getNextSunday() {
+		LocalDateTime localNow = LocalDateTime.now();
+
+		ZoneId currentZone = ZoneId.systemDefault();
+		ZonedDateTime zonedDateTime = ZonedDateTime.of(localNow, currentZone);
+		
+		// Set to next Sunday, if current Date is Sunday the date is not altered
+		zonedDateTime = zonedDateTime.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY)).withNano(0);
+		
+		return Date.from(zonedDateTime.toInstant());
+	}
+	
+	private Date getLastDayOfMonth() {
+		LocalDateTime localNow = LocalDateTime.now();
+
+		ZoneId currentZone = ZoneId.systemDefault();
+		ZonedDateTime zonedDateTime = ZonedDateTime.of(localNow, currentZone);
+		
+		zonedDateTime = zonedDateTime.with(TemporalAdjusters.lastDayOfMonth()).withNano(0);
+		
+		return Date.from(zonedDateTime.toInstant());
+	}
+	
+	private Date getLastDayOfYear() {
+		LocalDateTime localNow = LocalDateTime.now();
+
+		ZoneId currentZone = ZoneId.systemDefault();
+		ZonedDateTime zonedDateTime = ZonedDateTime.of(localNow, currentZone);
+
+		zonedDateTime = zonedDateTime.with(TemporalAdjusters.lastDayOfYear()).withNano(0);
+
+		return Date.from(zonedDateTime.toInstant());
+	}
+	
+	/**
+	 * 	Increment the different counters
+	 * */
 	public void loginCounter(IView sessionView, String userName) {
-		// Increment the different counters
 		if (isNewUserCurrentDay(sessionView, userName)) {
 			specmate_current_day.inc();
 		}
@@ -121,6 +159,7 @@ public class UserMetricService implements IUserMetricsService {
 			specmate_current_year.inc();
 		}
 	}
+	
 	/**
 	 * 
 	 * @param sessionView
@@ -130,7 +169,6 @@ public class UserMetricService implements IUserMetricsService {
 	 * @throws SpecmateException 
 	 */
 	private boolean isNewUser(IView sessionView, String userName, long difference) {
-		//String query = "UserSession.allInstances()->select(u | u.userName='" + userName + "' and u.lastActive> " + difference + " )";
 		
 		String sqlQuery = "SELECT DISTINCT username FROM UserSession WHERE username=:name AND lastActive> :time";
 
@@ -171,10 +209,12 @@ public class UserMetricService implements IUserMetricsService {
 		return isNewUser(sessionView, userName, difference);
 	}
 	
+	/**
+	 * Use the session view to identify how many session existed before startup of system and set 
+	 * the counter correspondingly
+	 * */
 	private void initializeGauge(long difference, IGauge gauge) {
-		// Use the session view to identify how many session existed before startup of system and set the counter correspondingly 
-		//String query = "UserSession.allInstances()->select(u | u.lastActive>" + difference + "->forAll(user1 | user1 <> self implies user1.userName <> self.userName))";
-		
+		 
 		String sqlQuery = "SELECT DISTINCT username FROM UserSession WHERE lastActive>:time";
 
 		List<Object> results = sessionView.querySQL(sqlQuery,

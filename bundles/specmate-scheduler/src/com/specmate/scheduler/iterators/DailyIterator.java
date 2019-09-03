@@ -12,7 +12,7 @@ import java.util.Date;
  * representing the same time each day.
  */
 public class DailyIterator implements ScheduleIterator {
-	private ZonedDateTime zoneDate;
+	private ZonedDateTime zonedDateTime;
 
 	public DailyIterator(Date date, int... time) {
 		this(getHourOfDay(time), getMinute(time), getSecond(time), date);
@@ -25,18 +25,17 @@ public class DailyIterator implements ScheduleIterator {
 				.atZone(ZoneId.systemDefault())
 				.toLocalDate();
 
-		// Convert LocalDate to LocalDateTime with parameter of method  
 		LocalDateTime localDT = LocalDateTime.of(localDate, LocalTime.now());
 		localDT = localDT.withHour(hourOfDay).withMinute(minute).withSecond(second).withNano(0);
 
 		ZoneId currentZone = ZoneId.systemDefault();
-		zoneDate = ZonedDateTime.of(localDT, currentZone);
+		zonedDateTime = ZonedDateTime.of(localDT, currentZone);
 	}
 
 	@Override
 	public Date next() {
-		zoneDate = zoneDate.plusDays(1);
-		return Date.from(zoneDate.toInstant());
+		zonedDateTime = zonedDateTime.plusDays(1);
+		return Date.from(zonedDateTime.toInstant());
 	}
 
 	private static int getHourOfDay(int... time) {

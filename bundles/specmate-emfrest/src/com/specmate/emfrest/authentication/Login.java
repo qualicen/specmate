@@ -11,7 +11,6 @@ import com.specmate.auth.api.IAuthenticationService;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.emfrest.api.IRestService;
 import com.specmate.emfrest.api.RestServiceBase;
-import com.specmate.emfrest.internal.metrics.MetricsFilter;
 import com.specmate.metrics.ICounter;
 import com.specmate.metrics.IMetricsService;
 import com.specmate.rest.RestResult;

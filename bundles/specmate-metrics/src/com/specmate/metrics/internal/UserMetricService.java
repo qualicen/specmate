@@ -39,13 +39,13 @@ public class UserMetricService implements IUserMetricsService {
 	public void start() throws SpecmateException {
 		this.sessionView = persistencyService.openView();
 		this.specmate_current_day = metricsService.
-				createGauge("specmate_login_counter_current_day", "Number of users logged in at the current day");
+				createGauge("login_counter_current_day", "Number of users logged in at the current day");
 		this.specmate_current_week = metricsService.
-				createGauge("specmate_login_counter_current_week", "Number of users logged in at the current week");
+				createGauge("login_counter_current_week", "Number of users logged in at the current week");
 		this.specmate_current_month = metricsService.
-				createGauge("specmate_login_counter_current_month", "Number of users logged in at the current month");
+				createGauge("login_counter_current_month", "Number of users logged in at the current month");
 		this.specmate_current_year = metricsService.
-				createGauge("specmate_login_counter_current_year", "Number of users logged in at the current year");
+				createGauge("login_counter_current_year", "Number of users logged in at the current year");
 		activeScheduler();
 		initializeAfterResart();
 	}
@@ -71,7 +71,7 @@ public class UserMetricService implements IUserMetricsService {
 		//TODO: change schedule Time
 		try {
 			String scheduleDay = "minute 15";
-			SchedulerTask metricRunnable = new MetricTask(CounterType.CURRENTDAY, specmate_current_day, sessionView);
+			SchedulerTask metricRunnable = new MetricTask(specmate_current_day);
 			//metricRunnable.run();
 			Scheduler scheduler = new Scheduler();
 			scheduler.schedule(metricRunnable, SchedulerIteratorFactory.create(scheduleDay));
@@ -79,7 +79,7 @@ public class UserMetricService implements IUserMetricsService {
 			specmate_current_day = ((MetricTask) metricRunnable).getGauge();
 			
 			String scheduleWeek = "minute 30";
-			SchedulerTask metricRunnableWeek = new MetricTask(CounterType.CURRENTWEEK, specmate_current_week, sessionView);
+			SchedulerTask metricRunnableWeek = new MetricTask(specmate_current_week);
 			//metricRunnableWeek.run();
 			Scheduler schedulerWeek = new Scheduler();
 			schedulerWeek.schedule(metricRunnableWeek, SchedulerIteratorFactory.create(scheduleWeek));
@@ -87,7 +87,7 @@ public class UserMetricService implements IUserMetricsService {
 			specmate_current_week = ((MetricTask) metricRunnableWeek).getGauge();
 
 			String scheduleMonth = "minute 45";
-			SchedulerTask metricRunnableMonth = new MetricTask(CounterType.CURRENTMONTH, specmate_current_month, sessionView);
+			SchedulerTask metricRunnableMonth = new MetricTask(specmate_current_month);
 			//metricRunnableMonth.run();
 			Scheduler schedulerMonth = new Scheduler();
 			schedulerMonth.schedule(metricRunnableMonth, SchedulerIteratorFactory.create(scheduleMonth));
@@ -95,7 +95,7 @@ public class UserMetricService implements IUserMetricsService {
 			specmate_current_month = ((MetricTask) metricRunnableMonth).getGauge();
 			
 			String scheduleYear = "minute 60";
-			SchedulerTask metricRunnableYear = new MetricTask(CounterType.CURRENTYEAR, specmate_current_year, sessionView);
+			SchedulerTask metricRunnableYear = new MetricTask(specmate_current_year);
 			//metricRunnableYear.run();
 			Scheduler schedulerYear = new Scheduler();
 			schedulerYear.schedule(metricRunnableYear, SchedulerIteratorFactory.create(scheduleYear));

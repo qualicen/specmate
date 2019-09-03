@@ -1,4 +1,4 @@
-package com.specmate.testspecification.internal.services;
+package com.specmate.testspecification.internal.generators;
 
 import java.util.Comparator;
 import java.util.Iterator;
@@ -12,17 +12,17 @@ public class CEGNodeEvaluationComparator implements Comparator<CEGNodeEvaluation
 	
 	@Override
 	public int compare(CEGNodeEvaluation nodeEval1, CEGNodeEvaluation nodeEval2) {
-		Set<Entry<IContainer, TaggedBoolean>> sortedNodeSet1 = nodeEval1.entrySet();
-		Set<Entry<IContainer, TaggedBoolean>> sortedNodeSet2 = nodeEval2.entrySet();
+		Set<Entry<CEGNode, TaggedBoolean>> sortedNodeSet1 = nodeEval1.entrySet();
+		Set<Entry<CEGNode, TaggedBoolean>> sortedNodeSet2 = nodeEval2.entrySet();
 
-		Iterator<Entry<IContainer, TaggedBoolean>> it1 = sortedNodeSet1.iterator();
-		Iterator<Entry<IContainer, TaggedBoolean>> it2 = sortedNodeSet2.iterator();
+		Iterator<Entry<CEGNode, TaggedBoolean>> it1 = sortedNodeSet1.iterator();
+		Iterator<Entry<CEGNode, TaggedBoolean>> it2 = sortedNodeSet2.iterator();
 
-		while(it1.hasNext() && it2.hasNext()) {
-			Entry<IContainer, TaggedBoolean> sortedNodeSetEntry1 = it1.next();
-			Entry<IContainer, TaggedBoolean> sortedNodeSetEntry2 = it2.next();
-			CEGNode node1 = (CEGNode)sortedNodeSetEntry1.getKey();
-			CEGNode node2 = (CEGNode)sortedNodeSetEntry2.getKey();
+		while (it1.hasNext() && it2.hasNext()) {
+			Entry<CEGNode, TaggedBoolean> sortedNodeSetEntry1 = it1.next();
+			Entry<CEGNode, TaggedBoolean> sortedNodeSetEntry2 = it2.next();
+			CEGNode node1 = sortedNodeSetEntry1.getKey();
+			CEGNode node2 = sortedNodeSetEntry2.getKey();
 
 			/*
 			 * Compare properties of both evaluations until they differ
@@ -33,12 +33,12 @@ public class CEGNodeEvaluationComparator implements Comparator<CEGNodeEvaluation
 			 * 		4. Compare taggedBoolean tag property of nodes
 			 * */
 			int result = node1.getVariable().compareTo(node2.getVariable());
-			if(result != 0) {
+			if (result != 0) {
 				return result;
-			} 
+			}
 			// Check if the condition of the nodes is also the same
 			int conditionResult = node1.getCondition().compareTo(node2.getCondition());
-			if(result != 0) {
+			if (conditionResult != 0) {
 				return conditionResult;
 			} 
 

@@ -116,6 +116,8 @@ export class ChangeTranslator {
         }
         element['x'] = change.cell.geometry.x;
         element['y'] = change.cell.geometry.y;
+        element['width'] = change.cell.geometry.width;
+        element['height'] = change.cell.geometry.height;
         await this.dataService.updateElement(element, true, Id.uuid);
     }
 

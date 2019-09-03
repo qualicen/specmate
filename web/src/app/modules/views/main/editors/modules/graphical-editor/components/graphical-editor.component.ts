@@ -124,8 +124,8 @@ export class GraphicalEditor {
     }
 
     private provideVertex(node: IModelNode, x?: number, y?: number): mxgraph.mxCell {
-        const width = this.shapeProvider.getInitialSize(node).width;
-        const height = this.shapeProvider.getInitialSize(node).height;
+        const width = node.width > 0 ? node.width : this.shapeProvider.getInitialSize(node).width;
+        const height = node.height > 0? node.height : this.shapeProvider.getInitialSize(node).height;
         const value = this.nodeNameConverter ? this.nodeNameConverter.convertTo(node) : node.name;
         const style = this.shapeProvider.getStyle(node);
         const parent = this.graph.getDefaultParent();
@@ -139,7 +139,7 @@ export class GraphicalEditor {
         mx.mxConstants.HANDLE_STROKECOLOR = '#0088cf';
         mx.mxConstants.VERTEX_SELECTION_COLOR = '#00a8ff';
         mx.mxConstants.EDGE_SELECTION_COLOR = '#00a8ff';
-        mx.mxConstants.DEFAULT_FONTSIZE = 16;
+        mx.mxConstants.DEFAULT_FONTSIZE = 12;
 
         const stylesheet = this.graph.getStylesheet();
         const validStyle: {

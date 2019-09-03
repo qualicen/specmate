@@ -94,18 +94,18 @@ def rule Condition2_2 {
 	[Effect] - NEB -> [Cause] - PP -> PWAV:'weswegen'	
 }
 
-// Für den Fall dass der Benutzer die Schaltfläche drückt lädt Specmate das Modell.
-def rule Condition21 {
+// Unter der Bedingung, dass der Benutzer die Taste drückt, lädt Specmate das Modell.
+def rule Condition2_3 {
 	[Effect] - PP -> 'unter' - PN -> 'Bedingung' - OBJC -> [Cause] - KONJ -> 'dass'
 }
 
-def rule Condition2_3 {
+def rule Condition2_4 {
 	[Effect] - NEB -> [Cause] 
 	[Effect] - PP -> (APPR:'unter'|APPR:'für') - PN -> NN:CASE!'(Bedingung)|(Fall)|(Voraussetzung)|(Annahme)' - DET -> (ART:'der'|ART:'den')
 }
 
 // Wenn entweder das Haus brennt oder das Haus einstürzt, evakuiere das Büro.
-def rule Condition2_4 {
+def rule Condition2_5 {
 	[Effect] - KONJ -> KOUS:'wenn' - KON -> [Cause] 
 }
 

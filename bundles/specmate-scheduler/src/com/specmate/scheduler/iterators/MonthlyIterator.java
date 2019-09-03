@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Date;
 
 /**
@@ -37,6 +38,11 @@ public class MonthlyIterator implements ScheduleIterator {
 	public Date next() {
 		// Add one month to the set date
 		zoneDate = zoneDate.plusMonths(1);
+		/*	If last day of previous month was the 30th then plusMonths method returns the 30th of the next month
+		 * 	as we want our counter to reset at the last day of the month we call lastDayOfMonth to set the date to the 31th
+		 * 	if it exists in the current month
+		 * */
+		zoneDate = zoneDate.with(TemporalAdjusters.lastDayOfMonth());
 		return Date.from(zoneDate.toInstant());
 	}
 

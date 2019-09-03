@@ -18,20 +18,20 @@ public class IteratorsTest {
 		Date date = dateFormat.parse("2018-11-01 09:30:10");
 
 		// scheduled time before current time
-		ScheduleIterator hourlyIterator = SchedulerIteratorFactory.create("hour 20 15", date);
+		ScheduleIterator hourlyIterator = SchedulerIteratorFactory.create("year 3 20 15", date);
 		Date next = hourlyIterator.next();
-		Assert.assertEquals("2018-11-01 10:20:15", dateFormat.format(next));
+		Assert.assertEquals("2019-11-01 03:20:15", dateFormat.format(next));
 
 		// scheduled time after current time
-		hourlyIterator = SchedulerIteratorFactory.create("hour 40 15", date);
+		hourlyIterator = SchedulerIteratorFactory.create("year 11 20 15", date);
 		next = hourlyIterator.next();
-		Assert.assertEquals("2018-11-01 09:40:15", dateFormat.format(next));
+		Assert.assertEquals("2019-11-01 11:20:15", dateFormat.format(next));
 
 		Date endOfDay = dateFormat.parse("2018-12-31 23:30:10");
 		// scheduled time need day jump
-		hourlyIterator = SchedulerIteratorFactory.create("hour 20 15", endOfDay);
+		hourlyIterator = SchedulerIteratorFactory.create("year 11 20 15", endOfDay);
 		next = hourlyIterator.next();
-		Assert.assertEquals("2019-01-01 00:20:15", dateFormat.format(next));
+		Assert.assertEquals("2019-12-31 11:20:15", dateFormat.format(next));
 	}
 	
 	@Test
@@ -44,15 +44,15 @@ public class IteratorsTest {
 		Assert.assertEquals("2018-12-01 4:40:50", dateFormat.format(next));
 
 		// scheduled time after current time
-		hourlyIterator = SchedulerIteratorFactory.create("month 4 40 50", date);
+		hourlyIterator = SchedulerIteratorFactory.create("month 12 30 00", date);
 		next = hourlyIterator.next();
-		Assert.assertEquals("2018-11-01 04:40:50", dateFormat.format(next));
+		Assert.assertEquals("2018-11-01 12:30:00", dateFormat.format(next));
 
 		Date endOfDay = dateFormat.parse("2018-12-31 23:30:10");
 		// scheduled time need day jump
-		hourlyIterator = SchedulerIteratorFactory.create("month 4 40 50", endOfDay);
+		hourlyIterator = SchedulerIteratorFactory.create("month 7 15 59", endOfDay);
 		next = hourlyIterator.next();
-		Assert.assertEquals("2019-01-01 04:40:50", dateFormat.format(next));
+		Assert.assertEquals("2019-01-31 07:15:59", dateFormat.format(next));
 	}
 	
 	@Test

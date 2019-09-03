@@ -9,13 +9,19 @@ import com.specmate.model.administration.ErrorCode;
 import com.specmate.scheduler.iterators.DailyIterator;
 import com.specmate.scheduler.iterators.HourlyIterator;
 import com.specmate.scheduler.iterators.MinuteIterator;
+import com.specmate.scheduler.iterators.MonthlyIterator;
 import com.specmate.scheduler.iterators.ScheduleIterator;
+import com.specmate.scheduler.iterators.WeeklyIterator;
+import com.specmate.scheduler.iterators.YearlyIterator;
 
 public class SchedulerIteratorFactory {
 
 	private static final String DAY = "day".toLowerCase();
 	private static final String MINUTE = "minute".toLowerCase();
 	private static final String HOUR = "hour".toLowerCase();
+	private static final String WEEK = "week".toLowerCase();
+	private static final String MONTH = "month".toLowerCase();
+	private static final String YEAR = "year".toLowerCase();
 
 	private static final String DELIM = " ";
 
@@ -33,7 +39,16 @@ public class SchedulerIteratorFactory {
 	private static ScheduleIterator constructScheduleIterator(String schedule, Date date) throws SpecmateException {
 		String type = getType(schedule);
 		int[] args = getArgs(schedule);
-
+		
+		if (type.equalsIgnoreCase(YEAR)) {
+			return new YearlyIterator(date, args);
+		}
+		if (type.equalsIgnoreCase(MONTH)) {
+			return new MonthlyIterator(date, args);
+		}
+		if (type.equalsIgnoreCase(WEEK)) {
+			return new WeeklyIterator(date, args);
+		}
 		if (type.equalsIgnoreCase(DAY)) {
 			return new DailyIterator(date, args);
 		}
@@ -59,7 +74,7 @@ public class SchedulerIteratorFactory {
 
 		String type = getType(schedule);
 
-		String[] validTypesStr = { DAY, HOUR, MINUTE };
+		String[] validTypesStr = { YEAR, MONTH, WEEK, DAY, HOUR, MINUTE };
 		boolean isValidType = Arrays.stream(validTypesStr)
 				.anyMatch(validType -> validType.compareToIgnoreCase(type) == 0);
 		if (!isValidType) {

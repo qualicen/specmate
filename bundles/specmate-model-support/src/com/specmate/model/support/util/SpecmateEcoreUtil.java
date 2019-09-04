@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import com.specmate.common.AssertUtil;
+import com.specmate.common.UUIDUtil;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.model.administration.ErrorCode;
@@ -160,16 +161,7 @@ public class SpecmateEcoreUtil {
 	}
 
 	public static String getIdForChild(IContainer parent, EClass type) {
-		int i = 1;
-		String format = "%s-%d";
-		EList<IContentElement> contents = parent.getContents();
-		String candidate;
-		do {
-			candidate = String.format(format, type.getName(), i);
-			i++;
-		} while (getEObjectWithId(candidate, contents) != null);
-
-		return candidate;
+		return UUIDUtil.generateUUID();
 	}
 
 	public static void detach(EObject object, Collection<EStructuralFeature> keepFeatures) {

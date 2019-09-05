@@ -395,8 +395,8 @@ public class ProcessTestCaseGenerator extends TestCaseGeneratorBase<Process, IMo
 	/** Create a test procedure for the given test case. */
 	private TestProcedure createTestProcedure(TestCase testCase) {
 		TestProcedure procedure = TestspecificationFactory.eINSTANCE.createTestProcedure();
-		procedure.setId(SpecmateEcoreUtil.getIdForChild(testCase, procedure.eClass()));
-		procedure.setName(procedure.getId());
+		procedure.setId(SpecmateEcoreUtil.getIdForChild());
+		procedure.setName(SpecmateEcoreUtil.getNameForChild(testCase, procedure.eClass()));
 		return procedure;
 	}
 
@@ -460,7 +460,7 @@ public class ProcessTestCaseGenerator extends TestCaseGeneratorBase<Process, IMo
 		testStep.setDescription(description);
 		testStep.setPosition(position);
 		testStep.setExpectedOutcome(expectedOutcome);
-		testStep.setId(SpecmateEcoreUtil.getIdForChild(procedure, testStep.eClass()));
+		testStep.setId(SpecmateEcoreUtil.getIdForChild());
 		if (testParameter != null) {
 			testStep.getReferencedTestParameters().add(testParameter);
 		}

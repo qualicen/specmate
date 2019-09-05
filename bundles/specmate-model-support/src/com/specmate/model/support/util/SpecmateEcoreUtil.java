@@ -160,8 +160,21 @@ public class SpecmateEcoreUtil {
 		unsetAllReferences(object, Collections.emptyList());
 	}
 
-	public static String getIdForChild(IContainer parent, EClass type) {
+	public static String getIdForChild() {
 		return UUIDUtil.generateUUID();
+	}
+	
+	public static String getNameForChild(IContainer parent, EClass type) {
+		int i = 1;
+		String format = "%s-%d";
+		EList<IContentElement> contents = parent.getContents();
+		String candidate;
+		do {
+			candidate = String.format(format, type.getName(), i);
+			i++;
+		} while (getEObjectWithId(candidate, contents) != null);
+
+		return candidate;
 	}
 
 	public static void detach(EObject object, Collection<EStructuralFeature> keepFeatures) {

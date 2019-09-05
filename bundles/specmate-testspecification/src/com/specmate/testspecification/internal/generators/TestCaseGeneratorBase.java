@@ -56,7 +56,7 @@ public abstract class TestCaseGeneratorBase<M extends IContainer, N extends IMod
 	 */
 	protected TestParameter createTestParameter(String name, ParameterType type) {
 		TestParameter parameter = TestspecificationFactory.eINSTANCE.createTestParameter();
-		parameter.setId(SpecmateEcoreUtil.getIdForChild(specification, parameter.eClass()));
+		parameter.setId(SpecmateEcoreUtil.getIdForChild());
 		parameter.setName(name);
 		parameter.setType(type);
 		return parameter;
@@ -68,7 +68,7 @@ public abstract class TestCaseGeneratorBase<M extends IContainer, N extends IMod
 	 */
 	protected ParameterAssignment createParameterAssignment(TestCase tc, TestParameter parameter, String value) {
 		ParameterAssignment assignment = TestspecificationFactory.eINSTANCE.createParameterAssignment();
-		assignment.setId(SpecmateEcoreUtil.getIdForChild(tc, assignment.eClass()));
+		assignment.setId(SpecmateEcoreUtil.getIdForChild());
 		assignment.setName(parameter.getName());
 		assignment.setParameter(parameter);
 		assignment.setCondition(value);
@@ -83,8 +83,8 @@ public abstract class TestCaseGeneratorBase<M extends IContainer, N extends IMod
 	 */
 	protected TestCase createTestCase(TestSpecification specification) {
 		TestCase testCase = TestspecificationFactory.eINSTANCE.createTestCase();
-		testCase.setId(SpecmateEcoreUtil.getIdForChild(specification, testCase.eClass()));
-		testCase.setName(testCase.getId());
+		testCase.setId(SpecmateEcoreUtil.getIdForChild());
+		testCase.setName(SpecmateEcoreUtil.getNameForChild(specification, testCase.eClass()));
 		return testCase;
 	}
 

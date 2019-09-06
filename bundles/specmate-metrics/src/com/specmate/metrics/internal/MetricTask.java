@@ -13,7 +13,6 @@ public class MetricTask extends SchedulerTask  {
 
 	@Override
 	public void run() {
-		System.err.println("Resetting gauge with sheduler: "+ gauge.toString() + " with value: " + Double.toString(gauge.get()));
 		gauge.set(0);
 	}
 	

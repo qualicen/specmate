@@ -174,10 +174,6 @@ public class UserMetricService implements IUserMetricsService {
 
 		List<Object> results = sessionView.querySQLWithName(sqlQuery,
 				UsermodelFactory.eINSTANCE.getUsermodelPackage().getUserSession(), userName, difference);
-		
-		for(int i = 0; i<results.size(); i++) {
-			System.err.println(results.get(i));
-		}
 
 		if (results.size() > 0) {
 			return false;
@@ -220,11 +216,6 @@ public class UserMetricService implements IUserMetricsService {
 		List<Object> results = sessionView.querySQL(sqlQuery,
 				UsermodelFactory.eINSTANCE.getUsermodelPackage().getUserSession(), difference);
 		int numberOfSessions = results.size();
-		
-		for(int i = 0; i<results.size(); i++) {
-			System.err.println(gauge.toString());
-			System.err.println(results.get(i));
-		}
 	 
 		gauge.set(numberOfSessions);
 	}
@@ -255,10 +246,10 @@ public class UserMetricService implements IUserMetricsService {
 		case CURRENTDAY:
 			gauge = specmate_current_day;
 			break;
-		case CURRENTMONTH:
+		case CURRENTWEEK:
 			gauge = specmate_current_week;
 			break;
-		case CURRENTWEEK:
+		case CURRENTMONTH:
 			gauge = specmate_current_month;
 			break;
 		case CURRENTYEAR:

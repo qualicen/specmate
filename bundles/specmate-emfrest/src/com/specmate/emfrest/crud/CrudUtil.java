@@ -99,7 +99,7 @@ public class CrudUtil {
 		EList<IContentElement> contents = parent.getContents();
 
 		// Change ID
-		String newID = SpecmateEcoreUtil.getIdForChild(parent, copy.eClass());
+		String newID = SpecmateEcoreUtil.getIdForChild();
 		copy.setId(newID);
 
 		String name = copy.getName().replaceFirst("^Copy [0-9]+ of ", "");

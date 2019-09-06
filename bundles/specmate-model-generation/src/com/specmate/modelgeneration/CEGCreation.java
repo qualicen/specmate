@@ -35,10 +35,10 @@ public class CEGCreation {
 	 */
 	public CEGNode createNode(CEGModel model, String variable, String condition, int x, int y, NodeType type) {
 		CEGNode node = RequirementsFactory.eINSTANCE.createCEGNode();
-		node.setId(SpecmateEcoreUtil.getIdForChild(model, node.eClass()));
+		node.setId(SpecmateEcoreUtil.getIdForChild());
 		node.setVariable(variable);
 		node.setCondition(condition);
-		node.setName("generated");
+		node.setName("New CEGNode " + dateFormat.format(new Date()));
 		node.setY(y);
 		node.setX(x);
 		node.setType(type);
@@ -57,7 +57,7 @@ public class CEGCreation {
 	 */
 	public CEGConnection createConnection(CEGModel model, CEGNode nodeFrom, CEGNode nodeTo, boolean negate) {
 		CEGConnection con = RequirementsFactory.eINSTANCE.createCEGConnection();
-		con.setId(SpecmateEcoreUtil.getIdForChild(model, con.eClass()));
+		con.setId(SpecmateEcoreUtil.getIdForChild());
 		con.setSource(nodeFrom);
 		con.setTarget(nodeTo);
 		con.setNegate(negate);

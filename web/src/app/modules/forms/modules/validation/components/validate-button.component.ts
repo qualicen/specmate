@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { ValidationService } from '../services/validation.service';
+import { NavigatorService } from '../../../../navigation/modules/navigator/services/navigator.service';
+import { SpecmateDataService } from '../../../../data/modules/data-service/services/specmate-data.service';
 
 @Component({
     moduleId: module.id.toString(),
@@ -12,15 +14,32 @@ export class ValidateButton {
 
     @Input()
     public textEnabled = true;
+    private commitCounter = 0;
 
-    constructor(private validationService: ValidationService) { }
+    constructor(
+                private validationService: ValidationService,
+                private dataService: SpecmateDataService,
+                private navigator: NavigatorService) {
+      }
 
     public validate(): Promise<void> {
+        this.commitCounter = this.dataService.countCommits;
         return this.validationService.validateCurrent();
     }
 
     public cancelEvent(event: Event): void {
         event.preventDefault();
         event.stopPropagation();
+    }
+
+    public get isValidationEnabled(): boolean {
+      return this.dataService.hasCommits && (this.dataService.countCommits !== this.commitCounter);
+    }
+
+    public get isValidationButtonVisible(): boolean {
+      if(this.navigator.currentElement && ( this.navigator.currentElement.className === "CEGModel" || this.navigator.currentElement.className === "Process")){
+        return true
+      }
+      return false;
     }
 }

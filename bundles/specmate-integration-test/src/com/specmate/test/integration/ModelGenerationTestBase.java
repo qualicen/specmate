@@ -11,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Assert;
 
+import com.specmate.common.TextUtil;
 import com.specmate.model.base.BasePackage;
 import com.specmate.model.requirements.CEGConnection;
 import com.specmate.model.requirements.CEGModel;
@@ -30,19 +31,19 @@ public class ModelGenerationTestBase extends EmfRestTest {
 	private Predicate<JSONObject> MATCHES_VAR_COND(String var, String cond, String type) {
 		return (obj -> obj.getString(ECLASS).equals(CEGNode.class.getSimpleName())
 				&& obj.getString(RequirementsPackage.Literals.CEG_NODE__TYPE.getName()).equals(type)
-				&& (obj.getString(RequirementsPackage.Literals.CEG_NODE__VARIABLE.getName())).toLowerCase()
-						.equals(var.toLowerCase())
-				&& (obj.getString(RequirementsPackage.Literals.CEG_NODE__CONDITION.getName())).toLowerCase()
-						.equals(cond.toLowerCase()));
+				&& TextUtil.textsContainSameWords(
+						obj.getString(RequirementsPackage.Literals.CEG_NODE__VARIABLE.getName()), var)
+				&& TextUtil.textsContainSameWords(
+						obj.getString(RequirementsPackage.Literals.CEG_NODE__CONDITION.getName()), cond));
 	}
 
 	private Predicate<JSONObject> MATCHES_ID_VAR_COND(String id, String var, String cond) {
 		return (obj -> obj.getString(ECLASS).equals(CEGNode.class.getSimpleName())
 				&& obj.getString(BasePackage.Literals.IID__ID.getName()).equals(id)
-				&& (obj.getString(RequirementsPackage.Literals.CEG_NODE__VARIABLE.getName())).toLowerCase()
-						.equals(var.toLowerCase())
-				&& (obj.getString(RequirementsPackage.Literals.CEG_NODE__CONDITION.getName())).toLowerCase()
-						.equals(cond.toLowerCase()));
+				&& TextUtil.textsContainSameWords(
+						obj.getString(RequirementsPackage.Literals.CEG_NODE__VARIABLE.getName()), var)
+				&& TextUtil.textsContainSameWords(
+						obj.getString(RequirementsPackage.Literals.CEG_NODE__CONDITION.getName()), cond));
 	}
 
 	public ModelGenerationTestBase() throws Exception {
@@ -62,7 +63,10 @@ public class ModelGenerationTestBase extends EmfRestTest {
 				nodes += "[" + item.get("variable") + " ; ";
 			}
 			if (item.keySet().contains("condition")) {
-				nodes += item.get("condition") + "],";
+				nodes += item.get("condition") + " ; ";
+			}
+			if (item.keySet().contains("type")) {
+				nodes += item.get("type") + "],";
 			}
 		}
 
@@ -78,7 +82,7 @@ public class ModelGenerationTestBase extends EmfRestTest {
 					MATCHES_VAR_COND(node.getVariable(), node.getCondition(), node.getType().getLiteral())));
 
 			Assert.assertTrue("Node with variable \"" + node.getVariable() + "\" and condition \"" + node.getCondition()
-					+ "\" not found. Nodes found: " + nodes, matched);
+					+ "\" and type \"" + node.getType() + "\" not found. Nodes found: " + nodes, matched);
 		}
 
 		// Verify connections

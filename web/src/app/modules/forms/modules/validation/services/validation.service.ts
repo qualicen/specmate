@@ -10,6 +10,11 @@ import { ValidationResult } from '../../../../../validation/validation-result';
 import { NavigatorService } from '../../../../navigation/modules/navigator/services/navigator.service';
 import { ValidationCache, ValidationPair } from '../util/validation-cache';
 import { ValidationErrorSeverity } from '../../../../../validation/validation-error-severity';
+import { Type } from '../../../../../util/type';
+import { CEGModel } from '../../../../../model/CEGModel';
+import { Process } from '../../../../../model/Process';
+import { TestSpecification } from '../../../../../model/TestSpecification';
+
 
 @Injectable()
 export class ValidationService {
@@ -58,16 +63,26 @@ export class ValidationService {
         if (clear) {
             this.validationCache.clear();
         }
-        const requiredFieldsResults: ValidationResult = this.getRequiredFieldsValidator(element).validate(element);
+        let elementResults: ValidationResult[] = this.getValidationResultsFor(element, contents);
+        if (Type.is(element, CEGModel) || Type.is(element, Process)) {
+            let childElements = contents.filter(c => !Type.is(c, TestSpecification));
+            for (let child of childElements) {
+                elementResults = elementResults.concat(this.getValidationResultsFor(child, []));
+            }
+        }
+        this.validationCache.addValidationResultsToCache(elementResults);
+    }
+
+    private getValidationResultsFor(element: IContainer, contents: IContainer[]) {
+        const requiredFieldsResults: ValidationResult = ValidationService.getRequiredFieldsValidator(element).validate(element);
         const validNameResult: ValidationResult = this.validNameValidator.validate(element);
         const textLengthValidationResult: ValidationResult = this.textLengthValidator.validate(element);
         const elementValidators = this.getElementValidators(element) || [];
-        let elementResults: ValidationResult[] =
-            elementValidators.map((validator: ElementValidatorBase<IContainer>) => validator.validate(element, contents))
-                .concat(requiredFieldsResults)
-                .concat(validNameResult)
-                .concat(textLengthValidationResult);
-        this.validationCache.addValidationResultsToCache(elementResults);
+        let elementResults: ValidationResult[] = elementValidators.map((validator: ElementValidatorBase<IContainer>) => validator.validate(element, contents))
+            .concat(requiredFieldsResults)
+            .concat(validNameResult)
+            .concat(textLengthValidationResult);
+        return elementResults;
     }
 
     public get currentSeverities(): ValidationErrorSeverity[] {
@@ -91,7 +106,7 @@ export class ValidationService {
         return contents.every((element: IContainer) => this.isValid(element));
     }
 
-    private getRequiredFieldsValidator(element: IContainer): RequiredFieldsValidator {
+    public static getRequiredFieldsValidator(element: IContainer): RequiredFieldsValidator {
         if (!ValidationService.requiredFieldValidatorMap) {
             ValidationService.requiredFieldValidatorMap = {};
         }

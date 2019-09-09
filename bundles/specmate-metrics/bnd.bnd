@@ -9,6 +9,7 @@
 	io.prometheus.simpleclient_hotspot,\
 	specmate-model-gen;version=latest,\
 	specmate-persistency-api;version=latest,\
-	org.eclipse.emf.ecore
+	org.eclipse.emf.ecore,\
+	org.eclipse.emf.common
 Private-Package: com.specmate.metrics.internal
 Export-Package: com.specmate.metrics

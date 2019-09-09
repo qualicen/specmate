@@ -38,7 +38,6 @@
 	"Error": "Fehler",
 	"ErrorsandWarnings": "Fehler & Warnungen",
 	"Expected Outcome": "Erwartetes Ergebnis",
-	"ExpectedOutcome": "",
 	"GeneralInformation": "Allgemeine Informationen",
 	"ImplementingBO-team": "Verantwortliches BO-Team",
 	"ImplementingIT-team": "Verantwortliches IT-Team",
@@ -128,6 +127,7 @@
 	"elementCouldNotBeUpdated": "Element konnte nicht geändert werden",
 	"errorLoggedOut": "Sie wurden aufgrund eines unbekannten Fehlers abgemeldet.",
 	"expand": "",
+	"exportAlm": "Nach ALM exportieren",
 	"exportTestprocedure": "Testprozedur exportieren",
 	"exportTestspecification": "Testspezifikation exportieren",
 	"failed": "Fehler",
@@ -137,6 +137,7 @@
 	"invalidCharacter": "Ungültige Zeichen: , ; |",
 	"library": "Bibliothek",
 	"loadMore": "Weitere laden",
+	"loading": "Lädt...",
 	"log": {
 		"dataError": "Datenfehler",
 		"delete": "Löschen",
@@ -153,6 +154,7 @@
 	"logout": "Abmelden",
 	"logoutFailed": "Abmeldung fehlgeschlagen.",
 	"maximize": "Maximieren",
+	"modelGenerationFailed": "Es konnte kein Modell erzeugt werden.",
 	"name": "Name",
 	"navigate": {
 		"back": "Zurück",
@@ -235,6 +237,7 @@
 	"unknownError": "Ein unbekannter Fehler ist auf dem Server aufgetreten",
 	"unreferenced": "nicht referenziert",
 	"username": "Benutzername",
+	"validate": "validieren",
 	"validationResult": {
 		"errorCircularCauses": "Zyklische Ursachenabhängigkeit.",
 		"errorContradictoryModel": "Wirkung hat wiedersprüchliche Ursachen.",

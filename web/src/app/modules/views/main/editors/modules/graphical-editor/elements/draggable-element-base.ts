@@ -10,9 +10,9 @@ import { Coords } from '../util/coords';
 import { GraphicalNodeBase } from './graphical-node-base';
 
 export abstract class DraggableElementBase<T extends ISpecmatePositionableModelObject> extends GraphicalNodeBase<T> {
-    constructor(sel: SelectedElementService, val: ValidationService,
-                        mul: MultiselectionService) {
-        super(sel, val, mul);
+    constructor(selectedElementService: SelectedElementService, validationService: ValidationService,
+                        multiselectionService: MultiselectionService) {
+        super(selectedElementService, validationService, multiselectionService);
     }
 
     private isGrabbed = false;
@@ -220,11 +220,14 @@ export abstract class DraggableElementBase<T extends ISpecmatePositionableModelO
     }
 
     public dropNode(): void {
+        let change = (this.prevX != undefined || this.prevY!=undefined);
         this.isGrabbed = false;
         this.isGrabTrigger = false;
         this.prevX = undefined;
         this.prevY = undefined;
-        this.dataService.updateElement(this.element, true, Id.uuid);
+        if(change){
+            this.dataService.updateElement(this.element, true, Id.uuid);
+        }
     }
 
     private dragEnd(): void {

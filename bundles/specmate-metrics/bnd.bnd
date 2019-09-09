@@ -9,6 +9,9 @@
 	specmate-model-gen;version=latest,\
 	specmate-persistency-api;version=latest,\
 	org.eclipse.emf.ecore,\
+	org.eclipse.emf.common,\
+	org.eclipse.emf.cdo,\
+	org.eclipse.emf.cdo.common,\
 	specmate-scheduler
 Private-Package: com.specmate.metrics.internal
 Export-Package: com.specmate.metrics

@@ -10,6 +10,6 @@
 	specmate-persistency-api;version=latest,\
 	org.eclipse.emf.ecore,\
 	org.eclipse.emf.common,\
-	specmate-scheduler
+	specmate-scheduler;version=latest
 Private-Package: com.specmate.metrics.internal
 Export-Package: com.specmate.metrics

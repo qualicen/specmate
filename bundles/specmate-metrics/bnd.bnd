@@ -13,5 +13,4 @@
 	org.eclipse.emf.common
 Private-Package: com.specmate.metrics.internal
 Export-Package: com.specmate.metrics,\
-com.specmate.scheduler,\
-com.specmate.scheduler.iterators
+com.specmate.scheduler

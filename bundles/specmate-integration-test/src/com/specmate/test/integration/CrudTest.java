@@ -376,11 +376,11 @@ public class CrudTest extends EmfRestTest {
 		postObject(Status.BAD_REQUEST.getStatusCode(), folder);
 	}
 
-	/*@Test
+	@Test
 	public void testPostFolderWithDuplicateId() {
 		JSONObject folder = postFolderToTopFolder();
 		postObject(Status.BAD_REQUEST.getStatusCode(), folder);
-	}*/
+	}
 
 	@Test
 	public void testPostFolderWithIllegalId() {

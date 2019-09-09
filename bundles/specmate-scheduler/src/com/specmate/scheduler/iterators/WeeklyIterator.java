@@ -1,8 +1,6 @@
 package com.specmate.scheduler.iterators;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
@@ -19,15 +17,11 @@ public class WeeklyIterator implements ScheduleIterator {
 	}
 
 	public WeeklyIterator(int hourOfDay, int minute, int second, Date date) {
-		
-		// Get the specified date
-		LocalDate localDate = date.toInstant()
-			      .atZone(ZoneId.systemDefault())
-			      .toLocalDate();
-		
-		LocalDateTime localDT = LocalDateTime.of(localDate, LocalTime.of(hourOfDay, minute, second, 0));
-		
 		ZoneId currentZone = ZoneId.systemDefault();
+		
+		LocalDateTime localDT = LocalDateTime.ofInstant(date.toInstant(), currentZone);
+		localDT = localDT.withHour(hourOfDay).withMinute(minute).withSecond(second).withNano(0);
+		
 		zoneDate = ZonedDateTime.of(localDT, currentZone);
 	}
 

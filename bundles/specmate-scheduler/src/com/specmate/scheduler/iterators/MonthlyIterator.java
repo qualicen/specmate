@@ -21,14 +21,10 @@ public class MonthlyIterator implements ScheduleIterator {
 
 	public MonthlyIterator(int hourOfDay, int minute, int second, Date date) {
 		
-		// Get the specified date
-		LocalDate localDate = date.toInstant()
-			      .atZone(ZoneId.systemDefault())
-			      .toLocalDate();
-		
-		LocalDateTime localDT = LocalDateTime.of(localDate, LocalTime.of(hourOfDay, minute, second, 0));
-		
 		ZoneId currentZone = ZoneId.systemDefault();
+		LocalDateTime localDT = LocalDateTime.ofInstant(date.toInstant(), currentZone);
+		localDT = localDT.withHour(hourOfDay).withMinute(minute).withSecond(second).withNano(0);
+		
 		zonedDateTime = ZonedDateTime.of(localDT, currentZone);
 	}
 

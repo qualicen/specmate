@@ -19,16 +19,11 @@ public class DailyIterator implements ScheduleIterator {
 	}
 
 	public DailyIterator(int hourOfDay, int minute, int second, Date date) {
-		
-		// Get the specified date
-		LocalDate localDate = date.toInstant()
-				.atZone(ZoneId.systemDefault())
-				.toLocalDate();
+		ZoneId currentZone = ZoneId.systemDefault();
 
-		LocalDateTime localDT = LocalDateTime.of(localDate, LocalTime.now());
+		LocalDateTime localDT = LocalDateTime.ofInstant(date.toInstant(), currentZone);
 		localDT = localDT.withHour(hourOfDay).withMinute(minute).withSecond(second).withNano(0);
 
-		ZoneId currentZone = ZoneId.systemDefault();
 		zonedDateTime = ZonedDateTime.of(localDT, currentZone);
 	}
 

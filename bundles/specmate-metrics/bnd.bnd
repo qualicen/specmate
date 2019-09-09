@@ -5,11 +5,11 @@
 	io.prometheus.simpleclient_servlet,\
 	org.eclipse.jetty.osgi-servlet-api,\
 	specmate-common;version=latest,\
+	specmate-scheduler;version=latest,\
 	io.prometheus.simpleclient_hotspot,\
 	specmate-model-gen;version=latest,\
 	specmate-persistency-api;version=latest,\
 	org.eclipse.emf.ecore,\
-	org.eclipse.emf.common,\
-	specmate-scheduler;version=latest
+	org.eclipse.emf.common
 Private-Package: com.specmate.metrics.internal
 Export-Package: com.specmate.metrics

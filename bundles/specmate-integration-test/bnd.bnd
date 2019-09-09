@@ -11,8 +11,7 @@ Test-Cases: \
 	com.specmate.test.integration.ErrorResponsesTest,\
 	com.specmate.test.integration.NLPServiceTest,\
 	com.specmate.test.integration.ModelGenerationTestEn,\
-	com.specmate.test.integration.ModelGenerationTestDe,\
-	com.specmate.test.integration.ModelGenerationTestDe_2
+	com.specmate.test.integration.ModelGenerationTestDe
 -buildpath: \
 	biz.aQute.launcher,\
 	specmate-persistency-api;version=latest,\
@@ -171,7 +170,6 @@ Bundle-Version: 0.0.0.${tstamp}
 	specmate-connectors;version=snapshot,\
 	org.eclipse.emf.cdo;version='[4.5.0,4.5.1)',\
 	org.eclipse.emf.cdo.common;version='[4.5.0,4.5.1)',\
-	org.eclipse.emf.cdo.ecore.retrofit;version='[4.2.300,4.2.301)',\
 	org.eclipse.emf.cdo.net4j;version='[4.1.400,4.1.401)',\
 	org.eclipse.emf.cdo.server;version='[4.5.0,4.5.1)',\
 	org.eclipse.emf.cdo.server.net4j;version='[4.1.300,4.1.301)',\
@@ -285,7 +283,8 @@ Bundle-Version: 0.0.0.${tstamp}
 	specmate-objectif;version=snapshot,\
 	specmate-xtext;version=snapshot,\
 	com.sun.activation.javax.activation;version='[1.2.0,1.2.1)',\
-	jaxb-api;version='[2.3.1,2.3.2)'
+	javax.activation-api;version='[1.2.0,1.2.1)',\
+	jaxb-api;version='[2.3.0,2.3.1)'
 
 -runproperties: \
 	jetty.http.port=8088,\

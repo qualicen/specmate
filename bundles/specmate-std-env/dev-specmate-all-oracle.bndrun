@@ -102,7 +102,6 @@
 	specmate-connectors;version=snapshot,\
 	org.eclipse.emf.cdo;version='[4.5.0,4.5.1)',\
 	org.eclipse.emf.cdo.common;version='[4.5.0,4.5.1)',\
-	org.eclipse.emf.cdo.ecore.retrofit;version='[4.2.300,4.2.301)',\
 	org.eclipse.emf.cdo.net4j;version='[4.1.400,4.1.401)',\
 	org.eclipse.emf.cdo.server;version='[4.5.0,4.5.1)',\
 	org.eclipse.emf.cdo.server.net4j;version='[4.1.300,4.1.301)',\
@@ -222,8 +221,9 @@
 	org.eclipse.xtext.util;version='[2.10.0,2.10.1)',\
 	org.eclipse.xtext.xbase.lib;version='[2.10.0,2.10.1)',\
 	specmate-cause-effect-patterns;version=snapshot,\
-	jaxb-api;version='[2.3.1,2.3.2)',\
-	specmate-xtext;version=snapshot
+	specmate-xtext;version=snapshot,\
+	javax.activation-api;version='[1.2.0,1.2.1)',\
+	jaxb-api;version='[2.3.0,2.3.1)'
 
 -runproperties: \
 	jetty.http.port=8080,\

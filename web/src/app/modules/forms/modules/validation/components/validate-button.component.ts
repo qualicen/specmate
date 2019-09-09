@@ -32,9 +32,6 @@ export class ValidateButton {
         event.stopPropagation();
     }
 
-    public get isValidationEnabled(): boolean {
-      return this.dataService.hasCommits && (this.dataService.countCommits !== this.commitCounter);
-    }
 
     public get isValidationButtonVisible(): boolean {
       if(this.navigator.currentElement && ( this.navigator.currentElement.className === "CEGModel" || this.navigator.currentElement.className === "Process")){

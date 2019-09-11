@@ -40,7 +40,7 @@ export class AdditionalInformationService {
     }
 
     private async loadTestSpecifications(): Promise<void> {
-        if (!this.canHaveTestSpecifications || !this.requirement) {
+        if (!this.canHaveTestSpecifications) {
             return;
         }
         let baseUrl = '';

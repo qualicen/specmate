@@ -24,6 +24,12 @@ public class MonthlyIterator implements ScheduleIterator {
 		localDT = localDT.withHour(hourOfDay).withMinute(minute).withSecond(second).withNano(0);
 		
 		zonedDateTime = ZonedDateTime.of(localDT, currentZone);
+		ZonedDateTime specifiedDate = date.toInstant().atZone(currentZone);
+		
+		if(zonedDateTime.isAfter(specifiedDate)) {
+			// if the time of the zonedDateTime lies in the future subtract one month to get the correct scheduled time
+			zonedDateTime.minusMonths(1);
+		}
 	}
 
 	@Override

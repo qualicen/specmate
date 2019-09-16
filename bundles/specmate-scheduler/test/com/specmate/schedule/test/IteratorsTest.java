@@ -25,7 +25,7 @@ public class IteratorsTest {
 		// scheduled time after current time
 		yearlyIterator = SchedulerIteratorFactory.create("year 11 20 15", date);
 		next = yearlyIterator.next();
-		Assert.assertEquals("2019-11-01 11:20:15", dateFormat.format(next));
+		Assert.assertEquals("2018-11-01 11:20:15", dateFormat.format(next));
 
 		Date endOfDay = dateFormat.parse("2018-12-31 23:30:10");
 		yearlyIterator = SchedulerIteratorFactory.create("year 11 20 15", endOfDay);
@@ -66,7 +66,7 @@ public class IteratorsTest {
 		// scheduled time after current time
 		weeklyIterator = SchedulerIteratorFactory.create("week 11 45 59", date);
 		next = weeklyIterator.next();
-		Assert.assertEquals("2018-11-08 11:45:59", dateFormat.format(next));
+		Assert.assertEquals("2018-11-01 11:45:59", dateFormat.format(next));
 
 		Date endOfDay = dateFormat.parse("2018-12-31 23:30:10");
 		// scheduled time need year jump

@@ -10,7 +10,7 @@ import java.util.Date;
  * representing the same time each week.
  */
 public class YearlyIterator implements ScheduleIterator {
-	private ZonedDateTime zoneDate;
+	private ZonedDateTime zonedDateTime;
 
 	public YearlyIterator(Date date, int... time) {
 		this(getHourOfDay(time), getMinute(time), getSecond(time), date);
@@ -22,14 +22,20 @@ public class YearlyIterator implements ScheduleIterator {
 		LocalDateTime localDT = LocalDateTime.ofInstant(date.toInstant(), currentZone);
 		localDT = localDT.withHour(hourOfDay).withMinute(minute).withSecond(second).withNano(0);
 		
-		zoneDate = ZonedDateTime.of(localDT, currentZone);
+		zonedDateTime = ZonedDateTime.of(localDT, currentZone);
+		ZonedDateTime specifiedDate = date.toInstant().atZone(currentZone);
+		
+		if(zonedDateTime.isAfter(specifiedDate)) {
+			// if the time of the zonedDateTime lies in the future subtract one year to get the correct scheduled time
+			zonedDateTime.minusYears(1);
+		}
 	}
 
 	@Override
 	public Date next() {
 		// Add one year to the set date
-		zoneDate = zoneDate.plusYears(1);
-		return Date.from(zoneDate.toInstant());
+		zonedDateTime = zonedDateTime.plusYears(1);
+		return Date.from(zonedDateTime.toInstant());
 	}
 
 	private static int getHourOfDay(int... time) {

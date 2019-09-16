@@ -40,7 +40,7 @@ public class IteratorsTest {
 		// scheduled time before current time
 		ScheduleIterator monthlyIterator = SchedulerIteratorFactory.create("month 4 40 50", date);
 		Date next = monthlyIterator.next();
-		Assert.assertEquals("2018-12-01 4:40:50", dateFormat.format(next));
+		Assert.assertEquals("2018-12-01 04:40:50", dateFormat.format(next));
 
 		// scheduled time after current time
 		monthlyIterator = SchedulerIteratorFactory.create("month 12 30 00", date);

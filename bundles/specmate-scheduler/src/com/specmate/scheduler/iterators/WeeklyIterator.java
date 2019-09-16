@@ -10,7 +10,7 @@ import java.util.Date;
  * representing the same time each week.
  */
 public class WeeklyIterator implements ScheduleIterator {
-	private ZonedDateTime zoneDate;
+	private ZonedDateTime zonedDateTime;
 
 	public WeeklyIterator(Date date, int... time) {
 		this(getHourOfDay(time), getMinute(time), getSecond(time), date);
@@ -22,14 +22,20 @@ public class WeeklyIterator implements ScheduleIterator {
 		LocalDateTime localDT = LocalDateTime.ofInstant(date.toInstant(), currentZone);
 		localDT = localDT.withHour(hourOfDay).withMinute(minute).withSecond(second).withNano(0);
 		
-		zoneDate = ZonedDateTime.of(localDT, currentZone);
+		zonedDateTime = ZonedDateTime.of(localDT, currentZone);
+		ZonedDateTime specifiedDate = date.toInstant().atZone(currentZone);
+		
+		if(zonedDateTime.isAfter(specifiedDate)) {
+			// if the time of the zonedDateTime lies in the future subtract one week to get the correct scheduled time
+			zonedDateTime.minusWeeks(1);
+		}
 	}
 
 	@Override
 	public Date next() {
 		// Add one week to the set day of the week
-		zoneDate = zoneDate.plusWeeks(1);
-		return Date.from(zoneDate.toInstant());
+		zonedDateTime = zonedDateTime.plusWeeks(1);
+		return Date.from(zonedDateTime.toInstant());
 	}
 
 	private static int getHourOfDay(int... time) {

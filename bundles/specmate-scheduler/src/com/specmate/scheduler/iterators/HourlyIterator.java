@@ -6,8 +6,8 @@ import java.time.ZonedDateTime;
 import java.util.Date;
 
 /**
- * A <code>DailyIterator</code> returns a sequence of dates on subsequent days
- * representing the same time each day.
+ * A <code>HourlyIterator</code> returns a sequence of dates on subsequent hours
+ * representing the same time each hour.
  */
 public class HourlyIterator implements ScheduleIterator {
 	private ZonedDateTime zonedDateTime;
@@ -23,6 +23,12 @@ public class HourlyIterator implements ScheduleIterator {
 		localDT = localDT.withMinute(minute).withSecond(second).withNano(0);
 
 		zonedDateTime = ZonedDateTime.of(localDT, currentZone);
+		ZonedDateTime specifiedDate = date.toInstant().atZone(currentZone);
+		
+		if(zonedDateTime.isAfter(specifiedDate)) {
+			// if the time of the zonedDateTime lies in the future subtract one hour to get the correct scheduled time
+			zonedDateTime.minusHours(1);
+		}
 	}
 
 	@Override

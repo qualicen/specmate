@@ -21,6 +21,7 @@ public class SchedulerIteratorFactory {
 	private static final String HOUR = "hour".toLowerCase();
 	private static final String WEEK = "week".toLowerCase();
 	private static final String MONTH = "month".toLowerCase();
+	private static final String MONTHLASTDAY = "monthlastDay".toLowerCase();
 	private static final String YEAR = "year".toLowerCase();
 
 	private static final String DELIM = " ";
@@ -44,7 +45,10 @@ public class SchedulerIteratorFactory {
 			return new YearlyIterator(date, args);
 		}
 		if (type.equalsIgnoreCase(MONTH)) {
-			return new MonthlyIterator(date, args);
+			return new MonthlyIterator(false, date, args);
+		}
+		if (type.equalsIgnoreCase(MONTHLASTDAY)) {
+			return new MonthlyIterator(true, date, args);
 		}
 		if (type.equalsIgnoreCase(WEEK)) {
 			return new WeeklyIterator(date, args);
@@ -74,7 +78,7 @@ public class SchedulerIteratorFactory {
 
 		String type = getType(schedule);
 
-		String[] validTypesStr = { YEAR, MONTH, WEEK, DAY, HOUR, MINUTE };
+		String[] validTypesStr = { YEAR, MONTH, MONTHLASTDAY, WEEK, DAY, HOUR, MINUTE };
 		boolean isValidType = Arrays.stream(validTypesStr)
 				.anyMatch(validType -> validType.compareToIgnoreCase(type) == 0);
 		if (!isValidType) {

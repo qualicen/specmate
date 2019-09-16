@@ -88,7 +88,7 @@ public class UserMetricService implements IUserMetricsService {
 			// Get the reseted counter back
 			specmate_current_week = ((MetricTask) weeklyMetricTask).getGauge();
 
-			String scheduleMonth = "month 23 59 59";
+			String scheduleMonth = "monthlastday 23 59 59";
 			SchedulerTask monthlyMetricTask = new MetricTask(specmate_current_month);
 			//metricRunnableMonth.run();
 			Scheduler schedulerMonth = new Scheduler();

@@ -12,16 +12,24 @@ import java.util.Date;
  */
 public class MonthlyIterator implements ScheduleIterator {
 	private ZonedDateTime zonedDateTime;
+	private boolean lastDayOfMonth;
 
-	public MonthlyIterator(Date date, int... time) {
-		this(getHourOfDay(time), getMinute(time), getSecond(time), date);
+	public MonthlyIterator(boolean lastDayOfMonth, Date date, int... time) {
+		this(lastDayOfMonth, getHourOfDay(time), getMinute(time), getSecond(time), date);
 	}
 
-	public MonthlyIterator(int hourOfDay, int minute, int second, Date date) {
+	public MonthlyIterator(boolean lastDayOfMonth, int hourOfDay, int minute, int second, Date date) {
+		
+		this.lastDayOfMonth = lastDayOfMonth;
 		
 		ZoneId currentZone = ZoneId.systemDefault();
 		LocalDateTime localDT = LocalDateTime.ofInstant(date.toInstant(), currentZone);
 		localDT = localDT.withHour(hourOfDay).withMinute(minute).withSecond(second).withNano(0);
+		
+		// if we want to use the lastDayOfMonth Iterator we can set the date to the last day of the month specified by the date
+		if (lastDayOfMonth) {
+			localDT = localDT.with(TemporalAdjusters.lastDayOfMonth());
+		}
 		
 		zonedDateTime = ZonedDateTime.of(localDT, currentZone);
 		ZonedDateTime specifiedDate = date.toInstant().atZone(currentZone);
@@ -40,7 +48,9 @@ public class MonthlyIterator implements ScheduleIterator {
 		 * 	as we want our counter to reset at the last day of the month we call lastDayOfMonth 
 		 * 	to set the date to the 31th if it exists in the current month
 		 * */
-		zonedDateTime = zonedDateTime.with(TemporalAdjusters.lastDayOfMonth());
+		if (lastDayOfMonth) {
+			zonedDateTime = zonedDateTime.with(TemporalAdjusters.lastDayOfMonth());
+		}
 		return Date.from(zonedDateTime.toInstant());
 	}
 	

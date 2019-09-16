@@ -28,7 +28,7 @@ public class MinuteIterator implements ScheduleIterator {
 		
 		if(zonedDateTime.isAfter(specifiedDate)) {
 			// if the time of the zonedDateTime lies in the future subtract one minute to get the correct scheduled time
-			zonedDateTime.minusMinutes(1);
+			zonedDateTime = zonedDateTime.minusMinutes(1);
 		}	
 	}
 

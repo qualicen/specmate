@@ -27,7 +27,7 @@ public class YearlyIterator implements ScheduleIterator {
 		
 		if(zonedDateTime.isAfter(specifiedDate)) {
 			// if the time of the zonedDateTime lies in the future subtract one year to get the correct scheduled time
-			zonedDateTime.minusYears(1);
+			zonedDateTime = zonedDateTime.minusYears(1);
 		}
 	}
 

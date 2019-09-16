@@ -27,7 +27,7 @@ public class WeeklyIterator implements ScheduleIterator {
 		
 		if(zonedDateTime.isAfter(specifiedDate)) {
 			// if the time of the zonedDateTime lies in the future subtract one week to get the correct scheduled time
-			zonedDateTime.minusWeeks(1);
+			zonedDateTime = zonedDateTime.minusWeeks(1);
 		}
 	}
 

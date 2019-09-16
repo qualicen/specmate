@@ -28,7 +28,7 @@ public class MonthlyIterator implements ScheduleIterator {
 		
 		if(zonedDateTime.isAfter(specifiedDate)) {
 			// if the time of the zonedDateTime lies in the future subtract one month to get the correct scheduled time
-			zonedDateTime.minusMonths(1);
+			zonedDateTime = zonedDateTime.minusMonths(1);
 		}
 	}
 

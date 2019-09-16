@@ -27,7 +27,7 @@ public class HourlyIterator implements ScheduleIterator {
 		
 		if(zonedDateTime.isAfter(specifiedDate)) {
 			// if the time of the zonedDateTime lies in the future subtract one hour to get the correct scheduled time
-			zonedDateTime.minusHours(1);
+			zonedDateTime = zonedDateTime.minusHours(1);
 		}
 	}
 

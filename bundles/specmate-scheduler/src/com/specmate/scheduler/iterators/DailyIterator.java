@@ -28,7 +28,7 @@ public class DailyIterator implements ScheduleIterator {
 		
 		if(zonedDateTime.isAfter(specifiedDate)) {
 			// if the time of the zonedDateTime lies in the future subtract one day to get the correct scheduled time
-			zonedDateTime.minusDays(1);
+			zonedDateTime = zonedDateTime.minusDays(1);
 		}
 	}
 

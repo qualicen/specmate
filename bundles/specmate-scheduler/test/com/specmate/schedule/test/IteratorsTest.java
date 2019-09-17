@@ -65,13 +65,13 @@ public class IteratorsTest {
 
 		Date lastDayOfFeb = dateFormat.parse("2018-02-28 23:30:10");
 		// scheduled time where current month has less days than next month
-		monthlyLastDayIterator = SchedulerIteratorFactory.create("month 12 30 00", lastDayOfFeb);
+		monthlyLastDayIterator = SchedulerIteratorFactory.create("monthlastday 12 30 00", lastDayOfFeb);
 		next = monthlyLastDayIterator.next();
 		Assert.assertEquals("2018-03-31 12:30:00", dateFormat.format(next));
 
 		Date endOfDay = dateFormat.parse("2019-04-30 23:30:10");
 		// scheduled time need year jump
-		monthlyLastDayIterator = SchedulerIteratorFactory.create("month 7 15 59", endOfDay);
+		monthlyLastDayIterator = SchedulerIteratorFactory.create("monthlastday 7 15 59", endOfDay);
 		next = monthlyLastDayIterator.next();
 		Assert.assertEquals("2019-05-31 07:15:59", dateFormat.format(next));
 	}

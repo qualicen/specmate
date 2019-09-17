@@ -92,7 +92,7 @@ public class UserMetricService implements IUserMetricsService {
 			SchedulerTask monthlyMetricTask = new MetricTask(specmate_current_month);
 			//metricRunnableMonth.run();
 			Scheduler schedulerMonth = new Scheduler();
-			schedulerMonth.schedule(monthlyMetricTask, SchedulerIteratorFactory.create(scheduleMonth, getLastDayOfMonth()));
+			schedulerMonth.schedule(monthlyMetricTask, SchedulerIteratorFactory.create(scheduleMonth));
 			// Get the reseted counter back
 			specmate_current_month = ((MetricTask) monthlyMetricTask).getGauge();
 			
@@ -116,17 +116,6 @@ public class UserMetricService implements IUserMetricsService {
 		
 		// Set to next Sunday, if current Date is Sunday the date is not altered
 		zonedDateTime = zonedDateTime.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY)).withNano(0);
-		
-		return Date.from(zonedDateTime.toInstant());
-	}
-	
-	private Date getLastDayOfMonth() {
-		LocalDateTime localNow = LocalDateTime.now();
-
-		ZoneId currentZone = ZoneId.systemDefault();
-		ZonedDateTime zonedDateTime = ZonedDateTime.of(localNow, currentZone);
-		
-		zonedDateTime = zonedDateTime.with(TemporalAdjusters.lastDayOfMonth()).withNano(0);
 		
 		return Date.from(zonedDateTime.toInstant());
 	}

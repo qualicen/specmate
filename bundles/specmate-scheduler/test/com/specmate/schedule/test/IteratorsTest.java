@@ -149,7 +149,7 @@ public class IteratorsTest {
 		Assert.assertEquals("2018-11-02 08:20:05", dateFormat.format(next));
 
 		// scheduled time after current time
-		dayIterator = SchedulerIteratorFactory.create("day 10 20 5", date);
+		dayIterator = SchedulerIteratorFactory.create("day 11 20 5", date);
 		next = dayIterator.next();
 		Assert.assertEquals("2018-11-01 10:20:05", dateFormat.format(next));
 

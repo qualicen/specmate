@@ -151,7 +151,7 @@ public class IteratorsTest {
 		// scheduled time after current time
 		dayIterator = SchedulerIteratorFactory.create("day 11 20 5", date);
 		next = dayIterator.next();
-		Assert.assertEquals("2018-11-01 10:20:05", dateFormat.format(next));
+		Assert.assertEquals("2018-11-01 11:20:05", dateFormat.format(next));
 
 		Date endOfDay = dateFormat.parse("2018-12-31 23:59:10");
 		// scheduled minutes need year jump

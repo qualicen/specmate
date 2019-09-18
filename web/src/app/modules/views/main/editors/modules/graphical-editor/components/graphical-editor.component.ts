@@ -160,7 +160,7 @@ export class GraphicalEditor {
         invalidStyle[mx.mxConstants.STYLE_STROKE_OPACITY] = '100';
         invalidStyle[mx.mxConstants.STYLE_STROKECOLOR] = '#ffc3d9';
         stylesheet.putCellStyle(this.INVALID_STYLE_NAME, invalidStyle);
-        
+
         const vertexStyle = this.graph.getStylesheet().getDefaultVertexStyle();
         vertexStyle[mx.mxConstants.STYLE_STROKECOLOR] = '#000000';
         this.graph.getStylesheet().getDefaultEdgeStyle()[mx.mxConstants.STYLE_STROKECOLOR] = '#000000';
@@ -186,6 +186,32 @@ export class GraphicalEditor {
             if (this.graph.isEnabled()) {
                 this.graph.getSelectionModel().addCells(this.graph.getChildCells(this.graph.getDefaultParent()));
             }
+        });
+
+        // Ctrl+C
+        this.keyHandler.bindControlKey(67, (evt: KeyboardEvent) => {
+          this.stopEvent(evt);
+          if (this.graph.isEnabled()) {
+            mx.mxClipboard.copy(this.graph, this.graph.getSelectionCells());
+          }
+        });
+
+        // Ctrl+V
+        this.keyHandler.bindControlKey(86, (evt: KeyboardEvent) => {
+          this.stopEvent(evt);
+          if (this.graph.isEnabled()) {
+            mx.mxClipboard.paste(this.graph);
+          }
+        });
+
+        // Ctrl+X
+        this.keyHandler.bindControlKey(88, (evt: KeyboardEvent) => {
+          this.stopEvent(evt);
+          if (this.graph.isEnabled()) {
+            mx.mxClipboard.copy(this.graph, this.graph.getSelectionCells());
+            this.deleteSelectedCells();
+
+          }
         });
     }
 

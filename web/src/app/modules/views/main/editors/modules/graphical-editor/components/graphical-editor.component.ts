@@ -17,6 +17,7 @@ import { ShapeData, ShapeProvider } from '../providers/properties/shape-provider
 import { ToolProvider } from '../providers/properties/tool-provider';
 import { ChangeTranslator } from './util/change-translator';
 import { StyleChanger } from './util/style-changer';
+import { UndoService } from 'src/app/modules/actions/modules/common-controls/services/undo.service';
 
 
 declare var require: any;
@@ -54,14 +55,22 @@ export class GraphicalEditor {
         private dataService: SpecmateDataService,
         private selectedElementService: SelectedElementService,
         private validationService: ValidationService,
-        private translate: TranslateService) {
+        private translate: TranslateService,
+        private undoService: UndoService) {
         this.validationService.validationFinished.subscribe(() => {
             this.updateValidities();
+        });
+        this.undoService.undoPressed.subscribe(() => {
+          this.undo();
+        });
+        this.undoService.redoPressed.subscribe(() => {
+          this.redo();
         });
     }
 
     private graph: mxgraph.mxGraph;
     private keyHandler: mxgraph.mxKeyHandler;
+    private undoManager: mxgraph.mxUndoManager;
 
     @ViewChild('mxGraphContainer')
     public set graphContainer(element: ElementRef) {
@@ -81,14 +90,13 @@ export class GraphicalEditor {
         const rubberBand = new mx.mxRubberband(this.graph);
         rubberBand.reset();
 
+
+
         this.graph.setTooltips(true);
 
         this.graph.getModel().addListener(mx.mxEvent.CHANGE, async (sender: mxgraph.mxEventSource, evt: mxgraph.mxEventObject) => {
             const edit = evt.getProperty('edit') as mxgraph.mxUndoableEdit;
 
-            if (edit.undone === true) {
-                return;
-            }
             try {
                 for (const change of edit.changes) {
                     await this.changeTranslator.translate(change);
@@ -98,6 +106,8 @@ export class GraphicalEditor {
                 edit.undo();
                 this.changeTranslator.preventDataUpdates = false;
             }
+            this.undoService.setUndoEnabled(this.undoManager.canUndo());
+            this.undoService.setRedoEnabled(this.undoManager.canRedo());
         });
 
         this.graph.getSelectionModel().addListener(mx.mxEvent.CHANGE, async (args: any) => {
@@ -110,6 +120,7 @@ export class GraphicalEditor {
         });
 
         this.init();
+
     }
 
     private async init(): Promise<void> {
@@ -120,7 +131,9 @@ export class GraphicalEditor {
         this.initKeyHandler();
         this.initGraphicalModel();
         this.initTools();
+        this.initUndoManager();
         this.validationService.refreshValidation(this.model);
+        await this.undoManager.clear();
     }
 
     private provideVertex(node: IModelNode, x?: number, y?: number): mxgraph.mxCell {
@@ -164,6 +177,19 @@ export class GraphicalEditor {
         const vertexStyle = this.graph.getStylesheet().getDefaultVertexStyle();
         vertexStyle[mx.mxConstants.STYLE_STROKECOLOR] = '#000000';
         this.graph.getStylesheet().getDefaultEdgeStyle()[mx.mxConstants.STYLE_STROKECOLOR] = '#000000';
+    }
+
+    private initUndoManager(): void {
+      this.undoManager = new mx.mxUndoManager(50);
+      const listener = async (sender: mxgraph.mxEventSource, evt: mxgraph.mxEventObject) =>
+        {
+          if(!evt.getProperty('edit').changes.some((s: object) => s.constructor.name === 'mxStyleChange')){
+            this.undoManager.undoableEditHappened(evt.getProperty('edit'));
+          }
+        }
+        this.graph.getModel().addListener(mx.mxEvent.UNDO, listener);
+        this.graph.getView().addListener(mx.mxEvent.UNDO, listener);
+        this.undoManager.clear();
     }
 
     private initKeyHandler(): void {
@@ -210,7 +236,6 @@ export class GraphicalEditor {
           if (this.graph.isEnabled()) {
             mx.mxClipboard.copy(this.graph, this.graph.getSelectionCells());
             this.deleteSelectedCells();
-
           }
         });
     }
@@ -251,6 +276,7 @@ export class GraphicalEditor {
         } finally {
             this.graph.getModel().endUpdate();
             this.changeTranslator.preventDataUpdates = false;
+            await this.undoManager.clear();
         }
     }
 
@@ -361,5 +387,17 @@ export class GraphicalEditor {
             return '';
         }
         return this.nameProvider.name;
+    }
+
+    public undo(): void {
+      if(this.undoManager.canUndo()){
+        this.undoManager.undo();
+      }
+    }
+
+    public redo(): void {
+      if(this.undoManager.canRedo()){
+        this.undoManager.redo();
+      }
     }
 }

@@ -125,8 +125,8 @@ export class GraphicalEditor {
     }
 
     private provideVertex(node: IModelNode, x?: number, y?: number): mxgraph.mxCell {
-        const width = this.shapeProvider.getInitialSize(node).width;
-        const height = this.shapeProvider.getInitialSize(node).height;
+        const width = node.width > 0 ? node.width : this.shapeProvider.getInitialSize(node).width;
+        const height = node.height > 0? node.height : this.shapeProvider.getInitialSize(node).height;
         const value = this.nodeNameConverter ? this.nodeNameConverter.convertTo(node) : node.name;
         const style = this.shapeProvider.getStyle(node);
         const parent = this.graph.getDefaultParent();
@@ -140,16 +140,18 @@ export class GraphicalEditor {
         mx.mxConstants.HANDLE_STROKECOLOR = '#0088cf';
         mx.mxConstants.VERTEX_SELECTION_COLOR = '#00a8ff';
         mx.mxConstants.EDGE_SELECTION_COLOR = '#00a8ff';
-        mx.mxConstants.DEFAULT_FONTSIZE = 16;
+        mx.mxConstants.DEFAULT_FONTSIZE = 12;
 
         const stylesheet = this.graph.getStylesheet();
         const validStyle: {
             [key: string]: string;
         } = {};
-        validStyle[mx.mxConstants.STYLE_OPACITY] = '75';
-        validStyle[mx.mxConstants.STYLE_FILLCOLOR] = '#c3d9ff';
+        validStyle[mx.mxConstants.STYLE_OPACITY] = '100';
+        validStyle[mx.mxConstants.STYLE_FILLCOLOR] = '#457fca';
+        validStyle[mx.mxConstants.STYLE_GRADIENTCOLOR] = '#77A7D3';
         validStyle[mx.mxConstants.STYLE_STROKE_OPACITY] = '100';
-        validStyle[mx.mxConstants.STYLE_STROKECOLOR] = '#c3d9ff';
+        validStyle[mx.mxConstants.STYLE_STROKECOLOR] = '#346CB6';
+        validStyle[mx.mxConstants.STYLE_FONTCOLOR='#ffffff'];
         stylesheet.putCellStyle(this.VALID_STYLE_NAME, validStyle);
         const invalidStyle: {
             [key: string]: string;
@@ -159,6 +161,7 @@ export class GraphicalEditor {
         invalidStyle[mx.mxConstants.STYLE_STROKE_OPACITY] = '100';
         invalidStyle[mx.mxConstants.STYLE_STROKECOLOR] = '#ffc3d9';
         stylesheet.putCellStyle(this.INVALID_STYLE_NAME, invalidStyle);
+        
         const vertexStyle = this.graph.getStylesheet().getDefaultVertexStyle();
         vertexStyle[mx.mxConstants.STYLE_STROKECOLOR] = '#000000';
         this.graph.getStylesheet().getDefaultEdgeStyle()[mx.mxConstants.STYLE_STROKECOLOR] = '#000000';

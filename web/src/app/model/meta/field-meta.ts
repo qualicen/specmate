@@ -226,7 +226,7 @@ export class MetaInfo {
 			required: true,
 			type: 'text',
 			position: '1',
-			allowedPattern: '^[^,;|]*$'	
+			allowedPattern: '^[^,;|]*$'		
 		},			{
 			name: "condition",
 			shortDesc: 'Condition',

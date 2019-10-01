@@ -4,7 +4,7 @@
 
 	export class CEGNode  {
 
-		___nsuri: string = "http://specmate.com/20190125/model/requirements";
+		___nsuri: string = "http://specmate.com/20190902/model/requirements";
 		public url: string;
 		public className: string = "CEGNode";
 		public static className: string = "CEGNode";
@@ -14,6 +14,8 @@
 		public description: EString;
 		public x: EDouble;
 		public y: EDouble;
+		public width: EDouble;
+		public height: EDouble;
 		public type: NodeType;
 		public variable: EString;
 		public condition: EString;

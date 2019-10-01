@@ -94,6 +94,7 @@ export class GraphicalEditor {
                     await this.changeTranslator.translate(change);
                 }
             } catch (e) {
+                console.error(e);
                 this.changeTranslator.preventDataUpdates = true;
                 edit.undo();
                 this.changeTranslator.preventDataUpdates = false;

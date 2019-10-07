@@ -22,7 +22,7 @@ export class ShapeProvider extends ProviderBase {
         super(type);
 
         this.shapeMap[CEGNode.className] = {
-            style: 'shape=rounded;rounded=2;arcSize=5;',
+            style: 'shape=rectangle;rounded=5;arcSize=5;',
             size: {
                 width: Config.CEG_NODE_WIDTH,
                 height: Config.CEG_NODE_HEIGHT
@@ -59,7 +59,7 @@ export class ShapeProvider extends ProviderBase {
         };
 
         this.shapeMap[ProcessStep.className] = {
-            style: 'shape=rounded;rounded=2;arcSize=24;',
+            style: 'shape=rectangle;rounded=2;arcSize=24;',
             size: {
                 width: Config.CEG_NODE_WIDTH,
                 height: Config.CEG_NODE_HEIGHT

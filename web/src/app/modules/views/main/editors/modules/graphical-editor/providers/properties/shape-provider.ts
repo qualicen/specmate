@@ -22,7 +22,7 @@ export class ShapeProvider extends ProviderBase {
         super(type);
 
         this.shapeMap[CEGNode.className] = {
-            style: 'shape=rectangle;rounded=5;arcSize=5;',
+            style: 'shape=rectangle;rounded=1;arcSize=10;align=center;perimeter=rectanglePerimeter;',
             size: {
                 width: Config.CEG_NODE_WIDTH,
                 height: Config.CEG_NODE_HEIGHT
@@ -35,7 +35,7 @@ export class ShapeProvider extends ProviderBase {
 
         this.shapeMap[ProcessStart.className] = {
             // tslint:disable-next-line:max-line-length
-            style: 'shape=ellipse;whiteSpace=wrap;html=1;aspect=fixed;',
+            style: 'shape=ellipse;whiteSpace=wrap;html=1;aspect=fixed;align=center;perimeter=ellipsePerimeter;',
             size: {
                 width: Config.PROCESS_START_END_NODE_RADIUS * 2,
                 height: Config.PROCESS_START_END_NODE_RADIUS * 2
@@ -47,8 +47,7 @@ export class ShapeProvider extends ProviderBase {
 
         this.shapeMap[ProcessEnd.className] = {
             // tslint:disable-next-line:max-line-length
-            style: 'shape=doubleEllipse', //;whiteSpace=wrap;html=1;aspect=fixed;',
-            //'shape=mxgraph.bpmn.shape;html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;align=center;perimeter=ellipsePerimeter;outlineConnect=0;outline=end;symbol=terminate;',
+            style: 'shape=doubleEllipse;whiteSpace=wrap;html=1;aspect=fixed;align=center;perimeter=ellipsePerimeter;',
             size: {
                 width: Config.PROCESS_START_END_NODE_RADIUS * 2,
                 height: Config.PROCESS_START_END_NODE_RADIUS * 2
@@ -59,7 +58,7 @@ export class ShapeProvider extends ProviderBase {
         };
 
         this.shapeMap[ProcessStep.className] = {
-            style: 'shape=rectangle;rounded=2;arcSize=24;',
+            style: 'shape=rectangle;rounded=1;arcSize=10;perimeter=rectanglePerimeter;',
             size: {
                 width: Config.CEG_NODE_WIDTH,
                 height: Config.CEG_NODE_HEIGHT
@@ -70,7 +69,7 @@ export class ShapeProvider extends ProviderBase {
         };
 
         this.shapeMap[ProcessDecision.className] = {
-            style: 'shape=rhombus',
+            style: 'shape=rhombus;align=center;perimeter=rhombusPerimeter;',
             size: {
                 width: Config.PROCESS_DECISION_NODE_DIM,
                 height: Config.PROCESS_DECISION_NODE_DIM

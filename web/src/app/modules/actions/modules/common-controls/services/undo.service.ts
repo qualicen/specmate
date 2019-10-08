@@ -1,4 +1,4 @@
-import { Injectable, EventEmitter } from "@angular/core";
+import { Injectable, EventEmitter } from '@angular/core';
 
 @Injectable()
 export class UndoService {
@@ -13,7 +13,7 @@ export class UndoService {
     this._redoEnabled = false;
   }
 
-  public undo(): void{
+  public undo(): void {
     this.undoPressed.emit();
   }
 
@@ -21,11 +21,11 @@ export class UndoService {
     return this._undoEnabled;
   }
 
-  public setUndoEnabled(newUndo: boolean){
+  public setUndoEnabled(newUndo: boolean) {
     this._undoEnabled = newUndo;
   }
 
-  public redo(): void{
+  public redo(): void {
     this.redoPressed.emit();
   }
 
@@ -33,7 +33,7 @@ export class UndoService {
     return this._redoEnabled;
   }
 
-  public setRedoEnabled(newRedo: boolean){
+  public setRedoEnabled(newRedo: boolean) {
     this._redoEnabled = newRedo;
   }
 

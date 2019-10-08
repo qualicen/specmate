@@ -186,14 +186,6 @@ export class GraphicalEditor {
       return null;
     };
 
-    /* mx.mxEvent.addListener(this.graph.container, mx.mxEvent.CLICK, function () {
-      console.log('Fokus');
-      if (!this.graph.isEditing()) {
-        this.graph.container.setAttribute('tabindex', '-1');
-        this.graph.container.focus();
-      }
-    }.bind(this)); */
-
     // Del
     this.keyHandler.bindKey(46, (evt: KeyboardEvent) => {
       this.stopEvent(evt);

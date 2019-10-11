@@ -22,7 +22,6 @@ public class TextUtil {
 		String[] arrayB = textBLower.split("\\s+");
 		Set<String> setA = Set.of(arrayA);
 		Set<String> setB = Set.of(arrayB);
-
 		return setA.equals(setB);
 	}
 }

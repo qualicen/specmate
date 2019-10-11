@@ -70,8 +70,8 @@ export class Config {
     public static CEG_NEW_CONNECTION_NAME = 'New Connection';
     public static CEG_NEW_CONNECTION_DESCRIPTION = '';
 
-    public static PROCESS_DECISION_NODE_DIM = 30;
-    public static PROCESS_START_END_NODE_RADIUS = 15;
+    public static PROCESS_DECISION_NODE_DIM = 60;
+    public static PROCESS_START_END_NODE_RADIUS = 25;
     public static PROCESS_NEW_PROCESS_NAME = 'New Process';
     public static PROCESS_NEW_PROCESS_DESCRIPTION = '';
     public static PROCESS_NEW_STEP_NAME = 'New Activity';

@@ -95,14 +95,13 @@ export class GraphicalEditor {
 
     this.graph.getModel().addListener(mx.mxEvent.CHANGE, async (sender: mxgraph.mxEventSource, evt: mxgraph.mxEventObject) => {
       const edit = evt.getProperty('edit') as mxgraph.mxUndoableEdit;
-      console.log(this.undoManager);
-      // debugger;
 
+      if (edit.undone === true || edit.redone === true) {
+        this.undoService.setUndoEnabled(this.undoManager.canUndo());
+        this.undoService.setRedoEnabled(this.undoManager.canRedo());
+        return;
+      }
 
-      // mxgraph-editor
-      // if (edit.undone === true) {
-      //  return;
-      // }
       try {
         for (const change of edit.changes) {
           await this.changeTranslator.translate(change);
@@ -111,9 +110,10 @@ export class GraphicalEditor {
         this.changeTranslator.preventDataUpdates = true;
         edit.undo();
         this.changeTranslator.preventDataUpdates = false;
+      } finally {
+        this.undoService.setUndoEnabled(this.undoManager.canUndo());
+        this.undoService.setRedoEnabled(this.undoManager.canRedo());
       }
-      this.undoService.setUndoEnabled(this.undoManager.canUndo());
-      this.undoService.setRedoEnabled(this.undoManager.canRedo());
     });
 
     // Set the focus to the container if a node is selected
@@ -146,7 +146,7 @@ export class GraphicalEditor {
     this.initTools();
     this.initUndoManager();
     this.validationService.refreshValidation(this.model);
-    await this.undoManager.clear();
+    this.undoManager.clear();
   }
 
   private provideVertex(node: IModelNode, x?: number, y?: number): mxgraph.mxCell {
@@ -195,10 +195,7 @@ export class GraphicalEditor {
   private initUndoManager(): void {
     this.undoManager = new mx.mxUndoManager(50);
     const listener = async (sender: mxgraph.mxEventSource, evt: mxgraph.mxEventObject) => {
-      console.log('listener');
-      console.log(this.undoManager);
       if (!evt.getProperty('edit').changes.some((s: object) => s.constructor.name === 'mxStyleChange')) {
-        console.log('true');
         this.undoManager.undoableEditHappened(evt.getProperty('edit'));
       }
     };
@@ -285,7 +282,6 @@ export class GraphicalEditor {
     this.changeTranslator.preventDataUpdates = true;
     this.graph.getModel().beginUpdate();
     try {
-
       const vertexCache: { [url: string]: mxgraph.mxCell } = {};
       for (const node of this.elementProvider.nodes) {
         const vertex = this.provideVertex(node as IModelNode);
@@ -297,11 +293,10 @@ export class GraphicalEditor {
         const value = this.nodeNameConverter ? this.nodeNameConverter.convertTo(connection) : connection.name;
         this.graph.insertEdge(parent, connection.url, value, sourceVertex, targetVertex);
       }
-
     } finally {
       this.graph.getModel().endUpdate();
       this.changeTranslator.preventDataUpdates = false;
-      await this.undoManager.clear();
+      this.undoManager.clear();
     }
   }
 

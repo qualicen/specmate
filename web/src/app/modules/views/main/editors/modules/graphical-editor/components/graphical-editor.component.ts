@@ -66,6 +66,7 @@ export class GraphicalEditor {
     this.undoService.redoPressed.subscribe(() => {
       this.redo();
     });
+
   }
 
   private graph: mxgraph.mxGraph;
@@ -95,8 +96,13 @@ export class GraphicalEditor {
     this.graph.getModel().addListener(mx.mxEvent.CHANGE, async (sender: mxgraph.mxEventSource, evt: mxgraph.mxEventObject) => {
       const edit = evt.getProperty('edit') as mxgraph.mxUndoableEdit;
       console.log(this.undoManager);
-      //debugger;
+      // debugger;
 
+
+      // mxgraph-editor
+      // if (edit.undone === true) {
+      //  return;
+      // }
       try {
         for (const change of edit.changes) {
           await this.changeTranslator.translate(change);
@@ -109,6 +115,14 @@ export class GraphicalEditor {
       this.undoService.setUndoEnabled(this.undoManager.canUndo());
       this.undoService.setRedoEnabled(this.undoManager.canRedo());
     });
+
+    // Set the focus to the container if a node is selected
+    this.graph.addListener(mx.mxEvent.CLICK, function (sender: any, evt: any) {
+      if (!this.graph.isEditing()) {
+        this.graph.container.setAttribute('tabindex', '-1');
+        this.graph.container.focus();
+      }
+    }.bind(this));
 
     this.graph.getSelectionModel().addListener(mx.mxEvent.CHANGE, async (args: any) => {
       if (this.graph.getSelectionCount() === 1) {
@@ -195,6 +209,16 @@ export class GraphicalEditor {
 
   private initKeyHandler(): void {
     this.keyHandler = new mx.mxKeyHandler(this.graph);
+
+    // Support Mac command-key
+    this.keyHandler.getFunction = function (evt) {
+      if (evt != null) {
+        return (mx.mxEvent.isControlDown(evt) || (mx.mxClient.IS_MAC && evt.metaKey))
+          ? this.controlKeys[evt.keyCode]
+          : this.normalKeys[evt.keyCode];
+      }
+      return null;
+    };
 
     // Del
     this.keyHandler.bindKey(46, (evt: KeyboardEvent) => {

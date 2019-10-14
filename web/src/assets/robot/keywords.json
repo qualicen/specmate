@@ -1,0 +1,18 @@
+[
+    {
+        "keyword": "Open Browser",
+        "parameters": []
+    },
+    {
+        "keyword": "Open Login Page",
+        "parameters": []
+    },
+    {
+        "keyword": "Open Webpage",
+        "parameters": ["URL"]
+    },
+    {
+        "keyword": "Enter Credentials",
+        "parameters": ["Username", "Password"]
+    }
+]

@@ -191,6 +191,21 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="referencedTestParameters"
           upperBound="-1" eType="#//testspecification/TestParameter"/>
     </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RobotProcedure" eSuperTypes="#//base/IContainer #//base/IExternal">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="isRegressionTest" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+        <eAnnotations source="http://specmate.com/form_meta">
+          <details key="shortDesc" value="Regression Test"/>
+          <details key="type" value="checkbox"/>
+          <details key="position" value="3"/>
+          <details key="longDesc" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RobotStep" eSuperTypes="#//base/IContentElement #//base/IPositionable">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedOutcome" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="referencedTestParameters"
+          upperBound="-1" eType="#//testspecification/TestParameter"/>
+    </eClassifiers>
   </eSubpackages>
   <eSubpackages name="processes" nsURI="http://specmate.com/20190125/model/processes"
       nsPrefix="com.specmate.model.processes">

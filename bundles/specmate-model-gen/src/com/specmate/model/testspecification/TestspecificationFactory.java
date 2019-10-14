@@ -85,6 +85,24 @@ public interface TestspecificationFactory extends EFactory {
 	TestStep createTestStep();
 
 	/**
+	 * Returns a new object of class '<em>Robot Procedure</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Robot Procedure</em>'.
+	 * @generated
+	 */
+	RobotProcedure createRobotProcedure();
+
+	/**
+	 * Returns a new object of class '<em>Robot Step</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Robot Step</em>'.
+	 * @generated
+	 */
+	RobotStep createRobotStep();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

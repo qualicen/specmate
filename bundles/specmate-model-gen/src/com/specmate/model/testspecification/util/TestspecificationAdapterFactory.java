@@ -103,6 +103,14 @@ public class TestspecificationAdapterFactory extends AdapterFactoryImpl {
 				return createTestStepAdapter();
 			}
 			@Override
+			public Adapter caseRobotProcedure(RobotProcedure object) {
+				return createRobotProcedureAdapter();
+			}
+			@Override
+			public Adapter caseRobotStep(RobotStep object) {
+				return createRobotStepAdapter();
+			}
+			@Override
 			public Adapter caseIID(IID object) {
 				return createIIDAdapter();
 			}
@@ -245,6 +253,34 @@ public class TestspecificationAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createTestStepAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.specmate.model.testspecification.RobotProcedure <em>Robot Procedure</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.specmate.model.testspecification.RobotProcedure
+	 * @generated
+	 */
+	public Adapter createRobotProcedureAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.specmate.model.testspecification.RobotStep <em>Robot Step</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.specmate.model.testspecification.RobotStep
+	 * @generated
+	 */
+	public Adapter createRobotStepAdapter() {
 		return null;
 	}
 

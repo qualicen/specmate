@@ -12,6 +12,8 @@ import { Url } from '../../../../../../../util/url';
 import { SpecmateDataService } from '../../../../../../data/modules/data-service/services/specmate-data.service';
 import { NavigatorService } from '../../../../../../navigation/modules/navigator/services/navigator.service';
 import { ConfirmationModal } from '../../../../../../notification/modules/modals/services/confirmation-modal.service';
+import { RobotProcedure } from '../../../../../../../model/RobotProcedure';
+import { RobotProcedureFactory } from '../../../../../../../factory/robot-procedure-factory';
 
 @Component({
     moduleId: module.id.toString(),
@@ -118,4 +120,19 @@ export class TestCaseRow {
         return Type.is(this.testCase, TestCase);
     }
 
+
+    public get robotProcedure(): RobotProcedure {
+        if (!this.contents) {
+            return undefined;
+        }
+        return this.contents.find((element: IContainer) => Type.is(element, RobotProcedure)) as RobotProcedure;
+    }
+
+    public createRobotProcedure(): void {
+        let factory: RobotProcedureFactory = new RobotProcedureFactory(this.dataService);
+        this.modal.confirmSave()
+            .then(() => factory.create(this.testCase, true))
+            .then((testProcedure: RobotProcedure) => this.navigator.navigate(testProcedure))
+            .catch(() => { });
+    }
 }

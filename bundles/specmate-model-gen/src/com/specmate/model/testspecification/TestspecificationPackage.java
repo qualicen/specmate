@@ -607,6 +607,197 @@ public interface TestspecificationPackage extends EPackage {
 	int TEST_STEP_OPERATION_COUNT = BasePackage.ICONTENT_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.specmate.model.testspecification.impl.RobotProcedureImpl <em>Robot Procedure</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.specmate.model.testspecification.impl.RobotProcedureImpl
+	 * @see com.specmate.model.testspecification.impl.TestspecificationPackageImpl#getRobotProcedure()
+	 * @generated
+	 */
+	int ROBOT_PROCEDURE = 7;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROBOT_PROCEDURE__ID = BasePackage.ICONTAINER__ID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROBOT_PROCEDURE__NAME = BasePackage.ICONTAINER__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROBOT_PROCEDURE__DESCRIPTION = BasePackage.ICONTAINER__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Contents</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROBOT_PROCEDURE__CONTENTS = BasePackage.ICONTAINER__CONTENTS;
+
+	/**
+	 * The feature id for the '<em><b>Ext Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROBOT_PROCEDURE__EXT_ID = BasePackage.ICONTAINER_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Ext Id2</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROBOT_PROCEDURE__EXT_ID2 = BasePackage.ICONTAINER_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Source</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROBOT_PROCEDURE__SOURCE = BasePackage.ICONTAINER_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Live</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROBOT_PROCEDURE__LIVE = BasePackage.ICONTAINER_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Is Regression Test</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROBOT_PROCEDURE__IS_REGRESSION_TEST = BasePackage.ICONTAINER_FEATURE_COUNT + 4;
+
+	/**
+	 * The number of structural features of the '<em>Robot Procedure</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROBOT_PROCEDURE_FEATURE_COUNT = BasePackage.ICONTAINER_FEATURE_COUNT + 5;
+
+	/**
+	 * The number of operations of the '<em>Robot Procedure</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROBOT_PROCEDURE_OPERATION_COUNT = BasePackage.ICONTAINER_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link com.specmate.model.testspecification.impl.RobotStepImpl <em>Robot Step</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.specmate.model.testspecification.impl.RobotStepImpl
+	 * @see com.specmate.model.testspecification.impl.TestspecificationPackageImpl#getRobotStep()
+	 * @generated
+	 */
+	int ROBOT_STEP = 8;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROBOT_STEP__ID = BasePackage.ICONTENT_ELEMENT__ID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROBOT_STEP__NAME = BasePackage.ICONTENT_ELEMENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROBOT_STEP__DESCRIPTION = BasePackage.ICONTENT_ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Position</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROBOT_STEP__POSITION = BasePackage.ICONTENT_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Expected Outcome</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROBOT_STEP__EXPECTED_OUTCOME = BasePackage.ICONTENT_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Referenced Test Parameters</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROBOT_STEP__REFERENCED_TEST_PARAMETERS = BasePackage.ICONTENT_ELEMENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Robot Step</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROBOT_STEP_FEATURE_COUNT = BasePackage.ICONTENT_ELEMENT_FEATURE_COUNT + 3;
+
+	/**
+	 * The number of operations of the '<em>Robot Step</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROBOT_STEP_OPERATION_COUNT = BasePackage.ICONTENT_ELEMENT_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link com.specmate.model.testspecification.ParameterType <em>Parameter Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -614,7 +805,7 @@ public interface TestspecificationPackage extends EPackage {
 	 * @see com.specmate.model.testspecification.impl.TestspecificationPackageImpl#getParameterType()
 	 * @generated
 	 */
-	int PARAMETER_TYPE = 7;
+	int PARAMETER_TYPE = 9;
 
 
 	/**
@@ -809,6 +1000,59 @@ public interface TestspecificationPackage extends EPackage {
 	EReference getTestStep_ReferencedTestParameters();
 
 	/**
+	 * Returns the meta object for class '{@link com.specmate.model.testspecification.RobotProcedure <em>Robot Procedure</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Robot Procedure</em>'.
+	 * @see com.specmate.model.testspecification.RobotProcedure
+	 * @generated
+	 */
+	EClass getRobotProcedure();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.specmate.model.testspecification.RobotProcedure#isIsRegressionTest <em>Is Regression Test</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Is Regression Test</em>'.
+	 * @see com.specmate.model.testspecification.RobotProcedure#isIsRegressionTest()
+	 * @see #getRobotProcedure()
+	 * @generated
+	 */
+	EAttribute getRobotProcedure_IsRegressionTest();
+
+	/**
+	 * Returns the meta object for class '{@link com.specmate.model.testspecification.RobotStep <em>Robot Step</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Robot Step</em>'.
+	 * @see com.specmate.model.testspecification.RobotStep
+	 * @generated
+	 */
+	EClass getRobotStep();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.specmate.model.testspecification.RobotStep#getExpectedOutcome <em>Expected Outcome</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Expected Outcome</em>'.
+	 * @see com.specmate.model.testspecification.RobotStep#getExpectedOutcome()
+	 * @see #getRobotStep()
+	 * @generated
+	 */
+	EAttribute getRobotStep_ExpectedOutcome();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.specmate.model.testspecification.RobotStep#getReferencedTestParameters <em>Referenced Test Parameters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Referenced Test Parameters</em>'.
+	 * @see com.specmate.model.testspecification.RobotStep#getReferencedTestParameters()
+	 * @see #getRobotStep()
+	 * @generated
+	 */
+	EReference getRobotStep_ReferencedTestParameters();
+
+	/**
 	 * Returns the meta object for enum '{@link com.specmate.model.testspecification.ParameterType <em>Parameter Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -998,6 +1242,50 @@ public interface TestspecificationPackage extends EPackage {
 		 * @generated
 		 */
 		EReference TEST_STEP__REFERENCED_TEST_PARAMETERS = eINSTANCE.getTestStep_ReferencedTestParameters();
+
+		/**
+		 * The meta object literal for the '{@link com.specmate.model.testspecification.impl.RobotProcedureImpl <em>Robot Procedure</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.specmate.model.testspecification.impl.RobotProcedureImpl
+		 * @see com.specmate.model.testspecification.impl.TestspecificationPackageImpl#getRobotProcedure()
+		 * @generated
+		 */
+		EClass ROBOT_PROCEDURE = eINSTANCE.getRobotProcedure();
+
+		/**
+		 * The meta object literal for the '<em><b>Is Regression Test</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ROBOT_PROCEDURE__IS_REGRESSION_TEST = eINSTANCE.getRobotProcedure_IsRegressionTest();
+
+		/**
+		 * The meta object literal for the '{@link com.specmate.model.testspecification.impl.RobotStepImpl <em>Robot Step</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.specmate.model.testspecification.impl.RobotStepImpl
+		 * @see com.specmate.model.testspecification.impl.TestspecificationPackageImpl#getRobotStep()
+		 * @generated
+		 */
+		EClass ROBOT_STEP = eINSTANCE.getRobotStep();
+
+		/**
+		 * The meta object literal for the '<em><b>Expected Outcome</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ROBOT_STEP__EXPECTED_OUTCOME = eINSTANCE.getRobotStep_ExpectedOutcome();
+
+		/**
+		 * The meta object literal for the '<em><b>Referenced Test Parameters</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ROBOT_STEP__REFERENCED_TEST_PARAMETERS = eINSTANCE.getRobotStep_ReferencedTestParameters();
 
 		/**
 		 * The meta object literal for the '{@link com.specmate.model.testspecification.ParameterType <em>Parameter Type</em>}' enum.

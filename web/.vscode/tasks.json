@@ -4,7 +4,8 @@
     "version": "2.0.0",
     "type": "shell",
     "presentation" : { "reveal": "always" },
-    "tasks": [{
+    "tasks": [
+        {
             "label": "install",
             "command": "npm install"
         },
@@ -19,7 +20,8 @@
         {
             "label": "build-dev",
             "group": "build",
-            "command": "npm run build-dev"
+            "command": "npm run build-dev",
+            "problemMatcher": []
         }
     ]
 }

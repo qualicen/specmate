@@ -1,0 +1,27 @@
+<ng-container *ngIf="testStep" [formGroup]="formGroup">
+    <td>
+        <span class="text-muted"><i class="fa fa-bars" aria-hidden="true"></i></span>
+    </td>
+    <td>{{getPosition(testStep)}}</td>
+    <td>
+        <div class="input-group input-group-sm">
+            <select [(ngModel)]="selectedKeyword" [ngModelOptions]="{standalone: true}" class="form-control form-control-sm">
+                <option *ngFor="let keyword of keywords" [ngValue]="keyword">{{keyword}}</option>
+            </select>
+        </div>
+    </td>
+    <td>
+        <div class="input-group input-group-sm" >
+            <ng-container *ngFor="let parameter of parameters; let i = index">
+                    <label>{{parameter}}:&nbsp;</label>
+                    <textarea formControlName="parameter{{i}}" type="text" class="tableInput form-control form-control-sm" autosize></textarea>
+            </ng-container>
+        </div>
+    </td>
+    <td>
+        <div class="input-group input-group-sm">
+            <button title="{{'delete' | translate}}" (click)="delete()" class="btn btn-sm btn-outline-danger"><i class="fa fa-trash"
+                    aria-hidden="true"></i></button>
+        </div>
+    </td>
+</ng-container>

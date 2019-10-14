@@ -226,7 +226,7 @@ export class MetaInfo {
 			required: true,
 			type: 'text',
 			position: '1',
-			allowedPattern: '^[^,;|]*$'	
+			allowedPattern: '^[^,;|]*$'		
 		},			{
 			name: "condition",
 			shortDesc: 'Condition',
@@ -366,6 +366,48 @@ export class MetaInfo {
 			longDesc: ''		
 		}	];
 	public static TestStep: FieldMetaItem[] = [
+			{
+			name: "name",
+			shortDesc: 'Name',
+			longDesc: '',
+			required: true,
+			type: 'text',
+			position: '0',
+			allowedPattern: '^[^,;|]*$'		
+		},			{
+			name: "description",
+			shortDesc: 'Description',
+			longDesc: '',
+			required: false,
+			type: 'longText',
+			rows: '5',
+			position: '100'		
+		}	];
+	public static RobotProcedure: FieldMetaItem[] = [
+			{
+			name: "name",
+			shortDesc: 'Name',
+			longDesc: '',
+			required: true,
+			type: 'text',
+			position: '0',
+			allowedPattern: '^[^,;|]*$'		
+		},			{
+			name: "description",
+			shortDesc: 'Description',
+			longDesc: '',
+			required: false,
+			type: 'longText',
+			rows: '5',
+			position: '100'		
+		},			{
+			name: "isRegressionTest",
+			shortDesc: 'Regression Test',
+			type: 'checkbox',
+			position: '3',
+			longDesc: ''		
+		}	];
+	public static RobotStep: FieldMetaItem[] = [
 			{
 			name: "name",
 			shortDesc: 'Name',

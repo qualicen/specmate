@@ -22,6 +22,8 @@ import { PageNotFoundModule } from '../../views/main/static/modules/page-not-fou
 import { Welcome } from '../../views/main/static/modules/welcome-page/components/welcome.component';
 import { WelcomePageModule } from '../../views/main/static/modules/welcome-page/welcome-page.module';
 import { UnsavedChangesGuard } from '../guards/unsaved-changes-guard';
+import { RobotProcedureEditor } from '../../views/main/editors/modules/robot-procedure-editor/components/robot-procedure-editor.component';
+import { RobotProcedureEditorModule } from '../../views/main/editors/modules/robot-procedure-editor/robot-procedure-editor.module';
 
 const routes: Routes = [
   {
@@ -50,6 +52,11 @@ const routes: Routes = [
     canDeactivate: [UnsavedChangesGuard],
     canActivate: [UserPermissionsGuard]
   }, {
+    path: Config.VIEW_URL_PREFIX + 'RobotProcedure' + '/:url',
+    component: RobotProcedureEditor,
+    canDeactivate: [UnsavedChangesGuard],
+    canActivate: [UserPermissionsGuard]
+  }, {
     path: Config.VIEW_URL_PREFIX + 'Process' + '/:url',
     component: ProcessDetails,
     canDeactivate: [UnsavedChangesGuard],
@@ -69,6 +76,7 @@ const routes: Routes = [
     RequirementsDetailsModule,
     FolderDetailsModule,
     TestProcedureEditorModule,
+    RobotProcedureEditorModule,
     TestSpecificationEditorModule,
     WelcomePageModule,
     PageNotFoundModule,

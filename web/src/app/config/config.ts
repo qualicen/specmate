@@ -104,6 +104,13 @@ export class Config {
     public static TESTSTEP_ACTION = '';
     public static TESTSTEP_EXPECTED_OUTCOME = '';
 
+    public static ROBOTPROCEDURE_NAME = 'New Robot Procedure';
+    public static ROBOTPROCEDURE_DESCRIPTION = '';
+
+    public static ROBOTSTEP_NAME = 'New Robot Step';
+    public static ROBOTSTEP_ACTION = '';
+    public static ROBOTSTEP_EXPECTED_OUTCOME = '';
+
     public static FOLDER_NEW_NAME = 'New Folder';
     public static FOLDER_NEW_DESCRIPTION = '';
 

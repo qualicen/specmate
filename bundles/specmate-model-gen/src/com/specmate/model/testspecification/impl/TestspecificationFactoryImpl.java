@@ -64,6 +64,8 @@ public class TestspecificationFactoryImpl extends EFactoryImpl implements Testsp
 			case TestspecificationPackage.PARAMETER_ASSIGNMENT: return (EObject)createParameterAssignment();
 			case TestspecificationPackage.TEST_PROCEDURE: return (EObject)createTestProcedure();
 			case TestspecificationPackage.TEST_STEP: return (EObject)createTestStep();
+			case TestspecificationPackage.ROBOT_PROCEDURE: return (EObject)createRobotProcedure();
+			case TestspecificationPackage.ROBOT_STEP: return (EObject)createRobotStep();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -104,6 +106,7 @@ public class TestspecificationFactoryImpl extends EFactoryImpl implements Testsp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public TestSpecification createTestSpecification() {
 		TestSpecificationImpl testSpecification = new TestSpecificationImpl();
 		return testSpecification;
@@ -114,6 +117,7 @@ public class TestspecificationFactoryImpl extends EFactoryImpl implements Testsp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public TestSpecificationSkeleton createTestSpecificationSkeleton() {
 		TestSpecificationSkeletonImpl testSpecificationSkeleton = new TestSpecificationSkeletonImpl();
 		return testSpecificationSkeleton;
@@ -124,6 +128,7 @@ public class TestspecificationFactoryImpl extends EFactoryImpl implements Testsp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public TestParameter createTestParameter() {
 		TestParameterImpl testParameter = new TestParameterImpl();
 		return testParameter;
@@ -134,6 +139,7 @@ public class TestspecificationFactoryImpl extends EFactoryImpl implements Testsp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public TestCase createTestCase() {
 		TestCaseImpl testCase = new TestCaseImpl();
 		return testCase;
@@ -144,6 +150,7 @@ public class TestspecificationFactoryImpl extends EFactoryImpl implements Testsp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ParameterAssignment createParameterAssignment() {
 		ParameterAssignmentImpl parameterAssignment = new ParameterAssignmentImpl();
 		return parameterAssignment;
@@ -154,6 +161,7 @@ public class TestspecificationFactoryImpl extends EFactoryImpl implements Testsp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public TestProcedure createTestProcedure() {
 		TestProcedureImpl testProcedure = new TestProcedureImpl();
 		return testProcedure;
@@ -164,9 +172,32 @@ public class TestspecificationFactoryImpl extends EFactoryImpl implements Testsp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public TestStep createTestStep() {
 		TestStepImpl testStep = new TestStepImpl();
 		return testStep;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public RobotProcedure createRobotProcedure() {
+		RobotProcedureImpl robotProcedure = new RobotProcedureImpl();
+		return robotProcedure;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public RobotStep createRobotStep() {
+		RobotStepImpl robotStep = new RobotStepImpl();
+		return robotStep;
 	}
 
 	/**
@@ -194,6 +225,7 @@ public class TestspecificationFactoryImpl extends EFactoryImpl implements Testsp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public TestspecificationPackage getTestspecificationPackage() {
 		return (TestspecificationPackage)getEPackage();
 	}

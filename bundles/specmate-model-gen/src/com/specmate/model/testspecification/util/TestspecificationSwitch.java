@@ -146,6 +146,29 @@ public class TestspecificationSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case TestspecificationPackage.ROBOT_PROCEDURE: {
+				RobotProcedure robotProcedure = (RobotProcedure)theEObject;
+				T result = caseRobotProcedure(robotProcedure);
+				if (result == null) result = caseIContainer(robotProcedure);
+				if (result == null) result = caseIExternal(robotProcedure);
+				if (result == null) result = caseIContentElement(robotProcedure);
+				if (result == null) result = caseIID(robotProcedure);
+				if (result == null) result = caseINamed(robotProcedure);
+				if (result == null) result = caseIDescribed(robotProcedure);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case TestspecificationPackage.ROBOT_STEP: {
+				RobotStep robotStep = (RobotStep)theEObject;
+				T result = caseRobotStep(robotStep);
+				if (result == null) result = caseIContentElement(robotStep);
+				if (result == null) result = caseIPositionable(robotStep);
+				if (result == null) result = caseIID(robotStep);
+				if (result == null) result = caseINamed(robotStep);
+				if (result == null) result = caseIDescribed(robotStep);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -252,6 +275,36 @@ public class TestspecificationSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseTestStep(TestStep object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Robot Procedure</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Robot Procedure</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseRobotProcedure(RobotProcedure object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Robot Step</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Robot Step</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseRobotStep(RobotStep object) {
 		return null;
 	}
 

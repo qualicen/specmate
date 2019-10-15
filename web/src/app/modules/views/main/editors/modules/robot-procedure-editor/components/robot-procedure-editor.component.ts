@@ -15,6 +15,7 @@ import { NavigatorService } from '../../../../../../navigation/modules/navigator
 import { ConfirmationModal } from '../../../../../../notification/modules/modals/services/confirmation-modal.service';
 import { DraggableSupportingViewBase } from '../../../base/draggable-supporting-view-base';
 import { RobotKeywordService } from '../services/robot-keyword-service';
+import { RobotStepFactory } from '../../../../../../../factory/robot-step-factory';
 
 @Component({
     moduleId: module.id.toString(),
@@ -58,14 +59,13 @@ export class RobotProcedureEditor extends DraggableSupportingViewBase {
         route: ActivatedRoute,
         modal: ConfirmationModal,
         dragulaService: DragulaService,
-        translate: TranslateService,
-        keywords: RobotKeywordService) {
+        translate: TranslateService) {
             super(dataService, navigator, route, modal, dragulaService, translate);
     }
 
     public onElementResolved(element: IContainer): Promise<void> {
         return super.onElementResolved(element)
-            .then(() => Type.is(element, RobotProcedure) ? Promise.resolve() : Promise.reject('Not a test procedure'))
+            .then(() => Type.is(element, RobotProcedure) ? Promise.resolve() : Promise.reject('Not a robot procedure'))
             .then(() => this.readParentTestSpec(element as RobotProcedure))
             .then(() => this.robotProcedure = element as RobotProcedure)
             .then(() => Promise.resolve());
@@ -82,7 +82,7 @@ export class RobotProcedureEditor extends DraggableSupportingViewBase {
 
     /** Creates a new test case */
     private createNewTestStep() {
-        let factory: TestStepFactory = new TestStepFactory(this.dataService);
+        let factory: RobotStepFactory = new RobotStepFactory(this.dataService);
         factory.create(this.robotProcedure, false);
     }
 

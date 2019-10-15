@@ -2,6 +2,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { IContainer } from '../../../../../model/IContainer';
 import { Id } from '../../../../../util/id';
 import { SpecmateDataService } from '../../../../data/modules/data-service/services/specmate-data.service';
+import { Subscription } from 'rxjs';
 
 export abstract class SimpleInputFormBase {
 
@@ -51,9 +52,15 @@ export abstract class SimpleInputFormBase {
         }
     }
 
-    private buildFormGroup(): void {
+    private _changeSubscription: Subscription;
+
+    protected buildFormGroup(): void {
         this.formGroup = this.buildFormGroupObject(this.modelElement, this.fields);
-        this.formGroup.valueChanges.subscribe(() => this.updateModelPropertiesIfChanged(this.modelElement, this.fields));
+        if (this._changeSubscription !== undefined && !this._changeSubscription.closed) {
+            this._changeSubscription.unsubscribe();
+        }
+        this._changeSubscription = this.formGroup.valueChanges.subscribe(() =>
+            this.updateModelPropertiesIfChanged(this.modelElement, this.fields));
     }
 
     private buildFormGroupObject(modelElement: IContainer, fields: string[]): FormGroup {

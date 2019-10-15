@@ -1,43 +1,53 @@
-<div *ngIf="robotProcedure" class="card maximized">
-    <h5 class="card-header">
-        {{'RobotCommands' | translate}}
-        <div class="pull-right">
-            <maximize-button></maximize-button>
+<as-split direction="vertical" [gutterSize]="7">
+    <as-split-area [size]="80">
+        <div *ngIf="robotProcedure && contents" class="card maximized">
+            <h5 class="card-header">
+                {{'RobotCommands' | translate}}
+                <div class="pull-right">
+                    <maximize-button></maximize-button>
+                </div>
+            </h5>
+            <div class="test-steps-container">
+                <table class="table table-striped">
+                    <colgroup>
+                        <col span="1" style="width: 8%;">
+                        <col span="1" style="width: 10%;">
+                        <col span="1" style="width: 22%;">
+                        <col span="1" style="width: 52%;">
+                        <col span="1" style="width: 8%;">
+                    </colgroup>
+                        
+                    <thead>
+                        <tr>
+                            <th>
+                                <!-- Drag handle -->
+                            </th>
+                            <th>{{'Step' | translate}}</th>
+                            <!--<th>{{'Name' | translate}}</th>-->
+                            <th>{{'Action' | translate}}</th>
+                            <th>{{'Parameter' | translate}}</th>
+                            <th>
+                                <!-- Delete button -->
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody [dragula]="dndBagName" [(dragulaModel)]="contents">
+                        <tr robot-step-row class="robot-procedure-row" *ngFor="let testStep of sortedContents" [testStep]="testStep"></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer">
+                <div class="input-group input-group-sm">
+                    <button title="{{'createTestStep' | translate}}" class="btn btn-sm btn-outline-primary" (click)="createNewTestStep()"><i
+                            class="fa fa-plus" aria-hidden="true"></i>&nbsp;{{'createTestStep' | translate}}</button>
+                </div>
+            </div>
         </div>
-    </h5>
-    <div class="test-steps-container">
-        <table class="table table-striped">
-            <colgroup>
-                <col span="1" style="width: 8%;">
-                <col span="1" style="width: 12%;">
-                <col span="1" style="width: 20%;">
-                <col span="1" style="width: 52%;">
-                <col span="1" style="width: 8%;">
-            </colgroup>
-                
-            <thead>
-                <tr>
-                    <th>
-                        <!-- Drag handle -->
-                    </th>
-                    <th>{{'Step' | translate}}</th>
-                    <!--<th>{{'Name' | translate}}</th>-->
-                    <th>{{'Action' | translate}}</th>
-                    <th>{{'Parameter' | translate}}</th>
-                    <th>
-                        <!-- Delete button -->
-                    </th>
-                </tr>
-            </thead>
-            <tbody [dragula]="dndBagName" [(dragulaModel)]="contents">
-                <tr robot-step-row class="robot-procedure-row" *ngFor="let testStep of sortedContents" [testStep]="testStep"></tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="card-footer">
-        <div class="input-group input-group-sm">
-            <button title="{{'createTestStep' | translate}}" class="btn btn-sm btn-outline-primary" (click)="createNewTestStep()"><i
-                    class="fa fa-plus" aria-hidden="true"></i>&nbsp;{{'createTestStep' | translate}}</button>
+    </as-split-area>
+    <as-split-area [size]="20">
+        <div class="card">
+            <h5 class="card-header">{{'ParameterMappings' | translate}}</h5>
+            <!--<test-case-parameter-mapping [testProcedure]="testProcedure"></test-case-parameter-mapping>-->
         </div>
-    </div>
-</div>
+    </as-split-area>
+</as-split>

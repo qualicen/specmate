@@ -22,7 +22,9 @@ import com.specmate.model.batch.BatchPackage;
 import com.specmate.model.batch.Operation;
 import com.specmate.model.support.util.SpecmateEcoreUtil;
 import com.specmate.rest.RestResult;
+import com.specmate.robotframework.RobotFileCreator;
 import com.specmate.urihandler.IObjectResolver;
+import com.specmate.urihandler.IURIFactory;
 
 @Component(immediate = true, service = IRestService.class)
 public class BatchService extends RestServiceBase {
@@ -32,6 +34,7 @@ public class BatchService extends RestServiceBase {
 	private IObjectResolver resolver;
 	private IMetricsService metricsService; 
 	private ICounter saveCounter;
+	private IURIFactory factory;
 	
 	@Activate
 	public void activate() throws SpecmateException {
@@ -76,6 +79,7 @@ public class BatchService extends RestServiceBase {
 				break;
 			}
 		}
+		RobotFileCreator.updateFile(project, factory);
 		return new RestResult<>(Response.Status.OK, null, userName);
 	}
 
@@ -87,6 +91,11 @@ public class BatchService extends RestServiceBase {
 	@Reference
 	public void setObjectResolver(IObjectResolver resolver) {
 		this.resolver = resolver;
+	}
+	
+	@Reference
+	public void setURIFactory(IURIFactory factory) {
+		this.factory = factory;
 	}
 	
 	@Reference

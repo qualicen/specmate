@@ -37,7 +37,8 @@ Bundle-Version: 0.0.0.${tstamp}
 	specmate-connectors;version=latest,\
 	specmate-auth-api;version=latest,\
 	specmate-metrics;version=latest,\
-	specmate-rest;version=latest
+	specmate-rest;version=latest,\
+	specmate-robot-framework;version=latest
 
 -dsannotations:  \
 	*

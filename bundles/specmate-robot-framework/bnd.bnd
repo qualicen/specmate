@@ -1,0 +1,7 @@
+-buildpath: \
+	specmate-model-gen,\
+	specmate-model-support,\
+	org.eclipse.emf.ecore,\
+	specmate-common,\
+	org.eclipse.emf.common
+Export-Package: com.specmate.robotframework

@@ -7,10 +7,21 @@ export class RobotKeywordService {
 
     constructor(private http: HttpClient) {
         const filePath = '../../../../../../../../assets/robot/keywords.json';
-        this.http.get(filePath).subscribe(data => this._keywords = data as Keyword[]);
+        this.http.get(filePath).subscribe(data => this.updateKeywords(data as Keyword[]));
     }
 
     private _keywords: Keyword[] = [];
+    private _maxParameterCount = 0;
+
+    private updateKeywords(data: Keyword[]) {
+        this._keywords = data;
+        this._maxParameterCount = this._keywords.map(k => k.parameters.length)
+                                                .reduce((a, b) => Math.max(a, b), 0);
+    }
+
+    public get maxParameterCount(): number {
+        return this._maxParameterCount;
+    }
 
     public getKeywordCount() {
         return this._keywords.length;

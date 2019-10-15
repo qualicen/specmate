@@ -1,8 +1,5 @@
 import { Component, Input } from '@angular/core';
 import { IContainer } from '../../../../../../../model/IContainer';
-import { ParameterAssignment } from '../../../../../../../model/ParameterAssignment';
-import { Proxy } from '../../../../../../../model/support/proxy';
-import { TestParameter } from '../../../../../../../model/TestParameter';
 import { RobotStep } from '../../../../../../../model/RobotStep';
 import { Id } from '../../../../../../../util/id';
 import { Type } from '../../../../../../../util/type';
@@ -23,6 +20,8 @@ export class RobotStepRow extends SimpleInputFormBase {
 
     @Input()
     public set testStep(testStep: RobotStep) {
+        this.wrapRobotStep(testStep);
+        this.selectedKeyword = testStep.name;
         let testStepUrl: string = testStep.url;
         let testProcedureUrl: string = Url.parent(testStepUrl);
         let testCaseUrl: string = Url.parent(testProcedureUrl);
@@ -35,7 +34,7 @@ export class RobotStepRow extends SimpleInputFormBase {
     }
 
     protected get fields(): string[] {
-        let fields = ['name', 'description'];
+        let fields = [];
         for (let i = 0; i < this.parameters.length; i++) {
             fields.push('parameter' + i);
         }
@@ -62,7 +61,16 @@ export class RobotStepRow extends SimpleInputFormBase {
     }
 
     public get selectedKeyword(): string {
-        return this.keywords[this._keywordIndex];
+        let idx = this.keywords.indexOf(this.testStep.name);
+        if (idx < 0) {
+            this.testStep.name = this.keywords[0];
+            if (this.keywords[0] === undefined) {
+                this.testStep.name = '';
+            }
+            this.dataService.updateElement(this.testStep, true, Id.uuid);
+            idx = 0;
+        }
+        return this.keywords[idx];
     }
 
     public set selectedKeyword(keyword: string) {
@@ -71,14 +79,24 @@ export class RobotStepRow extends SimpleInputFormBase {
             this.dataService.updateElement(this.testStep, true, Id.uuid);
             return;
         }
-        this._keywordIndex = this.keywords.indexOf(keyword);
-        if (this._keywordIndex < 0) {
-            this._keywordIndex = 0;
+        let newKeyword = this.keywords.indexOf(keyword);
+        if (newKeyword < 0) {
+            newKeyword = 0;
+        }
+        if (newKeyword != this._keywordIndex) {
+            this._keywordIndex = newKeyword;
+            this.testStep.name = this.keywords[newKeyword];
+            this.dataService.updateElement(this.testStep, true, Id.uuid);
+            this.buildFormGroup();
         }
     }
 
     public get parameters(): string[] {
-        return this.keywordService.getKeyword(this._keywordIndex).parameters;
+        let key = this.keywordService.getKeyword(this._keywordIndex);
+        if (key == undefined) {
+            return [];
+        }
+        return key.parameters;
     }
 
     constructor(protected dataService: SpecmateDataService, private keywordService: RobotKeywordService) {
@@ -93,5 +111,28 @@ export class RobotStepRow extends SimpleInputFormBase {
 
     public getPosition(testStep: RobotStep): number {
         return parseInt(String(testStep.position), 10) + 1;
+    }
+
+    private wrapRobotStep(rStep: RobotStep) {
+        const max = this.keywordService.maxParameterCount;
+        const para: string[] = rStep.description.split('\n');
+        for (let i = 0; i < max; i++) {
+            let key = 'parameter' + i;
+            Object.defineProperty(rStep, key, {
+                get: () => {
+                    return rStep.description.split('\n')[i];
+                },
+                set: (value: string) => {
+                    let param = rStep.description.split('\n');
+                    param[i] = value;
+                    rStep.description = param.join('\n');
+                },
+              });
+              let def = para[i];
+              if (def === undefined || def === null) {
+                  def = '';
+              }
+              rStep[key] = def;
+        }
     }
 }

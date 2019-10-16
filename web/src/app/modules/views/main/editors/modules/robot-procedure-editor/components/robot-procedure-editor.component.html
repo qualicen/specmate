@@ -1,6 +1,6 @@
 <as-split direction="vertical" [gutterSize]="7">
     <as-split-area [size]="80">
-        <div *ngIf="robotProcedure && contents" class="card maximized">
+        <div *ngIf="robotProcedure && contents && keysLoaded" class="card maximized">
             <h5 class="card-header">
                 {{'RobotCommands' | translate}}
                 <div class="pull-right">

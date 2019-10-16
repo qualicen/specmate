@@ -4,12 +4,12 @@ import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class RobotKeywordService {
-
     constructor(private http: HttpClient) {
         const filePath = '../../../../../../../../assets/robot/keywords.json';
         this.http.get(filePath).subscribe(data => this.updateKeywords(data as Keyword[]));
     }
 
+    private _loaded = false;
     private _keywords: Keyword[] = [];
     private _maxParameterCount = 0;
 
@@ -17,10 +17,15 @@ export class RobotKeywordService {
         this._keywords = data;
         this._maxParameterCount = this._keywords.map(k => k.parameters.length)
                                                 .reduce((a, b) => Math.max(a, b), 0);
+        this._loaded = true;
     }
 
     public get maxParameterCount(): number {
         return this._maxParameterCount;
+    }
+
+    public get isLoaded(): boolean {
+        return this._loaded;
     }
 
     public getKeywordCount() {

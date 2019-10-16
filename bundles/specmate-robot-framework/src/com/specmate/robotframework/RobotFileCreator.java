@@ -2,9 +2,9 @@ package com.specmate.robotframework;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -12,54 +12,58 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.model.base.Folder;
-import com.specmate.model.batch.Operation;
+import com.specmate.model.base.IContainer;
+import com.specmate.model.base.IDescribed;
+import com.specmate.model.support.util.SpecmateEcoreUtil;
 import com.specmate.model.testspecification.RobotProcedure;
 import com.specmate.model.testspecification.RobotStep;
 import com.specmate.model.testspecification.TestCase;
 import com.specmate.model.testspecification.TestSpecification;
-import com.specmate.model.testspecification.impl.RobotStepImpl;
 import com.specmate.urihandler.IURIFactory;
-// import com.specmate.model.support.internal.EObjectUriFactory;
-import com.specmate.model.support.util.SpecmateEcoreUtil;
 
 
 public class RobotFileCreator {
-	private static String ROBOT_PATH = "/Users/Dominik/Documents/Arbeit/Qualicen/Specmate/Robotframework";
+	private static String ROBOT_PATH = System.getProperty("user.dir")+"/../../../Robotframework/";
 	
 	public static void updateFile(Folder project, IURIFactory factory) {
 		System.out.println("Update File");
 		
 		Vector<Object> worklist = new Vector<Object>();
-		worklist.add(project);
-		
+		worklist.add(project);		
 		while(!worklist.isEmpty() ) {
 			Object current = worklist.remove(0);
 			
 			try {
 				List<EObject> children = SpecmateEcoreUtil.getChildren(current);
-				
 				if(current instanceof TestSpecification) {
-					
-					boolean hasRobotTests = children.stream().anyMatch(e -> (e instanceof RobotProcedure));
-					if(! hasRobotTests) {
+					if(!hasRobotTests((TestSpecification) current)) {
 						continue;
 					}
-					System.out.println(current);
-					
-					URI uri = EcoreUtil.getURI((EObject) current);
 					// Project/Folder/Requirement/Model/Testsuite/Testcase/RobotProcedure
-					String projectPath = factory.getURI((EObject) current);
-					String fullPath = ROBOT_PATH+"/"+projectPath+".robot";
+					String fullPath = ROBOT_PATH + getPath((IContainer) current, project);
+					System.out.println(fullPath);
 					
 					File file = new File(fullPath);
 					file.getParentFile().mkdirs();
 					FileWriter writer = new FileWriter(file);
 					
-					for(EObject obj: children) {
-						if(obj instanceof RobotProcedure) {
-							writer.write(getRobotTest((RobotProcedure)obj));
-							writer.write("---\n\n");
+					writer.write(getRobotHeader((TestSpecification) current));
+					
+					for(EObject tCase: children) {
+						List<EObject> procedures = SpecmateEcoreUtil.getChildren(tCase);
+						if (!procedures.stream().anyMatch(e -> (e instanceof RobotProcedure))) {
+							continue;
 						}
+						
+						// Write the test name
+						writer.write(((IContainer)tCase).getName()+":\n");
+						for(EObject proc: procedures) {
+							if(proc instanceof RobotProcedure) {
+								// Write the test content
+								writer.write(getRobotTestContent((RobotProcedure) proc));
+							}
+						}
+						writer.write("\n\n");
 					}
 					
 					writer.close();
@@ -73,18 +77,67 @@ public class RobotFileCreator {
 		}
 	}
 	
-	private static String getRobotTest(RobotProcedure proc) throws SpecmateException {
-		String out = "";
-		List<EObject> children = SpecmateEcoreUtil.getChildren((EObject)proc);
-		for(EObject obj: children) {
-			if(obj instanceof RobotStep) {
-				RobotStep step = (RobotStep) obj;
-				out+= step.getName()+":\n";
-				out+= step.getDescription().trim()+"\n";
-				out+= "END\n\n";
+	private static String getRobotHeader(TestSpecification spec) {
+		String result = "*** Settings ***\nDocumentation    ";
+		String description = ((IDescribed) ((EObject)spec).eContainer())
+											.getDescription()
+											.replaceAll(",", ",\n")
+											.replaceAll("\\.", ".\n");
+		
+		String[] desc = description.split("\n");
+		result += desc[0].trim();
+		for(int i = 1; i < desc.length; i++) {
+			result += "\n...              " + desc[i].trim();
+		}	
+		result += "\n\n*** Test Cases ***\n";
+		return result;
+	}
+
+	private static String getPath(IContainer testsuite, IContainer root ) {
+		String result = testsuite.getName() + ".robot";
+		
+		EObject current = (EObject) testsuite;
+		while(current != root) {
+			current = current.eContainer();
+			result = ((IContainer)current).getName()+"/"+result;
+		}
+		
+		return result;
+	}
+	
+	private static boolean hasRobotTests(TestSpecification spec) throws SpecmateException {
+		List<EObject> testcases = SpecmateEcoreUtil.getChildren(spec);
+		for(EObject tCase: testcases) {
+			if(tCase instanceof TestCase) {
+				List<EObject> children =  SpecmateEcoreUtil.getChildren(tCase);
+				boolean hasRobotTests = children.stream().anyMatch(e -> (e instanceof RobotProcedure));
+				if(hasRobotTests) {
+					return true;
+				}
 			}
 		}
 		
-		return out.trim();
+		return false;
+	}
+	
+	private static String getRobotTestContent(RobotProcedure proc) throws SpecmateException {
+		String result = "";
+		
+		List<RobotStep> children = SpecmateEcoreUtil.getChildren((EObject)proc)
+												.stream()
+												.filter(e -> e instanceof RobotStep)
+												.map(e -> (RobotStep)e)
+												.sorted( (a,b) -> {
+													return Integer.compare(a.getPosition(), b.getPosition());
+												})
+												.collect(Collectors.toList());
+		
+		for(RobotStep step: children) {
+			String line =  step.getName()+"    ";
+			line += step.getDescription().trim().replaceAll("\n", "    ");
+			result += "\t" + line.trim() + "\n";
+		}
+		// Trim only the end
+		return ("."+result).trim().substring(1);
 	}
 }

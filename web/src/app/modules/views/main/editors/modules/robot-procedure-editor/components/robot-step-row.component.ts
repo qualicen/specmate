@@ -21,7 +21,12 @@ export class RobotStepRow extends SimpleInputFormBase {
     @Input()
     public set testStep(testStep: RobotStep) {
         this.wrapRobotStep(testStep);
+        
+        let desc = testStep.description;
         this.selectedKeyword = testStep.name;
+        testStep.description = desc;
+        this.dataService.updateElement(testStep, true, Id.uuid);
+
         let testStepUrl: string = testStep.url;
         let testProcedureUrl: string = Url.parent(testStepUrl);
         let testCaseUrl: string = Url.parent(testProcedureUrl);
@@ -86,6 +91,7 @@ export class RobotStepRow extends SimpleInputFormBase {
         if (newKeyword != this._keywordIndex) {
             this._keywordIndex = newKeyword;
             this.testStep.name = this.keywords[newKeyword];
+            this.testStep.description = '\n'.repeat(this.keywordService.maxParameterCount);
             this.dataService.updateElement(this.testStep, true, Id.uuid);
             this.buildFormGroup();
         }

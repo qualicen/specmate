@@ -59,7 +59,8 @@ export class RobotProcedureEditor extends DraggableSupportingViewBase {
         route: ActivatedRoute,
         modal: ConfirmationModal,
         dragulaService: DragulaService,
-        translate: TranslateService) {
+        translate: TranslateService,
+        private keyService: RobotKeywordService) {
             super(dataService, navigator, route, modal, dragulaService, translate);
     }
 
@@ -89,5 +90,13 @@ export class RobotProcedureEditor extends DraggableSupportingViewBase {
     /** Return true if all user inputs are valid  */
     protected get isValid(): boolean {
         return true;
+    }
+
+    private _keysLoaded = false;
+    public get keysLoaded(): boolean {
+        if (this.keyService.isLoaded != this._keysLoaded) {
+            Promise.resolve().then(() => this._keysLoaded = this.keyService.isLoaded);
+        }
+        return this._keysLoaded;
     }
 }

@@ -23,7 +23,7 @@ import com.specmate.urihandler.IURIFactory;
 
 
 public class RobotFileCreator {
-	private static String ROBOT_PATH = System.getProperty("user.dir")+"/../../../Robotframework/";
+	private static String ROBOT_PATH = System.getProperty("user.dir")+"/Robotframework/";
 	
 	public static void updateFile(Folder project, IURIFactory factory) {
 		System.out.println("Update File");

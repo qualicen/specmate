@@ -50,6 +50,8 @@ export class GraphicalEditor {
   private _contents: IContainer[];
   private readonly VALID_STYLE_NAME = 'VALID';
   private readonly INVALID_STYLE_NAME = 'INVALID';
+  private readonly EDGE_HIGHLIGHT_STYLE_NAME = 'EDGE_HIGHLIGHT';
+  private readonly EDGE_DIM_STYLE_NAME = 'EDGE_DIM_STYLE_NAME';
 
   constructor(
     private dataService: SpecmateDataService,
@@ -72,6 +74,8 @@ export class GraphicalEditor {
   private graph: mxgraph.mxGraph;
   private keyHandler: mxgraph.mxKeyHandler;
   private undoManager: mxgraph.mxUndoManager;
+
+  private highlightedEdges: mxgraph.mxCell[] =  []
 
   @ViewChild('mxGraphContainer')
   public set graphContainer(element: ElementRef) {
@@ -125,9 +129,33 @@ export class GraphicalEditor {
     }.bind(this));
 
     this.graph.getSelectionModel().addListener(mx.mxEvent.CHANGE, async (args: any) => {
-      if (this.graph.getSelectionCount() === 1) {
-        const selectedElement = await this.dataService.readElement(this.graph.getSelectionModel().cells[0].getId(), true);
-        this.selectedElementService.select(selectedElement);
+      let selectionCount = this.graph.getSelectionCount();
+
+      // Dim all Edges 
+      for (const edge of this.highlightedEdges) {
+        StyleChanger.replaceStyle(edge, this.graph, this.EDGE_HIGHLIGHT_STYLE_NAME, this.EDGE_DIM_STYLE_NAME);
+      }
+      this.highlightedEdges = [];
+
+      if (selectionCount >= 1) {
+        // Highlight All Edges
+        let selection = this.graph.getSelectionModel().cells;
+        for (const cell of selection) {
+          if (cell.edge) {
+            this.highlightedEdges.push(cell);
+          } else {
+            this.highlightedEdges.push(...cell.edges); 
+          }
+        }
+        for (const edge of this.highlightedEdges) {
+          StyleChanger.addStyle(edge, this.graph, this.EDGE_HIGHLIGHT_STYLE_NAME);
+        }
+        
+
+        if (selectionCount === 1) {
+          const selectedElement = await this.dataService.readElement(this.graph.getSelectionModel().cells[0].getId(), true);
+          this.selectedElementService.select(selectedElement);
+        }
       } else {
         this.selectedElementService.deselect();
       }
@@ -187,9 +215,22 @@ export class GraphicalEditor {
     invalidStyle[mx.mxConstants.STYLE_STROKECOLOR] = '#ffc3d9';
     stylesheet.putCellStyle(this.INVALID_STYLE_NAME, invalidStyle);
 
+
+    const edgeHighlightStyle: {
+      [key: string]: string;
+    } = {};
+    edgeHighlightStyle[mx.mxConstants.STYLE_STROKECOLOR] = '#000000';
+    stylesheet.putCellStyle(this.EDGE_HIGHLIGHT_STYLE_NAME, edgeHighlightStyle);
+
+    const edgeDimStyle: {
+      [key: string]: string;
+    } = {};
+    edgeDimStyle[mx.mxConstants.STYLE_STROKECOLOR] = '#858585';
+    stylesheet.putCellStyle(this.EDGE_DIM_STYLE_NAME, edgeDimStyle);
+
     const vertexStyle = this.graph.getStylesheet().getDefaultVertexStyle();
     vertexStyle[mx.mxConstants.STYLE_STROKECOLOR] = '#000000';
-    this.graph.getStylesheet().getDefaultEdgeStyle()[mx.mxConstants.STYLE_STROKECOLOR] = '#000000';
+    this.graph.getStylesheet().putDefaultEdgeStyle(edgeDimStyle);
   }
 
   private initUndoManager(): void {

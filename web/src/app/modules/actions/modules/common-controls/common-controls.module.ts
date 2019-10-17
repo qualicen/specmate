@@ -4,6 +4,7 @@ import { ConnectionModule } from '../../../common/modules/connection/connection.
 import { SpecmateSharedModule } from '../../../specmate/specmate.shared.module';
 import { CommonControls } from './components/common-controls.component';
 import { ValidationModule } from '../../../forms/modules/validation/validation.module';
+import { UndoService } from './services/undo.service';
 
 @NgModule({
   imports: [
@@ -23,6 +24,7 @@ import { ValidationModule } from '../../../forms/modules/validation/validation.m
   ],
   providers: [
     // SERVICES
+    UndoService
   ],
   bootstrap: [
     // COMPONENTS THAT ARE BOOTSTRAPPED HERE

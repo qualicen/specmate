@@ -190,6 +190,7 @@
 	"processModel": "Process Model",
 	"project": "Project",
 	"queryCouldNotBePerformed": "Query could not be performed",
+	"redo": "Redo",
 	"requiredField": "Required field",
 	"resolve": "Resolve",
 	"resourceNotFound": "Element not found.",

@@ -18,6 +18,12 @@ import { ToolProvider } from '../providers/properties/tool-provider';
 import { ChangeTranslator } from './util/change-translator';
 import { StyleChanger } from './util/style-changer';
 import { UndoService } from 'src/app/modules/actions/modules/common-controls/services/undo.service';
+import { Type } from '../../../../../../../util/type';
+import { CEGModel } from 'src/app/model/CEGModel';
+import { HTMLLabelProvider } from '../providers/properties/html-label-provider';
+import { ValuePair } from '../providers/properties/value-pair';
+import { EditorStyle } from './editor-components/editor-style';
+import { EditorKeyHandler } from './editor-components/editor-key-handler';
 
 
 declare var require: any;
@@ -40,7 +46,7 @@ export class GraphicalEditor {
   private nameProvider: NameProvider;
   private elementProvider: ElementProvider;
   private toolProvider: ToolProvider;
-  private nodeNameConverter: ConverterBase<any, string>;
+  private nodeNameConverter: ConverterBase<any, string|ValuePair>;
   private shapeProvider: ShapeProvider;
   private changeTranslator: ChangeTranslator;
 
@@ -48,8 +54,6 @@ export class GraphicalEditor {
 
   private _model: IContainer;
   private _contents: IContainer[];
-  private readonly VALID_STYLE_NAME = 'VALID';
-  private readonly INVALID_STYLE_NAME = 'INVALID';
 
   constructor(
     private dataService: SpecmateDataService,
@@ -69,14 +73,19 @@ export class GraphicalEditor {
 
   }
 
+  /*********************** MX Graph ***********************/
   private graph: mxgraph.mxGraph;
   private keyHandler: mxgraph.mxKeyHandler;
   private undoManager: mxgraph.mxUndoManager;
 
+  /*
+   * Construct the MXGraph
+   */
   @ViewChild('mxGraphContainer')
   public set graphContainer(element: ElementRef) {
 
     mx.mxConnectionHandler.prototype.connectImage = new mx.mxImage('/assets/img/editor-tools/connector.png', 16, 16);
+    
     mx.mxEvent.disableContextMenu(document.body);
     mx.mxGraphHandler.prototype['guidesEnabled'] = true;
 
@@ -136,60 +145,20 @@ export class GraphicalEditor {
     this.init();
   }
 
+  /*
+   * Initialize the MXGraph
+   */
   private async init(): Promise<void> {
     if (this.graph === undefined || this.model === undefined) {
       return;
     }
-    this.initStyles();
-    this.initKeyHandler();
+    EditorStyle.initEditorStyles(this.graph);
+    this.keyHandler = EditorKeyHandler.initKeyHandler(this.graph);
     this.initGraphicalModel();
     this.initTools();
     this.initUndoManager();
     this.validationService.refreshValidation(this.model);
     this.undoManager.clear();
-  }
-
-  private provideVertex(node: IModelNode, x?: number, y?: number): mxgraph.mxCell {
-    const width = node.width > 0 ? node.width : this.shapeProvider.getInitialSize(node).width;
-    const height = node.height > 0 ? node.height : this.shapeProvider.getInitialSize(node).height;
-    const value = this.nodeNameConverter ? this.nodeNameConverter.convertTo(node) : node.name;
-    const style = this.shapeProvider.getStyle(node);
-    const parent = this.graph.getDefaultParent();
-    const vertex = this.graph.insertVertex(parent, node.url, value, x || node.x, y || node.y, width, height, style);
-    return vertex;
-  }
-
-  private initStyles(): void {
-
-    mx.mxConstants.HANDLE_FILLCOLOR = '#99ccff';
-    mx.mxConstants.HANDLE_STROKECOLOR = '#0088cf';
-    mx.mxConstants.VERTEX_SELECTION_COLOR = '#00a8ff';
-    mx.mxConstants.EDGE_SELECTION_COLOR = '#00a8ff';
-    mx.mxConstants.DEFAULT_FONTSIZE = 12;
-
-    const stylesheet = this.graph.getStylesheet();
-    const validStyle: {
-      [key: string]: string;
-    } = {};
-    validStyle[mx.mxConstants.STYLE_OPACITY] = '100';
-    validStyle[mx.mxConstants.STYLE_FILLCOLOR] = '#457fca';
-    validStyle[mx.mxConstants.STYLE_GRADIENTCOLOR] = '#77A7D3';
-    validStyle[mx.mxConstants.STYLE_STROKE_OPACITY] = '100';
-    validStyle[mx.mxConstants.STYLE_STROKECOLOR] = '#346CB6';
-    validStyle[mx.mxConstants.STYLE_FONTCOLOR] = '#ffffff';
-    stylesheet.putCellStyle(this.VALID_STYLE_NAME, validStyle);
-    const invalidStyle: {
-      [key: string]: string;
-    } = {};
-    invalidStyle[mx.mxConstants.STYLE_OPACITY] = '75';
-    invalidStyle[mx.mxConstants.STYLE_FILLCOLOR] = '#ffc3d9';
-    invalidStyle[mx.mxConstants.STYLE_STROKE_OPACITY] = '100';
-    invalidStyle[mx.mxConstants.STYLE_STROKECOLOR] = '#ffc3d9';
-    stylesheet.putCellStyle(this.INVALID_STYLE_NAME, invalidStyle);
-
-    const vertexStyle = this.graph.getStylesheet().getDefaultVertexStyle();
-    vertexStyle[mx.mxConstants.STYLE_STROKECOLOR] = '#000000';
-    this.graph.getStylesheet().getDefaultEdgeStyle()[mx.mxConstants.STYLE_STROKECOLOR] = '#000000';
   }
 
   private initUndoManager(): void {
@@ -204,82 +173,17 @@ export class GraphicalEditor {
     this.undoManager.clear();
   }
 
-  private initKeyHandler(): void {
-    this.keyHandler = new mx.mxKeyHandler(this.graph);
-
-    // Support Mac command-key
-    this.keyHandler.getFunction = function (evt) {
-      if (evt != null) {
-        return (mx.mxEvent.isControlDown(evt) || (mx.mxClient.IS_MAC && evt.metaKey))
-          ? this.controlKeys[evt.keyCode]
-          : this.normalKeys[evt.keyCode];
-      }
-      return null;
-    };
-
-    // Del
-    this.keyHandler.bindKey(46, (evt: KeyboardEvent) => {
-      this.stopEvent(evt);
-      this.deleteSelectedCells();
-    });
-
-    // Backspace
-    this.keyHandler.bindControlKey(8, (evt: KeyboardEvent) => {
-      this.deleteSelectedCells();
-    });
-
-    // Ctrl+A
-    this.keyHandler.bindControlKey(65, (evt: KeyboardEvent) => {
-      this.stopEvent(evt);
-      if (this.graph.isEnabled()) {
-        this.graph.getSelectionModel().addCells(this.graph.getChildCells(this.graph.getDefaultParent()));
-      }
-    });
-
-    // Ctrl+C
-    this.keyHandler.bindControlKey(67, (evt: KeyboardEvent) => {
-      this.stopEvent(evt);
-      if (this.graph.isEnabled()) {
-        mx.mxClipboard.copy(this.graph, this.graph.getSelectionCells());
-      }
-    });
-
-    // Ctrl+V
-    this.keyHandler.bindControlKey(86, (evt: KeyboardEvent) => {
-      this.stopEvent(evt);
-      if (this.graph.isEnabled()) {
-        mx.mxClipboard.paste(this.graph);
-      }
-    });
-
-    // Ctrl+X
-    this.keyHandler.bindControlKey(88, (evt: KeyboardEvent) => {
-      this.stopEvent(evt);
-      if (this.graph.isEnabled()) {
-        mx.mxClipboard.copy(this.graph, this.graph.getSelectionCells());
-        this.deleteSelectedCells();
-      }
-    });
-  }
-
-  private stopEvent(evt: Event): void {
-    evt.preventDefault();
-    evt.stopPropagation();
-  }
-
-  private deleteSelectedCells(): void {
-    if (this.graph.isEnabled()) {
-      const selectedCells = this.graph.getSelectionCells();
-      this.graph.removeCells(selectedCells, true);
-    }
-  }
-
   private async initGraphicalModel(): Promise<void> {
     this._contents = await this.dataService.readContents(this.model.url, true);
     this.elementProvider = new ElementProvider(this.model, this._contents);
     this.nodeNameConverter = new NodeNameConverterProvider(this.model).nodeNameConverter;
     const parent = this.graph.getDefaultParent();
     this.changeTranslator.preventDataUpdates = true;
+
+    if (Type.is(this.model, CEGModel)){
+      this.initCEGModel();
+    } 
+
     this.graph.getModel().beginUpdate();
     try {
       const vertexCache: { [url: string]: mxgraph.mxCell } = {};
@@ -298,6 +202,35 @@ export class GraphicalEditor {
       this.changeTranslator.preventDataUpdates = false;
       this.undoManager.clear();
     }
+  }
+
+  private htmlLabelProvider: HTMLLabelProvider;
+  private async initCEGModel(): Promise<void> {
+    this.graph.setHtmlLabels(true);
+    this.htmlLabelProvider = new HTMLLabelProvider(this.model, this.graph);
+    this.graph.getLabel = this.htmlLabelProvider.getLabel.bind(this.htmlLabelProvider);
+    this.graph.getEditingValue = this.htmlLabelProvider.getEditingValue.bind(this.htmlLabelProvider);
+    this.graph.labelChanged = this.htmlLabelProvider.labelChanged;
+    this.graph.isCellEditable = function(cell) {
+			return !cell.edge;
+		};
+  }
+
+  /**
+   * Helper Function: Creates a new Node at an optionally specified position
+   * @param node 
+   * @param x 
+   * @param y 
+   */
+  private provideVertex(node: IModelNode, x?: number, y?: number): mxgraph.mxCell {
+    const width = node.width > 0 ? node.width : this.shapeProvider.getInitialSize(node).width;
+    const height = node.height > 0 ? node.height : this.shapeProvider.getInitialSize(node).height;
+    
+    const value = this.nodeNameConverter ? this.nodeNameConverter.convertTo(node) : node.name;
+    const style = this.shapeProvider.getStyle(node);
+    const parent = this.graph.getDefaultParent();
+    const vertex = this.graph.insertVertex(parent, node.url, value, x || node.x, y || node.y, width, height, style);
+    return vertex;
   }
 
   private async initTools(): Promise<void> {
@@ -330,20 +263,20 @@ export class GraphicalEditor {
     }
     const vertices = this.graph.getModel().getChildVertices(this.graph.getDefaultParent());
     for (const vertex of vertices) {
-      StyleChanger.addStyle(vertex, this.graph, this.VALID_STYLE_NAME);
+      StyleChanger.addStyle(vertex, this.graph, EditorStyle.VALID_STYLE_NAME);
     }
     const invalidNodes = this.validationService.getValidationResults(this.model);
     for (const invalidNode of invalidNodes) {
       const vertexId = invalidNode.element.url;
       const vertex = vertices.find(vertex => vertex.id === vertexId);
-      StyleChanger.replaceStyle(vertex, this.graph, this.VALID_STYLE_NAME, this.INVALID_STYLE_NAME);
+      StyleChanger.replaceStyle(vertex, this.graph, EditorStyle.VALID_STYLE_NAME, EditorStyle.INVALID_STYLE_NAME);
     }
   }
 
+  /*********************** Editor Options ***********************/
   public get model(): IContainer {
     return this._model;
   }
-
 
   @Input()
   public set model(model: IContainer) {

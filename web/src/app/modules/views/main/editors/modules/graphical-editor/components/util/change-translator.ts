@@ -14,6 +14,10 @@ import { NodeNameConverterProvider } from '../../providers/conversion/node-name-
 import { DeleteToolBase } from '../../../tool-pallette/tools/delete-tool-base';
 import { ToolProvider } from '../../providers/properties/tool-provider';
 import { ToolBase } from '../../../tool-pallette/tools/tool-base';
+import { ValuePair } from '../../providers/properties/value-pair';
+import { HTMLLabelProvider } from '../../providers/properties/html-label-provider';
+import { Type } from 'src/app/util/type';
+import { CEGNode } from 'src/app/model/CEGNode';
 
 declare var require: any;
 
@@ -25,7 +29,7 @@ const mx: typeof mxgraph = require('mxgraph')({
 export class ChangeTranslator {
 
     private contents: IContainer[];
-    private nodeNameConverter: ConverterBase<IContainer, string>;
+    private nodeNameConverter: ConverterBase<IContainer, string|ValuePair>;
     public preventDataUpdates = false;
 
     constructor(private model: CEGModel | Process, private dataService: SpecmateDataService, private toolProvider: ToolProvider) {

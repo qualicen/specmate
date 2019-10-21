@@ -51,6 +51,11 @@ export class GraphicalEditor {
   private readonly VALID_STYLE_NAME = 'VALID';
   private readonly INVALID_STYLE_NAME = 'INVALID';
 
+  private readonly CAUSE_STYLE_NAME  = 'CAUSE';
+  private readonly INNER_STYLE_NAME  = 'INNER';
+  private readonly EFFECT_STYLE_NAME = 'EFFECT';
+
+
   constructor(
     private dataService: SpecmateDataService,
     private selectedElementService: SelectedElementService,
@@ -171,24 +176,48 @@ export class GraphicalEditor {
     const validStyle: {
       [key: string]: string;
     } = {};
-    validStyle[mx.mxConstants.STYLE_OPACITY] = '100';
-    validStyle[mx.mxConstants.STYLE_FILLCOLOR] = '#457fca';
-    validStyle[mx.mxConstants.STYLE_GRADIENTCOLOR] = '#77A7D3';
+    //validStyle[mx.mxConstants.STYLE_OPACITY] = '100';
+    //validStyle[mx.mxConstants.STYLE_FILLCOLOR] = '#457fca';
+    //validStyle[mx.mxConstants.STYLE_GRADIENTCOLOR] = '#77A7D3';  
+    //validStyle[mx.mxConstants.STYLE_FONTCOLOR] = '#ffffff';
+    validStyle[mx.mxConstants.STYLE_DASHED] = '0';
+    validStyle[mx.mxConstants.STYLE_STROKEWIDTH] = '3';
     validStyle[mx.mxConstants.STYLE_STROKE_OPACITY] = '100';
     validStyle[mx.mxConstants.STYLE_STROKECOLOR] = '#346CB6';
-    validStyle[mx.mxConstants.STYLE_FONTCOLOR] = '#ffffff';
+
     stylesheet.putCellStyle(this.VALID_STYLE_NAME, validStyle);
     const invalidStyle: {
       [key: string]: string;
     } = {};
-    invalidStyle[mx.mxConstants.STYLE_OPACITY] = '75';
-    invalidStyle[mx.mxConstants.STYLE_FILLCOLOR] = '#ffc3d9';
+    //invalidStyle[mx.mxConstants.STYLE_OPACITY] = '75';
+    //invalidStyle[mx.mxConstants.STYLE_FILLCOLOR] = '#ffc3d9';
+
+    invalidStyle[mx.mxConstants.STYLE_DASHED] = '0';
+    invalidStyle[mx.mxConstants.STYLE_STROKEWIDTH] = '3';
     invalidStyle[mx.mxConstants.STYLE_STROKE_OPACITY] = '100';
-    invalidStyle[mx.mxConstants.STYLE_STROKECOLOR] = '#ffc3d9';
+    invalidStyle[mx.mxConstants.STYLE_STROKECOLOR] = '#ff0000';
     stylesheet.putCellStyle(this.INVALID_STYLE_NAME, invalidStyle);
+
+    const causeStyle: {
+      [key: string]: string;
+    } = {};
+    causeStyle[mx.mxConstants.STYLE_FILLCOLOR] = '#39C4B8';
+    stylesheet.putCellStyle(this.CAUSE_STYLE_NAME, causeStyle);
+
+    const effectStyle: {
+      [key: string]: string;
+    } = {};
+    effectStyle[mx.mxConstants.STYLE_FILLCOLOR] = '#f6960d';
+    stylesheet.putCellStyle(this.EFFECT_STYLE_NAME, effectStyle);
+
+    const innerStyle = effectStyle;
+    stylesheet.putCellStyle(this.INNER_STYLE_NAME, innerStyle);
+
 
     const vertexStyle = this.graph.getStylesheet().getDefaultVertexStyle();
     vertexStyle[mx.mxConstants.STYLE_STROKECOLOR] = '#000000';
+    vertexStyle[mx.mxConstants.STYLE_DASHED] = "1";
+    vertexStyle[mx.mxConstants.STYLE_DASH_PATTERN] = "4";
     this.graph.getStylesheet().getDefaultEdgeStyle()[mx.mxConstants.STYLE_STROKECOLOR] = '#000000';
   }
 
@@ -293,6 +322,12 @@ export class GraphicalEditor {
         const value = this.nodeNameConverter ? this.nodeNameConverter.convertTo(connection) : connection.name;
         this.graph.insertEdge(parent, connection.url, value, sourceVertex, targetVertex);
       }
+
+      for (const url in vertexCache) {
+        const vertex = vertexCache[url];
+        const type = this.getNodeType(vertex);
+        StyleChanger.addStyle(vertex, this.graph, type);
+      }
     } finally {
       this.graph.getModel().endUpdate();
       this.changeTranslator.preventDataUpdates = false;
@@ -338,12 +373,47 @@ export class GraphicalEditor {
       const vertex = vertices.find(vertex => vertex.id === vertexId);
       StyleChanger.replaceStyle(vertex, this.graph, this.VALID_STYLE_NAME, this.INVALID_STYLE_NAME);
     }
+
+    for(const vertex of vertices) {
+      StyleChanger.removeStyle(vertex, this.graph, this.CAUSE_STYLE_NAME);
+      StyleChanger.removeStyle(vertex, this.graph, this.EFFECT_STYLE_NAME);
+      StyleChanger.removeStyle(vertex, this.graph, this.INNER_STYLE_NAME);
+      StyleChanger.addStyle(vertex, this.graph, this.getNodeType(vertex));
+    }
   }
 
   public get model(): IContainer {
     return this._model;
   }
 
+  private getNodeType(cell: mxgraph.mxCell) {
+    if(cell.edges === undefined || cell.edge) {
+      // The cell is an edge
+      return '';
+    }
+
+    if (cell.edges === null) {
+      // Node without Edges
+      return this.CAUSE_STYLE_NAME;
+    }
+
+    let hasIncommingEdges = false;
+    let hasOutgoingEdges = false;
+    for (const edge of cell.edges) {
+      if(edge.source.id === cell.id) {
+        hasOutgoingEdges = true;
+      } else if(edge.target.id === cell.id) {
+        hasIncommingEdges = true;
+      }
+    }
+
+    if (hasIncommingEdges && hasOutgoingEdges) {
+      return this.INNER_STYLE_NAME;
+    } else if(hasIncommingEdges) {
+      return this.EFFECT_STYLE_NAME;
+    }
+    return this.CAUSE_STYLE_NAME;
+  }
 
   @Input()
   public set model(model: IContainer) {

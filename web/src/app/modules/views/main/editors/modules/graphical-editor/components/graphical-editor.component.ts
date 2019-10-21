@@ -147,6 +147,10 @@ export class GraphicalEditor {
     this.initUndoManager();
     this.validationService.refreshValidation(this.model);
     this.undoManager.clear();
+    // TODO
+    this.dataService.stateChanged.subscribe( (evt:Event) => {
+      console.log(evt);
+    });
   }
 
   private provideVertex(node: IModelNode, x?: number, y?: number): mxgraph.mxCell {

@@ -57,6 +57,7 @@ public class RobotFileCreator {
 						
 						// Write the test name
 						writer.write(((IContainer)tCase).getName()+":\n");
+						// TODO Write Testdescription
 						for(EObject proc: procedures) {
 							if(proc instanceof RobotProcedure) {
 								// Write the test content
@@ -88,7 +89,8 @@ public class RobotFileCreator {
 		result += desc[0].trim();
 		for(int i = 1; i < desc.length; i++) {
 			result += "\n...              " + desc[i].trim();
-		}	
+		}
+		result += "\nResource    ../../../../keywords.robot";
 		result += "\n\n*** Test Cases ***\n";
 		return result;
 	}

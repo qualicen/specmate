@@ -1,18 +1,42 @@
 [
     {
-        "keyword": "Open Browser",
+        "keyword": "Open Application",
         "parameters": []
     },
     {
-        "keyword": "Open Login Page",
+        "keyword": "Set Steuerklasse",
+        "parameters": ["Steuerklasse"]
+    },
+    {
+        "keyword": "Set AnzKinderFreibetraege",
+        "parameters": ["AnzKinderfreibetraege"]
+    },
+    {
+        "keyword": "Set Geburtsjahr",
+        "parameters": ["Geburtsjahr"]
+    },
+    {
+        "keyword": "Set Jahresbruttolohn",
+        "parameters": ["Jahresbruttolohn"]
+    },
+    {
+        "keyword": "Set Pflegeversicherung",
+        "parameters": ["Pflegeversicherung"]
+    },
+    {
+        "keyword": "Start Calculation",
         "parameters": []
     },
     {
-        "keyword": "Open Webpage",
-        "parameters": ["URL"]
+        "keyword": "Validate Lohnsteuer",
+        "parameters": ["Expected Lohnsteuer"]
     },
     {
-        "keyword": "Enter Credentials",
-        "parameters": ["Username", "Password"]
+        "keyword": "Validate Solidaritaetszuschlag",
+        "parameters": ["Expected Soli"]
+    },
+    {
+        "keyword": "Close Application",
+        "parameters": []
     }
 ]

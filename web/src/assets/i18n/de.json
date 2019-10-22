@@ -190,6 +190,7 @@
 	"processModel": "Prozessmodell",
 	"project": "Projekt",
 	"queryCouldNotBePerformed": "Abfrage konnte nicht durchgeführt werden",
+	"redo": "Wiederholen",
 	"requiredField": "Pflichtfeld",
 	"resolve": "auflösen",
 	"resourceNotFound": "Element konnte nicht gefunden werden.",

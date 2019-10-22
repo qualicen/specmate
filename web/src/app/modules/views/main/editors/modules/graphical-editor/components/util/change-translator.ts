@@ -15,9 +15,6 @@ import { DeleteToolBase } from '../../../tool-pallette/tools/delete-tool-base';
 import { ToolProvider } from '../../providers/properties/tool-provider';
 import { ToolBase } from '../../../tool-pallette/tools/tool-base';
 import { ValuePair } from '../../providers/properties/value-pair';
-import { HTMLLabelProvider } from '../../providers/properties/html-label-provider';
-import { Type } from 'src/app/util/type';
-import { CEGNode } from 'src/app/model/CEGNode';
 
 declare var require: any;
 

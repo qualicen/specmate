@@ -75,7 +75,6 @@ export class GraphicalEditor {
 
   /*********************** MX Graph ***********************/
   private graph: mxgraph.mxGraph;
-  private keyHandler: mxgraph.mxKeyHandler;
   private undoManager: mxgraph.mxUndoManager;
 
   /*
@@ -85,7 +84,6 @@ export class GraphicalEditor {
   public set graphContainer(element: ElementRef) {
 
     mx.mxConnectionHandler.prototype.connectImage = new mx.mxImage('/assets/img/editor-tools/connector.png', 16, 16);
-    
     mx.mxEvent.disableContextMenu(document.body);
     mx.mxGraphHandler.prototype['guidesEnabled'] = true;
 
@@ -153,7 +151,7 @@ export class GraphicalEditor {
       return;
     }
     EditorStyle.initEditorStyles(this.graph);
-    this.keyHandler = EditorKeyHandler.initKeyHandler(this.graph);
+    EditorKeyHandler.initKeyHandler(this.graph);
     this.initGraphicalModel();
     this.initTools();
     this.initUndoManager();
@@ -180,9 +178,9 @@ export class GraphicalEditor {
     const parent = this.graph.getDefaultParent();
     this.changeTranslator.preventDataUpdates = true;
 
-    if (Type.is(this.model, CEGModel)){
+    if (Type.is(this.model, CEGModel)) {
       this.initCEGModel();
-    } 
+    }
 
     this.graph.getModel().beginUpdate();
     try {
@@ -212,20 +210,19 @@ export class GraphicalEditor {
     this.graph.getEditingValue = this.htmlLabelProvider.getEditingValue.bind(this.htmlLabelProvider);
     this.graph.labelChanged = this.htmlLabelProvider.labelChanged;
     this.graph.isCellEditable = function(cell) {
-			return !cell.edge;
-		};
+      return !cell.edge;
+    };
   }
 
   /**
    * Helper Function: Creates a new Node at an optionally specified position
-   * @param node 
-   * @param x 
-   * @param y 
+   * @param node
+   * @param x
+   * @param y
    */
   private provideVertex(node: IModelNode, x?: number, y?: number): mxgraph.mxCell {
     const width = node.width > 0 ? node.width : this.shapeProvider.getInitialSize(node).width;
     const height = node.height > 0 ? node.height : this.shapeProvider.getInitialSize(node).height;
-    
     const value = this.nodeNameConverter ? this.nodeNameConverter.convertTo(node) : node.name;
     const style = this.shapeProvider.getStyle(node);
     const parent = this.graph.getDefaultParent();

@@ -29,12 +29,12 @@ export class HTMLLabelProvider extends ProviderBase {
                 
                 // Returns second if mouse in second half of cell
                 if (point.y > state.height / 2) {
-                    return ValuePair.SECOND_KEY;
+                    return ValuePair.CONDITION_KEY;
                 }
             }
         }
         
-        return ValuePair.FIRST_KEY;
+        return ValuePair.VARIABLE_KEY;
     }
 
     public getLabel(cell: any) {

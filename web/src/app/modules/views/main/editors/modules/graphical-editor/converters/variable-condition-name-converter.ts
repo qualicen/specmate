@@ -13,8 +13,8 @@ export class VariableConditionToNameConverter extends ConverterBase<VariableAndC
 
     public convertFrom(value: ValuePair, item: VariableAndCondition): { variable: string, condition: string } {
         return {
-            variable: value.first,
-            condition: value.second
+            variable: value.variable,
+            condition: value.condition
         };
     }
 }

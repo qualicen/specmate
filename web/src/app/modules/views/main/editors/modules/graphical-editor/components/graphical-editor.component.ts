@@ -176,10 +176,6 @@ export class GraphicalEditor {
     const validStyle: {
       [key: string]: string;
     } = {};
-    //validStyle[mx.mxConstants.STYLE_OPACITY] = '100';
-    //validStyle[mx.mxConstants.STYLE_FILLCOLOR] = '#457fca';
-    //validStyle[mx.mxConstants.STYLE_GRADIENTCOLOR] = '#77A7D3';  
-    //validStyle[mx.mxConstants.STYLE_FONTCOLOR] = '#ffffff';
     validStyle[mx.mxConstants.STYLE_DASHED] = '0';
     validStyle[mx.mxConstants.STYLE_STROKEWIDTH] = '3';
     validStyle[mx.mxConstants.STYLE_STROKE_OPACITY] = '100';
@@ -189,8 +185,6 @@ export class GraphicalEditor {
     const invalidStyle: {
       [key: string]: string;
     } = {};
-    //invalidStyle[mx.mxConstants.STYLE_OPACITY] = '75';
-    //invalidStyle[mx.mxConstants.STYLE_FILLCOLOR] = '#ffc3d9';
 
     invalidStyle[mx.mxConstants.STYLE_DASHED] = '0';
     invalidStyle[mx.mxConstants.STYLE_STROKEWIDTH] = '3';
@@ -210,7 +204,11 @@ export class GraphicalEditor {
     effectStyle[mx.mxConstants.STYLE_FILLCOLOR] = '#f6960d';
     stylesheet.putCellStyle(this.EFFECT_STYLE_NAME, effectStyle);
 
-    const innerStyle = effectStyle;
+    const innerStyle: {
+      [key: string]: string;
+    } = {};
+
+    innerStyle[mx.mxConstants.STYLE_FILLCOLOR] = '#e0e026';
     stylesheet.putCellStyle(this.INNER_STYLE_NAME, innerStyle);
 
 

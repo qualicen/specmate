@@ -3,5 +3,8 @@
 	specmate-model-support,\
 	org.eclipse.emf.ecore,\
 	specmate-common,\
-	org.eclipse.emf.common
+	org.eclipse.emf.common,\
+	org.eclipse.emf.cdo,\
+	org.eclipse.emf,\
+	org.eclipse.emf.cdo.common
 Export-Package: com.specmate.robotframework

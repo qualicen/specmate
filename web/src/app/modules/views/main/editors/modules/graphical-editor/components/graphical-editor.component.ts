@@ -147,6 +147,27 @@ export class GraphicalEditor {
     this.initUndoManager();
     this.validationService.refreshValidation(this.model);
     this.undoManager.clear();
+    this.dataService.elementChanged.subscribe( (url:string) => {
+      const vertices = this.graph.getModel().getChildVertices(this.graph.getDefaultParent());
+      const vertex = vertices.find(vertex => vertex.id === url);
+      const node = this.nodes.find(node => node.url === url);
+      if (vertex === undefined || node === undefined) {
+        return;
+      }
+      let value = this.nodeNameConverter ? this.nodeNameConverter.convertTo(node) : node.name;
+      if(value === vertex.value) {
+        return;
+      }
+
+      // Update Vertex
+      this.graph.getModel().beginUpdate();
+      try{
+        this.graph.model.setValue(vertex, value);
+      }
+      finally{
+        this.graph.getModel().endUpdate();
+      }
+    });
   }
 
   private provideVertex(node: IModelNode, x?: number, y?: number): mxgraph.mxCell {

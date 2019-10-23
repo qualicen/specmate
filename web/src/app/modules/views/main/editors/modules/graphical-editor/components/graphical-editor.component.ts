@@ -50,6 +50,8 @@ export class GraphicalEditor {
   private _contents: IContainer[];
   private readonly VALID_STYLE_NAME = 'VALID';
   private readonly INVALID_STYLE_NAME = 'INVALID';
+  private readonly EDGE_HIGHLIGHT_STYLE_NAME = 'EDGE_HIGHLIGHT';
+  private readonly EDGE_DIM_STYLE_NAME = 'EDGE_DIM_STYLE_NAME';
 
   private readonly CAUSE_STYLE_NAME  = 'CAUSE';
   private readonly INNER_STYLE_NAME  = 'INNER';
@@ -77,6 +79,8 @@ export class GraphicalEditor {
   private graph: mxgraph.mxGraph;
   private keyHandler: mxgraph.mxKeyHandler;
   private undoManager: mxgraph.mxUndoManager;
+
+  private highlightedEdges: mxgraph.mxCell[] =  [];
 
   @ViewChild('mxGraphContainer')
   public set graphContainer(element: ElementRef) {
@@ -130,9 +134,32 @@ export class GraphicalEditor {
     }.bind(this));
 
     this.graph.getSelectionModel().addListener(mx.mxEvent.CHANGE, async (args: any) => {
-      if (this.graph.getSelectionCount() === 1) {
-        const selectedElement = await this.dataService.readElement(this.graph.getSelectionModel().cells[0].getId(), true);
-        this.selectedElementService.select(selectedElement);
+      let selectionCount = this.graph.getSelectionCount();
+
+      // Dim all Edges
+      for (const edge of this.highlightedEdges) {
+        StyleChanger.replaceStyle(edge, this.graph, this.EDGE_HIGHLIGHT_STYLE_NAME, this.EDGE_DIM_STYLE_NAME);
+      }
+      this.highlightedEdges = [];
+
+      if (selectionCount >= 1) {
+        // Highlight All Edges
+        let selection = this.graph.getSelectionModel().cells;
+        for (const cell of selection) {
+          if (cell.edge) {
+            this.highlightedEdges.push(cell);
+          } else {
+            this.highlightedEdges.push(...cell.edges);
+          }
+        }
+        for (const edge of this.highlightedEdges) {
+          StyleChanger.addStyle(edge, this.graph, this.EDGE_HIGHLIGHT_STYLE_NAME);
+        }
+
+        if (selectionCount === 1) {
+          const selectedElement = await this.dataService.readElement(this.graph.getSelectionModel().cells[0].getId(), true);
+          this.selectedElementService.select(selectedElement);
+        }
       } else {
         this.selectedElementService.deselect();
       }
@@ -152,6 +179,27 @@ export class GraphicalEditor {
     this.initUndoManager();
     this.validationService.refreshValidation(this.model);
     this.undoManager.clear();
+    this.dataService.elementChanged.subscribe( (url: string) => {
+      const vertices = this.graph.getModel().getChildVertices(this.graph.getDefaultParent());
+      const vertex = vertices.find(vertex => vertex.id === url);
+      const node = this.nodes.find(node => node.url === url);
+      if (vertex === undefined || node === undefined) {
+        return;
+      }
+      let value = this.nodeNameConverter ? this.nodeNameConverter.convertTo(node) : node.name;
+      if (value === vertex.value) {
+        return;
+      }
+
+      // Update Vertex
+      this.graph.getModel().beginUpdate();
+      try {
+        this.graph.model.setValue(vertex, value);
+      }
+      finally {
+        this.graph.getModel().endUpdate();
+      }
+    });
   }
 
   private provideVertex(node: IModelNode, x?: number, y?: number): mxgraph.mxCell {
@@ -211,12 +259,29 @@ export class GraphicalEditor {
     innerStyle[mx.mxConstants.STYLE_FILLCOLOR] = '#e0e026';
     stylesheet.putCellStyle(this.INNER_STYLE_NAME, innerStyle);
 
-
     const vertexStyle = this.graph.getStylesheet().getDefaultVertexStyle();
     vertexStyle[mx.mxConstants.STYLE_STROKECOLOR] = '#000000';
-    vertexStyle[mx.mxConstants.STYLE_DASHED] = "1";
-    vertexStyle[mx.mxConstants.STYLE_DASH_PATTERN] = "4";
+    vertexStyle[mx.mxConstants.STYLE_DASHED] = '1';
+    vertexStyle[mx.mxConstants.STYLE_DASH_PATTERN] = '4';
     this.graph.getStylesheet().getDefaultEdgeStyle()[mx.mxConstants.STYLE_STROKECOLOR] = '#000000';
+
+    const edgeHighlightStyle: {
+      [key: string]: string;
+    } = {};
+    edgeHighlightStyle[mx.mxConstants.STYLE_STROKECOLOR] = '#000000';
+    edgeHighlightStyle[mx.mxConstants.STYLE_STROKEWIDTH] = '3';
+    stylesheet.putCellStyle(this.EDGE_HIGHLIGHT_STYLE_NAME, edgeHighlightStyle);
+
+    const edgeDimStyle: {
+      [key: string]: string;
+    } = {};
+    edgeDimStyle[mx.mxConstants.STYLE_STROKECOLOR] = '#858585';
+    edgeDimStyle[mx.mxConstants.STYLE_STROKEWIDTH] = '2';
+    stylesheet.putCellStyle(this.EDGE_DIM_STYLE_NAME, edgeDimStyle);
+
+    const edgeStyle = this.graph.getStylesheet().getDefaultEdgeStyle();
+    edgeStyle[mx.mxConstants.STYLE_STROKECOLOR] = edgeDimStyle[mx.mxConstants.STYLE_STROKECOLOR];
+    edgeStyle[mx.mxConstants.STYLE_STROKEWIDTH] = edgeDimStyle[mx.mxConstants.STYLE_STROKEWIDTH];
   }
 
   private initUndoManager(): void {
@@ -372,7 +437,7 @@ export class GraphicalEditor {
       StyleChanger.replaceStyle(vertex, this.graph, this.VALID_STYLE_NAME, this.INVALID_STYLE_NAME);
     }
 
-    for(const vertex of vertices) {
+    for (const vertex of vertices) {
       StyleChanger.removeStyle(vertex, this.graph, this.CAUSE_STYLE_NAME);
       StyleChanger.removeStyle(vertex, this.graph, this.EFFECT_STYLE_NAME);
       StyleChanger.removeStyle(vertex, this.graph, this.INNER_STYLE_NAME);
@@ -385,7 +450,7 @@ export class GraphicalEditor {
   }
 
   private getNodeType(cell: mxgraph.mxCell) {
-    if(cell.edges === undefined || cell.edge) {
+    if (cell.edges === undefined || cell.edge) {
       // The cell is an edge
       return '';
     }
@@ -398,16 +463,16 @@ export class GraphicalEditor {
     let hasIncommingEdges = false;
     let hasOutgoingEdges = false;
     for (const edge of cell.edges) {
-      if(edge.source.id === cell.id) {
+      if (edge.source.id === cell.id) {
         hasOutgoingEdges = true;
-      } else if(edge.target.id === cell.id) {
+      } else if (edge.target.id === cell.id) {
         hasIncommingEdges = true;
       }
     }
 
     if (hasIncommingEdges && hasOutgoingEdges) {
       return this.INNER_STYLE_NAME;
-    } else if(hasIncommingEdges) {
+    } else if (hasIncommingEdges) {
       return this.EFFECT_STYLE_NAME;
     }
     return this.CAUSE_STYLE_NAME;

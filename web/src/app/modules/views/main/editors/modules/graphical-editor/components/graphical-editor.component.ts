@@ -75,7 +75,7 @@ export class GraphicalEditor {
   private keyHandler: mxgraph.mxKeyHandler;
   private undoManager: mxgraph.mxUndoManager;
 
-  private highlightedEdges: mxgraph.mxCell[] =  []
+  private highlightedEdges: mxgraph.mxCell[] =  [];
 
   @ViewChild('mxGraphContainer')
   public set graphContainer(element: ElementRef) {
@@ -131,7 +131,7 @@ export class GraphicalEditor {
     this.graph.getSelectionModel().addListener(mx.mxEvent.CHANGE, async (args: any) => {
       let selectionCount = this.graph.getSelectionCount();
 
-      // Dim all Edges 
+      // Dim all Edges
       for (const edge of this.highlightedEdges) {
         StyleChanger.replaceStyle(edge, this.graph, this.EDGE_HIGHLIGHT_STYLE_NAME, this.EDGE_DIM_STYLE_NAME);
       }
@@ -144,13 +144,12 @@ export class GraphicalEditor {
           if (cell.edge) {
             this.highlightedEdges.push(cell);
           } else {
-            this.highlightedEdges.push(...cell.edges); 
+            this.highlightedEdges.push(...cell.edges);
           }
         }
         for (const edge of this.highlightedEdges) {
           StyleChanger.addStyle(edge, this.graph, this.EDGE_HIGHLIGHT_STYLE_NAME);
         }
-        
 
         if (selectionCount === 1) {
           const selectedElement = await this.dataService.readElement(this.graph.getSelectionModel().cells[0].getId(), true);
@@ -220,17 +219,22 @@ export class GraphicalEditor {
       [key: string]: string;
     } = {};
     edgeHighlightStyle[mx.mxConstants.STYLE_STROKECOLOR] = '#000000';
+    edgeHighlightStyle[mx.mxConstants.STYLE_STROKEWIDTH] = '3';
     stylesheet.putCellStyle(this.EDGE_HIGHLIGHT_STYLE_NAME, edgeHighlightStyle);
 
     const edgeDimStyle: {
       [key: string]: string;
     } = {};
     edgeDimStyle[mx.mxConstants.STYLE_STROKECOLOR] = '#858585';
+    edgeDimStyle[mx.mxConstants.STYLE_STROKEWIDTH] = '2';
     stylesheet.putCellStyle(this.EDGE_DIM_STYLE_NAME, edgeDimStyle);
 
     const vertexStyle = this.graph.getStylesheet().getDefaultVertexStyle();
     vertexStyle[mx.mxConstants.STYLE_STROKECOLOR] = '#000000';
-    this.graph.getStylesheet().putDefaultEdgeStyle(edgeDimStyle);
+
+    const edgeStyle = this.graph.getStylesheet().getDefaultEdgeStyle();
+    edgeStyle[mx.mxConstants.STYLE_STROKECOLOR] = edgeDimStyle[mx.mxConstants.STYLE_STROKECOLOR];
+    edgeStyle[mx.mxConstants.STYLE_STROKEWIDTH] = edgeDimStyle[mx.mxConstants.STYLE_STROKEWIDTH];
   }
 
   private initUndoManager(): void {

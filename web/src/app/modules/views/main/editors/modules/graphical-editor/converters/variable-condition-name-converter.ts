@@ -1,7 +1,7 @@
 import { ConverterBase } from './converter-base';
 import { ValuePair } from '../providers/properties/value-pair';
 
-type VariableAndCondition = { variable: string, condition: string };
+export type VariableAndCondition = { variable: string, condition: string };
 
 export class VariableConditionToNameConverter extends ConverterBase<VariableAndCondition, ValuePair> {
     public convertTo(item: VariableAndCondition): ValuePair {

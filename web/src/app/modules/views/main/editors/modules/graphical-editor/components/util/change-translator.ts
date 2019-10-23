@@ -15,6 +15,9 @@ import { DeleteToolBase } from '../../../tool-pallette/tools/delete-tool-base';
 import { ToolProvider } from '../../providers/properties/tool-provider';
 import { ToolBase } from '../../../tool-pallette/tools/tool-base';
 import { ValuePair } from '../../providers/properties/value-pair';
+import { Type } from 'src/app/util/type';
+import { CEGNode } from 'src/app/model/CEGNode';
+
 
 declare var require: any;
 
@@ -26,11 +29,21 @@ const mx: typeof mxgraph = require('mxgraph')({
 export class ChangeTranslator {
 
     private contents: IContainer[];
+    private parentComponents: {[key: string]: IContainer};
     private nodeNameConverter: ConverterBase<IContainer, string|ValuePair>;
     public preventDataUpdates = false;
 
     constructor(private model: CEGModel | Process, private dataService: SpecmateDataService, private toolProvider: ToolProvider) {
         this.nodeNameConverter = this.nodeNameConverter = new NodeNameConverterProvider(this.model).nodeNameConverter;
+        this.parentComponents = {};
+    }
+
+    private async getElement(id: string) {
+        let element = this.contents.find(element => element.url === id);
+        if (element === undefined) {
+            element = this.parentComponents[id];
+        }
+        return element;
     }
 
     public async translate(change: (mxgraph.mxTerminalChange | mxgraph.mxChildChange)): Promise<void> {
@@ -56,18 +69,37 @@ export class ChangeTranslator {
 
     private async translateDelete(change: mxgraph.mxChildChange): Promise<void> {
         const deleteTool = this.toolProvider.tools.find(tool => (tool as DeleteToolBase).isDeleteTool === true) as DeleteToolBase;
-        deleteTool.element = this.contents.find(element => element.url === change.child.id);
+        deleteTool.element = await this.getElement(change.child.id);
         if (deleteTool.element === undefined) {
             return;
+        }
+        let keys = [];
+        for (const key in this.parentComponents) {
+            if (this.parentComponents.hasOwnProperty(key)) {
+                const element = this.parentComponents[key];
+                if (element === deleteTool.element) {
+                    keys.push(key);
+                }
+            }
+        }
+        for (const key of keys) {
+            delete this.parentComponents[key];
         }
         deleteTool.perform();
     }
 
     private async translateAdd(change: mxgraph.mxChildChange): Promise<void> {
-        if (this.contents.find(element => element.url === change.child.id) !== undefined) {
+        if (await this.getElement(change.child.id) !== undefined) {
             console.log('Child already addded');
             return;
         }
+        if (change.child.getParent().getId().length > 1) {
+            // The Node is a child node and has no representation in the model
+            let parentElement = await this.getElement(change.child.getParent().getId());
+            this.parentComponents[change.child.getId()] = parentElement;
+            return;
+        }
+
         let addedElement: IContainer = undefined;
         if (change.child.edge) {
             addedElement = await this.translateEdgeAdd(change);
@@ -79,8 +111,8 @@ export class ChangeTranslator {
 
     private async translateEdgeAdd(change: mxgraph.mxChildChange): Promise<IModelConnection> {
         const tool = this.determineTool(change) as ConnectionToolBase<any>;
-        tool.source = this.contents.find(element => element.url === change.child.source.id) as IModelNode;
-        tool.target = this.contents.find(element => element.url === change.child.target.id) as IModelNode;
+        tool.source = await this.getElement(change.child.source.id) as IModelNode;
+        tool.target = await this.getElement(change.child.target.id) as IModelNode;
         const connection = await tool.perform();
         change.child.id = connection.url;
         return connection;
@@ -95,7 +127,7 @@ export class ChangeTranslator {
     }
 
     private async translateChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange): Promise<void> {
-        const element = this.contents.find(element => element.url === change.cell.id);
+        const element = await this.getElement(change.cell.id);
         if (element === undefined) {
             return;
         }
@@ -107,18 +139,28 @@ export class ChangeTranslator {
     }
 
     private async translateNodeChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange, element: IModelNode): Promise<void> {
+        let cell = change.cell as mxgraph.mxCell;
         if (this.nodeNameConverter) {
-            const elementValues = this.nodeNameConverter.convertFrom(change.cell.value, element);
+            if (this.parentComponents[cell.getId()] !== undefined) {
+                // The changed node is a sublabel / child
+                cell = cell.getParent();
+            }
+            let value = cell.value;
+            if (Type.is(element, CEGNode)) {
+                value = new ValuePair(cell.children[0].value, cell.children[1].value);
+            }
+            const elementValues = this.nodeNameConverter.convertFrom(value, element);
             for (const key in elementValues) {
                 element[key] = elementValues[key];
             }
         } else {
+            // Keep change.cell to avoid having a parent a child value
             element['variable'] = change.cell.value;
         }
-        element['x'] = change.cell.geometry.x;
-        element['y'] = change.cell.geometry.y;
-        element['width'] = change.cell.geometry.width;
-        element['height'] = change.cell.geometry.height;
+        element['x'] = cell.geometry.x;
+        element['y'] = cell.geometry.y;
+        element['width'] = cell.geometry.width;
+        element['height'] = cell.geometry.height;
         await this.dataService.updateElement(element, true, Id.uuid);
     }
 
@@ -162,14 +204,14 @@ export class ChangeTranslator {
         const targetUrl = change.cell.target.id;
         // The new linked node
         const terminalUrl = change.terminal.id;
-        let terminal = this.contents.find(element => element.url === terminalUrl) as IModelNode;
+        let terminal = await this.getElement(terminalUrl) as IModelNode;
         if (terminal === undefined) {
             terminal = await this.dataService.readElement(terminalUrl, true) as IModelNode;
             this.contents = await this.dataService.readContents(this.model.url, true);
         }
         // The previously linked node
         const previousUrl = change.previous.id;
-        let previous = this.contents.find(element => element.url === previousUrl) as IModelNode;
+        let previous = await this.getElement(previousUrl) as IModelNode;
         if (previous === undefined) {
             previous = await this.dataService.readElement(previousUrl, true) as IModelNode;
             this.contents = await this.dataService.readContents(this.model.url, true);

@@ -20,11 +20,10 @@ import { StyleChanger } from './util/style-changer';
 import { UndoService } from 'src/app/modules/actions/modules/common-controls/services/undo.service';
 import { Type } from '../../../../../../../util/type';
 import { CEGModel } from 'src/app/model/CEGModel';
-import { HTMLLabelProvider } from '../providers/properties/html-label-provider';
 import { ValuePair } from '../providers/properties/value-pair';
 import { EditorStyle } from './editor-components/editor-style';
 import { EditorKeyHandler } from './editor-components/editor-key-handler';
-
+import { VertexProvider } from '../providers/properties/vertex-provider';
 
 declare var require: any;
 
@@ -49,6 +48,7 @@ export class GraphicalEditor {
   private nodeNameConverter: ConverterBase<any, string|ValuePair>;
   private shapeProvider: ShapeProvider;
   private changeTranslator: ChangeTranslator;
+  private vertexPrivider: VertexProvider;
 
   public isGridShown = true;
 
@@ -82,14 +82,13 @@ export class GraphicalEditor {
    */
   @ViewChild('mxGraphContainer')
   public set graphContainer(element: ElementRef) {
-
     mx.mxConnectionHandler.prototype.connectImage = new mx.mxImage('/assets/img/editor-tools/connector.png', 16, 16);
-    mx.mxEvent.disableContextMenu(document.body);
     mx.mxGraphHandler.prototype['guidesEnabled'] = true;
 
     if (element === undefined) {
       return;
     }
+    mx.mxEvent.disableContextMenu(element.nativeElement);
 
     this.graph = new mx.mxGraph(element.nativeElement);
     this.graph.setGridEnabled(true);
@@ -133,7 +132,11 @@ export class GraphicalEditor {
 
     this.graph.getSelectionModel().addListener(mx.mxEvent.CHANGE, async (args: any) => {
       if (this.graph.getSelectionCount() === 1) {
-        const selectedElement = await this.dataService.readElement(this.graph.getSelectionModel().cells[0].getId(), true);
+        let selected = this.graph.getSelectionCell();
+        if (selected.getParent() !== this.graph.getDefaultParent()) {
+          selected = selected.getParent();
+        }
+        const selectedElement = await this.dataService.readElement(selected.getId(), true);
         this.selectedElementService.select(selectedElement);
       } else {
         this.selectedElementService.deselect();
@@ -175,6 +178,7 @@ export class GraphicalEditor {
     this._contents = await this.dataService.readContents(this.model.url, true);
     this.elementProvider = new ElementProvider(this.model, this._contents);
     this.nodeNameConverter = new NodeNameConverterProvider(this.model).nodeNameConverter;
+    this.vertexPrivider = new VertexProvider(this.model, this.graph, this.shapeProvider, this.nodeNameConverter);
     const parent = this.graph.getDefaultParent();
     this.changeTranslator.preventDataUpdates = true;
 
@@ -186,7 +190,7 @@ export class GraphicalEditor {
     try {
       const vertexCache: { [url: string]: mxgraph.mxCell } = {};
       for (const node of this.elementProvider.nodes) {
-        const vertex = this.provideVertex(node as IModelNode);
+        const vertex = this.vertexPrivider.provideVertex(node as IModelNode);
         vertexCache[node.url] = vertex;
       }
       for (const connection of this.elementProvider.connections.map(element => element as IModelConnection)) {
@@ -202,32 +206,30 @@ export class GraphicalEditor {
     }
   }
 
-  private htmlLabelProvider: HTMLLabelProvider;
   private async initCEGModel(): Promise<void> {
     this.graph.setHtmlLabels(true);
-    this.htmlLabelProvider = new HTMLLabelProvider(this.model, this.graph);
-    this.graph.getLabel = this.htmlLabelProvider.getLabel.bind(this.htmlLabelProvider);
-    this.graph.getEditingValue = this.htmlLabelProvider.getEditingValue.bind(this.htmlLabelProvider);
-    this.graph.labelChanged = this.htmlLabelProvider.labelChanged;
-    this.graph.isCellEditable = function(cell) {
-      return !cell.edge;
-    };
-  }
 
-  /**
-   * Helper Function: Creates a new Node at an optionally specified position
-   * @param node
-   * @param x
-   * @param y
-   */
-  private provideVertex(node: IModelNode, x?: number, y?: number): mxgraph.mxCell {
-    const width = node.width > 0 ? node.width : this.shapeProvider.getInitialSize(node).width;
-    const height = node.height > 0 ? node.height : this.shapeProvider.getInitialSize(node).height;
-    const value = this.nodeNameConverter ? this.nodeNameConverter.convertTo(node) : node.name;
-    const style = this.shapeProvider.getStyle(node);
-    const parent = this.graph.getDefaultParent();
-    const vertex = this.graph.insertVertex(parent, node.url, value, x || node.x, y || node.y, width, height, style);
-    return vertex;
+    this.graph.isCellEditable = function(cell) {
+      let c = cell as mxgraph.mxCell;
+      if (c.edge) {
+        return false;
+      }
+      if (c.children !== undefined && c.children !== null && c.children.length > 0) {
+        return false;
+      }
+      return true;
+    };
+
+    this.graph.graphHandler.setRemoveCellsFromParent(false);
+
+    this.graph.isWrapping = function(cell) {
+      return this.model.isCollapsed(cell);
+    };
+
+    this.graph.isCellResizable = function(cell) {
+      let geo = this.model.getGeometry(cell);
+      return geo == null || !geo.relative;
+    };
   }
 
   private async initTools(): Promise<void> {
@@ -241,14 +243,23 @@ export class GraphicalEditor {
         const coords = graph.getPointForEvent(evt);
         const vertexUrl = Url.build([this.model.url, Id.uuid]);
         this.graph.startEditing(evt);
-        this.graph.insertVertex(
-          this.graph.getDefaultParent(),
-          vertexUrl,
-          initialData.text,
-          coords.x, coords.y,
-          initialData.size.width, initialData.size.height,
-          initialData.style);
-        this.graph.stopEditing(true);
+        try {
+          if (Type.is(this.model, CEGModel)) {
+            this.vertexPrivider.proviceCEGNode(vertexUrl, coords.x, coords.y,
+              initialData.size.width, initialData.size.height, initialData.text as ValuePair);
+          } else {
+            this.graph.insertVertex(
+              this.graph.getDefaultParent(),
+              vertexUrl,
+              initialData.text,
+              coords.x, coords.y,
+              initialData.size.width, initialData.size.height,
+              initialData.style);
+          }
+        }
+        finally {
+          this.graph.stopEditing(true);
+        }
       };
       mx.mxUtils.makeDraggable(document.getElementById(tool.elementId), this.graph, onDrop);
     }

@@ -94,6 +94,7 @@ export class GraphicalEditor {
     this.graph.setGridEnabled(true);
     this.graph.setConnectable(true);
     this.graph.setMultigraph(false);
+    this.graph.setDropEnabled(false);
     const rubberBand = new mx.mxRubberband(this.graph);
     rubberBand.reset();
 
@@ -233,7 +234,6 @@ export class GraphicalEditor {
   }
 
   private async initTools(): Promise<void> {
-    this.graph.setDropEnabled(true);
     const tools = this.toolProvider.tools;
 
     for (const tool of tools.filter(t => t.isVertexTool === true)) {

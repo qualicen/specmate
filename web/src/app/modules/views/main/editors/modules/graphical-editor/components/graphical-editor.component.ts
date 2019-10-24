@@ -316,7 +316,7 @@ export class GraphicalEditor {
     }
     const vertices = this.graph.getModel().getChildVertices(this.graph.getDefaultParent());
     for (const vertex of vertices) {
-      StyleChanger.addStyle(vertex, this.graph, EditorStyle.VALID_STYLE_NAME);
+      StyleChanger.replaceStyle(vertex, this.graph, EditorStyle.INVALID_STYLE_NAME, EditorStyle.VALID_STYLE_NAME);
       this.graph.setCellWarning(vertex, null);
     }
     const invalidNodes = this.validationService.getValidationResults(this.model);

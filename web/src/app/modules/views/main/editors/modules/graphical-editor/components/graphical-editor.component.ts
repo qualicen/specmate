@@ -235,7 +235,8 @@ export class GraphicalEditor {
         const sourceVertex = vertexCache[connection.source.url];
         const targetVertex = vertexCache[connection.target.url];
         const value = this.nodeNameConverter ? this.nodeNameConverter.convertTo(connection) : connection.name;
-        this.graph.insertEdge(parent, connection.url, value, sourceVertex, targetVertex);
+        const style = this.shapeProvider.getStyle(connection);
+        this.graph.insertEdge(parent, connection.url, value, sourceVertex, targetVertex, style);
       }
 
       for (const url in vertexCache) {

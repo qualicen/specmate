@@ -189,14 +189,14 @@ export class GraphicalEditor {
     this.validationService.refreshValidation(this.model);
     this.undoManager.clear();
     this.dataService.elementChanged.subscribe( (url: string) => {
-      const vertices = this.graph.getModel().getChildVertices(this.graph.getDefaultParent());
-      const vertex = vertices.find(vertex => vertex.id === url);
+      const cells = this.graph.getModel().getChildCells(this.graph.getDefaultParent());
+      const cell = cells.find(vertex => vertex.id === url);
       const node = this.nodes.find(node => node.url === url);
-      if (vertex === undefined || node === undefined) {
+      if (cell === undefined || node === undefined) {
         return;
       }
 
-      this.changeTranslator.retranslate(node, this.graph, vertex);
+      this.changeTranslator.retranslate(node, this.graph, cell);
     });
   }
 

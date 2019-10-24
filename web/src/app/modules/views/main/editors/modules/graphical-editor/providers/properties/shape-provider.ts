@@ -7,11 +7,12 @@ import { ProcessStart } from '../../../../../../../../model/ProcessStart';
 import { ProcessStep } from '../../../../../../../../model/ProcessStep';
 import { NodeNameConverterProvider } from '../conversion/node-name-converter-provider';
 import { ProviderBase } from './provider-base';
+import { ValuePair } from './value-pair';
 
 export type ShapeData = {
     style: string,
     size: { width: number, height: number },
-    text: string
+    text: string|ValuePair
 };
 
 export class ShapeProvider extends ProviderBase {
@@ -88,7 +89,7 @@ export class ShapeProvider extends ProviderBase {
         return this.shapeMap[element.className].size;
     }
 
-    public getInitialText(element: { className: string }): string {
+    public getInitialText(element: { className: string }): string|ValuePair {
         return this.shapeMap[element.className].text;
     }
 

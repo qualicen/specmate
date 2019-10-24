@@ -1,6 +1,5 @@
 import { Config } from '../../../../../../../../config/config';
 import { CEGNode } from '../../../../../../../../model/CEGNode';
-import { IContainer } from '../../../../../../../../model/IContainer';
 import { ProcessDecision } from '../../../../../../../../model/ProcessDecision';
 import { ProcessEnd } from '../../../../../../../../model/ProcessEnd';
 import { ProcessStart } from '../../../../../../../../model/ProcessStart';

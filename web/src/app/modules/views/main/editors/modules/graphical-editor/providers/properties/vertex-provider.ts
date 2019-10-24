@@ -32,7 +32,6 @@ export class VertexProvider extends ProviderBase {
     const l1 = this.graph.insertVertex(vertex, url + '/variable' , data.variable, 0.5, 0.25, 0, 0, null, true);
     const l2 = this.graph.insertVertex(vertex, url + '/condition' , data.condition, 0.5, 0.75, 0, 0, null, true);
     l1.isConnectable = () => false;
-    console.log(l1.getGeometry());
     l2.isConnectable = () => false;
     return vertex;
   }

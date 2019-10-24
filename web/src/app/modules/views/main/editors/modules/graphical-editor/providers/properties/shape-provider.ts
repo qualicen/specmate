@@ -7,16 +7,19 @@ import { ProcessStep } from '../../../../../../../../model/ProcessStep';
 import { NodeNameConverterProvider } from '../conversion/node-name-converter-provider';
 import { ProviderBase } from './provider-base';
 import { ValuePair } from './value-pair';
+import { Type } from 'src/app/util/type';
+import { CEGConnection } from 'src/app/model/CEGConnection';
 
 export type ShapeData = {
     style: string,
     size: { width: number, height: number },
-    text: string|ValuePair
+    text: string | ValuePair
 };
 
 export class ShapeProvider extends ProviderBase {
 
     private shapeMap: { [className: string]: ShapeData } = {};
+    private styles: ((element: { className: string }) => ShapeData)[] = [];
 
     constructor(type: { className: string }) {
         super(type);
@@ -78,18 +81,34 @@ export class ShapeProvider extends ProviderBase {
                 name: Config.PROCESS_NEW_DECISION_NAME
             })
         };
+
+        this.styles.push((element: { className: string }) => this.shapeMap[element.className]);
+
+        this.styles.push((element: { className: string }) => {
+            if (Type.is(element, CEGConnection) && (element as CEGConnection).negate === true) {
+                return {
+                    size: undefined,
+                    style: 'dashed=1',
+                    text: undefined
+                };
+            }
+        });
+    }
+
+    private getShapeData(element: { className: string }): ShapeData[] {
+        return this.styles.map(fn => fn(element)).filter(shapeData => shapeData !== undefined);
     }
 
     public getStyle(element: { className: string }): string {
-        return this.shapeMap[element.className].style;
+        return this.getShapeData(element).map(shapeData => shapeData.style).join(';');
     }
 
     public getInitialSize(element: { className: string }): { width: number, height: number } {
-        return this.shapeMap[element.className].size;
+        return this.getShapeData(element).find(shapeData => shapeData.size !== undefined).size;
     }
 
-    public getInitialText(element: { className: string }): string|ValuePair {
-        return this.shapeMap[element.className].text;
+    public getInitialText(element: { className: string }): string | ValuePair {
+        return this.getShapeData(element).find(shapeData => shapeData.text !== undefined).text;
     }
 
     public getInitialData(style: string): ShapeData {

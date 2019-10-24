@@ -82,6 +82,10 @@ export class GraphicalEditor {
    */
   @ViewChild('mxGraphContainer')
   public set graphContainer(element: ElementRef) {
+    if (this.graph !== undefined) {
+      return;
+    }
+
     mx.mxConnectionHandler.prototype.connectImage = new mx.mxImage('/assets/img/editor-tools/connector.png', 16, 16);
     mx.mxGraphHandler.prototype['guidesEnabled'] = true;
 
@@ -401,10 +405,12 @@ export class GraphicalEditor {
   }
 
   public showGrid(): void {
+    this.graph.setGridEnabled(true);
     this.isGridShown = true;
   }
 
   public hideGrid(): void {
+    this.graph.setGridEnabled(false);
     this.isGridShown = false;
   }
 

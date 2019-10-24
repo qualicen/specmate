@@ -53,8 +53,8 @@ export class GraphicalEditor {
   private readonly EDGE_HIGHLIGHT_STYLE_NAME = 'EDGE_HIGHLIGHT';
   private readonly EDGE_DIM_STYLE_NAME = 'EDGE_DIM_STYLE_NAME';
 
-  private readonly CAUSE_STYLE_NAME  = 'CAUSE';
-  private readonly INNER_STYLE_NAME  = 'INNER';
+  private readonly CAUSE_STYLE_NAME = 'CAUSE';
+  private readonly INNER_STYLE_NAME = 'INNER';
   private readonly EFFECT_STYLE_NAME = 'EFFECT';
 
 
@@ -80,12 +80,13 @@ export class GraphicalEditor {
   private keyHandler: mxgraph.mxKeyHandler;
   private undoManager: mxgraph.mxUndoManager;
 
-  private highlightedEdges: mxgraph.mxCell[] =  [];
+  private highlightedEdges: mxgraph.mxCell[] = [];
 
   @ViewChild('mxGraphContainer')
   public set graphContainer(element: ElementRef) {
 
     mx.mxConnectionHandler.prototype.connectImage = new mx.mxImage('/assets/img/editor-tools/connector.png', 16, 16);
+    mx.mxGraph.prototype.warningImage = new mx.mxImage('/assets/img/editor-tools/error_red.png', 20, 20);
     mx.mxEvent.disableContextMenu(document.body);
     mx.mxGraphHandler.prototype['guidesEnabled'] = true;
 
@@ -177,13 +178,12 @@ export class GraphicalEditor {
     this.initGraphicalModel();
     this.initTools();
     this.initUndoManager();
-    this.validationService.refreshValidation(this.model);
     this.undoManager.clear();
-    this.dataService.elementChanged.subscribe( (url: string) => {
+    this.dataService.elementChanged.subscribe((url: string) => {
       const vertices = this.graph.getModel().getChildVertices(this.graph.getDefaultParent());
       const vertex = vertices.find(vertex => vertex.id === url);
       const node = this.nodes.find(node => node.url === url);
-      if (vertex === undefined || node === undefined) {
+      if (vertex === undefined || node === undefined) {
         return;
       }
       let value = this.nodeNameConverter ? this.nodeNameConverter.convertTo(node) : node.name;
@@ -395,6 +395,7 @@ export class GraphicalEditor {
       this.graph.getModel().endUpdate();
       this.changeTranslator.preventDataUpdates = false;
       this.undoManager.clear();
+      this.validationService.validateCurrent();
     }
   }
 
@@ -429,12 +430,15 @@ export class GraphicalEditor {
     const vertices = this.graph.getModel().getChildVertices(this.graph.getDefaultParent());
     for (const vertex of vertices) {
       StyleChanger.addStyle(vertex, this.graph, this.VALID_STYLE_NAME);
+      this.graph.setCellWarning(vertex, null);
     }
     const invalidNodes = this.validationService.getValidationResults(this.model);
     for (const invalidNode of invalidNodes) {
       const vertexId = invalidNode.element.url;
       const vertex = vertices.find(vertex => vertex.id === vertexId);
       StyleChanger.replaceStyle(vertex, this.graph, this.VALID_STYLE_NAME, this.INVALID_STYLE_NAME);
+      const overlay = this.graph.setCellWarning(vertex, invalidNode.message);
+      overlay.offset = new mx.mxPoint(-13, -12);
     }
 
     for (const vertex of vertices) {
@@ -450,7 +454,7 @@ export class GraphicalEditor {
   }
 
   private getNodeType(cell: mxgraph.mxCell) {
-    if (cell.edges === undefined || cell.edge) {
+    if (cell.edges === undefined || cell.edge) {
       // The cell is an edge
       return '';
     }

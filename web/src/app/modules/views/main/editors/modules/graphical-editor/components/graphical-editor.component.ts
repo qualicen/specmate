@@ -69,7 +69,6 @@ export class GraphicalEditor {
     this.undoService.redoPressed.subscribe(() => {
       this.redo();
     });
-
   }
 
   /*********************** MX Graph ***********************/
@@ -319,13 +318,26 @@ export class GraphicalEditor {
       StyleChanger.replaceStyle(vertex, this.graph, EditorStyle.INVALID_STYLE_NAME, EditorStyle.VALID_STYLE_NAME);
       this.graph.setCellWarning(vertex, null);
     }
-    const invalidNodes = this.validationService.getValidationResults(this.model);
+    const validationResult = this.validationService.getValidationResults(this.model);
+    const invalidNodes = validationResult.filter(e => e.element.className === 'ProcessDecision'
+      || e.element.className === 'ProcessStart'
+      || e.element.className === 'ProcessEnd'
+      || e.element.className === 'ProcessStep'
+      || e.element.className === 'CEGNode');
     for (const invalidNode of invalidNodes) {
       const vertexId = invalidNode.element.url;
       const vertex = vertices.find(vertex => vertex.id === vertexId);
       StyleChanger.replaceStyle(vertex, this.graph, EditorStyle.VALID_STYLE_NAME, EditorStyle.INVALID_STYLE_NAME);
       const overlay = this.graph.setCellWarning(vertex, invalidNode.message);
-      overlay.offset = new mx.mxPoint(-13, -12);
+      if (invalidNode.element.className === 'CEGNode' || invalidNode.element.className === 'ProcessStep') {
+        overlay.offset = new mx.mxPoint(-13, -12);
+      }
+      if (invalidNode.element.className === 'ProcessStart' || invalidNode.element.className === 'ProcessEnd') {
+        overlay.offset = new mx.mxPoint(-23, -12);
+      }
+      if (invalidNode.element.className === 'ProcessDecision') {
+        overlay.offset = new mx.mxPoint(-28, -20);
+      }
     }
 
     for (const vertex of vertices) {

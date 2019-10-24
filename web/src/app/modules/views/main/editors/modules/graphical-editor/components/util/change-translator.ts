@@ -17,6 +17,7 @@ import { ToolBase } from '../../../tool-pallette/tools/tool-base';
 import { ValuePair } from '../../providers/properties/value-pair';
 import { Type } from 'src/app/util/type';
 import { CEGNode } from 'src/app/model/CEGNode';
+import { type } from 'os';
 
 
 declare var require: any;
@@ -59,8 +60,8 @@ export class ChangeTranslator {
             } else {
                 await this.translateDelete(childChange);
             }
-        } else if (change['style']) {
-            // We have a mxStyleChange, this should only be the case on validation.
+        } else if (change['style'] !== undefined) {
+            // We have a mxStyleChange, this should only be the case on validation or selection.
         } else if (change['cell'] !== undefined) {
             await this.translateChange(change as mxgraph.mxTerminalChange);
         }
@@ -262,5 +263,42 @@ export class ChangeTranslator {
             }
         }
         throw new Error('Could not determine tool');
+    }
+
+
+    public retranslate(changedElement: IContainer, graph: mxgraph.mxGraph, cell: mxgraph.mxCell) {
+        this.preventDataUpdates = true;
+        let value = this.nodeNameConverter ? this.nodeNameConverter.convertTo(changedElement) : changedElement.name;
+        if (value instanceof ValuePair) {
+            for (const key in value) {
+                if (value.hasOwnProperty(key)) {
+                    const val = value[key];
+                    let child = cell.children.find(s => s.getId().endsWith(key));
+                    if (child !== undefined) {
+                        graph.getModel().beginUpdate();
+                        try {
+                            graph.model.setValue(child, val);
+                        }
+                        finally {
+                            graph.getModel().endUpdate();
+                        }
+                    }
+                }
+            }
+
+        } else {
+            if (value === cell.value) {
+                return;
+            }
+
+            graph.getModel().beginUpdate();
+            try {
+                graph.model.setValue(cell, value);
+            }
+            finally {
+                graph.getModel().endUpdate();
+            }
+        }
+        this.preventDataUpdates = false;
     }
 }

@@ -32,7 +32,6 @@ const mx: typeof mxgraph = require('mxgraph')({
 });
 
 
-
 @Component({
   moduleId: module.id.toString(),
   selector: 'graphical-editor',
@@ -77,6 +76,7 @@ export class GraphicalEditor {
   private graph: mxgraph.mxGraph;
   private undoManager: mxgraph.mxUndoManager;
 
+  private highlightedEdges: mxgraph.mxCell[] =  [];
   /*
    * Construct the MXGraph
    */
@@ -132,13 +132,40 @@ export class GraphicalEditor {
     }.bind(this));
 
     this.graph.getSelectionModel().addListener(mx.mxEvent.CHANGE, async (args: any) => {
-      if (this.graph.getSelectionCount() === 1) {
-        let selected = this.graph.getSelectionCell();
-        if (selected.getParent() !== this.graph.getDefaultParent()) {
-          selected = selected.getParent();
+      let selectionCount = this.graph.getSelectionCount();
+
+      // Dim all Edges
+      for (const edge of this.highlightedEdges) {
+        StyleChanger.replaceStyle(edge, this.graph, EditorStyle.EDGE_HIGHLIGHT_STYLE_NAME, EditorStyle.EDGE_DIM_STYLE_NAME);
+      }
+      this.highlightedEdges = [];
+
+      if (selectionCount >= 1) {
+        // Highlight All Edges
+        let selections = this.graph.getSelectionModel().cells;
+        if (selections.length === 1) {
+          if (selections[0].getParent() !== this.graph.getDefaultParent()) {
+            // We selected a child/ sublabel --> Select Parent instead
+            selections[0] = selections[0].getParent();
+          }
         }
-        const selectedElement = await this.dataService.readElement(selected.getId(), true);
-        this.selectedElementService.select(selectedElement);
+
+        for (const cell of selections) {
+          if (cell.edge) {
+            this.highlightedEdges.push(cell);
+          } else {
+            this.highlightedEdges.push(...cell.edges);
+          }
+        }
+        for (const edge of this.highlightedEdges) {
+          StyleChanger.replaceStyle(edge, this.graph, EditorStyle.EDGE_DIM_STYLE_NAME, EditorStyle.EDGE_HIGHLIGHT_STYLE_NAME);
+        }
+
+        if (selectionCount === 1) {
+          let selection = selections[0];
+          const selectedElement = await this.dataService.readElement(selection.getId(), true);
+          this.selectedElementService.select(selectedElement);
+        }
       } else {
         this.selectedElementService.deselect();
       }
@@ -161,6 +188,16 @@ export class GraphicalEditor {
     this.initUndoManager();
     this.validationService.refreshValidation(this.model);
     this.undoManager.clear();
+    this.dataService.elementChanged.subscribe( (url: string) => {
+      const vertices = this.graph.getModel().getChildVertices(this.graph.getDefaultParent());
+      const vertex = vertices.find(vertex => vertex.id === url);
+      const node = this.nodes.find(node => node.url === url);
+      if (vertex === undefined || node === undefined) {
+        return;
+      }
+
+      this.changeTranslator.retranslate(node, this.graph, vertex);
+    });
   }
 
   private initUndoManager(): void {
@@ -199,6 +236,12 @@ export class GraphicalEditor {
         const targetVertex = vertexCache[connection.target.url];
         const value = this.nodeNameConverter ? this.nodeNameConverter.convertTo(connection) : connection.name;
         this.graph.insertEdge(parent, connection.url, value, sourceVertex, targetVertex);
+      }
+
+      for (const url in vertexCache) {
+        const vertex = vertexCache[url];
+        const type = this.getNodeType(vertex);
+        StyleChanger.addStyle(vertex, this.graph, type);
       }
     } finally {
       this.graph.getModel().endUpdate();
@@ -245,7 +288,7 @@ export class GraphicalEditor {
         this.graph.startEditing(evt);
         try {
           if (Type.is(this.model, CEGModel)) {
-            this.vertexPrivider.proviceCEGNode(vertexUrl, coords.x, coords.y,
+            this.vertexPrivider.provideCEGNode(vertexUrl, coords.x, coords.y,
               initialData.size.width, initialData.size.height, initialData.text as ValuePair);
           } else {
             this.graph.insertVertex(
@@ -279,11 +322,47 @@ export class GraphicalEditor {
       const vertex = vertices.find(vertex => vertex.id === vertexId);
       StyleChanger.replaceStyle(vertex, this.graph, EditorStyle.VALID_STYLE_NAME, EditorStyle.INVALID_STYLE_NAME);
     }
+
+    for (const vertex of vertices) {
+      StyleChanger.removeStyle(vertex, this.graph, EditorStyle.CAUSE_STYLE_NAME);
+      StyleChanger.removeStyle(vertex, this.graph, EditorStyle.EFFECT_STYLE_NAME);
+      StyleChanger.removeStyle(vertex, this.graph, EditorStyle.INNER_STYLE_NAME);
+      StyleChanger.addStyle(vertex, this.graph, this.getNodeType(vertex));
+    }
   }
 
   /*********************** Editor Options ***********************/
   public get model(): IContainer {
     return this._model;
+  }
+
+  private getNodeType(cell: mxgraph.mxCell) {
+    if (cell.edges === undefined || cell.edge) {
+      // The cell is an edge
+      return '';
+    }
+
+    if (cell.edges === null) {
+      // Node without Edges
+      return EditorStyle.CAUSE_STYLE_NAME;
+    }
+
+    let hasIncommingEdges = false;
+    let hasOutgoingEdges = false;
+    for (const edge of cell.edges) {
+      if (edge.source.id === cell.id) {
+        hasOutgoingEdges = true;
+      } else if (edge.target.id === cell.id) {
+        hasIncommingEdges = true;
+      }
+    }
+
+    if (hasIncommingEdges && hasOutgoingEdges) {
+      return EditorStyle.INNER_STYLE_NAME;
+    } else if (hasIncommingEdges) {
+      return EditorStyle.EFFECT_STYLE_NAME;
+    }
+    return EditorStyle.CAUSE_STYLE_NAME;
   }
 
   @Input()

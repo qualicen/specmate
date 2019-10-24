@@ -24,7 +24,7 @@ export class VertexProvider extends ProviderBase {
       super(element);
   }
 
-  public proviceCEGNode(url: string, x: number, y: number, width: number, height: number, data: ValuePair): mxgraph.mxCell {
+  public provideCEGNode(url: string, x: number, y: number, width: number, height: number, data: ValuePair): mxgraph.mxCell {
     const value: string = null;
     const style = this.shapeProvider.getStyle(new CEGNode());
     const parent = this.graph.getDefaultParent();
@@ -32,6 +32,7 @@ export class VertexProvider extends ProviderBase {
     const l1 = this.graph.insertVertex(vertex, url + '/variable' , data.variable, 0.5, 0.25, 0, 0, null, true);
     const l2 = this.graph.insertVertex(vertex, url + '/condition' , data.condition, 0.5, 0.75, 0, 0, null, true);
     l1.isConnectable = () => false;
+    console.log(l1.getGeometry());
     l2.isConnectable = () => false;
     return vertex;
   }
@@ -44,7 +45,7 @@ export class VertexProvider extends ProviderBase {
     if (Type.is(node, CEGNode)) {
       let n = node as CEGNode;
       const data = new ValuePair(n.variable, n.condition);
-      return this.proviceCEGNode(node.url, x || node.x, y || node.y, width, height, data);
+      return this.provideCEGNode(node.url, x || node.x, y || node.y, width, height, data);
     }
 
     const value: string = (this.nodeNameConverter ? this.nodeNameConverter.convertTo(node) : node.name) as string;

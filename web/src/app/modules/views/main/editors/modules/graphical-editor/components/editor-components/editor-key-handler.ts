@@ -80,4 +80,4 @@ export class EditorKeyHandler {
           graph.removeCells(selectedCells, true);
         }
       }
-} 
+}

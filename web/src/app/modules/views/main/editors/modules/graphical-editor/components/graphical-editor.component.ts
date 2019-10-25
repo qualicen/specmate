@@ -191,7 +191,7 @@ export class GraphicalEditor {
     EditorStyle.initEditorStyles(this.graph);
     EditorKeyHandler.initKeyHandler(this.graph);
     this.initGraphicalModel();
-    this.initTools();
+    this.toolProvider.initTools(this.graph, this.shapeProvider, this.vertexPrivider);
     this.initUndoManager();
     this.undoManager.clear();
     this.dataService.elementChanged.subscribe((url: string) => {
@@ -281,51 +281,6 @@ export class GraphicalEditor {
       let geo = this.model.getGeometry(cell);
       return geo == null || !geo.relative;
     };
-  }
-
-  private async initTools(): Promise<void> {
-    const tools = this.toolProvider.tools;
-
-    for (const tool of tools) {
-      tool.setGraph(this.graph);
-      if (tool.isVertexTool) {
-        this.makeVertexTool(tool);
-      } else {
-        this.makeClickTool(tool);
-      }
-    }
-  }
-
-  private makeVertexTool(tool: ToolBase) {
-    const onDrop = (graph: mxgraph.mxGraph, evt: MouseEvent, cell: mxgraph.mxCell) => {
-      this.graph.stopEditing(false);
-      const initialData: ShapeData = this.shapeProvider.getInitialData(tool.style);
-      const coords = graph.getPointForEvent(evt);
-      const vertexUrl = Url.build([this.model.url, Id.uuid]);
-      this.graph.startEditing(evt);
-      try {
-        if (Type.is(this.model, CEGModel)) {
-          this.vertexPrivider.provideCEGNode(vertexUrl, coords.x, coords.y,
-            initialData.size.width, initialData.size.height, initialData.text as ValuePair);
-        } else {
-          this.graph.insertVertex(
-            this.graph.getDefaultParent(),
-            vertexUrl,
-            initialData.text,
-            coords.x, coords.y,
-            initialData.size.width, initialData.size.height,
-            initialData.style);
-        }
-      }
-      finally {
-        this.graph.stopEditing(true);
-      }
-    };
-    mx.mxUtils.makeDraggable(document.getElementById(tool.elementId), this.graph, onDrop);
-  }
-
-  private makeClickTool(tool: ToolBase) {
-    document.getElementById(tool.elementId).addEventListener('click', (evt) => tool.perform(), false);
   }
 
   private updateValidities(): void {

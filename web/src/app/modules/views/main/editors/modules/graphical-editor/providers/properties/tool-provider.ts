@@ -12,6 +12,13 @@ import { StepTool } from '../../../tool-pallette/tools/process/step-tool';
 import { ToolBase } from '../../../tool-pallette/tools/tool-base';
 import { ProviderBase } from './provider-base';
 import { mxgraph } from 'mxgraph';
+import { Url } from 'src/app/util/url';
+import { Id } from 'src/app/util/id';
+import { Type } from 'src/app/util/type';
+import { CEGModel } from 'src/app/model/CEGModel';
+import { ValuePair } from './value-pair';
+import { ShapeData, ShapeProvider } from './shape-provider';
+import { VertexProvider } from './vertex-provider';
 
 export class ToolProvider extends ProviderBase {
 
@@ -61,5 +68,48 @@ export class ToolProvider extends ProviderBase {
 
     public getDefaultTool(contents: IContainer[]): ToolBase {
         return contents && contents.length > 0 ? this.tools[0] : this.tools[1];
+    }
+
+    public async initTools(graph: mxgraph.mxGraph, shapeProvider: ShapeProvider, vertexPrivider: VertexProvider): Promise<void> {
+        for (const tool of this.tools) {
+            tool.setGraph(graph);
+            if (tool.isVertexTool) {
+                this.makeVertexTool(graph, shapeProvider, vertexPrivider, tool);
+            } else {
+                this.makeClickTool(tool);
+            }
+        }
+    }
+
+    private makeVertexTool(graph: mxgraph.mxGraph, shapeProvider: ShapeProvider, vertexPrivider: VertexProvider, tool: ToolBase) {
+        const onDrop = (graph: mxgraph.mxGraph, evt: MouseEvent, cell: mxgraph.mxCell) => {
+            graph.stopEditing(false);
+            const initialData: ShapeData = shapeProvider.getInitialData(tool.style);
+            const coords = graph.getPointForEvent(evt);
+            const vertexUrl = Url.build([this.model.url, Id.uuid]);
+            graph.startEditing(evt);
+            try {
+                if (Type.is(this.model, CEGModel)) {
+                vertexPrivider.provideCEGNode(vertexUrl, coords.x, coords.y,
+                    initialData.size.width, initialData.size.height, initialData.text as ValuePair);
+                } else {
+                graph.insertVertex(
+                    graph.getDefaultParent(),
+                    vertexUrl,
+                    initialData.text,
+                    coords.x, coords.y,
+                    initialData.size.width, initialData.size.height,
+                    initialData.style);
+                }
+            }
+            finally {
+                graph.stopEditing(true);
+            }
+        };
+        mxgraph.mxUtils.makeDraggable(document.getElementById(tool.elementId), graph, onDrop);
+    }
+
+    private makeClickTool(tool: ToolBase) {
+        document.getElementById(tool.elementId).addEventListener('click', (evt) => tool.perform(), false);
     }
 }

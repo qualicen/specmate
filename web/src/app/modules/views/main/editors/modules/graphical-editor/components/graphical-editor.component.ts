@@ -44,7 +44,7 @@ export class GraphicalEditor {
   private nameProvider: NameProvider;
   private elementProvider: ElementProvider;
   private toolProvider: ToolProvider;
-  private nodeNameConverter: ConverterBase<any, string|ValuePair>;
+  private nodeNameConverter: ConverterBase<any, string | ValuePair>;
   private shapeProvider: ShapeProvider;
   private changeTranslator: ChangeTranslator;
   private vertexPrivider: VertexProvider;
@@ -76,13 +76,19 @@ export class GraphicalEditor {
   private graph: mxgraph.mxGraph;
   private undoManager: mxgraph.mxUndoManager;
 
-  private highlightedEdges: mxgraph.mxCell[] =  [];
+  private highlightedEdges: mxgraph.mxCell[] = [];
+
   /*
    * Construct the MXGraph
    */
   @ViewChild('mxGraphContainer')
   public set graphContainer(element: ElementRef) {
+    if (this.graph !== undefined) {
+      return;
+    }
+
     mx.mxConnectionHandler.prototype.connectImage = new mx.mxImage('/assets/img/editor-tools/connector.png', 16, 16);
+    mx.mxGraph.prototype.warningImage = new mx.mxImage('/assets/img/editor-tools/error_red.png', 20, 20);
     mx.mxGraphHandler.prototype['guidesEnabled'] = true;
 
     if (element === undefined) {
@@ -186,7 +192,6 @@ export class GraphicalEditor {
     this.initGraphicalModel();
     this.initTools();
     this.initUndoManager();
-    this.validationService.refreshValidation(this.model);
     this.undoManager.clear();
     this.dataService.elementChanged.subscribe( (url: string) => {
       const cells = this.graph.getModel().getChildCells(this.graph.getDefaultParent());
@@ -248,13 +253,14 @@ export class GraphicalEditor {
       this.graph.getModel().endUpdate();
       this.changeTranslator.preventDataUpdates = false;
       this.undoManager.clear();
+      this.validationService.validateCurrent();
     }
   }
 
   private async initCEGModel(): Promise<void> {
     this.graph.setHtmlLabels(true);
 
-    this.graph.isCellEditable = function(cell) {
+    this.graph.isCellEditable = function (cell) {
       let c = cell as mxgraph.mxCell;
       if (c.edge) {
         return false;
@@ -267,11 +273,11 @@ export class GraphicalEditor {
 
     this.graph.graphHandler.setRemoveCellsFromParent(false);
 
-    this.graph.isWrapping = function(cell) {
+    this.graph.isWrapping = function (cell) {
       return this.model.isCollapsed(cell);
     };
 
-    this.graph.isCellResizable = function(cell) {
+    this.graph.isCellResizable = function (cell) {
       let geo = this.model.getGeometry(cell);
       return geo == null || !geo.relative;
     };
@@ -315,13 +321,16 @@ export class GraphicalEditor {
     }
     const vertices = this.graph.getModel().getChildVertices(this.graph.getDefaultParent());
     for (const vertex of vertices) {
-      StyleChanger.addStyle(vertex, this.graph, EditorStyle.VALID_STYLE_NAME);
+      StyleChanger.replaceStyle(vertex, this.graph, EditorStyle.INVALID_STYLE_NAME, EditorStyle.VALID_STYLE_NAME);
+      this.graph.setCellWarning(vertex, null);
     }
     const invalidNodes = this.validationService.getValidationResults(this.model);
     for (const invalidNode of invalidNodes) {
       const vertexId = invalidNode.element.url;
       const vertex = vertices.find(vertex => vertex.id === vertexId);
       StyleChanger.replaceStyle(vertex, this.graph, EditorStyle.VALID_STYLE_NAME, EditorStyle.INVALID_STYLE_NAME);
+      const overlay = this.graph.setCellWarning(vertex, invalidNode.message);
+      overlay.offset = new mx.mxPoint(-13, -12);
     }
 
     for (const vertex of vertices) {
@@ -338,7 +347,7 @@ export class GraphicalEditor {
   }
 
   private getNodeType(cell: mxgraph.mxCell) {
-    if (cell.edges === undefined || cell.edge) {
+    if (cell.edges === undefined || cell.edge) {
       // The cell is an edge
       return '';
     }

@@ -83,6 +83,10 @@ export class GraphicalEditor {
    */
   @ViewChild('mxGraphContainer')
   public set graphContainer(element: ElementRef) {
+    if (this.graph !== undefined) {
+      return;
+    }
+
     mx.mxConnectionHandler.prototype.connectImage = new mx.mxImage('/assets/img/editor-tools/connector.png', 16, 16);
     mx.mxGraph.prototype.warningImage = new mx.mxImage('/assets/img/editor-tools/error_red.png', 20, 20);
     mx.mxGraphHandler.prototype['guidesEnabled'] = true;

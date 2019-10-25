@@ -1,6 +1,7 @@
 import { SpecmateDataService } from '../../../../../../data/modules/data-service/services/specmate-data.service';
 import { SelectedElementService } from '../../../../../side/modules/selected-element/services/selected-element.service';
 import { IContainer } from '../../../../../../../model/IContainer';
+import { mxgraph } from 'mxgraph';
 
 export abstract class ToolBase {
     public abstract icon: string;
@@ -17,5 +18,11 @@ export abstract class ToolBase {
 
     public get elementId(): string {
         return 'toolbar-' + this.name + '-button';
+    }
+
+    protected graph: mxgraph.mxGraph;
+
+    setGraph(graph: mxgraph.mxGraph) {
+        this.graph = graph;
     }
 }

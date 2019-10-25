@@ -8,11 +8,8 @@ import { ToolProvider } from '../../graphical-editor/providers/properties/tool-p
 import { ToolBase } from '../tools/tool-base';
 import { ClipboardService } from './clipboard-service';
 
-
 @Injectable()
 export class EditorToolsService {
-
-
     public activeTool: ToolBase;
 
     private model: IContainer;
@@ -35,7 +32,7 @@ export class EditorToolsService {
         this.model = model;
     }
 
-    private get toolProvider(): ToolProvider {
+    public get toolProvider(): ToolProvider {
         if (!this.model) {
             return undefined;
         }

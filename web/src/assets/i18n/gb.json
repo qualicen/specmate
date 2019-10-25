@@ -225,6 +225,7 @@
 		"addStart": "Start",
 		"addStep": "Step",
 		"delete": "Delete",
+		"layout": "Layout",
 		"move": "Move",
 		"select": "Select"
 	},

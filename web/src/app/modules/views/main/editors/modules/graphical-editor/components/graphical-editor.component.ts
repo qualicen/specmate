@@ -24,6 +24,7 @@ import { ValuePair } from '../providers/properties/value-pair';
 import { EditorStyle } from './editor-components/editor-style';
 import { EditorKeyHandler } from './editor-components/editor-key-handler';
 import { VertexProvider } from '../providers/properties/vertex-provider';
+import { ToolBase } from '../../tool-pallette/tools/tool-base';
 
 declare var require: any;
 
@@ -285,33 +286,46 @@ export class GraphicalEditor {
   private async initTools(): Promise<void> {
     const tools = this.toolProvider.tools;
 
-    for (const tool of tools.filter(t => t.isVertexTool === true)) {
-      const onDrop = (graph: mxgraph.mxGraph, evt: MouseEvent, cell: mxgraph.mxCell) => {
-        this.graph.stopEditing(false);
-        const initialData: ShapeData = this.shapeProvider.getInitialData(tool.style);
-        const coords = graph.getPointForEvent(evt);
-        const vertexUrl = Url.build([this.model.url, Id.uuid]);
-        this.graph.startEditing(evt);
-        try {
-          if (Type.is(this.model, CEGModel)) {
-            this.vertexPrivider.provideCEGNode(vertexUrl, coords.x, coords.y,
-              initialData.size.width, initialData.size.height, initialData.text as ValuePair);
-          } else {
-            this.graph.insertVertex(
-              this.graph.getDefaultParent(),
-              vertexUrl,
-              initialData.text,
-              coords.x, coords.y,
-              initialData.size.width, initialData.size.height,
-              initialData.style);
-          }
-        }
-        finally {
-          this.graph.stopEditing(true);
-        }
-      };
-      mx.mxUtils.makeDraggable(document.getElementById(tool.elementId), this.graph, onDrop);
+    for (const tool of tools) {
+      tool.setGraph(this.graph);
+      if (tool.isVertexTool) {
+        this.makeVertexTool(tool);
+      } else {
+        this.makeClickTool(tool);
+      }
     }
+  }
+
+  private makeVertexTool(tool: ToolBase) {
+    const onDrop = (graph: mxgraph.mxGraph, evt: MouseEvent, cell: mxgraph.mxCell) => {
+      this.graph.stopEditing(false);
+      const initialData: ShapeData = this.shapeProvider.getInitialData(tool.style);
+      const coords = graph.getPointForEvent(evt);
+      const vertexUrl = Url.build([this.model.url, Id.uuid]);
+      this.graph.startEditing(evt);
+      try {
+        if (Type.is(this.model, CEGModel)) {
+          this.vertexPrivider.provideCEGNode(vertexUrl, coords.x, coords.y,
+            initialData.size.width, initialData.size.height, initialData.text as ValuePair);
+        } else {
+          this.graph.insertVertex(
+            this.graph.getDefaultParent(),
+            vertexUrl,
+            initialData.text,
+            coords.x, coords.y,
+            initialData.size.width, initialData.size.height,
+            initialData.style);
+        }
+      }
+      finally {
+        this.graph.stopEditing(true);
+      }
+    };
+    mx.mxUtils.makeDraggable(document.getElementById(tool.elementId), this.graph, onDrop);
+  }
+
+  private makeClickTool(tool: ToolBase) {
+    document.getElementById(tool.elementId).addEventListener('click', (evt) => tool.perform(), false);
   }
 
   private updateValidities(): void {

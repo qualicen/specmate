@@ -1,8 +1,7 @@
 import { IContainer } from '../../../../../../../../model/IContainer';
 import { SpecmateDataService } from '../../../../../../../data/modules/data-service/services/specmate-data.service';
 import { SelectedElementService } from '../../../../../../side/modules/selected-element/services/selected-element.service';
-import { CEGConnectionTool } from '../../../tool-pallette/tools/ceg/ceg-connection-tool';
-import { CEGDeleteTool } from '../../../tool-pallette/tools/ceg/ceg-delete-tool';
+import { CEGLayoutTool } from '../../../tool-pallette/tools/ceg/ceg-layout-tool';
 import { CEGNodeTool } from '../../../tool-pallette/tools/ceg/ceg-node-tool';
 import { DecisionTool } from '../../../tool-pallette/tools/process/decision-tool';
 import { EndTool } from '../../../tool-pallette/tools/process/end-tool';
@@ -12,6 +11,7 @@ import { StartTool } from '../../../tool-pallette/tools/process/start-tool';
 import { StepTool } from '../../../tool-pallette/tools/process/step-tool';
 import { ToolBase } from '../../../tool-pallette/tools/tool-base';
 import { ProviderBase } from './provider-base';
+import { mxgraph } from 'mxgraph';
 
 export class ToolProvider extends ProviderBase {
 
@@ -46,8 +46,7 @@ export class ToolProvider extends ProviderBase {
     private createToolsForCEGModel(): void {
         this._tools = [
             new CEGNodeTool(this.dataService, this.selectedElementService, this.model),
-            new CEGConnectionTool(this.dataService, this.selectedElementService, this.model),
-            new CEGDeleteTool(this.model, this.dataService, this.selectedElementService)
+            new CEGLayoutTool(this.dataService, this.selectedElementService, this.model)
         ];
     }
 
@@ -56,9 +55,7 @@ export class ToolProvider extends ProviderBase {
             new StepTool(this.dataService, this.selectedElementService, this.model),
             new DecisionTool(this.model, this.dataService, this.selectedElementService),
             new StartTool(this.model, this.dataService, this.selectedElementService),
-            new EndTool(this.model, this.dataService, this.selectedElementService),
-            new ProcessConnectionTool(this.dataService, this.selectedElementService, this.model),
-            new ProcessDeleteTool(this.model, this.dataService, this.selectedElementService)
+            new EndTool(this.model, this.dataService, this.selectedElementService)
         ];
     }
 

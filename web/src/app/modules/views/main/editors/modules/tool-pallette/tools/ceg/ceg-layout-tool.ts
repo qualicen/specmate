@@ -8,11 +8,12 @@ class Dimension {
 }
 
 export class CEGLayoutTool extends ToolBase {
-    public isVertexTool = false;
+    public isVertexTool: boolean = undefined;
     public color = 'primary';
     public icon = 'sitemap';
     public name = 'tools.layout';
     public style = '';
+    public isHidden = false;
 
     public perform(): Promise<any> {
         return this.layoutGraph();
@@ -58,15 +59,18 @@ export class CEGLayoutTool extends ToolBase {
             if (current.edges === undefined || current.edges === null) {
                 continue;
             }
+            let newPosition = positionTable[current.getId()] + 1;
+
             for (const edge of current.edges) {
                 if (edge.target == current) {
+                    if (maxPosition < newPosition) {
+                        maxPosition = newPosition;
+                    }
+                    if (positionTable[edge.source.getId()] === undefined || newPosition > positionTable[edge.source.getId()]) {
+                        positionTable[edge.source.getId()] = newPosition;
+                    }
                     parentCount[edge.source.getId()]--;
                     if (parentCount[edge.source.getId()] == 0) {
-                        let position = positionTable[current.getId()] + 1;
-                        if (maxPosition < position) {
-                            maxPosition = position;
-                        }
-                        positionTable[edge.source.getId()] = position;
                         workList.push(edge.source);
                     }
                 }

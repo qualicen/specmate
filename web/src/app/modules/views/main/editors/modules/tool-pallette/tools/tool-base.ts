@@ -9,6 +9,7 @@ export abstract class ToolBase {
     public abstract color: string;
     public abstract name: string;
     public abstract isVertexTool: boolean;
+    public abstract isHidden: boolean;
 
     public abstract async perform(): Promise<any>;
 

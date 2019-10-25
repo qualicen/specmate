@@ -190,9 +190,9 @@ export class GraphicalEditor {
     }
     EditorStyle.initEditorStyles(this.graph);
     EditorKeyHandler.initKeyHandler(this.graph);
-    this.initGraphicalModel();
-    this.toolProvider.initTools(this.graph, this.shapeProvider, this.vertexPrivider);
     this.initUndoManager();
+    await this.initGraphicalModel();
+    await this.initTools();
     this.undoManager.clear();
     this.dataService.elementChanged.subscribe((url: string) => {
       const vertices = this.graph.getModel().getChildVertices(this.graph.getDefaultParent());
@@ -204,6 +204,49 @@ export class GraphicalEditor {
 
       this.changeTranslator.retranslate(node, this.graph, vertex);
     });
+  }
+
+  public async initTools(): Promise<void> {
+    for (const tool of this.toolProvider.tools) {
+        tool.setGraph(this.graph);
+        if (tool.isVertexTool) {
+            this.makeVertexTool(tool);
+        } else if (!tool.isHidden) {
+            this.makeClickTool(tool);
+        }
+    }
+  }
+
+  private makeVertexTool(tool: ToolBase) {
+      const onDrop = (graph: mxgraph.mxGraph, evt: MouseEvent, cell: mxgraph.mxCell) => {
+          graph.stopEditing(false);
+          const initialData: ShapeData = this.shapeProvider.getInitialData(tool.style);
+          const coords = graph.getPointForEvent(evt);
+          const vertexUrl = Url.build([this.model.url, Id.uuid]);
+          graph.startEditing(evt);
+          try {
+              if (Type.is(this.model, CEGModel)) {
+              this.vertexPrivider.provideCEGNode(vertexUrl, coords.x, coords.y,
+                  initialData.size.width, initialData.size.height, initialData.text as ValuePair);
+              } else {
+              graph.insertVertex(
+                  graph.getDefaultParent(),
+                  vertexUrl,
+                  initialData.text,
+                  coords.x, coords.y,
+                  initialData.size.width, initialData.size.height,
+                  initialData.style);
+              }
+          }
+          finally {
+              graph.stopEditing(true);
+          }
+      };
+      mx.mxUtils.makeDraggable(document.getElementById(tool.elementId), this.graph, onDrop);
+  }
+
+  private makeClickTool(tool: ToolBase) {
+      document.getElementById(tool.elementId).addEventListener('click', (evt) => tool.perform(), false);
   }
 
   private initUndoManager(): void {

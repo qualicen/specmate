@@ -19,6 +19,12 @@ import { CEGModel } from 'src/app/model/CEGModel';
 import { ValuePair } from './value-pair';
 import { ShapeData, ShapeProvider } from './shape-provider';
 import { VertexProvider } from './vertex-provider';
+import { CEGConnectionTool } from '../../../tool-pallette/tools/ceg/ceg-connection-tool';
+import { CEGDeleteTool } from '../../../tool-pallette/tools/ceg/ceg-delete-tool';
+
+const mx: typeof mxgraph = require('mxgraph')({
+    mxBasePath: 'mxgraph'
+});
 
 export class ToolProvider extends ProviderBase {
 
@@ -53,7 +59,9 @@ export class ToolProvider extends ProviderBase {
     private createToolsForCEGModel(): void {
         this._tools = [
             new CEGNodeTool(this.dataService, this.selectedElementService, this.model),
-            new CEGLayoutTool(this.dataService, this.selectedElementService, this.model)
+            new CEGLayoutTool(this.dataService, this.selectedElementService, this.model),
+            new CEGConnectionTool(this.dataService, this.selectedElementService, this.model),
+            new CEGDeleteTool(this.model, this.dataService, this.selectedElementService)
         ];
     }
 
@@ -62,54 +70,13 @@ export class ToolProvider extends ProviderBase {
             new StepTool(this.dataService, this.selectedElementService, this.model),
             new DecisionTool(this.model, this.dataService, this.selectedElementService),
             new StartTool(this.model, this.dataService, this.selectedElementService),
-            new EndTool(this.model, this.dataService, this.selectedElementService)
+            new EndTool(this.model, this.dataService, this.selectedElementService),
+            new ProcessConnectionTool(this.dataService, this.selectedElementService, this.model),
+            new ProcessDeleteTool(this.model, this.dataService, this.selectedElementService)
         ];
     }
 
     public getDefaultTool(contents: IContainer[]): ToolBase {
         return contents && contents.length > 0 ? this.tools[0] : this.tools[1];
-    }
-
-    public async initTools(graph: mxgraph.mxGraph, shapeProvider: ShapeProvider, vertexPrivider: VertexProvider): Promise<void> {
-        for (const tool of this.tools) {
-            tool.setGraph(graph);
-            if (tool.isVertexTool) {
-                this.makeVertexTool(graph, shapeProvider, vertexPrivider, tool);
-            } else {
-                this.makeClickTool(tool);
-            }
-        }
-    }
-
-    private makeVertexTool(graph: mxgraph.mxGraph, shapeProvider: ShapeProvider, vertexPrivider: VertexProvider, tool: ToolBase) {
-        const onDrop = (graph: mxgraph.mxGraph, evt: MouseEvent, cell: mxgraph.mxCell) => {
-            graph.stopEditing(false);
-            const initialData: ShapeData = shapeProvider.getInitialData(tool.style);
-            const coords = graph.getPointForEvent(evt);
-            const vertexUrl = Url.build([this.model.url, Id.uuid]);
-            graph.startEditing(evt);
-            try {
-                if (Type.is(this.model, CEGModel)) {
-                vertexPrivider.provideCEGNode(vertexUrl, coords.x, coords.y,
-                    initialData.size.width, initialData.size.height, initialData.text as ValuePair);
-                } else {
-                graph.insertVertex(
-                    graph.getDefaultParent(),
-                    vertexUrl,
-                    initialData.text,
-                    coords.x, coords.y,
-                    initialData.size.width, initialData.size.height,
-                    initialData.style);
-                }
-            }
-            finally {
-                graph.stopEditing(true);
-            }
-        };
-        mxgraph.mxUtils.makeDraggable(document.getElementById(tool.elementId), graph, onDrop);
-    }
-
-    private makeClickTool(tool: ToolBase) {
-        document.getElementById(tool.elementId).addEventListener('click', (evt) => tool.perform(), false);
     }
 }

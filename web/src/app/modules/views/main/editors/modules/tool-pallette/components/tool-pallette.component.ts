@@ -13,7 +13,7 @@ export class ToolPallette {
     constructor(private editorToolsService: EditorToolsService) { }
 
     public get tools(): ToolBase[] {
-        return this.editorToolsService.tools;
+        return this.editorToolsService.tools.filter(tool => !tool.isHidden);
     }
 
     public get isVisible(): boolean {

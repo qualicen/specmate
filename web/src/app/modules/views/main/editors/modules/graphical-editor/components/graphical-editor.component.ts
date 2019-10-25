@@ -405,12 +405,10 @@ export class GraphicalEditor {
   }
 
   public showGrid(): void {
-    this.graph.setGridEnabled(true);
     this.isGridShown = true;
   }
 
   public hideGrid(): void {
-    this.graph.setGridEnabled(false);
     this.isGridShown = false;
   }
 

@@ -242,10 +242,12 @@ export class GraphicalEditor {
         this.graph.insertEdge(parent, connection.url, value, sourceVertex, targetVertex);
       }
 
-      for (const url in vertexCache) {
-        const vertex = vertexCache[url];
-        const type = this.getNodeType(vertex);
-        StyleChanger.addStyle(vertex, this.graph, type);
+      if (Type.is(this.model, CEGModel)) {
+        for (const url in vertexCache) {
+          const vertex = vertexCache[url];
+          const type = this.getNodeType(vertex);
+          StyleChanger.addStyle(vertex, this.graph, type);
+        }
       }
     } finally {
       this.graph.getModel().endUpdate();
@@ -344,11 +346,13 @@ export class GraphicalEditor {
       }
     }
 
-    for (const vertex of vertices) {
-      StyleChanger.removeStyle(vertex, this.graph, EditorStyle.CAUSE_STYLE_NAME);
-      StyleChanger.removeStyle(vertex, this.graph, EditorStyle.EFFECT_STYLE_NAME);
-      StyleChanger.removeStyle(vertex, this.graph, EditorStyle.INNER_STYLE_NAME);
-      StyleChanger.addStyle(vertex, this.graph, this.getNodeType(vertex));
+    if (Type.is(this.model, CEGModel)) {
+      for (const vertex of vertices) {
+        StyleChanger.removeStyle(vertex, this.graph, EditorStyle.CAUSE_STYLE_NAME);
+        StyleChanger.removeStyle(vertex, this.graph, EditorStyle.EFFECT_STYLE_NAME);
+        StyleChanger.removeStyle(vertex, this.graph, EditorStyle.INNER_STYLE_NAME);
+        StyleChanger.addStyle(vertex, this.graph, this.getNodeType(vertex));
+      }
     }
   }
 

@@ -1,8 +1,12 @@
 import { ChangeDetectionStrategy, Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { mxgraph } from 'mxgraph'; // Typings only - no code!
-import { CEGConnection } from 'src/app/model/CEGConnection';
 import { CEGModel } from 'src/app/model/CEGModel';
+import { CEGNode } from 'src/app/model/CEGNode';
+import { ProcessDecision } from 'src/app/model/ProcessDecision';
+import { ProcessEnd } from 'src/app/model/ProcessEnd';
+import { ProcessStart } from 'src/app/model/ProcessStart';
+import { ProcessStep } from 'src/app/model/ProcessStep';
 import { UndoService } from 'src/app/modules/actions/modules/common-controls/services/undo.service';
 import { IContainer } from '../../../../../../../model/IContainer';
 import { IModelConnection } from '../../../../../../../model/IModelConnection';
@@ -22,9 +26,9 @@ import { ToolProvider } from '../providers/properties/tool-provider';
 import { ValuePair } from '../providers/properties/value-pair';
 import { VertexProvider } from '../providers/properties/vertex-provider';
 import { EditorKeyHandler } from './editor-components/editor-key-handler';
+import { EditorPopup } from './editor-components/editor-popup';
 import { EditorStyle } from './editor-components/editor-style';
 import { ChangeTranslator } from './util/change-translator';
-import { replaceClass } from './util/css-utils';
 import { StyleChanger } from './util/style-changer';
 
 declare var require: any;
@@ -76,6 +80,8 @@ export class GraphicalEditor {
   /*********************** MX Graph ***********************/
   private graph: mxgraph.mxGraph;
   private undoManager: mxgraph.mxUndoManager;
+
+  private popup: EditorPopup;
 
   private highlightedEdges: mxgraph.mxCell[] = [];
 
@@ -194,43 +200,8 @@ export class GraphicalEditor {
     this.initTools();
     this.initUndoManager();
 
-    this.graph.popupMenuHandler['autoExpand'] = true;
-
-    this.graph.popupMenuHandler.isSelectOnPopup = function (me) {
-      return mx.mxEvent.isMouseEvent(me.getEvent());
-    };
-
-    const mxPopupMenuShowMenu = mx.mxPopupMenu.prototype.showMenu;
-    mx.mxPopupMenuHandler.prototype.showMenu = function () {
-      mxPopupMenuShowMenu.apply(this, arguments);
-
-      const containerElem = this.div as HTMLElement;
-      containerElem.classList.remove('mxPopupMenu');
-      containerElem.classList.add('graphPopupMenu');
-
-      replaceClass('mxPopupMenu', 'graphPopupMenu');
-    };
-
-    // Installs context menu
-    this.graph.popupMenuHandler['factoryMethod'] = async (menu: mxgraph.mxPopupMenuHandler, cell: mxgraph.mxCell, evt: PointerEvent) => {
-
-      menu.addItem('Delete', null, () => {
-        this.graph.removeCells([cell]);
-      }, undefined, undefined, undefined, undefined);
-
-      const element = await this.dataService.readElement(cell.id, true);
-      if (Type.is(element, CEGConnection)) {
-
-        const connection = element as CEGConnection;
-        const icon = connection.negate ? 'fa fa-check' : 'fa fa-circle-o';
-
-        menu.addItem('Negate', null, async () => {
-          connection.negate = !connection.negate;
-          await this.dataService.updateElement(connection, true, Id.uuid);
-        }, undefined, icon, undefined, undefined);
-      }
-    };
-
+    this.popup = new EditorPopup(this.graph, this.dataService);
+    this.popup.init();
 
     this.undoManager.clear();
     this.dataService.elementChanged.subscribe((url: string) => {
@@ -365,23 +336,19 @@ export class GraphicalEditor {
       this.graph.setCellWarning(vertex, null);
     }
     const validationResult = this.validationService.getValidationResults(this.model);
-    const invalidNodes = validationResult.filter(e => e.element.className === 'ProcessDecision'
-      || e.element.className === 'ProcessStart'
-      || e.element.className === 'ProcessEnd'
-      || e.element.className === 'ProcessStep'
-      || e.element.className === 'CEGNode');
+    const invalidNodes = validationResult.filter(e => this.elementProvider.isNode(e.element));
     for (const invalidNode of invalidNodes) {
       const vertexId = invalidNode.element.url;
       const vertex = vertices.find(vertex => vertex.id === vertexId);
       StyleChanger.replaceStyle(vertex, this.graph, EditorStyle.VALID_STYLE_NAME, EditorStyle.INVALID_STYLE_NAME);
       const overlay = this.graph.setCellWarning(vertex, invalidNode.message);
-      if (invalidNode.element.className === 'CEGNode' || invalidNode.element.className === 'ProcessStep') {
+      if (Type.is(invalidNode.element, CEGNode) || Type.is(invalidNode.element, ProcessStep)) {
         overlay.offset = new mx.mxPoint(-13, -12);
       }
-      if (invalidNode.element.className === 'ProcessStart' || invalidNode.element.className === 'ProcessEnd') {
+      if (Type.is(invalidNode.element, ProcessStart) || Type.is(invalidNode.element, ProcessEnd)) {
         overlay.offset = new mx.mxPoint(-23, -12);
       }
-      if (invalidNode.element.className === 'ProcessDecision') {
+      if (Type.is(invalidNode.element, ProcessDecision)) {
         overlay.offset = new mx.mxPoint(-28, -20);
       }
     }

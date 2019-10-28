@@ -18,6 +18,8 @@ import { ValuePair } from '../../providers/properties/value-pair';
 import { Type } from 'src/app/util/type';
 import { CEGNode } from 'src/app/model/CEGNode';
 import { type } from 'os';
+import { CEGConnection } from 'src/app/model/CEGConnection';
+import { EditorStyle } from '../editor-components/editor-style';
 
 
 declare var require: any;
@@ -30,8 +32,8 @@ const mx: typeof mxgraph = require('mxgraph')({
 export class ChangeTranslator {
 
     private contents: IContainer[];
-    private parentComponents: {[key: string]: IContainer};
-    private nodeNameConverter: ConverterBase<IContainer, string|ValuePair>;
+    private parentComponents: { [key: string]: IContainer };
+    private nodeNameConverter: ConverterBase<IContainer, string | ValuePair>;
     public preventDataUpdates = false;
 
     constructor(private model: CEGModel | Process, private dataService: SpecmateDataService, private toolProvider: ToolProvider) {
@@ -47,7 +49,7 @@ export class ChangeTranslator {
         return element;
     }
 
-    public async translate(change: (mxgraph.mxTerminalChange | mxgraph.mxChildChange)): Promise<void> {
+    public async translate(change: (mxgraph.mxTerminalChange | mxgraph.mxChildChange | mxgraph.mxStyleChange)): Promise<void> {
         if (this.preventDataUpdates) {
             return;
         }
@@ -61,9 +63,35 @@ export class ChangeTranslator {
                 await this.translateDelete(childChange);
             }
         } else if (change['style'] !== undefined) {
-            // We have a mxStyleChange, this should only be the case on validation or selection.
+            await this.translateStyleChange(change as mxgraph.mxStyleChange);
         } else if (change['cell'] !== undefined) {
-            await this.translateChange(change as mxgraph.mxTerminalChange);
+            await this.translateTerminalChange(change as mxgraph.mxTerminalChange);
+        }
+    }
+
+    private async translateStyleChange(change: mxgraph.mxStyleChange): Promise<void> {
+        const element = await this.getElement(change.cell.id);
+        if (element === undefined) {
+            return;
+        }
+        const prevStyles: string[] = change.previous.split(';');
+        const currStyles: string[] = change.style.split(';');
+
+        const newStyles = currStyles.filter(style => !Arrays.contains(prevStyles, style));
+        const removedStyles = prevStyles.filter(style => !Arrays.contains(currStyles, style));
+
+        if (Type.is(element, CEGConnection)) {
+            const connection = (element as CEGConnection);
+            let changeMade = false;
+            if (Arrays.contains(newStyles, EditorStyle.ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE)) {
+                connection.negate = true;
+            } else if (Arrays.contains(removedStyles, EditorStyle.ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE)) {
+                connection.negate = false;
+            }
+
+            if (changeMade) {
+                await this.dataService.updateElement(connection, true, Id.uuid);
+            }
         }
     }
 
@@ -127,7 +155,7 @@ export class ChangeTranslator {
         return node;
     }
 
-    private async translateChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange): Promise<void> {
+    private async translateTerminalChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange): Promise<void> {
         const element = await this.getElement(change.cell.id);
         if (element === undefined) {
             return;

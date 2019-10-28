@@ -1,10 +1,14 @@
 import { ChangeDetectionStrategy, Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { mxgraph } from 'mxgraph'; // Typings only - no code!
+import { CEGConnection } from 'src/app/model/CEGConnection';
+import { CEGModel } from 'src/app/model/CEGModel';
+import { UndoService } from 'src/app/modules/actions/modules/common-controls/services/undo.service';
 import { IContainer } from '../../../../../../../model/IContainer';
 import { IModelConnection } from '../../../../../../../model/IModelConnection';
 import { IModelNode } from '../../../../../../../model/IModelNode';
 import { Id } from '../../../../../../../util/id';
+import { Type } from '../../../../../../../util/type';
 import { Url } from '../../../../../../../util/url';
 import { SpecmateDataService } from '../../../../../../data/modules/data-service/services/specmate-data.service';
 import { ValidationService } from '../../../../../../forms/modules/validation/services/validation.service';
@@ -15,15 +19,13 @@ import { ElementProvider } from '../providers/properties/element-provider';
 import { NameProvider } from '../providers/properties/name-provider';
 import { ShapeData, ShapeProvider } from '../providers/properties/shape-provider';
 import { ToolProvider } from '../providers/properties/tool-provider';
-import { ChangeTranslator } from './util/change-translator';
-import { StyleChanger } from './util/style-changer';
-import { UndoService } from 'src/app/modules/actions/modules/common-controls/services/undo.service';
-import { Type } from '../../../../../../../util/type';
-import { CEGModel } from 'src/app/model/CEGModel';
 import { ValuePair } from '../providers/properties/value-pair';
-import { EditorStyle } from './editor-components/editor-style';
-import { EditorKeyHandler } from './editor-components/editor-key-handler';
 import { VertexProvider } from '../providers/properties/vertex-provider';
+import { EditorKeyHandler } from './editor-components/editor-key-handler';
+import { EditorStyle } from './editor-components/editor-style';
+import { ChangeTranslator } from './util/change-translator';
+import { replaceClass } from './util/css-utils';
+import { StyleChanger } from './util/style-changer';
 
 declare var require: any;
 
@@ -192,12 +194,53 @@ export class GraphicalEditor {
     this.initGraphicalModel();
     this.initTools();
     this.initUndoManager();
+
+    this.graph.popupMenuHandler['autoExpand'] = true;
+
+    this.graph.popupMenuHandler.isSelectOnPopup = function (me) {
+      return mx.mxEvent.isMouseEvent(me.getEvent());
+    };
+
+    const mxPopupMenuShowMenu = mx.mxPopupMenu.prototype.showMenu;
+    mx.mxPopupMenuHandler.prototype.showMenu = function () {
+      mxPopupMenuShowMenu.apply(this, arguments);
+
+      const containerElem = this.div as HTMLElement;
+      containerElem.classList.remove('mxPopupMenu');
+      containerElem.classList.add('graphPopupMenu');
+
+      replaceClass('mxPopupMenu', 'graphPopupMenu');
+    };
+
+    // Installs context menu
+    this.graph.popupMenuHandler['factoryMethod'] = async (menu: mxgraph.mxPopupMenuHandler, cell: mxgraph.mxCell, evt: PointerEvent) => {
+
+      menu.addItem('Delete', null, () => {
+        this.graph.removeCells([cell]);
+      }, undefined, undefined, undefined, undefined);
+
+      const element = await this.dataService.readElement(cell.id, true);
+      if (Type.is(element, CEGConnection)) {
+
+        const connection = element as CEGConnection;
+        const icon = connection.negate ? 'fa fa-check' : 'fa fa-circle-o';
+
+        menu.addItem('Negate', null, async () => {
+          connection.negate = !connection.negate;
+          await this.dataService.updateElement(connection, true, Id.uuid);
+        }, undefined, icon, undefined, undefined);
+      }
+
+
+    };
+
+
     this.undoManager.clear();
-    this.dataService.elementChanged.subscribe( (url: string) => {
+    this.dataService.elementChanged.subscribe((url: string) => {
       const cells = this.graph.getModel().getChildCells(this.graph.getDefaultParent());
       const cell = cells.find(vertex => vertex.id === url);
       const node = this.nodes.find(node => node.url === url);
-      if (cell === undefined || node === undefined) {
+      if (cell === undefined || node === undefined) {
         return;
       }
 

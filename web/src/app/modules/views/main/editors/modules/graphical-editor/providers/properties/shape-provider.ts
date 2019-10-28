@@ -9,6 +9,7 @@ import { ProviderBase } from './provider-base';
 import { ValuePair } from './value-pair';
 import { Type } from 'src/app/util/type';
 import { CEGConnection } from 'src/app/model/CEGConnection';
+import { EditorStyle } from '../../components/editor-components/editor-style';
 
 export type ShapeData = {
     style: string,
@@ -25,7 +26,7 @@ export class ShapeProvider extends ProviderBase {
         super(type);
 
         this.shapeMap[CEGNode.className] = {
-            style: 'shape=rectangle;rounded=1;arcSize=10;align=center;perimeter=rectanglePerimeter;',
+            style: EditorStyle.BASE_CEG_NODE_STYLE,
             size: {
                 width: Config.CEG_NODE_WIDTH,
                 height: Config.CEG_NODE_HEIGHT
@@ -38,7 +39,7 @@ export class ShapeProvider extends ProviderBase {
 
         this.shapeMap[ProcessStart.className] = {
             // tslint:disable-next-line:max-line-length
-            style: 'shape=ellipse;whiteSpace=wrap;html=1;aspect=fixed;align=center;perimeter=ellipsePerimeter;editable=0;',
+            style: EditorStyle.BASE_PROCESS_START_STYLE,
             size: {
                 width: Config.PROCESS_START_END_NODE_RADIUS * 2,
                 height: Config.PROCESS_START_END_NODE_RADIUS * 2
@@ -50,7 +51,7 @@ export class ShapeProvider extends ProviderBase {
 
         this.shapeMap[ProcessEnd.className] = {
             // tslint:disable-next-line:max-line-length
-            style: 'shape=doubleEllipse;whiteSpace=wrap;html=1;aspect=fixed;align=center;perimeter=ellipsePerimeter;editable=0;',
+            style: EditorStyle.BASE_PROCESS_END_STYLE,
             size: {
                 width: Config.PROCESS_START_END_NODE_RADIUS * 2,
                 height: Config.PROCESS_START_END_NODE_RADIUS * 2
@@ -61,7 +62,7 @@ export class ShapeProvider extends ProviderBase {
         };
 
         this.shapeMap[ProcessStep.className] = {
-            style: 'shape=rectangle;rounded=1;arcSize=10;perimeter=rectanglePerimeter;',
+            style: EditorStyle.BASE_PROCESS_STEP_STYLE,
             size: {
                 width: Config.CEG_NODE_WIDTH,
                 height: Config.CEG_NODE_HEIGHT
@@ -72,7 +73,7 @@ export class ShapeProvider extends ProviderBase {
         };
 
         this.shapeMap[ProcessDecision.className] = {
-            style: 'shape=rhombus;align=center;perimeter=rhombusPerimeter;',
+            style: EditorStyle.BASE_PROCESS_DECISION_STYLE,
             size: {
                 width: Config.PROCESS_DECISION_NODE_DIM,
                 height: Config.PROCESS_DECISION_NODE_DIM
@@ -88,7 +89,7 @@ export class ShapeProvider extends ProviderBase {
             if (Type.is(element, CEGConnection) && (element as CEGConnection).negate === true) {
                 return {
                     size: undefined,
-                    style: 'dashed=1',
+                    style: EditorStyle.ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE,
                     text: undefined
                 };
             }

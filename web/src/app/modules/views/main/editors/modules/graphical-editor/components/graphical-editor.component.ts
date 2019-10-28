@@ -229,8 +229,6 @@ export class GraphicalEditor {
           await this.dataService.updateElement(connection, true, Id.uuid);
         }, undefined, icon, undefined, undefined);
       }
-
-
     };
 
 

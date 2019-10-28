@@ -7,12 +7,12 @@ import { ProcessStart } from '../../../../../../../../model/ProcessStart';
 import { ProcessStep } from '../../../../../../../../model/ProcessStep';
 import { NodeNameConverterProvider } from '../conversion/node-name-converter-provider';
 import { ProviderBase } from './provider-base';
-import { ValuePair } from './value-pair';
+import { CEGmxModelNode } from './ceg-mx-model-node';
 
 export type ShapeData = {
     style: string,
     size: { width: number, height: number },
-    text: string|ValuePair
+    text: string|CEGmxModelNode
 };
 
 export class ShapeProvider extends ProviderBase {
@@ -89,7 +89,7 @@ export class ShapeProvider extends ProviderBase {
         return this.shapeMap[element.className].size;
     }
 
-    public getInitialText(element: { className: string }): string|ValuePair {
+    public getInitialText(element: { className: string }): string|CEGmxModelNode {
         return this.shapeMap[element.className].text;
     }
 

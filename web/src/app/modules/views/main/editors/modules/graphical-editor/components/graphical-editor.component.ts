@@ -20,7 +20,7 @@ import { StyleChanger } from './util/style-changer';
 import { UndoService } from 'src/app/modules/actions/modules/common-controls/services/undo.service';
 import { Type } from '../../../../../../../util/type';
 import { CEGModel } from 'src/app/model/CEGModel';
-import { ValuePair } from '../providers/properties/value-pair';
+import { CEGmxModelNode } from '../providers/properties/ceg-mx-model-node';
 import { EditorStyle } from './editor-components/editor-style';
 import { EditorKeyHandler } from './editor-components/editor-key-handler';
 import { VertexProvider } from '../providers/properties/vertex-provider';
@@ -44,7 +44,7 @@ export class GraphicalEditor {
   private nameProvider: NameProvider;
   private elementProvider: ElementProvider;
   private toolProvider: ToolProvider;
-  private nodeNameConverter: ConverterBase<any, string | ValuePair>;
+  private nodeNameConverter: ConverterBase<any, string | CEGmxModelNode>;
   private shapeProvider: ShapeProvider;
   private changeTranslator: ChangeTranslator;
   private vertexPrivider: VertexProvider;
@@ -281,6 +281,7 @@ export class GraphicalEditor {
       let geo = this.model.getGeometry(cell);
       return geo == null || !geo.relative;
     };
+    this.vertexPrivider.initCEGRenderer(this.graph);
   }
 
   private async initTools(): Promise<void> {
@@ -296,7 +297,7 @@ export class GraphicalEditor {
         try {
           if (Type.is(this.model, CEGModel)) {
             this.vertexPrivider.provideCEGNode(vertexUrl, coords.x, coords.y,
-              initialData.size.width, initialData.size.height, initialData.text as ValuePair);
+              initialData.size.width, initialData.size.height, initialData.text as CEGmxModelNode);
           } else {
             this.graph.insertVertex(
               this.graph.getDefaultParent(),

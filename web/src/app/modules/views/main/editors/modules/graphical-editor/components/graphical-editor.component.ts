@@ -24,6 +24,7 @@ import { ValuePair } from '../providers/properties/value-pair';
 import { EditorStyle } from './editor-components/editor-style';
 import { EditorKeyHandler } from './editor-components/editor-key-handler';
 import { VertexProvider } from '../providers/properties/vertex-provider';
+import { ScrollbarHandler } from './editor-components/scrollbar-handler';
 
 declare var require: any;
 
@@ -192,6 +193,9 @@ export class GraphicalEditor {
     this.initTools();
     this.initUndoManager();
     this.undoManager.clear();
+
+    // new ScrollbarHandler(this.graph).init();
+
     this.dataService.elementChanged.subscribe((url: string) => {
       const vertices = this.graph.getModel().getChildVertices(this.graph.getDefaultParent());
       const vertex = vertices.find(vertex => vertex.id === url);

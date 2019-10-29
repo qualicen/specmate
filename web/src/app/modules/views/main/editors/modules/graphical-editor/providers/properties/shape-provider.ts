@@ -38,7 +38,6 @@ export class ShapeProvider extends ProviderBase {
         };
 
         this.shapeMap[ProcessStart.className] = {
-            // tslint:disable-next-line:max-line-length
             style: EditorStyle.BASE_PROCESS_START_STYLE,
             size: {
                 width: Config.PROCESS_START_END_NODE_RADIUS * 2,
@@ -50,7 +49,6 @@ export class ShapeProvider extends ProviderBase {
         };
 
         this.shapeMap[ProcessEnd.className] = {
-            // tslint:disable-next-line:max-line-length
             style: EditorStyle.BASE_PROCESS_END_STYLE,
             size: {
                 width: Config.PROCESS_START_END_NODE_RADIUS * 2,

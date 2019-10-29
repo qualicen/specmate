@@ -1,24 +1,23 @@
-import { CEGModel } from '../../../../../../../../model/CEGModel';
-import { Process } from '../../../../../../../../model/Process';
 import { mxgraph } from 'mxgraph';
+import { CEGConnection } from 'src/app/model/CEGConnection';
+import { CEGNode } from 'src/app/model/CEGNode';
+import { Type } from 'src/app/util/type';
+import { CEGModel } from '../../../../../../../../model/CEGModel';
 import { IContainer } from '../../../../../../../../model/IContainer';
-import { ConnectionToolBase } from '../../../tool-pallette/tools/connection-tool-base';
 import { IModelConnection } from '../../../../../../../../model/IModelConnection';
 import { IModelNode } from '../../../../../../../../model/IModelNode';
-import { CreateNodeToolBase } from '../../../tool-pallette/tools/create-node-tool-base';
+import { Process } from '../../../../../../../../model/Process';
+import { Arrays } from '../../../../../../../../util/arrays';
 import { Id } from '../../../../../../../../util/id';
 import { SpecmateDataService } from '../../../../../../../data/modules/data-service/services/specmate-data.service';
-import { Arrays } from '../../../../../../../../util/arrays';
+import { ConnectionToolBase } from '../../../tool-pallette/tools/connection-tool-base';
+import { CreateNodeToolBase } from '../../../tool-pallette/tools/create-node-tool-base';
+import { DeleteToolBase } from '../../../tool-pallette/tools/delete-tool-base';
+import { ToolBase } from '../../../tool-pallette/tools/tool-base';
 import { ConverterBase } from '../../converters/converter-base';
 import { NodeNameConverterProvider } from '../../providers/conversion/node-name-converter-provider';
-import { DeleteToolBase } from '../../../tool-pallette/tools/delete-tool-base';
 import { ToolProvider } from '../../providers/properties/tool-provider';
-import { ToolBase } from '../../../tool-pallette/tools/tool-base';
 import { ValuePair } from '../../providers/properties/value-pair';
-import { Type } from 'src/app/util/type';
-import { CEGNode } from 'src/app/model/CEGNode';
-import { type } from 'os';
-import { CEGConnection } from 'src/app/model/CEGConnection';
 import { EditorStyle } from '../editor-components/editor-style';
 
 
@@ -85,8 +84,10 @@ export class ChangeTranslator {
             let changeMade = false;
             if (Arrays.contains(newStyles, EditorStyle.ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE)) {
                 connection.negate = true;
+                changeMade = true;
             } else if (Arrays.contains(removedStyles, EditorStyle.ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE)) {
                 connection.negate = false;
+                changeMade = true;
             }
 
             if (changeMade) {

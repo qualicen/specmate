@@ -158,8 +158,8 @@ export class ChangeTranslator {
             // Keep change.cell to avoid having a parent a child value
             element['variable'] = change.cell.value;
         }
-        element['x'] = cell.geometry.x;
-        element['y'] = cell.geometry.y;
+        element['x'] = Math.max(0, cell.geometry.x);
+        element['y'] = Math.max(0, cell.geometry.y);
         element['width'] = cell.geometry.width;
         element['height'] = cell.geometry.height;
         await this.dataService.updateElement(element, true, Id.uuid);

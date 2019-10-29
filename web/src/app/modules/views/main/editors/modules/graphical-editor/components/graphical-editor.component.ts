@@ -25,6 +25,7 @@ import { EditorStyle } from './editor-components/editor-style';
 import { EditorKeyHandler } from './editor-components/editor-key-handler';
 import { VertexProvider } from '../providers/properties/vertex-provider';
 import { ToolBase } from '../../tool-pallette/tools/tool-base';
+import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
 
 declare var require: any;
 
@@ -60,7 +61,8 @@ export class GraphicalEditor {
     private selectedElementService: SelectedElementService,
     private validationService: ValidationService,
     private translate: TranslateService,
-    private undoService: UndoService) {
+    private undoService: UndoService,
+    private modal: ConfirmationModal) {
     this.validationService.validationFinished.subscribe(() => {
       this.updateValidities();
     });
@@ -388,7 +390,7 @@ export class GraphicalEditor {
 
   @Input()
   public set model(model: IContainer) {
-    this.toolProvider = new ToolProvider(model, this.dataService, this.selectedElementService);
+    this.toolProvider = new ToolProvider(model, this.dataService, this.selectedElementService, this.modal, this.translate);
     this.shapeProvider = new ShapeProvider(model);
     this.nameProvider = new NameProvider(model, this.translate);
     this.changeTranslator = new ChangeTranslator(model, this.dataService, this.toolProvider);

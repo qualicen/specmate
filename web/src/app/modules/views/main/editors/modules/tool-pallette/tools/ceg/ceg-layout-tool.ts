@@ -1,6 +1,11 @@
 import { ToolBase } from '../tool-base';
 import { mxgraph } from 'mxgraph';
 import { Config } from '../../../../../../../../config/config';
+import { SpecmateDataService } from 'src/app/modules/data/modules/data-service/services/specmate-data.service';
+import { SelectedElementService } from 'src/app/modules/views/side/modules/selected-element/services/selected-element.service';
+import { IContainer } from 'src/app/model/IContainer';
+import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
+import { TranslateService } from '@ngx-translate/core';
 
 
 class Dimension {
@@ -11,16 +16,25 @@ export class CEGLayoutTool extends ToolBase {
     public isVertexTool: boolean = undefined;
     public color = 'primary';
     public icon = 'sitemap';
-    public name = 'tools.layout';
+    public name = 'tools.autoLayout';
     public style = '';
     public isHidden = false;
+
+    constructor(dataService: SpecmateDataService, selectedElementService: SelectedElementService,
+            parent: IContainer, private modalService: ConfirmationModal, private translate: TranslateService) {
+        super(dataService, selectedElementService, parent);
+    }
 
     public perform(): Promise<any> {
         return this.layoutGraph();
     }
 
     public layoutGraph(): Promise<any> {
-        let nodeOrdering = this.toposort(this.graph);
+        const nodeList = this.graph.getModel().getChildVertices(this.graph.getDefaultParent()).filter(n => !n.isEdge());
+        let nodeOrdering = this.toposort(this.graph, nodeList);
+        if (nodeOrdering.length == 0 && nodeList.length > 0) {
+            return this.modalService.openOk('Error', this.translate.instant('layoutErrorCircle'));
+        }
         let dimTable = this.getDimensions(nodeOrdering);
         this.graph.model.beginUpdate();
         try {
@@ -31,31 +45,41 @@ export class CEGLayoutTool extends ToolBase {
         return Promise.resolve();
     }
 
-    private toposort(graph: mxgraph.mxGraph): mxgraph.mxCell[][] {
+    private toposort(graph: mxgraph.mxGraph, nodeList: mxgraph.mxCell[]): mxgraph.mxCell[][] {
         const positionTable: {[key: string]: number} = {};
         const parentCount: {[key: string]: number} = {};
-        const nodeList = graph.getModel().getChildVertices(graph.getDefaultParent()).filter(n => !n.isEdge());
-        const workList: mxgraph.mxCell[] = [];
+        const childCount: {[key: string]: number} = {};
+        const phaseAWorkList: mxgraph.mxCell[] = [];
+        const phaseBWorkList: mxgraph.mxCell[] = [];
 
+        // Find all Causes & Effects
         let maxPosition = 0;
         for (const node of nodeList) {
             parentCount[node.getId()] = 0;
+            childCount[node.getId()] = 0;
             if (node.edges !== undefined && node.edges !== null) {
                 for (const edge of node.edges) {
                     if (edge.source == node) {
                         parentCount[node.getId()]++;
+                    } else {
+                        childCount[node.getId()]++;
                     }
                 }
             }
             if (parentCount[node.getId()] == 0) {
                 positionTable[node.getId()] = 0;
-                workList.push(node);
+                phaseAWorkList.push(node);
+            }
+            if (childCount[node.getId()] == 0) {
+                phaseBWorkList.push(node);
             }
 
         }
 
-        while (workList.length > 0) {
-            let current = workList.pop();
+        // Phase A: Iterate Back to Front to find the rightmost position
+        // each node can be
+        while (phaseAWorkList.length > 0) {
+            let current = phaseAWorkList.pop();
             if (current.edges === undefined || current.edges === null) {
                 continue;
             }
@@ -71,9 +95,40 @@ export class CEGLayoutTool extends ToolBase {
                     }
                     parentCount[edge.source.getId()]--;
                     if (parentCount[edge.source.getId()] == 0) {
-                        workList.push(edge.source);
+                        phaseAWorkList.push(edge.source);
                     }
                 }
+            }
+        }
+
+        // Phase B: Iterate Front to Back to find the leftmost position each node can be in
+        while (phaseBWorkList.length > 0) {
+            let current = phaseBWorkList.pop();
+            if (current.edges === undefined || current.edges === null) {
+                continue;
+            }
+            if (positionTable[current.getId()] === undefined) {
+                // We have a cycle in the graph...
+                // If the user can't be asked to build a proper tree, we won't layout that
+                return [];
+            }
+
+            let newPosition = -1;
+            // Find the smallest position value of the parents
+            for (const edge of current.edges) {
+                if (edge.source == current) {
+                    childCount[edge.target.getId()]--;
+                    if (childCount[edge.target.getId()] == 0) {
+                        phaseBWorkList.push(edge.target);
+                    }
+                } else {
+                    if (newPosition == -1 || newPosition > positionTable[edge.source.getId()]) {
+                        newPosition = positionTable[edge.source.getId()];
+                    }
+                }
+            }
+            if (newPosition != -1) {
+                positionTable[current.getId()] = newPosition - 1;
             }
         }
 

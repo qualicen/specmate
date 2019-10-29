@@ -12,15 +12,10 @@ import { StepTool } from '../../../tool-pallette/tools/process/step-tool';
 import { ToolBase } from '../../../tool-pallette/tools/tool-base';
 import { ProviderBase } from './provider-base';
 import { mxgraph } from 'mxgraph';
-import { Url } from 'src/app/util/url';
-import { Id } from 'src/app/util/id';
-import { Type } from 'src/app/util/type';
-import { CEGModel } from 'src/app/model/CEGModel';
-import { ValuePair } from './value-pair';
-import { ShapeData, ShapeProvider } from './shape-provider';
-import { VertexProvider } from './vertex-provider';
 import { CEGConnectionTool } from '../../../tool-pallette/tools/ceg/ceg-connection-tool';
 import { CEGDeleteTool } from '../../../tool-pallette/tools/ceg/ceg-delete-tool';
+import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
+import { TranslateService } from '@ngx-translate/core';
 
 const mx: typeof mxgraph = require('mxgraph')({
     mxBasePath: 'mxgraph'
@@ -33,7 +28,9 @@ export class ToolProvider extends ProviderBase {
     constructor(
         private model: IContainer,
         private dataService: SpecmateDataService,
-        private selectedElementService: SelectedElementService) {
+        private selectedElementService: SelectedElementService,
+        private modal: ConfirmationModal,
+        private translate: TranslateService) {
         super(model);
     }
 
@@ -59,7 +56,7 @@ export class ToolProvider extends ProviderBase {
     private createToolsForCEGModel(): void {
         this._tools = [
             new CEGNodeTool(this.dataService, this.selectedElementService, this.model),
-            new CEGLayoutTool(this.dataService, this.selectedElementService, this.model),
+            new CEGLayoutTool(this.dataService, this.selectedElementService, this.model, this.modal, this.translate),
             new CEGConnectionTool(this.dataService, this.selectedElementService, this.model),
             new CEGDeleteTool(this.model, this.dataService, this.selectedElementService)
         ];

@@ -1,10 +1,13 @@
 import { ChangeDetectionStrategy, Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { mxgraph } from 'mxgraph'; // Typings only - no code!
+import { CEGModel } from 'src/app/model/CEGModel';
+import { UndoService } from 'src/app/modules/actions/modules/common-controls/services/undo.service';
 import { IContainer } from '../../../../../../../model/IContainer';
 import { IModelConnection } from '../../../../../../../model/IModelConnection';
 import { IModelNode } from '../../../../../../../model/IModelNode';
 import { Id } from '../../../../../../../util/id';
+import { Type } from '../../../../../../../util/type';
 import { Url } from '../../../../../../../util/url';
 import { SpecmateDataService } from '../../../../../../data/modules/data-service/services/specmate-data.service';
 import { ValidationService } from '../../../../../../forms/modules/validation/services/validation.service';
@@ -15,16 +18,12 @@ import { ElementProvider } from '../providers/properties/element-provider';
 import { NameProvider } from '../providers/properties/name-provider';
 import { ShapeData, ShapeProvider } from '../providers/properties/shape-provider';
 import { ToolProvider } from '../providers/properties/tool-provider';
+import { ValuePair } from '../providers/properties/value-pair';
+import { VertexProvider } from '../providers/properties/vertex-provider';
+import { EditorKeyHandler } from './editor-components/editor-key-handler';
+import { EditorStyle } from './editor-components/editor-style';
 import { ChangeTranslator } from './util/change-translator';
 import { StyleChanger } from './util/style-changer';
-import { UndoService } from 'src/app/modules/actions/modules/common-controls/services/undo.service';
-import { Type } from '../../../../../../../util/type';
-import { CEGModel } from 'src/app/model/CEGModel';
-import { ValuePair } from '../providers/properties/value-pair';
-import { EditorStyle } from './editor-components/editor-style';
-import { EditorKeyHandler } from './editor-components/editor-key-handler';
-import { VertexProvider } from '../providers/properties/vertex-provider';
-import { ScrollbarHandler } from './editor-components/scrollbar-handler';
 
 declare var require: any;
 
@@ -193,8 +192,6 @@ export class GraphicalEditor {
     this.initTools();
     this.initUndoManager();
     this.undoManager.clear();
-
-    // new ScrollbarHandler(this.graph).init();
 
     this.dataService.elementChanged.subscribe((url: string) => {
       const vertices = this.graph.getModel().getChildVertices(this.graph.getDefaultParent());

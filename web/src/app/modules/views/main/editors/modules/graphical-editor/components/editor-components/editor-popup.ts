@@ -63,7 +63,6 @@ export class EditorPopup {
                 } else {
                     StyleChanger.addStyle(cell, this.graph, EditorStyle.ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE);
                 }
-                this.graph.getSelectionModel().clear();
                 this.graph.getModel().endUpdate();
             }, undefined, icon, undefined, undefined);
         }

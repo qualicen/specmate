@@ -24,7 +24,9 @@ import com.specmate.model.testspecification.ParameterAssignment;
 import com.specmate.model.testspecification.ParameterType;
 import com.specmate.model.testspecification.TestCase;
 import com.specmate.model.testspecification.TestParameter;
+import com.specmate.model.testspecification.TestProcedure;
 import com.specmate.model.testspecification.TestSpecification;
+import com.specmate.model.testspecification.TestStep;
 import com.specmate.model.testspecification.TestspecificationFactory;
 import com.specmate.testspecification.internal.generators.ProcessTestCaseGenerator;
 
@@ -57,6 +59,33 @@ public class ProcessModelTestGenerationTest {
 		assertTestCase(testCases,
 				Arrays.asList(Pair.of("step2 outcome", "is present"), Pair.of("decision", "end-condition")));
 
+	}
+	
+	@Test
+	public void testInnerSteps() throws SpecmateException {
+		ProcessesFactory f = ProcessesFactory.eINSTANCE;
+		TestSpecification ts = TestspecificationFactory.eINSTANCE.createTestSpecification();
+		ts.setId("testspec");
+		ts.setName("testspec");
+		Process process = f.createProcess();
+		ts.getContents().add(process);
+		ProcessStart start = createStart("start");
+		ProcessStep step_1 = createStep("step-1", null);
+		ProcessConnection c1 = connect(start, step_1, "con-1", null);
+		ProcessEnd end = createEnd("end");
+		ProcessConnection c2 = connect(step_1, end, "con-2", null);
+		process.getContents().addAll(Arrays.asList(start, step_1, end, c1, c2, ts));
+		//
+		ProcessTestCaseGenerator generator = new ProcessTestCaseGenerator(ts);
+		generator.generate();
+		List<TestCase> testCases = SpecmateEcoreUtil.pickInstancesOf(ts.getContents(), TestCase.class);
+		Assert.assertEquals(1, testCases.size());
+		List<TestProcedure> testProcs = SpecmateEcoreUtil.pickInstancesOf(testCases.get(0).getContents(), TestProcedure.class);
+		Assert.assertEquals(1, testProcs.size());
+		List<TestStep> testSteps = SpecmateEcoreUtil.pickInstancesOf(testProcs.get(0).getContents(), TestStep.class);
+		Assert.assertEquals(1, testSteps.size());
+		TestStep testStep = testSteps.get(0);
+		Assert.assertEquals("step-1", testStep.getName());
 	}
 
 	private void assertParameter(List<TestParameter> parameters, String name, ParameterType type) {

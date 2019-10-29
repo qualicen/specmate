@@ -377,16 +377,17 @@ public class ProcessTestCaseGenerator extends TestCaseGeneratorBase<Process, IMo
 
 			@Override
 			public void consumeProcessStep(ProcessStep step, ProcessConnection outgoingConnection, int vertexNumber) {
-				if (!hasExpectedOutcome(step)) {
-					return;
-				}
 				String description = step.getDescription();
-				AssigmentValues varCond = extractVariableAndConditionFromExpression(step.getExpectedOutcome());
-				String parameterName = getCountingParameterName(seenParameterNames, varCond.name);
-				TestParameter testParameter = testParameters.get(parameterName);
-
-				createTestStep(makeAction(step), makeExpectedOutcome(step, outgoingConnection), vertexNumber, procedure,
-						testParameter, description);
+				String expectedOutcome = "";
+				TestParameter testParameter = null;
+				if (hasExpectedOutcome(step)) {
+					AssigmentValues varCond = extractVariableAndConditionFromExpression(step.getExpectedOutcome());
+					String parameterName = getCountingParameterName(seenParameterNames, varCond.name);
+					testParameter = testParameters.get(parameterName);
+					expectedOutcome = makeExpectedOutcome(step, outgoingConnection);
+				}
+				createTestStep(makeAction(step), expectedOutcome, vertexNumber, procedure, testParameter, description);
+				
 			}
 		});
 		return procedure;

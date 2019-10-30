@@ -125,5 +125,9 @@ export class Config {
     public static ERROR_INVALID_NAME = 'Invalid character in name.';
     // Number of elements to load at each step in the project explorer
     public static ELEMENT_CHUNK_SIZE = 100;
+
+
+    public static readonly CEG_LAYOUT_CLEARANCE_X = 100;
+    public static readonly CEG_LAYOUT_CLEARANCE_Y = 50;
 }
 

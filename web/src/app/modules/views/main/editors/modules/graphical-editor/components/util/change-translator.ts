@@ -17,7 +17,6 @@ import { ToolBase } from '../../../tool-pallette/tools/tool-base';
 import { ValuePair } from '../../providers/properties/value-pair';
 import { Type } from 'src/app/util/type';
 import { CEGNode } from 'src/app/model/CEGNode';
-import { type } from 'os';
 
 
 declare var require: any;

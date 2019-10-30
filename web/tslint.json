@@ -9,7 +9,8 @@
         ],
         "indent": [
             true,
-            "spaces"
+            "spaces",
+            4
         ],
         "eofline": true,
         "no-duplicate-variable": true,
@@ -33,6 +34,7 @@
             "avoid-escape"
         ],
         "semicolon": [true, "always"],
+        "strict-boolean-expressions": true,
         "typedef-whitespace": [
             true,
             {
@@ -58,6 +60,9 @@
             "check-operator",
             "check-separator",
             "check-type"
-        ]
+        ],
+        "no-tautology-expression": true,
+        "prefer-const": true,
+        "align": [true, "parameters", "statements"]
     }
 }

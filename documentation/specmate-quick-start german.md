@@ -150,9 +150,9 @@ Es muss nur ein einziger direkter Vorgänger erfüllt werden, wenn der Typ eines
 
 
 ### Modellierung mit Prozessmodellen
-Um Prozessmodelle zu modellieren öffnen Sie den zugehörigen Editor. 
+Um Prozessmodelle zu modellieren, öffnen Sie den zugehörigen Editor. 
 Mit dem *Schritt*-Werkzeug können Sie dem Modell eine Aktion hinzufügen. Jedes Modell muss einen Startknoten und mindestens einen Endknoten haben.
-Je nachdem, welchen Knotentyp Sie anlegen möchten, wählen Sie aus der Toolbox entweder das *Start* oder das *Ende* Werkzeug.
+Je nachdem, welchen Knotentyp Sie anlegen möchten, wählen Sie aus der Toolbox entweder das *Start*- oder das *Ende*-Werkzeug.
 
 Um die Komplexität des Modells zu erhöhen, können Sie einen Entscheidungsknoten hinzufügen, indem Sie das Werkzeug *Entscheidung* auswählen.  
 Um zwei Elemente zu verbinden, müssen Sie das Werkzeug *Verbindung* auswählen und die Knoten auswählen, die Sie verbinden möchten. 

@@ -136,6 +136,7 @@
 	"hideGrid": "Hilfslinien ausblenden",
 	"inactivityLoggedOut": "Sie wurden automatisch abgemeldet.",
 	"invalidCharacter": "Ungültige Zeichen: , ; |",
+	"layoutErrorCircle": "Das Modell konnte nicht geordnet werden: Der Graph enthält einen Kreis.",
 	"library": "Bibliothek",
 	"loadMore": "Weitere laden",
 	"log": {
@@ -224,6 +225,7 @@
 		"addProcessConnection": "Verbindung",
 		"addStart": "Start",
 		"addStep": "Schritt",
+		"autoLayout": "Auto-Layout",
 		"delete": "Löschen",
 		"move": "Verschieben",
 		"select": "Auswählen"

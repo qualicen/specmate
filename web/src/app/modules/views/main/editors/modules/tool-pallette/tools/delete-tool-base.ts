@@ -13,6 +13,7 @@ export abstract class DeleteToolBase extends TypeAwareToolBase {
     public style: string = undefined;
     public isVertexTool: boolean = undefined;
     public isDeleteTool = true;
+    public isHidden = true;
 
     private graphTransformer: GraphTransformer;
 

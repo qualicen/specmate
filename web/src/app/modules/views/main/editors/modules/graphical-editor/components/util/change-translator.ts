@@ -16,10 +16,10 @@ import { DeleteToolBase } from '../../../tool-pallette/tools/delete-tool-base';
 import { ToolBase } from '../../../tool-pallette/tools/tool-base';
 import { ConverterBase } from '../../converters/converter-base';
 import { NodeNameConverterProvider } from '../../providers/conversion/node-name-converter-provider';
+import { ShapeProvider } from '../../providers/properties/shape-provider';
 import { ToolProvider } from '../../providers/properties/tool-provider';
 import { ValuePair } from '../../providers/properties/value-pair';
 import { EditorStyle } from '../editor-components/editor-style';
-import { ShapeProvider } from '../../providers/properties/shape-provider';
 import { StyleChanger } from './style-changer';
 
 
@@ -193,8 +193,8 @@ export class ChangeTranslator {
             // Keep change.cell to avoid having a parent a child value
             element['variable'] = change.cell.value;
         }
-        element['x'] = cell.geometry.x;
-        element['y'] = cell.geometry.y;
+        element['x'] = Math.max(0, cell.geometry.x);
+        element['y'] = Math.max(0, cell.geometry.y);
         element['width'] = cell.geometry.width;
         element['height'] = cell.geometry.height;
         await this.dataService.updateElement(element, true, Id.uuid);

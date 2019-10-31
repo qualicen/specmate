@@ -207,12 +207,12 @@ export class GraphicalEditor {
     this.dataService.elementChanged.subscribe((url: string) => {
       const cells = this.graph.getModel().getChildCells(this.graph.getDefaultParent());
       const cell = cells.find(vertex => vertex.id === url);
-      const node = this.nodes.find(node => node.url === url);
-      if (cell === undefined || node === undefined) {
+      const modelElement = this.contents.find(node => node.url === url);
+      if (cell === undefined || modelElement === undefined) {
         return;
       }
 
-      this.changeTranslator.retranslate(node, this.graph, cell);
+      this.changeTranslator.retranslate(modelElement, this.graph, cell);
     });
   }
 
@@ -400,7 +400,7 @@ export class GraphicalEditor {
     this.toolProvider = new ToolProvider(model, this.dataService, this.selectedElementService);
     this.shapeProvider = new ShapeProvider(model);
     this.nameProvider = new NameProvider(model, this.translate);
-    this.changeTranslator = new ChangeTranslator(model, this.dataService, this.toolProvider);
+    this.changeTranslator = new ChangeTranslator(model, this.dataService, this.toolProvider, this.shapeProvider);
     this._model = model;
   }
 

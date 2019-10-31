@@ -19,6 +19,8 @@ import { NodeNameConverterProvider } from '../../providers/conversion/node-name-
 import { ToolProvider } from '../../providers/properties/tool-provider';
 import { ValuePair } from '../../providers/properties/value-pair';
 import { EditorStyle } from '../editor-components/editor-style';
+import { ShapeProvider } from '../../providers/properties/shape-provider';
+import { StyleChanger } from './style-changer';
 
 
 declare var require: any;
@@ -35,7 +37,11 @@ export class ChangeTranslator {
     private nodeNameConverter: ConverterBase<IContainer, string | ValuePair>;
     public preventDataUpdates = false;
 
-    constructor(private model: CEGModel | Process, private dataService: SpecmateDataService, private toolProvider: ToolProvider) {
+    constructor(private model: CEGModel | Process,
+        private dataService: SpecmateDataService,
+        private toolProvider: ToolProvider,
+        private shapeProvider: ShapeProvider) {
+
         this.nodeNameConverter = this.nodeNameConverter = new NodeNameConverterProvider(this.model).nodeNameConverter;
         this.parentComponents = {};
     }
@@ -316,13 +322,12 @@ export class ChangeTranslator {
             }
 
         } else {
-            if (value === cell.value) {
-                return;
-            }
-
             graph.getModel().beginUpdate();
             try {
-                graph.model.setValue(cell, value);
+                if (value === cell.value) {
+                    graph.model.setValue(cell, value);
+                }
+                StyleChanger.setStyle(cell, graph, this.shapeProvider.getStyle(changedElement));
             }
             finally {
                 graph.getModel().endUpdate();

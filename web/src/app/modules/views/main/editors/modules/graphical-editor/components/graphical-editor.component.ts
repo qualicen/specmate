@@ -200,7 +200,7 @@ export class GraphicalEditor {
     this.initTools();
     this.initUndoManager();
 
-    this.popup = new EditorPopup(this.graph, this.dataService);
+    this.popup = new EditorPopup(this.graph, this.translate, this.contents);
     this.popup.init();
 
     this.undoManager.clear();

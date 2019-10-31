@@ -5,6 +5,8 @@ import { EditorStyle } from './editor-style';
 import { SpecmateDataService } from 'src/app/modules/data/modules/data-service/services/specmate-data.service';
 import { Type } from 'src/app/util/type';
 import { replaceClass } from '../util/css-utils';
+import { TranslateService } from '@ngx-translate/core';
+import { IContainer } from 'src/app/model/IContainer';
 
 declare var require: any;
 
@@ -14,7 +16,7 @@ const mx: typeof mxgraph = require('mxgraph')({
 
 
 export class EditorPopup {
-    constructor(private graph: mxgraph.mxGraph, private dataService: SpecmateDataService) { }
+    constructor(private graph: mxgraph.mxGraph, private dataService: SpecmateDataService, private translate: TranslateService) { }
 
     public init(): void {
 
@@ -46,7 +48,8 @@ export class EditorPopup {
             return;
         }
 
-        menu.addItem('Delete', null, () => {
+        const deleteText = this.translate.instant('delete');
+        menu.addItem(deleteText, null, () => {
             this.graph.removeCells([cell]);
         }, undefined, undefined, undefined, undefined);
 
@@ -56,7 +59,8 @@ export class EditorPopup {
             const connection = element as CEGConnection;
             const icon = connection.negate ? 'fa fa-check' : 'fa fa-circle-o';
 
-            menu.addItem('Negate', null, async () => {
+            const negateText = this.translate.instant('negated');
+            menu.addItem(negateText, null, async () => {
                 this.graph.getModel().beginUpdate();
                 if (connection.negate) {
                     StyleChanger.removeStyle(cell, this.graph, EditorStyle.ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE);
@@ -67,6 +71,5 @@ export class EditorPopup {
             }, undefined, icon, undefined, undefined);
         }
     }
-
 }
 

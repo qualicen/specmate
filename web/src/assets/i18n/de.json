@@ -162,6 +162,8 @@
 	"navigateTo": "Navigiere nach \"{{name}}\"",
 	"navigated": "Navigiert",
 	"navigationWasNotPerformed": "Navigation wurde nicht ausgeführt",
+	"negate": "",
+	"negated": "Negiert",
 	"noCommandsLeft": "Keine Befehle übrig",
 	"noElementSelected": "Kein Element ausgewählt",
 	"noFoldersFound": "Keine Unterordner gefunden",

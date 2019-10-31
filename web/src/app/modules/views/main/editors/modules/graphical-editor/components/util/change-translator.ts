@@ -320,7 +320,6 @@ export class ChangeTranslator {
                     }
                 }
             }
-
         } else {
             graph.getModel().beginUpdate();
             try {

@@ -5,6 +5,8 @@
     border: 2px dotted white
 }
 
+
+
 .editor>svg {
     background-color: #fff;
     min-width: 100%;
@@ -25,6 +27,10 @@
 
 .zoom-indicator {
     width: 60px;
+}
+
+.editor-container:focus {
+    border: none !important;
 }
 
 button {

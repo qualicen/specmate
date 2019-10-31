@@ -16,7 +16,7 @@ const mx: typeof mxgraph = require('mxgraph')({
 
 
 export class EditorPopup {
-    constructor(private graph: mxgraph.mxGraph, private dataService: SpecmateDataService, private translate: TranslateService) { }
+    constructor(private graph: mxgraph.mxGraph, private contents: IContainer[], private translate: TranslateService) { }
 
     public init(): void {
 
@@ -48,12 +48,20 @@ export class EditorPopup {
             return;
         }
 
+        let element: IContainer = undefined;
+        let currentCell = cell;
+        while (element === undefined) {
+            element = this.contents.find(element => element.url === currentCell.id);
+            currentCell = currentCell.parent;
+        }
+
+        currentCell = this.graph.getModel().getChildCells(this.graph.getDefaultParent()).find(graphCell => graphCell.id === element.url);
+
         const deleteText = this.translate.instant('delete');
         menu.addItem(deleteText, null, () => {
-            this.graph.removeCells([cell]);
+            this.graph.removeCells([currentCell]);
         }, undefined, undefined, undefined, undefined);
 
-        const element = await this.dataService.readElement(cell.id, true);
         if (Type.is(element, CEGConnection)) {
 
             const connection = element as CEGConnection;
@@ -72,4 +80,3 @@ export class EditorPopup {
         }
     }
 }
-

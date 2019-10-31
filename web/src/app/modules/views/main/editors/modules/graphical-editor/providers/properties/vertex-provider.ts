@@ -88,7 +88,6 @@ export class VertexProvider extends ProviderBase {
                 cell.valueChanged = function(newValue: any) {
                     let sel = optionElements.find(e => e.value === newValue);
                     if (sel !== undefined) {
-                        console.log(sel);
                         sel.setAttribute('selected', 'true');
                     }
                     mx.mxCell.prototype.valueChanged.bind(cell)(newValue);

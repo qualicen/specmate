@@ -10,6 +10,7 @@ export abstract class ConnectionToolBase<T extends IModelConnection> extends Cre
 
     public color = 'primary';
     public isVertexTool = false;
+    public isHidden = true;
 
     public source: IModelNode;
     public target: IModelNode;

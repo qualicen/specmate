@@ -10,6 +10,7 @@ export abstract class CreateNodeToolBase<T extends IModelNode> extends CreateToo
 
     public color = 'primary';
     public isVertexTool = true;
+    public isHidden = false;
 
     public coords: { x: number, y: number };
     public name: string;

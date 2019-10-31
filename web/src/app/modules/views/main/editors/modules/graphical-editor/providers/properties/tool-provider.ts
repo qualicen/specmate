@@ -1,8 +1,7 @@
 import { IContainer } from '../../../../../../../../model/IContainer';
 import { SpecmateDataService } from '../../../../../../../data/modules/data-service/services/specmate-data.service';
 import { SelectedElementService } from '../../../../../../side/modules/selected-element/services/selected-element.service';
-import { CEGConnectionTool } from '../../../tool-pallette/tools/ceg/ceg-connection-tool';
-import { CEGDeleteTool } from '../../../tool-pallette/tools/ceg/ceg-delete-tool';
+import { CEGLayoutTool } from '../../../tool-pallette/tools/ceg/ceg-layout-tool';
 import { CEGNodeTool } from '../../../tool-pallette/tools/ceg/ceg-node-tool';
 import { DecisionTool } from '../../../tool-pallette/tools/process/decision-tool';
 import { EndTool } from '../../../tool-pallette/tools/process/end-tool';
@@ -12,6 +11,15 @@ import { StartTool } from '../../../tool-pallette/tools/process/start-tool';
 import { StepTool } from '../../../tool-pallette/tools/process/step-tool';
 import { ToolBase } from '../../../tool-pallette/tools/tool-base';
 import { ProviderBase } from './provider-base';
+import { mxgraph } from 'mxgraph';
+import { CEGConnectionTool } from '../../../tool-pallette/tools/ceg/ceg-connection-tool';
+import { CEGDeleteTool } from '../../../tool-pallette/tools/ceg/ceg-delete-tool';
+import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
+import { TranslateService } from '@ngx-translate/core';
+
+const mx: typeof mxgraph = require('mxgraph')({
+    mxBasePath: 'mxgraph'
+});
 
 export class ToolProvider extends ProviderBase {
 
@@ -20,7 +28,9 @@ export class ToolProvider extends ProviderBase {
     constructor(
         private model: IContainer,
         private dataService: SpecmateDataService,
-        private selectedElementService: SelectedElementService) {
+        private selectedElementService: SelectedElementService,
+        private modal: ConfirmationModal,
+        private translate: TranslateService) {
         super(model);
     }
 
@@ -46,6 +56,7 @@ export class ToolProvider extends ProviderBase {
     private createToolsForCEGModel(): void {
         this._tools = [
             new CEGNodeTool(this.dataService, this.selectedElementService, this.model),
+            new CEGLayoutTool(this.dataService, this.selectedElementService, this.model, this.modal, this.translate),
             new CEGConnectionTool(this.dataService, this.selectedElementService, this.model),
             new CEGDeleteTool(this.model, this.dataService, this.selectedElementService)
         ];

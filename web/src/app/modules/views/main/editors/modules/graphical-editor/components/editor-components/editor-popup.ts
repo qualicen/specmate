@@ -16,6 +16,7 @@ const mx: typeof mxgraph = require('mxgraph')({
 
 
 export class EditorPopup {
+
     constructor(private graph: mxgraph.mxGraph, private contents: IContainer[], private translate: TranslateService) { }
 
     public init(): void {
@@ -25,18 +26,6 @@ export class EditorPopup {
         this.graph.popupMenuHandler.isSelectOnPopup = function (me) {
             return mx.mxEvent.isMouseEvent(me.getEvent());
         };
-
-        const mxPopupMenuShowMenu = mx.mxPopupMenu.prototype.showMenu;
-        mx.mxPopupMenuHandler.prototype.showMenu = function () {
-            mxPopupMenuShowMenu.apply(this, arguments);
-
-            const containerElem = this.div as HTMLElement;
-            containerElem.classList.remove('mxPopupMenu');
-            containerElem.classList.add('graphPopupMenu');
-
-            replaceClass('mxPopupMenu', 'graphPopupMenu');
-        };
-
 
         // Installs context menu
         this.graph.popupMenuHandler['factoryMethod'] = this.provideMenu.bind(this);
@@ -60,7 +49,7 @@ export class EditorPopup {
         const deleteText = this.translate.instant('delete');
         menu.addItem(deleteText, null, () => {
             this.graph.removeCells([currentCell]);
-        }, undefined, undefined, undefined, undefined);
+        }, undefined, 'fa fa-trash-o', undefined, undefined);
 
         if (Type.is(element, CEGConnection)) {
 

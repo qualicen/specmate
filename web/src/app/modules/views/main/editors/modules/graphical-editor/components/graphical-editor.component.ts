@@ -332,6 +332,7 @@ export class GraphicalEditor {
 
   private repaintGrid: () => void;
   private forceRedraw = false;
+  private gridColor = '#8c8c8c';
 
   private async initGraphicalGrid(): Promise<void> {
     this.graph.setPanning(true);
@@ -409,7 +410,7 @@ export class GraphicalEditor {
 
             // Draws the actual grid
             if (this.isGridShown) {
-              ctx.strokeStyle = '#f6f6f6';
+              ctx.strokeStyle = this.gridColor;
               ctx.beginPath();
 
               for (let x = xs; x <= xe; x += stepping) {

@@ -14,7 +14,7 @@ import { NodeNameConverterProvider } from '../../providers/conversion/node-name-
 import { DeleteToolBase } from '../../../tool-pallette/tools/delete-tool-base';
 import { ToolProvider } from '../../providers/properties/tool-provider';
 import { ToolBase } from '../../../tool-pallette/tools/tool-base';
-import { ValuePair } from '../../providers/properties/value-pair';
+import { CEGmxModelNode } from '../../providers/properties/ceg-mx-model-node';
 import { Type } from 'src/app/util/type';
 import { CEGNode } from 'src/app/model/CEGNode';
 
@@ -30,7 +30,7 @@ export class ChangeTranslator {
 
     private contents: IContainer[];
     private parentComponents: {[key: string]: IContainer};
-    private nodeNameConverter: ConverterBase<IContainer, string|ValuePair>;
+    private nodeNameConverter: ConverterBase<IContainer, string|CEGmxModelNode>;
     public preventDataUpdates = false;
 
     constructor(private model: CEGModel | Process, private dataService: SpecmateDataService, private toolProvider: ToolProvider) {
@@ -147,7 +147,7 @@ export class ChangeTranslator {
             }
             let value = cell.value;
             if (Type.is(element, CEGNode)) {
-                value = new ValuePair(cell.children[0].value, cell.children[1].value);
+                value = new CEGmxModelNode(cell.children[0].value, cell.children[1].value, cell.children[2].value);
             }
             const elementValues = this.nodeNameConverter.convertFrom(value, element);
             for (const key in elementValues) {
@@ -268,7 +268,7 @@ export class ChangeTranslator {
     public retranslate(changedElement: IContainer, graph: mxgraph.mxGraph, cell: mxgraph.mxCell) {
         this.preventDataUpdates = true;
         let value = this.nodeNameConverter ? this.nodeNameConverter.convertTo(changedElement) : changedElement.name;
-        if (value instanceof ValuePair) {
+        if (value instanceof CEGmxModelNode) {
             for (const key in value) {
                 if (value.hasOwnProperty(key)) {
                     const val = value[key];

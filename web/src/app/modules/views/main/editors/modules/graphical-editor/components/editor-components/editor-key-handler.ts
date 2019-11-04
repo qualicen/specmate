@@ -46,7 +46,8 @@ export class EditorKeyHandler {
         keyHandler.bindControlKey(67, (evt: KeyboardEvent) => {
             EditorKeyHandler.stopEvent(evt);
             if (graph.isEnabled()) {
-                mx.mxClipboard.copy(graph, graph.getSelectionCells());
+                const sel = EditorKeyHandler.getFilteredSelectedCells(graph);
+                mx.mxClipboard.copy(graph, sel);
             }
         });
 
@@ -54,7 +55,8 @@ export class EditorKeyHandler {
         keyHandler.bindControlKey(86, (evt: KeyboardEvent) => {
             EditorKeyHandler.stopEvent(evt);
             if (graph.isEnabled()) {
-                mx.mxClipboard.paste(graph);
+                const cell = mx.mxClipboard.paste(graph);
+                console.log(cell);
             }
         });
 
@@ -62,7 +64,8 @@ export class EditorKeyHandler {
         keyHandler.bindControlKey(88, (evt: KeyboardEvent) => {
             EditorKeyHandler.stopEvent(evt);
             if (graph.isEnabled()) {
-                mx.mxClipboard.copy(graph, graph.getSelectionCells());
+                const sel = EditorKeyHandler.getFilteredSelectedCells(graph);
+                mx.mxClipboard.copy(graph, sel);
                 EditorKeyHandler.deleteSelectedCells(graph);
             }
         });
@@ -76,8 +79,18 @@ export class EditorKeyHandler {
 
     private static deleteSelectedCells(graph: mxgraph.mxGraph): void {
         if (graph.isEnabled()) {
-          const selectedCells = graph.getSelectionCells();
+          const selectedCells = EditorKeyHandler.getFilteredSelectedCells(graph);
           graph.removeCells(selectedCells, true);
         }
-      }
+    }
+
+    private static getFilteredSelectedCells(graph: mxgraph.mxGraph): mxgraph.mxCell[] {
+        let cells = graph.getSelectionCells();
+        let parent = graph.getDefaultParent();
+
+        cells = cells.filter((cell: mxgraph.mxCell) => {
+            return cell.getParent() === parent;
+        });
+        return cells;
+    }
 }

@@ -31,7 +31,7 @@ export class VertexProvider extends ProviderBase {
         const vertex = this.graph.insertVertex(parent, url, value, x, y, width, height, style);
         const l1 = this.graph.insertVertex(vertex, url + '/variable' , data.variable, 0.5, 0.25, 0, 0, null, true);
         const l2 = this.graph.insertVertex(vertex, url + '/condition' , data.condition, 0.5, 0.5, 0, 0, null, true);
-        const l3 = this.graph.insertVertex(vertex, url + '/type', '', 0.5, 0.75, 0, 0, null, true);
+        const l3 = this.graph.insertVertex(vertex, url + '/type', data.type, 0.5, 0.75, 0, 0, null, true);
         l1.isConnectable = () => false;
         l2.isConnectable = () => false;
         l3.isConnectable = () => false;
@@ -77,6 +77,7 @@ export class VertexProvider extends ProviderBase {
                     optionElem.setAttribute('value', option);
                     if (option === cell.getValue()) {
                         optionElem.setAttribute('selected', 'true');
+                        dropdown.value = option;
                     }
                     dropdown.appendChild(optionElem);
                     optionElements.push(optionElem);

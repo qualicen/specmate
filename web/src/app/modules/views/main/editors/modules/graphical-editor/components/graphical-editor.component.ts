@@ -217,6 +217,7 @@ export class GraphicalEditor {
         }
     }
   }
+
   private makeVertexTool(tool: ToolBase) {
       const onDrop = (graph: mxgraph.mxGraph, evt: MouseEvent, cell: mxgraph.mxCell) => {
           graph.stopEditing(false);
@@ -325,6 +326,13 @@ export class GraphicalEditor {
     this.graph.isCellResizable = function (cell) {
       let geo = this.model.getGeometry(cell);
       return geo == null || !geo.relative;
+    };
+
+    this.graph.getTooltipForCell = (cell) => {
+      if (cell.getId().endsWith('/type')) {
+        return '';
+      }
+      return mx.mxGraph.prototype.getTooltipForCell.bind(this.graph)(cell);
     };
     this.vertexPrivider.initCEGRenderer(this.graph);
   }

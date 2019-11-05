@@ -4,7 +4,6 @@ import { DuplicateIOVariableValidator } from './ceg/duplicate-io-variable-valida
 import { DuplicateNodeValidator } from './ceg/duplicate-node-validator';
 import { EmptyModelValidator } from './ceg/empty-model-validator';
 import { NodeCycleValidator } from './ceg/node-cycle-validator';
-import { SingleIndegreeNodesValidator } from './ceg/single-indegree-nodes-validator';
 import { SingleNodesValidator } from './ceg/single-nodes-validator';
 import { DecisionMultipleOutgoingConnectionsValidator } from './process/decision-multiple-outgoing-connections-validator';
 import { EndNodeNoOutgoingConnectionValidator } from './process/end-node-no-outgoing-connection-validator';
@@ -16,6 +15,7 @@ import { NodeNoOutgoingValidator } from './process/node-no-outgoing-validator';
 import { NodeSingleOutgoingConnectionValidator } from './process/node-single-outgoing-connection-validator';
 import { StartNodeNoIncomingConnectionValidator } from './process/start-node-no-incoming-connection-validator';
 import { StartNodeValidator } from './process/start-node-validator';
+import { InvalidNodeVariableValidator } from './ceg/invalid-node-variable-validator';
 
 @NgModule({
   imports: [
@@ -35,7 +35,6 @@ import { StartNodeValidator } from './process/start-node-validator';
     DuplicateIOVariableValidator,
     EmptyModelValidator,
     SingleNodesValidator,
-    SingleIndegreeNodesValidator,
     EndNodeValidator,
     EndNodeNoOutgoingConnectionValidator,
     HasStepsValidator,
@@ -45,7 +44,8 @@ import { StartNodeValidator } from './process/start-node-validator';
     NodeNoOutgoingValidator,
     StartNodeValidator,
     StartNodeNoIncomingConnectionValidator,
-    DecisionMultipleOutgoingConnectionsValidator
+    DecisionMultipleOutgoingConnectionsValidator,
+    InvalidNodeVariableValidator
   ],
   bootstrap: [
     // COMPONENTS THAT ARE BOOTSTRAPPED HERE

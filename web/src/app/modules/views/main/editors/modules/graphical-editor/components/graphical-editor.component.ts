@@ -207,6 +207,7 @@ export class GraphicalEditor {
     await this.initGraphicalModel();
     await this.initTools();
     this.undoManager.clear();
+
     this.dataService.elementChanged.subscribe((url: string) => {
       const cells = this.graph.getModel().getChildCells(this.graph.getDefaultParent());
       const cell = cells.find(vertex => vertex.id === url);

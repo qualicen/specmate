@@ -33,8 +33,8 @@ const mx: typeof mxgraph = require('mxgraph')({
 export class ChangeTranslator {
 
     private contents: IContainer[];
-    private parentComponents: {[key: string]: IContainer};
-    private nodeNameConverter: ConverterBase<IContainer, string|CEGmxModelNode>;
+    private parentComponents: { [key: string]: IContainer };
+    private nodeNameConverter: ConverterBase<IContainer, string | CEGmxModelNode>;
     public preventDataUpdates = false;
 
     constructor(private model: CEGModel | Process,

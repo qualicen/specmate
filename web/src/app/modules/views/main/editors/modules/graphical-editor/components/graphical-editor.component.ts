@@ -221,45 +221,45 @@ export class GraphicalEditor {
 
   public async initTools(): Promise<void> {
     for (const tool of this.toolProvider.tools) {
-        tool.setGraph(this.graph);
-        if (tool.isVertexTool) {
-            this.makeVertexTool(tool);
-        } else if (!tool.isHidden) {
-            this.makeClickTool(tool);
-        }
+      tool.setGraph(this.graph);
+      if (tool.isVertexTool) {
+        this.makeVertexTool(tool);
+      } else if (!tool.isHidden) {
+        this.makeClickTool(tool);
+      }
     }
   }
 
   private makeVertexTool(tool: ToolBase) {
-      const onDrop = (graph: mxgraph.mxGraph, evt: MouseEvent, cell: mxgraph.mxCell) => {
-          graph.stopEditing(false);
-          const initialData: ShapeData = this.shapeProvider.getInitialData(tool.style);
-          const coords = graph.getPointForEvent(evt);
-          const vertexUrl = Url.build([this.model.url, Id.uuid]);
-          graph.startEditing(evt);
-          try {
-              if (Type.is(this.model, CEGModel)) {
-              this.vertexPrivider.provideCEGNode(vertexUrl, coords.x, coords.y,
-                  initialData.size.width, initialData.size.height, initialData.text as CEGmxModelNode);
-              } else {
-              graph.insertVertex(
-                  graph.getDefaultParent(),
-                  vertexUrl,
-                  initialData.text,
-                  coords.x, coords.y,
-                  initialData.size.width, initialData.size.height,
-                  initialData.style);
-              }
-          }
-          finally {
-              graph.stopEditing(true);
-          }
-      };
-      mx.mxUtils.makeDraggable(document.getElementById(tool.elementId), this.graph, onDrop);
+    const onDrop = (graph: mxgraph.mxGraph, evt: MouseEvent, cell: mxgraph.mxCell) => {
+      graph.stopEditing(false);
+      const initialData: ShapeData = this.shapeProvider.getInitialData(tool.style);
+      const coords = graph.getPointForEvent(evt);
+      const vertexUrl = Url.build([this.model.url, Id.uuid]);
+      graph.startEditing(evt);
+      try {
+        if (Type.is(this.model, CEGModel)) {
+          this.vertexPrivider.provideCEGNode(vertexUrl, coords.x, coords.y,
+            initialData.size.width, initialData.size.height, initialData.text as CEGmxModelNode);
+        } else {
+          graph.insertVertex(
+            graph.getDefaultParent(),
+            vertexUrl,
+            initialData.text,
+            coords.x, coords.y,
+            initialData.size.width, initialData.size.height,
+            initialData.style);
+        }
+      }
+      finally {
+        graph.stopEditing(true);
+      }
+    };
+    mx.mxUtils.makeDraggable(document.getElementById(tool.elementId), this.graph, onDrop);
   }
 
   private makeClickTool(tool: ToolBase) {
-      document.getElementById(tool.elementId).addEventListener('click', (evt) => tool.perform(), false);
+    document.getElementById(tool.elementId).addEventListener('click', (evt) => tool.perform(), false);
   }
 
   private initUndoManager(): void {
@@ -358,7 +358,7 @@ export class GraphicalEditor {
   private async initGraphicalGrid(): Promise<void> {
     this.graph.setPanning(true);
     const graph = this.graph;
-    (function() {
+    (function () {
       const canvas = document.createElement('canvas');
       canvas.style.position = 'absolute';
       canvas.style.top = '0px';
@@ -370,9 +370,9 @@ export class GraphicalEditor {
 
       // Modify event filtering to accept canvas as container
       let mxGraphViewIsContainerEvent = mx.mxGraphView.prototype.isContainerEvent;
-      mx.mxGraphView.prototype.isContainerEvent = function(evt) {
+      mx.mxGraphView.prototype.isContainerEvent = function (evt) {
         return mxGraphViewIsContainerEvent.apply(this, arguments) ||
-        mx.mxEvent.getSource(evt) == canvas;
+          mx.mxEvent.getSource(evt) == canvas;
       };
 
       let s = 0;
@@ -380,7 +380,7 @@ export class GraphicalEditor {
       let tr = new mx.mxPoint();
       let w = 0;
       let h = 0;
-      this.repaintGrid = function() {
+      this.repaintGrid = function () {
         if (ctx != null) {
           let bounds = graph.getGraphBounds();
           let width = Math.max(bounds.x + bounds.width, graph.container.clientWidth);
@@ -459,7 +459,7 @@ export class GraphicalEditor {
 
       const repaint = this.repaintGrid;
       let mxGraphViewValidateBackground = mx.mxGraphView.prototype.validateBackground;
-      mx.mxGraphView.prototype.validateBackground = function() {
+      mx.mxGraphView.prototype.validateBackground = function () {
         mxGraphViewValidateBackground.apply(this, arguments);
         repaint();
       };

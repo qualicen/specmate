@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import { SpecmateDataService } from '../../../../data/modules/data-service/services/specmate-data.service';
 import { ViewControllerService } from '../../../../views/controller/modules/view-controller/services/view-controller.service';
-import { ConfirmationModal } from '../../modals/services/confirmation-modal.service';
 import { LoadingModalService } from '../../modals/services/loading-model-service';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
@@ -36,7 +35,8 @@ export class OperationMonitor implements OnDestroy {
 
         this.isLoading = this.dataService.isLoading;
         this.dataServiceSubscription = 
-            this.dataService.stateChanged.pipe().debounceTime(500).subscribe(() => {
+            // show loading modal after 1,5 seconds
+            this.dataService.stateChanged.pipe().debounceTime(1500).subscribe(() => {
             if(this.dataService.isLoading){
                 this.loadingModal.open();
             } else {

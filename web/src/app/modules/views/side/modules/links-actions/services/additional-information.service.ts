@@ -11,6 +11,7 @@ import { Url } from '../../../../../../util/url';
 import { SpecmateDataService } from '../../../../../data/modules/data-service/services/specmate-data.service';
 import { NavigatorService } from '../../../../../navigation/modules/navigator/services/navigator.service';
 import { AuthenticationService } from '../../../../main/authentication/modules/auth/services/authentication.service';
+import { Folder } from '../../../../../../model/Folder';
 
 @Injectable()
 export class AdditionalInformationService {
@@ -39,7 +40,7 @@ export class AdditionalInformationService {
     }
 
     private async loadTestSpecifications(): Promise<void> {
-        if (!this.canHaveTestSpecifications || !this.requirement) {
+        if (!this.canHaveTestSpecifications) {
             return;
         }
         let baseUrl = '';
@@ -98,11 +99,11 @@ export class AdditionalInformationService {
     }
 
     public get canHaveTestSpecifications(): boolean {
-        return Type.is(this.element, Requirement) || this.isModel(this.element);
+        return Type.is(this.element, Requirement) || this.isModel(this.element) || Type.is(this.element, Folder);
     }
 
     public get canGenerateTestSpecifications(): boolean {
-        return this.element && ((this.isModel(this.element) && this.requirement !== undefined) || Type.is(this.element, Requirement));
+        return this.element && (this.isModel(this.element) || Type.is(this.element, Requirement) || Type.is(this.element, Folder));
     }
 
     public get canAddTestSpecifications(): boolean {

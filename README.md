@@ -7,9 +7,11 @@
     - bndtools 4.2
 4. From the update site http://download.eclipse.org/acceleo/updates/releases/3.7, install Acceleo
 5. Install node js version 10
-6. In the folder web, run npm run init.
+6. In the folder web, `run npm run init`.
 7. Import all projects in the bundles folder into your Eclipse workspace
-8. Open specmate-std-env/dev-specmate-all.bndrun and hit the run button
+8. In the folder web, `run npm run build-dev`.
+9. Refresh the specmate-ui-core project. 
+10. Open specmate-std-env/dev-specmate-all.bndrun and hit the run button
 
 ## Developing the GUI
 

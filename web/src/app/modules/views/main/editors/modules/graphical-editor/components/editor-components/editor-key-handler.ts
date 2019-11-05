@@ -56,7 +56,6 @@ export class EditorKeyHandler {
             EditorKeyHandler.stopEvent(evt);
             if (graph.isEnabled()) {
                 const cell = mx.mxClipboard.paste(graph);
-                console.log(cell);
             }
         });
 

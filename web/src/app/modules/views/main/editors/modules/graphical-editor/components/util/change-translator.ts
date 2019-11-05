@@ -1,22 +1,26 @@
-import { CEGModel } from '../../../../../../../../model/CEGModel';
-import { Process } from '../../../../../../../../model/Process';
 import { mxgraph } from 'mxgraph';
+import { CEGConnection } from 'src/app/model/CEGConnection';
+import { CEGNode } from 'src/app/model/CEGNode';
+import { Type } from 'src/app/util/type';
+import { CEGModel } from '../../../../../../../../model/CEGModel';
 import { IContainer } from '../../../../../../../../model/IContainer';
-import { ConnectionToolBase } from '../../../tool-pallette/tools/connection-tool-base';
 import { IModelConnection } from '../../../../../../../../model/IModelConnection';
 import { IModelNode } from '../../../../../../../../model/IModelNode';
-import { CreateNodeToolBase } from '../../../tool-pallette/tools/create-node-tool-base';
+import { Process } from '../../../../../../../../model/Process';
+import { Arrays } from '../../../../../../../../util/arrays';
 import { Id } from '../../../../../../../../util/id';
 import { SpecmateDataService } from '../../../../../../../data/modules/data-service/services/specmate-data.service';
-import { Arrays } from '../../../../../../../../util/arrays';
+import { ConnectionToolBase } from '../../../tool-pallette/tools/connection-tool-base';
+import { CreateNodeToolBase } from '../../../tool-pallette/tools/create-node-tool-base';
+import { DeleteToolBase } from '../../../tool-pallette/tools/delete-tool-base';
+import { ToolBase } from '../../../tool-pallette/tools/tool-base';
 import { ConverterBase } from '../../converters/converter-base';
 import { NodeNameConverterProvider } from '../../providers/conversion/node-name-converter-provider';
-import { DeleteToolBase } from '../../../tool-pallette/tools/delete-tool-base';
+import { CEGmxModelNode } from '../../providers/properties/ceg-mx-model-node';
+import { ShapeProvider } from '../../providers/properties/shape-provider';
 import { ToolProvider } from '../../providers/properties/tool-provider';
-import { ToolBase } from '../../../tool-pallette/tools/tool-base';
-import { ValuePair } from '../../providers/properties/value-pair';
-import { Type } from 'src/app/util/type';
-import { CEGNode } from 'src/app/model/CEGNode';
+import { EditorStyle } from '../editor-components/editor-style';
+import { StyleChanger } from './style-changer';
 
 
 declare var require: any;
@@ -29,11 +33,15 @@ const mx: typeof mxgraph = require('mxgraph')({
 export class ChangeTranslator {
 
     private contents: IContainer[];
-    private parentComponents: {[key: string]: IContainer};
-    private nodeNameConverter: ConverterBase<IContainer, string|ValuePair>;
+    private parentComponents: { [key: string]: IContainer };
+    private nodeNameConverter: ConverterBase<IContainer, string | CEGmxModelNode>;
     public preventDataUpdates = false;
 
-    constructor(private model: CEGModel | Process, private dataService: SpecmateDataService, private toolProvider: ToolProvider) {
+    constructor(private model: CEGModel | Process,
+        private dataService: SpecmateDataService,
+        private toolProvider: ToolProvider,
+        private shapeProvider: ShapeProvider) {
+
         this.nodeNameConverter = this.nodeNameConverter = new NodeNameConverterProvider(this.model).nodeNameConverter;
         this.parentComponents = {};
     }
@@ -46,7 +54,7 @@ export class ChangeTranslator {
         return element;
     }
 
-    public async translate(change: (mxgraph.mxTerminalChange | mxgraph.mxChildChange)): Promise<void> {
+    public async translate(change: (mxgraph.mxTerminalChange | mxgraph.mxChildChange | mxgraph.mxStyleChange)): Promise<void> {
         if (this.preventDataUpdates) {
             return;
         }
@@ -60,9 +68,37 @@ export class ChangeTranslator {
                 await this.translateDelete(childChange);
             }
         } else if (change['style'] !== undefined) {
-            // We have a mxStyleChange, this should only be the case on validation or selection.
+            await this.translateStyleChange(change as mxgraph.mxStyleChange);
         } else if (change['cell'] !== undefined) {
-            await this.translateChange(change as mxgraph.mxTerminalChange);
+            await this.translateTerminalChange(change as mxgraph.mxTerminalChange);
+        }
+    }
+
+    private async translateStyleChange(change: mxgraph.mxStyleChange): Promise<void> {
+        const element = await this.getElement(change.cell.id);
+        if (element === undefined) {
+            return;
+        }
+        const prevStyles: string[] = change.previous.split(';');
+        const currStyles: string[] = change.style.split(';');
+
+        const newStyles = currStyles.filter(style => !Arrays.contains(prevStyles, style));
+        const removedStyles = prevStyles.filter(style => !Arrays.contains(currStyles, style));
+
+        if (Type.is(element, CEGConnection)) {
+            const connection = (element as CEGConnection);
+            let changeMade = false;
+            if (Arrays.contains(newStyles, EditorStyle.ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE)) {
+                connection.negate = true;
+                changeMade = true;
+            } else if (Arrays.contains(removedStyles, EditorStyle.ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE)) {
+                connection.negate = false;
+                changeMade = true;
+            }
+
+            if (changeMade) {
+                await this.dataService.updateElement(connection, true, Id.uuid);
+            }
         }
     }
 
@@ -126,7 +162,7 @@ export class ChangeTranslator {
         return node;
     }
 
-    private async translateChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange): Promise<void> {
+    private async translateTerminalChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange): Promise<void> {
         const element = await this.getElement(change.cell.id);
         if (element === undefined) {
             return;
@@ -147,7 +183,7 @@ export class ChangeTranslator {
             }
             let value = cell.value;
             if (Type.is(element, CEGNode)) {
-                value = new ValuePair(cell.children[0].value, cell.children[1].value);
+                value = new CEGmxModelNode(cell.children[0].value, cell.children[1].value, cell.children[2].value);
             }
             const elementValues = this.nodeNameConverter.convertFrom(value, element);
             for (const key in elementValues) {
@@ -268,7 +304,7 @@ export class ChangeTranslator {
     public retranslate(changedElement: IContainer, graph: mxgraph.mxGraph, cell: mxgraph.mxCell) {
         this.preventDataUpdates = true;
         let value = this.nodeNameConverter ? this.nodeNameConverter.convertTo(changedElement) : changedElement.name;
-        if (value instanceof ValuePair) {
+        if (value instanceof CEGmxModelNode) {
             for (const key in value) {
                 if (value.hasOwnProperty(key)) {
                     const val = value[key];
@@ -284,15 +320,13 @@ export class ChangeTranslator {
                     }
                 }
             }
-
         } else {
-            if (value === cell.value) {
-                return;
-            }
-
             graph.getModel().beginUpdate();
             try {
-                graph.model.setValue(cell, value);
+                if (value === cell.value) {
+                    graph.model.setValue(cell, value);
+                }
+                StyleChanger.setStyle(cell, graph, this.shapeProvider.getStyle(changedElement));
             }
             finally {
                 graph.getModel().endUpdate();

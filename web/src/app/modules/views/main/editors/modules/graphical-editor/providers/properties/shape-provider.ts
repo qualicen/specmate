@@ -1,29 +1,32 @@
+import { CEGConnection } from 'src/app/model/CEGConnection';
+import { Type } from 'src/app/util/type';
 import { Config } from '../../../../../../../../config/config';
 import { CEGNode } from '../../../../../../../../model/CEGNode';
-import { IContainer } from '../../../../../../../../model/IContainer';
 import { ProcessDecision } from '../../../../../../../../model/ProcessDecision';
 import { ProcessEnd } from '../../../../../../../../model/ProcessEnd';
 import { ProcessStart } from '../../../../../../../../model/ProcessStart';
 import { ProcessStep } from '../../../../../../../../model/ProcessStep';
+import { EditorStyle } from '../../components/editor-components/editor-style';
 import { NodeNameConverterProvider } from '../conversion/node-name-converter-provider';
-import { ProviderBase } from './provider-base';
 import { CEGmxModelNode } from './ceg-mx-model-node';
+import { ProviderBase } from './provider-base';
 
 export type ShapeData = {
     style: string,
     size: { width: number, height: number },
-    text: string|CEGmxModelNode
+    text: string | CEGmxModelNode
 };
 
 export class ShapeProvider extends ProviderBase {
 
     private shapeMap: { [className: string]: ShapeData } = {};
+    private styles: ((element: { className: string }) => ShapeData)[] = [];
 
     constructor(type: { className: string }) {
         super(type);
 
         this.shapeMap[CEGNode.className] = {
-            style: 'shape=rectangle;rounded=1;arcSize=10;align=center;perimeter=rectanglePerimeter;',
+            style: EditorStyle.BASE_CEG_NODE_STYLE,
             size: {
                 width: Config.CEG_NODE_WIDTH,
                 height: Config.CEG_NODE_HEIGHT
@@ -35,8 +38,7 @@ export class ShapeProvider extends ProviderBase {
         };
 
         this.shapeMap[ProcessStart.className] = {
-            // tslint:disable-next-line:max-line-length
-            style: 'shape=ellipse;whiteSpace=wrap;html=1;aspect=fixed;align=center;perimeter=ellipsePerimeter;editable=0;',
+            style: EditorStyle.BASE_PROCESS_START_STYLE,
             size: {
                 width: Config.PROCESS_START_END_NODE_RADIUS * 2,
                 height: Config.PROCESS_START_END_NODE_RADIUS * 2
@@ -47,8 +49,7 @@ export class ShapeProvider extends ProviderBase {
         };
 
         this.shapeMap[ProcessEnd.className] = {
-            // tslint:disable-next-line:max-line-length
-            style: 'shape=doubleEllipse;whiteSpace=wrap;html=1;aspect=fixed;align=center;perimeter=ellipsePerimeter;editable=0;',
+            style: EditorStyle.BASE_PROCESS_END_STYLE,
             size: {
                 width: Config.PROCESS_START_END_NODE_RADIUS * 2,
                 height: Config.PROCESS_START_END_NODE_RADIUS * 2
@@ -59,7 +60,7 @@ export class ShapeProvider extends ProviderBase {
         };
 
         this.shapeMap[ProcessStep.className] = {
-            style: 'shape=rectangle;rounded=1;arcSize=10;perimeter=rectanglePerimeter;',
+            style: EditorStyle.BASE_PROCESS_STEP_STYLE,
             size: {
                 width: Config.CEG_NODE_WIDTH,
                 height: Config.CEG_NODE_HEIGHT
@@ -70,7 +71,7 @@ export class ShapeProvider extends ProviderBase {
         };
 
         this.shapeMap[ProcessDecision.className] = {
-            style: 'shape=rhombus;align=center;perimeter=rhombusPerimeter;',
+            style: EditorStyle.BASE_PROCESS_DECISION_STYLE,
             size: {
                 width: Config.PROCESS_DECISION_NODE_DIM,
                 height: Config.PROCESS_DECISION_NODE_DIM
@@ -79,18 +80,34 @@ export class ShapeProvider extends ProviderBase {
                 name: Config.PROCESS_NEW_DECISION_NAME
             })
         };
+
+        this.styles.push((element: { className: string }) => this.shapeMap[element.className]);
+
+        this.styles.push((element: { className: string }) => {
+            if (Type.is(element, CEGConnection) && (element as CEGConnection).negate === true) {
+                return {
+                    size: undefined,
+                    style: EditorStyle.ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE,
+                    text: undefined
+                };
+            }
+        });
+    }
+
+    private getShapeData(element: { className: string }): ShapeData[] {
+        return this.styles.map(fn => fn(element)).filter(shapeData => shapeData !== undefined);
     }
 
     public getStyle(element: { className: string }): string {
-        return this.shapeMap[element.className].style;
+        return this.getShapeData(element).map(shapeData => shapeData.style).join(';');
     }
 
     public getInitialSize(element: { className: string }): { width: number, height: number } {
-        return this.shapeMap[element.className].size;
+        return this.getShapeData(element).find(shapeData => shapeData.size !== undefined).size;
     }
 
-    public getInitialText(element: { className: string }): string|CEGmxModelNode {
-        return this.shapeMap[element.className].text;
+    public getInitialText(element: { className: string }): string | CEGmxModelNode {
+        return this.getShapeData(element).find(shapeData => shapeData.text !== undefined).text;
     }
 
     public getInitialData(style: string): ShapeData {

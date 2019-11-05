@@ -1,31 +1,37 @@
 import { ChangeDetectionStrategy, Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { mxgraph } from 'mxgraph'; // Typings only - no code!
+import { CEGModel } from 'src/app/model/CEGModel';
+import { CEGNode } from 'src/app/model/CEGNode';
+import { ProcessDecision } from 'src/app/model/ProcessDecision';
+import { ProcessEnd } from 'src/app/model/ProcessEnd';
+import { ProcessStart } from 'src/app/model/ProcessStart';
+import { ProcessStep } from 'src/app/model/ProcessStep';
+import { UndoService } from 'src/app/modules/actions/modules/common-controls/services/undo.service';
+import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
 import { IContainer } from '../../../../../../../model/IContainer';
 import { IModelConnection } from '../../../../../../../model/IModelConnection';
 import { IModelNode } from '../../../../../../../model/IModelNode';
 import { Id } from '../../../../../../../util/id';
+import { Type } from '../../../../../../../util/type';
 import { Url } from '../../../../../../../util/url';
 import { SpecmateDataService } from '../../../../../../data/modules/data-service/services/specmate-data.service';
 import { ValidationService } from '../../../../../../forms/modules/validation/services/validation.service';
 import { SelectedElementService } from '../../../../../side/modules/selected-element/services/selected-element.service';
+import { ToolBase } from '../../tool-pallette/tools/tool-base';
 import { ConverterBase } from '../converters/converter-base';
 import { NodeNameConverterProvider } from '../providers/conversion/node-name-converter-provider';
+import { CEGmxModelNode } from '../providers/properties/ceg-mx-model-node';
 import { ElementProvider } from '../providers/properties/element-provider';
 import { NameProvider } from '../providers/properties/name-provider';
 import { ShapeData, ShapeProvider } from '../providers/properties/shape-provider';
 import { ToolProvider } from '../providers/properties/tool-provider';
+import { VertexProvider } from '../providers/properties/vertex-provider';
+import { EditorKeyHandler } from './editor-components/editor-key-handler';
+import { EditorPopup } from './editor-components/editor-popup';
+import { EditorStyle } from './editor-components/editor-style';
 import { ChangeTranslator } from './util/change-translator';
 import { StyleChanger } from './util/style-changer';
-import { UndoService } from 'src/app/modules/actions/modules/common-controls/services/undo.service';
-import { Type } from '../../../../../../../util/type';
-import { CEGModel } from 'src/app/model/CEGModel';
-import { CEGmxModelNode } from '../providers/properties/ceg-mx-model-node';
-import { EditorStyle } from './editor-components/editor-style';
-import { EditorKeyHandler } from './editor-components/editor-key-handler';
-import { VertexProvider } from '../providers/properties/vertex-provider';
-import { ToolBase } from '../../tool-pallette/tools/tool-base';
-import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
 
 declare var require: any;
 
@@ -77,6 +83,8 @@ export class GraphicalEditor {
   /*********************** MX Graph ***********************/
   private graph: mxgraph.mxGraph;
   private undoManager: mxgraph.mxUndoManager;
+
+  private popup: EditorPopup;
 
   private highlightedEdges: mxgraph.mxCell[] = [];
 
@@ -192,62 +200,66 @@ export class GraphicalEditor {
     EditorStyle.initEditorStyles(this.graph);
     EditorKeyHandler.initKeyHandler(this.graph);
     this.initUndoManager();
+
+    this.popup = new EditorPopup(this.graph, this.contents, this.translate);
+    this.popup.init();
+
     await this.initGraphicalModel();
     await this.initTools();
     this.undoManager.clear();
     this.dataService.elementChanged.subscribe((url: string) => {
-      const vertices = this.graph.getModel().getChildVertices(this.graph.getDefaultParent());
-      const vertex = vertices.find(vertex => vertex.id === url);
-      const node = this.nodes.find(node => node.url === url);
-      if (vertex === undefined || node === undefined) {
+      const cells = this.graph.getModel().getChildCells(this.graph.getDefaultParent());
+      const cell = cells.find(vertex => vertex.id === url);
+      const modelElement = this.contents.find(node => node.url === url);
+      if (cell === undefined || modelElement === undefined) {
         return;
       }
 
-      this.changeTranslator.retranslate(node, this.graph, vertex);
+      this.changeTranslator.retranslate(modelElement, this.graph, cell);
     });
   }
 
   public async initTools(): Promise<void> {
     for (const tool of this.toolProvider.tools) {
-        tool.setGraph(this.graph);
-        if (tool.isVertexTool) {
-            this.makeVertexTool(tool);
-        } else if (!tool.isHidden) {
-            this.makeClickTool(tool);
-        }
+      tool.setGraph(this.graph);
+      if (tool.isVertexTool) {
+        this.makeVertexTool(tool);
+      } else if (!tool.isHidden) {
+        this.makeClickTool(tool);
+      }
     }
   }
 
   private makeVertexTool(tool: ToolBase) {
-      const onDrop = (graph: mxgraph.mxGraph, evt: MouseEvent, cell: mxgraph.mxCell) => {
-          graph.stopEditing(false);
-          const initialData: ShapeData = this.shapeProvider.getInitialData(tool.style);
-          const coords = graph.getPointForEvent(evt);
-          const vertexUrl = Url.build([this.model.url, Id.uuid]);
-          graph.startEditing(evt);
-          try {
-              if (Type.is(this.model, CEGModel)) {
-              this.vertexPrivider.provideCEGNode(vertexUrl, coords.x, coords.y,
-                  initialData.size.width, initialData.size.height, initialData.text as CEGmxModelNode);
-              } else {
-              graph.insertVertex(
-                  graph.getDefaultParent(),
-                  vertexUrl,
-                  initialData.text,
-                  coords.x, coords.y,
-                  initialData.size.width, initialData.size.height,
-                  initialData.style);
-              }
-          }
-          finally {
-              graph.stopEditing(true);
-          }
-      };
-      mx.mxUtils.makeDraggable(document.getElementById(tool.elementId), this.graph, onDrop);
+    const onDrop = (graph: mxgraph.mxGraph, evt: MouseEvent, cell: mxgraph.mxCell) => {
+      graph.stopEditing(false);
+      const initialData: ShapeData = this.shapeProvider.getInitialData(tool.style);
+      const coords = graph.getPointForEvent(evt);
+      const vertexUrl = Url.build([this.model.url, Id.uuid]);
+      graph.startEditing(evt);
+      try {
+        if (Type.is(this.model, CEGModel)) {
+          this.vertexPrivider.provideCEGNode(vertexUrl, coords.x, coords.y,
+            initialData.size.width, initialData.size.height, initialData.text as CEGmxModelNode);
+        } else {
+          graph.insertVertex(
+            graph.getDefaultParent(),
+            vertexUrl,
+            initialData.text,
+            coords.x, coords.y,
+            initialData.size.width, initialData.size.height,
+            initialData.style);
+        }
+      }
+      finally {
+        graph.stopEditing(true);
+      }
+    };
+    mx.mxUtils.makeDraggable(document.getElementById(tool.elementId), this.graph, onDrop);
   }
 
   private makeClickTool(tool: ToolBase) {
-      document.getElementById(tool.elementId).addEventListener('click', (evt) => tool.perform(), false);
+    document.getElementById(tool.elementId).addEventListener('click', (evt) => tool.perform(), false);
   }
 
   private initUndoManager(): void {
@@ -285,7 +297,8 @@ export class GraphicalEditor {
         const sourceVertex = vertexCache[connection.source.url];
         const targetVertex = vertexCache[connection.target.url];
         const value = this.nodeNameConverter ? this.nodeNameConverter.convertTo(connection) : connection.name;
-        this.graph.insertEdge(parent, connection.url, value, sourceVertex, targetVertex);
+        const style = this.shapeProvider.getStyle(connection);
+        this.graph.insertEdge(parent, connection.url, value, sourceVertex, targetVertex, style);
       }
 
       if (Type.is(this.model, CEGModel)) {
@@ -345,7 +358,7 @@ export class GraphicalEditor {
   private async initGraphicalGrid(): Promise<void> {
     this.graph.setPanning(true);
     const graph = this.graph;
-    (function() {
+    (function () {
       const canvas = document.createElement('canvas');
       canvas.style.position = 'absolute';
       canvas.style.top = '0px';
@@ -357,9 +370,9 @@ export class GraphicalEditor {
 
       // Modify event filtering to accept canvas as container
       let mxGraphViewIsContainerEvent = mx.mxGraphView.prototype.isContainerEvent;
-      mx.mxGraphView.prototype.isContainerEvent = function(evt) {
+      mx.mxGraphView.prototype.isContainerEvent = function (evt) {
         return mxGraphViewIsContainerEvent.apply(this, arguments) ||
-        mx.mxEvent.getSource(evt) == canvas;
+          mx.mxEvent.getSource(evt) == canvas;
       };
 
       let s = 0;
@@ -367,7 +380,7 @@ export class GraphicalEditor {
       let tr = new mx.mxPoint();
       let w = 0;
       let h = 0;
-      this.repaintGrid = function() {
+      this.repaintGrid = function () {
         if (ctx != null) {
           let bounds = graph.getGraphBounds();
           let width = Math.max(bounds.x + bounds.width, graph.container.clientWidth);
@@ -446,7 +459,7 @@ export class GraphicalEditor {
 
       const repaint = this.repaintGrid;
       let mxGraphViewValidateBackground = mx.mxGraphView.prototype.validateBackground;
-      mx.mxGraphView.prototype.validateBackground = function() {
+      mx.mxGraphView.prototype.validateBackground = function () {
         mxGraphViewValidateBackground.apply(this, arguments);
         repaint();
       };
@@ -463,23 +476,19 @@ export class GraphicalEditor {
       this.graph.setCellWarning(vertex, null);
     }
     const validationResult = this.validationService.getValidationResults(this.model);
-    const invalidNodes = validationResult.filter(e => e.element.className === 'ProcessDecision'
-      || e.element.className === 'ProcessStart'
-      || e.element.className === 'ProcessEnd'
-      || e.element.className === 'ProcessStep'
-      || e.element.className === 'CEGNode');
+    const invalidNodes = validationResult.filter(e => this.elementProvider.isNode(e.element));
     for (const invalidNode of invalidNodes) {
       const vertexId = invalidNode.element.url;
       const vertex = vertices.find(vertex => vertex.id === vertexId);
       StyleChanger.replaceStyle(vertex, this.graph, EditorStyle.VALID_STYLE_NAME, EditorStyle.INVALID_STYLE_NAME);
       const overlay = this.graph.setCellWarning(vertex, invalidNode.message);
-      if (invalidNode.element.className === 'CEGNode' || invalidNode.element.className === 'ProcessStep') {
+      if (Type.is(invalidNode.element, CEGNode) || Type.is(invalidNode.element, ProcessStep)) {
         overlay.offset = new mx.mxPoint(-13, -12);
       }
-      if (invalidNode.element.className === 'ProcessStart' || invalidNode.element.className === 'ProcessEnd') {
+      if (Type.is(invalidNode.element, ProcessStart) || Type.is(invalidNode.element, ProcessEnd)) {
         overlay.offset = new mx.mxPoint(-23, -12);
       }
-      if (invalidNode.element.className === 'ProcessDecision') {
+      if (Type.is(invalidNode.element, ProcessDecision)) {
         overlay.offset = new mx.mxPoint(-28, -20);
       }
     }
@@ -533,7 +542,7 @@ export class GraphicalEditor {
     this.toolProvider = new ToolProvider(model, this.dataService, this.selectedElementService, this.modal, this.translate);
     this.shapeProvider = new ShapeProvider(model);
     this.nameProvider = new NameProvider(model, this.translate);
-    this.changeTranslator = new ChangeTranslator(model, this.dataService, this.toolProvider);
+    this.changeTranslator = new ChangeTranslator(model, this.dataService, this.toolProvider, this.shapeProvider);
     this._model = model;
   }
 

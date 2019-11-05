@@ -16,9 +16,9 @@ import { DeleteToolBase } from '../../../tool-pallette/tools/delete-tool-base';
 import { ToolBase } from '../../../tool-pallette/tools/tool-base';
 import { ConverterBase } from '../../converters/converter-base';
 import { NodeNameConverterProvider } from '../../providers/conversion/node-name-converter-provider';
+import { CEGmxModelNode } from '../../providers/properties/ceg-mx-model-node';
 import { ShapeProvider } from '../../providers/properties/shape-provider';
 import { ToolProvider } from '../../providers/properties/tool-provider';
-import { ValuePair } from '../../providers/properties/value-pair';
 import { EditorStyle } from '../editor-components/editor-style';
 import { StyleChanger } from './style-changer';
 
@@ -33,8 +33,8 @@ const mx: typeof mxgraph = require('mxgraph')({
 export class ChangeTranslator {
 
     private contents: IContainer[];
-    private parentComponents: { [key: string]: IContainer };
-    private nodeNameConverter: ConverterBase<IContainer, string | ValuePair>;
+    private parentComponents: {[key: string]: IContainer};
+    private nodeNameConverter: ConverterBase<IContainer, string|CEGmxModelNode>;
     public preventDataUpdates = false;
 
     constructor(private model: CEGModel | Process,
@@ -183,7 +183,7 @@ export class ChangeTranslator {
             }
             let value = cell.value;
             if (Type.is(element, CEGNode)) {
-                value = new ValuePair(cell.children[0].value, cell.children[1].value);
+                value = new CEGmxModelNode(cell.children[0].value, cell.children[1].value, cell.children[2].value);
             }
             const elementValues = this.nodeNameConverter.convertFrom(value, element);
             for (const key in elementValues) {
@@ -304,7 +304,7 @@ export class ChangeTranslator {
     public retranslate(changedElement: IContainer, graph: mxgraph.mxGraph, cell: mxgraph.mxCell) {
         this.preventDataUpdates = true;
         let value = this.nodeNameConverter ? this.nodeNameConverter.convertTo(changedElement) : changedElement.name;
-        if (value instanceof ValuePair) {
+        if (value instanceof CEGmxModelNode) {
             for (const key in value) {
                 if (value.hasOwnProperty(key)) {
                     const val = value[key];

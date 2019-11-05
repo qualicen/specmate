@@ -1,20 +1,20 @@
+import { CEGConnection } from 'src/app/model/CEGConnection';
+import { Type } from 'src/app/util/type';
 import { Config } from '../../../../../../../../config/config';
 import { CEGNode } from '../../../../../../../../model/CEGNode';
 import { ProcessDecision } from '../../../../../../../../model/ProcessDecision';
 import { ProcessEnd } from '../../../../../../../../model/ProcessEnd';
 import { ProcessStart } from '../../../../../../../../model/ProcessStart';
 import { ProcessStep } from '../../../../../../../../model/ProcessStep';
-import { NodeNameConverterProvider } from '../conversion/node-name-converter-provider';
-import { ProviderBase } from './provider-base';
-import { ValuePair } from './value-pair';
-import { Type } from 'src/app/util/type';
-import { CEGConnection } from 'src/app/model/CEGConnection';
 import { EditorStyle } from '../../components/editor-components/editor-style';
+import { NodeNameConverterProvider } from '../conversion/node-name-converter-provider';
+import { CEGmxModelNode } from './ceg-mx-model-node';
+import { ProviderBase } from './provider-base';
 
 export type ShapeData = {
     style: string,
     size: { width: number, height: number },
-    text: string | ValuePair
+    text: string | CEGmxModelNode
 };
 
 export class ShapeProvider extends ProviderBase {
@@ -106,7 +106,7 @@ export class ShapeProvider extends ProviderBase {
         return this.getShapeData(element).find(shapeData => shapeData.size !== undefined).size;
     }
 
-    public getInitialText(element: { className: string }): string | ValuePair {
+    public getInitialText(element: { className: string }): string | CEGmxModelNode {
         return this.getShapeData(element).find(shapeData => shapeData.text !== undefined).text;
     }
 

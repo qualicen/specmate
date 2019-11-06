@@ -25,6 +25,7 @@ export class ProjectExplorer implements OnInit {
 
     public _rootElements: IContainer[];
     public _rootLibraries: IContainer[];
+    public showLibrary: boolean = false;
 
     private searchQueries: Subject<string>;
     protected searchResults: IContentElement[];
@@ -119,6 +120,14 @@ export class ProjectExplorer implements OnInit {
 
     public loadMoreLibraryFolders(): void {
         this.numLibraryFoldersDisplayed += Config.ELEMENT_CHUNK_SIZE;
+    }
+
+    public switchToLibrary(): void {
+        this.showLibrary = true;
+    }
+
+    public switchToProject(): void {
+        this.showLibrary = false;
     }
 
     private clean(): void {

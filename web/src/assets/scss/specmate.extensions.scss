@@ -45,7 +45,6 @@ a.selected {
 }
 
 .project-explorer {
-  overflow: scroll;
   white-space: nowrap;
   z-index: 1;
 }
@@ -56,6 +55,7 @@ a.selected {
 
 .project-explorer-container {
   overflow-x: auto !important;
+  overflow-y: hidden;
 }
 
 .currentTreeElement {

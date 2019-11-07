@@ -159,6 +159,14 @@ export class ChangeTranslator {
         tool.name = change.child.value;
         tool.coords = { x: change.child.geometry.x, y: change.child.geometry.y };
         const node = await tool.perform();
+        if (Type.is(node, CEGNode)) {
+            const value = new ValuePair(change.child.children[0].value, change.child.children[1].value);
+            const elementValues = this.nodeNameConverter.convertFrom(value, node);
+            for (const key in elementValues) {
+                node[key] = elementValues[key];
+            }
+            await this.dataService.updateElement(node, true, Id.uuid);
+        }
         return node;
     }
 

@@ -62,6 +62,8 @@ export class GraphicalEditor {
   private _model: IContainer;
   private _contents: IContainer[];
 
+  private graphMouseMove: (evt: any) => void;
+
   constructor(
     private dataService: SpecmateDataService,
     private editorToolsService: EditorToolsService,
@@ -81,7 +83,13 @@ export class GraphicalEditor {
   }
 
   /*********************** MX Graph ***********************/
-  private graph: mxgraph.mxGraph;
+  private _graph: mxgraph.mxGraph;
+  private get graph(): mxgraph.mxGraph {
+    return this._graph;
+  }
+  private set graph(graph: mxgraph.mxGraph) {
+    this._graph = graph;
+  }
   private undoManager: mxgraph.mxUndoManager;
 
   private popup: EditorPopup;
@@ -91,7 +99,7 @@ export class GraphicalEditor {
   /*
    * Construct the MXGraph
    */
-  @ViewChild('mxGraphContainer', { static: false})
+  @ViewChild('mxGraphContainer', { static: false })
   public set graphContainer(graphContainer: ElementRef) {
     this.graphContainerElement = graphContainer;
     this.init();
@@ -103,13 +111,11 @@ export class GraphicalEditor {
   private async init(): Promise<void> {
 
     if (this.graphContainerElement === undefined) {
-      console.log('No Container for Graph');
       return;
     }
 
     if (this.graph !== undefined) {
-      this.graph.destroy();
-      this.graph = undefined;
+      this.destroyGraph();
     }
 
     mx.mxConnectionHandler.prototype.connectImage = new mx.mxImage('/assets/img/editor-tools/connector.png', 16, 16);
@@ -117,6 +123,20 @@ export class GraphicalEditor {
     mx.mxGraphHandler.prototype['guidesEnabled'] = true;
 
     mx.mxEvent.disableContextMenu(this.graphContainerElement.nativeElement);
+
+    if (this.graphMouseMove === undefined) {
+      this.graphMouseMove = mx.mxDragSource.prototype.mouseMove;
+    }
+    const mouseMove = this.graphMouseMove;
+
+    mx.mxDragSource.prototype.mouseMove = function (evt: PointerEvent) {
+      const graph = this.getGraphForEvent(evt);
+      if (graph !== undefined && graph.destroyed === true) {
+        return;
+      }
+      mouseMove.apply(this, arguments);
+    };
+
 
     this.graph = new mx.mxGraph(this.graphContainerElement.nativeElement);
     this.graph.setGridEnabled(true);
@@ -224,6 +244,19 @@ export class GraphicalEditor {
     });
   }
 
+  private destroyGraph(): void {
+    this.graph.destroy();
+    this.graph.dropEnabled = false;
+    while (this.graph.mouseListeners.length > 0) {
+      this.graph.mouseListeners.pop();
+    }
+    while (this.graph.eventListeners.length > 0) {
+      this.graph.eventListeners.pop();
+    }
+
+    this.graph = undefined;
+  }
+
   public initTools(): void {
     for (const tool of this.editorToolsService.tools) {
       tool.setGraph(this.graph);
@@ -260,8 +293,9 @@ export class GraphicalEditor {
         this.graph.stopEditing(true);
       }
     };
-
-    mx.mxUtils.makeDraggable(this.editorToolsService.getDOMElement(tool), this.graph, onDrop);
+    const domElement = this.editorToolsService.getDOMElement(tool);
+    mx.mxEvent.removeAllListeners(domElement);
+    mx.mxUtils.makeDraggable(domElement, this.graph, onDrop);
   }
 
   private makeClickTool(tool: ToolBase) {

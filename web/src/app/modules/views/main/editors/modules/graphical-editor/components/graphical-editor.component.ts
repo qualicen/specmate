@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Input, ViewChild, OnInit, AfterViewInit, AfterViewChecked } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { mxgraph } from 'mxgraph'; // Typings only - no code!
 import { CEGModel } from 'src/app/model/CEGModel';
@@ -49,6 +49,8 @@ const mx: typeof mxgraph = require('mxgraph')({
 })
 export class GraphicalEditor {
 
+  private graphContainerElement: ElementRef;
+
   private nameProvider: NameProvider;
   private elementProvider: ElementProvider;
   private toolProvider: ToolProvider;
@@ -91,23 +93,36 @@ export class GraphicalEditor {
   /*
    * Construct the MXGraph
    */
-  @ViewChild('mxGraphContainer')
-  public set graphContainer(element: ElementRef) {
-    if (this.graph !== undefined) {
+  @ViewChild('mxGraphContainer', { static: false})
+  public set graphContainer(graphContainer: ElementRef) {
+    this.graphContainerElement = graphContainer;
+    this.init();
+  }
+
+  /*
+   * Initialize the MXGraph
+   */
+  private async init(): Promise<void> {
+
+    if (this.graphContainerElement === undefined) {
+      console.log('No Container for Graph');
       return;
+    }
+
+    if (this.graph !== undefined) {
+      this.graph.destroy();
+      this.graph = undefined;
     }
 
     mx.mxConnectionHandler.prototype.connectImage = new mx.mxImage('/assets/img/editor-tools/connector.png', 16, 16);
     mx.mxGraph.prototype.warningImage = new mx.mxImage('/assets/img/editor-tools/error_red.png', 20, 20);
     mx.mxGraphHandler.prototype['guidesEnabled'] = true;
 
-    if (element === undefined) {
-      return;
-    }
-    mx.mxEvent.disableContextMenu(element.nativeElement);
+    mx.mxEvent.disableContextMenu(this.graphContainerElement.nativeElement);
 
-    this.graph = new mx.mxGraph(element.nativeElement);
+    this.graph = new mx.mxGraph(this.graphContainerElement.nativeElement);
     this.graph.setGridEnabled(true);
+    this.graph.setGridSize(15);
     this.graph.setConnectable(true);
     this.graph.setMultigraph(false);
     this.graph.setDropEnabled(false);
@@ -140,12 +155,12 @@ export class GraphicalEditor {
     });
 
     // Set the focus to the container if a node is selected
-    this.graph.addListener(mx.mxEvent.CLICK, function (sender: any, evt: any) {
+    this.graph.addListener(mx.mxEvent.CLICK, (sender: any, evt: any) => {
       if (!this.graph.isEditing()) {
         this.graph.container.setAttribute('tabindex', '-1');
         this.graph.container.focus();
       }
-    }.bind(this));
+    });
 
     this.graph.getSelectionModel().addListener(mx.mxEvent.CHANGE, async (args: any) => {
       let selectionCount = this.graph.getSelectionCount();
@@ -187,16 +202,6 @@ export class GraphicalEditor {
       }
     });
 
-    this.init();
-  }
-
-  /*
-   * Initialize the MXGraph
-   */
-  private async init(): Promise<void> {
-    if (this.graph === undefined || this.model === undefined) {
-      return;
-    }
     EditorStyle.initEditorStyles(this.graph);
     EditorKeyHandler.initKeyHandler(this.graph);
     this.initUndoManager();
@@ -205,9 +210,10 @@ export class GraphicalEditor {
     this.popup.init();
 
     await this.initGraphicalModel();
-    await this.initTools();
-    this.undoManager.clear();
 
+    this.initTools();
+
+    this.undoManager.clear();
     this.dataService.elementChanged.subscribe((url: string) => {
       const cells = this.graph.getModel().getChildCells(this.graph.getDefaultParent());
       const cell = cells.find(vertex => vertex.id === url);
@@ -220,7 +226,7 @@ export class GraphicalEditor {
     });
   }
 
-  public async initTools(): Promise<void> {
+  public initTools(): void {
     for (const tool of this.toolProvider.tools) {
       tool.setGraph(this.graph);
       if (tool.isVertexTool) {
@@ -256,7 +262,8 @@ export class GraphicalEditor {
         graph.stopEditing(true);
       }
     };
-    mx.mxUtils.makeDraggable(document.getElementById(tool.elementId), this.graph, onDrop);
+    const toolDOMElement = document.getElementById(tool.elementId);
+    mx.mxUtils.makeDraggable(toolDOMElement, this.graph, onDrop);
   }
 
   private makeClickTool(tool: ToolBase) {
@@ -315,7 +322,6 @@ export class GraphicalEditor {
       this.undoManager.clear();
       this.validationService.validateCurrent();
     }
-    this.initGraphicalGrid();
   }
 
   private async initCEGModel(): Promise<void> {
@@ -350,121 +356,6 @@ export class GraphicalEditor {
       return mx.mxGraph.prototype.getTooltipForCell.bind(this.graph)(cell);
     };
     this.vertexPrivider.initCEGRenderer(this.graph);
-  }
-
-  private repaintGrid: () => void;
-  private forceRedraw = false;
-  private gridColor = '#8c8c8c';
-
-  private async initGraphicalGrid(): Promise<void> {
-    this.graph.setPanning(true);
-    const graph = this.graph;
-    (function () {
-      const canvas = document.createElement('canvas');
-      canvas.style.position = 'absolute';
-      canvas.style.top = '0px';
-      canvas.style.left = '0px';
-      canvas.style.zIndex = '-1';
-      graph.container.appendChild(canvas);
-      graph.container.style.zIndex = '1';
-      let ctx = canvas.getContext('2d');
-
-      // Modify event filtering to accept canvas as container
-      let mxGraphViewIsContainerEvent = mx.mxGraphView.prototype.isContainerEvent;
-      mx.mxGraphView.prototype.isContainerEvent = function (evt) {
-        return mxGraphViewIsContainerEvent.apply(this, arguments) ||
-          mx.mxEvent.getSource(evt) == canvas;
-      };
-
-      let s = 0;
-      let gs = 0;
-      let tr = new mx.mxPoint();
-      let w = 0;
-      let h = 0;
-      this.repaintGrid = function () {
-        if (ctx != null) {
-          let bounds = graph.getGraphBounds();
-          let width = Math.max(bounds.x + bounds.width, graph.container.clientWidth);
-          let height = Math.max(bounds.y + bounds.height, graph.container.clientHeight);
-          let sizeChanged = width != w || height != h;
-
-          if (graph.view.scale != s || graph.view.translate.x != tr.x || graph.view.translate.y != tr.y ||
-            gs != graph.gridSize || sizeChanged || this.forceRedraw) {
-            this.forceRedraw = false;
-            tr = graph.view.translate.clone();
-            s = graph.view.scale;
-            gs = graph.gridSize;
-            w = width;
-            h = height;
-
-            // Clears the background if required
-            if (!sizeChanged) {
-              ctx.clearRect(0, 0, w, h);
-            } else {
-              canvas.setAttribute('width', w + '');
-              canvas.setAttribute('height', h + '');
-            }
-
-            let tx = tr.x * s;
-            let ty = tr.y * s;
-
-            // Sets the distance of the grid lines in pixels
-            let minStepping = graph.gridSize;
-            let stepping = minStepping * s;
-
-            if (stepping < minStepping) {
-              let count = Math.round(Math.ceil(minStepping / stepping) / 2) * 2;
-              stepping = count * stepping;
-            }
-
-            let xs = Math.floor((0 - tx) / stepping) * stepping + tx;
-            let xe = Math.ceil(w / stepping) * stepping;
-            let ys = Math.floor((0 - ty) / stepping) * stepping + ty;
-            let ye = Math.ceil(h / stepping) * stepping;
-
-            xe += Math.ceil(stepping);
-            ye += Math.ceil(stepping);
-
-            let ixs = Math.round(xs);
-            let ixe = Math.round(xe);
-            let iys = Math.round(ys);
-            let iye = Math.round(ye);
-
-            // Draws the actual grid
-            if (this.isGridShown) {
-              ctx.strokeStyle = this.gridColor;
-              ctx.beginPath();
-
-              for (let x = xs; x <= xe; x += stepping) {
-                x = Math.round((x - tx) / stepping) * stepping + tx;
-                let ix = Math.round(x);
-
-                ctx.moveTo(ix + 0.5, iys + 0.5);
-                ctx.lineTo(ix + 0.5, iye + 0.5);
-              }
-
-              for (let y = ys; y <= ye; y += stepping) {
-                y = Math.round((y - ty) / stepping) * stepping + ty;
-                let iy = Math.round(y);
-
-                ctx.moveTo(ixs + 0.5, iy + 0.5);
-                ctx.lineTo(ixe + 0.5, iy + 0.5);
-              }
-
-              ctx.closePath();
-              ctx.stroke();
-            }
-          }
-        }
-      }.bind(this);
-
-      const repaint = this.repaintGrid;
-      let mxGraphViewValidateBackground = mx.mxGraphView.prototype.validateBackground;
-      mx.mxGraphView.prototype.validateBackground = function () {
-        mxGraphViewValidateBackground.apply(this, arguments);
-        repaint();
-      };
-    }).bind(this)();
   }
 
   private updateValidities(): void {
@@ -545,12 +436,15 @@ export class GraphicalEditor {
     this.nameProvider = new NameProvider(model, this.translate);
     this.changeTranslator = new ChangeTranslator(model, this.dataService, this.toolProvider, this.shapeProvider);
     this._model = model;
+    this.dataService.readContents(model.url, true).then((contents) => {
+      this._contents = contents;
+      this.elementProvider = new ElementProvider(this.model, this._contents);
+      this.init();
+    });
   }
 
   @Input()
   public set contents(contents: IContainer[]) {
-    this._contents = contents;
-    this.elementProvider = new ElementProvider(this.model, this._contents);
   }
 
   public get contents(): IContainer[] {
@@ -575,14 +469,13 @@ export class GraphicalEditor {
 
   public showGrid(): void {
     this.isGridShown = true;
-    this.forceRedraw = true;
-    this.repaintGrid();
+    this.graphContainerElement.nativeElement.style.backgroundImage = "url('/assets/img/grid.png')";
   }
 
   public hideGrid(): void {
     this.isGridShown = false;
-    this.forceRedraw = true;
-    this.repaintGrid();
+    this.graphContainerElement.nativeElement.style.backgroundImage = '';
+    this.graphContainerElement.nativeElement.style.background = 'none';
   }
 
   public get connections(): IContainer[] {

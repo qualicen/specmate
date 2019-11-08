@@ -16,7 +16,7 @@ import { ValidationModule } from '../../../../forms/modules/validation/validatio
     BrowserModule,
     NavigatorModule,
     SpecmateSharedModule,
-    NgbModule.forRoot(),
+    NgbModule,
     TranslateModule,
     ValidationModule,
     ShortModelErrorDisplayModule

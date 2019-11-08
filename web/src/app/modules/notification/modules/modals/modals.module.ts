@@ -9,7 +9,7 @@ import { ErrorNotificationModalService } from './services/error-notification-mod
 @NgModule({
     imports: [
         // MODULE IMPORTS
-        NgbModule.forRoot(),
+        NgbModule,
         SpecmateSharedModule,
         BrowserModule
     ],

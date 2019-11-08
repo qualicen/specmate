@@ -14,7 +14,7 @@ import { TracingLinks } from './components/tracing-links.component';
     NavigatorModule,
     IconsModule,
     SpecmateSharedModule,
-    NgbModule.forRoot()
+    NgbModule
   ],
   declarations: [
     // COMPONENTS IN THIS MODULE

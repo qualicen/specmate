@@ -212,7 +212,7 @@ export class ElementTree implements OnInit {
                 if (shouldToggle) {
                     this.expand();
                 } else {
-                    this.move(1, event.srcElement);
+                    this.move(1, event.srcElement as Element);
                 }
                 break;
 
@@ -220,16 +220,16 @@ export class ElementTree implements OnInit {
                 if (shouldToggle) {
                     this.contract();
                 } else {
-                    this.move(-1, event.srcElement);
+                    this.move(-1, event.srcElement as Element);
                 }
                 break;
 
             case Key.ARROW_UP:
-                this.move(-1, event.srcElement);
+                this.move(-1, event.srcElement as Element);
                 break;
 
             case Key.ARROW_DOWN:
-                this.move(1, event.srcElement);
+                this.move(1, event.srcElement as Element);
                 break;
         }
     }

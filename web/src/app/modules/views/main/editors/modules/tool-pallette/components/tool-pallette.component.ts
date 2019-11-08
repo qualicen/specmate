@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewChecked, Component } from '@angular/core';
 import { EditorToolsService } from '../services/editor-tools.service';
 import { ToolBase } from '../tools/tool-base';
 
@@ -8,9 +8,13 @@ import { ToolBase } from '../tools/tool-base';
     templateUrl: 'tool-pallette.component.html',
     styleUrls: ['tool-pallette.component.css']
 })
-export class ToolPallette {
+export class ToolPallette implements AfterViewChecked {
 
     constructor(private editorToolsService: EditorToolsService) { }
+
+    public ngAfterViewChecked() {
+        this.tools.forEach(tool => this.editorToolsService.addDOMElement(tool, document.getElementById(tool.elementId)));
+    }
 
     public get tools(): ToolBase[] {
         return this.editorToolsService.tools.filter(tool => !tool.isHidden);

@@ -15,7 +15,9 @@ export class EditorToolsService {
 
     private model: IContainer;
 
-    private providerMap: {[url: string]: ToolProvider };
+    private providerMap: { [url: string]: ToolProvider };
+
+    private toolDOMElements: { [name: string]: HTMLElement } = {};
 
     constructor(private dataService: SpecmateDataService,
         private navigator: NavigatorService,
@@ -52,5 +54,13 @@ export class EditorToolsService {
             return undefined;
         }
         return this.toolProvider.tools;
+    }
+
+    public addDOMElement(tool: ToolBase, domElement: HTMLElement): void {
+        this.toolDOMElements[tool.name] = domElement;
+    }
+
+    public getDOMElement(tool: ToolBase): HTMLElement {
+        return this.toolDOMElements[tool.name];
     }
 }

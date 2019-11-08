@@ -7,7 +7,7 @@ export abstract class ToolBase {
     public abstract icon: string;
     public abstract style: string;
     public abstract color: string;
-    public abstract name: string;
+    public abstract get name(): string;
     public abstract isVertexTool: boolean;
     public abstract isHidden: boolean;
 
@@ -18,7 +18,11 @@ export abstract class ToolBase {
         protected parent: IContainer) { }
 
     public get elementId(): string {
-        return 'toolbar-' + this.name + '-button';
+        return 'toolbar-' + this.idPart + '-button';
+    }
+
+    private get idPart(): string {
+        return this.name;
     }
 
     protected graph: mxgraph.mxGraph;

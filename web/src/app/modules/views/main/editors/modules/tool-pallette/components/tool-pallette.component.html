@@ -1,13 +1,4 @@
-<!--<form *ngIf="isVisible" class="form-inline tool-bar">
-    <div class="input-group input-group-sm">
-        <ng-container *ngFor="let tool of tools">
-            <div id="{{tool.elementId}}" title="{{tool.name | translate}}" class="{{'btn btn-sm btn-outline-' + tool.color}}">
-                <i class="{{'fa fa-' + tool.icon}}" aria-hidden="true"></i>&nbsp;{{tool.name | translate}}
-            </div>&nbsp;
-        </ng-container>
-    </div>
-</form>
--->
+
 <ng-container *ngFor="let tool of tools">
     <span id="{{tool.elementId}}" title="{{tool.name | translate}}">
         <i class="{{'fa fa-' + tool.icon}}" aria-hidden="true"></i>&nbsp;{{tool.name | translate}}

@@ -156,7 +156,6 @@ export class ChangeTranslator {
 
     private async translateNodeAdd(change: mxgraph.mxChildChange): Promise<IModelNode> {
         const tool = this.determineTool(change) as CreateNodeToolBase<IModelNode>;
-        tool.name = change.child.value;
         tool.coords = { x: change.child.geometry.x, y: change.child.geometry.y };
         const node = await tool.perform();
         return node;

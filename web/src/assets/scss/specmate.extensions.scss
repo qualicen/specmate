@@ -55,7 +55,7 @@ a.selected {
 
 .project-explorer-container {
   overflow-x: auto !important;
-  overflow-y: hidden;
+  overflow-y: hidden !important;
 }
 
 .currentTreeElement {

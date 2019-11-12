@@ -31,6 +31,7 @@ import { EditorPopup } from './editor-components/editor-popup';
 import { EditorStyle } from './editor-components/editor-style';
 import { ChangeTranslator } from './util/change-translator';
 import { StyleChanger } from './util/style-changer';
+import { NavigatorService } from 'src/app/modules/navigation/modules/navigator/services/navigator.service';
 
 declare var require: any;
 
@@ -57,6 +58,8 @@ export class GraphicalEditor {
   private changeTranslator: ChangeTranslator;
   private vertexProvider: VertexProvider;
 
+  private isInGraphTransition = false;
+
   public isGridShown = true;
 
   private _model: IContainer;
@@ -67,12 +70,20 @@ export class GraphicalEditor {
   constructor(
     private dataService: SpecmateDataService,
     private editorToolsService: EditorToolsService,
+    private navigator: NavigatorService,
     private selectedElementService: SelectedElementService,
     private validationService: ValidationService,
     private translate: TranslateService,
     private undoService: UndoService) {
+
+    this.navigator.hasNavigated.subscribe(() => {
+      this.isInGraphTransition = true;
+    });
+
     this.validationService.validationFinished.subscribe(() => {
-      this.updateValidities();
+      if (!this.isInGraphTransition && this.graph !== undefined && this.graph['destroyed'] !== true) {
+        this.updateValidities();
+      }
     });
     this.undoService.undoPressed.subscribe(() => {
       this.undo();
@@ -118,6 +129,13 @@ export class GraphicalEditor {
       this.destroyGraph();
     }
 
+    await this.createGraph();
+
+    this.isInGraphTransition = false;
+    this.updateValidities();
+  }
+
+  private async createGraph(): Promise<void> {
     mx.mxConnectionHandler.prototype.connectImage = new mx.mxImage('/assets/img/editor-tools/connector.png', 16, 16);
     mx.mxGraph.prototype.warningImage = new mx.mxImage('/assets/img/editor-tools/error_red.png', 20, 20);
     mx.mxGraphHandler.prototype['guidesEnabled'] = true;
@@ -137,8 +155,8 @@ export class GraphicalEditor {
       mouseMove.apply(this, arguments);
     };
 
-
     this.graph = new mx.mxGraph(this.graphContainerElement.nativeElement);
+
     this.graph.setGridEnabled(true);
     this.graph.setGridSize(15);
     this.graph.setConnectable(true);
@@ -394,7 +412,9 @@ export class GraphicalEditor {
     if (this.graph === undefined) {
       return;
     }
-    const vertices = this.graph.getModel().getChildVertices(this.graph.getDefaultParent());
+
+    const vertices = this.graph.getChildCells(this.graph.getDefaultParent());
+
     for (const vertex of vertices) {
       StyleChanger.replaceStyle(vertex, this.graph, EditorStyle.INVALID_STYLE_NAME, EditorStyle.VALID_STYLE_NAME);
       this.graph.setCellWarning(vertex, null);

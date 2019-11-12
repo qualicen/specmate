@@ -34,13 +34,6 @@ export class Scheduler {
         return this.unresolvedCommands[this.unresolvedCommands.length - 1];
     }
 
-    private popCommand(): Command {
-        let index: number = this.commands.indexOf(this.lastCommand);
-        let command: Command = this.commands[index];
-        this.commands.splice(index, 1);
-        return command;
-    }
-
     private popCompoundCommands(): Command[] {
         let lastCommand: Command = this.lastCommand;
         if (!lastCommand) {
@@ -199,13 +192,6 @@ export class Scheduler {
             return true;
         }
         return false;
-    }
-
-    private unScheduleAllCommands(url: string) {
-        let unscheduled = true;
-        while (unscheduled) {
-            unscheduled = this.unScheduleLastCommand(url);
-        }
     }
 
     private scheduleCreateCommand(command: Command) {

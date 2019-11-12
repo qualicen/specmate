@@ -14,7 +14,7 @@ import { ProjectExplorer } from './components/project-explorer.component';
     NavigatorModule,
     SpecmateSharedModule,
     IconsModule,
-    NgbModule.forRoot()
+    NgbModule
   ],
   declarations: [
     // COMPONENTS IN THIS MODULE

@@ -1,22 +1,33 @@
-import { IContainer } from '../../../../../../../model/IContainer';
+import { SpecmateDataService } from '../../../../../../data/modules/data-service/services/specmate-data.service';
 import { SelectedElementService } from '../../../../../side/modules/selected-element/services/selected-element.service';
+import { IContainer } from '../../../../../../../model/IContainer';
+import { mxgraph } from 'mxgraph';
 
 export abstract class ToolBase {
-    protected abstract icon: string;
-    protected abstract color: string;
-    public abstract name: string;
-    public abstract cursor: string;
+    public abstract icon: string;
+    public abstract style: string;
+    public abstract color: string;
+    public abstract get name(): string;
+    public abstract isVertexTool: boolean;
+    public abstract isHidden: boolean;
 
-    public abstract done: boolean;
-    public abstract sticky: boolean;
+    public abstract async perform(): Promise<any>;
 
-    public abstract selectedElements: IContainer[];
+    constructor(protected dataService: SpecmateDataService,
+        protected selectedElementService: SelectedElementService,
+        protected parent: IContainer) { }
 
-    public abstract activate(): void;
-    public abstract deactivate(): void;
+    public get elementId(): string {
+        return 'toolbar-' + this.idPart + '-button';
+    }
 
-    public abstract click(event: MouseEvent, zoom: number): Promise<void>;
-    public abstract select(element: IContainer, evt?: MouseEvent): Promise<void>;
+    private get idPart(): string {
+        return this.name;
+    }
 
-    constructor(protected selectedElementService: SelectedElementService) { }
+    protected graph: mxgraph.mxGraph;
+
+    setGraph(graph: mxgraph.mxGraph) {
+        this.graph = graph;
+    }
 }

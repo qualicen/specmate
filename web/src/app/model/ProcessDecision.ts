@@ -4,7 +4,7 @@
 
 	export class ProcessDecision  {
 
-		___nsuri: string = "http://specmate.com/20190125/model/processes";
+		___nsuri: string = "http://specmate.com/20190902/model/processes";
 		public url: string;
 		public className: string = "ProcessDecision";
 		public static className: string = "ProcessDecision";
@@ -14,6 +14,8 @@
 		public description: EString;
 		public x: EDouble;
 		public y: EDouble;
+		public width: EDouble;
+		public height: EDouble;
 
 		// References
 		

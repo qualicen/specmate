@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CEGModel } from '../../../../../model/CEGModel';
 import { IContainer } from '../../../../../model/IContainer';
 import { Process } from '../../../../../model/Process';

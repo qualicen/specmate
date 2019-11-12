@@ -6,6 +6,7 @@ import { ProcessStart } from '../../../../../../../../model/ProcessStart';
 import { SpecmateDataService } from '../../../../../../../data/modules/data-service/services/specmate-data.service';
 import { SelectedElementService } from '../../../../../../side/modules/selected-element/services/selected-element.service';
 import { CreateNodeToolBase } from '../create-node-tool-base';
+import { ShapeProvider } from '../../../graphical-editor/providers/properties/shape-provider';
 
 export class StartTool extends CreateNodeToolBase<ProcessStart> {
 
@@ -14,11 +15,12 @@ export class StartTool extends CreateNodeToolBase<ProcessStart> {
     public name = 'tools.addStart';
     public icon = 'plus';
     public sticky = false;
+    public style = new ShapeProvider(Process).getStyle(ProcessStart);
 
     constructor(parent: IContainer,
         dataService: SpecmateDataService,
         selectedElementService: SelectedElementService) {
-        super(parent, dataService, selectedElementService);
+        super(dataService, selectedElementService, parent);
     }
 
     protected getElementFactory(coords: { x: number; y: number; }): ElementFactoryBase<ProcessStart> {

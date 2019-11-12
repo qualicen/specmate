@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ConnectionModule } from '../../../common/modules/connection/connection.module';
+import { ValidationModule } from '../../../forms/modules/validation/validation.module';
 import { SpecmateSharedModule } from '../../../specmate/specmate.shared.module';
 import { CommonControls } from './components/common-controls.component';
-import { ValidationModule } from '../../../forms/modules/validation/validation.module';
 import { UndoService } from './services/undo.service';
 
 @NgModule({

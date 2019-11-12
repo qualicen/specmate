@@ -3,8 +3,10 @@ package com.specmate.model.support.util;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.emf.cdo.CDOObject;
 import org.eclipse.emf.cdo.CDOState;
@@ -20,6 +22,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import com.specmate.common.AssertUtil;
+import com.specmate.common.UUIDUtil;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.model.administration.ErrorCode;
@@ -88,6 +91,12 @@ public class SpecmateEcoreUtil {
 		return pickInstancesOf(resource.getContents(), clazz);
 	}
 
+	public static <T> Set<T> uniqueInstancesOf(List<? extends EObject> contents, Class<T> clazz) {
+		Set<T> result = new HashSet<>();
+		result.addAll(pickInstancesOf(contents.iterator(), clazz));
+		return result;
+	}
+
 	public static <T> List<T> pickInstancesOf(List<? extends EObject> contents, Class<T> clazz) {
 		return pickInstancesOf(contents.iterator(), clazz);
 	}
@@ -151,7 +160,11 @@ public class SpecmateEcoreUtil {
 		unsetAllReferences(object, Collections.emptyList());
 	}
 
-	public static String getIdForChild(IContainer parent, EClass type) {
+	public static String getIdForChild() {
+		return UUIDUtil.generateUUID();
+	}
+	
+	public static String getNameForChild(IContainer parent, EClass type) {
 		int i = 1;
 		String format = "%s-%d";
 		EList<IContentElement> contents = parent.getContents();

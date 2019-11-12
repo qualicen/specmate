@@ -38,7 +38,6 @@
 	"Error": "Error",
 	"ErrorsandWarnings": "Errors & Warnings",
 	"Expected Outcome": "Expected Outcome",
-	"ExpectedOutcome": "",
 	"GeneralInformation": "General Information",
 	"ImplementingBO-team": "Implementing BO-Team",
 	"ImplementingIT-team": "Implementing IT-Team",
@@ -129,6 +128,7 @@
 	"elementCouldNotBeUpdated": "Could nto update element",
 	"errorLoggedOut": "You were logged out due to an unknown error.",
 	"expand": "",
+	"exportAlm": "Export to ALM",
 	"exportTestprocedure": "Export test procedure",
 	"exportTestspecification": "Export test specification",
 	"failed": "Failed",
@@ -139,6 +139,7 @@
 	"layoutErrorCircle": "Could not layout the model: There is a circle in the graph.",
 	"library": "Library",
 	"loadMore": "Load more",
+	"loading": "Loading...",
 	"log": {
 		"dataError": "Data error",
 		"delete": "Delete",
@@ -155,6 +156,7 @@
 	"logout": "Log Out",
 	"logoutFailed": "Log out failed.",
 	"maximize": "Maximize",
+	"modelGenerationFailed": "No model could be extracted.",
 	"name": "Name",
 	"navigate": {
 		"back": "Back",

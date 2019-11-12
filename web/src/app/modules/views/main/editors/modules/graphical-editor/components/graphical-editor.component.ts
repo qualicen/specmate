@@ -39,7 +39,6 @@ const mx: typeof mxgraph = require('mxgraph')({
   mxBasePath: 'mxgraph'
 });
 
-
 @Component({
   moduleId: module.id.toString(),
   selector: 'graphical-editor',

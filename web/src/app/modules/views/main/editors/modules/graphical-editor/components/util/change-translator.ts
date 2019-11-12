@@ -147,8 +147,13 @@ export class ChangeTranslator {
 
     private async translateEdgeAdd(change: mxgraph.mxChildChange): Promise<IModelConnection> {
         const tool = this.determineTool(change) as ConnectionToolBase<any>;
-        tool.source = await this.getElement(change.child.source.id) as IModelNode;
-        tool.target = await this.getElement(change.child.target.id) as IModelNode;
+
+        const source = (await this.getElement(change.child.source.id) as IModelNode);
+        const target = (await this.getElement(change.child.target.id) as IModelNode);
+
+        tool.source = source;
+        tool.target = target;
+
         const connection = await tool.perform();
         change.child.id = connection.url;
         return connection;

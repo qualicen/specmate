@@ -80,9 +80,9 @@ export class GraphicalEditor {
       this.isInGraphTransition = true;
     });
 
-    this.validationService.validationFinished.subscribe(() => {
+    this.validationService.validationFinished.subscribe(async () => {
       if (!this.isInGraphTransition && this.graph !== undefined && this.graph['destroyed'] !== true) {
-        this.updateValidities();
+        await this.updateValidities();
       }
     });
     this.undoService.undoPressed.subscribe(() => {
@@ -132,7 +132,7 @@ export class GraphicalEditor {
     await this.createGraph();
 
     this.isInGraphTransition = false;
-    this.updateValidities();
+    await this.updateValidities();
   }
 
   private async createGraph(): Promise<void> {
@@ -176,8 +176,17 @@ export class GraphicalEditor {
         return;
       }
 
+      const done: any[] = [];
       try {
-        for (const change of edit.changes) {
+        for (const change of edit.changes.filter(filteredChange => filteredChange.child && !filteredChange.child.vertex)) {
+          await this.changeTranslator.translate(change);
+          done.push(change);
+        }
+        for (const change of edit.changes.filter(filteredChange => filteredChange.child && filteredChange.child.vertex)) {
+          await this.changeTranslator.translate(change);
+          done.push(change);
+        }
+        for (const change of edit.changes.filter(filteredChange => done.indexOf(filteredChange) < 0)) {
           await this.changeTranslator.translate(change);
         }
       } catch (e) {
@@ -419,6 +428,7 @@ export class GraphicalEditor {
       StyleChanger.replaceStyle(vertex, this.graph, EditorStyle.INVALID_STYLE_NAME, EditorStyle.VALID_STYLE_NAME);
       this.graph.setCellWarning(vertex, null);
     }
+
     const validationResult = this.validationService.getValidationResults(this.model);
     const invalidNodes = validationResult.filter(e => this.elementProvider.isNode(e.element));
     for (const invalidNode of invalidNodes) {

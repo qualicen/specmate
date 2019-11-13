@@ -166,29 +166,24 @@ textarea:focus,
 }
 
 .nav-tabs .nav-link {
-  color: $primary;
-  padding: 0.5rem 1rem;
+  color: #495057;
   background-color: transparent;
+  border-color: transparent;
+}
+
+.nav-tabs .nav-link:hover {
+  background-color: transparent;
+  border-color: rgba(0, 0, 0, 0.1);
 }
 
 .nav-tabs .nav-link.active {
   color: $primary;
-  border-color: rgba(0, 0, 0, 0.1);
+  border-bottom-color: transparent;
+  background-color: transparent;
 }
 
-.nav-tabs .nav-link.inactive {
+.nav-tabs .nav-link.active:hover {
   color: $primary;
-  border: none;
-  color: #495057;
-}
-
-.nav-tabs .nav-link.inactive:hover {
-  color: $primary;
-  color: #495057;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  
 }
 
 .tableInput,

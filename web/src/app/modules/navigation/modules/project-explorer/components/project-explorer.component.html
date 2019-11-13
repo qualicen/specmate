@@ -14,10 +14,12 @@
                     <ul *ngIf="!searchBox.value">
                         <ul role="tablist" class="nav nav-tabs justify-content-start">
                             <li class="nav-item">
-                                <button role="tab" (click)="switchToProject()" class="nav-link active" id="ngb-tab-0" aria-expanded="true">{{'project' | translate}}</button>
+                                <button *ngIf="!showLibrary" role="tab" (click)="switchToProject()" class="nav-link active" id="ngb-tab-0" aria-expanded="true" aria-disabled="false" aria-controls="ngb-tab-0-panel">{{'project' | translate}}</button>
+                                <button *ngIf="showLibrary" role="tab" (click)="switchToProject()" class="nav-link" id="ngb-tab-0" aria-expanded="false" aria-disabled="false">{{'project' | translate}}</button>
                             </li>
                             <li class="nav-item">
-                                <button role="tab" (click)="switchToLibrary()" class="nav-link" id="ngb-tab-1" aria-expanded="false">{{'library' | translate}}</button>
+                                    <button *ngIf="showLibrary" role="tab" (click)="switchToLibrary()" class="nav-link active" id="ngb-tab-1" aria-expanded="true" aria-disabled="false" aria-controls="ngb-tab-1-panel">{{'library' | translate}}</button>
+                                <button *ngIf="!showLibrary" role="tab" (click)="switchToLibrary()" class="nav-link" id="ngb-tab-1" aria-expanded="false" aria-disabled="false">{{'library' | translate}}</button>
                             </li>
                         </ul>
                         <ul id="projectList" *ngIf="!showLibrary">

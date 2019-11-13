@@ -39,23 +39,23 @@
                             </li>     
                         </ul> 
                     </ul>
+                    <table class="table" *ngIf="searchBox.value">
+                            <thead>
+                                <tr>
+                                    <th scope="col">{{'searchResults' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let element of searchResults; let i = index;">
+                                    <td>
+                                        <a [navigationTarget]="element">
+                                            <icon-selector [model]="element" expanded="false"></icon-selector>{{element['extId'] ? element['extId'] + ': ' : ''}}{{element.name}}
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>                        
             </div>
         </div>
     </div>
 </div>
-<table class="table" *ngIf="searchBox.value">
-    <thead>
-        <tr>
-            <th scope="col">{{'searchResults' | translate}}</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let element of searchResults; let i = index;">
-            <td>
-                <a [navigationTarget]="element">
-                    <icon-selector [model]="element" expanded="false"></icon-selector>{{element['extId'] ? element['extId'] + ': ' : ''}}{{element.name}}
-                </a>
-            </td>
-        </tr>
-    </tbody>
-</table>

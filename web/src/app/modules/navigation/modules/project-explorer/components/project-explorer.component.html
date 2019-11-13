@@ -12,10 +12,14 @@
                         </div>
                     </div>
                     <ul *ngIf="!searchBox.value">
-                        <div class="tabs">
-                            <button (click)="switchToLibrary()">Tab1</button>
-                            <button (click)="switchToProject()">Tab2</button>
-                        </div>
+                        <ul role="tablist" class="nav nav-tabs justify-content-start">
+                            <li class="nav-item">
+                                <button role="tab" (click)="switchToProject()" class="nav-link active" id="ngb-tab-0" aria-expanded="true">{{'project' | translate}}</button>
+                            </li>
+                            <li class="nav-item">
+                                <button role="tab" (click)="switchToLibrary()" class="nav-link inactive" id="ngb-tab-1" aria-expanded="false">{{'library' | translate}}</button>
+                            </li>
+                        </ul>
                         <ul id="projectList" *ngIf="!showLibrary">
                             <element-tree *ngFor="let element of rootElements;" [baseUrl]="element.url" [currentElement]="currentElement" [withExpand]="true"></element-tree> 
                             <li *ngIf="canLoadMoreProjectFolders">

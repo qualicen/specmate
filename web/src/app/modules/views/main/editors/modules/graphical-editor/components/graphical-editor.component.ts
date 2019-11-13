@@ -132,6 +132,7 @@ export class GraphicalEditor {
 
     this.isInGraphTransition = false;
     await this.updateValidities();
+    await this.undoManager.clear();
   }
 
   private async createGraph(): Promise<void> {
@@ -169,12 +170,6 @@ export class GraphicalEditor {
     this.graph.getModel().addListener(mx.mxEvent.CHANGE, async (sender: mxgraph.mxEventSource, evt: mxgraph.mxEventObject) => {
       const edit = evt.getProperty('edit') as mxgraph.mxUndoableEdit;
 
-      if (edit.undone === true || edit.redone === true) {
-        this.undoService.setUndoEnabled(this.undoManager.canUndo());
-        this.undoService.setRedoEnabled(this.undoManager.canRedo());
-        return;
-      }
-
       const done: any[] = [];
       try {
         for (const change of edit.changes.filter(filteredChange => filteredChange.child && !filteredChange.child.vertex)) {
@@ -208,6 +203,7 @@ export class GraphicalEditor {
 
     this.graph.getSelectionModel().addListener(mx.mxEvent.CHANGE, async (args: any) => {
       let selectionCount = this.graph.getSelectionCount();
+      this.graph.getModel().beginUpdate();
 
       // Dim all Edges
       for (const edge of this.highlightedEdges) {
@@ -244,6 +240,7 @@ export class GraphicalEditor {
       } else {
         this.selectedElementService.deselect();
       }
+      this.graph.getModel().endUpdate();
     });
 
     EditorStyle.initEditorStyles(this.graph);
@@ -257,7 +254,6 @@ export class GraphicalEditor {
 
     this.initTools();
 
-    this.undoManager.clear();
     this.dataService.elementChanged.subscribe((url: string) => {
       const cells = this.graph.getModel().getChildCells(this.graph.getDefaultParent());
       const cell = cells.find(vertex => vertex.id === url);
@@ -331,13 +327,17 @@ export class GraphicalEditor {
   private initUndoManager(): void {
     this.undoManager = new mx.mxUndoManager(50);
     const listener = async (sender: mxgraph.mxEventSource, evt: mxgraph.mxEventObject) => {
-      if (!evt.getProperty('edit').changes.some((s: object) => s.constructor.name === 'mxStyleChange')) {
+      const isStyleChange = evt.getProperty('edit').changes.some((s: object) => s.constructor.name === 'mxStyleChange');
+      const isNegated = evt.getProperty('edit').changes.some(
+        (s: mxgraph.mxStyleChange) => s.style === EditorStyle.ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE
+          || s.previous === EditorStyle.ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE);
+      if (!isStyleChange || isNegated) {
+        console.log(evt.getProperty('edit'));
         this.undoManager.undoableEditHappened(evt.getProperty('edit'));
       }
     };
     this.graph.getModel().addListener(mx.mxEvent.UNDO, listener);
     this.graph.getView().addListener(mx.mxEvent.UNDO, listener);
-    this.undoManager.clear();
   }
 
   private async initGraphicalModel(): Promise<void> {
@@ -377,7 +377,6 @@ export class GraphicalEditor {
     } finally {
       this.graph.getModel().endUpdate();
       this.changeTranslator.preventDataUpdates = false;
-      this.undoManager.clear();
       this.validationService.validateCurrent();
     }
   }
@@ -560,6 +559,7 @@ export class GraphicalEditor {
   }
 
   public undo(): void {
+    // console.log(this.undoManager);
     if (this.undoManager.canUndo()) {
       this.undoManager.undo();
     }

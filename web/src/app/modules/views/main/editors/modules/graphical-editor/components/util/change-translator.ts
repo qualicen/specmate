@@ -220,8 +220,6 @@ export class ChangeTranslator {
             await this.translateEdgeEndsChange(change as mxgraph.mxTerminalChange, connection);
         } else if (change['value']) {
             await this.translateEdgeValueChange(change as mxgraph.mxValueChange, connection);
-        } else {
-            return Promise.reject('Could not determine edge change.');
         }
     }
 

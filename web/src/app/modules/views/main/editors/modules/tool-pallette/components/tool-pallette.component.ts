@@ -17,10 +17,13 @@ export class ToolPallette implements AfterViewChecked {
     }
 
     public get tools(): ToolBase[] {
+        if (this.editorToolsService.tools === undefined) {
+            return [];
+        }
         return this.editorToolsService.tools.filter(tool => !tool.isHidden);
     }
 
     public get isVisible(): boolean {
-        return this.tools && this.tools.length > 0;
+        return this.tools.length > 0;
     }
 }

@@ -43,6 +43,9 @@ export class AdditionalInformationService {
         if (!this.canHaveTestSpecifications) {
             return;
         }
+        if (this.requirement === undefined) {
+            return;
+        }
         let baseUrl = '';
         if (this.isModel(this.element)) {
             baseUrl = this.element.url;

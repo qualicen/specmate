@@ -153,8 +153,8 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 			}
 			String parameterValue = StringUtils.join(constraints, ",");
 			ParameterAssignment assignment = TestspecificationFactory.eINSTANCE.createParameterAssignment();
-			assignment.setId(SpecmateEcoreUtil.getIdForChild(testCase, assignment.eClass()));
-			assignment.setName(assignment.getId());
+			assignment.setId(SpecmateEcoreUtil.getIdForChild());
+			assignment.setName(SpecmateEcoreUtil.getNameForChild(testCase, assignment.eClass()));
 			assignment.setParameter(parameter);
 			assignment.setCondition(parameterValue);
 			testCase.getContents().add(assignment);

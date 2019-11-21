@@ -6,6 +6,7 @@ import { ProcessEnd } from '../../../../../../../../model/ProcessEnd';
 import { SpecmateDataService } from '../../../../../../../data/modules/data-service/services/specmate-data.service';
 import { SelectedElementService } from '../../../../../../side/modules/selected-element/services/selected-element.service';
 import { CreateNodeToolBase } from '../create-node-tool-base';
+import { ShapeProvider } from '../../../graphical-editor/providers/properties/shape-provider';
 
 export class EndTool extends CreateNodeToolBase<ProcessEnd> {
 
@@ -13,12 +14,12 @@ export class EndTool extends CreateNodeToolBase<ProcessEnd> {
 
     public name = 'tools.addEnd';
     public icon = 'plus';
-    public sticky = false;
+    public style = new ShapeProvider(Process).getStyle(ProcessEnd);
 
     constructor(parent: IContainer,
         dataService: SpecmateDataService,
         selectedElementService: SelectedElementService) {
-        super(parent, dataService, selectedElementService);
+        super(dataService, selectedElementService, parent);
     }
 
     protected getElementFactory(coords: { x: number; y: number; }): ElementFactoryBase<ProcessEnd> {

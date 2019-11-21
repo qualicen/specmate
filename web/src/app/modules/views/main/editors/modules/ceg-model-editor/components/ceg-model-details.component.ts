@@ -21,7 +21,7 @@ export class CEGModelDetails extends SpecmateViewBase {
     public model: CEGModel;
     private contents: IContainer[];
 
-    @ViewChild(GraphicalEditor)
+    @ViewChild(GraphicalEditor, { static: false })
     private editor: GraphicalEditor;
 
     constructor(

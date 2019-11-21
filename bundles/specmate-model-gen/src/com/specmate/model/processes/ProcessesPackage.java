@@ -39,7 +39,7 @@ public interface ProcessesPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://specmate.com/20190125/model/processes";
+	String eNS_URI = "http://specmate.com/20190902/model/processes";
 
 	/**
 	 * The package namespace name.
@@ -204,6 +204,24 @@ public interface ProcessesPackage extends EPackage {
 	int PROCESS_NODE__Y = BasePackage.IMODEL_NODE__Y;
 
 	/**
+	 * The feature id for the '<em><b>Width</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS_NODE__WIDTH = BasePackage.IMODEL_NODE__WIDTH;
+
+	/**
+	 * The feature id for the '<em><b>Height</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS_NODE__HEIGHT = BasePackage.IMODEL_NODE__HEIGHT;
+
+	/**
 	 * The feature id for the '<em><b>Outgoing Connections</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -320,6 +338,24 @@ public interface ProcessesPackage extends EPackage {
 	 * @ordered
 	 */
 	int PROCESS_STEP__Y = PROCESS_NODE__Y;
+
+	/**
+	 * The feature id for the '<em><b>Width</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS_STEP__WIDTH = PROCESS_NODE__WIDTH;
+
+	/**
+	 * The feature id for the '<em><b>Height</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS_STEP__HEIGHT = PROCESS_NODE__HEIGHT;
 
 	/**
 	 * The feature id for the '<em><b>Outgoing Connections</b></em>' reference list.
@@ -447,6 +483,24 @@ public interface ProcessesPackage extends EPackage {
 	 * @ordered
 	 */
 	int PROCESS_DECISION__Y = PROCESS_NODE__Y;
+
+	/**
+	 * The feature id for the '<em><b>Width</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS_DECISION__WIDTH = PROCESS_NODE__WIDTH;
+
+	/**
+	 * The feature id for the '<em><b>Height</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS_DECISION__HEIGHT = PROCESS_NODE__HEIGHT;
 
 	/**
 	 * The feature id for the '<em><b>Outgoing Connections</b></em>' reference list.
@@ -676,6 +730,24 @@ public interface ProcessesPackage extends EPackage {
 	int PROCESS_START__Y = PROCESS_NODE__Y;
 
 	/**
+	 * The feature id for the '<em><b>Width</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS_START__WIDTH = PROCESS_NODE__WIDTH;
+
+	/**
+	 * The feature id for the '<em><b>Height</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS_START__HEIGHT = PROCESS_NODE__HEIGHT;
+
+	/**
 	 * The feature id for the '<em><b>Outgoing Connections</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -792,6 +864,24 @@ public interface ProcessesPackage extends EPackage {
 	 * @ordered
 	 */
 	int PROCESS_END__Y = PROCESS_NODE__Y;
+
+	/**
+	 * The feature id for the '<em><b>Width</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS_END__WIDTH = PROCESS_NODE__WIDTH;
+
+	/**
+	 * The feature id for the '<em><b>Height</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS_END__HEIGHT = PROCESS_NODE__HEIGHT;
 
 	/**
 	 * The feature id for the '<em><b>Outgoing Connections</b></em>' reference list.

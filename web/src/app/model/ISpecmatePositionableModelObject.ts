@@ -14,6 +14,8 @@
 		 description: EString;
 		 x: EDouble;
 		 y: EDouble;
+		 width: EDouble;
+		 height: EDouble;
 
 		// References
 		

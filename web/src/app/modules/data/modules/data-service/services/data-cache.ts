@@ -115,6 +115,10 @@ export class DataCache {
     private removeFromParentContents(url: string): void {
         let parentContents = this.getParentContents(url);
         if (parentContents) {
+            if (!this.elementStore.hasOwnProperty(url)) {
+                console.warn('Unknown element.');
+                return;
+            }
             let element: IContainer = this.elementStore[url];
             Arrays.remove(parentContents, element);
         }

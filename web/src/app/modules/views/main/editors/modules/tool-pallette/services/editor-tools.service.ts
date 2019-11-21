@@ -7,25 +7,23 @@ import { SelectedElementService } from '../../../../../side/modules/selected-ele
 import { ToolProvider } from '../../graphical-editor/providers/properties/tool-provider';
 import { ToolBase } from '../tools/tool-base';
 import { ClipboardService } from './clipboard-service';
-import { MultiselectionService } from './multiselection.service';
-
+import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
 
 @Injectable()
 export class EditorToolsService {
-
-
     public activeTool: ToolBase;
 
     private model: IContainer;
 
-    private providerMap: {[url: string]: ToolProvider };
+    private providerMap: { [url: string]: ToolProvider };
+
+    private toolDOMElements: { [name: string]: HTMLElement } = {};
 
     constructor(private dataService: SpecmateDataService,
         private navigator: NavigatorService,
         private selectedElementService: SelectedElementService,
         private translate: TranslateService,
-        private rectService: MultiselectionService,
-        private clipboardService: ClipboardService) {
+        private modal: ConfirmationModal) {
         this.init(this.navigator.currentElement);
         this.navigator.hasNavigated.subscribe((model: IContainer) => this.init(model));
     }
@@ -35,10 +33,9 @@ export class EditorToolsService {
             return;
         }
         this.model = model;
-        this.activateDefaultTool();
     }
 
-    private get toolProvider(): ToolProvider {
+    public get toolProvider(): ToolProvider {
         if (!this.model) {
             return undefined;
         }
@@ -47,7 +44,7 @@ export class EditorToolsService {
         }
         if (!this.providerMap[this.model.url]) {
             this.providerMap[this.model.url] = new ToolProvider(this.model, this.dataService,
-                this.selectedElementService, this.translate, this.rectService, this.clipboardService);
+                this.selectedElementService, this.modal, this.translate);
         }
         return this.providerMap[this.model.url];
     }
@@ -59,44 +56,11 @@ export class EditorToolsService {
         return this.toolProvider.tools;
     }
 
-    public isActive(tool: ToolBase): boolean {
-        return this.activeTool === tool;
+    public addDOMElement(tool: ToolBase, domElement: HTMLElement): void {
+        this.toolDOMElements[tool.name] = domElement;
     }
 
-    public activate(tool: ToolBase): void {
-        if (!tool) {
-            return;
-        }
-        if (this.activeTool) {
-            this.activeTool.deactivate();
-        }
-        this.activeTool = tool;
-        this.activeTool.activate();
-    }
-
-    public deactivate(tool: ToolBase): void {
-        tool.deactivate();
-    }
-
-    public reset(): void {
-        if (this.activeTool) {
-            this.activeTool.deactivate();
-            this.activeTool.activate();
-        }
-    }
-
-    public activateDefaultTool(): void {
-        this.dataService.readContents(this.model.url, true)
-            .then((contents: IContainer[]) => {
-                let defaultTool: ToolBase = this.toolProvider.getDefaultTool(contents);
-                this.activate(defaultTool);
-            });
-    }
-
-    public get cursor(): string {
-        if (this.activeTool) {
-            return this.activeTool.cursor;
-        }
-        return 'auto';
+    public getDOMElement(tool: ToolBase): HTMLElement {
+        return this.toolDOMElements[tool.name];
     }
 }

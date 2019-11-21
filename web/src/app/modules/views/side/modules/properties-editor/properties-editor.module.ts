@@ -14,7 +14,7 @@ import { PropertiesEditor } from './components/properties-editor.component';
     BrowserModule,
     GenericFormModule,
     NavigatorModule,
-    NgbModule.forRoot(),
+    NgbModule,
     FormsModule,
     ReactiveFormsModule,
     SpecmateSharedModule,

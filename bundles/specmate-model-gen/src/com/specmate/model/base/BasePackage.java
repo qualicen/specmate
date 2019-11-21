@@ -38,7 +38,7 @@ public interface BasePackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://specmate.com/20190125/model/base";
+	String eNS_URI = "http://specmate.com/20190902/model/base";
 
 	/**
 	 * The package namespace name.
@@ -643,13 +643,31 @@ public interface BasePackage extends EPackage {
 	int ISPECMATE_POSITIONABLE_MODEL_OBJECT__Y = ISPECMATE_MODEL_OBJECT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Width</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ISPECMATE_POSITIONABLE_MODEL_OBJECT__WIDTH = ISPECMATE_MODEL_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Height</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ISPECMATE_POSITIONABLE_MODEL_OBJECT__HEIGHT = ISPECMATE_MODEL_OBJECT_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>ISpecmate Positionable Model Object</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ISPECMATE_POSITIONABLE_MODEL_OBJECT_FEATURE_COUNT = ISPECMATE_MODEL_OBJECT_FEATURE_COUNT + 2;
+	int ISPECMATE_POSITIONABLE_MODEL_OBJECT_FEATURE_COUNT = ISPECMATE_MODEL_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of operations of the '<em>ISpecmate Positionable Model Object</em>' class.
@@ -841,6 +859,24 @@ public interface BasePackage extends EPackage {
 	 * @ordered
 	 */
 	int IMODEL_NODE__Y = ISPECMATE_POSITIONABLE_MODEL_OBJECT__Y;
+
+	/**
+	 * The feature id for the '<em><b>Width</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int IMODEL_NODE__WIDTH = ISPECMATE_POSITIONABLE_MODEL_OBJECT__WIDTH;
+
+	/**
+	 * The feature id for the '<em><b>Height</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int IMODEL_NODE__HEIGHT = ISPECMATE_POSITIONABLE_MODEL_OBJECT__HEIGHT;
 
 	/**
 	 * The feature id for the '<em><b>Outgoing Connections</b></em>' reference list.
@@ -1158,6 +1194,28 @@ public interface BasePackage extends EPackage {
 	EAttribute getISpecmatePositionableModelObject_Y();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.specmate.model.base.ISpecmatePositionableModelObject#getWidth <em>Width</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Width</em>'.
+	 * @see com.specmate.model.base.ISpecmatePositionableModelObject#getWidth()
+	 * @see #getISpecmatePositionableModelObject()
+	 * @generated
+	 */
+	EAttribute getISpecmatePositionableModelObject_Width();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.specmate.model.base.ISpecmatePositionableModelObject#getHeight <em>Height</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Height</em>'.
+	 * @see com.specmate.model.base.ISpecmatePositionableModelObject#getHeight()
+	 * @see #getISpecmatePositionableModelObject()
+	 * @generated
+	 */
+	EAttribute getISpecmatePositionableModelObject_Height();
+
+	/**
 	 * Returns the meta object for class '{@link com.specmate.model.base.IModelConnection <em>IModel Connection</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1471,6 +1529,22 @@ public interface BasePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ISPECMATE_POSITIONABLE_MODEL_OBJECT__Y = eINSTANCE.getISpecmatePositionableModelObject_Y();
+
+		/**
+		 * The meta object literal for the '<em><b>Width</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ISPECMATE_POSITIONABLE_MODEL_OBJECT__WIDTH = eINSTANCE.getISpecmatePositionableModelObject_Width();
+
+		/**
+		 * The meta object literal for the '<em><b>Height</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ISPECMATE_POSITIONABLE_MODEL_OBJECT__HEIGHT = eINSTANCE.getISpecmatePositionableModelObject_Height();
 
 		/**
 		 * The meta object literal for the '{@link com.specmate.model.base.impl.IModelConnectionImpl <em>IModel Connection</em>}' class.

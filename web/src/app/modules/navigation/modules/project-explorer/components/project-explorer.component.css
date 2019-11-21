@@ -17,13 +17,13 @@ ul {
 
 #projectList {
     overflow: scroll;
-    padding: 0 0 0 0;
+    padding: 0 0 10px 0;
     margin-bottom: 1rem;
 }
 
 #libraryList {
     overflow: scroll;
-    padding: 0 0 0 0;
+    padding: 0 0 10px 0;
     margin-bottom: 1rem;
 }
 

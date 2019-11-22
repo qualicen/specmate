@@ -165,7 +165,7 @@ export class ChangeTranslator {
         const node = await tool.perform();
         if (Type.is(node, CEGNode)) {
             const value =
-                new CEGmxModelNode(change.child.children[0].value, change.child.children[1].value, change.child.children[2].value);
+                new CEGmxModelNode(change.child.children[0].value, change.child.children[1].value, change.child.children[2].value || 'AND');
             const elementValues = this.nodeNameConverter.convertFrom(value, node);
             for (const key in elementValues) {
                 node[key] = elementValues[key];
@@ -220,8 +220,6 @@ export class ChangeTranslator {
             await this.translateEdgeEndsChange(change as mxgraph.mxTerminalChange, connection);
         } else if (change['value']) {
             await this.translateEdgeValueChange(change as mxgraph.mxValueChange, connection);
-        } else {
-            return Promise.reject('Could not determine edge change.');
         }
     }
 

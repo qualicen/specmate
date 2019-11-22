@@ -2,6 +2,8 @@ sudo: false
 language:
 - java
 - node_js
+node_js:
+- '9'
 services:
 - docker
 jdk:

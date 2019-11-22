@@ -3,7 +3,7 @@ language:
 - java
 - node_js
 node_js:
-- '10'
+  - 10
 services:
 - docker
 jdk:
@@ -11,7 +11,6 @@ jdk:
 env:
 - TERM=dumb
 install:
-- node --version
 - cd web && npm run init
 - cd ../bundles && ./gradlew --version
 - cd ..

@@ -10,11 +10,13 @@ jdk:
 - openjdk11
 env:
 - TERM=dumb
+before_install:
+  - nvm install 6.10
 install:
-- cd web && npm update-check
+- cd web && npm install
 - npm run init
 - cd ../bundles && ./gradlew --version
-- cd ..
+- cd ..  
 script:
 - (node --version)
 - (cd web && npm run build-prod)

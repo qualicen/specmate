@@ -11,6 +11,7 @@ jdk:
 env:
 - TERM=dumb
 install:
+- node --version
 - cd web && npm run init
 - cd ../bundles && ./gradlew --version
 - cd ..

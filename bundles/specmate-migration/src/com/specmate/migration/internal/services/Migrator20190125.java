@@ -39,8 +39,8 @@ public class Migrator20190125 implements IMigrator {
 
 		IAttributeToSQLMapper aMapper = dbProvider.getAttributeToSQLMapper(packageName, getSourceVersion(),
 				getTargetVersion());
-		aMapper.migrateNewDoubleAttribute(objectName, "width", 0.0);
-		aMapper.migrateNewDoubleAttribute(objectName, "height", 0.0);
+		aMapper.migrateNewDoubleAttribute(objectName, "width", null);
+		aMapper.migrateNewDoubleAttribute(objectName, "height", null);
 	}
 
 	@Reference

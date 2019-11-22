@@ -283,9 +283,12 @@ export class GraphicalEditor {
     this.graph = undefined;
   }
 
-  public initTools(): void {
+  private initTools(): void {
+    if (this.editorToolsService.tools === undefined) {
+      return;
+    }
     for (const tool of this.editorToolsService.tools) {
-      tool.setGraph(this.graph);
+      tool.graph = this.graph;
       if (tool.isVertexTool) {
         this.makeVertexTool(tool);
       } else if (!tool.isHidden) {
@@ -490,11 +493,16 @@ export class GraphicalEditor {
     return EditorStyle.CAUSE_STYLE_NAME;
   }
 
-  @Input()
-  public set model(model: IContainer) {
+  private resetProviders(model: IContainer): void {
     this.shapeProvider = new ShapeProvider(model);
     this.nameProvider = new NameProvider(model, this.translate);
+    this.editorToolsService.init(model);
     this.changeTranslator = new ChangeTranslator(model, this.dataService, this.editorToolsService.toolProvider, this.shapeProvider);
+  }
+
+  @Input()
+  public set model(model: IContainer) {
+    this.resetProviders(model);
     this._model = model;
     this.dataService.readContents(model.url, true).then((contents) => {
       this._contents = contents;

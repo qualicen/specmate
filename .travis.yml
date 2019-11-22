@@ -10,9 +10,8 @@ jdk:
 - openjdk11
 env:
 - TERM=dumb
-before_script:
-- cd web && npm cache clean --force
-- npm run init
+install:
+- cd web && npm run init
 - cd ../bundles && ./gradlew --version
 - cd ..
 script:

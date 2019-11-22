@@ -1,7 +1,7 @@
 sudo: false
 language:
-- java
-- node_js
+  - java
+  - node_js
 node_js:
   - 10
 services:

@@ -11,7 +11,8 @@ jdk:
 env:
 - TERM=dumb
 before_script:
-- cd web && npm run init
+- cd web && npm cache clean --force
+- npm run init
 - cd ../bundles && ./gradlew --version
 - cd ..
 script:

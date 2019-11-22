@@ -15,6 +15,7 @@ install:
 - cd ../bundles && ./gradlew --version
 - cd ..
 script:
+- (node --version)
 - (cd web && npm run build-prod)
 - (cd bundles && ./gradlew --no-daemon build --continue -x check)
 - (cd bundles && ./gradlew --no-daemon export -x check)

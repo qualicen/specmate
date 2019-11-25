@@ -242,7 +242,7 @@ export class ChangeTranslator {
         //console.log(cell);
         graph.model = model;
         //console.log(graph.getModel()); */
-        this.contents = await this.dataService.readContents(this.model.url, true);
+
         return node;
     }
 

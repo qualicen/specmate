@@ -28,7 +28,7 @@ export class EditorToolsService {
         this.navigator.hasNavigated.subscribe((model: IContainer) => this.init(model));
     }
 
-    private init(model: IContainer): void {
+    public init(model: IContainer): void {
         if (!model) {
             return;
         }
@@ -57,10 +57,10 @@ export class EditorToolsService {
     }
 
     public addDOMElement(tool: ToolBase, domElement: HTMLElement): void {
-        this.toolDOMElements[tool.name] = domElement;
+        this.toolDOMElements[tool.name + '-' + tool.parentName] = domElement;
     }
 
     public getDOMElement(tool: ToolBase): HTMLElement {
-        return this.toolDOMElements[tool.name];
+        return this.toolDOMElements[tool.name + '-' + tool.parentName];
     }
 }

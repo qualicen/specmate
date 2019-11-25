@@ -21,13 +21,21 @@ export abstract class ToolBase {
         return 'toolbar-' + this.idPart + '-button';
     }
 
-    private get idPart(): string {
+    public get idPart(): string {
         return this.name;
     }
 
-    protected graph: mxgraph.mxGraph;
+    public get parentName(): string {
+        return this.parent.name;
+    }
 
-    setGraph(graph: mxgraph.mxGraph) {
-        this.graph = graph;
+    private _graph: mxgraph.mxGraph;
+
+    public get graph(): mxgraph.mxGraph {
+        return this._graph;
+    }
+
+    public set graph(graph: mxgraph.mxGraph) {
+        this._graph = graph;
     }
 }

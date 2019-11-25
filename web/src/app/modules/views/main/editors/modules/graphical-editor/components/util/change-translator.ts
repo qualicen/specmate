@@ -178,8 +178,13 @@ export class ChangeTranslator {
 
         }
         console.log(graph.getModel());
+        let model = graph.getModel();
         let cell = graph.getModel().getCell(change.child.id);
         cell.setId(node.url);
+        cell.setId(newId);
+        Map<String, Object> cells = model.getCells();
+        cells.remove(oldId);
+        cells.put(newId, cell);
         console.log(graph.getModel());
         console.log(cell);
         return node;

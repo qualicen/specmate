@@ -168,6 +168,7 @@ export class GraphicalEditor {
 
     this.graph.getModel().addListener(mx.mxEvent.CHANGE, async (sender: mxgraph.mxEventSource, evt: mxgraph.mxEventObject) => {
       const edit = evt.getProperty('edit') as mxgraph.mxUndoableEdit;
+      console.log(edit);
 
       if (edit.undone === true || edit.redone === true) {
         this.undoService.setUndoEnabled(this.undoManager.canUndo());
@@ -178,15 +179,15 @@ export class GraphicalEditor {
       const done: any[] = [];
       try {
         for (const change of edit.changes.filter(filteredChange => filteredChange.child && !filteredChange.child.vertex)) {
-          await this.changeTranslator.translate(change);
+          await this.changeTranslator.translate(change, this.graph);
           done.push(change);
         }
         for (const change of edit.changes.filter(filteredChange => filteredChange.child && filteredChange.child.vertex)) {
-          await this.changeTranslator.translate(change);
+          await this.changeTranslator.translate(change, this.graph);
           done.push(change);
         }
         for (const change of edit.changes.filter(filteredChange => done.indexOf(filteredChange) < 0)) {
-          await this.changeTranslator.translate(change);
+          await this.changeTranslator.translate(change, this.graph);
         }
       } catch (e) {
         this.changeTranslator.preventDataUpdates = true;

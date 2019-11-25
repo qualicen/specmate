@@ -54,7 +54,7 @@ export class ChangeTranslator {
         return element;
     }
 
-    public async translate(change: (mxgraph.mxTerminalChange | mxgraph.mxChildChange | mxgraph.mxStyleChange)): Promise<void> {
+    public async translate(change: (mxgraph.mxTerminalChange | mxgraph.mxChildChange | mxgraph.mxStyleChange), graph: mxgraph.mxGraph): Promise<void> {
         if (this.preventDataUpdates) {
             return;
         }
@@ -63,7 +63,7 @@ export class ChangeTranslator {
         if (change['cell'] === undefined && change['child'] !== undefined) {
             const childChange = change as mxgraph.mxChildChange;
             if (childChange.parent !== undefined && childChange.parent !== null) {
-                await this.translateAdd(childChange);
+                await this.translateAdd(childChange, graph);
             } else {
                 await this.translateDelete(childChange);
             }
@@ -124,7 +124,7 @@ export class ChangeTranslator {
         deleteTool.perform();
     }
 
-    private async translateAdd(change: mxgraph.mxChildChange): Promise<void> {
+    private async translateAdd(change: mxgraph.mxChildChange, graph: mxgraph.mxGraph): Promise<void> {
         if (await this.getElement(change.child.id) !== undefined) {
             console.log('Child already addded');
             return;
@@ -140,7 +140,7 @@ export class ChangeTranslator {
         if (change.child.edge) {
             addedElement = await this.translateEdgeAdd(change);
         } else {
-            addedElement = await this.translateNodeAdd(change);
+            addedElement = await this.translateNodeAdd(change, graph);
         }
         change.child.setId(addedElement.url);
     }
@@ -159,7 +159,7 @@ export class ChangeTranslator {
         return connection;
     }
 
-    private async translateNodeAdd(change: mxgraph.mxChildChange): Promise<IModelNode> {
+    private async translateNodeAdd(change: mxgraph.mxChildChange, graph: mxgraph.mxGraph): Promise<IModelNode> {
         const tool = this.determineTool(change) as CreateNodeToolBase<IModelNode>;
         tool.coords = { x: change.child.geometry.x, y: change.child.geometry.y };
         const node = await tool.perform();
@@ -170,8 +170,18 @@ export class ChangeTranslator {
             for (const key in elementValues) {
                 node[key] = elementValues[key];
             }
-            await this.dataService.updateElement(node, true, Id.uuid);
+            try {
+              await this.dataService.updateElement(node, true, Id.uuid);
+            } catch (error) {
+              console.log('node not found');
+            }
+
         }
+        console.log(graph.getModel());
+        let cell = graph.getModel().getCell(change.child.id);
+        cell.setId(node.url);
+        console.log(graph.getModel());
+        console.log(cell);
         return node;
     }
 

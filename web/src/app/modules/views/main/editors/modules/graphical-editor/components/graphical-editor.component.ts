@@ -168,7 +168,7 @@ export class GraphicalEditor {
 
     this.graph.getModel().addListener(mx.mxEvent.CHANGE, async (sender: mxgraph.mxEventSource, evt: mxgraph.mxEventObject) => {
       const edit = evt.getProperty('edit') as mxgraph.mxUndoableEdit;
-      console.log(edit);
+      // console.log(edit);
 
       if (edit.undone === true || edit.redone === true) {
         this.undoService.setUndoEnabled(this.undoManager.canUndo());

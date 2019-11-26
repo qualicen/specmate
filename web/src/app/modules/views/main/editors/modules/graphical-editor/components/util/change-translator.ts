@@ -71,7 +71,6 @@ export class ChangeTranslator {
         } else if (change['style'] !== undefined) {
             await this.translateStyleChange(change as mxgraph.mxStyleChange);
         } else if (change['cell'] !== undefined) {
-          console.log('value changed');
             await this.translateTerminalChange(change as mxgraph.mxTerminalChange);
         }
     }
@@ -175,87 +174,53 @@ export class ChangeTranslator {
             }
               await this.dataService.updateElement(node, true, Id.uuid);
         }
-        // console.log('0.0');
-        // console.log(graph.getModel());
-        // console.log('1');
+
+        // Update the ids, thus mxgraph and dataService uses the same
         let oldId = change.child.id;
         let newId = node.url;
-        let model = graph.getModel();
-        let cells = model.cells;
+        let cells = graph.getModel().cells;
 
         let cell = graph.getModel().getCell(oldId);
-        let variable = graph.getModel().getCell(oldId + '/variable');
-        let condition = graph.getModel().getCell(oldId + '/condition');
-        let type = graph.getModel().getCell(oldId + '/type');
-
         cell.setId(newId);
-        variable.setId(newId + '/variable');
-        condition.setId(newId + '/condition');
-        type.setId(newId + '/type');
-
-
         delete cells[oldId];
         cells[newId] = cell;
-        delete cells[oldId + '/variable'];
-        cells[newId + '/variable'] = variable;
-        delete cells[oldId + '/condition'];
-        cells[newId + '/condition'] = condition;
-        delete cells[oldId + '/type'];
-        cells[newId + '/type'] = type;
-        // console.log(cells);
 
+        if (Type.is(node, CEGNode)) {
+          let variable = graph.getModel().getCell(oldId + '/variable');
+          let condition = graph.getModel().getCell(oldId + '/condition');
+          let type = graph.getModel().getCell(oldId + '/type');
 
+          variable.setId(newId + '/variable');
+          condition.setId(newId + '/condition');
+          type.setId(newId + '/type');
 
-        /* console.log('2');
-        console.log(cell);
-        cell.setId(node.url);
-        console.log('3');
-        cell.parent = graph.getDefaultParent();
-        console.log('4');
-        console.log(model.cells[oldId]);
-        // let children: mxgraph.mxCell[] = graph.model.getChildren(cell);
+          delete cells[oldId + '/variable'];
+          delete cells[oldId + '/condition'];
+          delete cells[oldId + '/type'];
 
-        console.log('5');
+          cells[variable.id] = variable;
+          cells[condition.id] = condition;
+          cells[type.id] = type;
 
-        // cells.delete(change.child.id + '/variable');
-        // cells.delete(change.child.id + '/condition');
-        // cells.delete(change.child.id + '/type');
-        // console.log(cells.constructor.name);
+          this.parentComponents[variable.id] = node;
+          this.parentComponents[condition.id] = node;
+          this.parentComponents[type.id] = node;
 
-        // let index = cells.indexOf(oldId);
-        // console.log(index);
-        // cells.splice(index, 1);
-        // console.log(cells.get(oldId));
-        // console.log(cells);
-        // console.log('6');
-        // console.log(cells);
-
-        //console.log(model);
-        console.log('7');
-        // cells.set(node.url, cell);
-        //console.log('8');
-        // for (let c in children) {
-
-        // }
-
-        //console.log(model);
-        //console.log(cell);
-        graph.model = model;
-        //console.log(graph.getModel()); */
-
+          delete this.parentComponents[oldId + '/variable'];
+          delete this.parentComponents[oldId + '/condition'];
+          delete this.parentComponents[oldId + '/type'];
+        }
         return node;
     }
 
     private async translateTerminalChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange): Promise<void> {
         const element = await this.getElement(change.cell.id);
         if (element === undefined) {
-          console.log('undefined');
             return;
         }
         if (change.cell.edge) {
             await this.translateEdgeChange(change, element as IModelConnection);
         } else {
-          console.log('node change');
             await this.translateNodeChange(change, element as IModelNode);
         }
     }

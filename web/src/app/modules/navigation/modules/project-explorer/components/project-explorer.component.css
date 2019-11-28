@@ -17,7 +17,7 @@ ul {
 
 #projectList {
     overflow: scroll;
-    padding: 0 0 10px 0;
+    padding: 0 0 15px 0;
     margin-bottom: 1rem;
     padding-top: 3px;
 }
@@ -54,4 +54,8 @@ ul {
     max-height: 100%;
     display: flex;
     flex-direction: column;
+}
+
+#explorer {
+    margin-bottom: 1.5rem;
 }

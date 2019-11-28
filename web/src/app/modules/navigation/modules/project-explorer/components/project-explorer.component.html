@@ -11,7 +11,7 @@
                             </span>
                         </div>
                     </div>
-                    <ul *ngIf="!searchBox.value">
+                    <ul *ngIf="!searchBox.value" id="explorer">
                         <ul role="tablist" class="nav nav-tabs justify-content-start">
                             <li class="nav-item">
                                 <button [ngClass]="{'active' : !showLibrary}" role="tab" (click)="switchToProject()" class="nav-link" id="ngb-tab-0" aria-disabled="false" [attr.aria-expanded]="!showLibrary ? 'true' : 'false'"  [attr.aria-controls]="!showLibrary ? 'ngb-tab-0-panel' : null">{{'project' | translate}}</button>

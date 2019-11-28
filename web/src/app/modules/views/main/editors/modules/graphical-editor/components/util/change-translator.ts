@@ -55,7 +55,7 @@ export class ChangeTranslator {
     }
 
     public async translate(change: (mxgraph.mxTerminalChange | mxgraph.mxChildChange | mxgraph.mxStyleChange),
-     graph: mxgraph.mxGraph): Promise<void> {
+        graph: mxgraph.mxGraph): Promise<void> {
         if (this.preventDataUpdates) {
             return;
         }
@@ -171,8 +171,11 @@ export class ChangeTranslator {
             for (const key in elementValues) {
                 node[key] = elementValues[key];
             }
-              await this.dataService.updateElement(node, true, Id.uuid);
+        } else {
+            node.name = change.child.value;
         }
+        await this.dataService.updateElement(node, true, Id.uuid);
+
         // Update the ids, thus mxgraph and dataService uses the same
         let oldId = change.child.id;
         let newId = node.url;
@@ -184,33 +187,33 @@ export class ChangeTranslator {
         cells[newId] = cell;
 
         if (Type.is(node, CEGNode)) {
-          let variable = cell.children[0];
-          let condition = cell.children[1];
-          let type = cell.children[2];
+            let variable = cell.children[0];
+            let condition = cell.children[1];
+            let type = cell.children[2];
 
-          let oldIdVariable = variable.id;
-          let oldIdCondition = condition.id;
-          let oldIdType = type.id;
+            let oldIdVariable = variable.id;
+            let oldIdCondition = condition.id;
+            let oldIdType = type.id;
 
-          variable.setId(newId + '/variable');
-          condition.setId(newId + '/condition');
-          type.setId(newId + '/type');
+            variable.setId(newId + '/variable');
+            condition.setId(newId + '/condition');
+            type.setId(newId + '/type');
 
-          delete cells[oldIdVariable];
-          delete cells[oldIdCondition];
-          delete cells[oldIdType];
+            delete cells[oldIdVariable];
+            delete cells[oldIdCondition];
+            delete cells[oldIdType];
 
-          cells[variable.id] = variable;
-          cells[condition.id] = condition;
-          cells[type.id] = type;
+            cells[variable.id] = variable;
+            cells[condition.id] = condition;
+            cells[type.id] = type;
 
-          this.parentComponents[variable.id] = node;
-          this.parentComponents[condition.id] = node;
-          this.parentComponents[type.id] = node;
+            this.parentComponents[variable.id] = node;
+            this.parentComponents[condition.id] = node;
+            this.parentComponents[type.id] = node;
 
-          delete this.parentComponents[oldIdVariable];
-          delete this.parentComponents[oldIdCondition];
-          delete this.parentComponents[oldIdType];
+            delete this.parentComponents[oldIdVariable];
+            delete this.parentComponents[oldIdCondition];
+            delete this.parentComponents[oldIdType];
         }
         return node;
     }

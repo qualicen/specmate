@@ -144,7 +144,6 @@ export class ChangeTranslator {
             addedElement = await this.translateNodeAdd(change, graph);
         }
         change.child.setId(addedElement.url);
-
     }
 
     private async translateEdgeAdd(change: mxgraph.mxChildChange): Promise<IModelConnection> {
@@ -174,7 +173,6 @@ export class ChangeTranslator {
             }
               await this.dataService.updateElement(node, true, Id.uuid);
         }
-
         // Update the ids, thus mxgraph and dataService uses the same
         let oldId = change.child.id;
         let newId = node.url;
@@ -186,17 +184,21 @@ export class ChangeTranslator {
         cells[newId] = cell;
 
         if (Type.is(node, CEGNode)) {
-          let variable = graph.getModel().getCell(oldId + '/variable');
-          let condition = graph.getModel().getCell(oldId + '/condition');
-          let type = graph.getModel().getCell(oldId + '/type');
+          let variable = cell.children[0];
+          let condition = cell.children[1];
+          let type = cell.children[2];
+
+          let oldIdVariable = variable.id;
+          let oldIdCondition = condition.id;
+          let oldIdType = type.id;
 
           variable.setId(newId + '/variable');
           condition.setId(newId + '/condition');
           type.setId(newId + '/type');
 
-          delete cells[oldId + '/variable'];
-          delete cells[oldId + '/condition'];
-          delete cells[oldId + '/type'];
+          delete cells[oldIdVariable];
+          delete cells[oldIdCondition];
+          delete cells[oldIdType];
 
           cells[variable.id] = variable;
           cells[condition.id] = condition;
@@ -206,9 +208,9 @@ export class ChangeTranslator {
           this.parentComponents[condition.id] = node;
           this.parentComponents[type.id] = node;
 
-          delete this.parentComponents[oldId + '/variable'];
-          delete this.parentComponents[oldId + '/condition'];
-          delete this.parentComponents[oldId + '/type'];
+          delete this.parentComponents[oldIdVariable];
+          delete this.parentComponents[oldIdCondition];
+          delete this.parentComponents[oldIdType];
         }
         return node;
     }
@@ -340,7 +342,7 @@ export class ChangeTranslator {
             } else {
                 const vertexTools = this.toolProvider.tools.filter(tool => tool.isVertexTool === true);
                 if (vertexTools.length > 1) {
-                    return vertexTools.find(tool => tool.style === childChange.child.style);
+                    return vertexTools.find(tool => childChange.child.style.includes(tool.style));
                 } else if (vertexTools.length === 1) {
                     return vertexTools[0];
                 }

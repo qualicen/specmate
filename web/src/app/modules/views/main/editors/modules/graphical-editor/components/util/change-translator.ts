@@ -374,7 +374,7 @@ export class ChangeTranslator {
         } else {
             graph.getModel().beginUpdate();
             try {
-                if (value === cell.value) {
+                if (value !== cell.value) {
                     graph.model.setValue(cell, value);
                 }
                 StyleChanger.setStyle(cell, graph, this.shapeProvider.getStyle(changedElement));

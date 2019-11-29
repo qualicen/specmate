@@ -51,7 +51,7 @@ import com.specmate.model.support.util.SpecmateEcoreUtil;
 import com.specmate.rest.RestResult;
 
 @Component(immediate = true, service = { IRestService.class,
-		IRequirementsSource.class }, configurationPid = JiraConnectorConfig.PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
+		IRequirementsSource.class }, configurationPid = JiraConnectorConfig.CONNECTOR_PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
 public class JiraConnector extends DetailsService implements IRequirementsSource, IRestService {
 
 	private static final String JIRA_STORY_CACHE_NAME = "jiraStoryCache";
@@ -72,6 +72,10 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 
 	private ICache<String, Issue> cache;
 
+	public JiraRestClient getJiraClient() {
+		return this.jiraClient;
+	}
+	
 	@Activate
 	public void activate(Map<String, Object> properties) throws SpecmateException {
 		validateConfig(properties);
@@ -83,8 +87,7 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 		String password = (String) properties.get(JiraConnectorConfig.KEY_JIRA_PASSWORD);
 
 		try {
-			jiraClient = new AsynchronousJiraRestClientFactory().createWithBasicHttpAuthentication(new URI(url),
-					username, password);
+			jiraClient = createJiraRESTClient(username, password);
 		} catch (URISyntaxException e) {
 			throw new SpecmateInternalException(ErrorCode.JIRA, e);
 		}
@@ -101,6 +104,12 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 		});
 
 		logService.log(LogService.LOG_DEBUG, "Initialized Jira Connector with " + properties.toString() + ".");
+	}
+
+	private JiraRestClient createJiraRESTClient(String username, String password) throws URISyntaxException {
+		// curl -s -H "Authorization: Basic ***REMOVED***" https://***REMOVED***/rest/api/2/issuetype | jq '.[] | select(.name == "Test") | .id'
+		return new AsynchronousJiraRestClientFactory()
+				.createWithAuthenticationHandler(new URI(url), new BasicAuthHandler(username, password));
 	}
 
 	@Deactivate
@@ -221,8 +230,7 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 	@Override
 	public boolean authenticate(String username, String password) throws SpecmateException {
 		try {
-			JiraRestClient client = new AsynchronousJiraRestClientFactory()
-					.createWithBasicHttpAuthentication(new URI(url), username, password);
+			JiraRestClient client = this.createJiraRESTClient(username, password);
 			client.getProjectClient().getProject(projectName).claim();
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
@@ -314,8 +322,8 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 	}
 
 	/**
-	 * Behavior for GET requests. For requirements the current data is fetched
-	 * from the HP server.
+	 * Behavior for GET requests. For requirements the current data is fetched from
+	 * the HP server.
 	 */
 	@Override
 	public RestResult<?> get(Object target, MultivaluedMap<String, String> queryParams, String token)
@@ -346,6 +354,10 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 	@Reference
 	public void setCacheService(ICacheService cacheService) {
 		this.cacheService = cacheService;
+	}
+
+	public String getProjectName() {
+		return this.projectName;
 	}
 
 }

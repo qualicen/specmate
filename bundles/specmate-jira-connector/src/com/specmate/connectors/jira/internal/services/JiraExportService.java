@@ -20,7 +20,7 @@ import com.specmate.connectors.api.IExportService;
 import com.specmate.connectors.jira.config.JiraConnectorConfig;
 import com.specmate.model.testspecification.TestProcedure;
 
-@Component(service = IExportService.class, configurationPid = JiraConnectorConfig.EXPORTER_PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
+@Component(immediate = true, service = IExportService.class, configurationPid = JiraConnectorConfig.EXPORTER_PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
 public class JiraExportService implements IExportService {
 
 	private LogService logService;
@@ -33,13 +33,11 @@ public class JiraExportService implements IExportService {
 		jiraClient = connector.getJiraClient();
 		Iterable<IssueType> issueTypes = jiraClient.getMetadataClient().getIssueTypes().claim();
 		Spliterator<IssueType> issueTypesSpliterator = Spliterators.spliteratorUnknownSize(issueTypes.iterator(), 0);
-		
+
 		testType = StreamSupport.stream(issueTypesSpliterator, false)
-				.filter(issueType -> issueType.getName().equals("Test"))
-				.findFirst()
-				.orElseGet(null);
-		if(testType == null) {
-			this.logService.log(LogService.LOG_ERROR, "Could not get Issue Type for Tests");
+				.filter(issueType -> issueType.getName().equals("Test")).findFirst().orElseGet(null);
+		if (testType == null) {
+			logService.log(LogService.LOG_ERROR, "Could not get Issue Type for Tests");
 		}
 	}
 
@@ -53,13 +51,12 @@ public class JiraExportService implements IExportService {
 
 	@Override
 	public boolean isAuthorizedToExport(String username, String password) {
-		return this.testType != null;
+		return testType != null;
 	}
 
 	@Reference
 	public void setLogService(LogService logService) {
 		this.logService = logService;
 	}
-
 
 }

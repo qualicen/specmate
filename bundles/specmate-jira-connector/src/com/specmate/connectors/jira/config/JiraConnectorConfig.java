@@ -17,7 +17,7 @@ import com.specmate.config.api.IConfigService;
 public class JiraConnectorConfig {
 
 	public static final String CONNECTOR_PID = "com.specmate.connectors.jira.JiraConnector";
-	public static final String EXPORTER_PID = "com.specmate.connectors.jira.JiraExportService";
+	public static final String EXPORTER_PID = "com.specmate.connectors.jira.JiraExporter";
 	public static final String KEY_JIRA_URL = "jira.url";
 	public static final String KEY_JIRA_PROJECT = "jira.project";
 	public static final String KEY_JIRA_USERNAME = "jira.username";
@@ -28,7 +28,7 @@ public class JiraConnectorConfig {
 
 	/**
 	 * Configures the Jira Connector.
-	 * 
+	 *
 	 * @throws SpecmateException
 	 */
 	@Activate

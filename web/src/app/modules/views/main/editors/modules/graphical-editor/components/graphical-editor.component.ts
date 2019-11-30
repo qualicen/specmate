@@ -178,15 +178,15 @@ export class GraphicalEditor {
       const done: any[] = [];
       try {
         for (const change of edit.changes.filter(filteredChange => filteredChange.child && !filteredChange.child.vertex)) {
-          await this.changeTranslator.translate(change);
+          await this.changeTranslator.translate(change, this.graph);
           done.push(change);
         }
         for (const change of edit.changes.filter(filteredChange => filteredChange.child && filteredChange.child.vertex)) {
-          await this.changeTranslator.translate(change);
+          await this.changeTranslator.translate(change, this.graph);
           done.push(change);
         }
         for (const change of edit.changes.filter(filteredChange => done.indexOf(filteredChange) < 0)) {
-          await this.changeTranslator.translate(change);
+          await this.changeTranslator.translate(change, this.graph);
         }
       } catch (e) {
         this.changeTranslator.preventDataUpdates = true;

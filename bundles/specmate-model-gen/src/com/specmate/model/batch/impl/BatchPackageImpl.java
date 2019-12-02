@@ -31,7 +31,6 @@ import com.specmate.model.requirements.impl.RequirementsPackageImpl;
 import com.specmate.model.testspecification.TestspecificationPackage;
 
 import com.specmate.model.testspecification.impl.TestspecificationPackageImpl;
-
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;

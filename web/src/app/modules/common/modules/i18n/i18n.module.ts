@@ -16,7 +16,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     // MODULE IMPORTS
     BrowserModule,
     SpecmateSharedModule,
-    NgbModule.forRoot()
+    NgbModule
   ],
   declarations: [
     // COMPONENTS IN THIS MODULE

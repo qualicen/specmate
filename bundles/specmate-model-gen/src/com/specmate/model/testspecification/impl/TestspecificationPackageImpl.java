@@ -34,7 +34,6 @@ import com.specmate.model.testspecification.TestSpecificationSkeleton;
 import com.specmate.model.testspecification.TestStep;
 import com.specmate.model.testspecification.TestspecificationFactory;
 import com.specmate.model.testspecification.TestspecificationPackage;
-
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;

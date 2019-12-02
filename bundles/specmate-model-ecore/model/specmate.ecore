@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="model" nsURI="http://specmate.com/20190125/model" nsPrefix="com.specmate.model">
-  <eSubpackages name="base" nsURI="http://specmate.com/20190125/model/base" nsPrefix="com.specmate.model.basemodel">
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="model" nsURI="http://specmate.com/20190902/model" nsPrefix="com.specmate.model">
+  <eSubpackages name="base" nsURI="http://specmate.com/20190902/model/base" nsPrefix="com.specmate.model.basemodel">
     <eClassifiers xsi:type="ecore:EClass" name="INamed" abstract="true" interface="true">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
         <eAnnotations source="http://specmate.com/form_meta">
@@ -54,6 +54,8 @@
         abstract="true" interface="true" eSuperTypes="#//base/ISpecmateModelObject">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="x" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="y" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="width" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="height" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="IModelConnection" eSuperTypes="#//base/ISpecmateModelObject">
       <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//base/IModelNode"
@@ -74,7 +76,7 @@
           eType="#//base/ITracingElement" eOpposite="#//base/ITracingElement/tracesTo"/>
     </eClassifiers>
   </eSubpackages>
-  <eSubpackages name="requirements" nsURI="http://specmate.com/20190125/model/requirements"
+  <eSubpackages name="requirements" nsURI="http://specmate.com/20190902/model/requirements"
       nsPrefix="com.specmate.model.requirements">
     <eClassifiers xsi:type="ecore:EClass" name="Requirement" eSuperTypes="#//base/ISpecmateModelObject #//base/IExternal">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="numberOfTests" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
@@ -150,7 +152,7 @@
       </eStructuralFeatures>
     </eClassifiers>
   </eSubpackages>
-  <eSubpackages name="testspecification" nsURI="http://specmate.com/20190125/model/testspecification"
+  <eSubpackages name="testspecification" nsURI="http://specmate.com/20190902/model/testspecification"
       nsPrefix="com.specmate.model.testspecification">
     <eClassifiers xsi:type="ecore:EClass" name="TestSpecification" eSuperTypes="#//base/IContainer"/>
     <eClassifiers xsi:type="ecore:EClass" name="TestSpecificationSkeleton" eSuperTypes="#//base/INamed">
@@ -192,7 +194,7 @@
           upperBound="-1" eType="#//testspecification/TestParameter"/>
     </eClassifiers>
   </eSubpackages>
-  <eSubpackages name="processes" nsURI="http://specmate.com/20190125/model/processes"
+  <eSubpackages name="processes" nsURI="http://specmate.com/20190902/model/processes"
       nsPrefix="com.specmate.model.processes">
     <eClassifiers xsi:type="ecore:EClass" name="Process" eSuperTypes="#//base/IContainer"/>
     <eClassifiers xsi:type="ecore:EClass" name="ProcessNode" abstract="true" eSuperTypes="#//base/IModelNode"/>
@@ -225,7 +227,7 @@
     <eClassifiers xsi:type="ecore:EClass" name="ProcessStart" eSuperTypes="#//processes/ProcessNode"/>
     <eClassifiers xsi:type="ecore:EClass" name="ProcessEnd" eSuperTypes="#//processes/ProcessNode"/>
   </eSubpackages>
-  <eSubpackages name="history" nsURI="http://specmate.com/20190125/model/history"
+  <eSubpackages name="history" nsURI="http://specmate.com/20190902/model/history"
       nsPrefix="com.specmate.model.processes">
     <eClassifiers xsi:type="ecore:EClass" name="History">
       <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
@@ -251,7 +253,7 @@
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="isDelete" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     </eClassifiers>
   </eSubpackages>
-  <eSubpackages name="administration" nsURI="http://specmate.com/20190125/model/administration"
+  <eSubpackages name="administration" nsURI="http://specmate.com/20190902/model/administration"
       nsPrefix="com.specmate.model.administration">
     <eClassifiers xsi:type="ecore:EClass" name="Status">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -286,7 +288,7 @@
       <eLiterals name="nlp" value="114" literal="nlp"/>
     </eClassifiers>
   </eSubpackages>
-  <eSubpackages name="batch" nsURI="http://specmate.com/20190125/model/batch" nsPrefix="com.specmate.model.batch">
+  <eSubpackages name="batch" nsURI="http://specmate.com/20190902/model/batch" nsPrefix="com.specmate.model.batch">
     <eClassifiers xsi:type="ecore:EClass" name="BatchOperation">
       <eStructuralFeatures xsi:type="ecore:EReference" name="operations" upperBound="-1"
           eType="#//batch/Operation" containment="true"/>

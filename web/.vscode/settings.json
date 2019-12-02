@@ -14,5 +14,8 @@
         "**/.project": true,
         "**/.settings": true,
         "**/.factorypath": true
+    },
+    "editor.codeActionsOnSave": {
+        "source.fixAll.tslint": true
     }
 }

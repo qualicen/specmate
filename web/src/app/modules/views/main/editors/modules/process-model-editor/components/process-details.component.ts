@@ -21,7 +21,7 @@ export class ProcessDetails extends SpecmateViewBase {
     public model: Process;
     private contents: IContainer[];
 
-    @ViewChild(GraphicalEditor)
+    @ViewChild(GraphicalEditor, { static: false})
     private editor: GraphicalEditor;
 
     constructor(dataService: SpecmateDataService,

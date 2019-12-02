@@ -70,17 +70,17 @@ export class Config {
     public static CEG_NEW_CONNECTION_NAME = 'New Connection';
     public static CEG_NEW_CONNECTION_DESCRIPTION = '';
 
-    public static PROCESS_DECISION_NODE_DIM = 30;
-    public static PROCESS_START_END_NODE_RADIUS = 15;
+    public static PROCESS_DECISION_NODE_DIM = 60;
+    public static PROCESS_START_END_NODE_RADIUS = 25;
     public static PROCESS_NEW_PROCESS_NAME = 'New Process';
     public static PROCESS_NEW_PROCESS_DESCRIPTION = '';
     public static PROCESS_NEW_STEP_NAME = 'New Activity';
     public static PROCESS_NEW_STEP_DESCRIPTION = '';
-    public static PROCESS_NEW_DECISION_NAME = 'New Decision';
+    public static PROCESS_NEW_DECISION_NAME = 'Decision';
     public static PROCESS_NEW_DECISION_DESCRIPTION = '';
-    public static PROCESS_NEW_START_NAME = 'Start';
+    public static PROCESS_NEW_START_NAME = '';
     public static PROCESS_NEW_START_DESCRIPTION = '';
-    public static PROCESS_NEW_END_NAME = 'End';
+    public static PROCESS_NEW_END_NAME = '';
     public static PROCESS_NEW_END_DESCRIPTION = '';
     public static PROCESS_NEW_CONNECTION_NAME = 'New Connection';
     public static PROCESS_NEW_CONNECTION_DESCRIPTION = '';
@@ -125,5 +125,9 @@ export class Config {
     public static ERROR_INVALID_NAME = 'Invalid character in name.';
     // Number of elements to load at each step in the project explorer
     public static ELEMENT_CHUNK_SIZE = 100;
+
+
+    public static readonly CEG_LAYOUT_CLEARANCE_X = 100;
+    public static readonly CEG_LAYOUT_CLEARANCE_Y = 50;
 }
 

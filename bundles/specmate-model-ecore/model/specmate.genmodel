@@ -41,6 +41,8 @@
       <genClasses image="false" ecoreClass="specmate.ecore#//base/ISpecmatePositionableModelObject">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//base/ISpecmatePositionableModelObject/x"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//base/ISpecmatePositionableModelObject/y"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//base/ISpecmatePositionableModelObject/width"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//base/ISpecmatePositionableModelObject/height"/>
       </genClasses>
       <genClasses ecoreClass="specmate.ecore#//base/IModelConnection">
         <genFeatures notify="false" createChild="false" propertySortChoices="true"

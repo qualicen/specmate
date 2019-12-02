@@ -1,5 +1,4 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { DOCUMENT } from '@angular/platform-browser';
 import { NgbDropdown, NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { CookieService } from 'ngx-cookie';
@@ -17,7 +16,7 @@ export class LanguageChooser implements OnInit {
 
     private selectionIndex = 0;
 
-    @ViewChild('dropdownRef')
+    @ViewChild('dropdownRef', { static: false })
     set dropdownRef(ref: NgbDropdown) {
         this._dropdownRef = ref;
     }
@@ -25,8 +24,7 @@ export class LanguageChooser implements OnInit {
 
     constructor(private translate: TranslateService,
         private cookie: CookieService,
-        config: NgbDropdownConfig,
-        @Inject(DOCUMENT) private document: any) {
+        config: NgbDropdownConfig) {
         config.autoClose = true;
         config.placement = 'bottom-right';
     }
@@ -76,7 +74,7 @@ export class LanguageChooser implements OnInit {
     }
 
     private setLangAttr(language: string): void {
-        this.document.documentElement.lang = language;
+        document.documentElement.lang = language;
     }
 
     private retrieveFromCookie(): string {

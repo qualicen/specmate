@@ -1,19 +1,19 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { CEGModel } from '../../../../../model/CEGModel';
 import { IContainer } from '../../../../../model/IContainer';
 import { FieldMetaItem, MetaInfo } from '../../../../../model/meta/field-meta';
+import { Process } from '../../../../../model/Process';
+import { TestSpecification } from '../../../../../model/TestSpecification';
+import { Type } from '../../../../../util/type';
 import { ElementValidatorBase } from '../../../../../validation/element-validator-base';
 import { RequiredFieldsValidator } from '../../../../../validation/required-fields-validator';
 import { TextLengthValidator } from '../../../../../validation/text-length-validator';
 import { ValidNameValidator } from '../../../../../validation/valid-name-validator';
+import { ValidationErrorSeverity } from '../../../../../validation/validation-error-severity';
 import { ValidationResult } from '../../../../../validation/validation-result';
 import { NavigatorService } from '../../../../navigation/modules/navigator/services/navigator.service';
 import { ValidationCache, ValidationPair } from '../util/validation-cache';
-import { ValidationErrorSeverity } from '../../../../../validation/validation-error-severity';
-import { Type } from '../../../../../util/type';
-import { CEGModel } from '../../../../../model/CEGModel';
-import { Process } from '../../../../../model/Process';
-import { TestSpecification } from '../../../../../model/TestSpecification';
 
 
 @Injectable()
@@ -22,6 +22,8 @@ export class ValidationService {
     private validationCache: ValidationCache;
     private validNameValidator: ValidNameValidator = new ValidNameValidator();
     private textLengthValidator: TextLengthValidator = new TextLengthValidator();
+
+    public validationFinished: EventEmitter<void> = new EventEmitter<void>();
 
     constructor(private navigator: NavigatorService, translate: TranslateService) {
         this.validationCache = new ValidationCache(translate);
@@ -78,10 +80,13 @@ export class ValidationService {
         const validNameResult: ValidationResult = this.validNameValidator.validate(element);
         const textLengthValidationResult: ValidationResult = this.textLengthValidator.validate(element);
         const elementValidators = this.getElementValidators(element) || [];
-        let elementResults: ValidationResult[] = elementValidators.map((validator: ElementValidatorBase<IContainer>) => validator.validate(element, contents))
+        let elementResults: ValidationResult[] =
+            elementValidators.map((validator: ElementValidatorBase<IContainer>) => validator.validate(element, contents))
             .concat(requiredFieldsResults)
             .concat(validNameResult)
             .concat(textLengthValidationResult);
+            this.validationCache.addValidationResultsToCache(elementResults);
+            this.validationFinished.emit();
         return elementResults;
     }
 

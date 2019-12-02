@@ -11,7 +11,7 @@ import { HistoryView } from './components/history-view.component';
     BrowserModule,
     NavigatorModule,
     SpecmateSharedModule,
-    NgbModule.forRoot()
+    NgbModule
   ],
   declarations: [
     // COMPONENTS IN THIS MODULE

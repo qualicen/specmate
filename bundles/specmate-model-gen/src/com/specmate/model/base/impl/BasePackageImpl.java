@@ -38,7 +38,6 @@ import com.specmate.model.requirements.impl.RequirementsPackageImpl;
 import com.specmate.model.testspecification.TestspecificationPackage;
 
 import com.specmate.model.testspecification.impl.TestspecificationPackageImpl;
-
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
@@ -457,6 +456,26 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getISpecmatePositionableModelObject_Width() {
+		return (EAttribute)iSpecmatePositionableModelObjectEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getISpecmatePositionableModelObject_Height() {
+		return (EAttribute)iSpecmatePositionableModelObjectEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getIModelConnection() {
 		return iModelConnectionEClass;
 	}
@@ -601,6 +620,8 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 		iSpecmatePositionableModelObjectEClass = createEClass(ISPECMATE_POSITIONABLE_MODEL_OBJECT);
 		createEAttribute(iSpecmatePositionableModelObjectEClass, ISPECMATE_POSITIONABLE_MODEL_OBJECT__X);
 		createEAttribute(iSpecmatePositionableModelObjectEClass, ISPECMATE_POSITIONABLE_MODEL_OBJECT__Y);
+		createEAttribute(iSpecmatePositionableModelObjectEClass, ISPECMATE_POSITIONABLE_MODEL_OBJECT__WIDTH);
+		createEAttribute(iSpecmatePositionableModelObjectEClass, ISPECMATE_POSITIONABLE_MODEL_OBJECT__HEIGHT);
 
 		iModelConnectionEClass = createEClass(IMODEL_CONNECTION);
 		createEReference(iModelConnectionEClass, IMODEL_CONNECTION__SOURCE);
@@ -686,6 +707,8 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 		initEClass(iSpecmatePositionableModelObjectEClass, ISpecmatePositionableModelObject.class, "ISpecmatePositionableModelObject", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getISpecmatePositionableModelObject_X(), ecorePackage.getEDouble(), "x", null, 0, 1, ISpecmatePositionableModelObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getISpecmatePositionableModelObject_Y(), ecorePackage.getEDouble(), "y", null, 0, 1, ISpecmatePositionableModelObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getISpecmatePositionableModelObject_Width(), ecorePackage.getEDouble(), "width", null, 0, 1, ISpecmatePositionableModelObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getISpecmatePositionableModelObject_Height(), ecorePackage.getEDouble(), "height", null, 0, 1, ISpecmatePositionableModelObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(iModelConnectionEClass, IModelConnection.class, "IModelConnection", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getIModelConnection_Source(), this.getIModelNode(), this.getIModelNode_OutgoingConnections(), "source", null, 0, 1, IModelConnection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

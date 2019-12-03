@@ -15,14 +15,14 @@ ul {
 }
 
 #projectList {
-    padding: 0 0 15px 0;
-    margin-bottom: 1rem;
+    padding: 0 0 0 0;
+    margin-bottom: 0;
     padding-top: 3px;
 }
 
 #libraryList {
-    padding: 0 0 10px 0;
-    margin-bottom: 1rem;
+    padding: 0 0 0 0;
+    margin-bottom: 0;
     padding-top: 3px;
 }
 
@@ -33,10 +33,6 @@ ul {
     display: inline-flex;
     flex: 1 1 0%;
     flex-direction: column;
-}
-
-#explorer {
-    margin-bottom: 1.5rem;
 }
 
 #list-wrapper {

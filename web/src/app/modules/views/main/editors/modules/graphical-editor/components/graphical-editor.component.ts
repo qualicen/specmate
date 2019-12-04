@@ -333,7 +333,6 @@ export class GraphicalEditor {
     this.undoManager = new mx.mxUndoManager(50);
     const listener = async (sender: mxgraph.mxEventSource, evt: mxgraph.mxEventObject) => {
       if (!evt.getProperty('edit').changes.some((s: object) => s.constructor.name === 'mxStyleChange')) {
-        console.log(evt.getProperty('edit'));
         this.undoManager.undoableEditHappened(evt.getProperty('edit'));
       }
     };

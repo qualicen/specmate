@@ -196,6 +196,7 @@ textarea:focus,
   min-width: 100%;
   min-height: 100%;
   overflow: auto;
+  display: table;
 }
 
 .editor-container svg {

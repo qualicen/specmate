@@ -119,6 +119,7 @@ export class GraphicalEditor {
    * Initialize the MXGraph
    */
   private async init(): Promise<void> {
+    console.log('init');
 
     if (this.graphContainerElement === undefined) {
       return;
@@ -335,6 +336,7 @@ export class GraphicalEditor {
     this.undoManager = new mx.mxUndoManager(50);
     const listener = async (sender: mxgraph.mxEventSource, evt: mxgraph.mxEventObject) => {
       if (!evt.getProperty('edit').changes.some((s: object) => s.constructor.name === 'mxStyleChange')) {
+        console.log(evt.getProperty('edit'));
         this.undoManager.undoableEditHappened(evt.getProperty('edit'));
       }
     };
@@ -537,13 +539,13 @@ export class GraphicalEditor {
 
   public showGrid(): void {
     this.isGridShown = true;
-    this.graphContainerElement.nativeElement.style.backgroundImage = "url('/assets/img/grid.png')";
+    // this.graphContainerElement.nativeElement.style.backgroundImage = "url('/assets/img/grid.png')";
   }
 
   public hideGrid(): void {
     this.isGridShown = false;
-    this.graphContainerElement.nativeElement.style.backgroundImage = '';
-    this.graphContainerElement.nativeElement.style.background = 'none';
+    // this.graphContainerElement.nativeElement.style.backgroundImage = '';
+    // this.graphContainerElement.nativeElement.style.background = 'none';
   }
 
   public get connections(): IContainer[] {

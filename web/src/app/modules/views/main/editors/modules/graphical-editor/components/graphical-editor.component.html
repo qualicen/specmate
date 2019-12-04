@@ -22,8 +22,12 @@
         <tool-pallette></tool-pallette>
         <div #mxGraphToolbar id="mxGraphToolbar"></div>
         <hr>
-        <div #mxGraphContainer id="mxGraphContainer" [ngClass]="{'editor-container': true, 'grid-shown': isGridShown }"
-            class="editor-container"></div>
+        <div class="editor-body" style="width: 100%; height: 90%; position: relative;">
+          <div id="editor-grid" *ngIf="isGridShown" style="background: url('/assets/img/grid.png'); width: 100%; height: 100%; position: absolute;"></div>
+          <div #mxGraphContainer id="mxGraphContainer" [ngClass]="{'editor-container': true}"
+            class="editor-container" style="width: 100%; height: 100%; position: absolute;"></div>
+
+        </div>
     </div>
 
 </div>

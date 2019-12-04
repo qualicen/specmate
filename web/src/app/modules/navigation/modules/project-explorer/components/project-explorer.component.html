@@ -1,5 +1,5 @@
 <div class="left-sidebar">
-    <div id="sticky-wrapper">
+    <div id="sticky-header-wrapper">
         <div class="input-group input-group-sm">
             <input #searchBox class="form-control form-control-sm" type="search" (keyup)="search(searchBox.value)" />
             <div class="input-group-append" title="{{'search' | translate}}">
@@ -21,6 +21,13 @@
                     | translate}}</button>
             </li>
         </ul>
+        <table class="table" *ngIf="searchBox.value">
+            <thead>
+                <tr>
+                    <th scope="col">{{'searchResults' | translate}}</th>
+                </tr>
+            </thead>
+        </table>
     </div>
     <div id="list-wrapper" *ngIf="!searchBox.value">
         <ul id="projectList" *ngIf="!showLibrary">
@@ -42,21 +49,18 @@
             </li>
         </ul>
     </div>
-    <table class="table" *ngIf="searchBox.value">
-        <thead>
-            <tr>
-                <th scope="col">{{'searchResults' | translate}}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let element of searchResults; let i = index;">
-                <td>
-                    <a [navigationTarget]="element">
-                        <icon-selector [model]="element" expanded="false"></icon-selector>{{element['extId'] ?
-                        element['extId'] + ': ' : ''}}{{element.name}}
-                    </a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div id="table-wrapper" *ngIf="searchBox.value">
+        <table class="table">
+            <tbody>
+                <tr *ngFor="let element of searchResults; let i = index;">
+                    <td>
+                        <a [navigationTarget]="element">
+                            <icon-selector [model]="element" expanded="false"></icon-selector>{{element['extId'] ?
+                            element['extId'] + ': ' : ''}}{{element.name}}
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

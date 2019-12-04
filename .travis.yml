@@ -3,7 +3,7 @@ language:
 - java
 - node_js
 node_js:
-  - '10'
+- 10
 services:
 - docker
 jdk:

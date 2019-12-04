@@ -191,8 +191,8 @@ textarea:focus,
 
 .editor-container {
   position: relative;
-  width: fit-content;
-  height: fit-content;
+  width: 0px;
+  height: 0px;
   min-width: 100%;
   min-height: 100%;
   overflow: auto;

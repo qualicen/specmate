@@ -59,8 +59,6 @@ export class GraphicalEditor {
 
   private isInGraphTransition = false;
 
-  public isGridShown = true;
-
   private _model: IContainer;
   private _contents: IContainer[];
 
@@ -119,8 +117,6 @@ export class GraphicalEditor {
    * Initialize the MXGraph
    */
   private async init(): Promise<void> {
-    console.log('init');
-
     if (this.graphContainerElement === undefined) {
       return;
     }
@@ -166,6 +162,7 @@ export class GraphicalEditor {
     rubberBand.reset();
 
     this.graph.setTooltips(true);
+    this.graph.zoomFactor = 1.1;
 
     this.graph.getModel().addListener(mx.mxEvent.CHANGE, async (sender: mxgraph.mxEventSource, evt: mxgraph.mxEventObject) => {
       const edit = evt.getProperty('edit') as mxgraph.mxUndoableEdit;
@@ -535,17 +532,6 @@ export class GraphicalEditor {
 
   public resetZoom(): void {
     this.graph.zoomActual();
-  }
-
-  public showGrid(): void {
-    this.isGridShown = true;
-    // this.graphContainerElement.nativeElement.style.backgroundImage = "url('/assets/img/grid.png')";
-  }
-
-  public hideGrid(): void {
-    this.isGridShown = false;
-    // this.graphContainerElement.nativeElement.style.backgroundImage = '';
-    // this.graphContainerElement.nativeElement.style.background = 'none';
   }
 
   public get connections(): IContainer[] {

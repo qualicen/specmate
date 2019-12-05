@@ -364,12 +364,14 @@ export class ChangeTranslator {
                     const val = value[key];
                     let child = cell.children.find(s => s.getId().endsWith(key));
                     if (child !== undefined) {
-                        graph.getModel().beginUpdate();
-                        try {
-                            graph.model.setValue(child, val);
-                        }
-                        finally {
-                            graph.getModel().endUpdate();
+                        if (child.value !== val) {
+                            graph.getModel().beginUpdate();
+                            try {
+                                graph.model.setValue(child, val);
+                            }
+                            finally {
+                                graph.getModel().endUpdate();
+                            }
                         }
                     }
                 }

@@ -57,6 +57,7 @@ a.selected {
 
 .project-explorer-container {
   overflow-x: auto !important;
+  overflow-y: hidden !important;
 }
 
 .currentTreeElement {
@@ -167,11 +168,22 @@ textarea:focus,
 }
 
 .nav-tabs .nav-link {
-  color: $primary;
+  color: #495057;
+  background-color: transparent;
+  outline: none;
+}
+
+.nav-tabs .nav-link:hover {
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .nav-tabs .nav-link.active {
   color: $primary;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.btn.btn-sm.expand {
+  margin-left: 3px;
 }
 
 .tableInput,

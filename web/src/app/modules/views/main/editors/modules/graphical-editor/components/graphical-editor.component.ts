@@ -169,14 +169,28 @@ export class GraphicalEditor {
       const edit = evt.getProperty('edit') as mxgraph.mxUndoableEdit;
 
       const done: any[] = [];
+
+      const isAddEdit = edit.changes.find(change => ChangeTranslator.isAddChange(change)) !== undefined;
+
       try {
-        for (const change of edit.changes.filter(filteredChange => filteredChange.child && !filteredChange.child.vertex)) {
-          await this.changeTranslator.translate(change, this.graph);
-          done.push(change);
-        }
-        for (const change of edit.changes.filter(filteredChange => filteredChange.child && filteredChange.child.vertex)) {
-          await this.changeTranslator.translate(change, this.graph);
-          done.push(change);
+        if (!isAddEdit) {
+          for (const change of edit.changes.filter(filteredChange => filteredChange.child && !filteredChange.child.vertex)) {
+            await this.changeTranslator.translate(change, this.graph);
+            done.push(change);
+          }
+          for (const change of edit.changes.filter(filteredChange => filteredChange.child && filteredChange.child.vertex)) {
+            await this.changeTranslator.translate(change, this.graph);
+            done.push(change);
+          }
+        } else {
+          for (const change of edit.changes.filter(filteredChange => filteredChange.child && filteredChange.child.vertex)) {
+            await this.changeTranslator.translate(change, this.graph);
+            done.push(change);
+          }
+          for (const change of edit.changes.filter(filteredChange => filteredChange.child && !filteredChange.child.vertex)) {
+            await this.changeTranslator.translate(change, this.graph);
+            done.push(change);
+          }
         }
         for (const change of edit.changes.filter(filteredChange => done.indexOf(filteredChange) < 0)) {
           await this.changeTranslator.translate(change, this.graph);
@@ -333,7 +347,7 @@ export class GraphicalEditor {
       const isNegated = evt.getProperty('edit').changes.some(function test(s: any): boolean {
         if (s.constructor.name === 'mxStyleChange') {
           return (s.style as String).includes(EditorStyle.ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE)
-          !== ((s.previous as String).includes(EditorStyle.ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE));
+            !== ((s.previous as String).includes(EditorStyle.ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE));
         }
         return false;
       });

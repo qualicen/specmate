@@ -54,6 +54,21 @@ export class ChangeTranslator {
         return element;
     }
 
+    public static isChildChange(change: (mxgraph.mxTerminalChange | mxgraph.mxChildChange | mxgraph.mxStyleChange)): boolean {
+        return change['cell'] === undefined && change['child'] !== undefined;
+    }
+
+    public static isAddChange(change: (mxgraph.mxTerminalChange | mxgraph.mxChildChange | mxgraph.mxStyleChange)): boolean {
+        return ChangeTranslator.isChildChange(change) &&
+            (change as mxgraph.mxChildChange).parent !== null &&
+            (change as mxgraph.mxChildChange).parent !== undefined;
+    }
+
+    public static isDeleteChange(change: (mxgraph.mxTerminalChange | mxgraph.mxChildChange | mxgraph.mxStyleChange)): boolean {
+        return ChangeTranslator.isChildChange(change) && !ChangeTranslator.isAddChange(change);
+    }
+
+
     public async translate(change: (mxgraph.mxTerminalChange | mxgraph.mxChildChange | mxgraph.mxStyleChange),
         graph: mxgraph.mxGraph): Promise<void> {
         if (this.preventDataUpdates) {

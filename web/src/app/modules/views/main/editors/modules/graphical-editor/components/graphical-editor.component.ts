@@ -59,8 +59,6 @@ export class GraphicalEditor {
 
   private isInGraphTransition = false;
 
-  public isGridShown = true;
-
   private _model: IContainer;
   private _contents: IContainer[];
 
@@ -119,7 +117,6 @@ export class GraphicalEditor {
    * Initialize the MXGraph
    */
   private async init(): Promise<void> {
-
     if (this.graphContainerElement === undefined) {
       return;
     }
@@ -132,6 +129,7 @@ export class GraphicalEditor {
 
     this.isInGraphTransition = false;
     await this.updateValidities();
+    await this.undoManager.clear();
   }
 
   private async createGraph(): Promise<void> {
@@ -165,25 +163,34 @@ export class GraphicalEditor {
     rubberBand.reset();
 
     this.graph.setTooltips(true);
+    this.graph.zoomFactor = 1.1;
 
     this.graph.getModel().addListener(mx.mxEvent.CHANGE, async (sender: mxgraph.mxEventSource, evt: mxgraph.mxEventObject) => {
       const edit = evt.getProperty('edit') as mxgraph.mxUndoableEdit;
 
-      if (edit.undone === true || edit.redone === true) {
-        this.undoService.setUndoEnabled(this.undoManager.canUndo());
-        this.undoService.setRedoEnabled(this.undoManager.canRedo());
-        return;
-      }
-
       const done: any[] = [];
+
+      const isAddEdit = edit.changes.find(change => ChangeTranslator.isAddChange(change)) !== undefined;
+
       try {
-        for (const change of edit.changes.filter(filteredChange => filteredChange.child && !filteredChange.child.vertex)) {
-          await this.changeTranslator.translate(change, this.graph);
-          done.push(change);
-        }
-        for (const change of edit.changes.filter(filteredChange => filteredChange.child && filteredChange.child.vertex)) {
-          await this.changeTranslator.translate(change, this.graph);
-          done.push(change);
+        if (!isAddEdit) {
+          for (const change of edit.changes.filter(filteredChange => filteredChange.child && !filteredChange.child.vertex)) {
+            await this.changeTranslator.translate(change, this.graph);
+            done.push(change);
+          }
+          for (const change of edit.changes.filter(filteredChange => filteredChange.child && filteredChange.child.vertex)) {
+            await this.changeTranslator.translate(change, this.graph);
+            done.push(change);
+          }
+        } else {
+          for (const change of edit.changes.filter(filteredChange => filteredChange.child && filteredChange.child.vertex)) {
+            await this.changeTranslator.translate(change, this.graph);
+            done.push(change);
+          }
+          for (const change of edit.changes.filter(filteredChange => filteredChange.child && !filteredChange.child.vertex)) {
+            await this.changeTranslator.translate(change, this.graph);
+            done.push(change);
+          }
         }
         for (const change of edit.changes.filter(filteredChange => done.indexOf(filteredChange) < 0)) {
           await this.changeTranslator.translate(change, this.graph);
@@ -208,6 +215,7 @@ export class GraphicalEditor {
 
     this.graph.getSelectionModel().addListener(mx.mxEvent.CHANGE, async (args: any) => {
       let selectionCount = this.graph.getSelectionCount();
+      this.graph.getModel().beginUpdate();
 
       // Dim all Edges
       for (const edge of this.highlightedEdges) {
@@ -222,6 +230,17 @@ export class GraphicalEditor {
           if (selections[0].getParent() !== this.graph.getDefaultParent()) {
             // We selected a child/ sublabel --> Select Parent instead
             selections[0] = selections[0].getParent();
+          }
+        }
+
+        for (const cell of selections.filter(cell => cell.edge)) {
+          const source = cell.source;
+          const target = cell.target;
+          if (!this.graph.isCellSelected(source)) {
+            this.graph.getSelectionModel().addCell(source);
+          }
+          if (!this.graph.isCellSelected(target)) {
+            this.graph.getSelectionModel().addCell(target);
           }
         }
 
@@ -244,6 +263,7 @@ export class GraphicalEditor {
       } else {
         this.selectedElementService.deselect();
       }
+      this.graph.getModel().endUpdate();
     });
 
     EditorStyle.initEditorStyles(this.graph);
@@ -257,7 +277,6 @@ export class GraphicalEditor {
 
     this.initTools();
 
-    this.undoManager.clear();
     this.dataService.elementChanged.subscribe((url: string) => {
       const cells = this.graph.getModel().getChildCells(this.graph.getDefaultParent());
       const cell = cells.find(vertex => vertex.id === url);
@@ -334,13 +353,21 @@ export class GraphicalEditor {
   private initUndoManager(): void {
     this.undoManager = new mx.mxUndoManager(50);
     const listener = async (sender: mxgraph.mxEventSource, evt: mxgraph.mxEventObject) => {
-      if (!evt.getProperty('edit').changes.some((s: object) => s.constructor.name === 'mxStyleChange')) {
+      // StyleChanges are not added to the undo-stack, except an edge is negeated (dashed line)
+      const isStyleChange = evt.getProperty('edit').changes.some((s: object) => s.constructor.name === 'mxStyleChange');
+      const isNegated = evt.getProperty('edit').changes.some(function test(s: any): boolean {
+        if (s.constructor.name === 'mxStyleChange') {
+          return (s.style as String).includes(EditorStyle.ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE)
+            !== ((s.previous as String).includes(EditorStyle.ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE));
+        }
+        return false;
+      });
+      if (!isStyleChange || isNegated) {
         this.undoManager.undoableEditHappened(evt.getProperty('edit'));
       }
     };
     this.graph.getModel().addListener(mx.mxEvent.UNDO, listener);
     this.graph.getView().addListener(mx.mxEvent.UNDO, listener);
-    this.undoManager.clear();
   }
 
   private async initGraphicalModel(): Promise<void> {
@@ -380,7 +407,6 @@ export class GraphicalEditor {
     } finally {
       this.graph.getModel().endUpdate();
       this.changeTranslator.preventDataUpdates = false;
-      this.undoManager.clear();
       this.validationService.validateCurrent();
     }
   }
@@ -533,17 +559,6 @@ export class GraphicalEditor {
 
   public resetZoom(): void {
     this.graph.zoomActual();
-  }
-
-  public showGrid(): void {
-    this.isGridShown = true;
-    this.graphContainerElement.nativeElement.style.backgroundImage = "url('/assets/img/grid.png')";
-  }
-
-  public hideGrid(): void {
-    this.isGridShown = false;
-    this.graphContainerElement.nativeElement.style.backgroundImage = '';
-    this.graphContainerElement.nativeElement.style.background = 'none';
   }
 
   public get connections(): IContainer[] {

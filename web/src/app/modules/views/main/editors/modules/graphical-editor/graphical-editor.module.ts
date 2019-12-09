@@ -4,6 +4,7 @@ import { SpecmateSharedModule } from '../../../../../specmate/specmate.shared.mo
 import { MaximizeButtonModule } from '../maximize-button/maximize-button.module';
 import { ToolPalletteModule } from '../tool-pallette/tool-pallette.module';
 import { GraphicalEditor } from './components/graphical-editor.component';
+import { EditorGridButtonModule } from '../editor-grid-button/editor-grid-button.module';
 
 @NgModule({
   imports: [
@@ -11,7 +12,8 @@ import { GraphicalEditor } from './components/graphical-editor.component';
     MaximizeButtonModule,
     ToolPalletteModule,
     SpecmateSharedModule,
-    BrowserModule
+    BrowserModule,
+    EditorGridButtonModule
   ],
   declarations: [
     // COMPONENTS IN THIS MODULE

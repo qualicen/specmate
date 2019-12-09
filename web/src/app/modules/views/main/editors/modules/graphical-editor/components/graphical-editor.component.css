@@ -38,3 +38,17 @@ svg {
 button {
   margin-right: 0.2rem;
 }
+
+.editor-grid {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  overflow: hidden;
+}
+
+.editor-body {
+  width: 100%;
+  height: 90%;
+  position: relative;
+  overflow: auto;
+}

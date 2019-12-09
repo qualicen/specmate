@@ -28,6 +28,7 @@ export class VertexProvider extends ProviderBase {
         const value: string = null;
         const style = this.shapeProvider.getStyle(new CEGNode());
         const parent = this.graph.getDefaultParent();
+        this.graph.getModel().beginUpdate();
         const vertex = this.graph.insertVertex(parent, url, value, x, y, width, height, style);
         const l1 = this.graph.insertVertex(vertex, url + '/variable' , data.variable, 0.5, 0.25, 0, 0, null, true);
         const l2 = this.graph.insertVertex(vertex, url + '/condition' , data.condition, 0.5, 0.5, 0, 0, null, true);
@@ -35,6 +36,7 @@ export class VertexProvider extends ProviderBase {
         l1.isConnectable = () => false;
         l2.isConnectable = () => false;
         l3.isConnectable = () => false;
+        this.graph.getModel().endUpdate();
         return vertex;
     }
 

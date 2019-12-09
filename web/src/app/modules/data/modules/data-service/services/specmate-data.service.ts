@@ -142,6 +142,10 @@ export class SpecmateDataService {
         return contents;
     }
 
+    public hasElement(url: string): boolean {
+        return this.cache.isCachedElement(url);
+    }
+
     public async readElement(url: string, virtual?: boolean): Promise<IContainer> {
         this.busy = true;
         let readElementTask: Promise<IContainer> = undefined;

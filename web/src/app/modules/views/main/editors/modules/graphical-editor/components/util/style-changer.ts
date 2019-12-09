@@ -29,8 +29,10 @@ export class StyleChanger {
     }
 
     public static replaceStyle(vertex: mxgraph.mxCell, graph: mxgraph.mxGraph, searchStyle: string, replaceStyle: string): void {
+        graph.getModel().beginUpdate();
         StyleChanger.removeStyle(vertex, graph, searchStyle);
         StyleChanger.addStyle(vertex, graph, replaceStyle);
+        graph.getModel().endUpdate();
     }
 
     public static setStyle(cell: mxgraph.mxCell, graph: mxgraph.mxGraph, style: string): void {

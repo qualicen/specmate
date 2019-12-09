@@ -8,6 +8,7 @@ jdk:
 env:
 - TERM=dumb
 before_install:
+  # Update nvm and install nodejs 10.17
   - wget https://raw.githubusercontent.com/creationix/nvm/v0.31.0/nvm.sh -O ~/.nvm/nvm.sh
   - source ~/.nvm/nvm.sh
   - nvm install v10.17.0

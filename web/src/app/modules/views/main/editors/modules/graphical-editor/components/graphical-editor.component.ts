@@ -458,8 +458,7 @@ export class GraphicalEditor {
     }
 
     const validationResult = this.validationService.getValidationResults(this.model);
-    const invalidNodes = validationResult.filter(e => this.elementProvider.isNode(e.element));
-    for (const invalidNode of invalidNodes) {
+    for (const invalidNode of validationResult) {
       const vertexId = invalidNode.element.url;
       const vertex = vertices.find(vertex => vertex.id === vertexId);
       StyleChanger.replaceStyle(vertex, this.graph, EditorStyle.VALID_STYLE_NAME, EditorStyle.INVALID_STYLE_NAME);

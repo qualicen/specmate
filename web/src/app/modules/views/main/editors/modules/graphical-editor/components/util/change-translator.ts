@@ -158,14 +158,39 @@ export class ChangeTranslator {
         } else {
             addedElement = await this.translateNodeAdd(change, graph);
         }
-        change.child.setId(addedElement.url);
+
+        if (addedElement !== undefined) {
+            change.child.setId(addedElement.url);
+        } else {
+            graph.removeCells([change.child]);
+        }
     }
 
     private async translateEdgeAdd(change: mxgraph.mxChildChange): Promise<IModelConnection> {
         const tool = this.determineTool(change) as ConnectionToolBase<any>;
 
-        const source = (await this.getElement(change.child.source.id) as IModelNode);
-        const target = (await this.getElement(change.child.target.id) as IModelNode);
+        const sourceCell = change.child.source;
+        const targetCell = change.child.target;
+
+        if (sourceCell === null || targetCell === null || sourceCell === undefined || targetCell === undefined) {
+            return;
+        }
+
+        const sourceElement = await this.getElement(sourceCell.id);
+        if (sourceElement === undefined) {
+            return;
+        }
+        const source = (sourceElement as IModelNode);
+
+        const targetElement = await this.getElement(targetCell.id);
+        if (targetElement === undefined) {
+            return;
+        }
+        const target = (targetElement as IModelNode);
+
+        if (source === undefined || target === undefined) {
+            return;
+        }
 
         tool.source = source;
         tool.target = target;

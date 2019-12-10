@@ -261,6 +261,7 @@
 		"errorNotOneStartNode": "Nicht genau ein Startknoten.",
 		"errorProcessDecisionWithOneOrFewerOutgoingConnections": "Entscheidungsknoten hat nicht mindestens zwei ausgehende Verbindungen.",
 		"errorProcessEndOutgoingConnection": "Endknoten mit ausgehenden Verbindungen.",
+		"errorProcessInvalidConditionText": "Ungültige Bedingung: ungültige Zeichen: , ; |",
 		"errorProcessNodeMultipleOutgoingConnections": "Nicht-Entscheidungsknoten mit mehreren ausgehenden Verbindungen.",
 		"errorProcessStartIncomingConnection": "Startknoten mit eingehenden Verbindungen.",
 		"errorSingleIndegreeNode": "Knoten hat nur eine Ursache und ist somit überflüssig.",

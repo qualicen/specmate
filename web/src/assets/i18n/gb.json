@@ -261,6 +261,7 @@
 		"errorNotOneStartNode": "Not exactly one start node.",
 		"errorProcessDecisionWithOneOrFewerOutgoingConnections": "Decision node not at least two outgoing connections.",
 		"errorProcessEndOutgoingConnection": "End node with outgoing connection.",
+		"errorProcessInvalidConditionText": "Invalid condition: invalid characters: , ; |",
 		"errorProcessNodeMultipleOutgoingConnections": "Non-decision-node with multiple outgoing connections.",
 		"errorProcessStartIncomingConnection": "Start node with incoming connection.",
 		"errorSingleIndegreeNode": "Node has only one cause and is therefore unnecessary.",

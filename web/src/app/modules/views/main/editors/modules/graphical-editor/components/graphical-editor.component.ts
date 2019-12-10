@@ -233,17 +233,6 @@ export class GraphicalEditor {
           }
         }
 
-        for (const cell of selections.filter(cell => cell.edge)) {
-          const source = cell.source;
-          const target = cell.target;
-          if (!this.graph.isCellSelected(source)) {
-            this.graph.getSelectionModel().addCell(source);
-          }
-          if (!this.graph.isCellSelected(target)) {
-            this.graph.getSelectionModel().addCell(target);
-          }
-        }
-
         for (const cell of selections) {
           if (cell.edge) {
             this.highlightedEdges.push(cell);

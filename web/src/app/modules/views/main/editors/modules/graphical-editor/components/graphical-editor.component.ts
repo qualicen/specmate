@@ -353,16 +353,17 @@ export class GraphicalEditor {
   private initUndoManager(): void {
     this.undoManager = new mx.mxUndoManager(50);
     const listener = async (sender: mxgraph.mxEventSource, evt: mxgraph.mxEventObject) => {
-      // StyleChanges are not added to the undo-stack, except an edge is negeated (dashed line)
+      // StyleChanges are not added to the undo-stack, except an edge is negated (dashed line)
       const isStyleChange = evt.getProperty('edit').changes.some((s: object) => s.constructor.name === 'mxStyleChange');
       const isNegated = evt.getProperty('edit').changes.some(function test(s: any): boolean {
-        if (s.constructor.name === 'mxStyleChange') {
+        if (s.constructor.name === 'mxStyleChange' && s.previous !== null) {
           return (s.style as String).includes(EditorStyle.ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE)
             !== ((s.previous as String).includes(EditorStyle.ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE));
         }
         return false;
       });
       if (!isStyleChange || isNegated) {
+        console.log(evt.getProperty('edit'));
         this.undoManager.undoableEditHappened(evt.getProperty('edit'));
       }
     };

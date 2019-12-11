@@ -363,7 +363,6 @@ export class GraphicalEditor {
         return false;
       });
       if (!isStyleChange || isNegated) {
-        console.log(evt.getProperty('edit'));
         this.undoManager.undoableEditHappened(evt.getProperty('edit'));
       }
     };

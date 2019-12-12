@@ -259,9 +259,11 @@ export class GraphicalEditor {
           let selection = selections[0];
           const selectedElement = await this.dataService.readElement(selection.getId(), true);
           this.selectedElementService.select(selectedElement);
+        } else {
+          this.selectedElementService.deselect();
         }
       } else {
-        this.selectedElementService.deselect();
+        this.selectedElementService.select(this.model);
       }
       this.graph.getModel().endUpdate();
     });

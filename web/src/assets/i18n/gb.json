@@ -168,7 +168,7 @@
 	"negate": "",
 	"negated": "Negated",
 	"noCommandsLeft": "No commands left",
-	"noElementSelected": "No element selected",
+	"noOrMultipleElementSelected": "No / multiple elements selected",
 	"noFoldersFound": "No sub-folders found",
 	"noModelsFound": "No models found",
 	"noProcessesFound": "No processes found",

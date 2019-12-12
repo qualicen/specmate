@@ -168,7 +168,7 @@
 	"negate": "",
 	"negated": "Negiert",
 	"noCommandsLeft": "Keine Befehle übrig",
-	"noElementSelected": "Kein Element ausgewählt",
+	"noOrMultipleElementSelected": "Keine / mehrere Elemente ausgewählt",
 	"noFoldersFound": "Keine Unterordner gefunden",
 	"noModelsFound": "Keine CEG-Modelle gefunden",
 	"noProcessesFound": "Keine Prozessmodelle gefunden",

@@ -71,18 +71,21 @@ export class EditorStyle {
         mx.mxConstants.VERTEX_SELECTION_COLOR = '#00a8ff';
         mx.mxConstants.EDGE_SELECTION_COLOR = '#00a8ff';
         mx.mxConstants.DEFAULT_FONTSIZE = 12;
+        mx.mxConstants.STYLE_FONTCOLOR = '#000000';
 
-        EditorStyle.VALID_STYLE[mx.mxConstants.STYLE_STROKEWIDTH] = '3';
+        EditorStyle.VALID_STYLE[mx.mxConstants.STYLE_STROKEWIDTH] = '2';
         EditorStyle.VALID_STYLE[mx.mxConstants.STYLE_STROKE_OPACITY] = '100';
-        EditorStyle.VALID_STYLE[mx.mxConstants.STYLE_STROKECOLOR] = '#346CB6';
+        EditorStyle.VALID_STYLE[mx.mxConstants.STYLE_STROKECOLOR] = '#000000';
 
-        EditorStyle.INVALID_STYLE[mx.mxConstants.STYLE_STROKEWIDTH] = '3';
+        EditorStyle.INVALID_STYLE[mx.mxConstants.STYLE_STROKEWIDTH] = '2';
         EditorStyle.INVALID_STYLE[mx.mxConstants.STYLE_STROKE_OPACITY] = '100';
         EditorStyle.INVALID_STYLE[mx.mxConstants.STYLE_STROKECOLOR] = '#ff0000';
 
-        EditorStyle.CAUSE_STYLE[mx.mxConstants.STYLE_FILLCOLOR] = '#39C4B8';
-        EditorStyle.EFFECT_STYLE[mx.mxConstants.STYLE_FILLCOLOR] = '#f6960d';
-        EditorStyle.INNER_STYLE[mx.mxConstants.STYLE_FILLCOLOR] = '#e0e026';
+        EditorStyle.CAUSE_STYLE[mx.mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
+        EditorStyle.EFFECT_STYLE[mx.mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
+        EditorStyle.EFFECT_STYLE[mx.mxConstants.STYLE_GRADIENTCOLOR] = '#346CB6';
+        EditorStyle.INNER_STYLE[mx.mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
+        EditorStyle.INNER_STYLE[mx.mxConstants.STYLE_GRADIENTCOLOR] = '#d8d8d8';
 
         EditorStyle.EDGE_HIGHLIGHT_STYLE[mx.mxConstants.STYLE_STROKECOLOR] = '#000000';
         EditorStyle.EDGE_HIGHLIGHT_STYLE[mx.mxConstants.STYLE_STROKEWIDTH] = '3';

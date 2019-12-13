@@ -8,7 +8,6 @@ import { Url } from '../../../../../util/url';
 import { SpecmateDataService } from '../../../../data/modules/data-service/services/specmate-data.service';
 import { AuthenticationService } from '../../../../views/main/authentication/modules/auth/services/authentication.service';
 import { LoggingService } from '../../../../views/side/modules/log-list/services/logging.service';
-import { throwIfEmpty } from 'rxjs/operators';
 
 @Injectable()
 export class NavigatorService {

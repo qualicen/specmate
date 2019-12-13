@@ -21,6 +21,7 @@ import { ShapeProvider } from '../../providers/properties/shape-provider';
 import { ToolProvider } from '../../providers/properties/tool-provider';
 import { EditorStyle } from '../editor-components/editor-style';
 import { StyleChanger } from './style-changer';
+import { VertexProvider } from '../../providers/properties/vertex-provider';
 
 
 declare var require: any;
@@ -240,9 +241,9 @@ export class ChangeTranslator {
             let oldIdCondition = condition.id;
             let oldIdType = type.id;
 
-            variable.setId(newId + '/variable');
-            condition.setId(newId + '/condition');
-            type.setId(newId + '/type');
+            variable.setId(newId + VertexProvider.ID_SUFFIX_VARIABLE);
+            condition.setId(newId + VertexProvider.ID_SUFFIX_CONDITION);
+            type.setId(newId + VertexProvider.ID_SUFFIX_TYPE);
 
             delete cells[oldIdVariable];
             delete cells[oldIdCondition];

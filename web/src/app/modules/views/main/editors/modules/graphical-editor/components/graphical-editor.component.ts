@@ -192,10 +192,23 @@ export class GraphicalEditor {
             done.push(change);
           }
         }
+
+        // Filter duplicate style changes; We only need to adress the last one.
+        const styleChangeMap: { [id: string]: mxgraph.mxStyleChange } = {};
+        edit.changes.filter(filteredChange => filteredChange.style !== undefined)
+          .forEach(styleChange => {
+            styleChangeMap[styleChange.cell.id] = styleChange;
+            done.push(styleChange);
+          });
+        for (const cellId in styleChangeMap) {
+          await this.changeTranslator.translate(styleChangeMap[cellId], this.graph);
+        }
         for (const change of edit.changes.filter(filteredChange => done.indexOf(filteredChange) < 0)) {
           await this.changeTranslator.translate(change, this.graph);
         }
       } catch (e) {
+        // This is actually for debug purposes; However, mxgraph or the change translation fails silently without this.
+        console.error(e);
         this.changeTranslator.preventDataUpdates = true;
         edit.undo();
         this.changeTranslator.preventDataUpdates = false;

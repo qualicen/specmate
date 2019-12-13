@@ -463,6 +463,9 @@ export class GraphicalEditor {
     for (const invalidNode of validationResult) {
       const vertexId = invalidNode.element.url;
       const vertex = vertices.find(vertex => vertex.id === vertexId);
+      if (vertex === undefined) {
+        continue;
+      }
       StyleChanger.replaceStyle(vertex, this.graph, EditorStyle.VALID_STYLE_NAME, EditorStyle.INVALID_STYLE_NAME);
       const overlay = this.graph.setCellWarning(vertex, invalidNode.message);
       if (Type.is(invalidNode.element, CEGNode) || Type.is(invalidNode.element, ProcessStep)) {

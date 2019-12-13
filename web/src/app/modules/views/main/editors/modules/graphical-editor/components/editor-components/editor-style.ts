@@ -43,6 +43,11 @@ export class EditorStyle {
     public static readonly INNER_STYLE: Style = {};
     public static readonly EFFECT_STYLE: Style = {};
 
+
+    public static readonly TEXT_INPUT_STYLE = 'BASE_TEXT_INPUT';
+    private static readonly TEXT_INPUT_STYLE_STR = 'shape=rectangle;rounded=0;align=center;perimeter=rectanglePerimeter;dashed=0;strokeWidth=1;strokeColor=#ff0000';
+    private static readonly TEXT_INPUT_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.TEXT_INPUT_STYLE_STR);
+
     public static readonly BASE_CEG_NODE_STYLE = 'BASE_CEG_NODE';
     private static readonly BASE_CEG_NODE_STYLE_STR = 'shape=rectangle;rounded=1;arcSize=10;align=center;perimeter=rectanglePerimeter;dashed=0';
     private static readonly BASE_CEG_NODE_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.BASE_CEG_NODE_STYLE_STR);
@@ -96,6 +101,8 @@ export class EditorStyle {
 
         const stylesheet = graph.getStylesheet();
 
+        stylesheet.putCellStyle(EditorStyle.TEXT_INPUT_STYLE, EditorStyle.TEXT_INPUT_STYLE_OBJ);
+
         stylesheet.putCellStyle(EditorStyle.BASE_CEG_NODE_STYLE, EditorStyle.BASE_CEG_NODE_STYLE_OBJ);
         stylesheet.putCellStyle(EditorStyle.BASE_PROCESS_START_STYLE, EditorStyle.BASE_PROCESS_START_STYLE_OBJ);
         stylesheet.putCellStyle(EditorStyle.BASE_PROCESS_END_STYLE, EditorStyle.BASE_PROCESS_END_STYLE_OBJ);
@@ -112,8 +119,7 @@ export class EditorStyle {
 
         const vertexStyle = graph.getStylesheet().getDefaultVertexStyle();
         vertexStyle[mx.mxConstants.STYLE_STROKECOLOR] = '#000000';
-        vertexStyle[mx.mxConstants.STYLE_DASHED] = '1';
-        vertexStyle[mx.mxConstants.STYLE_DASH_PATTERN] = '4';
+        vertexStyle[mx.mxConstants.STYLE_DASHED] = '0';
 
         stylesheet.putCellStyle(EditorStyle.EDGE_DIM_STYLE_NAME, EditorStyle.EDGE_DIM_STYLE);
         stylesheet.putCellStyle(EditorStyle.EDGE_HIGHLIGHT_STYLE_NAME, EditorStyle.EDGE_HIGHLIGHT_STYLE);

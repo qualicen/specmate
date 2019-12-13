@@ -165,6 +165,13 @@ export class GraphicalEditor {
     this.graph.setTooltips(true);
     this.graph.zoomFactor = 1.1;
 
+    this.graph.addListener(mx.mxEvent.DOUBLE_CLICK, (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) => {
+      const cell = evt.properties.cell as mxgraph.mxCell;
+      if (cell.id.endsWith(VertexProvider.ID_SUFFIX_TYPE)) {
+        evt.consumed = true;
+      }
+    });
+
     this.graph.getModel().addListener(mx.mxEvent.CHANGE, async (sender: mxgraph.mxEventSource, evt: mxgraph.mxEventObject) => {
       const edit = evt.getProperty('edit') as mxgraph.mxUndoableEdit;
 
@@ -441,7 +448,7 @@ export class GraphicalEditor {
     };
 
     this.graph.getTooltipForCell = (cell) => {
-      if (cell.getId().endsWith('/type')) {
+      if (cell.getId().endsWith(VertexProvider.ID_SUFFIX_TYPE)) {
         return '';
       }
       return mx.mxGraph.prototype.getTooltipForCell.bind(this.graph)(cell);

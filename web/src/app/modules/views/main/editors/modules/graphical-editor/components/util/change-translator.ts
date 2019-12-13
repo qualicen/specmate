@@ -95,6 +95,11 @@ export class ChangeTranslator {
         if (element === undefined) {
             return;
         }
+
+        if (change.previous === null) {
+            change.previous = '';
+        }
+
         const prevStyles: string[] = change.previous.split(';');
         const currStyles: string[] = change.style.split(';');
 

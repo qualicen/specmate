@@ -303,6 +303,10 @@ export class ChangeTranslator {
             await this.translateEdgeEndsChange(change as mxgraph.mxTerminalChange, connection);
         } else if (change['value']) {
             await this.translateEdgeValueChange(change as mxgraph.mxValueChange, connection);
+        } else {
+            if (change.cell.source === null || change.cell.target === null) {
+                throw new Error('No source or target');
+            }
         }
     }
 

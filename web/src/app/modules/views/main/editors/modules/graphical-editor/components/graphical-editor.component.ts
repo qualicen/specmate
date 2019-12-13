@@ -73,7 +73,7 @@ export class GraphicalEditor {
     private translate: TranslateService,
     private undoService: UndoService) {
 
-    this.navigator.hasNavigated.subscribe(() => {
+    this.navigator.navigationStart.subscribe(() => {
       this.isInGraphTransition = true;
     });
 

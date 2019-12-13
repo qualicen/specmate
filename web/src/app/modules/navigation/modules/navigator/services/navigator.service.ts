@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { EventEmitter, Injectable } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, NavigationStart } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Config } from '../../../../../config/config';
 import { IContainer } from '../../../../../model/IContainer';
@@ -8,6 +8,7 @@ import { Url } from '../../../../../util/url';
 import { SpecmateDataService } from '../../../../data/modules/data-service/services/specmate-data.service';
 import { AuthenticationService } from '../../../../views/main/authentication/modules/auth/services/authentication.service';
 import { LoggingService } from '../../../../views/side/modules/log-list/services/logging.service';
+import { throwIfEmpty } from 'rxjs/operators';
 
 @Injectable()
 export class NavigatorService {
@@ -17,6 +18,7 @@ export class NavigatorService {
     private _hasNavigated: EventEmitter<IContainer>;
     private _currentContents: IContainer[];
     private redirect: string;
+    private _navigationStart: EventEmitter<void>;
 
     private get currentElementUrl(): string {
         if (this.redirect !== undefined) {
@@ -70,6 +72,8 @@ export class NavigatorService {
                 }
                 this._currentContents = await this.dataService.readContents(currentUrl, true);
                 this.hasNavigated.emit(this.currentElement);
+            } else if (event instanceof NavigationStart) {
+                this.navigationStart.emit();
             }
         });
     }
@@ -79,6 +83,13 @@ export class NavigatorService {
             this._hasNavigated = new EventEmitter();
         }
         return this._hasNavigated;
+    }
+
+    public get navigationStart(): EventEmitter<void> {
+        if (!this._navigationStart) {
+            this._navigationStart = new EventEmitter();
+        }
+        return this._navigationStart;
     }
 
     private navigateToWelcome(): void {

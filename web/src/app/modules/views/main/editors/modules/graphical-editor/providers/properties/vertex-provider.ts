@@ -3,9 +3,8 @@ import { IContainer } from '../../../../../../../../model/IContainer';
 import { mxgraph } from 'mxgraph'; // Typings only - no code!
 import { IModelNode } from '../../../../../../../../model/IModelNode';
 import { ShapeProvider} from './shape-provider';
-import {CEGmxModelNode} from './ceg-mx-model-node';
+import { CEGmxModelNode} from './ceg-mx-model-node';
 import { ConverterBase } from '../../converters/converter-base';
-import {VariableAndCondition} from '../../converters/variable-condition-name-converter';
 import { Type } from '../../../../../../../../util/type';
 import { CEGNode } from '../../../../../../../../model/CEGNode';
 
@@ -93,7 +92,7 @@ export class VertexProvider extends ProviderBase {
                     if (sel !== undefined) {
                         sel.setAttribute('selected', 'true');
                     }
-                    mx.mxCell.prototype.valueChanged.bind(cell)(newValue);
+                    return mx.mxCell.prototype.valueChanged.bind(cell)(newValue);
                 };
                 return dropdown;
             }

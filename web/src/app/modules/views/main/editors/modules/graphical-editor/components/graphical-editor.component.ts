@@ -233,6 +233,17 @@ export class GraphicalEditor {
           }
         }
 
+        for (const cell of selections.filter(cell => cell.edge)) {
+          const source = cell.source;
+          const target = cell.target;
+          if (!this.graph.isCellSelected(source)) {
+            this.graph.getSelectionModel().addCell(source);
+          }
+          if (!this.graph.isCellSelected(target)) {
+            this.graph.getSelectionModel().addCell(target);
+          }
+        }
+
         for (const cell of selections) {
           if (cell.edge) {
             this.highlightedEdges.push(cell);
@@ -248,9 +259,11 @@ export class GraphicalEditor {
           let selection = selections[0];
           const selectedElement = await this.dataService.readElement(selection.getId(), true);
           this.selectedElementService.select(selectedElement);
+        } else {
+          this.selectedElementService.deselect();
         }
       } else {
-        this.selectedElementService.deselect();
+        this.selectedElementService.select(this.model);
       }
       this.graph.getModel().endUpdate();
     });
@@ -342,10 +355,10 @@ export class GraphicalEditor {
   private initUndoManager(): void {
     this.undoManager = new mx.mxUndoManager(50);
     const listener = async (sender: mxgraph.mxEventSource, evt: mxgraph.mxEventObject) => {
-      // StyleChanges are not added to the undo-stack, except an edge is negeated (dashed line)
+      // StyleChanges are not added to the undo-stack, except an edge is negated (dashed line)
       const isStyleChange = evt.getProperty('edit').changes.some((s: object) => s.constructor.name === 'mxStyleChange');
       const isNegated = evt.getProperty('edit').changes.some(function test(s: any): boolean {
-        if (s.constructor.name === 'mxStyleChange') {
+        if (s.constructor.name === 'mxStyleChange' && s.previous !== null) {
           return (s.style as String).includes(EditorStyle.ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE)
             !== ((s.previous as String).includes(EditorStyle.ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE));
         }
@@ -447,8 +460,7 @@ export class GraphicalEditor {
     }
 
     const validationResult = this.validationService.getValidationResults(this.model);
-    const invalidNodes = validationResult.filter(e => this.elementProvider.isNode(e.element));
-    for (const invalidNode of invalidNodes) {
+    for (const invalidNode of validationResult) {
       const vertexId = invalidNode.element.url;
       const vertex = vertices.find(vertex => vertex.id === vertexId);
       StyleChanger.replaceStyle(vertex, this.graph, EditorStyle.VALID_STYLE_NAME, EditorStyle.INVALID_STYLE_NAME);

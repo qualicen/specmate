@@ -34,8 +34,8 @@ export class ValidateButton {
 
 
     public get isValidationButtonVisible(): boolean {
-      if(this.navigator.currentElement && ( this.navigator.currentElement.className === "CEGModel" || this.navigator.currentElement.className === "Process")){
-        return true
+      if (this.navigator.currentElement && ( this.navigator.currentElement.className === 'CEGModel' || this.navigator.currentElement.className === 'Process')) {
+        return true;
       }
       return false;
     }

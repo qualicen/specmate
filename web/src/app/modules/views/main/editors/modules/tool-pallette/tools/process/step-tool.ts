@@ -3,6 +3,7 @@ import { ProcessStepFactory } from '../../../../../../../../factory/process-step
 import { Process } from '../../../../../../../../model/Process';
 import { ProcessStep } from '../../../../../../../../model/ProcessStep';
 import { CreateNodeToolBase } from '../create-node-tool-base';
+import { ShapeProvider } from '../../../graphical-editor/providers/properties/shape-provider';
 
 export class StepTool extends CreateNodeToolBase<ProcessStep> {
 
@@ -10,6 +11,7 @@ export class StepTool extends CreateNodeToolBase<ProcessStep> {
 
     public icon = 'plus';
     public name = 'tools.addStep';
+    public style = new ShapeProvider(Process).getStyle(ProcessStep);
 
     protected getElementFactory(coords: { x: number; y: number; }): ElementFactoryBase<ProcessStep> {
         return new ProcessStepFactory(coords, this.dataService);

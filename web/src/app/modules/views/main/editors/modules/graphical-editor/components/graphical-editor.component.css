@@ -1,32 +1,54 @@
 .editor {
-    overflow: scroll;
-    width: 100%;
-    height: 100%;
-    border: 2px dotted white
+  overflow: scroll;
+  width: 100%;
+  height: 100%;
+  border: 2px dotted white;
 }
 
-.editor>svg {
-    background-color: #fff;
-    min-width: 100%;
-    min-height: 100%;
+.editor > svg {
+  background-color: #fff;
+  min-width: 100%;
+  min-height: 100%;
 }
 
 .tool-bar {
-    height: 50px;
-    max-height: 50px;
+  height: 50px;
+  max-height: 50px;
 }
 
 .loading-indicator {
-    margin: auto;
-    text-align: center;
-    padding-top: 100px;
-    color: #777;
+  margin: auto;
+  text-align: center;
+  padding-top: 100px;
+  color: #777;
 }
 
 .zoom-indicator {
-    width: 60px;
+  width: 60px;
+}
+
+svg {
+    background: aqua;
+}
+
+.editor-container:focus {
+  border: none !important;
 }
 
 button {
-    margin-right: 0.2rem;
+  margin-right: 0.2rem;
+}
+
+.editor-grid {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  overflow: hidden;
+}
+
+.editor-body {
+  width: 100%;
+  height: 90%;
+  position: relative;
+  overflow: auto;
 }

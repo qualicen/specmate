@@ -11,7 +11,7 @@ import { LoadingModalContent } from './components/loading-modal-content.componen
 @NgModule({
     imports: [
         // MODULE IMPORTS
-        NgbModule.forRoot(),
+        NgbModule,
         SpecmateSharedModule,
         BrowserModule
     ],

@@ -9,35 +9,28 @@ import { CreateToolBase } from './create-tool-base';
 export abstract class CreateNodeToolBase<T extends IModelNode> extends CreateToolBase {
 
     public color = 'primary';
-    public cursor = 'cell';
-    public selectedElements: T[];
-    public done = false;
+    public isVertexTool = true;
+    public isHidden = false;
 
-    constructor(protected parent: IContainer,
-        protected dataService: SpecmateDataService,
-        selectedElementService: SelectedElementService) {
-        super(parent, dataService, selectedElementService);
+    public coords: { x: number, y: number };
+    public name: string;
+
+    public async perform(): Promise<T> {
+        if (this.coords === undefined) {
+            throw new Error('Coords undefined');
+        }
+        return await this.createNewNodeAtCoords();
     }
 
-    click(event: MouseEvent, zoom: number): Promise<void> {
-        return this.createNewNodeAtCoords({
-            x: Coords.roundToGrid(event.offsetX),
-            y: Coords.roundToGrid(event.offsetY)
-        });
+    private async createNewNodeAtCoords(): Promise<T> {
+        if (this.name === undefined || this.coords === undefined) {
+            throw new Error('Necessary data undefined.');
+        }
+        const factory = this.getElementFactory(this.coords);
+        const node = await factory.create(this.parent, false, undefined, this.name);
+        this.selectedElementService.select(node);
+        return node;
     }
 
-    select(element: T): Promise<void> {
-        this.selectedElements = [element];
-        this.selectedElementService.select(element);
-        return Promise.resolve();
-    }
-
-    private createNewNodeAtCoords(coords: {x: number, y: number}): Promise<void> {
-        return this.getElementFactory(coords).create(this.parent, false)
-            .then((node: T) => this.select(node))
-            .then(() => this.done = true)
-            .then(() => Promise.resolve());
-    }
-
-    protected abstract getElementFactory(coords: {x: number, y: number}): ElementFactoryBase<T>;
+    protected abstract getElementFactory(coords: { x: number, y: number }): ElementFactoryBase<T>;
 }

@@ -1,29 +1,27 @@
 sudo: false
 language:
 - java
-- node_js
-node_js:
-- '10'
 services:
 - docker
 jdk:
 - openjdk11
-addons:
-  sauce_connect: true
 env:
 - TERM=dumb
+before_install:
+  # Update nvm and install nodejs 10.17
+  - wget https://raw.githubusercontent.com/creationix/nvm/v0.31.0/nvm.sh -O ~/.nvm/nvm.sh
+  - source ~/.nvm/nvm.sh
+  - nvm install v10.17.0
+  - node --version
 install:
 - cd web && npm run init
 - cd ../bundles && ./gradlew --version
-- cd ..
+- cd ..  
 script:
 - (cd web && npm run build-prod)
 - (cd bundles && ./gradlew --no-daemon build --continue -x check)
 - (cd bundles && ./gradlew --no-daemon export -x check)
 - (cd bundles && ./gradlew --no-daemon check)
-- (cd bundles/specmate-std-env/generated/distributions/executable/ && java -Xmx6000m -Djdk.crypto.KeyAgreement.legacyKDF=true -jar dev-specmate-all.jar &)
-- sleep 10
-- (cd ui-tests/ && mvn clean test)
 after_success:
 - DOCKER_TAG=$TRAVIS_BRANCH
 - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin

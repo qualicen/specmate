@@ -246,17 +246,6 @@ export class GraphicalEditor {
           }
         }
 
-        for (const cell of selections.filter(cell => cell.edge)) {
-          const source = cell.source;
-          const target = cell.target;
-          if (!this.graph.isCellSelected(source)) {
-            this.graph.getSelectionModel().addCell(source);
-          }
-          if (!this.graph.isCellSelected(target)) {
-            this.graph.getSelectionModel().addCell(target);
-          }
-        }
-
         for (const cell of selections) {
           if (cell.edge) {
             this.highlightedEdges.push(cell);
@@ -476,6 +465,9 @@ export class GraphicalEditor {
     for (const invalidNode of validationResult) {
       const vertexId = invalidNode.element.url;
       const vertex = vertices.find(vertex => vertex.id === vertexId);
+      if (vertex === undefined) {
+        continue;
+      }
       StyleChanger.replaceStyle(vertex, this.graph, EditorStyle.VALID_STYLE_NAME, EditorStyle.INVALID_STYLE_NAME);
       const overlay = this.graph.setCellWarning(vertex, invalidNode.message);
       if (Type.is(invalidNode.element, CEGNode) || Type.is(invalidNode.element, ProcessStep)) {

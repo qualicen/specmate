@@ -125,7 +125,6 @@ export class ChangeTranslator {
         }
     }
 
-
     private async translateDelete(change: mxgraph.mxChildChange): Promise<void> {
         const deleteTool = this.toolProvider.tools.find(tool => (tool as DeleteToolBase).isDeleteTool === true) as DeleteToolBase;
         deleteTool.element = await this.getElement(change.child.id);

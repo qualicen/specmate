@@ -22,6 +22,7 @@ import { ToolProvider } from '../../providers/properties/tool-provider';
 import { EditorStyle } from '../editor-components/editor-style';
 import { StyleChanger } from './style-changer';
 import { VertexProvider } from '../../providers/properties/vertex-provider';
+import { ProcessConnection } from 'src/app/model/ProcessConnection';
 
 
 declare var require: any;
@@ -124,7 +125,6 @@ export class ChangeTranslator {
         }
     }
 
-
     private async translateDelete(change: mxgraph.mxChildChange): Promise<void> {
         const deleteTool = this.toolProvider.tools.find(tool => (tool as DeleteToolBase).isDeleteTool === true) as DeleteToolBase;
         deleteTool.element = await this.getElement(change.child.id);
@@ -160,7 +160,7 @@ export class ChangeTranslator {
 
         let addedElement: IContainer = undefined;
         if (change.child.edge) {
-            addedElement = await this.translateEdgeAdd(change);
+            addedElement = await this.translateEdgeAdd(change, graph);
         } else {
             addedElement = await this.translateNodeAdd(change, graph);
         }
@@ -172,7 +172,7 @@ export class ChangeTranslator {
         }
     }
 
-    private async translateEdgeAdd(change: mxgraph.mxChildChange): Promise<IModelConnection> {
+    private async translateEdgeAdd(change: mxgraph.mxChildChange, graph: mxgraph.mxGraph): Promise<IModelConnection> {
         const tool = this.determineTool(change) as ConnectionToolBase<any>;
 
         const sourceCell = change.child.source;
@@ -202,6 +202,25 @@ export class ChangeTranslator {
         tool.target = target;
 
         const connection = await tool.perform();
+
+        let oldId = change.child.id;
+        let cell = graph.getModel().getCell(oldId);
+
+        const condition = change.child.value;
+        if (condition !== null && condition !== undefined && condition !== '') {
+            (connection as ProcessConnection).condition = condition;
+            await this.dataService.updateElement(connection, true, Id.uuid);
+        } else {
+            cell.value = '';
+        }
+
+        // Update the ids, thus mxgraph and dataService uses the same
+        let newId = connection.url;
+        let cells = graph.getModel().cells;
+        cell.setId(newId);
+        delete cells[oldId];
+        cells[newId] = cell;
+
         change.child.id = connection.url;
         return connection;
     }

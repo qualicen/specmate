@@ -295,7 +295,6 @@ export class GraphicalEditor {
       if (cell === undefined || modelElement === undefined) {
         return;
       }
-
       this.changeTranslator.retranslate(modelElement, this.graph, cell);
     });
   }
@@ -365,16 +364,17 @@ export class GraphicalEditor {
     this.undoManager = new mx.mxUndoManager(50);
     const listener = async (sender: mxgraph.mxEventSource, evt: mxgraph.mxEventObject) => {
       // StyleChanges are not added to the undo-stack, except an edge is negated (dashed line)
-      const isStyleChange = evt.getProperty('edit').changes.some((s: object) => s.constructor.name === 'mxStyleChange');
-      const isNegated = evt.getProperty('edit').changes.some(function test(s: any): boolean {
+      const edit = evt.getProperty('edit');
+      const isNotOnlyStyleChange = edit.changes.some((s: object) => s.constructor.name !== 'mxStyleChange');
+      const isNegated = edit.changes.some(function test(s: any): boolean {
         if (s.constructor.name === 'mxStyleChange' && s.previous !== null) {
           return (s.style as String).includes(EditorStyle.ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE)
             !== ((s.previous as String).includes(EditorStyle.ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE));
         }
         return false;
       });
-      if (!isStyleChange || isNegated) {
-        this.undoManager.undoableEditHappened(evt.getProperty('edit'));
+      if (isNotOnlyStyleChange || isNegated) {
+        this.undoManager.undoableEditHappened(edit);
       }
     };
     this.graph.getModel().addListener(mx.mxEvent.UNDO, listener);

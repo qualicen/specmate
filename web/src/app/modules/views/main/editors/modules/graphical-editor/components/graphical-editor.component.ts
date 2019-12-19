@@ -79,7 +79,7 @@ export class GraphicalEditor {
 
     this.validationService.validationFinished.subscribe(async () => {
       if (!this.isInGraphTransition && this.graph !== undefined && this.graph['destroyed'] !== true) {
-        await this.updateValidities();
+        this.updateValidities();
       }
     });
     this.undoService.undoPressed.subscribe(() => {
@@ -128,13 +128,13 @@ export class GraphicalEditor {
     await this.createGraph();
 
     this.isInGraphTransition = false;
-    await this.updateValidities();
-    await this.undoManager.clear();
+    this.updateValidities();
+    this.undoManager.clear();
   }
 
   private async createGraph(): Promise<void> {
     mx.mxConnectionHandler.prototype.connectImage = new mx.mxImage('/assets/img/editor-tools/connector.png', 16, 16);
-    mx.mxGraph.prototype.warningImage = new mx.mxImage('/assets/img/editor-tools/error_red.png', 20, 20);
+    mx.mxGraph.prototype.warningImage = new mx.mxImage('/assets/img/editor-tools/error_red.png', 19, 19);
     mx.mxGraphHandler.prototype['guidesEnabled'] = true;
 
     mx.mxEvent.disableContextMenu(this.graphContainerElement.nativeElement);
@@ -476,17 +476,20 @@ export class GraphicalEditor {
         continue;
       }
       StyleChanger.replaceStyle(vertex, this.graph, EditorStyle.VALID_STYLE_NAME, EditorStyle.INVALID_STYLE_NAME);
-      const overlay = this.graph.setCellWarning(vertex, invalidNode.message);
+      const overlay = this.graph.setCellWarning(vertex, invalidNode.message, undefined, true);
       if (Type.is(invalidNode.element, CEGNode) || Type.is(invalidNode.element, ProcessStep)) {
         overlay.offset = new mx.mxPoint(-13, -12);
       }
       if (Type.is(invalidNode.element, ProcessStart) || Type.is(invalidNode.element, ProcessEnd)) {
-        overlay.offset = new mx.mxPoint(-23, -12);
+        overlay.align = mx.mxConstants.ALIGN_CENTER;
+        overlay.offset = new mx.mxPoint(0, -13);
       }
       if (Type.is(invalidNode.element, ProcessDecision)) {
-        overlay.offset = new mx.mxPoint(-28, -20);
+        overlay.align = mx.mxConstants.ALIGN_CENTER;
+        overlay.offset = new mx.mxPoint(0, -18);
       }
     }
+    this.graph.getView().revalidate();
 
     if (Type.is(this.model, CEGModel)) {
       for (const vertex of vertices) {

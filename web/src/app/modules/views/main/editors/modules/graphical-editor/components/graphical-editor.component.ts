@@ -136,6 +136,7 @@ export class GraphicalEditor {
     mx.mxConnectionHandler.prototype.connectImage = new mx.mxImage('/assets/img/editor-tools/connector.png', 16, 16);
     mx.mxGraph.prototype.warningImage = new mx.mxImage('/assets/img/editor-tools/error_red.png', 19, 19);
     mx.mxGraphHandler.prototype['guidesEnabled'] = true;
+    mx.mxGraph.prototype.centerZoom = false;
 
     mx.mxEvent.disableContextMenu(this.graphContainerElement.nativeElement);
 

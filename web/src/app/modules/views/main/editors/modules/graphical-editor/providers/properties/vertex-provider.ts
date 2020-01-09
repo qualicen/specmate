@@ -7,6 +7,7 @@ import { ConverterBase } from '../../converters/converter-base';
 import { CEGmxModelNode } from './ceg-mx-model-node';
 import { ProviderBase } from './provider-base';
 import { ShapeProvider } from './shape-provider';
+import { EditorStyle } from '../../components/editor-components/editor-style';
 
 declare var require: any;
 
@@ -34,9 +35,12 @@ export class VertexProvider extends ProviderBase {
         const parent = this.graph.getDefaultParent();
         this.graph.getModel().beginUpdate();
         const vertex = this.graph.insertVertex(parent, url, value, x, y, width, height, style);
-        const l1 = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_VARIABLE, data.variable, 0.5, 0.25, 0, 0, null, true);
-        const l2 = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_CONDITION, data.condition, 0.5, 0.5, 0, 0, null, true);
-        const l3 = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_TYPE, data.type, 0.5, 0.75, 0, 0, null, true);
+        const l1 = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_VARIABLE, data.variable,
+            0, 0.15, width, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.TEXT_INPUT_STYLE, true);
+        const l2 = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_CONDITION, data.condition,
+            0, 0.4, width, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.TEXT_INPUT_STYLE, true);
+        const l3 = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_TYPE, data.type,
+            0, 0.65, width, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.TEXT_INPUT_STYLE, true);
 
         l1.isConnectable = () => false;
         l2.isConnectable = () => false;

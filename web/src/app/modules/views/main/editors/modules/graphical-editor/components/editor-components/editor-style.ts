@@ -45,7 +45,7 @@ export class EditorStyle {
 
 
     public static readonly TEXT_INPUT_STYLE = 'BASE_TEXT_INPUT';
-    private static readonly TEXT_INPUT_STYLE_STR = 'shape=rectangle;rounded=0;align=center;perimeter=rectanglePerimeter;dashed=0;strokeWidth=1;strokeColor=#ff0000';
+    private static readonly TEXT_INPUT_STYLE_STR = 'shape=rectangle;rounded=0;align=center;strokeColor=none;fillColor=none';
     private static readonly TEXT_INPUT_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.TEXT_INPUT_STYLE_STR);
 
     public static readonly BASE_CEG_NODE_STYLE = 'BASE_CEG_NODE';

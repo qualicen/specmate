@@ -220,6 +220,7 @@ export class GraphicalEditor {
         edit.undo();
         this.changeTranslator.preventDataUpdates = false;
       } finally {
+        this.graph.getView().revalidate();
         this.undoService.setUndoEnabled(this.undoManager.canUndo());
         this.undoService.setRedoEnabled(this.undoManager.canRedo());
       }

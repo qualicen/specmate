@@ -106,8 +106,10 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 		logService.log(LogService.LOG_DEBUG, "Initialized Jira Connector with " + properties.toString() + ".");
 	}
 
+	
+
 	private JiraRestClient createJiraRESTClient(String username, String password) throws URISyntaxException {
-		// curl -s -H "Authorization: Basic I3NwZWNtYXRlOjlaYTVfJlNw" https://jira.azd.io/rest/api/2/issuetype | jq '.[] | select(.name == "Test") | .id'
+		// curl -s -H "Authorization: Basic ***REMOVED***" https://***REMOVED***/rest/api/2/issuetype | jq '.[] | select(.name == "Test") | .id'
 		return new AsynchronousJiraRestClientFactory()
 				.createWithAuthenticationHandler(new URI(url), new BasicAuthHandler(username, password));
 	}

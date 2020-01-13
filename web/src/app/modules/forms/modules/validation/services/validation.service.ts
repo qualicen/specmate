@@ -73,6 +73,7 @@ export class ValidationService {
             }
         }
         this.validationCache.addValidationResultsToCache(elementResults);
+        this.validationFinished.emit();
     }
 
     private getValidationResultsFor(element: IContainer, contents: IContainer[]) {
@@ -86,7 +87,6 @@ export class ValidationService {
             .concat(validNameResult)
             .concat(textLengthValidationResult);
             this.validationCache.addValidationResultsToCache(elementResults);
-            this.validationFinished.emit();
         return elementResults;
     }
 

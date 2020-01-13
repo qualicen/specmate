@@ -43,20 +43,25 @@ export class EditorStyle {
     public static readonly INNER_STYLE: Style = {};
     public static readonly EFFECT_STYLE: Style = {};
 
+
+    public static readonly TEXT_INPUT_STYLE = 'BASE_TEXT_INPUT';
+    private static readonly TEXT_INPUT_STYLE_STR = 'shape=rectangle;rounded=0;align=center;strokeColor=none;fillColor=none';
+    private static readonly TEXT_INPUT_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.TEXT_INPUT_STYLE_STR);
+
     public static readonly BASE_CEG_NODE_STYLE = 'BASE_CEG_NODE';
-    private static readonly BASE_CEG_NODE_STYLE_STR = 'shape=rectangle;rounded=1;arcSize=10;align=center;perimeter=rectanglePerimeter';
+    private static readonly BASE_CEG_NODE_STYLE_STR = 'shape=rectangle;rounded=1;arcSize=10;align=center;perimeter=rectanglePerimeter;dashed=0';
     private static readonly BASE_CEG_NODE_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.BASE_CEG_NODE_STYLE_STR);
     public static readonly BASE_PROCESS_START_STYLE = 'BASE_PROCESS_START_STYLE';
-    private static readonly BASE_PROCESS_START_STYLE_STR = 'shape=ellipse;whiteSpace=wrap;html=1;aspect=fixed;align=center;perimeter=ellipsePerimeter;editable=0';
+    private static readonly BASE_PROCESS_START_STYLE_STR = 'shape=ellipse;whiteSpace=wrap;html=1;aspect=fixed;align=center;perimeter=ellipsePerimeter;editable=0;dashed=0';
     private static readonly BASE_PROCESS_START_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.BASE_PROCESS_START_STYLE_STR);
     public static readonly BASE_PROCESS_END_STYLE = 'BASE_PROCESS_END_STYLE';
-    private static readonly BASE_PROCESS_END_STYLE_STR = 'shape=doubleEllipse;whiteSpace=wrap;html=1;aspect=fixed;align=center;perimeter=ellipsePerimeter;editable=0';
+    private static readonly BASE_PROCESS_END_STYLE_STR = 'shape=doubleEllipse;whiteSpace=wrap;html=1;aspect=fixed;align=center;perimeter=ellipsePerimeter;editable=0;dashed=0';
     private static readonly BASE_PROCESS_END_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.BASE_PROCESS_END_STYLE_STR);
     public static readonly BASE_PROCESS_STEP_STYLE = 'BASE_PROCESS_STEP_STYLE';
-    private static readonly BASE_PROCESS_STEP_STYLE_STR = 'shape=rectangle;rounded=1;arcSize=10;perimeter=rectanglePerimeter';
+    private static readonly BASE_PROCESS_STEP_STYLE_STR = 'shape=rectangle;rounded=1;arcSize=10;perimeter=rectanglePerimeter;dashed=0';
     private static readonly BASE_PROCESS_STEP_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.BASE_PROCESS_STEP_STYLE_STR);
     public static readonly BASE_PROCESS_DECISION_STYLE = 'BASE_PROCESS_DECISION_STYLE';
-    private static readonly BASE_PROCESS_DECISION_STYLE_STR = 'shape=rhombus;align=center;perimeter=rhombusPerimeter';
+    private static readonly BASE_PROCESS_DECISION_STYLE_STR = 'shape=rhombus;align=center;perimeter=rhombusPerimeter;dashed=0';
     private static readonly BASE_PROCESS_DECISION_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.BASE_PROCESS_DECISION_STYLE_STR);
 
     public static readonly ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE = 'ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE';
@@ -71,20 +76,21 @@ export class EditorStyle {
         mx.mxConstants.VERTEX_SELECTION_COLOR = '#00a8ff';
         mx.mxConstants.EDGE_SELECTION_COLOR = '#00a8ff';
         mx.mxConstants.DEFAULT_FONTSIZE = 12;
+        mx.mxConstants.STYLE_FONTCOLOR = '#000000';
 
-        EditorStyle.VALID_STYLE[mx.mxConstants.STYLE_DASHED] = '0';
-        EditorStyle.VALID_STYLE[mx.mxConstants.STYLE_STROKEWIDTH] = '3';
+        EditorStyle.VALID_STYLE[mx.mxConstants.STYLE_STROKEWIDTH] = '2';
         EditorStyle.VALID_STYLE[mx.mxConstants.STYLE_STROKE_OPACITY] = '100';
-        EditorStyle.VALID_STYLE[mx.mxConstants.STYLE_STROKECOLOR] = '#346CB6';
+        EditorStyle.VALID_STYLE[mx.mxConstants.STYLE_STROKECOLOR] = '#000000';
 
-        EditorStyle.INVALID_STYLE[mx.mxConstants.STYLE_DASHED] = '0';
-        EditorStyle.INVALID_STYLE[mx.mxConstants.STYLE_STROKEWIDTH] = '3';
+        EditorStyle.INVALID_STYLE[mx.mxConstants.STYLE_STROKEWIDTH] = '2';
         EditorStyle.INVALID_STYLE[mx.mxConstants.STYLE_STROKE_OPACITY] = '100';
         EditorStyle.INVALID_STYLE[mx.mxConstants.STYLE_STROKECOLOR] = '#ff0000';
 
-        EditorStyle.CAUSE_STYLE[mx.mxConstants.STYLE_FILLCOLOR] = '#39C4B8';
-        EditorStyle.EFFECT_STYLE[mx.mxConstants.STYLE_FILLCOLOR] = '#f6960d';
-        EditorStyle.INNER_STYLE[mx.mxConstants.STYLE_FILLCOLOR] = '#e0e026';
+        EditorStyle.CAUSE_STYLE[mx.mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
+        EditorStyle.EFFECT_STYLE[mx.mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
+        EditorStyle.EFFECT_STYLE[mx.mxConstants.STYLE_GRADIENTCOLOR] = '#346CB6';
+        EditorStyle.INNER_STYLE[mx.mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
+        EditorStyle.INNER_STYLE[mx.mxConstants.STYLE_GRADIENTCOLOR] = '#d8d8d8';
 
         EditorStyle.EDGE_HIGHLIGHT_STYLE[mx.mxConstants.STYLE_STROKECOLOR] = '#000000';
         EditorStyle.EDGE_HIGHLIGHT_STYLE[mx.mxConstants.STYLE_STROKEWIDTH] = '3';
@@ -97,6 +103,8 @@ export class EditorStyle {
         EditorStyle.initStyles();
 
         const stylesheet = graph.getStylesheet();
+
+        stylesheet.putCellStyle(EditorStyle.TEXT_INPUT_STYLE, EditorStyle.TEXT_INPUT_STYLE_OBJ);
 
         stylesheet.putCellStyle(EditorStyle.BASE_CEG_NODE_STYLE, EditorStyle.BASE_CEG_NODE_STYLE_OBJ);
         stylesheet.putCellStyle(EditorStyle.BASE_PROCESS_START_STYLE, EditorStyle.BASE_PROCESS_START_STYLE_OBJ);
@@ -114,8 +122,7 @@ export class EditorStyle {
 
         const vertexStyle = graph.getStylesheet().getDefaultVertexStyle();
         vertexStyle[mx.mxConstants.STYLE_STROKECOLOR] = '#000000';
-        vertexStyle[mx.mxConstants.STYLE_DASHED] = '1';
-        vertexStyle[mx.mxConstants.STYLE_DASH_PATTERN] = '4';
+        vertexStyle[mx.mxConstants.STYLE_DASHED] = '0';
 
         stylesheet.putCellStyle(EditorStyle.EDGE_DIM_STYLE_NAME, EditorStyle.EDGE_DIM_STYLE);
         stylesheet.putCellStyle(EditorStyle.EDGE_HIGHLIGHT_STYLE_NAME, EditorStyle.EDGE_HIGHLIGHT_STYLE);

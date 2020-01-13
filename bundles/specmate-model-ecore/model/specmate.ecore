@@ -224,8 +224,16 @@
         </eAnnotations>
       </eStructuralFeatures>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="ProcessStart" eSuperTypes="#//processes/ProcessNode"/>
-    <eClassifiers xsi:type="ecore:EClass" name="ProcessEnd" eSuperTypes="#//processes/ProcessNode"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ProcessStart" eSuperTypes="#//processes/ProcessNode">
+      <eAnnotations source="http://specmate.com/form_meta">
+        <details key="disabled1" value="name"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ProcessEnd" eSuperTypes="#//processes/ProcessNode">
+      <eAnnotations source="http://specmate.com/form_meta">
+        <details key="disabled1" value="name"/>
+      </eAnnotations>
+    </eClassifiers>
   </eSubpackages>
   <eSubpackages name="history" nsURI="http://specmate.com/20190902/model/history"
       nsPrefix="com.specmate.model.processes">

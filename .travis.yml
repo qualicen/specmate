@@ -24,9 +24,10 @@ script:
 - (cd bundles && ./gradlew --no-daemon check)
 after_success:
 - DOCKER_TAG=$TRAVIS_BRANCH
+- DOCKER_REPO=qualicen/specmate
 - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-- docker build -t ${DOCKER_USERNAME}/specmate:${DOCKER_TAG} .
-- docker push ${DOCKER_USERNAME}/specmate:${DOCKER_TAG}
+- docker build -t ${DOCKER_REPO}:${DOCKER_TAG} .
+- docker push ${DOCKER_REPO}:${DOCKER_TAG}
 - (cd bundles/specmate-std-env/generated/distributions/executable/&& mv dev-specmate-all.jar dev-specmate-all-$TRAVIS_TAG.jar)
 - (cd bundles/specmate-std-env/generated/distributions/executable/&& mv prod-specmate-all.jar prod-specmate-all-$TRAVIS_TAG.jar)
 - (cd bundles/specmate-std-env/generated/distributions/executable/&& mv prod-specmate-cdo-server.jar prod-specmate-cdo-server-$TRAVIS_TAG.jar)

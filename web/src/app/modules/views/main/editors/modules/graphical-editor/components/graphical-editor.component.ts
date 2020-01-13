@@ -73,13 +73,13 @@ export class GraphicalEditor {
     private translate: TranslateService,
     private undoService: UndoService) {
 
-    this.navigator.hasNavigated.subscribe(() => {
+    this.navigator.navigationStart.subscribe(() => {
       this.isInGraphTransition = true;
     });
 
     this.validationService.validationFinished.subscribe(async () => {
       if (!this.isInGraphTransition && this.graph !== undefined && this.graph['destroyed'] !== true) {
-        await this.updateValidities();
+        this.updateValidities();
       }
     });
     this.undoService.undoPressed.subscribe(() => {
@@ -128,13 +128,13 @@ export class GraphicalEditor {
     await this.createGraph();
 
     this.isInGraphTransition = false;
-    await this.updateValidities();
-    await this.undoManager.clear();
+    this.updateValidities();
+    this.undoManager.clear();
   }
 
   private async createGraph(): Promise<void> {
     mx.mxConnectionHandler.prototype.connectImage = new mx.mxImage('/assets/img/editor-tools/connector.png', 16, 16);
-    mx.mxGraph.prototype.warningImage = new mx.mxImage('/assets/img/editor-tools/error_red.png', 20, 20);
+    mx.mxGraph.prototype.warningImage = new mx.mxImage('/assets/img/editor-tools/error_red.png', 19, 19);
     mx.mxGraphHandler.prototype['guidesEnabled'] = true;
 
     mx.mxEvent.disableContextMenu(this.graphContainerElement.nativeElement);
@@ -165,6 +165,13 @@ export class GraphicalEditor {
     this.graph.setTooltips(true);
     this.graph.zoomFactor = 1.1;
 
+    this.graph.addListener(mx.mxEvent.DOUBLE_CLICK, (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) => {
+      const cell = evt.properties.cell as mxgraph.mxCell;
+      if (cell.id.endsWith(VertexProvider.ID_SUFFIX_TYPE)) {
+        evt.consumed = true;
+      }
+    });
+
     this.graph.getModel().addListener(mx.mxEvent.CHANGE, async (sender: mxgraph.mxEventSource, evt: mxgraph.mxEventObject) => {
       const edit = evt.getProperty('edit') as mxgraph.mxUndoableEdit;
 
@@ -192,14 +199,28 @@ export class GraphicalEditor {
             done.push(change);
           }
         }
+
+        // Filter duplicate style changes; We only need to adress the last one.
+        const styleChangeMap: { [id: string]: mxgraph.mxStyleChange } = {};
+        edit.changes.filter(filteredChange => filteredChange.style !== undefined)
+          .forEach(styleChange => {
+            styleChangeMap[styleChange.cell.id] = styleChange;
+            done.push(styleChange);
+          });
+        for (const cellId in styleChangeMap) {
+          await this.changeTranslator.translate(styleChangeMap[cellId], this.graph);
+        }
         for (const change of edit.changes.filter(filteredChange => done.indexOf(filteredChange) < 0)) {
           await this.changeTranslator.translate(change, this.graph);
         }
       } catch (e) {
+        // This is actually for debug purposes; However, mxgraph or the change translation fails silently without this.
+        console.error(e);
         this.changeTranslator.preventDataUpdates = true;
         edit.undo();
         this.changeTranslator.preventDataUpdates = false;
       } finally {
+        this.graph.getView().revalidate();
         this.undoService.setUndoEnabled(this.undoManager.canUndo());
         this.undoService.setRedoEnabled(this.undoManager.canRedo());
       }
@@ -233,17 +254,6 @@ export class GraphicalEditor {
           }
         }
 
-        for (const cell of selections.filter(cell => cell.edge)) {
-          const source = cell.source;
-          const target = cell.target;
-          if (!this.graph.isCellSelected(source)) {
-            this.graph.getSelectionModel().addCell(source);
-          }
-          if (!this.graph.isCellSelected(target)) {
-            this.graph.getSelectionModel().addCell(target);
-          }
-        }
-
         for (const cell of selections) {
           if (cell.edge) {
             this.highlightedEdges.push(cell);
@@ -259,9 +269,11 @@ export class GraphicalEditor {
           let selection = selections[0];
           const selectedElement = await this.dataService.readElement(selection.getId(), true);
           this.selectedElementService.select(selectedElement);
+        } else {
+          this.selectedElementService.deselect();
         }
       } else {
-        this.selectedElementService.deselect();
+        this.selectedElementService.select(this.model);
       }
       this.graph.getModel().endUpdate();
     });
@@ -284,7 +296,6 @@ export class GraphicalEditor {
       if (cell === undefined || modelElement === undefined) {
         return;
       }
-
       this.changeTranslator.retranslate(modelElement, this.graph, cell);
     });
   }
@@ -353,17 +364,18 @@ export class GraphicalEditor {
   private initUndoManager(): void {
     this.undoManager = new mx.mxUndoManager(50);
     const listener = async (sender: mxgraph.mxEventSource, evt: mxgraph.mxEventObject) => {
-      // StyleChanges are not added to the undo-stack, except an edge is negeated (dashed line)
-      const isStyleChange = evt.getProperty('edit').changes.some((s: object) => s.constructor.name === 'mxStyleChange');
-      const isNegated = evt.getProperty('edit').changes.some(function test(s: any): boolean {
-        if (s.constructor.name === 'mxStyleChange') {
+      // StyleChanges are not added to the undo-stack, except an edge is negated (dashed line)
+      const edit = evt.getProperty('edit');
+      const isNotOnlyStyleChange = edit.changes.some((s: object) => s.constructor.name !== 'mxStyleChange');
+      const isNegated = edit.changes.some(function test(s: any): boolean {
+        if (s.constructor.name === 'mxStyleChange' && s.previous !== null) {
           return (s.style as String).includes(EditorStyle.ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE)
             !== ((s.previous as String).includes(EditorStyle.ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE));
         }
         return false;
       });
-      if (!isStyleChange || isNegated) {
-        this.undoManager.undoableEditHappened(evt.getProperty('edit'));
+      if (isNotOnlyStyleChange || isNegated) {
+        this.undoManager.undoableEditHappened(edit);
       }
     };
     this.graph.getModel().addListener(mx.mxEvent.UNDO, listener);
@@ -437,7 +449,7 @@ export class GraphicalEditor {
     };
 
     this.graph.getTooltipForCell = (cell) => {
-      if (cell.getId().endsWith('/type')) {
+      if (cell.getId().endsWith(VertexProvider.ID_SUFFIX_TYPE)) {
         return '';
       }
       return mx.mxGraph.prototype.getTooltipForCell.bind(this.graph)(cell);
@@ -458,22 +470,27 @@ export class GraphicalEditor {
     }
 
     const validationResult = this.validationService.getValidationResults(this.model);
-    const invalidNodes = validationResult.filter(e => this.elementProvider.isNode(e.element));
-    for (const invalidNode of invalidNodes) {
+    for (const invalidNode of validationResult) {
       const vertexId = invalidNode.element.url;
       const vertex = vertices.find(vertex => vertex.id === vertexId);
+      if (vertex === undefined) {
+        continue;
+      }
       StyleChanger.replaceStyle(vertex, this.graph, EditorStyle.VALID_STYLE_NAME, EditorStyle.INVALID_STYLE_NAME);
-      const overlay = this.graph.setCellWarning(vertex, invalidNode.message);
+      const overlay = this.graph.setCellWarning(vertex, invalidNode.message, undefined, true);
       if (Type.is(invalidNode.element, CEGNode) || Type.is(invalidNode.element, ProcessStep)) {
         overlay.offset = new mx.mxPoint(-13, -12);
       }
       if (Type.is(invalidNode.element, ProcessStart) || Type.is(invalidNode.element, ProcessEnd)) {
-        overlay.offset = new mx.mxPoint(-23, -12);
+        overlay.align = mx.mxConstants.ALIGN_CENTER;
+        overlay.offset = new mx.mxPoint(0, -13);
       }
       if (Type.is(invalidNode.element, ProcessDecision)) {
-        overlay.offset = new mx.mxPoint(-28, -20);
+        overlay.align = mx.mxConstants.ALIGN_CENTER;
+        overlay.offset = new mx.mxPoint(0, -18);
       }
     }
+    this.graph.getView().revalidate();
 
     if (Type.is(this.model, CEGModel)) {
       for (const vertex of vertices) {

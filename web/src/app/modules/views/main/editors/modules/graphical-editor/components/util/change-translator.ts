@@ -21,6 +21,8 @@ import { ShapeProvider } from '../../providers/properties/shape-provider';
 import { ToolProvider } from '../../providers/properties/tool-provider';
 import { EditorStyle } from '../editor-components/editor-style';
 import { StyleChanger } from './style-changer';
+import { VertexProvider } from '../../providers/properties/vertex-provider';
+import { ProcessConnection } from 'src/app/model/ProcessConnection';
 
 
 declare var require: any;
@@ -95,6 +97,11 @@ export class ChangeTranslator {
         if (element === undefined) {
             return;
         }
+
+        if (change.previous === null) {
+            change.previous = '';
+        }
+
         const prevStyles: string[] = change.previous.split(';');
         const currStyles: string[] = change.style.split(';');
 
@@ -117,7 +124,6 @@ export class ChangeTranslator {
             }
         }
     }
-
 
     private async translateDelete(change: mxgraph.mxChildChange): Promise<void> {
         const deleteTool = this.toolProvider.tools.find(tool => (tool as DeleteToolBase).isDeleteTool === true) as DeleteToolBase;
@@ -154,23 +160,67 @@ export class ChangeTranslator {
 
         let addedElement: IContainer = undefined;
         if (change.child.edge) {
-            addedElement = await this.translateEdgeAdd(change);
+            addedElement = await this.translateEdgeAdd(change, graph);
         } else {
             addedElement = await this.translateNodeAdd(change, graph);
         }
-        change.child.setId(addedElement.url);
+
+        if (addedElement !== undefined) {
+            change.child.setId(addedElement.url);
+        } else {
+            graph.removeCells([change.child]);
+        }
     }
 
-    private async translateEdgeAdd(change: mxgraph.mxChildChange): Promise<IModelConnection> {
+    private async translateEdgeAdd(change: mxgraph.mxChildChange, graph: mxgraph.mxGraph): Promise<IModelConnection> {
         const tool = this.determineTool(change) as ConnectionToolBase<any>;
 
-        const source = (await this.getElement(change.child.source.id) as IModelNode);
-        const target = (await this.getElement(change.child.target.id) as IModelNode);
+        const sourceCell = change.child.source;
+        const targetCell = change.child.target;
+
+        if (sourceCell === null || targetCell === null || sourceCell === undefined || targetCell === undefined) {
+            return;
+        }
+
+        const sourceElement = await this.getElement(sourceCell.id);
+        if (sourceElement === undefined) {
+            return;
+        }
+        const source = (sourceElement as IModelNode);
+
+        const targetElement = await this.getElement(targetCell.id);
+        if (targetElement === undefined) {
+            return;
+        }
+        const target = (targetElement as IModelNode);
+
+        if (source === undefined || target === undefined) {
+            return;
+        }
 
         tool.source = source;
         tool.target = target;
 
         const connection = await tool.perform();
+
+        let oldId = change.child.id;
+        let cell = graph.getModel().getCell(oldId);
+
+        const condition = change.child.value;
+        if (condition !== null && condition !== undefined && condition !== '') {
+            (connection as ProcessConnection).condition = condition;
+            await this.dataService.updateElement(connection, true, Id.uuid);
+        } else {
+            cell.value = '';
+        }
+
+        // Update the ids, thus mxgraph and dataService uses the same
+        let newId = connection.url;
+        let cells = graph.getModel().cells;
+        cell.setId(newId);
+        delete cells[oldId];
+        cells[newId] = cell;
+
         change.child.id = connection.url;
         return connection;
     }
@@ -210,9 +260,9 @@ export class ChangeTranslator {
             let oldIdCondition = condition.id;
             let oldIdType = type.id;
 
-            variable.setId(newId + '/variable');
-            condition.setId(newId + '/condition');
-            type.setId(newId + '/type');
+            variable.setId(newId + VertexProvider.ID_SUFFIX_VARIABLE);
+            condition.setId(newId + VertexProvider.ID_SUFFIX_CONDITION);
+            type.setId(newId + VertexProvider.ID_SUFFIX_TYPE);
 
             delete cells[oldIdVariable];
             delete cells[oldIdCondition];
@@ -278,6 +328,10 @@ export class ChangeTranslator {
             await this.translateEdgeEndsChange(change as mxgraph.mxTerminalChange, connection);
         } else if (change['value']) {
             await this.translateEdgeValueChange(change as mxgraph.mxValueChange, connection);
+        } else {
+            if (change.cell.source === null || change.cell.target === null) {
+                throw new Error('No source or target');
+            }
         }
     }
 

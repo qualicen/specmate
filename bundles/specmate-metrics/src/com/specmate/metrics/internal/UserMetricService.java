@@ -45,7 +45,7 @@ public class UserMetricService implements IUserMetricsService {
 				createGauge("login_counter_current_month", "Number of users logged in at the current month");
 		this.specmate_current_year = metricsService.
 				createGauge("login_counter_current_year", "Number of users logged in at the current year");
-		activeScheduler();
+		createSchedulers();
 		initializeAfterResart();
 	}
 	
@@ -70,7 +70,7 @@ public class UserMetricService implements IUserMetricsService {
 	/**
 	 * 	Create different schedulers for reseting the different counters
 	 * */
-	private void activeScheduler() {
+	private void createSchedulers() {
 		try {
 			String scheduleDay = "day 23 59 59";
 			SchedulerTask dailyMetricTask = new MetricTask(specmate_current_day);

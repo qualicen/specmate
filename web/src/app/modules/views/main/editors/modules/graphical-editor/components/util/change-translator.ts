@@ -329,7 +329,10 @@ export class ChangeTranslator {
         } else if (change['value']) {
             await this.translateEdgeValueChange(change as mxgraph.mxValueChange, connection);
         } else {
-            if (change.cell.source === null || change.cell.target === null) {
+            if (change['previous']) {
+                // Edge is undone
+                return;
+            } else if (change.cell.source === null || change.cell.target === null) {
                 throw new Error('No source or target');
             }
         }

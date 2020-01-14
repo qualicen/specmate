@@ -127,7 +127,7 @@ export class Config {
     public static ELEMENT_CHUNK_SIZE = 100;
 
 
-    public static readonly CEG_LAYOUT_CLEARANCE_X = 100;
-    public static readonly CEG_LAYOUT_CLEARANCE_Y = 50;
+    public static readonly CEG_LAYOUT_CLEARANCE_X = 90;
+    public static readonly CEG_LAYOUT_CLEARANCE_Y = 45;
 }
 

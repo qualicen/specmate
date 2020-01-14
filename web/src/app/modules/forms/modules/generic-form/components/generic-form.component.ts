@@ -135,6 +135,7 @@ export class GenericForm {
         // We need this, since in some cases, the update event on the control is fired,
         // even though the data did actually not change. We want to prevent unnecessary updates.
         let changed = false;
+        let isEmptyString = false;
         for (let i = 0; i < this._meta.length; i++) {
             let fieldMeta: FieldMetaItem = this._meta[i];
             let fieldName: string = fieldMeta.name;
@@ -146,6 +147,9 @@ export class GenericForm {
             if (converter) {
                 updateValue = converter.convertFromControlToModel(updateValue);
             }
+            if (updateValue === '') {
+                isEmptyString = true;
+            }
             // We do not need to clone here (hopefully), because only simple values can be passed via forms.
             const originalValue = this.element[fieldName] || '';
             if (originalValue !== updateValue + '') {
@@ -153,7 +157,7 @@ export class GenericForm {
                 changed = true;
             }
         }
-        if (changed && this.isValid) {
+        if (changed && (this.isValid || isEmptyString)) {
             this.dataService.updateElement(this.element, true, Id.uuid);
         }
     }

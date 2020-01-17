@@ -87,10 +87,9 @@ export class EditorStyle {
         EditorStyle.INVALID_STYLE[mx.mxConstants.STYLE_STROKECOLOR] = '#ff0000';
 
         EditorStyle.CAUSE_STYLE[mx.mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
-        EditorStyle.EFFECT_STYLE[mx.mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
-        EditorStyle.EFFECT_STYLE[mx.mxConstants.STYLE_GRADIENTCOLOR] = '#346CB6';
-        EditorStyle.INNER_STYLE[mx.mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
-        EditorStyle.INNER_STYLE[mx.mxConstants.STYLE_GRADIENTCOLOR] = '#d8d8d8';
+        EditorStyle.EFFECT_STYLE[mx.mxConstants.STYLE_FILLCOLOR] = '#346CB6';
+        EditorStyle.EFFECT_STYLE[mx.mxConstants.STYLE_FONTCOLOR] = '#FFFFFF';
+        EditorStyle.INNER_STYLE[mx.mxConstants.STYLE_FILLCOLOR] = '#d8d8d8';
 
         EditorStyle.EDGE_HIGHLIGHT_STYLE[mx.mxConstants.STYLE_STROKECOLOR] = '#000000';
         EditorStyle.EDGE_HIGHLIGHT_STYLE[mx.mxConstants.STYLE_STROKEWIDTH] = '3';

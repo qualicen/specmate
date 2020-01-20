@@ -76,6 +76,9 @@ export class GraphicalEditor {
     this.navigator.navigationStart.subscribe(() => {
       this.isInGraphTransition = true;
     });
+    this.navigator.navigationCancel.subscribe(() => {
+      this.isInGraphTransition = false;
+    });
 
     this.validationService.validationFinished.subscribe(async () => {
       if (!this.isInGraphTransition && this.graph !== undefined && this.graph['destroyed'] !== true) {

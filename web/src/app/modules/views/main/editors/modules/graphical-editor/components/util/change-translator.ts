@@ -326,7 +326,7 @@ export class ChangeTranslator {
 
         if (change['terminal']) {
             await this.translateEdgeEndsChange(change as mxgraph.mxTerminalChange, connection);
-        } else if (change['value']) {
+        } else if (change['value'] !== undefined && change['value'] !== null) {
             await this.translateEdgeValueChange(change as mxgraph.mxValueChange, connection);
         } else {
             if (change['previous']) {

@@ -1,6 +1,7 @@
 import { mxgraph } from 'mxgraph';
 import { CEGConnection } from 'src/app/model/CEGConnection';
 import { CEGNode } from 'src/app/model/CEGNode';
+import { ProcessConnection } from 'src/app/model/ProcessConnection';
 import { Type } from 'src/app/util/type';
 import { CEGModel } from '../../../../../../../../model/CEGModel';
 import { IContainer } from '../../../../../../../../model/IContainer';
@@ -19,10 +20,9 @@ import { NodeNameConverterProvider } from '../../providers/conversion/node-name-
 import { CEGmxModelNode } from '../../providers/properties/ceg-mx-model-node';
 import { ShapeProvider } from '../../providers/properties/shape-provider';
 import { ToolProvider } from '../../providers/properties/tool-provider';
+import { VertexProvider } from '../../providers/properties/vertex-provider';
 import { EditorStyle } from '../editor-components/editor-style';
 import { StyleChanger } from './style-changer';
-import { VertexProvider } from '../../providers/properties/vertex-provider';
-import { ProcessConnection } from 'src/app/model/ProcessConnection';
 
 
 declare var require: any;
@@ -295,8 +295,16 @@ export class ChangeTranslator {
         }
     }
 
+    private isTextInputChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange): boolean {
+        const cell = change.cell as mxgraph.mxCell;
+        return (cell.id.endsWith(VertexProvider.ID_SUFFIX_VARIABLE) || cell.id.endsWith(VertexProvider.ID_SUFFIX_CONDITION));
+    }
+
     private async translateNodeChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange, element: IModelNode): Promise<void> {
         let cell = change.cell as mxgraph.mxCell;
+        if (this.isTextInputChange(change)) {
+            VertexProvider.adjustChildCellSize(cell, element.width);
+        }
         if (this.nodeNameConverter) {
             if (this.parentComponents[cell.getId()] !== undefined) {
                 // The changed node is a sublabel / child

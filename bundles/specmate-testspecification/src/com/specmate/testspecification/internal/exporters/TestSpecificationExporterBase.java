@@ -64,7 +64,7 @@ public abstract class TestSpecificationExporterBase implements ITestExporter {
 		for (TestCase tc : getTestCases(testSpecification)) {
 			generateTestCaseHeader(sb, testSpecification, tc);
 			List<ParameterAssignment> assignments = getTestCaseParameterAssignments(tc);
-			generateTestCaseParameterAssignments(sb, assignments);
+			generateTestCaseParameterAssignments(sb, assignments, parameters);
 			generateTestCaseFooter(sb, tc);
 		}
 		generateFooter(sb, testSpecification);
@@ -120,7 +120,7 @@ public abstract class TestSpecificationExporterBase implements ITestExporter {
 	protected abstract void generateTestCaseHeader(StringBuilder sb, TestSpecification ts, TestCase tc);
 
 	protected abstract void generateTestCaseParameterAssignments(StringBuilder sb,
-			List<ParameterAssignment> assignments);
+			List<ParameterAssignment> assignments, List<TestParameter> parameters);
 
 	protected abstract String generateFileName(TestSpecification testSpecification);
 }

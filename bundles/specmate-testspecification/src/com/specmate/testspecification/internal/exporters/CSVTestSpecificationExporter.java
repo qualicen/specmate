@@ -50,14 +50,25 @@ public class CSVTestSpecificationExporter extends TestSpecificationExporterBase 
 	}
 
 	@Override
-	protected void generateTestCaseParameterAssignments(StringBuilder sb, List<ParameterAssignment> assignments) {
+	protected void generateTestCaseParameterAssignments(StringBuilder sb, List<ParameterAssignment> assignments,
+			List<TestParameter> parameters) {
 		StringJoiner joiner = new StringJoiner(ExportUtil.CSV_COL_SEP);
-		for (ParameterAssignment assignment : assignments) {
-			String assignmentValue = assignment.getCondition();
-			String characterToEscape = "=";
-			String escapeString = StringUtils.isEmpty(assignmentValue) ? ""
-					: escapeString(assignmentValue, characterToEscape);
-			joiner.add(StringUtils.wrap(escapeString + assignmentValue, ExportUtil.CSV_TEXT_WRAP));
+		for (TestParameter parameter : parameters) {
+			boolean added = false;
+			for (ParameterAssignment assignment : assignments) {
+				if (parameter.getName().equals(assignment.getParameter().getName())) {
+					added = true;
+					String assignmentValue = assignment.getCondition();
+					String characterToEscape = "=";
+					String escapeString = StringUtils.isEmpty(assignmentValue) ? ""
+							: escapeString(assignmentValue, characterToEscape);
+					joiner.add(StringUtils.wrap(escapeString + assignmentValue, ExportUtil.CSV_TEXT_WRAP));
+					break;
+				}
+			}
+			if (!added) {
+				joiner.add(StringUtils.wrap("", ExportUtil.CSV_TEXT_WRAP));
+			}
 		}
 		sb.append(joiner.toString());
 	}

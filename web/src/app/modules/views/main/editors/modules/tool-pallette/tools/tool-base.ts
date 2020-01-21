@@ -38,4 +38,12 @@ export abstract class ToolBase {
     public set graph(graph: mxgraph.mxGraph) {
         this._graph = graph;
     }
+
+    public get isDragTool(): boolean {
+        return this.isVertexTool;
+    }
+
+    public get isClickTool(): boolean {
+        return !this.isDragTool && !this.isHidden;
+    }
 }

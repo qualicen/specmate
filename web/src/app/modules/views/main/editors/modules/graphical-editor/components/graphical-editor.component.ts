@@ -163,6 +163,10 @@ export class GraphicalEditor {
     this.graph.setConnectable(true);
     this.graph.setMultigraph(false);
     this.graph.setDropEnabled(false);
+
+    this.graph.setAllowDanglingEdges(false);
+    this.graph.setDisconnectOnMove(false);
+
     const rubberBand = new mx.mxRubberband(this.graph);
     rubberBand.reset();
 

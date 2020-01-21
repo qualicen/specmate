@@ -48,3 +48,4 @@ generated/
 bundles/cnf/releaserepo/index.xml.sha
 bundles/specmate-model-generators-typescript/src/com/specmate/model/generators/typescript/GenerateAngular.java
 package-lock.json
+bundles/specmate-model-generation/generated/buildfiles

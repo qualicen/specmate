@@ -20,6 +20,9 @@ import com.specmate.testspecification.api.ITestExporter;
 /** Base class for Test Specification Exporters (aka "Skeletons") */
 public abstract class TestSpecificationExporterBase implements ITestExporter {
 
+	/** The date of the export */
+	private Date date;
+	
 	/** the language for the export */
 	protected String language;
 
@@ -36,6 +39,14 @@ public abstract class TestSpecificationExporterBase implements ITestExporter {
 	@Override
 	public String getLanguage() {
 		return language;
+	}
+	
+	public void setDate(Date date) {
+		this.date = date;
+	}
+	
+	public Date getDate() {
+		return this.date;
 	}
 
 	@Override
@@ -106,7 +117,11 @@ public abstract class TestSpecificationExporterBase implements ITestExporter {
 		sb.append("/*\n");
 		sb.append(" * Datum: ");
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		sb.append(sdf.format(new Date()));
+		Date exportDate = getDate();
+		if(exportDate == null) {
+			exportDate = new Date();
+		}
+		sb.append(sdf.format(exportDate));
 		sb.append("\n */\n\n");
 	}
 

@@ -1,5 +1,6 @@
 package com.specmate.testspecification.internal.services;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,10 +25,12 @@ import com.specmate.model.testspecification.TestSpecification;
 import com.specmate.model.testspecification.TestSpecificationSkeleton;
 import com.specmate.rest.RestResult;
 import com.specmate.testspecification.api.ITestExporter;
+import com.specmate.testspecification.internal.exporters.TestSpecificationExporterBase;
 
 /** Service that exports a test specification in various formats */
 @Component(immediate = true, service = IRestService.class)
 public class TestExportService extends RestServiceBase {
+	private static final String EXPORT_DATE_KEY = "exportDate";
 	private final String LANGUAGE_PARAM = "language";
 	private Map<String, ITestExporter> testSpecificationExporters = new HashMap<String, ITestExporter>();
 	private Map<String, ITestExporter> testProcedureExporters = new HashMap<String, ITestExporter>();
@@ -61,6 +64,12 @@ public class TestExportService extends RestServiceBase {
 		ITestExporter generator = null;
 		if (object instanceof TestSpecification) {
 			generator = testSpecificationExporters.get(language);
+			if(queryParams.containsKey(EXPORT_DATE_KEY) && generator instanceof TestSpecificationExporterBase) {
+				String exportDateParam = queryParams.getFirst(EXPORT_DATE_KEY);
+				Long timestamp = Long.parseLong(exportDateParam);
+				Date exportDate = new Date(timestamp);
+				((TestSpecificationExporterBase) generator).setDate(exportDate);
+			}
 		} else if (object instanceof TestProcedure) {
 			generator = testProcedureExporters.get(language);
 		}

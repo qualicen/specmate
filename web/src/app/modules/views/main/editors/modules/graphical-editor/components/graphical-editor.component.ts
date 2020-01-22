@@ -325,9 +325,9 @@ export class GraphicalEditor {
     }
     for (const tool of this.editorToolsService.tools) {
       tool.graph = this.graph;
-      if (tool.isVertexTool) {
+      if (tool.isDragTool) {
         this.makeVertexTool(tool);
-      } else if (!tool.isHidden) {
+      } else if (tool.isClickTool) {
         this.makeClickTool(tool);
       }
     }

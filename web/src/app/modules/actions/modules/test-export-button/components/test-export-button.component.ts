@@ -44,13 +44,16 @@ export class TestExportButton {
         }
 
         const data: TestSpecificationSkeleton = await this.dataService.performQuery(this._element.url, 'export',
-            { language: new LowerCasePipe().transform(this._lang)});
+            {
+                language: new LowerCasePipe().transform(this._lang),
+                exportDate: (new Date().getTime()).toString()
+            });
 
         if (data === undefined) {
             throw new Error('Could not load test specification skeleton for ' + this._lang);
         }
 
-        saveAs(new Blob([TestExportButton.UTF8_BOM + data.code], {type: 'text/plain;charset=utf-8'}), data.name);
+        saveAs(new Blob([TestExportButton.UTF8_BOM + data.code], { type: 'text/plain;charset=utf-8' }), data.name);
     }
 
     public get language(): string {

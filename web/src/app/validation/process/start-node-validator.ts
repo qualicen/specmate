@@ -10,9 +10,10 @@ import { Validator } from '../validator-decorator';
 @Validator(Process)
 export class StartNodeValidator extends ElementValidatorBase<Process> {
     public validate(element: Process, contents: IContainer[]): ValidationResult {
-        let hasSingleStartNode: boolean = contents.filter((element: IContainer) => Type.is(element, ProcessStart)).length === 1;
+        const startNodes = contents.filter(elem => Type.is(ProcessStart, elem));
+        let hasSingleStartNode: boolean = startNodes.length === 1;
         if (!hasSingleStartNode) {
-            return new ValidationResult(ValidationMessage.ERROR_NOT_ONE_START_NODE, false, [element]);
+            return new ValidationResult(ValidationMessage.ERROR_NOT_ONE_START_NODE, false, startNodes);
         }
         return ValidationResult.VALID;
     }

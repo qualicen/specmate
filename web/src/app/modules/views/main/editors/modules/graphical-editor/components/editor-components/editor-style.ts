@@ -47,7 +47,7 @@ export class EditorStyle {
     private static readonly TEXT_INPUT_STYLE_STR = 'shape=rectangle;rounded=0;align=center;strokeColor=#666666;fillColor=none;fontColor=#000000';
     private static readonly TEXT_INPUT_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.TEXT_INPUT_STYLE_STR);
     public static readonly VARIABLE_NAME_STYLE = 'VARIABLE_NAME_STYLE';
-    private static readonly VARIABLE_NAME_STYLE_STR = 'shape=rectangle;rounded=0;align=center;strokeColor=#666666;fontColor=#000000;font-weight=bold';
+    private static readonly VARIABLE_NAME_STYLE_STR = 'shape=rectangle;rounded=0;align=center;strokeColor=#666666;fontColor=#000000;fontStyle=' + mx.mxConstants.FONT_BOLD;
     private static readonly VARIABLE_NAME_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.VARIABLE_NAME_STYLE_STR);
 
     public static readonly BASE_CEG_NODE_STYLE = 'BASE_CEG_NODE';
@@ -82,7 +82,7 @@ export class EditorStyle {
         EditorStyle.INVALID_STYLE[mx.mxConstants.STYLE_STROKE_OPACITY] = '100';
         EditorStyle.INVALID_STYLE[mx.mxConstants.STYLE_STROKECOLOR] = '#ff0000';
 
-        EditorStyle.CAUSE_STYLE[mx.mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
+        EditorStyle.CAUSE_STYLE[mx.mxConstants.STYLE_FILLCOLOR] = '#c3d9ff';
         EditorStyle.EFFECT_STYLE[mx.mxConstants.STYLE_FILLCOLOR] = '#f0a029';
         EditorStyle.INNER_STYLE[mx.mxConstants.STYLE_FILLCOLOR] = '#d8d8d8';
 
@@ -117,6 +117,7 @@ export class EditorStyle {
 
         const vertexStyle = graph.getStylesheet().getDefaultVertexStyle();
         vertexStyle[mx.mxConstants.STYLE_STROKECOLOR] = '#000000';
+        vertexStyle[mx.mxConstants.STYLE_STROKEWIDTH] = '2';
         vertexStyle[mx.mxConstants.STYLE_DASHED] = '0';
 
         stylesheet.putCellStyle(EditorStyle.EDGE_DIM_STYLE_NAME, EditorStyle.EDGE_DIM_STYLE);

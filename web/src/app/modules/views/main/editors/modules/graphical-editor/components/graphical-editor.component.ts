@@ -141,6 +141,7 @@ export class GraphicalEditor {
     mx.mxGraphHandler.prototype['guidesEnabled'] = true;
     mx.mxGraph.prototype.centerZoom = false;
     mx.mxGraph.prototype.allowNegativeCoordinates = false;
+    mx.mxGraph.prototype.border = 25;
 
     mx.mxEvent.disableContextMenu(this.graphContainerElement.nativeElement);
 

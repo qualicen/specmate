@@ -31,7 +31,7 @@ export abstract class DraggableSupportingViewBase extends SpecmateViewBase {
     }
 
     public get sortedContents(): IContentElement[] {
-        return Sort.sortArray(this.contents);
+        return Sort.sortArrayBy(this.relevantElements, 'position');
     }
 
     public dndBagName = 'DND_BAG';
@@ -45,35 +45,43 @@ export abstract class DraggableSupportingViewBase extends SpecmateViewBase {
         translate: TranslateService) {
         super(dataService, navigator, route, modal, translate);
         this.dragulaService.dropModel(this.dndBagName)
-            .subscribe(({sourceIndex, targetIndex}) => this.onDropModel(sourceIndex, targetIndex));
+            .subscribe(({ sourceIndex, targetIndex }) => this.onDropModel(sourceIndex, targetIndex));
     }
 
-    private onDropModel(sourceIndex: number, targetIndex: number): void {
+    private async onDropModel(sourceIndex: number, targetIndex: number): Promise<void> {
         const source = this.relevantElements[sourceIndex];
         const target = this.relevantElements[targetIndex];
-        const sourceContentIndex = this.contents.indexOf(source);
-        const targetContentIndex = this.contents.indexOf(target);
-        this.contents.splice(targetContentIndex, 0, this.contents.splice(sourceContentIndex, 1)[0]);
-        this.sanitizeContentPositions(true);
+        const sourceContentIndex = this.relevantElements.indexOf(source);
+        const targetContentIndex = this.relevantElements.indexOf(target);
+        this.relevantElements.splice(targetContentIndex, 0, this.relevantElements.splice(sourceContentIndex, 1)[0]);
+        await this.sanitizeContentPositions(true);
+        await this.readContents();
     }
 
-    protected sanitizeContentPositions(update: boolean): void {
-        this.dataService.sanitizeContentPositions(this.relevantElements, update);
-        Sort.sortArrayInPlace(this.contents);
+    protected async sanitizeContentPositions(update: boolean): Promise<void> {
+        await this.dataService.sanitizeContentPositions(this.relevantElements, update);
     }
 
-    public onElementResolved(element: IContainer): Promise<void> {
+    public async onElementResolved(element: IContainer): Promise<void> {
         this.element = element;
-        return this.readContents();
+        return await this.readContents();
     }
 
-    /** Reads to the contents of the test specification  */
-    protected readContents(): Promise<void> {
+    protected async onContentsRead(contents: IContainer[]): Promise<void> {
+        // empty default implementation
+    }
+
+    /** Reads to the contents of the element  */
+    public async readContents(): Promise<void> {
         if (!this.element) {
             return Promise.resolve();
         }
-        return this.dataService.readContents(this.element.url)
-            .then((contents: IContainer[]) => this.contents = contents as IContentElement[])
-            .then(() => this.dataService.commit(this.translate.instant('save')));
+        this.contents = await this.dataService.readContents(this.element.url);
+        this.onContentsRead(this.contents);
+    }
+
+    /** Callback handler for content changes */
+    public async updateContents(): Promise<void> {
+        await this.readContents();
     }
 }

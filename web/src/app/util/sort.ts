@@ -55,10 +55,6 @@ class ClassAwareComparer<T extends IContainer> extends FieldComparer {
             element1.className === this.classToCompare.className &&
             element2.className === this.classToCompare.className;
     }
-
-    private get className(): string {
-        return this.classToCompare.className;
-    }
 }
 
 export class Sort {
@@ -84,6 +80,24 @@ export class Sort {
             return elements;
         }
         return elements.sort((e1: T, e2: T) => Sort.compareElements(e1, e2));
+    }
+
+    public static sortArrayBy<T extends IContainer>(elements: T[], field: string, fallback = 'name'): T[] {
+        if (!elements) {
+            return elements;
+        }
+
+        const comparer = new FieldComparer(field);
+        return elements.sort((e1: T, e2: T) => {
+            try {
+                return comparer.compare(e1, e2);
+            } catch (e) {
+                if (e1[fallback] === undefined || e2[fallback] === undefined) {
+                    throw new Error('Falllback field ' + fallback + ' was undefined.');
+                }
+                return e1[fallback].localeCompare(e2[fallback]);
+            }
+        });
     }
 
     public static sortArrayInPlace<T extends IContainer>(array: T[]): void {

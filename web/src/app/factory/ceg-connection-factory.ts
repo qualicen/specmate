@@ -1,13 +1,20 @@
 import { Config } from '../config/config';
 import { CEGConnection } from '../model/CEGConnection';
 import { IContainer } from '../model/IContainer';
+import { IModelNode } from '../model/IModelNode';
 import { Proxy } from '../model/support/proxy';
+import { SpecmateDataService } from '../modules/data/modules/data-service/services/specmate-data.service';
 import { Id } from '../util/id';
 import { Url } from '../util/url';
 import { ConnectionElementFactoryBase } from './connection-element-factory-base';
 import { ElementFactoryBase } from './element-factory-base';
 
 export class CEGConnectionFactory extends ConnectionElementFactoryBase<CEGConnection> {
+
+    constructor(protected source: IModelNode, protected target: IModelNode, dataService: SpecmateDataService, private negated = false) {
+        super(source, target, dataService);
+    }
+
     public create(parent: IContainer, commit: boolean, compoundId?: string, name?: string): Promise<CEGConnection> {
         compoundId = compoundId || Id.uuid;
 
@@ -18,7 +25,7 @@ export class CEGConnectionFactory extends ConnectionElementFactoryBase<CEGConnec
         connection.description = Config.CEG_NEW_CONNECTION_DESCRIPTION;
         connection.id = id;
         connection.url = url;
-        connection.negate = false;
+        connection.negate = this.negated;
         connection.source = new Proxy();
         connection.source.url = this.source.url;
         connection.target = new Proxy();

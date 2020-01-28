@@ -23,6 +23,7 @@ import { ToolProvider } from '../../providers/properties/tool-provider';
 import { VertexProvider } from '../../providers/properties/vertex-provider';
 import { EditorStyle } from '../editor-components/editor-style';
 import { StyleChanger } from './style-changer';
+import { CEGConnectionTool } from '../../../tool-pallette/tools/ceg/ceg-connection-tool';
 
 
 declare var require: any;
@@ -172,6 +173,10 @@ export class ChangeTranslator {
         }
     }
 
+    private isNegatedCEGNode(cell: mxgraph.mxCell): boolean {
+        return (cell.style as String).includes(EditorStyle.ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE);
+    }
+
     private async translateEdgeAdd(change: mxgraph.mxChildChange, graph: mxgraph.mxGraph): Promise<IModelConnection> {
         const tool = this.determineTool(change) as ConnectionToolBase<any>;
 
@@ -200,6 +205,10 @@ export class ChangeTranslator {
 
         tool.source = source;
         tool.target = target;
+
+        if (tool instanceof CEGConnectionTool) {
+            (tool as CEGConnectionTool).negated = this.isNegatedCEGNode(change.child);
+        }
 
         const connection = await tool.perform();
 

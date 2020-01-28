@@ -21,6 +21,8 @@ export class ProcessStepFactory extends PositionableElementFactoryBase<ProcessSt
         node.y = this.coords.y;
         node.tracesFrom = [];
         node.tracesTo = [];
+        node.incomingConnections = [];
+        node.outgoingConnections = [];
 
         return this.dataService.createElement(node, true, compoundId).then(() => node);
     }

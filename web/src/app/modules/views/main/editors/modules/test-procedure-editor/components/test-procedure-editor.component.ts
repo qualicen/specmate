@@ -74,14 +74,14 @@ export class TestProcedureEditor extends DraggableSupportingViewBase {
         let testSpecificationUrl: string = Url.parent(testProcedure.url);
         return this.dataService.readContents(testSpecificationUrl)
             .then((contents: IContainer[]) => this.testSpecContents = contents)
-            .then((contents: IContainer[]) => this.sanitizeContentPositions(true))
+            .then(() => this.sanitizeContentPositions(true))
             .then(() => Promise.resolve());
     }
 
     /** Creates a new test case */
-    private createNewTestStep() {
+    public createNewTestStep() {
         let factory: TestStepFactory = new TestStepFactory(this.dataService);
-        factory.create(this.testProcedure, false);
+        factory.create(this.testProcedure, false).then(() => this.sanitizeContentPositions(false)).then(() => this.readContents());
     }
 
     /** Return true if all user inputs are valid  */

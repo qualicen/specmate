@@ -203,7 +203,7 @@ export class SpecmateDataService {
         }
     }
 
-    public sanitizeContentPositions(elements: IPositionable[], update: boolean, compoundId?: string): void {
+    public async sanitizeContentPositions(elements: (IContainer & IPositionable)[], update: boolean, compoundId?: string): Promise<void> {
         if (!compoundId) {
             compoundId = Id.uuid;
         }

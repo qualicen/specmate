@@ -26,6 +26,7 @@ export class ProcessLayoutTool extends ToolBase {
             return;
         }
         const treeLayout = new mx.mxCompactTreeLayout(this.graph, true, false);
+        treeLayout['moveTree'] = true;
         treeLayout['groupPadding'] = 30;
         treeLayout['edgeRouting'] = false;
         treeLayout.execute(this.graph.getDefaultParent());

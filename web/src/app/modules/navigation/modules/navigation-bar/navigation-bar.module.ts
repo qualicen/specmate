@@ -5,6 +5,7 @@ import { OperationMonitorModule } from '../../../notification/modules/operation-
 import { SpecmateSharedModule } from '../../../specmate/specmate.shared.module';
 import { LogoutModule } from '../../../views/main/authentication/modules/logout/logout.module';
 import { NavigationBar } from './components/navigation-bar.component';
+import { BrowserVersionCheckerModule } from 'src/app/modules/actions/modules/browser-version-checker/browser-version-checker.module';
 
 @NgModule({
   imports: [
@@ -13,7 +14,8 @@ import { NavigationBar } from './components/navigation-bar.component';
     OperationMonitorModule,
     I18NModule,
     SpecmateSharedModule,
-    LogoutModule
+    LogoutModule,
+    BrowserVersionCheckerModule
   ],
   declarations: [
     // COMPONENTS IN THIS MODULE

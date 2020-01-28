@@ -90,6 +90,7 @@
 	"addNode": "",
 	"addOutputColumn": "Add output column",
 	"attentionNumberOfTestCasesWillBeDeleted": "Warning: {{num}} testcases will be deleted!",
+	"browserUnsupported": "The current browser is not supported. Supported Browsers: {{supportedBrowsers}}",
 	"cancel": "Cancel",
 	"causeEffectGraph": "Cause Effect Graph",
 	"chooseLanguage": "Choose Language",

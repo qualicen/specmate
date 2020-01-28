@@ -90,6 +90,7 @@
 	"addNode": "",
 	"addOutputColumn": "Ausgabespalte hinzufügen",
 	"attentionNumberOfTestCasesWillBeDeleted": "Achtung: {{num}} Testfälle werden gelöscht!",
+	"browserUnsupported": "Der aktuelle Browser wird nicht unterstützt. Empfohlene Browser: {{supportedBrowsers}}",
 	"cancel": "Abbrechen",
 	"causeEffectGraph": "Ursache-Wirkungs-Diagramm",
 	"chooseLanguage": "Sprache ändern",

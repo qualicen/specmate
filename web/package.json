@@ -36,6 +36,7 @@
     "bootswatch": "4.3.1",
     "classlist.js": "1.1.20150312",
     "core-js": "3.4.0",
+    "detect-browser": "4.8.0",
     "file-saver": "2.0.2",
     "flag-icon-css": "3.4.5",
     "font-awesome": "4.7.0",

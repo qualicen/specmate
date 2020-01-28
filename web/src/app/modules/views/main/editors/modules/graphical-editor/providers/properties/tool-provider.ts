@@ -16,6 +16,7 @@ import { CEGConnectionTool } from '../../../tool-pallette/tools/ceg/ceg-connecti
 import { CEGDeleteTool } from '../../../tool-pallette/tools/ceg/ceg-delete-tool';
 import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
 import { TranslateService } from '@ngx-translate/core';
+import { ProcessLayoutTool } from '../../../tool-pallette/tools/process/process-layout-tool';
 
 const mx: typeof mxgraph = require('mxgraph')({
     mxBasePath: 'mxgraph'
@@ -69,7 +70,8 @@ export class ToolProvider extends ProviderBase {
             new StartTool(this.model, this.dataService, this.selectedElementService),
             new EndTool(this.model, this.dataService, this.selectedElementService),
             new ProcessConnectionTool(this.dataService, this.selectedElementService, this.model),
-            new ProcessDeleteTool(this.model, this.dataService, this.selectedElementService)
+            new ProcessDeleteTool(this.model, this.dataService, this.selectedElementService),
+            new ProcessLayoutTool(this.dataService, this.selectedElementService, this.model)
         ];
     }
 

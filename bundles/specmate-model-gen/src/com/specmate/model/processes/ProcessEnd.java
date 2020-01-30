@@ -10,7 +10,7 @@ package com.specmate.model.processes;
  *
  *
  * @see com.specmate.model.processes.ProcessesPackage#getProcessEnd()
- * @model
+ * @model annotation="http://specmate.com/form_meta disabled1='name'"
  * @generated
  */
 public interface ProcessEnd extends ProcessNode {

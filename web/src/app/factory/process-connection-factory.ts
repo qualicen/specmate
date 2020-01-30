@@ -19,6 +19,8 @@ export class ProcessConnectionFactory extends ConnectionElementFactoryBase<Proce
         connection.condition = Config.PROCESS_NEW_CONNECTION_DESCRIPTION;
         connection.id = id;
         connection.url = url;
+        connection.labelX = 0;
+        connection.labelY = 0;
         connection.source = new Proxy();
         connection.source.url = this.source.url;
         connection.target = new Proxy();

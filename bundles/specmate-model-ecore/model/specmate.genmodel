@@ -134,6 +134,8 @@
       <genClasses ecoreClass="specmate.ecore#//processes/ProcessDecision"/>
       <genClasses ecoreClass="specmate.ecore#//processes/ProcessConnection">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//processes/ProcessConnection/condition"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//processes/ProcessConnection/labelX"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//processes/ProcessConnection/labelY"/>
       </genClasses>
       <genClasses ecoreClass="specmate.ecore#//processes/ProcessStart"/>
       <genClasses ecoreClass="specmate.ecore#//processes/ProcessEnd"/>

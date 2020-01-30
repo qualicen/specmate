@@ -224,7 +224,7 @@
 	specmate-cause-effect-patterns;version=snapshot,\
 	specmate-xtext;version=snapshot,\
 	specmate-objectif;version=snapshot,\
-	jaxb-api;version='[2.3.1,2.3.2)'
+	jaxb-api;version='[2.3.0,2.3.1)'
 
 -runproperties: \
 	jetty.http.port=8080,\

@@ -32,6 +32,7 @@ import { EditorStyle } from './editor-components/editor-style';
 import { ChangeTranslator } from './util/change-translator';
 import { StyleChanger } from './util/style-changer';
 import { NavigatorService } from 'src/app/modules/navigation/modules/navigator/services/navigator.service';
+import { ProcessConnection } from 'src/app/model/ProcessConnection';
 
 declare var require: any;
 
@@ -413,7 +414,11 @@ export class GraphicalEditor {
         const targetVertex = vertexCache[connection.target.url];
         const value = this.nodeNameConverter ? this.nodeNameConverter.convertTo(connection) : connection.name;
         const style = this.shapeProvider.getStyle(connection);
-        this.graph.insertEdge(parent, connection.url, value, sourceVertex, targetVertex, style);
+        let cell = this.graph.insertEdge(parent, connection.url, value, sourceVertex, targetVertex, style);
+        if (Type.is(connection, ProcessConnection)) {
+          cell.geometry.x = (connection as ProcessConnection).labelX;
+          cell.geometry.y = (connection as ProcessConnection).labelY;
+        }
       }
 
       if (Type.is(this.model, CEGModel)) {

@@ -338,13 +338,15 @@ export class ChangeTranslator {
         await this.dataService.updateElement(element, true, Id.uuid);
     }
 
-    private async translateEdgeChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange,
+    private async translateEdgeChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange | mxgraph.mxGeometryChange,
         connection: IModelConnection): Promise<void> {
 
         if (change['terminal']) {
             await this.translateEdgeEndsChange(change as mxgraph.mxTerminalChange, connection);
         } else if (change['value'] !== undefined && change['value'] !== null) {
             await this.translateEdgeValueChange(change as mxgraph.mxValueChange, connection);
+        } else if (change['geometry'] !== undefined && change['geometry'] !== null) {
+            await this.translateEdgeLabelPositionChange(change as mxgraph.mxGeometryChange, connection);
         } else {
             if (change['previous']) {
                 // Edge is undone
@@ -364,6 +366,18 @@ export class ChangeTranslator {
         const changeId = Id.uuid;
         this.dataService.updateElement(connection, true, changeId);
     }
+
+    private async translateEdgeLabelPositionChange(change: mxgraph.mxGeometryChange, connection: IModelConnection): Promise<void> {
+      if (Type.is(connection, ProcessConnection)) {
+        let con = (connection as ProcessConnection);
+        let labelX = change.geometry.x;
+        let labelY = change.geometry.y;
+        con.labelX = labelX;
+        con.labelY = labelY;
+        const changeId = Id.uuid;
+        this.dataService.updateElement(con, true, changeId);
+      }
+  }
 
     private async translateEdgeEndsChange(change: mxgraph.mxTerminalChange, connection: IModelConnection): Promise<void> {
         if (change.cell.target === undefined

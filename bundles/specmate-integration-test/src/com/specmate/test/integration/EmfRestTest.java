@@ -251,8 +251,8 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 		connection.put(BasePackage.Literals.INAMED__NAME.getName(), connectionName);
 		connection.put(BasePackage.Literals.IMODEL_CONNECTION__SOURCE.getName(), EmfRestTestUtil.proxy(node1));
 		connection.put(BasePackage.Literals.IMODEL_CONNECTION__TARGET.getName(), EmfRestTestUtil.proxy(node2));
-		connection.put(ProcessesPackage.Literals.PROCESS_CONNECTION__LABEL_X.getName(), 0.0);
-		connection.put(ProcessesPackage.Literals.PROCESS_CONNECTION__LABEL_Y.getName(), 0.0);	
+		connection.put(ProcessesPackage.Literals.PROCESS_CONNECTION__LABEL_X.getName(), 0);
+		connection.put(ProcessesPackage.Literals.PROCESS_CONNECTION__LABEL_Y.getName(), 0);
 		return connection;
 	}
 
@@ -265,6 +265,8 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 		connection.put(BasePackage.Literals.INAMED__NAME.getName(), connectionName);
 		connection.put(BasePackage.Literals.IMODEL_CONNECTION__SOURCE.getName(), EmfRestTestUtil.proxy(node1));
 		connection.put(BasePackage.Literals.IMODEL_CONNECTION__TARGET.getName(), EmfRestTestUtil.proxy(node2));
+		connection.put(ProcessesPackage.Literals.PROCESS_CONNECTION__LABEL_X.getName(), 0);
+		connection.put(ProcessesPackage.Literals.PROCESS_CONNECTION__LABEL_Y.getName(), 0);
 		connection.put(ProcessesPackage.Literals.PROCESS_CONNECTION__CONDITION.getName(), "condition" + counter++);
 		return connection;
 	}

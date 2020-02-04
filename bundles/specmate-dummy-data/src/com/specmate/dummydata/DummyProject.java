@@ -3,6 +3,7 @@ package com.specmate.dummydata;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.emf.ecore.EObject;
 import org.osgi.service.component.annotations.Component;
 
 import com.specmate.common.exception.SpecmateException;
@@ -65,8 +66,20 @@ public class DummyProject implements IProject {
 			}
 
 			@Override
-			public void export(TestProcedure testProcedure) throws SpecmateException {
+			public void export(EObject target) throws SpecmateException {
 				// Do nothing
+			}
+
+			@Override
+			public boolean canExportTestProceure() {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public boolean canExportTextSpecification() {
+				// TODO Auto-generated method stub
+				return false;
 			}
 		};
 	}

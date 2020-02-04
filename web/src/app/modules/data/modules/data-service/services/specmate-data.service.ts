@@ -142,6 +142,10 @@ export class SpecmateDataService {
         return contents;
     }
 
+    public hasElement(url: string): boolean {
+        return this.cache.isCachedElement(url);
+    }
+
     public async readElement(url: string, virtual?: boolean): Promise<IContainer> {
         this.busy = true;
         let readElementTask: Promise<IContainer> = undefined;
@@ -199,7 +203,7 @@ export class SpecmateDataService {
         }
     }
 
-    public sanitizeContentPositions(elements: IPositionable[], update: boolean, compoundId?: string): void {
+    public async sanitizeContentPositions(elements: (IContainer & IPositionable)[], update: boolean, compoundId?: string): Promise<void> {
         if (!compoundId) {
             compoundId = Id.uuid;
         }

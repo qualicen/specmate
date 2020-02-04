@@ -73,10 +73,15 @@ export class ValidationService {
             }
         }
         this.validationCache.addValidationResultsToCache(elementResults);
+        this.validationFinished.emit();
     }
 
-    private getValidationResultsFor(element: IContainer, contents: IContainer[]) {
-        const requiredFieldsResults: ValidationResult = ValidationService.getRequiredFieldsValidator(element).validate(element);
+    private getValidationResultsFor(element: IContainer, contents: IContainer[]): ValidationResult[] {
+        const requiredFieldsValidator = ValidationService.getRequiredFieldsValidator(element);
+        if (requiredFieldsValidator === undefined) {
+            return [];
+        }
+        const requiredFieldsResults: ValidationResult = requiredFieldsValidator.validate(element);
         const validNameResult: ValidationResult = this.validNameValidator.validate(element);
         const textLengthValidationResult: ValidationResult = this.textLengthValidator.validate(element);
         const elementValidators = this.getElementValidators(element) || [];
@@ -86,7 +91,6 @@ export class ValidationService {
             .concat(validNameResult)
             .concat(textLengthValidationResult);
             this.validationCache.addValidationResultsToCache(elementResults);
-            this.validationFinished.emit();
         return elementResults;
     }
 
@@ -112,6 +116,9 @@ export class ValidationService {
     }
 
     public static getRequiredFieldsValidator(element: IContainer): RequiredFieldsValidator {
+        if (element === undefined) {
+            return undefined;
+        }
         if (!ValidationService.requiredFieldValidatorMap) {
             ValidationService.requiredFieldValidatorMap = {};
         }

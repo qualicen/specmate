@@ -481,14 +481,6 @@ export class MetaInfo {
 		}	];
 	public static ProcessStart: FieldMetaItem[] = [
 			{
-			name: "name",
-			shortDesc: 'Name',
-			longDesc: '',
-			required: true,
-			type: 'text',
-			position: '0',
-			allowedPattern: '^[^,;|]*$'		
-		},			{
 			name: "description",
 			shortDesc: 'Description',
 			longDesc: '',
@@ -499,14 +491,6 @@ export class MetaInfo {
 		}	];
 	public static ProcessEnd: FieldMetaItem[] = [
 			{
-			name: "name",
-			shortDesc: 'Name',
-			longDesc: '',
-			required: true,
-			type: 'text',
-			position: '0',
-			allowedPattern: '^[^,;|]*$'		
-		},			{
 			name: "description",
 			shortDesc: 'Description',
 			longDesc: '',

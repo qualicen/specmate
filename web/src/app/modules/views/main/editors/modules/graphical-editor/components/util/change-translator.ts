@@ -1,6 +1,7 @@
 import { mxgraph } from 'mxgraph';
 import { CEGConnection } from 'src/app/model/CEGConnection';
 import { CEGNode } from 'src/app/model/CEGNode';
+import { ProcessConnection } from 'src/app/model/ProcessConnection';
 import { Type } from 'src/app/util/type';
 import { CEGModel } from '../../../../../../../../model/CEGModel';
 import { IContainer } from '../../../../../../../../model/IContainer';
@@ -19,8 +20,10 @@ import { NodeNameConverterProvider } from '../../providers/conversion/node-name-
 import { CEGmxModelNode } from '../../providers/properties/ceg-mx-model-node';
 import { ShapeProvider } from '../../providers/properties/shape-provider';
 import { ToolProvider } from '../../providers/properties/tool-provider';
+import { VertexProvider } from '../../providers/properties/vertex-provider';
 import { EditorStyle } from '../editor-components/editor-style';
 import { StyleChanger } from './style-changer';
+import { CEGConnectionTool } from '../../../tool-pallette/tools/ceg/ceg-connection-tool';
 
 
 declare var require: any;
@@ -54,7 +57,23 @@ export class ChangeTranslator {
         return element;
     }
 
-    public async translate(change: (mxgraph.mxTerminalChange | mxgraph.mxChildChange | mxgraph.mxStyleChange)): Promise<void> {
+    public static isChildChange(change: (mxgraph.mxTerminalChange | mxgraph.mxChildChange | mxgraph.mxStyleChange)): boolean {
+        return change['cell'] === undefined && change['child'] !== undefined;
+    }
+
+    public static isAddChange(change: (mxgraph.mxTerminalChange | mxgraph.mxChildChange | mxgraph.mxStyleChange)): boolean {
+        return ChangeTranslator.isChildChange(change) &&
+            (change as mxgraph.mxChildChange).parent !== null &&
+            (change as mxgraph.mxChildChange).parent !== undefined;
+    }
+
+    public static isDeleteChange(change: (mxgraph.mxTerminalChange | mxgraph.mxChildChange | mxgraph.mxStyleChange)): boolean {
+        return ChangeTranslator.isChildChange(change) && !ChangeTranslator.isAddChange(change);
+    }
+
+
+    public async translate(change: (mxgraph.mxTerminalChange | mxgraph.mxChildChange | mxgraph.mxStyleChange),
+        graph: mxgraph.mxGraph): Promise<void> {
         if (this.preventDataUpdates) {
             return;
         }
@@ -63,7 +82,7 @@ export class ChangeTranslator {
         if (change['cell'] === undefined && change['child'] !== undefined) {
             const childChange = change as mxgraph.mxChildChange;
             if (childChange.parent !== undefined && childChange.parent !== null) {
-                await this.translateAdd(childChange);
+                await this.translateAdd(childChange, graph);
             } else {
                 await this.translateDelete(childChange);
             }
@@ -79,6 +98,11 @@ export class ChangeTranslator {
         if (element === undefined) {
             return;
         }
+
+        if (change.previous === null) {
+            change.previous = '';
+        }
+
         const prevStyles: string[] = change.previous.split(';');
         const currStyles: string[] = change.style.split(';');
 
@@ -102,7 +126,6 @@ export class ChangeTranslator {
         }
     }
 
-
     private async translateDelete(change: mxgraph.mxChildChange): Promise<void> {
         const deleteTool = this.toolProvider.tools.find(tool => (tool as DeleteToolBase).isDeleteTool === true) as DeleteToolBase;
         deleteTool.element = await this.getElement(change.child.id);
@@ -124,7 +147,7 @@ export class ChangeTranslator {
         deleteTool.perform();
     }
 
-    private async translateAdd(change: mxgraph.mxChildChange): Promise<void> {
+    private async translateAdd(change: mxgraph.mxChildChange, graph: mxgraph.mxGraph): Promise<void> {
         if (await this.getElement(change.child.id) !== undefined) {
             console.log('Child already addded');
             return;
@@ -138,28 +161,80 @@ export class ChangeTranslator {
 
         let addedElement: IContainer = undefined;
         if (change.child.edge) {
-            addedElement = await this.translateEdgeAdd(change);
+            addedElement = await this.translateEdgeAdd(change, graph);
         } else {
-            addedElement = await this.translateNodeAdd(change);
+            addedElement = await this.translateNodeAdd(change, graph);
         }
-        change.child.setId(addedElement.url);
+
+        if (addedElement !== undefined) {
+            change.child.setId(addedElement.url);
+        } else {
+            graph.removeCells([change.child]);
+        }
     }
 
-    private async translateEdgeAdd(change: mxgraph.mxChildChange): Promise<IModelConnection> {
+    private isNegatedCEGNode(cell: mxgraph.mxCell): boolean {
+        return (cell.style as String).includes(EditorStyle.ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE);
+    }
+
+    private async translateEdgeAdd(change: mxgraph.mxChildChange, graph: mxgraph.mxGraph): Promise<IModelConnection> {
         const tool = this.determineTool(change) as ConnectionToolBase<any>;
 
-        const source = (await this.getElement(change.child.source.id) as IModelNode);
-        const target = (await this.getElement(change.child.target.id) as IModelNode);
+        const sourceCell = change.child.source;
+        const targetCell = change.child.target;
+
+        if (sourceCell === null || targetCell === null || sourceCell === undefined || targetCell === undefined) {
+            return;
+        }
+
+        const sourceElement = await this.getElement(sourceCell.id);
+        if (sourceElement === undefined) {
+            return;
+        }
+        const source = (sourceElement as IModelNode);
+
+        const targetElement = await this.getElement(targetCell.id);
+        if (targetElement === undefined) {
+            return;
+        }
+        const target = (targetElement as IModelNode);
+
+        if (source === undefined || target === undefined) {
+            return;
+        }
 
         tool.source = source;
         tool.target = target;
 
+        if (tool instanceof CEGConnectionTool) {
+            (tool as CEGConnectionTool).negated = this.isNegatedCEGNode(change.child);
+        }
+
         const connection = await tool.perform();
+
+        let oldId = change.child.id;
+        let cell = graph.getModel().getCell(oldId);
+
+        const condition = change.child.value;
+        if (condition !== null && condition !== undefined && condition !== '') {
+            (connection as ProcessConnection).condition = condition;
+            await this.dataService.updateElement(connection, true, Id.uuid);
+        } else {
+            cell.value = '';
+        }
+
+        // Update the ids, thus mxgraph and dataService uses the same
+        let newId = connection.url;
+        let cells = graph.getModel().cells;
+        cell.setId(newId);
+        delete cells[oldId];
+        cells[newId] = cell;
+
         change.child.id = connection.url;
         return connection;
     }
 
-    private async translateNodeAdd(change: mxgraph.mxChildChange): Promise<IModelNode> {
+    private async translateNodeAdd(change: mxgraph.mxChildChange, graph: mxgraph.mxGraph): Promise<IModelNode> {
         const tool = this.determineTool(change) as CreateNodeToolBase<IModelNode>;
         tool.coords = { x: change.child.geometry.x, y: change.child.geometry.y };
         const node = await tool.perform();
@@ -170,7 +245,49 @@ export class ChangeTranslator {
             for (const key in elementValues) {
                 node[key] = elementValues[key];
             }
-            await this.dataService.updateElement(node, true, Id.uuid);
+        } else {
+            node.name = change.child.value;
+        }
+        await this.dataService.updateElement(node, true, Id.uuid);
+
+        // Update the ids, thus mxgraph and dataService uses the same
+        let oldId = change.child.id;
+        let newId = node.url;
+        let cells = graph.getModel().cells;
+
+        let cell = graph.getModel().getCell(oldId);
+        cell.setId(newId);
+        delete cells[oldId];
+        cells[newId] = cell;
+
+        if (Type.is(node, CEGNode)) {
+            let variable = cell.children[0];
+            let condition = cell.children[1];
+            let type = cell.children[2];
+
+            let oldIdVariable = variable.id;
+            let oldIdCondition = condition.id;
+            let oldIdType = type.id;
+
+            variable.setId(newId + VertexProvider.ID_SUFFIX_VARIABLE);
+            condition.setId(newId + VertexProvider.ID_SUFFIX_CONDITION);
+            type.setId(newId + VertexProvider.ID_SUFFIX_TYPE);
+
+            delete cells[oldIdVariable];
+            delete cells[oldIdCondition];
+            delete cells[oldIdType];
+
+            cells[variable.id] = variable;
+            cells[condition.id] = condition;
+            cells[type.id] = type;
+
+            this.parentComponents[variable.id] = node;
+            this.parentComponents[condition.id] = node;
+            this.parentComponents[type.id] = node;
+
+            delete this.parentComponents[oldIdVariable];
+            delete this.parentComponents[oldIdCondition];
+            delete this.parentComponents[oldIdType];
         }
         return node;
     }
@@ -187,8 +304,16 @@ export class ChangeTranslator {
         }
     }
 
+    private isTextInputChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange): boolean {
+        const cell = change.cell as mxgraph.mxCell;
+        return (cell.id.endsWith(VertexProvider.ID_SUFFIX_VARIABLE) || cell.id.endsWith(VertexProvider.ID_SUFFIX_CONDITION));
+    }
+
     private async translateNodeChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange, element: IModelNode): Promise<void> {
         let cell = change.cell as mxgraph.mxCell;
+        if (this.isTextInputChange(change)) {
+            VertexProvider.adjustChildCellSize(cell, element.width);
+        }
         if (this.nodeNameConverter) {
             if (this.parentComponents[cell.getId()] !== undefined) {
                 // The changed node is a sublabel / child
@@ -218,8 +343,15 @@ export class ChangeTranslator {
 
         if (change['terminal']) {
             await this.translateEdgeEndsChange(change as mxgraph.mxTerminalChange, connection);
-        } else if (change['value']) {
+        } else if (change['value'] !== undefined && change['value'] !== null) {
             await this.translateEdgeValueChange(change as mxgraph.mxValueChange, connection);
+        } else {
+            if (change['previous']) {
+                // Edge is undone
+                return;
+            } else if (change.cell.source === null || change.cell.target === null) {
+                throw new Error('No source or target');
+            }
         }
     }
 
@@ -302,7 +434,7 @@ export class ChangeTranslator {
             } else {
                 const vertexTools = this.toolProvider.tools.filter(tool => tool.isVertexTool === true);
                 if (vertexTools.length > 1) {
-                    return vertexTools.find(tool => tool.style === childChange.child.style);
+                    return vertexTools.find(tool => childChange.child.style.includes(tool.style));
                 } else if (vertexTools.length === 1) {
                     return vertexTools[0];
                 }
@@ -321,12 +453,14 @@ export class ChangeTranslator {
                     const val = value[key];
                     let child = cell.children.find(s => s.getId().endsWith(key));
                     if (child !== undefined) {
-                        graph.getModel().beginUpdate();
-                        try {
-                            graph.model.setValue(child, val);
-                        }
-                        finally {
-                            graph.getModel().endUpdate();
+                        if (child.value !== val) {
+                            graph.getModel().beginUpdate();
+                            try {
+                                graph.model.setValue(child, val);
+                            }
+                            finally {
+                                graph.getModel().endUpdate();
+                            }
                         }
                     }
                 }
@@ -334,7 +468,7 @@ export class ChangeTranslator {
         } else {
             graph.getModel().beginUpdate();
             try {
-                if (value === cell.value) {
+                if (value !== cell.value) {
                     graph.model.setValue(cell, value);
                 }
                 StyleChanger.setStyle(cell, graph, this.shapeProvider.getStyle(changedElement));

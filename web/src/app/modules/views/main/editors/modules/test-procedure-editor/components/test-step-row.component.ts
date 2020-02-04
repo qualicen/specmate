@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { IContainer } from '../../../../../../../model/IContainer';
 import { ParameterAssignment } from '../../../../../../../model/ParameterAssignment';
 import { Proxy } from '../../../../../../../model/support/proxy';
@@ -9,6 +9,7 @@ import { Type } from '../../../../../../../util/type';
 import { Url } from '../../../../../../../util/url';
 import { SpecmateDataService } from '../../../../../../data/modules/data-service/services/specmate-data.service';
 import { SimpleInputFormBase } from '../../../../../../forms/modules/generic-form/base/simple-input-form-base';
+import { TestSpecificationEditor } from '../../test-specification-editor/components/test-specification-editor.component';
 
 @Component({
     moduleId: module.id.toString(),
@@ -32,6 +33,9 @@ export class TestStepRow extends SimpleInputFormBase {
             .then((contents: IContainer[]) => this.testProcedureContents = contents)
             .then(() => this.modelElement = testStep);
     }
+
+    @Output()
+    public onDelete = new EventEmitter();
 
     protected get fields(): string[] {
         return ['name', 'description', 'expectedOutcome'];
@@ -98,7 +102,8 @@ export class TestStepRow extends SimpleInputFormBase {
     public delete(): void {
         let compoundId: string = Id.uuid;
         this.dataService.deleteElement(this.testStep.url, true, compoundId)
-            .then(() => this.dataService.sanitizeContentPositions(this.testSteps, true, compoundId));
+            .then(() => this.dataService.sanitizeContentPositions(this.testSteps, true, compoundId))
+            .then(() => this.onDelete.emit());
     }
 
     public getTestParameter(url: string): TestParameter {

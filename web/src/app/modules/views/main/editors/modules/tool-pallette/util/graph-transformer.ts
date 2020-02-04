@@ -78,6 +78,9 @@ export class GraphTransformer {
     }
 
     private async removeConnectionFromSource(connection: IModelConnection, compoundId: string): Promise<void> {
+        if (!this.dataService.hasElement(connection.source.url)) {
+            return;
+        }
         const source = await this.dataService.readElement(connection.source.url, true) as IModelNode;
         if (!source.outgoingConnections) {
             return;
@@ -88,6 +91,9 @@ export class GraphTransformer {
     }
 
     private async removeConnectionFromTarget(connection: IModelConnection, compoundId: string): Promise<void> {
+        if (!this.dataService.hasElement(connection.target.url)) {
+            return;
+        }
         const target = await this.dataService.readElement(connection.target.url, true) as IModelNode;
         if (!target.incomingConnections) {
             return;

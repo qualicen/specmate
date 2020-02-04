@@ -12,6 +12,7 @@ import { IPositionable } from '../../../../../../../model/IPositionable';
 import { TestCase } from '../../../../../../../model/TestCase';
 import { TestParameter } from '../../../../../../../model/TestParameter';
 import { TestSpecification } from '../../../../../../../model/TestSpecification';
+import { Sort } from '../../../../../../../util/sort';
 import { Type } from '../../../../../../../util/type';
 import { SpecmateDataService } from '../../../../../../data/modules/data-service/services/specmate-data.service';
 import { NavigatorService } from '../../../../../../navigation/modules/navigator/services/navigator.service';
@@ -29,9 +30,7 @@ export class TestSpecificationEditor extends DraggableSupportingViewBase {
     /** The test specification to be shown */
     public testSpecification: TestSpecification;
 
-    protected get relevantElements(): (IContentElement & IPositionable)[] {
-        return this.contents.filter((element: IContentElement & IPositionable) => Type.is(element, TestCase)) as TestCase[];
-    }
+    protected relevantElements: (IContentElement & IPositionable)[];
 
     /** Constructor */
     constructor(
@@ -50,6 +49,10 @@ export class TestSpecificationEditor extends DraggableSupportingViewBase {
             .then(() => Type.is(element, TestSpecification) ? Promise.resolve() : Promise.reject('Not a test specification'))
             .then(() => this.testSpecification = element as TestSpecification)
             .then(() => Promise.resolve());
+    }
+
+    public async onContentsRead(elements: IContainer[]): Promise<void> {
+        this.relevantElements = Sort.sortArrayBy(this.contents.filter(element => this.isTestCase(element)), 'position') as TestCase[];
     }
 
     /** getter for the input parameters */
@@ -72,19 +75,19 @@ export class TestSpecificationEditor extends DraggableSupportingViewBase {
     /** Adds a new test case (row) */
     public addTestCaseRow(): void {
         let factory: TestCaseFactory = new TestCaseFactory(this.dataService, true);
-        factory.create(this.testSpecification, false);
+        factory.create(this.testSpecification, false).then(() => this.updateContents());
     }
 
     /** Adds a new input column */
     public addInputColumn(): void {
         let factory: TestParameterFactory = new TestInputParameterFactory(this.dataService);
-        factory.create(this.testSpecification, false);
+        factory.create(this.testSpecification, false).then(() => this.updateContents());
     }
 
     /** Adds a new output column  */
     public addOutputColumn(): void {
         let factory: TestParameterFactory = new TestOutputParameterFactory(this.dataService);
-        factory.create(this.testSpecification, false);
+        factory.create(this.testSpecification, false).then(() => this.updateContents());
     }
 
     /** Returns true if the element is a TestCase - Important in UI. */

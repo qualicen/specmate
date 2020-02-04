@@ -59,8 +59,6 @@ export class GraphicalEditor {
 
   private isInGraphTransition = false;
 
-  public isGridShown = true;
-
   private _model: IContainer;
   private _contents: IContainer[];
 
@@ -75,13 +73,16 @@ export class GraphicalEditor {
     private translate: TranslateService,
     private undoService: UndoService) {
 
-    this.navigator.hasNavigated.subscribe(() => {
+    this.navigator.navigationStart.subscribe(() => {
       this.isInGraphTransition = true;
+    });
+    this.navigator.navigationCancel.subscribe(() => {
+      this.isInGraphTransition = false;
     });
 
     this.validationService.validationFinished.subscribe(async () => {
       if (!this.isInGraphTransition && this.graph !== undefined && this.graph['destroyed'] !== true) {
-        await this.updateValidities();
+        this.updateValidities();
       }
     });
     this.undoService.undoPressed.subscribe(() => {
@@ -119,7 +120,6 @@ export class GraphicalEditor {
    * Initialize the MXGraph
    */
   private async init(): Promise<void> {
-
     if (this.graphContainerElement === undefined) {
       return;
     }
@@ -131,13 +131,17 @@ export class GraphicalEditor {
     await this.createGraph();
 
     this.isInGraphTransition = false;
-    await this.updateValidities();
+    this.updateValidities();
+    this.undoManager.clear();
   }
 
   private async createGraph(): Promise<void> {
     mx.mxConnectionHandler.prototype.connectImage = new mx.mxImage('/assets/img/editor-tools/connector.png', 16, 16);
-    mx.mxGraph.prototype.warningImage = new mx.mxImage('/assets/img/editor-tools/error_red.png', 20, 20);
+    mx.mxGraph.prototype.warningImage = new mx.mxImage('/assets/img/editor-tools/error_red.png', 19, 19);
     mx.mxGraphHandler.prototype['guidesEnabled'] = true;
+    mx.mxGraph.prototype.centerZoom = false;
+    mx.mxGraph.prototype.allowNegativeCoordinates = false;
+    mx.mxGraph.prototype.border = 25;
 
     mx.mxEvent.disableContextMenu(this.graphContainerElement.nativeElement);
 
@@ -161,38 +165,69 @@ export class GraphicalEditor {
     this.graph.setConnectable(true);
     this.graph.setMultigraph(false);
     this.graph.setDropEnabled(false);
+    this.graph.setAllowDanglingEdges(false);
     const rubberBand = new mx.mxRubberband(this.graph);
     rubberBand.reset();
 
     this.graph.setTooltips(true);
+    this.graph.zoomFactor = 1.1;
+
+    this.graph.addListener(mx.mxEvent.DOUBLE_CLICK, (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) => {
+      const cell = evt.properties.cell as mxgraph.mxCell;
+      if (cell.id.endsWith(VertexProvider.ID_SUFFIX_TYPE)) {
+        evt.consumed = true;
+      }
+    });
 
     this.graph.getModel().addListener(mx.mxEvent.CHANGE, async (sender: mxgraph.mxEventSource, evt: mxgraph.mxEventObject) => {
       const edit = evt.getProperty('edit') as mxgraph.mxUndoableEdit;
 
-      if (edit.undone === true || edit.redone === true) {
-        this.undoService.setUndoEnabled(this.undoManager.canUndo());
-        this.undoService.setRedoEnabled(this.undoManager.canRedo());
-        return;
-      }
-
       const done: any[] = [];
+
+      const isAddEdit = edit.changes.find(change => ChangeTranslator.isAddChange(change)) !== undefined;
+
       try {
-        for (const change of edit.changes.filter(filteredChange => filteredChange.child && !filteredChange.child.vertex)) {
-          await this.changeTranslator.translate(change);
-          done.push(change);
+        if (!isAddEdit) {
+          for (const change of edit.changes.filter(filteredChange => filteredChange.child && !filteredChange.child.vertex)) {
+            await this.changeTranslator.translate(change, this.graph);
+            done.push(change);
+          }
+          for (const change of edit.changes.filter(filteredChange => filteredChange.child && filteredChange.child.vertex)) {
+            await this.changeTranslator.translate(change, this.graph);
+            done.push(change);
+          }
+        } else {
+          for (const change of edit.changes.filter(filteredChange => filteredChange.child && filteredChange.child.vertex)) {
+            await this.changeTranslator.translate(change, this.graph);
+            done.push(change);
+          }
+          for (const change of edit.changes.filter(filteredChange => filteredChange.child && !filteredChange.child.vertex)) {
+            await this.changeTranslator.translate(change, this.graph);
+            done.push(change);
+          }
         }
-        for (const change of edit.changes.filter(filteredChange => filteredChange.child && filteredChange.child.vertex)) {
-          await this.changeTranslator.translate(change);
-          done.push(change);
+
+        // Filter duplicate style changes; We only need to adress the last one.
+        const styleChangeMap: { [id: string]: mxgraph.mxStyleChange } = {};
+        edit.changes.filter(filteredChange => filteredChange.style !== undefined)
+          .forEach(styleChange => {
+            styleChangeMap[styleChange.cell.id] = styleChange;
+            done.push(styleChange);
+          });
+        for (const cellId in styleChangeMap) {
+          await this.changeTranslator.translate(styleChangeMap[cellId], this.graph);
         }
         for (const change of edit.changes.filter(filteredChange => done.indexOf(filteredChange) < 0)) {
-          await this.changeTranslator.translate(change);
+          await this.changeTranslator.translate(change, this.graph);
         }
       } catch (e) {
+        // This is actually for debug purposes; However, mxgraph or the change translation fails silently without this.
+        console.error(e);
         this.changeTranslator.preventDataUpdates = true;
         edit.undo();
         this.changeTranslator.preventDataUpdates = false;
       } finally {
+        this.graph.getView().revalidate();
         this.undoService.setUndoEnabled(this.undoManager.canUndo());
         this.undoService.setRedoEnabled(this.undoManager.canRedo());
       }
@@ -208,6 +243,7 @@ export class GraphicalEditor {
 
     this.graph.getSelectionModel().addListener(mx.mxEvent.CHANGE, async (args: any) => {
       let selectionCount = this.graph.getSelectionCount();
+      this.graph.getModel().beginUpdate();
 
       // Dim all Edges
       for (const edge of this.highlightedEdges) {
@@ -240,10 +276,13 @@ export class GraphicalEditor {
           let selection = selections[0];
           const selectedElement = await this.dataService.readElement(selection.getId(), true);
           this.selectedElementService.select(selectedElement);
+        } else {
+          this.selectedElementService.deselect();
         }
       } else {
-        this.selectedElementService.deselect();
+        this.selectedElementService.select(this.model);
       }
+      this.graph.getModel().endUpdate();
     });
 
     EditorStyle.initEditorStyles(this.graph);
@@ -257,7 +296,6 @@ export class GraphicalEditor {
 
     this.initTools();
 
-    this.undoManager.clear();
     this.dataService.elementChanged.subscribe((url: string) => {
       const cells = this.graph.getModel().getChildCells(this.graph.getDefaultParent());
       const cell = cells.find(vertex => vertex.id === url);
@@ -265,7 +303,6 @@ export class GraphicalEditor {
       if (cell === undefined || modelElement === undefined) {
         return;
       }
-
       this.changeTranslator.retranslate(modelElement, this.graph, cell);
     });
   }
@@ -289,9 +326,9 @@ export class GraphicalEditor {
     }
     for (const tool of this.editorToolsService.tools) {
       tool.graph = this.graph;
-      if (tool.isVertexTool) {
+      if (tool.isDragTool) {
         this.makeVertexTool(tool);
-      } else if (!tool.isHidden) {
+      } else if (tool.isClickTool) {
         this.makeClickTool(tool);
       }
     }
@@ -334,13 +371,22 @@ export class GraphicalEditor {
   private initUndoManager(): void {
     this.undoManager = new mx.mxUndoManager(50);
     const listener = async (sender: mxgraph.mxEventSource, evt: mxgraph.mxEventObject) => {
-      if (!evt.getProperty('edit').changes.some((s: object) => s.constructor.name === 'mxStyleChange')) {
-        this.undoManager.undoableEditHappened(evt.getProperty('edit'));
+      // StyleChanges are not added to the undo-stack, except an edge is negated (dashed line)
+      const edit = evt.getProperty('edit');
+      const isNotOnlyStyleChange = edit.changes.some((s: object) => s.constructor.name !== 'mxStyleChange');
+      const isNegated = edit.changes.some(function test(s: any): boolean {
+        if (s.constructor.name === 'mxStyleChange' && s.previous !== null) {
+          return (s.style as String).includes(EditorStyle.ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE)
+            !== ((s.previous as String).includes(EditorStyle.ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE));
+        }
+        return false;
+      });
+      if (isNotOnlyStyleChange || isNegated) {
+        this.undoManager.undoableEditHappened(edit);
       }
     };
     this.graph.getModel().addListener(mx.mxEvent.UNDO, listener);
     this.graph.getView().addListener(mx.mxEvent.UNDO, listener);
-    this.undoManager.clear();
   }
 
   private async initGraphicalModel(): Promise<void> {
@@ -380,7 +426,6 @@ export class GraphicalEditor {
     } finally {
       this.graph.getModel().endUpdate();
       this.changeTranslator.preventDataUpdates = false;
-      this.undoManager.clear();
       this.validationService.validateCurrent();
     }
   }
@@ -411,7 +456,7 @@ export class GraphicalEditor {
     };
 
     this.graph.getTooltipForCell = (cell) => {
-      if (cell.getId().endsWith('/type')) {
+      if (cell.getId().endsWith(VertexProvider.ID_SUFFIX_TYPE)) {
         return '';
       }
       return mx.mxGraph.prototype.getTooltipForCell.bind(this.graph)(cell);
@@ -432,22 +477,27 @@ export class GraphicalEditor {
     }
 
     const validationResult = this.validationService.getValidationResults(this.model);
-    const invalidNodes = validationResult.filter(e => this.elementProvider.isNode(e.element));
-    for (const invalidNode of invalidNodes) {
+    for (const invalidNode of validationResult) {
       const vertexId = invalidNode.element.url;
       const vertex = vertices.find(vertex => vertex.id === vertexId);
+      if (vertex === undefined) {
+        continue;
+      }
       StyleChanger.replaceStyle(vertex, this.graph, EditorStyle.VALID_STYLE_NAME, EditorStyle.INVALID_STYLE_NAME);
-      const overlay = this.graph.setCellWarning(vertex, invalidNode.message);
+      const overlay = this.graph.setCellWarning(vertex, invalidNode.message, undefined, true);
       if (Type.is(invalidNode.element, CEGNode) || Type.is(invalidNode.element, ProcessStep)) {
         overlay.offset = new mx.mxPoint(-13, -12);
       }
       if (Type.is(invalidNode.element, ProcessStart) || Type.is(invalidNode.element, ProcessEnd)) {
-        overlay.offset = new mx.mxPoint(-23, -12);
+        overlay.align = mx.mxConstants.ALIGN_CENTER;
+        overlay.offset = new mx.mxPoint(0, -13);
       }
       if (Type.is(invalidNode.element, ProcessDecision)) {
-        overlay.offset = new mx.mxPoint(-28, -20);
+        overlay.align = mx.mxConstants.ALIGN_CENTER;
+        overlay.offset = new mx.mxPoint(0, -18);
       }
     }
+    this.graph.getView().revalidate();
 
     if (Type.is(this.model, CEGModel)) {
       for (const vertex of vertices) {
@@ -533,17 +583,6 @@ export class GraphicalEditor {
 
   public resetZoom(): void {
     this.graph.zoomActual();
-  }
-
-  public showGrid(): void {
-    this.isGridShown = true;
-    this.graphContainerElement.nativeElement.style.backgroundImage = "url('/assets/img/grid.png')";
-  }
-
-  public hideGrid(): void {
-    this.isGridShown = false;
-    this.graphContainerElement.nativeElement.style.backgroundImage = '';
-    this.graphContainerElement.nativeElement.style.background = 'none';
   }
 
   public get connections(): IContainer[] {

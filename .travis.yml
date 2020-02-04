@@ -1,15 +1,18 @@
 sudo: false
 language:
 - java
-- node_js
-node_js:
-- '10'
 services:
 - docker
 jdk:
 - openjdk11
 env:
 - TERM=dumb
+before_install:
+  # Update nvm and install nodejs 10.17
+  - wget https://raw.githubusercontent.com/creationix/nvm/v0.31.0/nvm.sh -O ~/.nvm/nvm.sh
+  - source ~/.nvm/nvm.sh
+  - nvm install v10.17.0
+  - node --version
 install:
 - cd web && npm run init
 - cd ../bundles && ./gradlew --version
@@ -21,9 +24,10 @@ script:
 - (cd bundles && ./gradlew --no-daemon check)
 after_success:
 - DOCKER_TAG=$TRAVIS_BRANCH
+- DOCKER_REPO=qualicen/specmate
 - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-- docker build -t ${DOCKER_USERNAME}/specmate:${DOCKER_TAG} .
-- docker push ${DOCKER_USERNAME}/specmate:${DOCKER_TAG}
+- docker build -t ${DOCKER_REPO}:${DOCKER_TAG} .
+- docker push ${DOCKER_REPO}:${DOCKER_TAG}
 - (cd bundles/specmate-std-env/generated/distributions/executable/&& mv dev-specmate-all.jar dev-specmate-all-$TRAVIS_TAG.jar)
 - (cd bundles/specmate-std-env/generated/distributions/executable/&& mv prod-specmate-all.jar prod-specmate-all-$TRAVIS_TAG.jar)
 - (cd bundles/specmate-std-env/generated/distributions/executable/&& mv prod-specmate-cdo-server.jar prod-specmate-cdo-server-$TRAVIS_TAG.jar)

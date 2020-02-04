@@ -25,6 +25,7 @@ export class ProjectExplorer implements OnInit {
 
     public _rootElements: IContainer[];
     public _rootLibraries: IContainer[];
+    public showLibrary = false;
 
     private searchQueries: Subject<string>;
     protected searchResults: IContentElement[];
@@ -88,6 +89,12 @@ export class ProjectExplorer implements OnInit {
         let libraryFolders: string[] = this.auth.token.libraryFolders;
         let projectContents: IContainer[] = await this.dataService.readContents(this.auth.token.project);
 
+        // In this case, we were logged out automatically.
+        if (projectContents === undefined) {
+            this.clean();
+            return;
+        }
+
         this._rootElements = projectContents.filter(c => Type.is(c, Folder) && !(c as Folder).library);
         this._rootLibraries = projectContents.filter(c => Type.is(c, Folder) && (c as Folder).library && libraryFolders.indexOf(c.id) > -1);
 
@@ -119,6 +126,14 @@ export class ProjectExplorer implements OnInit {
 
     public loadMoreLibraryFolders(): void {
         this.numLibraryFoldersDisplayed += Config.ELEMENT_CHUNK_SIZE;
+    }
+
+    public switchToLibrary(): void {
+        this.showLibrary = true;
+    }
+
+    public switchToProject(): void {
+        this.showLibrary = false;
     }
 
     private clean(): void {

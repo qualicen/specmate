@@ -1,6 +1,5 @@
-
 <ng-container *ngFor="let tool of tools">
-    <span id="{{tool.elementId}}" title="{{tool.name | translate}}">
+    <span id="{{tool.elementId}}" class="editor-tool" title="{{tool.name | translate}}" [ngClass]="getClasses(tool)">
         <i class="{{'fa fa-' + tool.icon}}" aria-hidden="true"></i>&nbsp;{{tool.name | translate}}
     </span>
 </ng-container>

@@ -266,6 +266,7 @@
 		"errorProcessNodeMultipleOutgoingConnections": "Non-decision-node with multiple outgoing connections.",
 		"errorProcessStartIncomingConnection": "Start node with incoming connection.",
 		"errorSingleIndegreeNode": "Node has only one cause and is therefore unnecessary.",
+		"errorTextTooLong": "The text cannot contain more than 4000 characters. ",
 		"errorUnconnectedNode": "Unconnected node in model."
 	},
 	"version": "Version",

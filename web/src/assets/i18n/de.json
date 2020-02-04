@@ -266,6 +266,7 @@
 		"errorProcessNodeMultipleOutgoingConnections": "Nicht-Entscheidungsknoten mit mehreren ausgehenden Verbindungen.",
 		"errorProcessStartIncomingConnection": "Startknoten mit eingehenden Verbindungen.",
 		"errorSingleIndegreeNode": "Knoten hat nur eine Ursache und ist somit überflüssig.",
+		"errorTextTooLong": "Der Text darf nicht mehr als 4000 Zeichen beinhalten.",
 		"errorUnconnectedNode": "Unverbundener Knoten im Modell."
 	},
 	"version": "Version",

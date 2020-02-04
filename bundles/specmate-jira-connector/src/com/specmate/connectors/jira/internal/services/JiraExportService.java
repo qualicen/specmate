@@ -8,6 +8,7 @@ import java.util.Spliterators;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.StreamSupport;
 
+import org.eclipse.emf.ecore.EObject;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
@@ -28,6 +29,7 @@ import com.specmate.connectors.jira.config.JiraConnectorConfig;
 import com.specmate.model.administration.ErrorCode;
 import com.specmate.model.support.util.SpecmateEcoreUtil;
 import com.specmate.model.testspecification.TestProcedure;
+import com.specmate.model.testspecification.TestSpecification;
 import com.specmate.model.testspecification.TestStep;
 
 @Component(immediate = true, service = IExportService.class, configurationPid = JiraConnectorConfig.EXPORTER_PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
@@ -65,7 +67,31 @@ public class JiraExportService implements IExportService {
 	}
 
 	@Override
-	public void export(TestProcedure testProcedure) throws SpecmateException {
+	public void export(EObject exportTarget) throws SpecmateException {
+		if (exportTarget instanceof TestProcedure) {
+			exportTestProcedure((TestProcedure) exportTarget);
+		}
+		if (exportTarget instanceof TestSpecification) {
+			exportTestSpecificatoin((TestSpecification) exportTarget);
+		}
+	}
+
+	@Override
+	public boolean canExportTestProceure() {
+		return true;
+	}
+
+	@Override
+	public boolean canExportTextSpecification() {
+		return true;
+	}
+
+	private void exportTestSpecificatoin(TestSpecification exportTarget) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void exportTestProcedure(TestProcedure testProcedure) throws SpecmateException {
 		IssueInputBuilder issueBuilder = new IssueInputBuilder(projectName, testType.getId());
 		issueBuilder.setSummary("Specmate Exported Test Procedure: " + testProcedure.getName());
 		StringBuilder builder = new StringBuilder();

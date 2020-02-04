@@ -6,6 +6,7 @@ import { ElementValidatorBase } from '../element-validator-base';
 import { ValidationMessage } from '../validation-message';
 import { ValidationResult } from '../validation-result';
 import { Validator } from '../validator-decorator';
+import { ValidationUtil } from '../validation-util';
 
 @Validator(CEGModel)
 export class DuplicateNodeValidator extends ElementValidatorBase<CEGModel> {
@@ -17,13 +18,12 @@ export class DuplicateNodeValidator extends ElementValidatorBase<CEGModel> {
             let currentNode: CEGNode = nodes[i];
             let currentDuplicates: CEGNode[] =
                 nodes.filter((otherNode: CEGNode) =>
-                    otherNode.variable === currentNode.variable &&
-                    otherNode.condition === currentNode.condition &&
+                    ValidationUtil.compareStrTrimed(otherNode.variable, currentNode.variable) &&
+                    ValidationUtil.compareStrTrimed(otherNode.condition, currentNode.condition) &&
                     otherNode !== currentNode &&
                     !duplicates.has(otherNode));
             currentDuplicates.forEach( node => duplicates.add(node));
         }
-
         let dupList = Array.from(duplicates.keys());
         if (dupList.length > 0) {
             return new ValidationResult(ValidationMessage.ERROR_DUPLICATE_NODE, false, dupList);

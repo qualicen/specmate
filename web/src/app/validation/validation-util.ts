@@ -19,4 +19,8 @@ export class ValidationUtil {
         }
         return true;
     }
+
+    public static compareStrTrimed(s1: string, s2: string): boolean {
+      return s1.trim() === s2.trim();
+    }
 }

@@ -257,6 +257,26 @@ public class ProcessesPackageImpl extends EPackageImpl implements ProcessesPacka
 	 * @generated
 	 */
 	@Override
+	public EAttribute getProcessConnection_LabelX() {
+		return (EAttribute)processConnectionEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getProcessConnection_LabelY() {
+		return (EAttribute)processConnectionEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getProcessStart() {
 		return processStartEClass;
 	}
@@ -311,6 +331,8 @@ public class ProcessesPackageImpl extends EPackageImpl implements ProcessesPacka
 
 		processConnectionEClass = createEClass(PROCESS_CONNECTION);
 		createEAttribute(processConnectionEClass, PROCESS_CONNECTION__CONDITION);
+		createEAttribute(processConnectionEClass, PROCESS_CONNECTION__LABEL_X);
+		createEAttribute(processConnectionEClass, PROCESS_CONNECTION__LABEL_Y);
 
 		processStartEClass = createEClass(PROCESS_START);
 
@@ -368,6 +390,8 @@ public class ProcessesPackageImpl extends EPackageImpl implements ProcessesPacka
 
 		initEClass(processConnectionEClass, ProcessConnection.class, "ProcessConnection", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getProcessConnection_Condition(), ecorePackage.getEString(), "condition", null, 0, 1, ProcessConnection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getProcessConnection_LabelX(), ecorePackage.getEDouble(), "labelX", null, 0, 1, ProcessConnection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getProcessConnection_LabelY(), ecorePackage.getEDouble(), "labelY", null, 0, 1, ProcessConnection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(processStartEClass, ProcessStart.class, "ProcessStart", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -414,6 +438,18 @@ public class ProcessesPackageImpl extends EPackageImpl implements ProcessesPacka
 			   "required", "false",
 			   "type", "text",
 			   "position", "2"
+		   });
+		addAnnotation
+		  (processStartEClass,
+		   source,
+		   new String[] {
+			   "disabled1", "name"
+		   });
+		addAnnotation
+		  (processEndEClass,
+		   source,
+		   new String[] {
+			   "disabled1", "name"
 		   });
 	}
 

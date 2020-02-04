@@ -22,6 +22,7 @@ export class ValidationMessage {
     public static ERROR_INVALID_NAME = 'errorInvalidName';
     public static ERROR_INVALID_VARIABLE = 'errorInvalidVariable';
     public static ERROR_PROCESS_INVALID_CONDITION_TEXT = 'errorProcessInvalidConditionText';
+    public static ERROR_TEXT_TOO_LONG = 'errorTextTooLong';
 
 
     constructor(private messageKey: string, private interpolationParameters?: Object) {}

@@ -122,9 +122,7 @@ export class AdditionalInformationService {
     }
 
     public get canGenerateCEGModel(): boolean {
-        // We return false to disable this functionality. When we turn it on again, use the commented line below.
-        return false;
-        // return Type.is(this.element, CEGModel);
+        return Type.is(this.element, CEGModel);
     }
 
     private isModel(element: IContainer): boolean {

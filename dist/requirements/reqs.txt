@@ -1,0 +1,31 @@
+ID-1
+Als Test Designer möchte ich getätigte Bearbeitungsschritte wieder rückgängig machen, damit ich ohne großen Aufwand Fehler korrigieren kann.
+Akzeptanzkriterien:
+1.	Im CEG-Editor im Prozessmodell-Editor, im Testfallspezifikations-Editor und im Testprozedur-Editor existiert eine Option, um den letzten Schritt rückgängig zu machen.
+2.	Wählt der Benutzer diese Option aus, wird die letzte Aktion des Benutzers rückgängig gemacht.
+3.	Die Option ist nur aktivierbar, falls eine Aktion existiert, die rückgängig gemacht werden kann, andernfalls ist die Option deaktiviert.
+4.	Wird ein Editorinhalt gespeichert, ist die Rückgängig-Option nicht mehr möglic
+
+ID-2
+Als Kunde möchte ich Sonderkonditionen und Standardkonditionen sehen, wenn ein höherwertiges VO erfüllt ist, sodass ich immer den günstigsten Preis sehe. Dies ist der Fall, wenn basic erfüllt ist (VO Basic und Preis höher als 38.000€), wenn extended erfüllt ist (Kaufpreis >= 120.000€) oder bei VO Small (Preis >= 17.000€).
+
+ID-3
+When the user clicks on a link to an existing model, Specmate displays the model in the editor.
+
+ID-4
+If the user clicks the button or hits the Enter-key and the data is not saved, a confirmation window opens.
+
+ID-5
+Specmate alerts the user to errors and prevents the model from being saved if the name-field is not filled or a start node or end node doesn't exists.
+
+ID-6
+If a model has been deleted from a requirement, it is no longer displayed in the requirements overview and in the Project Explorer.
+
+ID-7
+If the debit memo procedure exists, the balance is smaller than the tolerance amount, and the contract is neither reversed nor suspended, then no disbursement is to be made.
+
+ID-8
+The contract is approved if the agent and the account approve it.
+
+DRIVING-1
+Driving shall be allowed if the driver is at least 18 years old and has a valid driver licence.

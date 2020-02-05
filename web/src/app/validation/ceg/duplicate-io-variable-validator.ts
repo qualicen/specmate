@@ -34,7 +34,7 @@ export class DuplicateIOVariableValidator extends ElementValidatorBase<CEGModel>
             if (typeMap[node.variable] === undefined) {
                 typeMap[node.variable] = [];
             }
-            if (!typeMap[node.variable].includes(type)) {
+            if (typeMap[node.variable].indexOf(type) < 0) {
                 typeMap[node.variable].push(type);
             }
 

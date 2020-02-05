@@ -31,7 +31,6 @@ import com.atlassian.jira.rest.client.api.domain.SearchResult;
 import com.specmate.common.cache.ICache;
 import com.specmate.common.cache.ICacheLoader;
 import com.specmate.common.cache.ICacheService;
-import com.specmate.common.exception.SpecmateAuthorizationException;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.connectors.api.IProjectConfigService;
@@ -85,7 +84,7 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 		String password = (String) properties.get(JiraConnectorConfig.KEY_JIRA_PASSWORD);
 
 		try {
-			jiraClient = JiraClientFactory.createJiraRESTClient(url, username, password);
+			jiraClient = JiraUtil.createJiraRESTClient(url, username, password);
 		} catch (URISyntaxException e) {
 			throw new SpecmateInternalException(ErrorCode.JIRA, e);
 		}
@@ -221,23 +220,7 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 
 	@Override
 	public boolean authenticate(String username, String password) throws SpecmateException {
-		try {
-			JiraRestClient client = JiraClientFactory.createJiraRESTClient(url, username, password);
-			client.getProjectClient().getProject(projectName).claim();
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-			throw new SpecmateAuthorizationException("Jira authentication failed.", e);
-		} catch (RestClientException e) {
-			Integer status = e.getStatusCode().get();
-			if (status == 401) {
-				logService.log(LogService.LOG_INFO,
-						"Invalid credentials provided for jira project " + projectName + '.');
-				return false;
-			}
-			e.printStackTrace();
-			return false;
-		}
-		return true;
+		return JiraUtil.authenticate(url, projectName, username, password);
 	}
 
 	private static Requirement createRequirement(Issue story) throws SpecmateException {

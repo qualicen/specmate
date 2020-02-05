@@ -1,11 +1,11 @@
 package com.specmate.connectors.jira.internal.services;
 
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 import java.util.Spliterator;
 import java.util.Spliterators;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.StreamSupport;
 
 import org.eclipse.emf.ecore.EObject;
@@ -24,7 +24,6 @@ import com.atlassian.util.concurrent.Promise;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.connectors.api.IExportService;
-import com.specmate.connectors.api.IProjectConfigService;
 import com.specmate.connectors.jira.config.JiraConnectorConfig;
 import com.specmate.model.administration.ErrorCode;
 import com.specmate.model.support.util.SpecmateEcoreUtil;
@@ -36,33 +35,41 @@ import com.specmate.model.testspecification.TestStep;
 public class JiraExportService implements IExportService {
 
 	private LogService logService;
-	private JiraRestClient jiraClient;
 	private IssueType testType;
-	private String id;
 	private String url;
 	private String projectName;
+	private String username;
+	private String password;
 
 	@Activate
 	public void activate(Map<String, Object> properties) throws SpecmateException {
-		id = (String) properties.get(IProjectConfigService.KEY_CONNECTOR_ID);
 		url = (String) properties.get(JiraConnectorConfig.KEY_JIRA_URL);
 		projectName = (String) properties.get(JiraConnectorConfig.KEY_JIRA_PROJECT);
-		String username = (String) properties.get(JiraConnectorConfig.KEY_JIRA_USERNAME);
-		String password = (String) properties.get(JiraConnectorConfig.KEY_JIRA_PASSWORD);
+		username = (String) properties.get(JiraConnectorConfig.KEY_JIRA_USERNAME);
+		password = (String) properties.get(JiraConnectorConfig.KEY_JIRA_PASSWORD);
 
+		JiraRestClient jiraClient = null;
 		try {
-			jiraClient = JiraClientFactory.createJiraRESTClient(url, username, password);
+			jiraClient = JiraUtil.createJiraRESTClient(url, username, password);
+			Iterable<IssueType> issueTypes = jiraClient.getMetadataClient().getIssueTypes().claim();
+			Spliterator<IssueType> issueTypesSpliterator = Spliterators.spliteratorUnknownSize(issueTypes.iterator(),
+					0);
+
+			testType = StreamSupport.stream(issueTypesSpliterator, false)
+					.filter(issueType -> issueType.getName().equals("Test")).findFirst().orElseGet(null);
+			if (testType == null) {
+				logService.log(LogService.LOG_ERROR, "Could not get Issue Type for Tests");
+			}
 		} catch (URISyntaxException e) {
 			throw new SpecmateInternalException(ErrorCode.JIRA, e);
-		}
-
-		Iterable<IssueType> issueTypes = jiraClient.getMetadataClient().getIssueTypes().claim();
-		Spliterator<IssueType> issueTypesSpliterator = Spliterators.spliteratorUnknownSize(issueTypes.iterator(), 0);
-
-		testType = StreamSupport.stream(issueTypesSpliterator, false)
-				.filter(issueType -> issueType.getName().equals("Test")).findFirst().orElseGet(null);
-		if (testType == null) {
-			logService.log(LogService.LOG_ERROR, "Could not get Issue Type for Tests");
+		} finally {
+			if (jiraClient != null) {
+				try {
+					jiraClient.close();
+				} catch (IOException e) {
+					logService.log(LogService.LOG_ERROR, "Could not close jira client");
+				}
+			}
 		}
 	}
 
@@ -72,7 +79,7 @@ public class JiraExportService implements IExportService {
 			exportTestProcedure((TestProcedure) exportTarget);
 		}
 		if (exportTarget instanceof TestSpecification) {
-			exportTestSpecificatoin((TestSpecification) exportTarget);
+			exportTestSpecification((TestSpecification) exportTarget);
 		}
 	}
 
@@ -86,40 +93,50 @@ public class JiraExportService implements IExportService {
 		return true;
 	}
 
-	private void exportTestSpecificatoin(TestSpecification exportTarget) {
+	private void exportTestSpecification(TestSpecification exportTarget) {
 		// TODO Auto-generated method stub
 
 	}
 
 	public void exportTestProcedure(TestProcedure testProcedure) throws SpecmateException {
-		IssueInputBuilder issueBuilder = new IssueInputBuilder(projectName, testType.getId());
-		issueBuilder.setSummary("Specmate Exported Test Procedure: " + testProcedure.getName());
-		StringBuilder builder = new StringBuilder();
-		builder.append("||Step||Name||Description||Expected Result||\n");
-		List<TestStep> steps = SpecmateEcoreUtil.pickInstancesOf(testProcedure.getContents(), TestStep.class);
-		steps.sort((s1, s2) -> Integer.compare(s1.getPosition(), s2.getPosition()));
-		int stepNum = 0;
-		for (TestStep step : steps) {
-			stepNum++;
-			builder.append("| " + stepNum + " | " + step.getName() + " | " + step.getDescription() + " | "
-					+ step.getExpectedOutcome() + " |\n");
-		}
-//		builder.append("</tbody></table> </div>");
-		issueBuilder.setDescription(builder.toString());
-		IssueInput issueInput = issueBuilder.build();
-		Promise<BasicIssue> result = jiraClient.getIssueClient().createIssue(issueInput);
-		BasicIssue createdIssue;
+		JiraRestClient jiraClient = null;
 		try {
-			createdIssue = result.get();
-			System.out.println(createdIssue);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			try {
+				jiraClient = JiraUtil.createJiraRESTClient(url, username, password);
+			} catch (URISyntaxException e) {
+				throw new SpecmateInternalException(ErrorCode.JIRA, e);
+			}
 
+			IssueInputBuilder issueBuilder = new IssueInputBuilder(projectName, testType.getId());
+			issueBuilder.setSummary("Specmate Exported Test Procedure: " + testProcedure.getName());
+			StringBuilder builder = new StringBuilder();
+			builder.append("||Step||Name||Description||Expected Result||\n");
+			List<TestStep> steps = SpecmateEcoreUtil.pickInstancesOf(testProcedure.getContents(), TestStep.class);
+			steps.sort((s1, s2) -> Integer.compare(s1.getPosition(), s2.getPosition()));
+			int stepNum = 0;
+			for (TestStep step : steps) {
+				stepNum++;
+				builder.append("| " + stepNum + " | " + step.getName() + " | " + step.getDescription() + " | "
+						+ step.getExpectedOutcome() + " |\n");
+			}
+			issueBuilder.setDescription(builder.toString());
+			IssueInput issueInput = issueBuilder.build();
+			Promise<BasicIssue> result = jiraClient.getIssueClient().createIssue(issueInput);
+			try {
+				result.get();
+			} catch (Exception e) {
+				throw new SpecmateInternalException(ErrorCode.JIRA, e);
+			}
+		} finally {
+			if (jiraClient != null) {
+				try {
+					jiraClient.close();
+				} catch (IOException e) {
+					logService.log(LogService.LOG_ERROR, "Could not close jira client", e);
+				}
+			}
+		}
+// This is not working:
 //		ArrayList<ComplexIssueInputFieldValue> steps = new ArrayList<ComplexIssueInputFieldValue>();
 //		for (TestStep step : SpecmateEcoreUtil.pickInstancesOf(testProcedure.getContents(), TestStep.class)) {
 //			Map<String, Object> stepValues = new HashMap<String, Object>();
@@ -148,7 +165,12 @@ public class JiraExportService implements IExportService {
 
 	@Override
 	public boolean isAuthorizedToExport(String username, String password) {
-		return testType != null;
+		try {
+			return JiraUtil.authenticate(url, projectName, username, password);
+		} catch (SpecmateException e) {
+			logService.log(LogService.LOG_ERROR, "Exception occured when authorizing for export", e);
+			return false;
+		}
 	}
 
 	@Reference

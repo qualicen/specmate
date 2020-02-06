@@ -25,6 +25,9 @@ export class ValidationService {
 
     public validationFinished: EventEmitter<void> = new EventEmitter<void>();
 
+    public isValidating = false;
+    public stateChanged: EventEmitter<void> = new EventEmitter<void>();
+
     constructor(private navigator: NavigatorService, translate: TranslateService) {
         this.validationCache = new ValidationCache(translate);
         navigator.hasNavigated.subscribe(() => this.validateCurrent());
@@ -62,6 +65,9 @@ export class ValidationService {
     }
 
     public async refreshValidation(element: IContainer, contents: IContainer[] = [], clear = true): Promise<void> {
+        this.isValidating = true;
+        this.stateChanged.emit();
+
         if (clear) {
             this.validationCache.clear();
         }
@@ -73,7 +79,14 @@ export class ValidationService {
             }
         }
         this.validationCache.addValidationResultsToCache(elementResults);
-        this.validationFinished.emit();
+
+        // Run this asynchronously to prevent the loading modal to remain closed.
+        setTimeout(() => {
+            this.isValidating = false;
+            this.validationFinished.emit();
+            this.stateChanged.emit();
+        }, 1);
+
     }
 
     private getValidationResultsFor(element: IContainer, contents: IContainer[]): ValidationResult[] {

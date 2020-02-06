@@ -94,7 +94,7 @@ public class JiraExportService implements IExportService {
 	}
 
 	private void exportTestSpecification(TestSpecification exportTarget) {
-		// TODO Auto-generated method stub
+		// not implemented yet
 
 	}
 
@@ -136,31 +136,6 @@ public class JiraExportService implements IExportService {
 				}
 			}
 		}
-// This is not working:
-//		ArrayList<ComplexIssueInputFieldValue> steps = new ArrayList<ComplexIssueInputFieldValue>();
-//		for (TestStep step : SpecmateEcoreUtil.pickInstancesOf(testProcedure.getContents(), TestStep.class)) {
-//			Map<String, Object> stepValues = new HashMap<String, Object>();
-//			stepValues.put("step", step.getDescription());
-//			stepValues.put("result", step.getExpectedOutcome());
-//			stepValues.put("index", step.getPosition());
-//			steps.add(new ComplexIssueInputFieldValue(stepValues));
-//		}
-//		ComplexIssueInputFieldValue stepsFieldValue = ComplexIssueInputFieldValue.with("steps", steps);
-//		issueBuilder.setFieldValue("customfield_10004", stepsFieldValue);
-//		IssueInput issueInput = issueBuilder.build();
-//		Promise<BasicIssue> result = jiraClient.getIssueClient().createIssue(issueInput);
-//		BasicIssue createdIssue;
-//		try {
-//			createdIssue = result.get();
-//			System.out.println(createdIssue);
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (ExecutionException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-
 	}
 
 	@Override

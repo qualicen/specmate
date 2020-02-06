@@ -92,6 +92,12 @@ export class GraphicalEditor {
     this.undoService.redoPressed.subscribe(() => {
       this.redo();
     });
+
+    this.dataService.elementChanged.subscribe((url: string) => {
+      if (url === this.model.url) {
+        this.init();
+      }
+    });
   }
 
   /*********************** MX Graph ***********************/
@@ -567,8 +573,7 @@ export class GraphicalEditor {
   }
 
   @Input()
-  public set contents(contents: IContainer[]) {
-  }
+  public set contents(contents: IContainer[]) { }
 
   public get contents(): IContainer[] {
     return this._contents;

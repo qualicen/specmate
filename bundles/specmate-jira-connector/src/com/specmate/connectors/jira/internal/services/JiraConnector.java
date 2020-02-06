@@ -3,7 +3,6 @@ package com.specmate.connectors.jira.internal.services;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,11 +28,9 @@ import com.atlassian.jira.rest.client.api.RestClientException;
 import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.atlassian.jira.rest.client.api.domain.IssueField;
 import com.atlassian.jira.rest.client.api.domain.SearchResult;
-import com.atlassian.jira.rest.client.internal.async.AsynchronousJiraRestClientFactory;
 import com.specmate.common.cache.ICache;
 import com.specmate.common.cache.ICacheLoader;
 import com.specmate.common.cache.ICacheService;
-import com.specmate.common.exception.SpecmateAuthorizationException;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.connectors.api.IProjectConfigService;
@@ -51,7 +48,7 @@ import com.specmate.model.support.util.SpecmateEcoreUtil;
 import com.specmate.rest.RestResult;
 
 @Component(immediate = true, service = { IRestService.class,
-		IRequirementsSource.class }, configurationPid = JiraConnectorConfig.PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
+		IRequirementsSource.class }, configurationPid = JiraConnectorConfig.CONNECTOR_PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
 public class JiraConnector extends DetailsService implements IRequirementsSource, IRestService {
 
 	private static final String JIRA_STORY_CACHE_NAME = "jiraStoryCache";
@@ -72,6 +69,10 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 
 	private ICache<String, Issue> cache;
 
+	public JiraRestClient getJiraClient() {
+		return jiraClient;
+	}
+
 	@Activate
 	public void activate(Map<String, Object> properties) throws SpecmateException {
 		validateConfig(properties);
@@ -83,8 +84,7 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 		String password = (String) properties.get(JiraConnectorConfig.KEY_JIRA_PASSWORD);
 
 		try {
-			jiraClient = new AsynchronousJiraRestClientFactory().createWithBasicHttpAuthentication(new URI(url),
-					username, password);
+			jiraClient = JiraUtil.createJiraRESTClient(url, username, password);
 		} catch (URISyntaxException e) {
 			throw new SpecmateInternalException(ErrorCode.JIRA, e);
 		}
@@ -138,12 +138,12 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 
 		List<Requirement> requirements = new ArrayList<>();
 
-		List<Issue> storiesWithoutEpic = this.getStoriesWithoutEpic();
+		List<Issue> storiesWithoutEpic = getStoriesWithoutEpic();
 		for (Issue story : storiesWithoutEpic) {
 			requirements.add(createRequirement(story));
 		}
 
-		List<Issue> epics = this.getEpics();
+		List<Issue> epics = getEpics();
 
 		for (Issue epic : epics) {
 			createFolderIfNotExists(epic);
@@ -159,21 +159,21 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 	}
 
 	private List<Issue> getStoriesForEpic(Issue epic) throws SpecmateException {
-		return this.getIssues("project=" + projectName + " AND issueType=story AND \"Epic Link\"=\"" + epic.getKey()
+		return getIssues("project=" + projectName + " AND issueType=story AND \"Epic Link\"=\"" + epic.getKey()
 				+ "\" ORDER BY assignee, resolutiondate");
 	}
 
 	private List<Issue> getStoriesWithoutEpic() throws SpecmateException {
-		return this.getIssues("project=" + projectName
+		return getIssues("project=" + projectName
 				+ " AND issueType=story AND \"Epic Link\" IS EMPTY ORDER BY assignee, resolutiondate");
 	}
 
 	private List<Issue> getEpics() throws SpecmateException {
-		return this.getIssues("project=" + projectName + " AND issueType=epic ORDER BY id");
+		return getIssues("project=" + projectName + " AND issueType=epic ORDER BY id");
 	}
 
 	private Issue getStory(String id) throws SpecmateException {
-		List<Issue> issues = this.getIssues("project=" + projectName + " AND id=" + id);
+		List<Issue> issues = getIssues("project=" + projectName + " AND id=" + id);
 		if (issues == null || issues.size() == 0) {
 			throw new SpecmateInternalException(ErrorCode.INTERNAL_PROBLEM, "JIRA Issue not found: " + id);
 		}
@@ -220,24 +220,7 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 
 	@Override
 	public boolean authenticate(String username, String password) throws SpecmateException {
-		try {
-			JiraRestClient client = new AsynchronousJiraRestClientFactory()
-					.createWithBasicHttpAuthentication(new URI(url), username, password);
-			client.getProjectClient().getProject(projectName).claim();
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-			throw new SpecmateAuthorizationException("Jira authentication failed.", e);
-		} catch (RestClientException e) {
-			Integer status = e.getStatusCode().get();
-			if (status == 401) {
-				logService.log(LogService.LOG_INFO,
-						"Invalid credentials provided for jira project " + projectName + '.');
-				return false;
-			}
-			e.printStackTrace();
-			return false;
-		}
-		return true;
+		return JiraUtil.authenticate(url, projectName, username, password);
 	}
 
 	private static Requirement createRequirement(Issue story) throws SpecmateException {
@@ -314,8 +297,8 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 	}
 
 	/**
-	 * Behavior for GET requests. For requirements the current data is fetched
-	 * from the HP server.
+	 * Behavior for GET requests. For requirements the current data is fetched from
+	 * the HP server.
 	 */
 	@Override
 	public RestResult<?> get(Object target, MultivaluedMap<String, String> queryParams, String token)
@@ -346,6 +329,10 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 	@Reference
 	public void setCacheService(ICacheService cacheService) {
 		this.cacheService = cacheService;
+	}
+
+	public String getProjectName() {
+		return projectName;
 	}
 
 }

@@ -3,6 +3,7 @@ package com.specmate.dummydata;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.emf.ecore.EObject;
 import org.osgi.service.component.annotations.Component;
 
 import com.specmate.common.exception.SpecmateException;
@@ -11,7 +12,6 @@ import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.api.IRequirementsSource;
 import com.specmate.model.base.IContainer;
 import com.specmate.model.requirements.Requirement;
-import com.specmate.model.testspecification.TestProcedure;
 
 /**
  * A project definition for the test-data that authorizes every user.
@@ -65,8 +65,18 @@ public class DummyProject implements IProject {
 			}
 
 			@Override
-			public void export(TestProcedure testProcedure) throws SpecmateException {
+			public void export(EObject target) throws SpecmateException {
 				// Do nothing
+			}
+
+			@Override
+			public boolean canExportTestProceure() {
+				return false;
+			}
+
+			@Override
+			public boolean canExportTextSpecification() {
+				return false;
 			}
 		};
 	}

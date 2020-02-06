@@ -63,6 +63,10 @@ export class LinksActions {
         return this.additionalInformationService.canExportTestspecification;
     }
 
+    public get exports(): string[] {
+        return this.additionalInformationService.exports;
+    }
+
     public get canGenerateCEGModel(): boolean {
         return this.additionalInformationService.canGenerateCEGModel;
     }

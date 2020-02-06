@@ -1,4 +1,6 @@
-package com.specmate.testspecification.api;
+package com.specmate.export.api;
+
+import java.util.Optional;
 
 import com.specmate.model.testspecification.TestSpecificationSkeleton;
 
@@ -8,7 +10,7 @@ public interface ITestExporter {
 	String getLanguage();
 
 	/** Generates an export for the test specification */
-	TestSpecificationSkeleton generate(Object object);
+	Optional<TestSpecificationSkeleton> export(Object object);
 
 	/** Signals that this exporter can export test specifications */
 	boolean canExportTestSpecification();

@@ -1,4 +1,4 @@
-package com.specmate.testspecification.api;
+package com.specmate.export.api;
 
 public interface ITestProcedureExporter {
 

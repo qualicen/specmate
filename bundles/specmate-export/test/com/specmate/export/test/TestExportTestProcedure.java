@@ -1,13 +1,15 @@
-package com.specmate.testspecification.test;
+package com.specmate.export.test;
+
+import java.util.Optional;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.specmate.export.internal.exporters.CSVTestProcedureExporter;
 import com.specmate.model.testspecification.TestProcedure;
 import com.specmate.model.testspecification.TestSpecificationSkeleton;
 import com.specmate.model.testspecification.TestStep;
 import com.specmate.model.testspecification.TestspecificationFactory;
-import com.specmate.testspecification.internal.exporters.CSVTestProcedureExporter;
 
 public class TestExportTestProcedure {
 
@@ -16,8 +18,8 @@ public class TestExportTestProcedure {
 		TestProcedure tp = getTestProcedure();
 
 		CSVTestProcedureExporter exporter = new CSVTestProcedureExporter();
-		TestSpecificationSkeleton result = exporter.generate(tp);
-		String code = result.getCode();
+		Optional<TestSpecificationSkeleton> result = exporter.export(tp);
+		String code = result.get().getCode();
 		Assert.assertEquals("Step Name;Action;Expected Outcome\n" + "step-1;Description1;Outcome1\n"
 				+ "step-2;Description2;Outcome2", code);
 	}
@@ -27,8 +29,8 @@ public class TestExportTestProcedure {
 		TestProcedure tp = getTestProcedure();
 		tp.getContents().clear();
 		CSVTestProcedureExporter exporter = new CSVTestProcedureExporter();
-		TestSpecificationSkeleton result = exporter.generate(tp);
-		String code = result.getCode();
+		Optional<TestSpecificationSkeleton> result = exporter.export(tp);
+		String code = result.get().getCode();
 		Assert.assertEquals("Step Name;Action;Expected Outcome", code);
 	}
 

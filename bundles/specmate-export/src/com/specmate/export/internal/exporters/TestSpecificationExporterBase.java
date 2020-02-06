@@ -1,13 +1,15 @@
-package com.specmate.testspecification.internal.exporters;
+package com.specmate.export.internal.exporters;
 
-import static com.specmate.testspecification.internal.exporters.ExportUtil.replaceInvalidChars;
+import static com.specmate.export.internal.exporters.ExportUtil.replaceInvalidChars;
 
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.specmate.export.api.ITestExporter;
 import com.specmate.model.support.util.SpecmateEcoreUtil;
 import com.specmate.model.testspecification.ParameterAssignment;
 import com.specmate.model.testspecification.TestCase;
@@ -15,14 +17,10 @@ import com.specmate.model.testspecification.TestParameter;
 import com.specmate.model.testspecification.TestSpecification;
 import com.specmate.model.testspecification.TestSpecificationSkeleton;
 import com.specmate.model.testspecification.TestspecificationFactory;
-import com.specmate.testspecification.api.ITestExporter;
 
 /** Base class for Test Specification Exporters (aka "Skeletons") */
 public abstract class TestSpecificationExporterBase implements ITestExporter {
 
-	/** The date of the export */
-	private Date date;
-	
 	/** the language for the export */
 	protected String language;
 
@@ -40,14 +38,6 @@ public abstract class TestSpecificationExporterBase implements ITestExporter {
 	public String getLanguage() {
 		return language;
 	}
-	
-	public void setDate(Date date) {
-		this.date = date;
-	}
-	
-	public Date getDate() {
-		return this.date;
-	}
 
 	@Override
 	public boolean canExportTestProcedure() {
@@ -61,7 +51,7 @@ public abstract class TestSpecificationExporterBase implements ITestExporter {
 
 	/** Generates an export for the test specification */
 	@Override
-	public TestSpecificationSkeleton generate(Object obj) {
+	public Optional<TestSpecificationSkeleton> export(Object obj) {
 		TestSpecification testSpecification = (TestSpecification) obj;
 		StringBuilder sb = new StringBuilder();
 
@@ -81,7 +71,7 @@ public abstract class TestSpecificationExporterBase implements ITestExporter {
 		generateFooter(sb, testSpecification);
 		tss.setCode(sb.toString());
 
-		return tss;
+		return Optional.of(tss);
 	}
 
 	private static int compareParameter(TestParameter p1, TestParameter p2) {
@@ -117,10 +107,7 @@ public abstract class TestSpecificationExporterBase implements ITestExporter {
 		sb.append("/*\n");
 		sb.append(" * Datum: ");
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		Date exportDate = getDate();
-		if(exportDate == null) {
-			exportDate = new Date();
-		}
+		Date exportDate = new Date();
 		sb.append(sdf.format(exportDate));
 		sb.append("\n */\n\n");
 	}

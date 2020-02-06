@@ -41,7 +41,8 @@
 	osgi.identity;filter:='(osgi.identity=specmate-jira-connector)',\
 	osgi.identity;filter:='(osgi.identity=specmate-nlp)',\
 	osgi.identity;filter:='(osgi.identity=specmate-model-generation)',\
-	bnd.identity;id='log4j'
+	bnd.identity;id='log4j',\
+	bnd.identity;id='specmate-export'
 -runbundles: \
 	specmate-logging;version=snapshot,\
 	specmate-logging-slf4j;version=snapshot,\
@@ -204,7 +205,9 @@
 	org.eclipse.xtext.xbase.lib;version='[2.10.0,2.10.1)',\
 	specmate-cause-effect-patterns;version=snapshot,\
 	jaxb-api;version='[2.3.1,2.3.2)',\
-	specmate-xtext;version=snapshot
+	specmate-xtext;version=snapshot,\
+	specmate-export;version=snapshot,\
+	specmate-objectif;version=snapshot
 
 -runproperties: \
 	jetty.http.port=8080,\

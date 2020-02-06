@@ -1,6 +1,6 @@
-package com.specmate.testspecification.internal.exporters;
+package com.specmate.export.internal.exporters;
 
-import static com.specmate.testspecification.internal.exporters.ExportUtil.replaceInvalidChars;
+import static com.specmate.export.internal.exporters.ExportUtil.replaceInvalidChars;
 
 import java.util.List;
 import java.util.StringJoiner;
@@ -8,11 +8,11 @@ import java.util.StringJoiner;
 import org.apache.commons.lang3.StringUtils;
 import org.osgi.service.component.annotations.Component;
 
+import com.specmate.export.api.ITestExporter;
 import com.specmate.model.testspecification.ParameterAssignment;
 import com.specmate.model.testspecification.TestCase;
 import com.specmate.model.testspecification.TestParameter;
 import com.specmate.model.testspecification.TestSpecification;
-import com.specmate.testspecification.api.ITestExporter;
 
 /** Exports a test specification as CSV */
 @Component(immediate = true, service = ITestExporter.class)

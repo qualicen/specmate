@@ -18,6 +18,7 @@ export class AdditionalInformationService {
 
     public element: IContainer;
     private parents: IContainer[];
+    private _exports: string[];
     private _testSpecifications: TestSpecification[];
 
     constructor(private dataService: SpecmateDataService, navigator: NavigatorService, private auth: AuthenticationService) {
@@ -31,12 +32,14 @@ export class AdditionalInformationService {
     private reset(): void {
         this.element = undefined;
         this.parents = undefined;
+        this._exports = undefined;
         this._testSpecifications = undefined;
     }
 
     private async load(): Promise<void> {
         await this.loadParents();
         await this.loadTestSpecifications();
+        await this.loadExports();
     }
 
     private async loadTestSpecifications(): Promise<void> {
@@ -72,6 +75,14 @@ export class AdditionalInformationService {
         this.parents = await Promise.all(parentUrls.map(url => this.dataService.readElement(url)));
     }
 
+    private async loadExports(): Promise<void> {
+        if(Type.is(this.element,TestSpecification) || Type.is(this.element, TestProcedure)){
+            this._exports = await this.dataService.performQuery(this.element.url, 'exporterlist',{});
+        } else {
+            this._exports = [];
+        }
+    }
+
     public get hasAdditionalInformation(): boolean {
         return this.requirement !== undefined || this.model !== undefined || this.testSpecification !== undefined;
     }
@@ -99,6 +110,10 @@ export class AdditionalInformationService {
 
     public get testSpecifications(): TestSpecification[] {
         return this._testSpecifications;
+    }
+
+    public get exports(): string[] {
+        return this._exports;
     }
 
     public get canHaveTestSpecifications(): boolean {

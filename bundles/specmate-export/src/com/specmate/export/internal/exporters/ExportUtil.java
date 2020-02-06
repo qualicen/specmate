@@ -1,4 +1,4 @@
-package com.specmate.testspecification.internal.exporters;
+package com.specmate.export.internal.exporters;
 
 import java.util.regex.Pattern;
 

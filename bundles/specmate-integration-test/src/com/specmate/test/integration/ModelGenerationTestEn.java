@@ -752,6 +752,7 @@ public class ModelGenerationTestEn extends ModelGenerationTestBase {
 		JSONArray generated = generateCEGWithModelRequirementsText(text);
 		checkResultingModel(generated, model);
 	}
+
 	/**
 	 * @Test public void testModelGenerationEN58_pattern2_4_and() {String text =
 	 *       "When there is snow on the tree and the wind is blowing and the sun is
@@ -770,5 +771,19 @@ public class ModelGenerationTestEn extends ModelGenerationTestBase {
 	 *       = generateCEGWithModelRequirementsText(text);
 	 *       checkResultingModel(generated, model); }
 	 */
+
+	@Test
+	public void testModelGenerationEN_58() {
+		String text = "If the driver is older than 18 years and the driver has a valid license, driving is allowed.";
+		RequirementsFactory f = RequirementsFactory.eINSTANCE;
+		CEGModel model = f.createCEGModel();
+		CEGNode node1 = createNode(model, "the driver", "is older than 18 years", NodeType.AND);
+		CEGNode node2 = createNode(model, "the driver", "has a valid license", NodeType.AND);
+		CEGNode node3 = createNode(model, "driving", "is allowed", NodeType.AND);
+		createConnection(model, node1, node3, false);
+		createConnection(model, node2, node3, false);
+		JSONArray generated = generateCEGWithModelRequirementsText(text);
+		checkResultingModel(generated, model);
+	}
 
 }

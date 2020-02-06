@@ -38,7 +38,7 @@ public interface AdministrationPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://specmate.com/20190902/model/administration";
+	String eNS_URI = "http://specmate.com/20200130/model/administration";
 
 	/**
 	 * The package namespace name.

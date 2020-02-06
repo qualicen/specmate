@@ -12,7 +12,6 @@ import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.api.IRequirementsSource;
 import com.specmate.model.base.IContainer;
 import com.specmate.model.requirements.Requirement;
-import com.specmate.model.testspecification.TestProcedure;
 
 /**
  * A project definition for the test-data that authorizes every user.
@@ -72,13 +71,11 @@ public class DummyProject implements IProject {
 
 			@Override
 			public boolean canExportTestProceure() {
-				// TODO Auto-generated method stub
 				return false;
 			}
 
 			@Override
 			public boolean canExportTextSpecification() {
-				// TODO Auto-generated method stub
 				return false;
 			}
 		};

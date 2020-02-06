@@ -14,9 +14,6 @@ public class JiraUtil {
 
 	public static JiraRestClient createJiraRESTClient(String url, String username, String password)
 			throws URISyntaxException {
-		// curl -s -H "Authorization: Basic ***REMOVED***"
-		// https://***REMOVED***/rest/api/2/issuetype | jq '.[] | select(.name ==
-		// "Test") | .id'
 		return new AsynchronousJiraRestClientFactory().createWithAuthenticationHandler(new URI(url),
 				new BasicAuthHandler(username, password));
 	}

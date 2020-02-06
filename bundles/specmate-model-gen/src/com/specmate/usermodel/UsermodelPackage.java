@@ -38,7 +38,7 @@ public interface UsermodelPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://specmate.com/20190902/model/user";
+	String eNS_URI = "http://specmate.com/20200130/model/user";
 
 	/**
 	 * The package namespace name.

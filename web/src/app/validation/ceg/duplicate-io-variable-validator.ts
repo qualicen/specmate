@@ -31,17 +31,17 @@ export class DuplicateIOVariableValidator extends ElementValidatorBase<CEGModel>
                 type = 'output';
             }
 
-            if (typeMap[node.variable.trim()] === undefined) {
-                typeMap[node.variable.trim()] = [];
+            if (typeMap[node.variable.trim().toLowerCase()] === undefined) {
+                typeMap[node.variable.trim().toLowerCase()] = [];
             }
-            if (typeMap[node.variable.trim()].indexOf(type) < 0) {
-                typeMap[node.variable.trim()].push(type);
+            if (typeMap[node.variable.trim().toLowerCase()].indexOf(type) < 0) {
+                typeMap[node.variable.trim().toLowerCase()].push(type);
             }
 
-            if (nodeMap[node.variable.trim()] === undefined) {
-                nodeMap[node.variable.trim()] = [];
+            if (nodeMap[node.variable.trim().toLowerCase()] === undefined) {
+                nodeMap[node.variable.trim().toLowerCase()] = [];
             }
-            nodeMap[node.variable.trim()].push(node);
+            nodeMap[node.variable.trim().toLowerCase()].push(node);
         }
 
         for (const variable in typeMap) {

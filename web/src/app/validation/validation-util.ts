@@ -21,6 +21,6 @@ export class ValidationUtil {
     }
 
     public static compareStrTrimed(s1: string, s2: string): boolean {
-      return s1.trim() === s2.trim();
+      return s1.trim().toLowerCase() === s2.trim().toLowerCase();
     }
 }

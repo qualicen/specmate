@@ -4,7 +4,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.Optional;
 
+import com.specmate.model.base.IModelConnection;
 import com.specmate.model.requirements.CEGConnection;
 import com.specmate.model.requirements.CEGModel;
 import com.specmate.model.requirements.CEGNode;
@@ -14,9 +16,9 @@ import com.specmate.model.support.util.SpecmateEcoreUtil;
 
 /**
  * Class creates Node and Edges for a CEG-Graphs
- * 
+ *
  * @author Andreas Wehrle
- * 
+ *
  */
 public class CEGCreation {
 
@@ -24,7 +26,7 @@ public class CEGCreation {
 
 	/**
 	 * Create a new node and add it to the CEGModel
-	 * 
+	 *
 	 * @param model
 	 * @param variable
 	 * @param condition
@@ -48,7 +50,7 @@ public class CEGCreation {
 
 	/**
 	 * Create a new connection to the CEGModel
-	 * 
+	 *
 	 * @param model
 	 * @param nodeFrom
 	 * @param nodeTo
@@ -56,6 +58,11 @@ public class CEGCreation {
 	 * @return
 	 */
 	public CEGConnection createConnection(CEGModel model, CEGNode nodeFrom, CEGNode nodeTo, boolean negate) {
+		Optional<IModelConnection> optCon = nodeFrom.getOutgoingConnections().stream()
+				.filter(conn -> conn.getTarget() == nodeTo).findFirst();
+		if (optCon.isPresent()) {
+			return (CEGConnection) optCon.get();
+		}
 		CEGConnection con = RequirementsFactory.eINSTANCE.createCEGConnection();
 		con.setId(SpecmateEcoreUtil.getIdForChild());
 		con.setSource(nodeFrom);
@@ -69,7 +76,7 @@ public class CEGCreation {
 	/**
 	 * Create a new node it it does not exist in the list. Otherwise return the
 	 * existing node. Nodes are only compared by variable, condition and type
-	 * 
+	 *
 	 * @param list
 	 * @param model
 	 * @param variable

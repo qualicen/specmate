@@ -47,6 +47,7 @@ def rule Condition2_1 {
 	[Cause] - advmod -> RB: 'then'
 }
 
+
 def rule Condition2_2 {
 	[Cause] - dobj -> [Effect]
 	[Cause] - advmod -> WRB:'when'
@@ -57,6 +58,11 @@ def rule Condition2_3 {
 	[Cause] - advcl -> [Effect]
 	[Cause] - advmod -> RB: 'then'
 	[Cause] - advmod -> WRB:'when'
+}
+
+def rule Condition2_4 {
+	[Cause] - ccomp -> [Effect]
+	[Cause] - mark -> IN:'If'
 }
 
 // When the tool detects an error, the tool beeps.

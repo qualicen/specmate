@@ -16,6 +16,8 @@ import com.specmate.auth.config.SessionServiceConfig;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.config.api.IConfigService;
+import com.specmate.metrics.IGauge;
+import com.specmate.metrics.IMetricsService;
 import com.specmate.model.administration.ErrorCode;
 import com.specmate.model.support.util.SpecmateEcoreUtil;
 import com.specmate.persistency.IChange;
@@ -25,8 +27,6 @@ import com.specmate.persistency.IView;
 import com.specmate.usermodel.AccessRights;
 import com.specmate.usermodel.UserSession;
 import com.specmate.usermodel.UsermodelFactory;
-import com.specmate.metrics.IGauge;
-import com.specmate.metrics.IMetricsService;
 
 @Component(immediate = true, service = ISessionService.class, configurationPid = SessionServiceConfig.PID, configurationPolicy = ConfigurationPolicy.REQUIRE, property = "impl=persistent")
 public class PersistentSessionService extends BaseSessionService {
@@ -45,7 +45,7 @@ public class PersistentSessionService extends BaseSessionService {
 		// Sessions do not adhere to the constraints of general specmate objects
 		sessionTransaction.enableValidators(false);
 		sessionView = persistencyService.openView();
-		this.numberOfUsers = metricsService.createGauge("Logged_in_users", "The number of users currently logged in.");
+		numberOfUsers = metricsService.createGauge("Logged_in_users", "The number of users currently logged in.");
 	}
 
 	@Deactivate
@@ -60,14 +60,14 @@ public class PersistentSessionService extends BaseSessionService {
 	}
 
 	@Override
-	public UserSession create(AccessRights source, AccessRights target, String userName, String projectName)
-			throws SpecmateException {
-		
-		if(isNewUser(userName)) {
-			this.numberOfUsers.inc();
+	public UserSession create(AccessRights source, AccessRights target, String userName, String password,
+			String projectName) throws SpecmateException {
+
+		if (isNewUser(userName)) {
+			numberOfUsers.inc();
 		}
 
-		UserSession session = createSession(source, target, userName, sanitize(projectName));
+		UserSession session = createSession(source, target, userName, password, sanitize(projectName));
 
 		sessionTransaction.doAndCommit(new IChange<Object>() {
 			@Override
@@ -76,8 +76,6 @@ public class PersistentSessionService extends BaseSessionService {
 				return null;
 			}
 		});
-		
-		
 
 		return session;
 	}
@@ -130,10 +128,10 @@ public class PersistentSessionService extends BaseSessionService {
 				return null;
 			}
 		});
-		if(isNewUser(session.getUserName())) {
-			this.numberOfUsers.dec();	
+		if (isNewUser(session.getUserName())) {
+			numberOfUsers.dec();
 		}
-		
+
 	}
 
 	@Override
@@ -154,7 +152,7 @@ public class PersistentSessionService extends BaseSessionService {
 		}
 
 	}
-	
+
 	private boolean isNewUser(String userName) {
 		String query = "UserSession.allInstances()->select(u | u.userName='" + userName + "')";
 
@@ -185,7 +183,7 @@ public class PersistentSessionService extends BaseSessionService {
 	public void setConfigService(IConfigService configService) {
 		this.configService = configService;
 	}
-	
+
 	@Reference
 	public void setMetricsService(IMetricsService metricsService) {
 		this.metricsService = metricsService;

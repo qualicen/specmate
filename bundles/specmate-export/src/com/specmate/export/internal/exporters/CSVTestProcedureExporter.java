@@ -9,6 +9,7 @@ import java.util.StringJoiner;
 
 import org.osgi.service.component.annotations.Component;
 
+import com.specmate.connectors.api.IProject;
 import com.specmate.export.api.ITestExporter;
 import com.specmate.model.support.util.SpecmateEcoreUtil;
 import com.specmate.model.testspecification.TestProcedure;
@@ -50,6 +51,16 @@ public class CSVTestProcedureExporter implements ITestExporter {
 		skelleton.setCode(joiner.toString());
 		return Optional.of(skelleton);
 
+	}
+
+	@Override
+	public IProject getProject() {
+		return null;
+	}
+
+	@Override
+	public boolean isAuthorizedToExport(String username, String password) {
+		return true;
 	}
 
 }

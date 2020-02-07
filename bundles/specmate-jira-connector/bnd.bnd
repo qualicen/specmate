@@ -39,7 +39,8 @@
 	javax.ws.rs-api,\
 	osgi.cmpn,\
 	osgi.core,\
-	org.apache.commons.codec
+	org.apache.commons.codec,\
+	specmate-export;version=latest
 
 Private-Package: \
 	com.specmate.connectors.jira.internal.services,\

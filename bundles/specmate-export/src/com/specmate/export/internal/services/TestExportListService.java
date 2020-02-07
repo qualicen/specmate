@@ -5,7 +5,6 @@ import java.util.List;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response.Status;
 
-import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -22,11 +21,6 @@ public class TestExportListService extends RestServiceBase {
 
 	private ExportManagerService exportManager;
 
-	@Activate
-	public void activate() {
-		System.out.println("activated");
-	}
-
 	@Override
 	public String getServiceName() {
 		return "exporterlist";
@@ -35,7 +29,7 @@ public class TestExportListService extends RestServiceBase {
 	@Override
 	public RestResult<?> get(Object object, MultivaluedMap<String, String> queryParams, String token)
 			throws SpecmateException {
-		return new RestResult<List<String>>(Status.OK, exportManager.getExporterList(object));
+		return new RestResult<List<String>>(Status.OK, exportManager.getExporters(object, token));
 	}
 
 	@Override

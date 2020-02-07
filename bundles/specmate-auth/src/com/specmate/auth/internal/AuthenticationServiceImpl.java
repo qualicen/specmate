@@ -38,7 +38,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 		AccessRights targetRights = retrieveTargetAccessRights(project, username, password);
 
 		try {
-			return sessionService.create(AccessRights.ALL, targetRights, username, projectname);
+			return sessionService.create(AccessRights.ALL, targetRights, username, password, projectname);
 		} catch (SpecmateException e) {
 			// Something went wrong when creating the session. We act as if the
 			// Authorization failed

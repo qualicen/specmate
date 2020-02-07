@@ -23,8 +23,9 @@ public class InMemorySessionService extends BaseSessionService {
 	private Map<String, UserSession> sessions = new HashMap<>();
 
 	@Override
-	public UserSession create(AccessRights source, AccessRights target, String userName, String projectName) {
-		UserSession session = createSession(source, target, userName, sanitize(projectName));
+	public UserSession create(AccessRights source, AccessRights target, String userName, String password,
+			String projectName) {
+		UserSession session = createSession(source, target, userName, password, sanitize(projectName));
 		String token = session.getId();
 		sessions.put(token, session);
 		return session;

@@ -14,7 +14,9 @@
 	javax.ws.rs-api,\
 	specmate-rest;version=latest,\
 	org.apache.commons.lang3,\
-	org.apache.servicemix.bundles.junit
+	org.apache.servicemix.bundles.junit,\
+	specmate-auth-api;version=latest,\
+	specmate-connectors;version=latest
 -privatepackage: \
 	com.specmate.export.internal.exporters,\
 	com.specmate.export.internal.services

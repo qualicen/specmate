@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.StreamSupport;
 
-import org.eclipse.emf.ecore.EObject;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
@@ -23,16 +23,18 @@ import com.atlassian.jira.rest.client.api.domain.input.IssueInputBuilder;
 import com.atlassian.util.concurrent.Promise;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
-import com.specmate.connectors.api.IExportService;
+import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.jira.config.JiraConnectorConfig;
+import com.specmate.export.api.ITestExporter;
 import com.specmate.model.administration.ErrorCode;
 import com.specmate.model.support.util.SpecmateEcoreUtil;
 import com.specmate.model.testspecification.TestProcedure;
 import com.specmate.model.testspecification.TestSpecification;
+import com.specmate.model.testspecification.TestSpecificationSkeleton;
 import com.specmate.model.testspecification.TestStep;
 
-@Component(immediate = true, service = IExportService.class, configurationPid = JiraConnectorConfig.EXPORTER_PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
-public class JiraExportService implements IExportService {
+@Component(immediate = true, service = ITestExporter.class, configurationPid = JiraConnectorConfig.EXPORTER_PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
+public class JiraExportService implements ITestExporter {
 
 	private LogService logService;
 	private IssueType testType;
@@ -40,6 +42,7 @@ public class JiraExportService implements IExportService {
 	private String projectName;
 	private String username;
 	private String password;
+	private IProject project;
 
 	@Activate
 	public void activate(Map<String, Object> properties) throws SpecmateException {
@@ -74,31 +77,39 @@ public class JiraExportService implements IExportService {
 	}
 
 	@Override
-	public void export(EObject exportTarget) throws SpecmateException {
+	public String getLanguage() {
+		return "Atlassian JIRA";
+	}
+
+	@Override
+	public boolean canExportTestSpecification() {
+		return true;
+	}
+
+	@Override
+	public boolean canExportTestProcedure() {
+		return true;
+	}
+
+	@Override
+	public Optional<TestSpecificationSkeleton> export(Object exportTarget) throws SpecmateException {
 		if (exportTarget instanceof TestProcedure) {
-			exportTestProcedure((TestProcedure) exportTarget);
+			return exportTestProcedure((TestProcedure) exportTarget);
 		}
 		if (exportTarget instanceof TestSpecification) {
-			exportTestSpecification((TestSpecification) exportTarget);
+			return exportTestSpecification((TestSpecification) exportTarget);
 		}
+		throw new SpecmateInternalException(ErrorCode.JIRA,
+				"Cannot export object of type " + exportTarget.getClass().getName());
 	}
 
-	@Override
-	public boolean canExportTestProceure() {
-		return true;
-	}
-
-	@Override
-	public boolean canExportTextSpecification() {
-		return true;
-	}
-
-	private void exportTestSpecification(TestSpecification exportTarget) {
+	private Optional<TestSpecificationSkeleton> exportTestSpecification(TestSpecification exportTarget) {
 		// not implemented yet
-
+		return Optional.empty();
 	}
 
-	public void exportTestProcedure(TestProcedure testProcedure) throws SpecmateException {
+	public Optional<TestSpecificationSkeleton> exportTestProcedure(TestProcedure testProcedure)
+			throws SpecmateException {
 		JiraRestClient jiraClient = null;
 		try {
 			try {
@@ -127,6 +138,7 @@ public class JiraExportService implements IExportService {
 			} catch (Exception e) {
 				throw new SpecmateInternalException(ErrorCode.JIRA, e);
 			}
+			return Optional.empty();
 		} finally {
 			if (jiraClient != null) {
 				try {
@@ -136,6 +148,7 @@ public class JiraExportService implements IExportService {
 				}
 			}
 		}
+
 	}
 
 	@Override
@@ -151,6 +164,11 @@ public class JiraExportService implements IExportService {
 	@Reference
 	public void setLogService(LogService logService) {
 		this.logService = logService;
+	}
+
+	@Override
+	public IProject getProject() {
+		return project;
 	}
 
 }

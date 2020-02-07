@@ -1,6 +1,6 @@
 {
   "name": "specmate",
-  "version": "v0.4.0-rc-4",
+  "version": "v0.4.0-rc-5",
   "description": "Specmate for co-engineering requirements and tests",
   "scripts": {
     "extract": "ngx-translate-extract -i ./src -o ./src/assets/i18n/de.json ./src/assets/i18n/gb.json -m ngx_trans_extr --sort --format namespaced-json",

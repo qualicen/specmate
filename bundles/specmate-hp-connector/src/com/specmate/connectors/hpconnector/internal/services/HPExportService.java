@@ -2,6 +2,7 @@ package com.specmate.connectors.hpconnector.internal.services;
 
 import java.util.Map;
 
+import org.eclipse.emf.ecore.EObject;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
@@ -29,9 +30,22 @@ public class HPExportService implements IExportService {
 	}
 
 	@Override
-	public void export(TestProcedure testProcedure) throws SpecmateException {
-		this.hpConnection.exportTestProcedure(testProcedure);
+	public void export(EObject target) throws SpecmateException {
+		if(target instanceof TestProcedure) {
+			this.hpConnection.exportTestProcedure((TestProcedure)target);
+		}
 	}
+
+	@Override
+	public boolean canExportTestProceure() {
+		return true;
+	}
+
+	@Override
+	public boolean canExportTextSpecification() {
+		return false;
+	}
+
 
 	@Override
 	public boolean isAuthorizedToExport(String username, String password) {

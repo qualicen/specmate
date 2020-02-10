@@ -16,7 +16,8 @@ import com.specmate.config.api.IConfigService;
 @Component(immediate = true)
 public class JiraConnectorConfig {
 
-	public static final String PID = "com.specmate.connectors.jira.JiraConnector";
+	public static final String CONNECTOR_PID = "com.specmate.connectors.jira.JiraConnector";
+	public static final String EXPORTER_PID = "com.specmate.connectors.jira.JiraExporter";
 	public static final String KEY_JIRA_URL = "jira.url";
 	public static final String KEY_JIRA_PROJECT = "jira.project";
 	public static final String KEY_JIRA_USERNAME = "jira.username";
@@ -27,7 +28,7 @@ public class JiraConnectorConfig {
 
 	/**
 	 * Configures the Jira Connector.
-	 * 
+	 *
 	 * @throws SpecmateException
 	 */
 	@Activate
@@ -46,7 +47,7 @@ public class JiraConnectorConfig {
 			logService.log(LogService.LOG_DEBUG,
 					"Configuring Jira Connector with:\n" + OSGiUtil.configDictionaryToString(properties));
 
-			OSGiUtil.configureService(configurationAdmin, PID, properties);
+			OSGiUtil.configureService(configurationAdmin, CONNECTOR_PID, properties);
 		}
 
 	}

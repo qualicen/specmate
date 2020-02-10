@@ -7,6 +7,7 @@ import { SpecmateDataService } from '../../../../data/modules/data-service/servi
 import { ValidationService } from '../../../../forms/modules/validation/services/validation.service';
 import { NavigatorService } from '../../../../navigation/modules/navigator/services/navigator.service';
 import { UndoService } from '../services/undo.service';
+import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
 
 @Component({
     moduleId: module.id.toString(),
@@ -26,14 +27,18 @@ export class CommonControls {
             private validator: ValidationService,
             private navigator: NavigatorService,
             private translate: TranslateService,
-            private undoService: UndoService) {
+            private undoService: UndoService,
+            private modal: ConfirmationModal) {
     }
 
-    public save(): void {
+    public async save(): Promise<void> {
         if (this.isSaveEnabled) {
-            this.validator.validateCurrent();
-            if (this.isSaveEnabled) {
+            await this.validator.validateCurrent();
+            console.log(this.validator.isSavingEnabled());
+            if (this.isSaveEnabled && this.validator.isSavingEnabled()) {
                 this.dataService.commit(this.translate.instant('save'));
+            } else {
+                this.modal.openOk(this.translate.instant('saveError.title'), this.translate.instant('saveError.message'));
             }
         }
     }
@@ -68,9 +73,7 @@ export class CommonControls {
     }
 
     public get isSaveEnabled(): boolean {
-        const hasSaveDisablingError =
-            this.validator.currentSeverities.find(severity => severity === ValidationErrorSeverity.SAVE_DISABLED) !== undefined;
-        return this.isEnabled && this.hasCommits && !hasSaveDisablingError;
+        return this.isEnabled && this.hasCommits;
     }
 
     public get isUndoEnabled(): boolean {

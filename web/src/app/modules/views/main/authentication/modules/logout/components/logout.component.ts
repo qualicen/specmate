@@ -20,7 +20,7 @@ export class Logout {
 
         if (this.dataService.hasCommits) {
             try {
-                await this.modal.open(this.translate.instant('discardUnsavedChangesConfirmation'));
+                await this.modal.openSave(this.translate.instant('discardUnsavedChangesConfirmation'));
                 this.auth.deauthenticate();
             } catch (e) { }
         } else {

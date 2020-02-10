@@ -1,7 +1,8 @@
-<button title="{{'validate' | translate}}" [hidden]="!isValidationButtonVisible" (click)="cancelEvent($event); validate()" class="btn btn-sm btn-secondary brighter-secondary-outline">
+<button title="{{'validate' | translate}}" [hidden]="!isValidationButtonVisible"
+    (click)="cancelEvent($event); validate()" class="btn btn-sm expand btn-secondary brighter-secondary-outline">
     <span class="fa-stack" style="font-size: 0.5em">
         <i class="fa fa-file-o fa-stack-2x fa-lg" aria-hidden="true"></i>
         <i class="fa fa-check fa-stack-1x" style="font-size: 1.25em" aria-hidden="true"></i>
     </span>
-  <span *ngIf="textEnabled">&nbsp;{{'validate' | translate}}</span>
+    <span *ngIf="textEnabled">&nbsp;{{'validate' | translate}}</span>
 </button>

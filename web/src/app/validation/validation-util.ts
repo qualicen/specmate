@@ -21,6 +21,12 @@ export class ValidationUtil {
     }
 
     public static compareStrTrimed(s1: string, s2: string): boolean {
-      return s1.trim().toLowerCase() === s2.trim().toLowerCase();
+        if (s1 === undefined && s2 === undefined || s1 === null && s2 === null) {
+            return true;
+        }
+        if (s1 !== undefined && s2 !== undefined && s1 !== null && s2 !== null) {
+            return s1.trim().toLowerCase() === s2.trim().toLowerCase();
+        }
+        return false;
     }
 }

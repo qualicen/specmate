@@ -32,7 +32,7 @@ public class CSVTestProcedureExporter implements ITestExporter {
 
 	@Override
 	public String getLanguage() {
-		return "csv";
+		return "CSV";
 	}
 
 	@Override

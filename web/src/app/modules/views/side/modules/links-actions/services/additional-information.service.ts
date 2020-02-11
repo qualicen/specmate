@@ -128,14 +128,6 @@ export class AdditionalInformationService {
         return Type.is(this.element, Requirement);
     }
 
-    public get canExportTestprocedure(): boolean {
-        return Type.is(this.element, TestProcedure);
-    }
-
-    public get canExportTestspecification(): boolean {
-        return Type.is(this.element, TestSpecification);
-    }
-
     public get canGenerateCEGModel(): boolean {
         return Type.is(this.element, CEGModel);
     }

@@ -55,14 +55,6 @@ export class LinksActions {
         return this.additionalInformationService.canAddTestSpecifications;
     }
 
-    public get canExportTestprocedure(): boolean {
-        return this.additionalInformationService.canExportTestprocedure;
-    }
-
-    public get canExportTestspecification(): boolean {
-        return this.additionalInformationService.canExportTestspecification;
-    }
-
     public get exports(): string[] {
         return this.additionalInformationService.exports;
     }

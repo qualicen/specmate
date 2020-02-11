@@ -1,12 +1,10 @@
 package com.specmate.auth.internal;
 
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Reference;
 
 import com.specmate.auth.api.IAuthenticationService;
 import com.specmate.auth.api.ISessionService;
-import com.specmate.auth.config.AuthenticationServiceConfig;
 import com.specmate.common.exception.SpecmateAuthorizationException;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.connectors.api.IProject;
@@ -19,7 +17,7 @@ import com.specmate.usermodel.UserSession;
  * Authentication design based on this implementation:
  * https://stackoverflow.com/a/26778123
  */
-@Component(immediate = true, service = IAuthenticationService.class, configurationPid = AuthenticationServiceConfig.PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
+@Component(immediate = true, service = IAuthenticationService.class)
 public class AuthenticationServiceImpl implements IAuthenticationService {
 	private ISessionService sessionService;
 	private IProjectService projectService;

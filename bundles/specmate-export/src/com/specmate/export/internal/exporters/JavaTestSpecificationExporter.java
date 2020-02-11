@@ -17,7 +17,7 @@ import com.specmate.model.testspecification.TestSpecification;
 public class JavaTestSpecificationExporter extends TestSpecificationExporterBase {
 
 	public JavaTestSpecificationExporter() {
-		super("java");
+		super("Java");
 	}
 
 	@Override

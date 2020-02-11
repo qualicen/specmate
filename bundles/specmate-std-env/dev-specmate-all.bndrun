@@ -226,7 +226,10 @@
 	specmate-xtext;version=snapshot,\
 	specmate-objectif;version=snapshot,\
 	jaxb-api;version='[2.3.1,2.3.2)',\
-	specmate-export;version=snapshot
+	specmate-export;version=snapshot,\
+	specmate-connectors-api;version=snapshot,\
+	specmate-export-api;version=snapshot,\
+	org.apache.commons.collections4;version='[4.0.0,4.0.1)'
 
 -runproperties: \
 	jetty.http.port=8080,\

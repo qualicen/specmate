@@ -19,7 +19,7 @@ import com.specmate.model.testspecification.TestSpecification;
 public class CSVTestSpecificationExporter extends TestSpecificationExporterBase {
 
 	public CSVTestSpecificationExporter() {
-		super("csv");
+		super("CSV");
 	}
 
 	@Override

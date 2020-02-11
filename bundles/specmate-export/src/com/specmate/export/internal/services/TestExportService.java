@@ -51,7 +51,7 @@ public class TestExportService extends RestServiceBase {
 		if (language == null) {
 			throw new SpecmateValidationException("Language for export not specified.");
 		}
-		Optional<TestSpecificationSkeleton> result = exportManager.export(object, language);
+		Optional<TestSpecificationSkeleton> result = exportManager.export(object, language, token);
 		exportCounter.inc();
 		if (result.isPresent()) {
 			return new RestResult<TestSpecificationSkeleton>(Status.OK, result.get());

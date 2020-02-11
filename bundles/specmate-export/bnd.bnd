@@ -17,7 +17,8 @@
 	org.apache.servicemix.bundles.junit,\
 	specmate-auth-api;version=latest,\
 	specmate-connectors-api;version=latest,\
-	specmate-export-api;version=latest
+	specmate-export-api;version=latest,\
+	org.apache.commons.collections4
 
 -privatepackage: \
 	com.specmate.export.internal.exporters,\

@@ -12,7 +12,6 @@ import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 
 import com.specmate.auth.api.ISessionService;
-import com.specmate.auth.config.SessionServiceConfig;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.config.api.IConfigService;
@@ -28,8 +27,12 @@ import com.specmate.usermodel.AccessRights;
 import com.specmate.usermodel.UserSession;
 import com.specmate.usermodel.UsermodelFactory;
 
-@Component(immediate = true, service = ISessionService.class, configurationPid = SessionServiceConfig.PID, configurationPolicy = ConfigurationPolicy.REQUIRE, property = "impl=persistent")
+@Component(immediate = true, service = ISessionService.class, configurationPid = PersistentSessionService.PID, configurationPolicy = ConfigurationPolicy.REQUIRE, property = "impl=persistent")
 public class PersistentSessionService extends BaseSessionService {
+
+	/** The PID of the session service */
+	public static final String PID = "com.specmate.auth.PersistentSessionService";
+
 	private static final long SESSION_REFRESH_LIMIT = 1000L * 60; // 60 seconds
 	private IPersistencyService persistencyService;
 	private ITransaction sessionTransaction;

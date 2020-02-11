@@ -17,7 +17,7 @@ import com.specmate.model.testspecification.TestSpecification;
 public class JavascriptTestSpecificationExporter extends TestSpecificationExporterBase {
 
 	public JavascriptTestSpecificationExporter() {
-		super("javascript");
+		super("Javascript");
 	}
 
 	@Override

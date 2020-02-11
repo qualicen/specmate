@@ -68,9 +68,19 @@ public class JavaTestSpecificationExporter extends TestSpecificationExporterBase
 	}
 
 	@Override
-	protected void generateTestCaseParameterAssignments(StringBuilder sb, List<ParameterAssignment> assignments, List<TestParameter> parameters) {
+	protected void generateTestCaseParameterAssignments(StringBuilder sb, List<ParameterAssignment> assignments,
+			List<TestParameter> parameters) {
 		for (ParameterAssignment pAssignment : assignments) {
 			appendParameterValue(sb, pAssignment);
 		}
+	}
+
+	@Override
+	public String getProjectName() {
+		return null;
+	}
+
+	@Override
+	public void setProjectName(String project) {
 	}
 }

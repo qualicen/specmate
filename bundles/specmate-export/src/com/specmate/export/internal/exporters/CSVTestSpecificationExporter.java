@@ -83,4 +83,14 @@ public class CSVTestSpecificationExporter extends TestSpecificationExporterBase 
 		return escapeCharacter;
 	}
 
+	@Override
+	public String getProjectName() {
+		return null;
+	}
+
+	@Override
+	public void setProjectName(String project) {
+
+	}
+
 }

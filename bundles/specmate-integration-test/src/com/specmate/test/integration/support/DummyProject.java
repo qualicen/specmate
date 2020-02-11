@@ -2,16 +2,15 @@ package com.specmate.test.integration.support;
 
 import java.util.Collection;
 import java.util.List;
-
-import org.eclipse.emf.ecore.EObject;
+import java.util.Optional;
 
 import com.specmate.common.exception.SpecmateException;
-import com.specmate.connectors.api.IExportService;
 import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.api.IRequirementsSource;
+import com.specmate.export.api.TestExporterBase;
 import com.specmate.model.base.IContainer;
 import com.specmate.model.requirements.Requirement;
-import com.specmate.model.testspecification.TestProcedure;
+import com.specmate.model.testspecification.TestSpecificationSkeleton;
 
 public class DummyProject implements IProject {
 	private String projectId;
@@ -22,7 +21,7 @@ public class DummyProject implements IProject {
 
 	@Override
 	public String getID() {
-		return this.projectId;
+		return projectId;
 	}
 
 	@Override
@@ -52,26 +51,26 @@ public class DummyProject implements IProject {
 	}
 
 	@Override
-	public IExportService getExporter() {
-		return new IExportService() {
+	public TestExporterBase getExporter() {
+		return new TestExporterBase("dummy") {
+
+			@Override
+			public boolean canExportTestProcedure() {
+				return false;
+			}
+
+			@Override
+			public boolean canExportTestSpecification() {
+				return false;
+			}
+
+			@Override
+			public Optional<TestSpecificationSkeleton> export(Object object) throws SpecmateException {
+				return null;
+			}
 
 			@Override
 			public boolean isAuthorizedToExport(String username, String password) {
-				return false;
-			}
-
-			@Override
-			public void export(EObject target) throws SpecmateException {
-				// Nothing to do
-			}
-
-			@Override
-			public boolean canExportTestProceure() {
-				return false;
-			}
-
-			@Override
-			public boolean canExportTextSpecification() {
 				return false;
 			}
 		};

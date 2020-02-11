@@ -23,8 +23,8 @@ import com.google.common.io.PatternFilenameFilter;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.connectors.api.ConnectorUtil;
+import com.specmate.connectors.api.IProjectConfigService;
 import com.specmate.connectors.api.IRequirementsSource;
-import com.specmate.connectors.config.ProjectConfigService;
 import com.specmate.connectors.fileconnector.internal.config.FileConnectorConfig;
 import com.specmate.model.administration.ErrorCode;
 import com.specmate.model.base.BaseFactory;
@@ -58,14 +58,14 @@ public class FileConnector implements IRequirementsSource {
 	@Activate
 	public void activate(Map<String, Object> properties) throws SpecmateException {
 		validateConfig(properties);
-		this.folder = (String) properties.get(FileConnectorConfig.KEY_FOLDER);
-		this.user = (String) properties.get(FileConnectorConfig.KEY_USER);
-		this.password = (String) properties.get(FileConnectorConfig.KEY_PASSWORD);
-		this.id = (String) properties.get(ProjectConfigService.KEY_CONNECTOR_ID);
-		this.defaultFolder = BaseFactory.eINSTANCE.createFolder();
-		this.defaultFolder.setId("default");
-		this.defaultFolder.setName("default");
-		this.logService.log(LogService.LOG_INFO, "Initialized file connector with " + properties.toString() + ".");
+		folder = (String) properties.get(FileConnectorConfig.KEY_FOLDER);
+		user = (String) properties.get(FileConnectorConfig.KEY_USER);
+		password = (String) properties.get(FileConnectorConfig.KEY_PASSWORD);
+		id = (String) properties.get(IProjectConfigService.KEY_CONNECTOR_ID);
+		defaultFolder = BaseFactory.eINSTANCE.createFolder();
+		defaultFolder.setId("default");
+		defaultFolder.setName("default");
+		logService.log(LogService.LOG_INFO, "Initialized file connector with " + properties.toString() + ".");
 	}
 
 	private void validateConfig(Map<String, Object> properties) throws SpecmateException {
@@ -158,7 +158,7 @@ public class FileConnector implements IRequirementsSource {
 
 	@Override
 	public String getId() {
-		return this.id;
+		return id;
 	}
 
 	@Override
@@ -175,7 +175,7 @@ public class FileConnector implements IRequirementsSource {
 		if (user == null) {
 			return false;
 		} else {
-			return username.equals(this.user) && password.equals(this.password);
+			return username.equals(user) && password.equals(this.password);
 		}
 	}
 

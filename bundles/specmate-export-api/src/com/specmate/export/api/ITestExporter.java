@@ -3,7 +3,6 @@ package com.specmate.export.api;
 import java.util.Optional;
 
 import com.specmate.common.exception.SpecmateException;
-import com.specmate.connectors.api.IProject;
 import com.specmate.model.testspecification.TestSpecificationSkeleton;
 
 public interface ITestExporter {
@@ -24,8 +23,10 @@ public interface ITestExporter {
 	/** Signals that this exporter can export test procedures */
 	boolean canExportTestProcedure();
 
-	IProject getProject();
-
 	boolean isAuthorizedToExport(String username, String password);
+
+	void setProjectName(String project);
+
+	String getProjectName();
 
 }

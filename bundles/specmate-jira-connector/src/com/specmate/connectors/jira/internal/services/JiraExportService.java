@@ -23,9 +23,9 @@ import com.atlassian.jira.rest.client.api.domain.input.IssueInputBuilder;
 import com.atlassian.util.concurrent.Promise;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
-import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.jira.config.JiraConnectorConfig;
 import com.specmate.export.api.ITestExporter;
+import com.specmate.export.api.TestExporterBase;
 import com.specmate.model.administration.ErrorCode;
 import com.specmate.model.support.util.SpecmateEcoreUtil;
 import com.specmate.model.testspecification.TestProcedure;
@@ -34,7 +34,7 @@ import com.specmate.model.testspecification.TestSpecificationSkeleton;
 import com.specmate.model.testspecification.TestStep;
 
 @Component(immediate = true, service = ITestExporter.class, configurationPid = JiraConnectorConfig.EXPORTER_PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
-public class JiraExportService implements ITestExporter {
+public class JiraExportService extends TestExporterBase {
 
 	private LogService logService;
 	private IssueType testType;
@@ -42,7 +42,10 @@ public class JiraExportService implements ITestExporter {
 	private String projectName;
 	private String username;
 	private String password;
-	private IProject project;
+
+	public JiraExportService() {
+		super("Atlassian JIRA");
+	}
 
 	@Activate
 	public void activate(Map<String, Object> properties) throws SpecmateException {
@@ -74,11 +77,6 @@ public class JiraExportService implements ITestExporter {
 				}
 			}
 		}
-	}
-
-	@Override
-	public String getLanguage() {
-		return "Atlassian JIRA";
 	}
 
 	@Override
@@ -148,7 +146,6 @@ public class JiraExportService implements ITestExporter {
 				}
 			}
 		}
-
 	}
 
 	@Override
@@ -164,11 +161,6 @@ public class JiraExportService implements ITestExporter {
 	@Reference
 	public void setLogService(LogService logService) {
 		this.logService = logService;
-	}
-
-	@Override
-	public IProject getProject() {
-		return project;
 	}
 
 }

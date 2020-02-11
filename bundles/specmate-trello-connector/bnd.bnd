@@ -1,5 +1,4 @@
 -buildpath: \
-	specmate-connectors;version=latest,\
 	specmate-model-gen;version=latest,\
 	specmate-common;version=latest,\
 	osgi.core,\
@@ -12,4 +11,5 @@
 	org.eclipse.emf.cdo,\
 	org.eclipse.emf.ecore,\
 	org.eclipse.emf.common,\
-	specmate-rest;version=latest
+	specmate-rest;version=latest,\
+	specmate-connectors-api;version=latest

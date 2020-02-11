@@ -47,8 +47,8 @@ public class ExportManagerService {
 			public void sessionCreated(UserSession session, String userName, String password) {
 				List<String> allowedExporters = new ArrayList<String>();
 				for (ITestExporter exporter : testSpecificationExporters.values()) {
-					if (exporter.getProject() == null
-							|| Pattern.matches(session.getAllowedPathPattern(), exporter.getProject().getID())) {
+					if (exporter.getProjectName() == null
+							|| Pattern.matches(session.getAllowedPathPattern(), exporter.getProjectName())) {
 						if (exporter.isAuthorizedToExport(userName, password)) {
 							allowedExporters.add(exporter.getLanguage());
 						}

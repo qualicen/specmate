@@ -35,7 +35,6 @@ Test-Cases: \
 	org.apache.servicemix.bundles.junit,\
 	specmate-persistency-cdo;version=latest,\
 	specmate-config-api;version=latest,\
-	specmate-connectors;version=latest,\
 	specmate-file-connector;version=latest,\
 	specmate-hp-connector;version=latest,\
 	specmate-jettystarter;version=latest,\
@@ -59,7 +58,10 @@ Test-Cases: \
 	specmate-model-generation;version=latest,\
 	specmate-cause-effect-patterns;version=latest,\
 	specmate-objectif;version=latest,\
-	specmate-xtext
+	specmate-xtext,\
+	specmate-connectors-api;version=latest,\
+	specmate-connectors;version=latest,\
+	specmate-export-api
 
 -runee: JavaSE-11
 -runfw: org.eclipse.osgi;version='[3.13.300.v20190218-1622,3.13.300.v20190218-1622]'

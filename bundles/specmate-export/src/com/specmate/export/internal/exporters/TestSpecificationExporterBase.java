@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.specmate.connectors.api.IProject;
 import com.specmate.export.api.ITestExporter;
 import com.specmate.model.support.util.SpecmateEcoreUtil;
 import com.specmate.model.testspecification.ParameterAssignment;
@@ -116,11 +115,6 @@ public abstract class TestSpecificationExporterBase implements ITestExporter {
 	@Override
 	public boolean isAuthorizedToExport(String username, String password) {
 		return true;
-	}
-
-	@Override
-	public IProject getProject() {
-		return null;
 	}
 
 	protected abstract void generateHeader(StringBuilder sb, TestSpecification testSpecification,

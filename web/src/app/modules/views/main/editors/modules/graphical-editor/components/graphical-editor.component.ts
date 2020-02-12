@@ -181,7 +181,7 @@ export class GraphicalEditor {
 
     this.graph.addListener(mx.mxEvent.DOUBLE_CLICK, (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) => {
       const cell = evt.properties.cell as mxgraph.mxCell;
-      if (cell.id.endsWith(VertexProvider.ID_SUFFIX_TYPE)) {
+      if (cell !== undefined && cell.id.endsWith(VertexProvider.ID_SUFFIX_TYPE)) {
         evt.consumed = true;
       }
     });

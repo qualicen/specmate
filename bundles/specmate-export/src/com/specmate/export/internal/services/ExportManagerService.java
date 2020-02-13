@@ -39,8 +39,14 @@ public class ExportManagerService {
 
 	/** Collects all exporters that can export test specifications */
 	private Map<String, ITestExporter> testSpecificationExporters = new HashMap<String, ITestExporter>();
+
+	/** Collects all exporters that can export test specifications */
 	private Map<String, ITestExporter> testProcedureExporters = new HashMap<String, ITestExporter>();
+
+	/** Reference to the logging service */
 	private LogService logService;
+
+	/** Reference to the session service */
 	private ISessionService sessionService;
 
 	@Activate
@@ -52,6 +58,10 @@ public class ExportManagerService {
 				// nothing to do
 			}
 
+			/**
+			 * When a new session is created, checks for which exporters the user is
+			 * authorized and saves this in the session.
+			 */
 			@Override
 			public void sessionCreated(UserSession session, String userName, String password) {
 				Set<String> allowedExporters = new HashSet<String>();
@@ -71,6 +81,15 @@ public class ExportManagerService {
 		});
 	}
 
+	/**
+	 * Exports the given object with an exporter that fits the given language.
+	 *
+	 * @param object    The object to export
+	 * @param language  Specifices the exporter to use
+	 * @param userToken The user token of the user who is requesting the export
+	 * @return
+	 * @throws SpecmateException
+	 */
 	public Optional<TestSpecificationSkeleton> export(Object object, String language, String userToken)
 			throws SpecmateException {
 		List<String> allowedExporters = sessionService.getExporters(userToken);
@@ -90,6 +109,7 @@ public class ExportManagerService {
 		return exporter.export(object);
 	}
 
+	/** Returns a list of exporters for which a user is authorized */
 	public List<String> getExporters(Object object, String userToken) {
 		List<String> allowedExporters;
 		try {

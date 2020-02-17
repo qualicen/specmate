@@ -213,7 +213,7 @@ public class PatternbasedCEGGenerator implements ICEGFromRequirementGenerator {
 		
 		RuleType type 		= cause.getType();
 		RuleType typeChild  = cause.getFirstArgument().getType();
-		if(type.getPriority() > typeChild.getPriority() && typeChild != RuleType.NEGATION) {
+		if(typeChild != null && type.getPriority() > typeChild.getPriority() && typeChild != RuleType.NEGATION) {
 			// Left Swap
 			cause.leftSwap();
 			fixOrderOfOperations(cause.getFirstArgument());

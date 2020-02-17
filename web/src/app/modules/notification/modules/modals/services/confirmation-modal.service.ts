@@ -19,7 +19,8 @@ export class ConfirmationModal {
         if (this.validator.isSavingEnabled()) {
             modalRef.componentInstance.options = Dialogtype.unsavedChangesDialog(message, withCancel);
         } else {
-            modalRef.componentInstance.options = Dialogtype.discardCancelDialog(this.translate.instant('saveError.discard'), withCancel);
+            let displayMessage = this.translate.instant('saveError.discard') + '\n' + this.validator.getValidationResultSaveDisabled();
+            modalRef.componentInstance.options = Dialogtype.discardCancelDialog(displayMessage, withCancel);
         }
         return modalRef.result;
     }
@@ -48,7 +49,8 @@ export class ConfirmationModal {
             if (this.validator.isSavingEnabled()) {
                 return this.openOkCancel('ConfirmationRequired', message || this.translate.instant('confirmSave'));
             } else {
-                return this.openOk('saveError.title', this.translate.instant('saveError.continue'));
+                let displayMessage = this.translate.instant('saveError.continue') + '\n' + this.validator.getValidationResultSaveDisabled();
+                return this.openOk('saveError.title', displayMessage);
             }
         }
         return Promise.resolve();

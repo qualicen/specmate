@@ -206,9 +206,9 @@
 	"save": "Speichern",
 	"saveBeforeTestprocedureExport": "Vor dem Export muss die Testprozedur gespeichert werden. Fortfahren?",
 	"saveError": {
-		"continue": "Fortfahren nicht möglich, da Fehler existieren.",
-		"discard": "Das Speichern ist nicht möglich, da Fehler existieren. Änderungen verwerfen?",
-		"message": "Das Speichern ist nicht möglich, da Fehler existieren.",
+		"continue": "Fortfahren nicht möglich, da die folgende Fehler existieren:",
+		"discard": "Das Speichern ist nicht möglich, da die folgenden Fehler existieren. Änderungen verwerfen?",
+		"message": "Das Speichern ist nicht möglich, da die folgenden Fehler existieren:",
 		"title": "Speichern nicht möglich"
 	},
 	"search": "suchen",

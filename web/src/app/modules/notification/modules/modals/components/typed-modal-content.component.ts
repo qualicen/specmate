@@ -10,7 +10,8 @@ import { Dialogtype } from '../modal-dialog-type';
 @Component({
     moduleId: module.id.toString(),
     selector: 'typed-modal-content',
-    templateUrl: 'typed-modal-content.component.html'
+    templateUrl: 'typed-modal-content.component.html',
+    styleUrls: ['typed-modal-content.component.css']
 })
 
 export class TypedModalContent extends ModalBase {

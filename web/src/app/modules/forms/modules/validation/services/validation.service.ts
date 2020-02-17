@@ -170,4 +170,16 @@ export class ValidationService {
     public isSavingEnabled(): boolean {
         return this.currentSeverities.find(severity => severity === ValidationErrorSeverity.SAVE_DISABLED) === undefined;
     }
+
+    public getValidationResultSaveDisabled(): String {
+        let validation = this.getValidationResults(this.navigator.currentElement)
+            .filter(severity => severity.severity === ValidationErrorSeverity.SAVE_DISABLED);
+        let result = '';
+        validation.forEach(element => {
+            result += element.element.className;
+            result += element.element.name !== '' ? ' - ' + element.element.name : '';
+            result += ': ' + element.message + '\n';
+        });
+        return result;
+    }
 }

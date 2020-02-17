@@ -34,11 +34,11 @@ export class CommonControls {
     public async save(): Promise<void> {
         if (this.isSaveEnabled) {
             await this.validator.validateCurrent();
-            console.log(this.validator.isSavingEnabled());
             if (this.isSaveEnabled && this.validator.isSavingEnabled()) {
                 this.dataService.commit(this.translate.instant('save'));
             } else {
-                this.modal.openOk(this.translate.instant('saveError.title'), this.translate.instant('saveError.message'));
+                let message = this.translate.instant('saveError.message') + '\n' + this.validator.getValidationResultSaveDisabled();
+                this.modal.openOk(this.translate.instant('saveError.title'), message);
             }
         }
     }

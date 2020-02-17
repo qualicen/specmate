@@ -206,10 +206,10 @@
 	"save": "Speichern",
 	"saveBeforeTestprocedureExport": "Vor dem Export muss die Testprozedur gespeichert werden. Fortfahren?",
 	"saveError": {
-		"continue": "Fortfahren nicht möglich, da die folgende Fehler existieren:",
-		"discard": "Das Speichern ist nicht möglich, da die folgenden Fehler existieren. Änderungen verwerfen?",
-		"message": "Das Speichern ist nicht möglich, da die folgenden Fehler existieren:",
-		"title": "Speichern nicht möglich"
+		"continue": "",
+		"discard": "",
+		"message": "",
+		"title": ""
 	},
 	"search": "suchen",
 	"searchRequirements": "Suchen",
@@ -224,6 +224,8 @@
 	},
 	"successful": "Erfolgreich",
 	"testspec": {
+		"errorMessage": "Testspezifikation kann nicht generiert werden, da das Modell folgende Fehler enthält:",
+		"errorTitle": "Generierung nicht möglich",
 		"generate": "Testspezifikation generieren",
 		"skeleton": "Testspezifikationshüllen herunterladen"
 	},

@@ -8,7 +8,7 @@ export class GraphicalEditorService {
     constructor() {
     }
 
-    public initGraphicalModel(): void {
+    public triggerGraphicalModelInit(): void {
         this.initModel.emit();
     }
 }

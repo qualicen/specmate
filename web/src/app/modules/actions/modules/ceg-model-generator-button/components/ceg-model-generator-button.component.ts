@@ -78,7 +78,7 @@ export class CegModelGeneratorButton {
             await this.dataService.readElement(this.model.url, false);
             let modelContents = await this.dataService.readContents(this.model.url, false);
             this.selectedElementService.select(this.model);
-            this.graphicalEditorService.initGraphicalModel();
+            this.graphicalEditorService.triggerGraphicalModelInit();
 
             if (modelContents.length == 0) {
                 this.errorModal.open(this.translate.instant('modelGenerationFailed'));

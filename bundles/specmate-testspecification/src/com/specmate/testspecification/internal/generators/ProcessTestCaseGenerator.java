@@ -10,10 +10,16 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jgrapht.DirectedGraph;
+import org.jgrapht.EdgeFactory;
 import org.jgrapht.GraphPath;
+import org.jgrapht.WeightedGraph;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedMultigraph;
 import org.jgrapht.graph.GraphWalk;
+import org.jgrapht.graph.SimpleDirectedWeightedGraph;
+import org.jgrapht.graph.builder.DirectedGraphBuilder;
+import org.jgrapht.graph.builder.DirectedWeightedGraphBuilder;
 
 import com.specmate.common.AssertUtil;
 import com.specmate.common.exception.SpecmateException;
@@ -25,6 +31,7 @@ import com.specmate.model.processes.ProcessDecision;
 import com.specmate.model.processes.ProcessEnd;
 import com.specmate.model.processes.ProcessStart;
 import com.specmate.model.processes.ProcessStep;
+import com.specmate.model.processes.impl.ProcessConnectionImpl;
 import com.specmate.model.support.util.SpecmateEcoreUtil;
 import com.specmate.model.testspecification.ParameterAssignment;
 import com.specmate.model.testspecification.ParameterType;
@@ -112,44 +119,73 @@ public class ProcessTestCaseGenerator extends TestCaseGeneratorBase<Process, IMo
 		Set<ProcessStart> processStarts = getStartNodes();
 		Set<ProcessEnd> processEnds = getEndNodes();
 		DirectedGraph<IModelNode, ProcessConnection> graph = getGraph();
+		
+		@SuppressWarnings("unchecked")
+		WeightedGraph<IModelNode, DefaultWeightedEdge> weightedGraph = new SimpleDirectedWeightedGraph<IModelNode, DefaultWeightedEdge>(DefaultWeightedEdge.class);
+		
+		Map<DefaultWeightedEdge, ProcessConnection> connectionMap = new HashMap<>();
+		graph.vertexSet().stream().forEach(node -> weightedGraph.addVertex(node));
+		graph.edgeSet().stream().forEach(proccessConnection -> {
+			DefaultWeightedEdge edge = weightedGraph.addEdge(proccessConnection.getSource(), proccessConnection.getTarget());
+			connectionMap.put(edge, proccessConnection);
+		});
 
+		Set<ProcessConnection> conditionEdges = weightedGraph.edgeSet().stream().map(e -> connectionMap.get(e)).filter(e -> e.getCondition() != null && !e.getCondition().isBlank()).collect(Collectors.toSet());
+		Set<String> conditions = conditionEdges.stream().map(e -> e.getCondition()).collect(Collectors.toSet());
+		
 		List<GraphPath<IModelNode, ProcessConnection>> allPaths = new ArrayList<>();
-		Set<ProcessConnection> uncoveredConnections = new HashSet<>(graph.edgeSet());
+		
+		conditions.stream().forEach(c -> {
+			weightedGraph.edgeSet().stream().forEach(e -> {
+				ProcessConnection processConnection = connectionMap.get(e);
+				float weight = processConnection.getCondition() != null && processConnection.getCondition().equalsIgnoreCase(c) ? 0 : graph.vertexSet().size();
+				weightedGraph.setEdgeWeight(e, weight);
+			});
+			
+			Set<ProcessConnection> uncoveredConnections = connectionMap.values().stream().filter(processConnection -> processConnection.getCondition() != null && processConnection.getCondition().equalsIgnoreCase(c)).collect(Collectors.toSet());
+			
+			IModelNode startNode = processStarts.stream().findAny().get();
+			while (uncoveredConnections.stream().findAny().isPresent()) {
+				ProcessConnection currentUncoveredConnection = uncoveredConnections.stream().findAny().get();
+				IModelNode sourceNode = currentUncoveredConnection.getSource();
+				IModelNode targetNode = currentUncoveredConnection.getTarget();
+				DijkstraShortestPath<IModelNode, DefaultWeightedEdge> dsp = new DijkstraShortestPath<>(weightedGraph);
 
-		IModelNode startNode = processStarts.stream().findAny().get();
-		while (uncoveredConnections.stream().findAny().isPresent()) {
-			ProcessConnection currentUncoveredConnection = uncoveredConnections.stream().findAny().get();
-			IModelNode sourceNode = currentUncoveredConnection.getSource();
-			IModelNode targetNode = currentUncoveredConnection.getTarget();
-			DijkstraShortestPath<IModelNode, ProcessConnection> dsp = new DijkstraShortestPath<>(graph);
-
-			GraphPath<IModelNode, ProcessConnection> startPath = dsp.getPath(startNode, sourceNode);
-			GraphPath<IModelNode, ProcessConnection> endPath = null;
-			IModelNode bestEndNode = null;
-			int minimalEndPathLength = Integer.MAX_VALUE;
-			for (IModelNode endNode : processEnds) {
-				GraphPath<IModelNode, ProcessConnection> currentEndPath = dsp.getPath(targetNode, endNode);
-				if (currentEndPath != null) {
-					int currentEndPathLength = currentEndPath.getLength();
-					if (currentEndPathLength < minimalEndPathLength) {
-						minimalEndPathLength = currentEndPathLength;
-						endPath = currentEndPath;
-						bestEndNode = endNode;
+				GraphPath<IModelNode, DefaultWeightedEdge> startPath = dsp.getPath(startNode, sourceNode);
+				GraphPath<IModelNode, DefaultWeightedEdge> endPath = null;
+				IModelNode bestEndNode = null;
+				int minimalEndPathLength = Integer.MAX_VALUE;
+				for (IModelNode endNode : processEnds) {
+					GraphPath<IModelNode, DefaultWeightedEdge> currentEndPath = dsp.getPath(targetNode, endNode);
+					if (currentEndPath != null) {
+						int currentEndPathLength = currentEndPath.getLength();
+						if (currentEndPathLength < minimalEndPathLength) {
+							minimalEndPathLength = currentEndPathLength;
+							endPath = currentEndPath;
+							bestEndNode = endNode;
+						}
 					}
 				}
+
+				AssertUtil.assertNotNull(endPath, "Could not find path to end node!");
+
+				List<ProcessConnection> connections = new ArrayList<>();
+				List<ProcessConnection> startPathConnections = startPath.getEdgeList().stream().map(e -> connectionMap.get(e)).collect(Collectors.toList());
+				connections.addAll(startPathConnections);
+				connections.add(currentUncoveredConnection);
+				List<ProcessConnection> endPathConnections = endPath.getEdgeList().stream().map(e -> connectionMap.get(e)).collect(Collectors.toList());
+				connections.addAll(endPathConnections);
+				GraphPath<IModelNode, ProcessConnection> constructedPath = new GraphWalk<>(graph, startNode, bestEndNode,
+						connections, 0d);
+				allPaths.add(constructedPath);
+				uncoveredConnections.removeAll(connections);
 			}
+		});
+		
+		
+		
 
-			AssertUtil.assertNotNull(endPath, "Could not find path to end node!");
-
-			List<ProcessConnection> connections = new ArrayList<>();
-			connections.addAll(startPath.getEdgeList());
-			connections.add(currentUncoveredConnection);
-			connections.addAll(endPath.getEdgeList());
-			GraphPath<IModelNode, ProcessConnection> constructedPath = new GraphWalk<>(graph, startNode, bestEndNode,
-					connections, 0d);
-			allPaths.add(constructedPath);
-			uncoveredConnections.removeAll(connections);
-		}
+		
 
 		return allPaths;
 	}

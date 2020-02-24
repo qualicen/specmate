@@ -10,20 +10,19 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jgrapht.DirectedGraph;
-import org.jgrapht.EdgeFactory;
 import org.jgrapht.GraphPath;
 import org.jgrapht.WeightedGraph;
+import org.jgrapht.alg.shortestpath.AllDirectedPaths;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedMultigraph;
 import org.jgrapht.graph.GraphWalk;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
-import org.jgrapht.graph.builder.DirectedGraphBuilder;
-import org.jgrapht.graph.builder.DirectedWeightedGraphBuilder;
 
 import com.specmate.common.AssertUtil;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.model.base.IContainer;
+import com.specmate.model.base.IModelConnection;
 import com.specmate.model.base.IModelNode;
 import com.specmate.model.processes.Process;
 import com.specmate.model.processes.ProcessConnection;
@@ -31,7 +30,6 @@ import com.specmate.model.processes.ProcessDecision;
 import com.specmate.model.processes.ProcessEnd;
 import com.specmate.model.processes.ProcessStart;
 import com.specmate.model.processes.ProcessStep;
-import com.specmate.model.processes.impl.ProcessConnectionImpl;
 import com.specmate.model.support.util.SpecmateEcoreUtil;
 import com.specmate.model.testspecification.ParameterAssignment;
 import com.specmate.model.testspecification.ParameterType;
@@ -93,9 +91,34 @@ public class ProcessTestCaseGenerator extends TestCaseGeneratorBase<Process, IMo
 	/** {@inheritDoc} */
 	@Override
 	protected void generateTestCases() throws SpecmateException {
-		List<GraphPath<IModelNode, ProcessConnection>> allPaths = getAllPaths();
+		List<GraphPath<IModelNode, ProcessConnection>> allPaths = null;
+		try {
+			allPaths = getAllPathsExact();
+		} catch (IllegalArgumentException e) {
+			allPaths = getAllPathsHeuristically();
+		}
+		
 		List<GraphPath<IModelNode, ProcessConnection>> filteredPaths = filterDuplicatePaths(allPaths);
 		createTestCases(filteredPaths);
+	}
+
+	/**
+	 * Computes all paths 
+	 * @return
+	 */
+	private List<GraphPath<IModelNode, ProcessConnection>> getAllPathsExact() {
+		List<GraphPath<IModelNode, ProcessConnection>> paths = getConditions().parallelStream()
+				.flatMap(c -> getPathsForCondition(c).stream())
+				.collect(Collectors.toList());
+		
+		Set<String> uncoveredConditions = paths.stream()
+				.flatMap(g -> g.getEdgeList().stream())
+				.filter(c -> hasCondition(c))
+				.map(c -> c.getCondition())
+				.collect(Collectors.toSet());
+		
+		uncoveredConditions.stream().map(c -> get)
+		return paths;
 	}
 
 	/**
@@ -111,11 +134,160 @@ public class ProcessTestCaseGenerator extends TestCaseGeneratorBase<Process, IMo
 		}
 		return testParameter;
 	}
+	
+	/**
+	 * @param condition the condition to search for
+	 * @return all conditions that should not be taken if the actual condition is selected
+	 */
+	private Set<String> getConflictingConditions(String condition) {
+		Set<IModelNode> decisionNodes = nodes.stream().filter(n -> hasCondition(n, condition)).collect(Collectors.toSet());
+		Set<String> conflictingConditions = decisionNodes.stream()
+				.flatMap(n -> n.getOutgoingConnections().stream())
+				.filter(c -> !hasCondition(c, condition))
+				.map(c -> (ProcessConnection) c)
+				.map(c -> c.getCondition())
+				.collect(Collectors.toSet());
+		return conflictingConditions;
+	}
+	
+	private static boolean hasCondition(IModelNode node, String condition) {
+		if(node instanceof ProcessDecision) {
+			return ((ProcessDecision) node).getOutgoingConnections().stream().filter(c -> hasCondition(c, condition)).findAny().isPresent();
+		}
+		return false;
+	}
+	
+	private static boolean hasCondition(IModelConnection connection, String condition) {
+		if(connection instanceof ProcessConnection) {
+			return ((ProcessConnection) connection).getCondition().equalsIgnoreCase(condition);
+		}
+		return false;
+	}
+	
+	/**
+	 * Computes a weighted graph with edge weights increased for edges carrying a condition that is on conflict with the given condition.
+	 * @param condition the condition
+	 * @return the weighted graph
+	 */
+	private WeightedGraph<IModelNode, ProcessWeightedGraphEdge> getWeightedGraph(String condition) {
+		DirectedGraph<IModelNode, ProcessConnection> graph = getGraph();
+		
+		WeightedGraph<IModelNode, ProcessWeightedGraphEdge> weightedGraph = new SimpleDirectedWeightedGraph<IModelNode, ProcessWeightedGraphEdge>(ProcessWeightedGraphEdge.class);
+		
+		graph.vertexSet().stream().forEach(node -> weightedGraph.addVertex(node));
+		
+		Set<String> conflictingConditions = getConflictingConditions(condition);
+		graph.edgeSet().stream().forEach(processConnection -> {
+			ProcessWeightedGraphEdge edge = weightedGraph.addEdge(processConnection.getSource(), processConnection.getTarget());
+			edge.setConnection(processConnection);
+			if(conflictingConditions.contains(processConnection.getCondition())) {
+				weightedGraph.setEdgeWeight(edge, 1);
+			}
+		});
+		return weightedGraph;
+	}
+	
+	/**
+	 * Gets the current graph without edges containing conflicting conditions to the given condition.
+	 * 
+	 * @param condition the condition
+	 * @return the graph without conflicting conditions to the given condition
+	 */
+	private DirectedGraph<IModelNode, ProcessConnection> getGraph(String condition) {
+		DirectedGraph<IModelNode, ProcessConnection> graph = getGraph();
+		
+		Set<String> conflictingConditions = getConflictingConditions(condition);
+		Set<ProcessConnection> conflictingConnections = graph.edgeSet().stream().filter(c -> conflictingConditions.contains(c.getCondition())).collect(Collectors.toSet());
+		graph.removeAllEdges(conflictingConnections);
+		return graph;
+	}
+	
+	/**
+	 * @return the conditions in the connections of the given path
+	 */
+	private static Set<String> getConditions(GraphPath<IModelNode, ProcessConnection> path) {
+		return path.getEdgeList().stream()
+				.filter(e -> e.getCondition() != null && !e.getCondition().isBlank())
+				.map(e -> e.getCondition())
+				.collect(Collectors.toSet());
+	}
+	
+	/**
+	 * Computes all conditions in all connections.
+	 * 
+	 * @return the set of all conditions.
+	 */
+	private Set<String> getConditions() {
+		return connections.stream()
+				.filter(c -> c.getCondition() != null && !c.getCondition().isBlank())
+				.map(c -> c.getCondition())
+				.collect(Collectors.toSet());
+	}
+	
+	/**
+	 * Checks the given path for conflicting conditions
+	 * 
+	 * @param path the path to check
+	 * @return true, if the path contains conflicting conditions, false otherwise
+	 */
+	private boolean containsConflicts(GraphPath<IModelNode, ProcessConnection> path) {
+		Set<String> conditions = getConditions(path);
+		Set<String> conflictingConditions = conditions.stream().flatMap(c -> getConflictingConditions(c).stream()).collect(Collectors.toSet());
+		conditions.retainAll(conflictingConditions);
+		return !conditions.isEmpty();
+	}
+	
+	/**
+	 * Computes the edges in the graph carrying the given condition.
+	 * 
+	 * @param condition
+	 * @return The set of edges carrying the given condition.
+	 */
+	private Set<ProcessConnection> getConditionEdges(String condition) {
+		return connections.stream().filter(c -> c.getCondition().equalsIgnoreCase(condition)).collect(Collectors.toSet());
+	}
+	
+	/**
+	 * Computes the shortest conflict free paths (covering all edges with the given condition).
+	 * 
+	 * @param condition the condition
+	 * @return the list of graph paths
+	 */
+	private List<GraphPath<IModelNode, ProcessConnection>> getPathsForCondition(String condition) {
+		DirectedGraph<IModelNode, ProcessConnection> graph = getGraph(condition);
+		AllDirectedPaths<IModelNode, ProcessConnection> adp = new AllDirectedPaths<IModelNode, ProcessConnection>(graph);
+		Set<IModelNode> startNodes = getStartNodes().stream().map(n -> (IModelNode) n).collect(Collectors.toSet());
+		Set<IModelNode> endNodes = getEndNodes().stream().map(n -> (IModelNode) n).collect(Collectors.toSet());
+		List<GraphPath<IModelNode, ProcessConnection>> paths = adp.getAllPaths(startNodes, endNodes, true, null);
+		paths.sort((p1, p2) -> p1.getLength() - p2.getLength());
+		List<GraphPath<IModelNode, ProcessConnection>> conflictFreePaths = paths.stream().filter(p -> !containsConflicts(p)).collect(Collectors.toList());
+		Set<ProcessConnection> edgesToCover = this.getConditionEdges(condition);
+		Set<ProcessConnection> coveredEdges = new HashSet<>();
+		List<GraphPath<IModelNode, ProcessConnection>> selectedPaths = new ArrayList<>();
+		for(GraphPath<IModelNode, ProcessConnection> path: conflictFreePaths) {
+			if(!coveredEdges.containsAll(path.getEdgeList())) {
+				selectedPaths.add(path);
+				coveredEdges.addAll(path.getEdgeList());
+				edgesToCover.removeAll(path.getEdgeList());
+			}
+			if(edgesToCover.isEmpty()) {
+				break;
+			}
+		}
+		if(!edgesToCover.isEmpty()) {
+			// throw new IllegalArgumentException("Cannot cover all edges for condition " + condition + ".");
+		}
+		
+		return selectedPaths;
+	}
+	
 
 	/**
-	 * Generates paths through the model such that every edge is taken at least once
+	 * Generates paths to the process graph by weighting conflicting high
+	 * 
+	 * @return graph paths
 	 */
-	private List<GraphPath<IModelNode, ProcessConnection>> getAllPaths() {
+	private List<GraphPath<IModelNode, ProcessConnection>> getAllPathsHeuristically() {
 		Set<ProcessStart> processStarts = getStartNodes();
 		Set<ProcessEnd> processEnds = getEndNodes();
 		DirectedGraph<IModelNode, ProcessConnection> graph = getGraph();
@@ -182,11 +354,6 @@ public class ProcessTestCaseGenerator extends TestCaseGeneratorBase<Process, IMo
 			}
 		});
 		
-		
-		
-
-		
-
 		return allPaths;
 	}
 

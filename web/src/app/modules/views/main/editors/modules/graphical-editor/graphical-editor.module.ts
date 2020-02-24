@@ -5,6 +5,7 @@ import { MaximizeButtonModule } from '../maximize-button/maximize-button.module'
 import { ToolPalletteModule } from '../tool-pallette/tool-pallette.module';
 import { GraphicalEditor } from './components/graphical-editor.component';
 import { EditorGridButtonModule } from '../editor-grid-button/editor-grid-button.module';
+import { GraphicalEditorService } from './services/graphical-editor.service';
 
 @NgModule({
   imports: [
@@ -24,7 +25,7 @@ import { EditorGridButtonModule } from '../editor-grid-button/editor-grid-button
     GraphicalEditor
   ],
   providers: [
-    // SERVICES
+    GraphicalEditorService
   ],
   bootstrap: [
     // COMPONENTS THAT ARE BOOTSTRAPPED HERE

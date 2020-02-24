@@ -1,6 +1,7 @@
 import { mxgraph } from 'mxgraph';
 import { CEGConnection } from 'src/app/model/CEGConnection';
 import { CEGNode } from 'src/app/model/CEGNode';
+import { ProcessConnection } from 'src/app/model/ProcessConnection';
 import { Type } from 'src/app/util/type';
 import { CEGModel } from '../../../../../../../../model/CEGModel';
 import { IContainer } from '../../../../../../../../model/IContainer';
@@ -19,10 +20,10 @@ import { NodeNameConverterProvider } from '../../providers/conversion/node-name-
 import { CEGmxModelNode } from '../../providers/properties/ceg-mx-model-node';
 import { ShapeProvider } from '../../providers/properties/shape-provider';
 import { ToolProvider } from '../../providers/properties/tool-provider';
+import { VertexProvider } from '../../providers/properties/vertex-provider';
 import { EditorStyle } from '../editor-components/editor-style';
 import { StyleChanger } from './style-changer';
-import { VertexProvider } from '../../providers/properties/vertex-provider';
-import { ProcessConnection } from 'src/app/model/ProcessConnection';
+import { CEGConnectionTool } from '../../../tool-pallette/tools/ceg/ceg-connection-tool';
 
 
 declare var require: any;
@@ -172,6 +173,10 @@ export class ChangeTranslator {
         }
     }
 
+    private isNegatedCEGNode(cell: mxgraph.mxCell): boolean {
+        return (cell.style as String).includes(EditorStyle.ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE);
+    }
+
     private async translateEdgeAdd(change: mxgraph.mxChildChange, graph: mxgraph.mxGraph): Promise<IModelConnection> {
         const tool = this.determineTool(change) as ConnectionToolBase<any>;
 
@@ -200,6 +205,10 @@ export class ChangeTranslator {
 
         tool.source = source;
         tool.target = target;
+
+        if (tool instanceof CEGConnectionTool) {
+            (tool as CEGConnectionTool).negated = this.isNegatedCEGNode(change.child);
+        }
 
         const connection = await tool.perform();
 
@@ -295,8 +304,16 @@ export class ChangeTranslator {
         }
     }
 
+    private isTextInputChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange): boolean {
+        const cell = change.cell as mxgraph.mxCell;
+        return (cell.id.endsWith(VertexProvider.ID_SUFFIX_VARIABLE) || cell.id.endsWith(VertexProvider.ID_SUFFIX_CONDITION));
+    }
+
     private async translateNodeChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange, element: IModelNode): Promise<void> {
         let cell = change.cell as mxgraph.mxCell;
+        if (this.isTextInputChange(change)) {
+            VertexProvider.adjustChildCellSize(cell, element.width);
+        }
         if (this.nodeNameConverter) {
             if (this.parentComponents[cell.getId()] !== undefined) {
                 // The changed node is a sublabel / child
@@ -321,15 +338,20 @@ export class ChangeTranslator {
         await this.dataService.updateElement(element, true, Id.uuid);
     }
 
-    private async translateEdgeChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange,
+    private async translateEdgeChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange | mxgraph.mxGeometryChange,
         connection: IModelConnection): Promise<void> {
 
         if (change['terminal']) {
             await this.translateEdgeEndsChange(change as mxgraph.mxTerminalChange, connection);
-        } else if (change['value']) {
+        } else if (change['value'] !== undefined && change['value'] !== null) {
             await this.translateEdgeValueChange(change as mxgraph.mxValueChange, connection);
+        } else if (change['geometry'] !== undefined && change['geometry'] !== null) {
+            await this.translateEdgeLabelPositionChange(change as mxgraph.mxGeometryChange, connection);
         } else {
-            if (change.cell.source === null || change.cell.target === null) {
+            if (change['previous']) {
+                // Edge is undone
+                return;
+            } else if (change.cell.source === null || change.cell.target === null) {
                 throw new Error('No source or target');
             }
         }
@@ -344,6 +366,18 @@ export class ChangeTranslator {
         const changeId = Id.uuid;
         this.dataService.updateElement(connection, true, changeId);
     }
+
+    private async translateEdgeLabelPositionChange(change: mxgraph.mxGeometryChange, connection: IModelConnection): Promise<void> {
+      if (Type.is(connection, ProcessConnection)) {
+        let con = (connection as ProcessConnection);
+        let labelX = change.geometry.x;
+        let labelY = change.geometry.y;
+        con.labelX = labelX;
+        con.labelY = labelY;
+        const changeId = Id.uuid;
+        this.dataService.updateElement(con, true, changeId);
+      }
+  }
 
     private async translateEdgeEndsChange(change: mxgraph.mxTerminalChange, connection: IModelConnection): Promise<void> {
         if (change.cell.target === undefined

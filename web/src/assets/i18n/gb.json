@@ -90,6 +90,7 @@
 	"addNode": "",
 	"addOutputColumn": "Add output column",
 	"attentionNumberOfTestCasesWillBeDeleted": "Warning: {{num}} testcases will be deleted!",
+	"browserUnsupported": "The current browser is not supported. Supported Browsers: {{supportedBrowsers}}",
 	"cancel": "Cancel",
 	"causeEffectGraph": "Cause Effect Graph",
 	"chooseLanguage": "Choose Language",
@@ -204,6 +205,12 @@
 	"restoreZoom": "Restore zoom",
 	"save": "Save",
 	"saveBeforeTestprocedureExport": "Before the export the test procedure will be saved. Continue?",
+	"saveError": {
+		"continue": "Continue not possible due to the following errors:",
+		"discard": "Saving is not possible due to the following errors. Discard changes?",
+		"message": "Saving is not possible due to the following errors:",
+		"title": "Saving is not possible"
+	},
 	"search": "search",
 	"searchRequirements": "Search",
 	"searchResults": "Search results",
@@ -243,7 +250,7 @@
 	"unknownError": "An unknown error occurred on the server",
 	"unreferenced": "unreferenced",
 	"username": "Username",
-	"validate": "validate",
+	"validate": "Validate",
 	"validationResult": {
 		"errorCircularCauses": "Circular cause dependency.",
 		"errorContradictoryModel": "Effect has contradictory causes.",
@@ -265,6 +272,7 @@
 		"errorProcessNodeMultipleOutgoingConnections": "Non-decision-node with multiple outgoing connections.",
 		"errorProcessStartIncomingConnection": "Start node with incoming connection.",
 		"errorSingleIndegreeNode": "Node has only one cause and is therefore unnecessary.",
+		"errorTextTooLong": "The text cannot contain more than 4000 characters. ",
 		"errorUnconnectedNode": "Unconnected node in model."
 	},
 	"version": "Version",

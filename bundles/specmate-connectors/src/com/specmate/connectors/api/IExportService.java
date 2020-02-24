@@ -1,11 +1,16 @@
 package com.specmate.connectors.api;
 
+import org.eclipse.emf.ecore.EObject;
+
 import com.specmate.common.exception.SpecmateException;
-import com.specmate.model.testspecification.TestProcedure;
 
 public interface IExportService {
 
-	void export(TestProcedure testProcedure) throws SpecmateException;
+	void export(EObject exportTarget) throws SpecmateException;
 
 	boolean isAuthorizedToExport(String username, String password);
+	
+	boolean canExportTestProceure();
+	
+	boolean canExportTextSpecification();
 }

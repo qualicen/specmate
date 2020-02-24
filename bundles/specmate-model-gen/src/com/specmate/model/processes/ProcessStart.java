@@ -10,7 +10,7 @@ package com.specmate.model.processes;
  *
  *
  * @see com.specmate.model.processes.ProcessesPackage#getProcessStart()
- * @model
+ * @model annotation="http://specmate.com/form_meta disabled1='name'"
  * @generated
  */
 public interface ProcessStart extends ProcessNode {

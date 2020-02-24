@@ -8,11 +8,15 @@ import { SpecmateViewBase } from '../../views/main/editors/base/specmate-view-ba
 @Injectable()
 export class UnsavedChangesGuard implements CanDeactivate<SpecmateViewBase> {
 
-    constructor(private dataService: SpecmateDataService, private modal: ConfirmationModal, private translate: TranslateService) { }
+    constructor(private dataService: SpecmateDataService,
+        private modal: ConfirmationModal,
+        private translate: TranslateService) { }
 
     canDeactivate(component: SpecmateViewBase) {
         if (this.dataService.hasCommits) {
-            return this.modal.open(this.translate.instant('discardUnsavedChangesConfirmation')).then(() => true).catch(() => false);
+            return this.modal.openSave(this.translate.instant('discardUnsavedChangesConfirmation'))
+                .then(() => true)
+                .catch(() => false);
         } else {
             return true;
         }

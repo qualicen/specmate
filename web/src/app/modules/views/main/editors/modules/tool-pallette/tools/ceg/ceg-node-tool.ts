@@ -9,7 +9,7 @@ export class CEGNodeTool extends CreateNodeToolBase<CEGNode> {
 
     protected modelType: { className: string; } = CEGModel;
 
-    public icon = 'square-o';
+    public icon = 'plus';
     public name = 'tools.addCegNode';
     public style = new ShapeProvider(CEGModel).getStyle(CEGNode);
 

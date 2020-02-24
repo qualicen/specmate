@@ -4,14 +4,24 @@ import { TranslateService } from '@ngx-translate/core';
 import { SpecmateDataService } from '../../../../data/modules/data-service/services/specmate-data.service';
 import { TypedModalContent } from '../components/typed-modal-content.component';
 import { Dialogtype } from '../modal-dialog-type';
+import { ValidationService } from 'src/app/modules/forms/modules/validation/services/validation.service';
 
 @Injectable()
 export class ConfirmationModal {
-    constructor(private modalService: NgbModal, private dataService: SpecmateDataService, private translate: TranslateService) { }
+    constructor(private modalService: NgbModal,
+        private dataService: SpecmateDataService,
+        private translate: TranslateService,
+        private validator: ValidationService) { }
 
-    public open(message: string, withCancel = true): Promise<any> {
+    public async openSave(message: string, withCancel = true): Promise<any> {
         const modalRef = this.modalService.open(TypedModalContent);
-        modalRef.componentInstance.options = Dialogtype.unsavedChangesDialog(message, withCancel);
+        await this.validator.validateCurrent();
+        if (this.validator.isSavingEnabled()) {
+            modalRef.componentInstance.options = Dialogtype.unsavedChangesDialog(message, withCancel);
+        } else {
+            let displayMessage = this.translate.instant('saveError.discard') + '\n' + this.validator.getValidationResultSaveDisabled();
+            modalRef.componentInstance.options = Dialogtype.discardCancelDialog(displayMessage, withCancel);
+        }
         return modalRef.result;
     }
 
@@ -33,9 +43,15 @@ export class ConfirmationModal {
         return modalRef.result;
     }
 
-    public confirmSave(message?: string): Promise<void> {
+    public async confirmSave(message?: string): Promise<void> {
         if (this.dataService.hasCommits) {
-            return this.openOkCancel('ConfirmationRequired', message || this.translate.instant('confirmSave'));
+            await this.validator.validateCurrent();
+            if (this.validator.isSavingEnabled()) {
+                return this.openOkCancel('ConfirmationRequired', message || this.translate.instant('confirmSave'));
+            } else {
+                let displayMessage = this.translate.instant('saveError.continue') + '\n' + this.validator.getValidationResultSaveDisabled();
+                return this.openOk('saveError.title', displayMessage);
+            }
         }
         return Promise.resolve();
     }

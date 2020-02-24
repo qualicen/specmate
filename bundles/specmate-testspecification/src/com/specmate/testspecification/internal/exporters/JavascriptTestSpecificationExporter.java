@@ -57,7 +57,7 @@ public class JavascriptTestSpecificationExporter extends TestSpecificationExport
 	}
 
 	@Override
-	protected void generateTestCaseParameterAssignments(StringBuilder sb, List<ParameterAssignment> assignments) {
+	protected void generateTestCaseParameterAssignments(StringBuilder sb, List<ParameterAssignment> assignments, List<TestParameter> parameters) {
 		for (ParameterAssignment pAssignment : assignments) {
 			appendParameterValue(sb, pAssignment);
 		}

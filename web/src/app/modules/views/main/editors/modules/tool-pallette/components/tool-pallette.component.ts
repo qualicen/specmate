@@ -26,4 +26,14 @@ export class ToolPallette implements AfterViewChecked {
     public get isVisible(): boolean {
         return this.tools.length > 0;
     }
+
+    public getClasses(tool: ToolBase): string[] {
+        const classes = ['tool'];
+        if (tool.isDragTool) {
+            classes.push('drag-tool');
+        } else if (tool.isClickTool) {
+            classes.push('click-tool');
+        }
+        return classes;
+    }
 }

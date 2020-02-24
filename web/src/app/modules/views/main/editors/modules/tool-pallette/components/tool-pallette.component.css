@@ -1,0 +1,11 @@
+.tool {
+    margin: 10px;
+}
+
+.drag-tool {
+  cursor: move;
+}
+
+.click-tool {
+  cursor: pointer;
+}

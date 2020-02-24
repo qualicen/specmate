@@ -14,6 +14,8 @@ import com.specmate.model.base.IModelConnection;
  * </p>
  * <ul>
  *   <li>{@link com.specmate.model.processes.ProcessConnection#getCondition <em>Condition</em>}</li>
+ *   <li>{@link com.specmate.model.processes.ProcessConnection#getLabelX <em>Label X</em>}</li>
+ *   <li>{@link com.specmate.model.processes.ProcessConnection#getLabelY <em>Label Y</em>}</li>
  * </ul>
  *
  * @see com.specmate.model.processes.ProcessesPackage#getProcessConnection()
@@ -46,5 +48,49 @@ public interface ProcessConnection extends IModelConnection {
 	 * @generated
 	 */
 	void setCondition(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Label X</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Label X</em>' attribute.
+	 * @see #setLabelX(double)
+	 * @see com.specmate.model.processes.ProcessesPackage#getProcessConnection_LabelX()
+	 * @model
+	 * @generated
+	 */
+	double getLabelX();
+
+	/**
+	 * Sets the value of the '{@link com.specmate.model.processes.ProcessConnection#getLabelX <em>Label X</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Label X</em>' attribute.
+	 * @see #getLabelX()
+	 * @generated
+	 */
+	void setLabelX(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Label Y</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Label Y</em>' attribute.
+	 * @see #setLabelY(double)
+	 * @see com.specmate.model.processes.ProcessesPackage#getProcessConnection_LabelY()
+	 * @model
+	 * @generated
+	 */
+	double getLabelY();
+
+	/**
+	 * Sets the value of the '{@link com.specmate.model.processes.ProcessConnection#getLabelY <em>Label Y</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Label Y</em>' attribute.
+	 * @see #getLabelY()
+	 * @generated
+	 */
+	void setLabelY(double value);
 
 } // ProcessConnection

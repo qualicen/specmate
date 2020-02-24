@@ -170,19 +170,20 @@ export class CEGLayoutTool extends ToolBase {
     private updateLayout(nodeOrdering: mxgraph.mxCell[][], dimTable: Dimension[]) {
         let layerPositionX = Config.CEG_LAYOUT_CLEARANCE_X;
         let layerPositionY = Config.CEG_LAYOUT_CLEARANCE_Y;
-        let maxHight = Math.max(...dimTable.map(d => d.height));
+        let gridSpace = Config.GRAPHICAL_EDITOR_GRID_SPACE;
+        let maxHeight = Math.max(...dimTable.map(d => d.height));
 
         for (let layerIndex = 0; layerIndex < dimTable.length; layerIndex++) {
             const layerNodes = nodeOrdering[layerIndex];
             const layerDimensions = dimTable[layerIndex];
-            let dynamicYOffset = (maxHight - layerDimensions.height) / (layerNodes.length + 1);
-            let yOffset = dynamicYOffset;
+            let dynamicYOffset = (maxHeight - layerDimensions.height) / (layerNodes.length + 1);
+            let yOffset = dynamicYOffset - (dynamicYOffset % gridSpace);
             for (let nodeIndex = 0; nodeIndex < layerNodes.length; nodeIndex++) {
                 const node = layerNodes[nodeIndex];
                 let nodeClearanceX = 0.5 * (layerDimensions.width - node.getGeometry().width);
                 let nodeX = layerPositionX + nodeClearanceX;
                 let nodeY = layerPositionY + yOffset;
-                yOffset += node.getGeometry().height + Config.CEG_LAYOUT_CLEARANCE_Y + dynamicYOffset;
+                yOffset += node.getGeometry().height + Config.CEG_LAYOUT_CLEARANCE_Y + dynamicYOffset - (dynamicYOffset % gridSpace);
                 let geometry = node.getGeometry().clone() as mxgraph.mxGeometry;
                 geometry.x = nodeX;
                 geometry.y = nodeY;

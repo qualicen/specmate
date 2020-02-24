@@ -215,4 +215,9 @@ textarea:focus,
   position: relative;
 }
 
+.editor-tool {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
 

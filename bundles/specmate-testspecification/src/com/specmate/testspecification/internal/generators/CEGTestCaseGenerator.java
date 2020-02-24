@@ -157,6 +157,7 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 			assignment.setName(SpecmateEcoreUtil.getNameForChild(testCase, assignment.eClass()));
 			assignment.setParameter(parameter);
 			assignment.setCondition(parameterValue);
+			assignment.setValue("");
 			testCase.getContents().add(assignment);
 		}
 		return testCase;

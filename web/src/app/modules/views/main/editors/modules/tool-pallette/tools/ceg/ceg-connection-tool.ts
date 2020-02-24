@@ -10,11 +10,13 @@ export class CEGConnectionTool extends ConnectionToolBase<CEGConnection> {
 
     protected modelType: { className: string; } = CEGModel;
 
+    public negated = false;
+
     public name = 'tools.addCegConnection';
     public icon = 'sitemap';
     public style = '';
 
     protected getFactory(e1: IModelNode, e2: IModelNode): ElementFactoryBase<IModelConnection> {
-        return new CEGConnectionFactory(e1, e2, this.dataService);
+        return new CEGConnectionFactory(e1, e2, this.dataService, this.negated);
     }
 }

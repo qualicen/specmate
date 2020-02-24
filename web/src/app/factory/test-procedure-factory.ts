@@ -20,12 +20,12 @@ export class TestProcedureFactory extends ElementFactoryBase<TestProcedure> {
         testProcedure.isRegressionTest = false;
 
         return this.dataService.createElement(testProcedure, true, compoundId)
-            .then(() => this.createTestCase(testProcedure, compoundId))
+            .then(() => this.createTestStep(testProcedure, compoundId))
             .then(() => commit ? this.dataService.commit('create') : Promise.resolve())
             .then(() => testProcedure);
     }
 
-    private createTestCase(testProcedure: TestProcedure, compoundId: string): Promise<TestStep> {
+    private createTestStep(testProcedure: TestProcedure, compoundId: string): Promise<TestStep> {
         let factory: TestStepFactory = new TestStepFactory(this.dataService);
         return factory.create(testProcedure, false, compoundId);
     }

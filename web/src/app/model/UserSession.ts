@@ -4,7 +4,7 @@
 
 	export class UserSession  {
 
-		___nsuri: string = "http://specmate.com/20190902/model/user";
+		___nsuri: string = "http://specmate.com/20200130/model/user";
 		public url: string;
 		public className: string = "UserSession";
 		public static className: string = "UserSession";

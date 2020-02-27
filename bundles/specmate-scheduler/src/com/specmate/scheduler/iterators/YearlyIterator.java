@@ -6,35 +6,35 @@ import java.time.ZonedDateTime;
 import java.util.Date;
 
 /**
- * A <code>DailyIterator</code> returns a sequence of dates on subsequent days
- * representing the same time each day.
+ * A <code>WeeklyIterator</code> returns a sequence of dates on subsequent weeks
+ * representing the same time each week.
  */
-public class DailyIterator implements ScheduleIterator {
+public class YearlyIterator implements ScheduleIterator {
 	private ZonedDateTime zonedDateTime;
 
-	public DailyIterator(Date date, int... time) {
+	public YearlyIterator(Date date, int... time) {
 		this(getHourOfDay(time), getMinute(time), getSecond(time), date);
 	}
 
-	public DailyIterator(int hourOfDay, int minute, int second, Date date) {
+	public YearlyIterator(int hourOfDay, int minute, int second, Date date) {
 		ZoneId currentZone = ZoneId.systemDefault();
-
+		
 		LocalDateTime localDT = LocalDateTime.ofInstant(date.toInstant(), currentZone);
 		localDT = localDT.withHour(hourOfDay).withMinute(minute).withSecond(second).withNano(0);
-
-		zonedDateTime = ZonedDateTime.of(localDT, currentZone);
 		
+		zonedDateTime = ZonedDateTime.of(localDT, currentZone);
 		ZonedDateTime specifiedDate = date.toInstant().atZone(currentZone);
 		
 		if(zonedDateTime.isAfter(specifiedDate)) {
-			// if the time of the zonedDateTime lies in the future subtract one day to get the correct scheduled time
-			zonedDateTime = zonedDateTime.minusDays(1);
+			// if the time of the zonedDateTime lies in the future subtract one year to get the correct scheduled time
+			zonedDateTime = zonedDateTime.minusYears(1);
 		}
 	}
 
 	@Override
 	public Date next() {
-		zonedDateTime = zonedDateTime.plusDays(1);
+		// Add one year to the set date
+		zonedDateTime = zonedDateTime.plusYears(1);
 		return Date.from(zonedDateTime.toInstant());
 	}
 

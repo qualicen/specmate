@@ -15,7 +15,8 @@ Test-Cases: \
 	org.eclipse.emf.cdo,\
 	org.eclipse.emf.cdo.common,\
 	org.eclipse.emf.ecore,\
-	org.eclipse.emf.common
+	org.eclipse.emf.common,\
+	osgi.cmpn
 -runfw: org.eclipse.osgi;version='[3.13.300.v20190218-1622,3.13.300.v20190218-1622]'
 -runee: JavaSE-11
 -runproperties:\

@@ -3,15 +3,20 @@ package com.specmate.auth.test;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Dictionary;
+import java.util.Hashtable;
+
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkUtil;
+import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.util.tracker.ServiceTracker;
 
 import com.specmate.auth.api.ISessionService;
+import com.specmate.common.OSGiUtil;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.usermodel.AccessRights;
 import com.specmate.usermodel.UserSession;
@@ -26,7 +31,19 @@ public class InMemorySessionServiceTest {
 	@BeforeClass
 	public static void init() throws Exception {
 		context = FrameworkUtil.getBundle(InMemorySessionServiceTest.class).getBundleContext();
+		configureInMemorySessionService();
 		sessionService = getSessionService();
+	}
+
+	private static void configureInMemorySessionService() throws Exception {
+
+		ConfigurationAdmin configurationAdmin = getConfigurationAdmin();
+
+		Dictionary<String, Object> properties = new Hashtable<>();
+		String pid = "com.specmate.auth.InMemorySessionService";
+		properties.put("session.maxIdleMinutes", 1);
+		OSGiUtil.configureService(configurationAdmin, pid, properties);
+
 	}
 
 	@Test
@@ -87,5 +104,16 @@ public class InMemorySessionServiceTest {
 
 		Assert.assertNotNull(sessionService);
 		return sessionService;
+	}
+
+	private static ConfigurationAdmin getConfigurationAdmin() throws Exception {
+		ServiceTracker<ConfigurationAdmin, ConfigurationAdmin> adminTracker = new ServiceTracker<>(context,
+				ConfigurationAdmin.class, null);
+		adminTracker.open();
+
+		ConfigurationAdmin configAdmin = adminTracker.waitForService(10000);
+
+		Assert.assertNotNull(configAdmin);
+		return configAdmin;
 	}
 }

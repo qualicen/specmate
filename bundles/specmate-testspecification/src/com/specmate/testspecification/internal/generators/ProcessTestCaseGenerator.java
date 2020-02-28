@@ -91,14 +91,27 @@ public class ProcessTestCaseGenerator extends TestCaseGeneratorBase<Process, IMo
 	/** {@inheritDoc} */
 	@Override
 	protected void generateTestCases() throws SpecmateException {
-		List<GraphPath<IModelNode, ProcessConnection>> allPaths = null;
-		try {
-			allPaths = getAllPathsExact();
-		} catch (IllegalArgumentException e) {
-			allPaths = getAllPathsHeuristically();
+		Set<IModelNode> startNodes = getStartNodes();
+		Set<IModelNode> endNodes = getEndNodes();
+		
+		List<GraphPath<IModelNode, ProcessConnection>> paths = getAllPathsExact(startNodes, endNodes);
+
+		Set<ProcessConnection> coveredConnections = paths.stream()
+				.flatMap(g -> g.getEdgeList().stream())
+				.filter(c -> hasCondition(c))
+				.collect(Collectors.toSet());
+		
+		Set<ProcessConnection> uncoveredConditionConnections = connections.stream()
+				.filter(c -> !coveredConnections.contains(c))
+				.filter(c -> hasCondition(c))
+				.collect(Collectors.toSet());
+		
+		if(!uncoveredConditionConnections.isEmpty()) {
+			List<GraphPath<IModelNode, ProcessConnection>> heuristicPaths = getPathsHeuristically(startNodes, endNodes, uncoveredConditionConnections);
+			paths.addAll(heuristicPaths);
 		}
 		
-		List<GraphPath<IModelNode, ProcessConnection>> filteredPaths = filterDuplicatePaths(allPaths);
+		List<GraphPath<IModelNode, ProcessConnection>> filteredPaths = filterDuplicatePaths(paths);
 		createTestCases(filteredPaths);
 	}
 
@@ -106,18 +119,10 @@ public class ProcessTestCaseGenerator extends TestCaseGeneratorBase<Process, IMo
 	 * Computes all paths 
 	 * @return
 	 */
-	private List<GraphPath<IModelNode, ProcessConnection>> getAllPathsExact() {
+	private List<GraphPath<IModelNode, ProcessConnection>> getAllPathsExact(Set<IModelNode> startNodes, Set<IModelNode> endNodes) {
 		List<GraphPath<IModelNode, ProcessConnection>> paths = getConditions().parallelStream()
-				.flatMap(c -> getPathsForCondition(c).stream())
+				.flatMap(c -> getPathsForCondition(c, startNodes, endNodes).stream())
 				.collect(Collectors.toList());
-		
-		Set<String> uncoveredConditions = paths.stream()
-				.flatMap(g -> g.getEdgeList().stream())
-				.filter(c -> hasCondition(c))
-				.map(c -> c.getCondition())
-				.collect(Collectors.toSet());
-		
-		uncoveredConditions.stream().map(c -> get)
 		return paths;
 	}
 
@@ -165,29 +170,6 @@ public class ProcessTestCaseGenerator extends TestCaseGeneratorBase<Process, IMo
 	}
 	
 	/**
-	 * Computes a weighted graph with edge weights increased for edges carrying a condition that is on conflict with the given condition.
-	 * @param condition the condition
-	 * @return the weighted graph
-	 */
-	private WeightedGraph<IModelNode, ProcessWeightedGraphEdge> getWeightedGraph(String condition) {
-		DirectedGraph<IModelNode, ProcessConnection> graph = getGraph();
-		
-		WeightedGraph<IModelNode, ProcessWeightedGraphEdge> weightedGraph = new SimpleDirectedWeightedGraph<IModelNode, ProcessWeightedGraphEdge>(ProcessWeightedGraphEdge.class);
-		
-		graph.vertexSet().stream().forEach(node -> weightedGraph.addVertex(node));
-		
-		Set<String> conflictingConditions = getConflictingConditions(condition);
-		graph.edgeSet().stream().forEach(processConnection -> {
-			ProcessWeightedGraphEdge edge = weightedGraph.addEdge(processConnection.getSource(), processConnection.getTarget());
-			edge.setConnection(processConnection);
-			if(conflictingConditions.contains(processConnection.getCondition())) {
-				weightedGraph.setEdgeWeight(edge, 1);
-			}
-		});
-		return weightedGraph;
-	}
-	
-	/**
 	 * Gets the current graph without edges containing conflicting conditions to the given condition.
 	 * 
 	 * @param condition the condition
@@ -228,13 +210,13 @@ public class ProcessTestCaseGenerator extends TestCaseGeneratorBase<Process, IMo
 	 * Checks the given path for conflicting conditions
 	 * 
 	 * @param path the path to check
-	 * @return true, if the path contains conflicting conditions, false otherwise
+	 * @return the set of conflicting conditions (with all condition pairs that are in conflict).
 	 */
-	private boolean containsConflicts(GraphPath<IModelNode, ProcessConnection> path) {
+	private Set<String> getConflicts(GraphPath<IModelNode, ProcessConnection> path) {
 		Set<String> conditions = getConditions(path);
 		Set<String> conflictingConditions = conditions.stream().flatMap(c -> getConflictingConditions(c).stream()).collect(Collectors.toSet());
-		conditions.retainAll(conflictingConditions);
-		return !conditions.isEmpty();
+		conflictingConditions.retainAll(conditions);
+		return conflictingConditions;
 	}
 	
 	/**
@@ -253,17 +235,17 @@ public class ProcessTestCaseGenerator extends TestCaseGeneratorBase<Process, IMo
 	 * @param condition the condition
 	 * @return the list of graph paths
 	 */
-	private List<GraphPath<IModelNode, ProcessConnection>> getPathsForCondition(String condition) {
+	private List<GraphPath<IModelNode, ProcessConnection>> getPathsForCondition(String condition, Set<IModelNode> startNodes, Set<IModelNode> endNodes) {
 		DirectedGraph<IModelNode, ProcessConnection> graph = getGraph(condition);
 		AllDirectedPaths<IModelNode, ProcessConnection> adp = new AllDirectedPaths<IModelNode, ProcessConnection>(graph);
-		Set<IModelNode> startNodes = getStartNodes().stream().map(n -> (IModelNode) n).collect(Collectors.toSet());
-		Set<IModelNode> endNodes = getEndNodes().stream().map(n -> (IModelNode) n).collect(Collectors.toSet());
 		List<GraphPath<IModelNode, ProcessConnection>> paths = adp.getAllPaths(startNodes, endNodes, true, null);
 		paths.sort((p1, p2) -> p1.getLength() - p2.getLength());
-		List<GraphPath<IModelNode, ProcessConnection>> conflictFreePaths = paths.stream().filter(p -> !containsConflicts(p)).collect(Collectors.toList());
+		
 		Set<ProcessConnection> edgesToCover = this.getConditionEdges(condition);
 		Set<ProcessConnection> coveredEdges = new HashSet<>();
 		List<GraphPath<IModelNode, ProcessConnection>> selectedPaths = new ArrayList<>();
+		
+		List<GraphPath<IModelNode, ProcessConnection>> conflictFreePaths = paths.stream().filter(p -> getConflicts(p).isEmpty()).collect(Collectors.toList());
 		for(GraphPath<IModelNode, ProcessConnection> path: conflictFreePaths) {
 			if(!coveredEdges.containsAll(path.getEdgeList())) {
 				selectedPaths.add(path);
@@ -273,9 +255,6 @@ public class ProcessTestCaseGenerator extends TestCaseGeneratorBase<Process, IMo
 			if(edgesToCover.isEmpty()) {
 				break;
 			}
-		}
-		if(!edgesToCover.isEmpty()) {
-			// throw new IllegalArgumentException("Cannot cover all edges for condition " + condition + ".");
 		}
 		
 		return selectedPaths;
@@ -287,12 +266,9 @@ public class ProcessTestCaseGenerator extends TestCaseGeneratorBase<Process, IMo
 	 * 
 	 * @return graph paths
 	 */
-	private List<GraphPath<IModelNode, ProcessConnection>> getAllPathsHeuristically() {
-		Set<ProcessStart> processStarts = getStartNodes();
-		Set<ProcessEnd> processEnds = getEndNodes();
+	private List<GraphPath<IModelNode, ProcessConnection>> getPathsHeuristically(Set<IModelNode> startNodes, Set<IModelNode> endNodes, Set<ProcessConnection> mandatoryConnections) {
 		DirectedGraph<IModelNode, ProcessConnection> graph = getGraph();
 		
-		@SuppressWarnings("unchecked")
 		WeightedGraph<IModelNode, DefaultWeightedEdge> weightedGraph = new SimpleDirectedWeightedGraph<IModelNode, DefaultWeightedEdge>(DefaultWeightedEdge.class);
 		
 		Map<DefaultWeightedEdge, ProcessConnection> connectionMap = new HashMap<>();
@@ -310,13 +286,14 @@ public class ProcessTestCaseGenerator extends TestCaseGeneratorBase<Process, IMo
 		conditions.stream().forEach(c -> {
 			weightedGraph.edgeSet().stream().forEach(e -> {
 				ProcessConnection processConnection = connectionMap.get(e);
-				float weight = processConnection.getCondition() != null && processConnection.getCondition().equalsIgnoreCase(c) ? 0 : graph.vertexSet().size();
+				int edges = graph.edgeSet().size();
+				float weight = processConnection.getCondition() != null && processConnection.getCondition().equalsIgnoreCase(c) ? 1 : (edges * edges);
 				weightedGraph.setEdgeWeight(e, weight);
 			});
 			
-			Set<ProcessConnection> uncoveredConnections = connectionMap.values().stream().filter(processConnection -> processConnection.getCondition() != null && processConnection.getCondition().equalsIgnoreCase(c)).collect(Collectors.toSet());
+			Set<ProcessConnection> uncoveredConnections = mandatoryConnections;
 			
-			IModelNode startNode = processStarts.stream().findAny().get();
+			IModelNode startNode = startNodes.stream().findAny().get();
 			while (uncoveredConnections.stream().findAny().isPresent()) {
 				ProcessConnection currentUncoveredConnection = uncoveredConnections.stream().findAny().get();
 				IModelNode sourceNode = currentUncoveredConnection.getSource();
@@ -327,7 +304,7 @@ public class ProcessTestCaseGenerator extends TestCaseGeneratorBase<Process, IMo
 				GraphPath<IModelNode, DefaultWeightedEdge> endPath = null;
 				IModelNode bestEndNode = null;
 				int minimalEndPathLength = Integer.MAX_VALUE;
-				for (IModelNode endNode : processEnds) {
+				for (IModelNode endNode : endNodes) {
 					GraphPath<IModelNode, DefaultWeightedEdge> currentEndPath = dsp.getPath(targetNode, endNode);
 					if (currentEndPath != null) {
 						int currentEndPathLength = currentEndPath.getLength();
@@ -358,15 +335,15 @@ public class ProcessTestCaseGenerator extends TestCaseGeneratorBase<Process, IMo
 	}
 
 	/** Retrieves the start nodes of the model */
-	private Set<ProcessStart> getStartNodes() {
-		Set<ProcessStart> startNodes = SpecmateEcoreUtil.uniqueInstancesOf(nodes, ProcessStart.class);
+	private Set<IModelNode> getStartNodes() {
+		Set<IModelNode> startNodes = SpecmateEcoreUtil.uniqueInstancesOf(nodes, ProcessStart.class).stream().map(n -> (IModelNode) n).collect(Collectors.toSet());
 		AssertUtil.assertEquals(startNodes.size(), 1, "Number of start nodes in process is different to 1.");
 		return startNodes;
 	}
 
 	/** Retrieves the end nodes of the model */
-	private Set<ProcessEnd> getEndNodes() {
-		Set<ProcessEnd> endNodes = SpecmateEcoreUtil.uniqueInstancesOf(nodes, ProcessEnd.class);
+	private Set<IModelNode> getEndNodes() {
+		Set<IModelNode> endNodes = SpecmateEcoreUtil.uniqueInstancesOf(nodes, ProcessEnd.class).stream().map(n -> (IModelNode) n).collect(Collectors.toSet());
 		AssertUtil.assertTrue(endNodes.size() > 0, "No end nodes in process were found");
 		return endNodes;
 	}

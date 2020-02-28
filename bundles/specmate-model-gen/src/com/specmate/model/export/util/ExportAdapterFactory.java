@@ -3,6 +3,7 @@
 package com.specmate.model.export.util;
 
 import com.specmate.model.base.INamed;
+
 import com.specmate.model.export.*;
 
 import org.eclipse.emf.common.notify.Adapter;

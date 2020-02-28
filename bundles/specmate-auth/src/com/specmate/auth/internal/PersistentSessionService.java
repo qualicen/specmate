@@ -15,10 +15,8 @@ import com.specmate.auth.api.ISessionService;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.config.api.IConfigService;
-import com.specmate.metrics.IGauge;
-import com.specmate.metrics.IMetricsService;
+import com.specmate.metrics.IUserMetricsService;
 import com.specmate.model.administration.ErrorCode;
-import com.specmate.model.support.util.SpecmateEcoreUtil;
 import com.specmate.persistency.IChange;
 import com.specmate.persistency.IPersistencyService;
 import com.specmate.persistency.ITransaction;
@@ -37,8 +35,7 @@ public class PersistentSessionService extends BaseSessionService {
 	private IPersistencyService persistencyService;
 	private ITransaction sessionTransaction;
 	private IView sessionView;
-	private IMetricsService metricsService;
-	private IGauge numberOfUsers;
+	private IUserMetricsService userMetricsService;
 
 	@Override
 	@Activate
@@ -48,7 +45,6 @@ public class PersistentSessionService extends BaseSessionService {
 		// Sessions do not adhere to the constraints of general specmate objects
 		sessionTransaction.enableValidators(false);
 		sessionView = persistencyService.openView();
-		numberOfUsers = metricsService.createGauge("Logged_in_users", "The number of users currently logged in.");
 	}
 
 	@Deactivate
@@ -66,10 +62,7 @@ public class PersistentSessionService extends BaseSessionService {
 	public UserSession create(AccessRights source, AccessRights target, String userName, String password,
 			String projectName) throws SpecmateException {
 
-		if (isNewUser(userName)) {
-			numberOfUsers.inc();
-		}
-
+		userMetricsService.loginCounter(sessionView, userName);
 		UserSession session = createSession(source, target, userName, password, sanitize(projectName));
 
 		sessionTransaction.doAndCommit(new IChange<Object>() {
@@ -127,19 +120,21 @@ public class PersistentSessionService extends BaseSessionService {
 		sessionTransaction.doAndCommit(new IChange<Object>() {
 			@Override
 			public Object doChange() throws SpecmateException {
-				SpecmateEcoreUtil.detach(session);
+				// TODO: detach class should not delete session, just mark it as inactive
+				// SpecmateEcoreUtil.detach(session);
+				// Set Session isDeleted Property to true, to indicate that this session was
+				// deleted
+				session.setIsDeleted(true);
 				return null;
 			}
 		});
-		if (isNewUser(session.getUserName())) {
-			numberOfUsers.dec();
-		}
-
 	}
 
 	@Override
 	protected UserSession getSession(String token) throws SpecmateException {
-		String query = "UserSession.allInstances()->select(u | u.id='" + token + "')";
+		// Only get the active sessions, the deleted sessions are only used for the
+		// login counter
+		String query = "UserSession.allInstances()->select(u | u.id='" + token + "' and u.isDeleted=false)";
 
 		List<Object> results = sessionView.query(query,
 				UsermodelFactory.eINSTANCE.getUsermodelPackage().getUserSession());
@@ -154,18 +149,6 @@ public class PersistentSessionService extends BaseSessionService {
 			return null;
 		}
 
-	}
-
-	private boolean isNewUser(String userName) {
-		String query = "UserSession.allInstances()->select(u | u.userName='" + userName + "')";
-
-		List<Object> results = sessionView.query(query,
-				UsermodelFactory.eINSTANCE.getUsermodelPackage().getUserSession());
-
-		if (results.size() > 0) {
-			return false;
-		}
-		return true;
 	}
 
 	private CDOID getSessionID(String token) throws SpecmateException {
@@ -188,7 +171,7 @@ public class PersistentSessionService extends BaseSessionService {
 	}
 
 	@Reference
-	public void setMetricsService(IMetricsService metricsService) {
-		this.metricsService = metricsService;
+	public void setUserMetricsService(IUserMetricsService userMetricsService) {
+		this.userMetricsService = userMetricsService;
 	}
 }

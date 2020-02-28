@@ -7,7 +7,9 @@ import com.specmate.usermodel.UserSession;
 import com.specmate.usermodel.UsermodelPackage;
 
 import java.util.Collection;
+
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.internal.cdo.CDOObjectImpl;
@@ -27,6 +29,7 @@ import org.eclipse.emf.internal.cdo.CDOObjectImpl;
  *   <li>{@link com.specmate.usermodel.impl.UserSessionImpl#getSourceSystem <em>Source System</em>}</li>
  *   <li>{@link com.specmate.usermodel.impl.UserSessionImpl#getTargetSystem <em>Target System</em>}</li>
  *   <li>{@link com.specmate.usermodel.impl.UserSessionImpl#getLibraryFolders <em>Library Folders</em>}</li>
+ *   <li>{@link com.specmate.usermodel.impl.UserSessionImpl#isIsDeleted <em>Is Deleted</em>}</li>
  *   <li>{@link com.specmate.usermodel.impl.UserSessionImpl#getExporters <em>Exporters</em>}</li>
  * </ul>
  *
@@ -92,6 +95,16 @@ public class UserSessionImpl extends CDOObjectImpl implements UserSession {
 	 * @ordered
 	 */
 	protected static final AccessRights TARGET_SYSTEM_EDEFAULT = AccessRights.NONE;
+
+	/**
+	 * The default value of the '{@link #isIsDeleted() <em>Is Deleted</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isIsDeleted()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean IS_DELETED_EDEFAULT = false;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -258,6 +271,26 @@ public class UserSessionImpl extends CDOObjectImpl implements UserSession {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public boolean isIsDeleted() {
+		return (Boolean)eDynamicGet(UsermodelPackage.USER_SESSION__IS_DELETED, UsermodelPackage.Literals.USER_SESSION__IS_DELETED, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setIsDeleted(boolean newIsDeleted) {
+		eDynamicSet(UsermodelPackage.USER_SESSION__IS_DELETED, UsermodelPackage.Literals.USER_SESSION__IS_DELETED, newIsDeleted);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public EList<String> getExporters() {
@@ -286,6 +319,8 @@ public class UserSessionImpl extends CDOObjectImpl implements UserSession {
 				return getTargetSystem();
 			case UsermodelPackage.USER_SESSION__LIBRARY_FOLDERS:
 				return getLibraryFolders();
+			case UsermodelPackage.USER_SESSION__IS_DELETED:
+				return isIsDeleted();
 			case UsermodelPackage.USER_SESSION__EXPORTERS:
 				return getExporters();
 		}
@@ -322,6 +357,9 @@ public class UserSessionImpl extends CDOObjectImpl implements UserSession {
 			case UsermodelPackage.USER_SESSION__LIBRARY_FOLDERS:
 				getLibraryFolders().clear();
 				getLibraryFolders().addAll((Collection<? extends String>)newValue);
+				return;
+			case UsermodelPackage.USER_SESSION__IS_DELETED:
+				setIsDeleted((Boolean)newValue);
 				return;
 			case UsermodelPackage.USER_SESSION__EXPORTERS:
 				getExporters().clear();
@@ -360,6 +398,9 @@ public class UserSessionImpl extends CDOObjectImpl implements UserSession {
 			case UsermodelPackage.USER_SESSION__LIBRARY_FOLDERS:
 				getLibraryFolders().clear();
 				return;
+			case UsermodelPackage.USER_SESSION__IS_DELETED:
+				setIsDeleted(IS_DELETED_EDEFAULT);
+				return;
 			case UsermodelPackage.USER_SESSION__EXPORTERS:
 				getExporters().clear();
 				return;
@@ -389,6 +430,8 @@ public class UserSessionImpl extends CDOObjectImpl implements UserSession {
 				return getTargetSystem() != TARGET_SYSTEM_EDEFAULT;
 			case UsermodelPackage.USER_SESSION__LIBRARY_FOLDERS:
 				return !getLibraryFolders().isEmpty();
+			case UsermodelPackage.USER_SESSION__IS_DELETED:
+				return isIsDeleted() != IS_DELETED_EDEFAULT;
 			case UsermodelPackage.USER_SESSION__EXPORTERS:
 				return !getExporters().isEmpty();
 		}

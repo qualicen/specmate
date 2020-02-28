@@ -93,7 +93,6 @@ public interface AdministrationPackage extends EPackage {
 	 */
 	int STATUS_OPERATION_COUNT = 0;
 
-
 	/**
 	 * The meta object id for the '{@link com.specmate.model.administration.impl.ProblemDetailImpl <em>Problem Detail</em>}' class.
 	 * <!-- begin-user-doc -->
@@ -157,7 +156,6 @@ public interface AdministrationPackage extends EPackage {
 	 * @ordered
 	 */
 	int PROBLEM_DETAIL_OPERATION_COUNT = 0;
-
 
 	/**
 	 * The meta object id for the '{@link com.specmate.model.administration.ErrorCode <em>Error Code</em>}' enum.

@@ -44,6 +44,7 @@ public class ProcessConnectionImpl extends IModelConnectionImpl implements Proce
 	 * @ordered
 	 */
 	protected static final double LABEL_X_EDEFAULT = 0.0;
+
 	/**
 	 * The default value of the '{@link #getLabelY() <em>Label Y</em>}' attribute.
 	 * <!-- begin-user-doc -->

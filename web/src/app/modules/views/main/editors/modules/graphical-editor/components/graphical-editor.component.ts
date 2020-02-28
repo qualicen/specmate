@@ -3,11 +3,13 @@ import { TranslateService } from '@ngx-translate/core';
 import { mxgraph } from 'mxgraph'; // Typings only - no code!
 import { CEGModel } from 'src/app/model/CEGModel';
 import { CEGNode } from 'src/app/model/CEGNode';
+import { ProcessConnection } from 'src/app/model/ProcessConnection';
 import { ProcessDecision } from 'src/app/model/ProcessDecision';
 import { ProcessEnd } from 'src/app/model/ProcessEnd';
 import { ProcessStart } from 'src/app/model/ProcessStart';
 import { ProcessStep } from 'src/app/model/ProcessStep';
 import { UndoService } from 'src/app/modules/actions/modules/common-controls/services/undo.service';
+import { NavigatorService } from 'src/app/modules/navigation/modules/navigator/services/navigator.service';
 import { IContainer } from '../../../../../../../model/IContainer';
 import { IModelConnection } from '../../../../../../../model/IModelConnection';
 import { IModelNode } from '../../../../../../../model/IModelNode';
@@ -31,8 +33,7 @@ import { EditorPopup } from './editor-components/editor-popup';
 import { EditorStyle } from './editor-components/editor-style';
 import { ChangeTranslator } from './util/change-translator';
 import { StyleChanger } from './util/style-changer';
-import { NavigatorService } from 'src/app/modules/navigation/modules/navigator/services/navigator.service';
-import { ProcessConnection } from 'src/app/model/ProcessConnection';
+import { GraphicalEditorService } from '../services/graphical-editor.service';
 
 declare var require: any;
 
@@ -72,7 +73,8 @@ export class GraphicalEditor {
     private selectedElementService: SelectedElementService,
     private validationService: ValidationService,
     private translate: TranslateService,
-    private undoService: UndoService) {
+    private undoService: UndoService,
+    private graphicalEditorService: GraphicalEditorService) {
 
     this.navigator.navigationStart.subscribe(() => {
       this.isInGraphTransition = true;
@@ -91,6 +93,11 @@ export class GraphicalEditor {
     });
     this.undoService.redoPressed.subscribe(() => {
       this.redo();
+    });
+
+    this.graphicalEditorService.initModel.subscribe(async () => {
+      await this.init();
+      validationService.validateCurrent();
     });
   }
 
@@ -175,7 +182,7 @@ export class GraphicalEditor {
 
     this.graph.addListener(mx.mxEvent.DOUBLE_CLICK, (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) => {
       const cell = evt.properties.cell as mxgraph.mxCell;
-      if (cell.id.endsWith(VertexProvider.ID_SUFFIX_TYPE)) {
+      if (cell !== undefined && cell.id.endsWith(VertexProvider.ID_SUFFIX_TYPE)) {
         evt.consumed = true;
       }
     });
@@ -286,6 +293,7 @@ export class GraphicalEditor {
       this.graph.getModel().endUpdate();
     });
 
+    VertexProvider.initRenderer(this.graph);
     EditorStyle.initEditorStyles(this.graph);
     EditorKeyHandler.initKeyHandler(this.graph);
     this.initUndoManager();
@@ -459,14 +467,6 @@ export class GraphicalEditor {
       let geo = this.model.getGeometry(cell);
       return geo == null || !geo.relative;
     };
-
-    this.graph.getTooltipForCell = (cell) => {
-      if (cell.getId().endsWith(VertexProvider.ID_SUFFIX_TYPE)) {
-        return '';
-      }
-      return mx.mxGraph.prototype.getTooltipForCell.bind(this.graph)(cell);
-    };
-    this.vertexProvider.initCEGRenderer(this.graph);
   }
 
   private updateValidities(): void {
@@ -567,8 +567,7 @@ export class GraphicalEditor {
   }
 
   @Input()
-  public set contents(contents: IContainer[]) {
-  }
+  public set contents(contents: IContainer[]) { }
 
   public get contents(): IContainer[] {
     return this._contents;

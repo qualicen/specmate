@@ -17,7 +17,9 @@ import com.specmate.model.batch.Operation;
 import com.specmate.model.batch.OperationType;
 
 import com.specmate.model.export.ExportPackage;
+
 import com.specmate.model.export.impl.ExportPackageImpl;
+
 import com.specmate.model.history.HistoryPackage;
 
 import com.specmate.model.history.impl.HistoryPackageImpl;
@@ -33,6 +35,7 @@ import com.specmate.model.requirements.impl.RequirementsPackageImpl;
 import com.specmate.model.testspecification.TestspecificationPackage;
 
 import com.specmate.model.testspecification.impl.TestspecificationPackageImpl;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;

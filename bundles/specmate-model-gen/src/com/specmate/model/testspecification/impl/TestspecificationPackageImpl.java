@@ -11,9 +11,13 @@ import com.specmate.model.base.BasePackage;
 import com.specmate.model.base.impl.BasePackageImpl;
 
 import com.specmate.model.batch.BatchPackage;
+
 import com.specmate.model.batch.impl.BatchPackageImpl;
+
 import com.specmate.model.export.ExportPackage;
+
 import com.specmate.model.export.impl.ExportPackageImpl;
+
 import com.specmate.model.history.HistoryPackage;
 
 import com.specmate.model.history.impl.HistoryPackageImpl;
@@ -35,6 +39,7 @@ import com.specmate.model.testspecification.TestSpecification;
 import com.specmate.model.testspecification.TestStep;
 import com.specmate.model.testspecification.TestspecificationFactory;
 import com.specmate.model.testspecification.TestspecificationPackage;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
@@ -276,8 +281,8 @@ public class TestspecificationPackageImpl extends EPackageImpl implements Testsp
 	 * @generated
 	 */
 	@Override
-	public EAttribute getParameterAssignment_Condition() {
-		return (EAttribute)parameterAssignmentEClass.getEStructuralFeatures().get(2);
+	public EAttribute getParameterAssignment_Value() {
+		return (EAttribute)parameterAssignmentEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -286,8 +291,8 @@ public class TestspecificationPackageImpl extends EPackageImpl implements Testsp
 	 * @generated
 	 */
 	@Override
-	public EAttribute getParameterAssignment_Value() {
-		return (EAttribute)parameterAssignmentEClass.getEStructuralFeatures().get(1);
+	public EAttribute getParameterAssignment_Condition() {
+		return (EAttribute)parameterAssignmentEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**

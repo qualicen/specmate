@@ -61,10 +61,6 @@ public enum AccessRights implements Enumerator {
 	/**
 	 * The '<em><b>NONE</b></em>' literal value.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of '<em><b>NONE</b></em>' literal object isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @see #NONE
 	 * @model
@@ -76,10 +72,6 @@ public enum AccessRights implements Enumerator {
 	/**
 	 * The '<em><b>READ</b></em>' literal value.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of '<em><b>READ</b></em>' literal object isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @see #READ
 	 * @model
@@ -91,10 +83,6 @@ public enum AccessRights implements Enumerator {
 	/**
 	 * The '<em><b>WRITE</b></em>' literal value.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of '<em><b>WRITE</b></em>' literal object isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @see #WRITE
 	 * @model
@@ -106,10 +94,6 @@ public enum AccessRights implements Enumerator {
 	/**
 	 * The '<em><b>ALL</b></em>' literal value.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of '<em><b>ALL</b></em>' literal object isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @see #ALL
 	 * @model

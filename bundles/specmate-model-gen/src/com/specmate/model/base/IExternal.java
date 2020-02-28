@@ -28,10 +28,6 @@ public interface IExternal extends CDOObject {
 	/**
 	 * Returns the value of the '<em><b>Ext Id</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Ext Id</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Ext Id</em>' attribute.
 	 * @see #setExtId(String)
@@ -54,10 +50,6 @@ public interface IExternal extends CDOObject {
 	/**
 	 * Returns the value of the '<em><b>Ext Id2</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Ext Id2</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Ext Id2</em>' attribute.
 	 * @see #setExtId2(String)
@@ -80,10 +72,6 @@ public interface IExternal extends CDOObject {
 	/**
 	 * Returns the value of the '<em><b>Source</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Source</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Source</em>' attribute.
 	 * @see #setSource(String)
@@ -106,10 +94,6 @@ public interface IExternal extends CDOObject {
 	/**
 	 * Returns the value of the '<em><b>Live</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Live</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Live</em>' attribute.
 	 * @see #setLive(boolean)

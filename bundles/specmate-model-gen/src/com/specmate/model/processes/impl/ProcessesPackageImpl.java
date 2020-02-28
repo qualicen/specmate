@@ -11,9 +11,13 @@ import com.specmate.model.base.BasePackage;
 import com.specmate.model.base.impl.BasePackageImpl;
 
 import com.specmate.model.batch.BatchPackage;
+
 import com.specmate.model.batch.impl.BatchPackageImpl;
+
 import com.specmate.model.export.ExportPackage;
+
 import com.specmate.model.export.impl.ExportPackageImpl;
+
 import com.specmate.model.history.HistoryPackage;
 
 import com.specmate.model.history.impl.HistoryPackageImpl;
@@ -34,6 +38,7 @@ import com.specmate.model.requirements.impl.RequirementsPackageImpl;
 import com.specmate.model.testspecification.TestspecificationPackage;
 
 import com.specmate.model.testspecification.impl.TestspecificationPackageImpl;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;

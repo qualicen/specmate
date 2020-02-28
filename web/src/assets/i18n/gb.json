@@ -205,6 +205,12 @@
 	"restoreZoom": "Restore zoom",
 	"save": "Save",
 	"saveBeforeTestprocedureExport": "Before the export the test procedure will be saved. Continue?",
+	"saveError": {
+		"continue": "Continue not possible due to the following errors:",
+		"discard": "Saving is not possible due to the following errors. Discard changes?",
+		"message": "Saving is not possible due to the following errors:",
+		"title": "Saving is not possible"
+	},
 	"search": "search",
 	"searchRequirements": "Search",
 	"searchResults": "Search results",

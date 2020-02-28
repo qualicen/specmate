@@ -51,10 +51,6 @@ public enum OperationType implements Enumerator {
 	/**
 	 * The '<em><b>CREATE</b></em>' literal value.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of '<em><b>CREATE</b></em>' literal object isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @see #CREATE
 	 * @model
@@ -66,10 +62,6 @@ public enum OperationType implements Enumerator {
 	/**
 	 * The '<em><b>UPDATE</b></em>' literal value.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of '<em><b>UPDATE</b></em>' literal object isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @see #UPDATE
 	 * @model
@@ -81,10 +73,6 @@ public enum OperationType implements Enumerator {
 	/**
 	 * The '<em><b>DELETE</b></em>' literal value.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of '<em><b>DELETE</b></em>' literal object isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @see #DELETE
 	 * @model

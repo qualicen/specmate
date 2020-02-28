@@ -20,14 +20,9 @@ package com.specmate.model.base;
  * @generated
  */
 public interface Folder extends ISpecmateModelObject {
-
 	/**
 	 * Returns the value of the '<em><b>Library</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Library</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Library</em>' attribute.
 	 * @see #setLibrary(boolean)
@@ -46,4 +41,5 @@ public interface Folder extends ISpecmateModelObject {
 	 * @generated
 	 */
 	void setLibrary(boolean value);
+
 } // Folder

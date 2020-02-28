@@ -33,6 +33,7 @@ import { EditorPopup } from './editor-components/editor-popup';
 import { EditorStyle } from './editor-components/editor-style';
 import { ChangeTranslator } from './util/change-translator';
 import { StyleChanger } from './util/style-changer';
+import { GraphicalEditorService } from '../services/graphical-editor.service';
 
 declare var require: any;
 
@@ -72,7 +73,8 @@ export class GraphicalEditor {
     private selectedElementService: SelectedElementService,
     private validationService: ValidationService,
     private translate: TranslateService,
-    private undoService: UndoService) {
+    private undoService: UndoService,
+    private graphicalEditorService: GraphicalEditorService) {
 
     this.navigator.navigationStart.subscribe(() => {
       this.isInGraphTransition = true;
@@ -93,10 +95,9 @@ export class GraphicalEditor {
       this.redo();
     });
 
-    this.dataService.elementChanged.subscribe((url: string) => {
-      if (url === this.model.url) {
-        this.init();
-      }
+    this.graphicalEditorService.initModel.subscribe(async () => {
+      await this.init();
+      validationService.validateCurrent();
     });
   }
 

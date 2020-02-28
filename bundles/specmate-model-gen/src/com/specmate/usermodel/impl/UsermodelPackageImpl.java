@@ -240,6 +240,16 @@ public class UsermodelPackageImpl extends EPackageImpl implements UsermodelPacka
 	 * @generated
 	 */
 	@Override
+	public EAttribute getUserSession_IsDeleted() {
+		return (EAttribute)userSessionEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EEnum getAccessRights() {
 		return accessRightsEEnum;
 	}
@@ -287,6 +297,7 @@ public class UsermodelPackageImpl extends EPackageImpl implements UsermodelPacka
 		createEAttribute(userSessionEClass, USER_SESSION__SOURCE_SYSTEM);
 		createEAttribute(userSessionEClass, USER_SESSION__TARGET_SYSTEM);
 		createEAttribute(userSessionEClass, USER_SESSION__LIBRARY_FOLDERS);
+		createEAttribute(userSessionEClass, USER_SESSION__IS_DELETED);
 
 		// Create enums
 		accessRightsEEnum = createEEnum(ACCESS_RIGHTS);
@@ -336,6 +347,7 @@ public class UsermodelPackageImpl extends EPackageImpl implements UsermodelPacka
 		initEAttribute(getUserSession_SourceSystem(), this.getAccessRights(), "SourceSystem", null, 0, 1, UserSession.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSession_TargetSystem(), this.getAccessRights(), "TargetSystem", null, 0, 1, UserSession.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSession_LibraryFolders(), ecorePackage.getEString(), "libraryFolders", null, 0, -1, UserSession.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getUserSession_IsDeleted(), ecorePackage.getEBoolean(), "isDeleted", null, 0, 1, UserSession.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(accessRightsEEnum, AccessRights.class, "AccessRights");

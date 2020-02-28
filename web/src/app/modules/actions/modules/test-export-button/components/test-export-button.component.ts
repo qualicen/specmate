@@ -57,7 +57,7 @@ export class TestExportButton {
                 language: new LowerCasePipe().transform(this._lang)
             });
 
-        if (data === null || data===undefined) {
+        if (data === null || data === undefined) {
             // no failure but no content --> export to background system
             this.modal.openOk(this.translate.instant('successful'), this.translate.instant('exportSuccessful'));
 

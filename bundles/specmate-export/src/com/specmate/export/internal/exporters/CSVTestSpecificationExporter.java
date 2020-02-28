@@ -8,14 +8,14 @@ import java.util.StringJoiner;
 import org.apache.commons.lang3.StringUtils;
 import org.osgi.service.component.annotations.Component;
 
-import com.specmate.export.api.ITestExporter;
+import com.specmate.export.api.IExporter;
 import com.specmate.model.testspecification.ParameterAssignment;
 import com.specmate.model.testspecification.TestCase;
 import com.specmate.model.testspecification.TestParameter;
 import com.specmate.model.testspecification.TestSpecification;
 
 /** Exports a test specification as CSV */
-@Component(immediate = true, service = ITestExporter.class)
+@Component(immediate = true, service = IExporter.class)
 public class CSVTestSpecificationExporter extends TestSpecificationExporterBase {
 
 	public CSVTestSpecificationExporter() {

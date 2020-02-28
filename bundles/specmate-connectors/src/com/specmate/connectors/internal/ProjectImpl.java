@@ -14,13 +14,13 @@ import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.api.IProjectConfigService;
 import com.specmate.connectors.api.IRequirementsSource;
 import com.specmate.connectors.config.ProjectConfigService;
-import com.specmate.export.api.ITestExporter;
+import com.specmate.export.api.IExporter;
 
 @Component(service = IProject.class, configurationPid = ProjectConfigService.PROJECT_CONFIG_FACTORY_PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
 public class ProjectImpl implements IProject {
 	private String id = null;
 	private IRequirementsSource connector = null;
-	private ITestExporter exporter = null;
+	private IExporter exporter = null;
 	private List<String> libraryFolders = null;
 
 	@Activate
@@ -56,14 +56,14 @@ public class ProjectImpl implements IProject {
 	}
 
 	@Reference(cardinality = ReferenceCardinality.OPTIONAL, name = "exporter")
-	public void setExporter(ITestExporter exporter) {
+	public void setExporter(IExporter exporter) {
 		this.exporter = exporter;
 		this.exporter.setProjectName(getID());
 
 	}
 
 	@Override
-	public ITestExporter getExporter() {
+	public IExporter getExporter() {
 		return exporter;
 	}
 

@@ -9,7 +9,7 @@ import com.specmate.common.exception.SpecmateAuthorizationException;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.api.IProjectService;
-import com.specmate.export.api.ITestExporter;
+import com.specmate.export.api.IExporter;
 import com.specmate.usermodel.AccessRights;
 import com.specmate.usermodel.UserSession;
 
@@ -100,7 +100,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 	}
 
 	private AccessRights retrieveTargetAccessRights(IProject project, String username, String password) {
-		ITestExporter exporter = project.getExporter();
+		IExporter exporter = project.getExporter();
 		if (exporter == null) {
 			return AccessRights.NONE;
 		}

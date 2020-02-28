@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.specmate.export.api.ITestExporter;
+import com.specmate.export.api.IExporter;
 import com.specmate.model.export.Export;
 import com.specmate.model.export.ExportFactory;
 import com.specmate.model.support.util.SpecmateEcoreUtil;
@@ -19,7 +19,7 @@ import com.specmate.model.testspecification.TestParameter;
 import com.specmate.model.testspecification.TestSpecification;
 
 /** Base class for Test Specification Exporters */
-public abstract class TestSpecificationExporterBase implements ITestExporter {
+public abstract class TestSpecificationExporterBase implements IExporter {
 
 	/** the language for the export */
 	protected String language;
@@ -35,7 +35,7 @@ public abstract class TestSpecificationExporterBase implements ITestExporter {
 
 	/** getter for language */
 	@Override
-	public String getLanguage() {
+	public String getType() {
 		return language;
 	}
 

@@ -5,13 +5,13 @@ import java.util.Optional;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.model.export.Export;
 
-public interface ITestExporter {
+public interface IExporter {
 
 	/**
 	 * Returns the language of the exporter. The language represents the type of
 	 * export and can also be the name of an external system, such as Jira
 	 */
-	String getLanguage();
+	String getType();
 
 	/**
 	 * Starts the export of a certain object.

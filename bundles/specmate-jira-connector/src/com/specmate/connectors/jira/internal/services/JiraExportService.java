@@ -24,8 +24,8 @@ import com.atlassian.util.concurrent.Promise;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.connectors.jira.config.JiraConnectorConfig;
-import com.specmate.export.api.ITestExporter;
-import com.specmate.export.api.TestExporterBase;
+import com.specmate.export.api.IExporter;
+import com.specmate.export.api.ExporterBase;
 import com.specmate.model.administration.ErrorCode;
 import com.specmate.model.support.util.SpecmateEcoreUtil;
 import com.specmate.model.testspecification.TestProcedure;
@@ -34,8 +34,8 @@ import com.specmate.model.export.Export;
 import com.specmate.model.testspecification.TestStep;
 
 /** Exorter for jira x-ray */
-@Component(immediate = true, service = ITestExporter.class, configurationPid = JiraConnectorConfig.EXPORTER_PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
-public class JiraExportService extends TestExporterBase {
+@Component(immediate = true, service = IExporter.class, configurationPid = JiraConnectorConfig.EXPORTER_PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
+public class JiraExportService extends ExporterBase {
 
 	/** Reference to the logging service */
 	private LogService logService;

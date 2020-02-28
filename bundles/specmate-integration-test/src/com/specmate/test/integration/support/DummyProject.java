@@ -7,7 +7,7 @@ import java.util.Optional;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.api.IRequirementsSource;
-import com.specmate.export.api.TestExporterBase;
+import com.specmate.export.api.ExporterBase;
 import com.specmate.model.base.IContainer;
 import com.specmate.model.requirements.Requirement;
 import com.specmate.model.export.Export;
@@ -51,8 +51,8 @@ public class DummyProject implements IProject {
 	}
 
 	@Override
-	public TestExporterBase getExporter() {
-		return new TestExporterBase("dummy") {
+	public ExporterBase getExporter() {
+		return new ExporterBase("dummy") {
 
 			@Override
 			public boolean canExportTestProcedure() {

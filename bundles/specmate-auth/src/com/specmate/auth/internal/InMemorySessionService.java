@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Reference;
@@ -24,12 +23,8 @@ public class InMemorySessionService extends BaseSessionService {
 	/** The PID of the session service */
 	public static final String PID = "com.specmate.auth.InMemorySessionService";
 
+	/** Holds the current sessions */
 	private Map<String, UserSession> sessions = new HashMap<>();
-
-	@Activate
-	public void activate() {
-		System.out.println("active");
-	}
 
 	@Override
 	public UserSession create(AccessRights source, AccessRights target, String userName, String password,

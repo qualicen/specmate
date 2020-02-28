@@ -13,14 +13,14 @@ import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.connectors.hpconnector.internal.config.HPServerProxyConfig;
 import com.specmate.connectors.hpconnector.internal.util.HPProxyConnection;
-import com.specmate.export.api.ITestExporter;
-import com.specmate.export.api.TestExporterBase;
+import com.specmate.export.api.IExporter;
+import com.specmate.export.api.ExporterBase;
 import com.specmate.model.administration.ErrorCode;
 import com.specmate.model.testspecification.TestProcedure;
 import com.specmate.model.export.Export;
 
-@Component(service = ITestExporter.class, configurationPid = HPServerProxyConfig.EXPORTER_PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
-public class HPExportService extends TestExporterBase {
+@Component(service = IExporter.class, configurationPid = HPServerProxyConfig.EXPORTER_PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
+public class HPExportService extends ExporterBase {
 
 	private static final String EXPORTER_NAME = "HP ALM";
 	private HPProxyConnection hpConnection;

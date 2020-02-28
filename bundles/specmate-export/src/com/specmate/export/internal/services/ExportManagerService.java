@@ -24,7 +24,7 @@ import com.specmate.auth.api.ISessionService;
 import com.specmate.common.exception.SpecmateAuthorizationException;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateValidationException;
-import com.specmate.export.api.ITestExporter;
+import com.specmate.export.api.IExporter;
 import com.specmate.model.testspecification.TestProcedure;
 import com.specmate.model.testspecification.TestSpecification;
 import com.specmate.model.export.Export;
@@ -38,10 +38,10 @@ import com.specmate.usermodel.UserSession;
 public class ExportManagerService {
 
 	/** Collects all exporters that can export test specifications */
-	private Map<String, ITestExporter> testSpecificationExporters = new HashMap<String, ITestExporter>();
+	private Map<String, IExporter> testSpecificationExporters = new HashMap<String, IExporter>();
 
 	/** Collects all exporters that can export test specifications */
-	private Map<String, ITestExporter> testProcedureExporters = new HashMap<String, ITestExporter>();
+	private Map<String, IExporter> testProcedureExporters = new HashMap<String, IExporter>();
 
 	/** Reference to the logging service */
 	private LogService logService;
@@ -65,14 +65,14 @@ public class ExportManagerService {
 			@Override
 			public void sessionCreated(UserSession session, String userName, String password) {
 				Set<String> allowedExporters = new HashSet<String>();
-				IteratorChain<ITestExporter> allExporters = new IteratorChain<ITestExporter>(
+				IteratorChain<IExporter> allExporters = new IteratorChain<IExporter>(
 						testProcedureExporters.values().iterator(), testSpecificationExporters.values().iterator());
 				while (allExporters.hasNext()) {
-					ITestExporter exporter = allExporters.next();
+					IExporter exporter = allExporters.next();
 					if (exporter.getProjectName() == null
 							|| Pattern.matches(session.getAllowedPathPattern(), exporter.getProjectName())) {
 						if (exporter.isAuthorizedToExport(userName, password)) {
-							allowedExporters.add(exporter.getLanguage().toLowerCase());
+							allowedExporters.add(exporter.getType().toLowerCase());
 						}
 					}
 				}
@@ -97,7 +97,7 @@ public class ExportManagerService {
 			throw new SpecmateAuthorizationException("Export to " + language + " is not allowed.");
 		}
 		String languageKey = language.toLowerCase();
-		ITestExporter exporter = null;
+		IExporter exporter = null;
 		if (object instanceof TestSpecification) {
 			exporter = testSpecificationExporters.get(languageKey);
 		} else if (object instanceof TestProcedure) {
@@ -121,17 +121,17 @@ public class ExportManagerService {
 		final List<String> _allowedExporters = allowedExporters;
 		if (object instanceof TestSpecification) {
 			return testSpecificationExporters.entrySet().stream().filter(e -> _allowedExporters.contains(e.getKey()))
-					.map(e -> e.getValue().getLanguage()).collect(Collectors.toList());
+					.map(e -> e.getValue().getType()).collect(Collectors.toList());
 		}
 		if (object instanceof TestProcedure) {
 			return testProcedureExporters.entrySet().stream().filter(e -> _allowedExporters.contains(e.getKey()))
-					.map(e -> e.getValue().getLanguage()).collect(Collectors.toList());
+					.map(e -> e.getValue().getType()).collect(Collectors.toList());
 		}
 		return Collections.emptyList();
 	}
 
 	@Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
-	public void addTestSpecificationExporter(ITestExporter exporter) {
+	public void addTestSpecificationExporter(IExporter exporter) {
 		if (exporter.canExportTestProcedure()) {
 			addToExporterCollection(exporter, testProcedureExporters);
 		}
@@ -140,18 +140,18 @@ public class ExportManagerService {
 		}
 	}
 
-	public void removeTestSpecificationExporter(ITestExporter exporter) {
-		String languageKey = exporter.getLanguage().toLowerCase();
-		ITestExporter existing = testSpecificationExporters.get(languageKey);
+	public void removeTestSpecificationExporter(IExporter exporter) {
+		String languageKey = exporter.getType().toLowerCase();
+		IExporter existing = testSpecificationExporters.get(languageKey);
 		if (existing == exporter) {
 			testSpecificationExporters.remove(languageKey);
 		}
 	}
 
-	private void addToExporterCollection(ITestExporter exporter, Map<String, ITestExporter> exporterMap) {
-		String languageKey = exporter.getLanguage().toLowerCase();
+	private void addToExporterCollection(IExporter exporter, Map<String, IExporter> exporterMap) {
+		String languageKey = exporter.getType().toLowerCase();
 		if (exporterMap.containsKey(languageKey)) {
-			logService.log(LogService.LOG_WARNING, "Test exporter for langugae " + exporter.getLanguage()
+			logService.log(LogService.LOG_WARNING, "Test exporter for langugae " + exporter.getType()
 					+ " already exists. Ignoring: " + exporter.getClass().getName());
 		}
 		exporterMap.put(languageKey, exporter);

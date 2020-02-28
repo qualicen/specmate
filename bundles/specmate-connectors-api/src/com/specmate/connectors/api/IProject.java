@@ -2,7 +2,7 @@ package com.specmate.connectors.api;
 
 import java.util.List;
 
-import com.specmate.export.api.ITestExporter;
+import com.specmate.export.api.IExporter;
 
 public interface IProject {
 
@@ -21,7 +21,7 @@ public interface IProject {
 	 * @return the defined sink to which test information is exported, or
 	 *         <code>null</code>.
 	 */
-	ITestExporter getExporter();
+	IExporter getExporter();
 
 	/**
 	 * @return the list of defined library folders for the project, or

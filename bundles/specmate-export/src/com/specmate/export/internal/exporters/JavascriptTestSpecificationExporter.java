@@ -6,14 +6,14 @@ import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 
-import com.specmate.export.api.ITestExporter;
+import com.specmate.export.api.IExporter;
 import com.specmate.model.testspecification.ParameterAssignment;
 import com.specmate.model.testspecification.TestCase;
 import com.specmate.model.testspecification.TestParameter;
 import com.specmate.model.testspecification.TestSpecification;
 
 /** Exports a test specification to javascript */
-@Component(immediate = true, service = ITestExporter.class)
+@Component(immediate = true, service = IExporter.class)
 public class JavascriptTestSpecificationExporter extends TestSpecificationExporterBase {
 
 	public JavascriptTestSpecificationExporter() {

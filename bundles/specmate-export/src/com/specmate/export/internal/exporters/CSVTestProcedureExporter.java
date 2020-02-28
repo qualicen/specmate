@@ -9,7 +9,7 @@ import java.util.StringJoiner;
 
 import org.osgi.service.component.annotations.Component;
 
-import com.specmate.export.api.ITestExporter;
+import com.specmate.export.api.IExporter;
 import com.specmate.model.export.Export;
 import com.specmate.model.export.ExportFactory;
 import com.specmate.model.support.util.SpecmateEcoreUtil;
@@ -17,7 +17,7 @@ import com.specmate.model.testspecification.TestProcedure;
 import com.specmate.model.testspecification.TestStep;
 
 @Component(immediate = true)
-public class CSVTestProcedureExporter implements ITestExporter {
+public class CSVTestProcedureExporter implements IExporter {
 	private static final String HEADER = "Step Name" + CSV_COL_SEP + "Action" + CSV_COL_SEP + "Expected Outcome";
 
 	@Override
@@ -31,7 +31,7 @@ public class CSVTestProcedureExporter implements ITestExporter {
 	}
 
 	@Override
-	public String getLanguage() {
+	public String getType() {
 		return "CSV";
 	}
 
@@ -46,7 +46,7 @@ public class CSVTestProcedureExporter implements ITestExporter {
 		}
 		Export eport = ExportFactory.eINSTANCE.createExport();
 		eport.setName(ExportUtil.replaceInvalidChars(testprocedure.getName()) + ".csv");
-		eport.setType(getLanguage());
+		eport.setType(getType());
 		eport.setContent(joiner.toString());
 		return Optional.of(eport);
 

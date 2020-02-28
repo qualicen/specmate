@@ -18,8 +18,8 @@ export class DuplicateNodeValidator extends ElementValidatorBase<CEGModel> {
             let currentNode: CEGNode = nodes[i];
             let currentDuplicates: CEGNode[] =
                 nodes.filter((otherNode: CEGNode) =>
-                    ValidationUtil.compareStrTrimed(otherNode.variable, currentNode.variable) &&
-                    ValidationUtil.compareStrTrimed(otherNode.condition, currentNode.condition) &&
+                    ValidationUtil.compareStrTrimmed(otherNode.variable, currentNode.variable) &&
+                    ValidationUtil.compareStrTrimmed(otherNode.condition, currentNode.condition) &&
                     otherNode !== currentNode &&
                     !duplicates.has(otherNode));
             currentDuplicates.forEach( node => duplicates.add(node));

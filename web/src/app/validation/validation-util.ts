@@ -20,13 +20,10 @@ export class ValidationUtil {
         return true;
     }
 
-    public static compareStrTrimed(s1: string, s2: string): boolean {
-        if (s1 === undefined && s2 === undefined || s1 === null && s2 === null) {
-            return true;
-        }
+    public static compareStrTrimmed(s1: string, s2: string): boolean {
         if (s1 !== undefined && s2 !== undefined && s1 !== null && s2 !== null) {
             return s1.trim().toLowerCase() === s2.trim().toLowerCase();
         }
-        return false;
+        return s1 === undefined && s2 === undefined || s1 === null && s2 === null;
     }
 }

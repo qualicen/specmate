@@ -30,7 +30,7 @@ import com.specmate.model.administration.ErrorCode;
 import com.specmate.model.support.util.SpecmateEcoreUtil;
 import com.specmate.model.testspecification.TestProcedure;
 import com.specmate.model.testspecification.TestSpecification;
-import com.specmate.model.testspecification.TestSpecificationSkeleton;
+import com.specmate.model.export.Export;
 import com.specmate.model.testspecification.TestStep;
 
 /** Exorter for jira x-ray */
@@ -102,7 +102,7 @@ public class JiraExportService extends TestExporterBase {
 	}
 
 	@Override
-	public Optional<TestSpecificationSkeleton> export(Object exportTarget) throws SpecmateException {
+	public Optional<Export> export(Object exportTarget) throws SpecmateException {
 		if (exportTarget instanceof TestProcedure) {
 			return exportTestProcedure((TestProcedure) exportTarget);
 		}
@@ -113,12 +113,12 @@ public class JiraExportService extends TestExporterBase {
 				"Cannot export object of type " + exportTarget.getClass().getName());
 	}
 
-	private Optional<TestSpecificationSkeleton> exportTestSpecification(TestSpecification exportTarget)
+	private Optional<Export> exportTestSpecification(TestSpecification exportTarget)
 			throws SpecmateInternalException {
 		throw new SpecmateInternalException(ErrorCode.JIRA, "Test specification export to jira not supported");
 	}
 
-	public Optional<TestSpecificationSkeleton> exportTestProcedure(TestProcedure testProcedure)
+	public Optional<Export> exportTestProcedure(TestProcedure testProcedure)
 			throws SpecmateException {
 		JiraRestClient jiraClient = null;
 		try {

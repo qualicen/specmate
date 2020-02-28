@@ -9,12 +9,12 @@ import org.junit.Test;
 import com.specmate.export.internal.exporters.CSVTestSpecificationExporter;
 import com.specmate.export.internal.exporters.JavaTestSpecificationExporter;
 import com.specmate.export.internal.exporters.JavascriptTestSpecificationExporter;
+import com.specmate.model.export.Export;
 import com.specmate.model.testspecification.ParameterAssignment;
 import com.specmate.model.testspecification.ParameterType;
 import com.specmate.model.testspecification.TestCase;
 import com.specmate.model.testspecification.TestParameter;
 import com.specmate.model.testspecification.TestSpecification;
-import com.specmate.model.testspecification.TestSpecificationSkeleton;
 import com.specmate.model.testspecification.TestspecificationFactory;
 
 public class TestExportTestSpecification {
@@ -22,9 +22,9 @@ public class TestExportTestSpecification {
 	public void testJavaExport() {
 		TestSpecification ts = getTestSpecification();
 
-		JavaTestSpecificationExporter skel = new JavaTestSpecificationExporter();
-		Optional<TestSpecificationSkeleton> result = skel.export(ts);
-		String code = result.get().getCode();
+		JavaTestSpecificationExporter exporter = new JavaTestSpecificationExporter();
+		Optional<Export> result = exporter.export(ts);
+		String code = result.get().getType();
 
 		Assert.assertTrue(code.contains("public void TSTest___in1__in11___in2_____out1__out11___out2__out12()"));
 		Assert.assertTrue(code.contains("public void TSTest___in1__in21___in2__in22___out1__out21___out2__out22()"));
@@ -34,9 +34,9 @@ public class TestExportTestSpecification {
 	public void testJavascriptExport() {
 		TestSpecification ts = getTestSpecification();
 
-		JavascriptTestSpecificationExporter skel = new JavascriptTestSpecificationExporter();
-		Optional<TestSpecificationSkeleton> result = skel.export(ts);
-		String code = result.get().getCode();
+		JavascriptTestSpecificationExporter exporter = new JavascriptTestSpecificationExporter();
+		Optional<Export> result = exporter.export(ts);
+		String code = result.get().getContent();
 
 		Assert.assertTrue(code.contains("	it('TS___in1__in11___in2_____out1__out11___out2__out12', () => {\n"
 				+ "		throw new Error('not implemented yet');\n" + "	});"));
@@ -48,9 +48,9 @@ public class TestExportTestSpecification {
 	public void testCSVExport() {
 		TestSpecification ts = getTestSpecification();
 
-		CSVTestSpecificationExporter skel = new CSVTestSpecificationExporter();
-		Optional<TestSpecificationSkeleton> result = skel.export(ts);
-		String code = result.get().getCode();
+		CSVTestSpecificationExporter exporter = new CSVTestSpecificationExporter();
+		Optional<Export> result = exporter.export(ts);
+		String code = result.get().getContent();
 
 		Assert.assertTrue(code.contains("\"TC\";\"INPUT - in1\";\"INPUT - in2\";\"OUTPUT - out1\";\"OUTPUT - out2\""));
 		Assert.assertTrue(code.contains("tc1;\"in11\";;\"out11\";\"out12\""));

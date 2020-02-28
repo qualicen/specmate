@@ -41,7 +41,7 @@ public interface TestspecificationPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://specmate.com/20200130/model/testspecification";
+	String eNS_URI = "http://specmate.com/20200228/model/testspecification";
 
 	/**
 	 * The package namespace name.
@@ -124,61 +124,6 @@ public interface TestspecificationPackage extends EPackage {
 	int TEST_SPECIFICATION_OPERATION_COUNT = BasePackage.ICONTAINER_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link com.specmate.model.testspecification.impl.TestSpecificationSkeletonImpl <em>Test Specification Skeleton</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.specmate.model.testspecification.impl.TestSpecificationSkeletonImpl
-	 * @see com.specmate.model.testspecification.impl.TestspecificationPackageImpl#getTestSpecificationSkeleton()
-	 * @generated
-	 */
-	int TEST_SPECIFICATION_SKELETON = 1;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TEST_SPECIFICATION_SKELETON__NAME = BasePackage.INAMED__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Language</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TEST_SPECIFICATION_SKELETON__LANGUAGE = BasePackage.INAMED_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Code</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TEST_SPECIFICATION_SKELETON__CODE = BasePackage.INAMED_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of structural features of the '<em>Test Specification Skeleton</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TEST_SPECIFICATION_SKELETON_FEATURE_COUNT = BasePackage.INAMED_FEATURE_COUNT + 2;
-
-	/**
-	 * The number of operations of the '<em>Test Specification Skeleton</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TEST_SPECIFICATION_SKELETON_OPERATION_COUNT = BasePackage.INAMED_OPERATION_COUNT + 0;
-
-	/**
 	 * The meta object id for the '{@link com.specmate.model.testspecification.impl.TestParameterImpl <em>Test Parameter</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -186,7 +131,7 @@ public interface TestspecificationPackage extends EPackage {
 	 * @see com.specmate.model.testspecification.impl.TestspecificationPackageImpl#getTestParameter()
 	 * @generated
 	 */
-	int TEST_PARAMETER = 2;
+	int TEST_PARAMETER = 1;
 
 	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -259,7 +204,7 @@ public interface TestspecificationPackage extends EPackage {
 	 * @see com.specmate.model.testspecification.impl.TestspecificationPackageImpl#getTestCase()
 	 * @generated
 	 */
-	int TEST_CASE = 3;
+	int TEST_CASE = 2;
 
 	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -341,7 +286,7 @@ public interface TestspecificationPackage extends EPackage {
 	 * @see com.specmate.model.testspecification.impl.TestspecificationPackageImpl#getParameterAssignment()
 	 * @generated
 	 */
-	int PARAMETER_ASSIGNMENT = 4;
+	int PARAMETER_ASSIGNMENT = 3;
 
 	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -423,7 +368,7 @@ public interface TestspecificationPackage extends EPackage {
 	 * @see com.specmate.model.testspecification.impl.TestspecificationPackageImpl#getTestProcedure()
 	 * @generated
 	 */
-	int TEST_PROCEDURE = 5;
+	int TEST_PROCEDURE = 4;
 
 	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -532,7 +477,7 @@ public interface TestspecificationPackage extends EPackage {
 	 * @see com.specmate.model.testspecification.impl.TestspecificationPackageImpl#getTestStep()
 	 * @generated
 	 */
-	int TEST_STEP = 6;
+	int TEST_STEP = 5;
 
 	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -614,7 +559,7 @@ public interface TestspecificationPackage extends EPackage {
 	 * @see com.specmate.model.testspecification.impl.TestspecificationPackageImpl#getParameterType()
 	 * @generated
 	 */
-	int PARAMETER_TYPE = 7;
+	int PARAMETER_TYPE = 6;
 
 
 	/**
@@ -626,38 +571,6 @@ public interface TestspecificationPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getTestSpecification();
-
-	/**
-	 * Returns the meta object for class '{@link com.specmate.model.testspecification.TestSpecificationSkeleton <em>Test Specification Skeleton</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Test Specification Skeleton</em>'.
-	 * @see com.specmate.model.testspecification.TestSpecificationSkeleton
-	 * @generated
-	 */
-	EClass getTestSpecificationSkeleton();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.specmate.model.testspecification.TestSpecificationSkeleton#getLanguage <em>Language</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Language</em>'.
-	 * @see com.specmate.model.testspecification.TestSpecificationSkeleton#getLanguage()
-	 * @see #getTestSpecificationSkeleton()
-	 * @generated
-	 */
-	EAttribute getTestSpecificationSkeleton_Language();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.specmate.model.testspecification.TestSpecificationSkeleton#getCode <em>Code</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Code</em>'.
-	 * @see com.specmate.model.testspecification.TestSpecificationSkeleton#getCode()
-	 * @see #getTestSpecificationSkeleton()
-	 * @generated
-	 */
-	EAttribute getTestSpecificationSkeleton_Code();
 
 	/**
 	 * Returns the meta object for class '{@link com.specmate.model.testspecification.TestParameter <em>Test Parameter</em>}'.
@@ -850,32 +763,6 @@ public interface TestspecificationPackage extends EPackage {
 		 * @generated
 		 */
 		EClass TEST_SPECIFICATION = eINSTANCE.getTestSpecification();
-
-		/**
-		 * The meta object literal for the '{@link com.specmate.model.testspecification.impl.TestSpecificationSkeletonImpl <em>Test Specification Skeleton</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.specmate.model.testspecification.impl.TestSpecificationSkeletonImpl
-		 * @see com.specmate.model.testspecification.impl.TestspecificationPackageImpl#getTestSpecificationSkeleton()
-		 * @generated
-		 */
-		EClass TEST_SPECIFICATION_SKELETON = eINSTANCE.getTestSpecificationSkeleton();
-
-		/**
-		 * The meta object literal for the '<em><b>Language</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute TEST_SPECIFICATION_SKELETON__LANGUAGE = eINSTANCE.getTestSpecificationSkeleton_Language();
-
-		/**
-		 * The meta object literal for the '<em><b>Code</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute TEST_SPECIFICATION_SKELETON__CODE = eINSTANCE.getTestSpecificationSkeleton_Code();
 
 		/**
 		 * The meta object literal for the '{@link com.specmate.model.testspecification.impl.TestParameterImpl <em>Test Parameter</em>}' class.

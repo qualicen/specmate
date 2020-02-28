@@ -27,7 +27,7 @@ import com.specmate.common.exception.SpecmateValidationException;
 import com.specmate.export.api.ITestExporter;
 import com.specmate.model.testspecification.TestProcedure;
 import com.specmate.model.testspecification.TestSpecification;
-import com.specmate.model.testspecification.TestSpecificationSkeleton;
+import com.specmate.model.export.Export;
 import com.specmate.usermodel.UserSession;
 
 /**
@@ -90,7 +90,7 @@ public class ExportManagerService {
 	 * @return
 	 * @throws SpecmateException
 	 */
-	public Optional<TestSpecificationSkeleton> export(Object object, String language, String userToken)
+	public Optional<Export> export(Object object, String language, String userToken)
 			throws SpecmateException {
 		List<String> allowedExporters = sessionService.getExporters(userToken);
 		if (!allowedExporters.contains(language.toLowerCase())) {

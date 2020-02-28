@@ -10,11 +10,11 @@ import java.util.StringJoiner;
 import org.osgi.service.component.annotations.Component;
 
 import com.specmate.export.api.ITestExporter;
+import com.specmate.model.export.Export;
+import com.specmate.model.export.ExportFactory;
 import com.specmate.model.support.util.SpecmateEcoreUtil;
 import com.specmate.model.testspecification.TestProcedure;
-import com.specmate.model.testspecification.TestSpecificationSkeleton;
 import com.specmate.model.testspecification.TestStep;
-import com.specmate.model.testspecification.TestspecificationFactory;
 
 @Component(immediate = true)
 public class CSVTestProcedureExporter implements ITestExporter {
@@ -36,7 +36,7 @@ public class CSVTestProcedureExporter implements ITestExporter {
 	}
 
 	@Override
-	public Optional<TestSpecificationSkeleton> export(Object object) {
+	public Optional<Export> export(Object object) {
 		TestProcedure testprocedure = (TestProcedure) object;
 		StringJoiner joiner = new StringJoiner(CSV_LINE_SEP);
 		joiner.add(HEADER);
@@ -44,11 +44,11 @@ public class CSVTestProcedureExporter implements ITestExporter {
 		for (TestStep step : testSteps) {
 			joiner.add(step.getName() + CSV_COL_SEP + step.getDescription() + CSV_COL_SEP + step.getExpectedOutcome());
 		}
-		TestSpecificationSkeleton skelleton = TestspecificationFactory.eINSTANCE.createTestSpecificationSkeleton();
-		skelleton.setName(ExportUtil.replaceInvalidChars(testprocedure.getName()) + ".csv");
-		skelleton.setLanguage(getLanguage());
-		skelleton.setCode(joiner.toString());
-		return Optional.of(skelleton);
+		Export eport = ExportFactory.eINSTANCE.createExport();
+		eport.setName(ExportUtil.replaceInvalidChars(testprocedure.getName()) + ".csv");
+		eport.setType(getLanguage());
+		eport.setContent(joiner.toString());
+		return Optional.of(eport);
 
 	}
 

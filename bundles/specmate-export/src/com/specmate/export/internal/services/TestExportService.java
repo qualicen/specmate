@@ -17,7 +17,7 @@ import com.specmate.metrics.ICounter;
 import com.specmate.metrics.IMetricsService;
 import com.specmate.model.testspecification.TestProcedure;
 import com.specmate.model.testspecification.TestSpecification;
-import com.specmate.model.testspecification.TestSpecificationSkeleton;
+import com.specmate.model.export.Export;
 import com.specmate.rest.RestResult;
 
 /** Service that exports a test specification in various formats */
@@ -51,12 +51,12 @@ public class TestExportService extends RestServiceBase {
 		if (language == null) {
 			throw new SpecmateValidationException("Language for export not specified.");
 		}
-		Optional<TestSpecificationSkeleton> result = exportManager.export(object, language, token);
+		Optional<Export> result = exportManager.export(object, language, token);
 		exportCounter.inc();
 		if (result.isPresent()) {
-			return new RestResult<TestSpecificationSkeleton>(Status.OK, result.get());
+			return new RestResult<Export>(Status.OK, result.get());
 		} else {
-			return new RestResult<TestSpecificationSkeleton>(Status.NO_CONTENT);
+			return new RestResult<Export>(Status.NO_CONTENT);
 		}
 	}
 

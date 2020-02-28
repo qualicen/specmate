@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { saveAs } from 'file-saver';
 import { TestSpecification } from '../../../../../model/TestSpecification';
-import { TestSpecificationSkeleton } from '../../../../../model/TestSpecificationSkeleton';
+import { Export } from '../../../../../model/Export';
 import { SpecmateDataService } from '../../../../data/modules/data-service/services/specmate-data.service';
 import { IContainer } from '../../../../../model/IContainer';
 import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
@@ -52,7 +52,7 @@ export class TestExportButton {
             return;
         }
 
-        const data: TestSpecificationSkeleton = await this.dataService.performQuery(this._element.url, 'export',
+        const data: Export = await this.dataService.performQuery(this._element.url, 'export',
             {
                 language: new LowerCasePipe().transform(this._lang)
             });
@@ -63,7 +63,7 @@ export class TestExportButton {
 
         } else {
             // there is content --> save it (not modal needed in this case)
-            saveAs(new Blob([TestExportButton.UTF8_BOM + data.code], { type: 'text/plain;charset=utf-8' }), data.name);
+            saveAs(new Blob([TestExportButton.UTF8_BOM + data.content], { type: 'text/plain;charset=utf-8' }), data.name);
         }
     }
 

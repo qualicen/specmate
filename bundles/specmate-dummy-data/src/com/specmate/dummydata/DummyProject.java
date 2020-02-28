@@ -12,7 +12,7 @@ import com.specmate.connectors.api.IRequirementsSource;
 import com.specmate.export.api.TestExporterBase;
 import com.specmate.model.base.IContainer;
 import com.specmate.model.requirements.Requirement;
-import com.specmate.model.testspecification.TestSpecificationSkeleton;
+import com.specmate.model.export.Export;
 
 /**
  * A project definition for the test-data that authorizes every user.
@@ -76,7 +76,7 @@ public class DummyProject implements IProject {
 			}
 
 			@Override
-			public Optional<TestSpecificationSkeleton> export(Object object) throws SpecmateException {
+			public Optional<Export> export(Object object) throws SpecmateException {
 				return null;
 			}
 		};

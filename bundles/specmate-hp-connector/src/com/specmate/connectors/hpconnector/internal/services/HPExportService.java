@@ -17,7 +17,7 @@ import com.specmate.export.api.ITestExporter;
 import com.specmate.export.api.TestExporterBase;
 import com.specmate.model.administration.ErrorCode;
 import com.specmate.model.testspecification.TestProcedure;
-import com.specmate.model.testspecification.TestSpecificationSkeleton;
+import com.specmate.model.export.Export;
 
 @Component(service = ITestExporter.class, configurationPid = HPServerProxyConfig.EXPORTER_PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
 public class HPExportService extends TestExporterBase {
@@ -39,7 +39,7 @@ public class HPExportService extends TestExporterBase {
 	}
 
 	@Override
-	public Optional<TestSpecificationSkeleton> export(Object target) throws SpecmateException {
+	public Optional<Export> export(Object target) throws SpecmateException {
 		if (target instanceof TestProcedure) {
 			hpConnection.exportTestProcedure((TestProcedure) target);
 			return Optional.empty();

@@ -98,10 +98,6 @@
         <genEnumLiterals ecoreEnumLiteral="specmate.ecore#//testspecification/ParameterType/OUTPUT"/>
       </genEnums>
       <genClasses ecoreClass="specmate.ecore#//testspecification/TestSpecification"/>
-      <genClasses ecoreClass="specmate.ecore#//testspecification/TestSpecificationSkeleton">
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//testspecification/TestSpecificationSkeleton/language"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//testspecification/TestSpecificationSkeleton/code"/>
-      </genClasses>
       <genClasses ecoreClass="specmate.ecore#//testspecification/TestParameter">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//testspecification/TestParameter/type"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
@@ -209,6 +205,12 @@
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference specmate.ecore#//batch/Operation/target"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference specmate.ecore#//batch/Operation/value"/>
+      </genClasses>
+    </nestedGenPackages>
+    <nestedGenPackages prefix="Export" disposableProviderFactory="true" ecorePackage="specmate.ecore#//export">
+      <genClasses ecoreClass="specmate.ecore#//export/Export">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//export/Export/type"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//export/Export/content"/>
       </genClasses>
     </nestedGenPackages>
   </genPackages>

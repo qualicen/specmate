@@ -10,15 +10,15 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.specmate.export.api.ITestExporter;
+import com.specmate.model.export.Export;
+import com.specmate.model.export.ExportFactory;
 import com.specmate.model.support.util.SpecmateEcoreUtil;
 import com.specmate.model.testspecification.ParameterAssignment;
 import com.specmate.model.testspecification.TestCase;
 import com.specmate.model.testspecification.TestParameter;
 import com.specmate.model.testspecification.TestSpecification;
-import com.specmate.model.testspecification.TestSpecificationSkeleton;
-import com.specmate.model.testspecification.TestspecificationFactory;
 
-/** Base class for Test Specification Exporters (aka "Skeletons") */
+/** Base class for Test Specification Exporters */
 public abstract class TestSpecificationExporterBase implements ITestExporter {
 
 	/** the language for the export */
@@ -51,12 +51,12 @@ public abstract class TestSpecificationExporterBase implements ITestExporter {
 
 	/** Generates an export for the test specification */
 	@Override
-	public Optional<TestSpecificationSkeleton> export(Object obj) {
+	public Optional<Export> export(Object obj) {
 		TestSpecification testSpecification = (TestSpecification) obj;
 		StringBuilder sb = new StringBuilder();
 
-		TestSpecificationSkeleton tss = TestspecificationFactory.eINSTANCE.createTestSpecificationSkeleton();
-		tss.setLanguage(language);
+		Export tss = ExportFactory.eINSTANCE.createExport();
+		tss.setType(language);
 		tss.setName(generateFileName(testSpecification));
 
 		List<TestParameter> parameters = getParameters(testSpecification);
@@ -69,7 +69,7 @@ public abstract class TestSpecificationExporterBase implements ITestExporter {
 			generateTestCaseFooter(sb, tc);
 		}
 		generateFooter(sb, testSpecification);
-		tss.setCode(sb.toString());
+		tss.setContent(sb.toString());
 
 		return Optional.of(tss);
 	}

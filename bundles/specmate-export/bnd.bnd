@@ -19,7 +19,8 @@
 	specmate-connectors-api;version=latest,\
 	specmate-export-api;version=latest,\
 	org.apache.commons.collections4,\
-	org.eclipse.net4j.util
+	org.eclipse.net4j.util,\
+	org.eclipse.equinox.common
 
 -privatepackage: \
 	com.specmate.export.internal.exporters,\

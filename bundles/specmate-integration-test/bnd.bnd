@@ -288,7 +288,10 @@ Bundle-Version: 0.0.0.${tstamp}
 	com.sun.activation.javax.activation;version='[1.2.0,1.2.1)',\
 	jaxb-api;version='[2.3.1,2.3.2)',\
 	org.eclipse.emf.cdo.ecore.retrofit;version='[4.2.300,4.2.301)',\
-	specmate-export;version=snapshot
+	specmate-export;version=snapshot,\
+	org.apache.commons.collections4;version='[4.0.0,4.0.1)',\
+	specmate-connectors-api;version=snapshot,\
+	specmate-export-api;version=snapshot
 
 -runproperties: \
 	jetty.http.port=8088,\
@@ -310,4 +313,3 @@ Bundle-Version: 0.0.0.${tstamp}
 Private-Package: \
 	com.specmate.test.integration,\
 	com.specmate.test.integration.support
--resolve: auto

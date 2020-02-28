@@ -224,6 +224,8 @@
 	},
 	"successful": "Erfolgreich",
 	"testspec": {
+		"errorMessage": "Testspezifikation kann nicht generiert werden, da das Modell folgende Fehler enthält:",
+		"errorTitle": "Generierung nicht möglich",
 		"generate": "Testspezifikation generieren",
 		"skeleton": "Testspezifikationshüllen herunterladen"
 	},

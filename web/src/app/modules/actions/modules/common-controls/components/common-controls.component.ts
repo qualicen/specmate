@@ -37,7 +37,7 @@ export class CommonControls {
             if (this.isSaveEnabled && this.validator.isSavingEnabled()) {
                 this.dataService.commit(this.translate.instant('save'));
             } else {
-                let message = this.translate.instant('saveError.message') + '\n' + this.validator.getValidationResultSaveDisabled();
+                let message = this.translate.instant('saveError.message') + '\n' + this.validator.getValidationResultAsString(true);
                 this.modal.openOk(this.translate.instant('saveError.title'), message);
             }
         }

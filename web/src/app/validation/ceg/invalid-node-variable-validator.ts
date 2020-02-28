@@ -12,6 +12,7 @@ import { ValidationErrorSeverity } from '../validation-error-severity';
  * element names. As from the variable name Specmate contstruct Testparameters with the same name, this
  * would cause problems.
  */
+
 @Validator(CEGNode)
 export class InvalidNodeVariableValidator extends ElementValidatorBase<CEGNode> {
 

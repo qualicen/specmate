@@ -3,6 +3,8 @@ package com.specmate.test.integration.support;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.emf.ecore.EObject;
+
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.connectors.api.IExportService;
 import com.specmate.connectors.api.IProject;
@@ -59,8 +61,18 @@ public class DummyProject implements IProject {
 			}
 
 			@Override
-			public void export(TestProcedure testProcedure) throws SpecmateException {
+			public void export(EObject target) throws SpecmateException {
 				// Nothing to do
+			}
+
+			@Override
+			public boolean canExportTestProceure() {
+				return false;
+			}
+
+			@Override
+			public boolean canExportTextSpecification() {
+				return false;
 			}
 		};
 	}

@@ -14,6 +14,8 @@ import { ValidationErrorSeverity } from '../../../../../validation/validation-er
 import { ValidationResult } from '../../../../../validation/validation-result';
 import { NavigatorService } from '../../../../navigation/modules/navigator/services/navigator.service';
 import { ValidationCache, ValidationPair } from '../util/validation-cache';
+import { TestCase } from 'src/app/model/TestCase';
+import { TestProcedure } from 'src/app/model/TestProcedure';
 
 
 @Injectable()
@@ -24,6 +26,9 @@ export class ValidationService {
     private textLengthValidator: TextLengthValidator = new TextLengthValidator();
 
     public validationFinished: EventEmitter<void> = new EventEmitter<void>();
+
+    public isValidating = false;
+    public stateChanged: EventEmitter<void> = new EventEmitter<void>();
 
     constructor(private navigator: NavigatorService, translate: TranslateService) {
         this.validationCache = new ValidationCache(translate);
@@ -62,6 +67,9 @@ export class ValidationService {
     }
 
     public async refreshValidation(element: IContainer, contents: IContainer[] = [], clear = true): Promise<void> {
+        this.isValidating = true;
+        this.stateChanged.emit();
+
         if (clear) {
             this.validationCache.clear();
         }
@@ -72,8 +80,26 @@ export class ValidationService {
                 elementResults = elementResults.concat(this.getValidationResultsFor(child, []));
             }
         }
+        if (Type.is(element, TestSpecification)) {
+            let childElements = contents.filter(c => !Type.is(c, TestProcedure));
+            for (let child of childElements) {
+                elementResults = elementResults.concat(this.getValidationResultsFor(child, []));
+            }
+        }
+        if (Type.is(element, TestProcedure)) {
+            for (let child of contents) {
+                elementResults = elementResults.concat(this.getValidationResultsFor(child, []));
+            }
+        }
         this.validationCache.addValidationResultsToCache(elementResults);
-        this.validationFinished.emit();
+
+        // Run this asynchronously to prevent the loading modal to remain closed.
+        setTimeout(() => {
+            this.isValidating = false;
+            this.validationFinished.emit();
+            this.stateChanged.emit();
+        }, 1);
+
     }
 
     private getValidationResultsFor(element: IContainer, contents: IContainer[]): ValidationResult[] {
@@ -87,10 +113,10 @@ export class ValidationService {
         const elementValidators = this.getElementValidators(element) || [];
         let elementResults: ValidationResult[] =
             elementValidators.map((validator: ElementValidatorBase<IContainer>) => validator.validate(element, contents))
-            .concat(requiredFieldsResults)
-            .concat(validNameResult)
-            .concat(textLengthValidationResult);
-            this.validationCache.addValidationResultsToCache(elementResults);
+                .concat(requiredFieldsResults)
+                .concat(validNameResult)
+                .concat(textLengthValidationResult);
+        this.validationCache.addValidationResultsToCache(elementResults);
         return elementResults;
     }
 
@@ -152,5 +178,21 @@ export class ValidationService {
         }
         const validatorInstance: ElementValidatorBase<IContainer> = new (validatorType)();
         ValidationService.elementValidators[className].push(validatorInstance);
+    }
+
+    public isSavingEnabled(): boolean {
+        return this.currentSeverities.find(severity => severity === ValidationErrorSeverity.SAVE_DISABLED) === undefined;
+    }
+
+    public getValidationResultSaveDisabled(): String {
+        let validation = this.getValidationResults(this.navigator.currentElement)
+            .filter(severity => severity.severity === ValidationErrorSeverity.SAVE_DISABLED);
+        let result = '';
+        validation.forEach(element => {
+            result += element.element.className;
+            result += element.element.name !== '' ? ' - ' + element.element.name : '';
+            result += ': ' + element.message + '\n';
+        });
+        return result;
     }
 }

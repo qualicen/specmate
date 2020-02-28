@@ -1,0 +1,20 @@
+ID-1
+When the user clicks on a link to an existing model, Specmate displays the model in the editor.
+
+ID-2
+If the user clicks the button or hits the Enter-key and the data is not saved, a confirmation window opens.
+
+ID-3
+Specmate alerts the user to errors and prevents the model from being saved if the name-field is not filled or a start node or end node doesn't exists.
+
+ID-4
+If a model has been deleted from a requirement, it is no longer displayed in the requirements overview and in the Project Explorer.
+
+ID-5
+If the debit memo procedure exists, the balance is smaller than the tolerance amount, and the contract is neither reversed nor suspended, then no disbursement is to be made.
+
+ID-6
+The contract is approved if the agent and the account approve it.
+
+DRIVING-1
+Driving shall be allowed if the driver is at least 18 years old and has a valid driver licence.

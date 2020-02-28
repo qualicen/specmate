@@ -46,5 +46,9 @@ export class Dialogtype {
         return new Dialogtype('ConfirmationRequired', message, 'discard', withCancel ? 'cancel' : '', true);
     }
 
+    public static discardCancelDialog(message: string, withCancel: boolean) {
+        return new Dialogtype('ConfirmationRequired', message, 'discard', withCancel ? 'cancel' : '');
+    }
+
     static readonly DEFAULT = new Dialogtype('Default Title', 'Default Message');
 }

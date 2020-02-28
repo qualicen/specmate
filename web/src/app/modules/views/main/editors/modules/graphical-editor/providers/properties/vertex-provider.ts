@@ -1,13 +1,14 @@
+import * as he from 'he';
 import { mxgraph } from 'mxgraph'; // Typings only - no code!
 import { CEGNode } from '../../../../../../../../model/CEGNode';
 import { IContainer } from '../../../../../../../../model/IContainer';
 import { IModelNode } from '../../../../../../../../model/IModelNode';
 import { Type } from '../../../../../../../../util/type';
+import { EditorStyle } from '../../components/editor-components/editor-style';
 import { ConverterBase } from '../../converters/converter-base';
 import { CEGmxModelNode } from './ceg-mx-model-node';
 import { ProviderBase } from './provider-base';
 import { ShapeProvider } from './shape-provider';
-import { EditorStyle } from '../../components/editor-components/editor-style';
 
 declare var require: any;
 
@@ -84,7 +85,7 @@ export class VertexProvider extends ProviderBase {
         return vertex;
     }
 
-    public initCEGRenderer(graph: mxgraph.mxGraph) {
+    public static initRenderer(graph: mxgraph.mxGraph) {
         graph.convertValueToString = function (cell: mxgraph.mxCell) {
             if (cell.getId().endsWith(VertexProvider.ID_SUFFIX_TYPE)) {
                 let parent = cell.getParent();
@@ -126,5 +127,24 @@ export class VertexProvider extends ProviderBase {
             }
             return mx.mxGraph.prototype.convertValueToString.bind(graph)(cell);
         };
+
+        graph.getLabel = function (cell: mxgraph.mxCell) {
+            if (VertexProvider.isCEGTextInputCell(cell)) {
+                return he.encode(cell.value);
+            }
+            return mx.mxGraph.prototype.getLabel.bind(graph)(cell);
+        };
+
+        graph.getTooltipForCell = (cell) => {
+            if (cell.getId().endsWith(VertexProvider.ID_SUFFIX_TYPE)) {
+              return '';
+            }
+            return he.encode(cell.value);
+          };
+    }
+
+    public static isCEGTextInputCell(cell: mxgraph.mxCell): boolean {
+        return [VertexProvider.ID_SUFFIX_VARIABLE, VertexProvider.ID_SUFFIX_CONDITION]
+            .find(suffix => cell.id.endsWith(suffix)) !== undefined;
     }
 }

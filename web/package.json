@@ -1,6 +1,6 @@
 {
   "name": "specmate",
-  "version": "v0.4.0-rc-3",
+  "version": "v0.4.0-fix-1",
   "description": "Specmate for co-engineering requirements and tests",
   "scripts": {
     "extract": "ngx-translate-extract -i ./src -o ./src/assets/i18n/de.json ./src/assets/i18n/gb.json -m ngx_trans_extr --sort --format namespaced-json",
@@ -40,6 +40,7 @@
     "file-saver": "2.0.2",
     "flag-icon-css": "3.4.5",
     "font-awesome": "4.7.0",
+    "he": "^1.2.0",
     "jquery": "3.4.1",
     "mxgraph": "github:jgraph/mxgraph#12621211eed3495188c95bbc4b3020a1db451df5",
     "ng2-dragula": "2.1.1",
@@ -62,6 +63,7 @@
     "@angular/compiler-cli": "8.2.13",
     "@biesbjerg/ngx-translate-extract": "4.2.0",
     "@types/file-saver": "2.0.1",
+    "@types/he": "^1.1.0",
     "@types/jquery": "3.3.31",
     "@types/mxgraph": "github:lgleim/mxgraph-typings#474719ec8cedbb1ae5ea2cf121a41db105043374",
     "license-checker": "25.0.1",

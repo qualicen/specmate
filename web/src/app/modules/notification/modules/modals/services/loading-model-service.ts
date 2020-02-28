@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
-import { NgbModal, NgbModalRef, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
-import { LogElement } from '../../../../views/side/modules/log-list/services/log-element';
+import { NgbModal, NgbModalConfig, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { LoggingService } from '../../../../views/side/modules/log-list/services/logging.service';
-import { TypedModalContent } from '../components/typed-modal-content.component';
-import { Dialogtype } from '../modal-dialog-type';
 import { LoadingModalContent } from '../components/loading-modal-content.component';
 
 @Injectable()
@@ -16,16 +13,16 @@ export class LoadingModalService {
     }
 
     public open() {
-        var x: NgbModalConfig;
+        let x: NgbModalConfig;
         if (!this.isOpen) {
             this.isOpen = true;
-            this.modalRef = this.modalService.open(LoadingModalContent, { 
-                // small size 
-                size: "sm",
+            this.modalRef = this.modalService.open(LoadingModalContent, {
+                // small size
+                size: 'sm',
                 // don't allow to hide the modal by clicking the background
-                backdrop: "static", 
+                backdrop: 'static',
                 // don't allow to hide the modal by hitting ESC
-                keyboard: false, 
+                keyboard: false,
                 // center modal vertically
                 centered: true });
 

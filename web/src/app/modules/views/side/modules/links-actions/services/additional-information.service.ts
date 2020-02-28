@@ -76,8 +76,8 @@ export class AdditionalInformationService {
     }
 
     private async loadExports(): Promise<void> {
-        if(Type.is(this.element,TestSpecification) || Type.is(this.element, TestProcedure)){
-            this._exports = await this.dataService.performQuery(this.element.url, 'exporterlist',{});
+        if (Type.is(this.element, TestSpecification) || Type.is(this.element, TestProcedure)) {
+            this._exports = await this.dataService.performQuery(this.element.url, 'exporterlist', {});
         } else {
             this._exports = [];
         }

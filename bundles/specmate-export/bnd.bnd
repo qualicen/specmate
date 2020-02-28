@@ -18,7 +18,8 @@
 	specmate-auth-api;version=latest,\
 	specmate-connectors-api;version=latest,\
 	specmate-export-api;version=latest,\
-	org.apache.commons.collections4
+	org.apache.commons.collections4,\
+	org.eclipse.net4j.util
 
 -privatepackage: \
 	com.specmate.export.internal.exporters,\

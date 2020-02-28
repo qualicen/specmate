@@ -28,6 +28,17 @@ public class Migrator20200130 implements IMigrator {
 
 	@Override
 	public void migrate(Connection connection) throws SpecmateException {
+		migrateExportObject();
+		migrateUserSessionDeletedFlag();
+	}
+
+	private void migrateUserSessionDeletedFlag() throws SpecmateException {
+		IAttributeToSQLMapper aMapper = dbProvider.getAttributeToSQLMapper("model/user", getSourceVersion(),
+				getTargetVersion());
+		aMapper.migrateNewBooleanAttribute("usersession", "isdeleted", true);
+	}
+
+	private void migrateExportObject() throws SpecmateException {
 		IObjectToSQLMapper oMapper = dbProvider.getObjectToSQLMapper("model/export", getSourceVersion(),
 				getTargetVersion());
 		oMapper.newObject("Export");

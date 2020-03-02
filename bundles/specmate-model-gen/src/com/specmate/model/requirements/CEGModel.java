@@ -21,14 +21,9 @@ import com.specmate.model.base.ISpecmateModelObject;
  * @generated
  */
 public interface CEGModel extends ISpecmateModelObject {
-
 	/**
 	 * Returns the value of the '<em><b>Model Requirements</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Model Requirements</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Model Requirements</em>' attribute.
 	 * @see #setModelRequirements(String)
@@ -47,4 +42,5 @@ public interface CEGModel extends ISpecmateModelObject {
 	 * @generated
 	 */
 	void setModelRequirements(String value);
+
 } // CEGModel

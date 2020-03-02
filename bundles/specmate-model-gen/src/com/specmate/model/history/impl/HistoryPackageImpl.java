@@ -11,7 +11,13 @@ import com.specmate.model.base.BasePackage;
 import com.specmate.model.base.impl.BasePackageImpl;
 
 import com.specmate.model.batch.BatchPackage;
+
 import com.specmate.model.batch.impl.BatchPackageImpl;
+
+import com.specmate.model.export.ExportPackage;
+
+import com.specmate.model.export.impl.ExportPackageImpl;
+
 import com.specmate.model.history.Change;
 import com.specmate.model.history.History;
 import com.specmate.model.history.HistoryEntry;
@@ -29,6 +35,7 @@ import com.specmate.model.requirements.impl.RequirementsPackageImpl;
 import com.specmate.model.testspecification.TestspecificationPackage;
 
 import com.specmate.model.testspecification.impl.TestspecificationPackageImpl;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
@@ -124,6 +131,8 @@ public class HistoryPackageImpl extends EPackageImpl implements HistoryPackage {
 		AdministrationPackageImpl theAdministrationPackage = (AdministrationPackageImpl)(registeredPackage instanceof AdministrationPackageImpl ? registeredPackage : AdministrationPackage.eINSTANCE);
 		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(BatchPackage.eNS_URI);
 		BatchPackageImpl theBatchPackage = (BatchPackageImpl)(registeredPackage instanceof BatchPackageImpl ? registeredPackage : BatchPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(ExportPackage.eNS_URI);
+		ExportPackageImpl theExportPackage = (ExportPackageImpl)(registeredPackage instanceof ExportPackageImpl ? registeredPackage : ExportPackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theHistoryPackage.createPackageContents();
@@ -133,6 +142,7 @@ public class HistoryPackageImpl extends EPackageImpl implements HistoryPackage {
 		theProcessesPackage.createPackageContents();
 		theAdministrationPackage.createPackageContents();
 		theBatchPackage.createPackageContents();
+		theExportPackage.createPackageContents();
 
 		// Initialize created meta-data
 		theHistoryPackage.initializePackageContents();
@@ -142,6 +152,7 @@ public class HistoryPackageImpl extends EPackageImpl implements HistoryPackage {
 		theProcessesPackage.initializePackageContents();
 		theAdministrationPackage.initializePackageContents();
 		theBatchPackage.initializePackageContents();
+		theExportPackage.initializePackageContents();
 
 		// Mark meta-data to indicate it can't be changed
 		theHistoryPackage.freeze();

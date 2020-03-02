@@ -31,10 +31,6 @@ public interface HistoryEntry extends CDOObject {
 	/**
 	 * Returns the value of the '<em><b>Timestamp</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Timestamp</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Timestamp</em>' attribute.
 	 * @see #setTimestamp(long)
@@ -57,10 +53,6 @@ public interface HistoryEntry extends CDOObject {
 	/**
 	 * Returns the value of the '<em><b>User</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>User</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>User</em>' attribute.
 	 * @see #setUser(String)
@@ -84,10 +76,6 @@ public interface HistoryEntry extends CDOObject {
 	 * Returns the value of the '<em><b>Deleted Objects</b></em>' attribute list.
 	 * The list contents are of type {@link java.lang.String}.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Deleted Objects</em>' attribute list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Deleted Objects</em>' attribute list.
 	 * @see com.specmate.model.history.HistoryPackage#getHistoryEntry_DeletedObjects()
@@ -99,10 +87,6 @@ public interface HistoryEntry extends CDOObject {
 	/**
 	 * Returns the value of the '<em><b>Comment</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Comment</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Comment</em>' attribute.
 	 * @see #setComment(String)
@@ -126,10 +110,6 @@ public interface HistoryEntry extends CDOObject {
 	 * Returns the value of the '<em><b>Changes</b></em>' containment reference list.
 	 * The list contents are of type {@link com.specmate.model.history.Change}.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Changes</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Changes</em>' containment reference list.
 	 * @see com.specmate.model.history.HistoryPackage#getHistoryEntry_Changes()

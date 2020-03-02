@@ -2,7 +2,6 @@
 	osgi.annotation;version=6.0.1,\
 	osgi.core;version=6.0,\
 	osgi.cmpn;version=6.0,\
-	specmate-connectors;version=latest,\
 	specmate-model-gen;version=latest,\
 	specmate-common;version=latest,\
 	com.google.guava,\
@@ -12,7 +11,8 @@
 	org.eclipse.emf.ecore,\
 	org.eclipse.emf,\
 	org.eclipse.emf.common,\
-	specmate-config-api;version=latest
+	specmate-config-api;version=latest,\
+	specmate-connectors-api;version=latest
 
 Bundle-Version: 0.0.0.${tstamp}
 Private-Package: \

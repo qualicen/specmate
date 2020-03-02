@@ -7,6 +7,7 @@ import com.specmate.model.history.HistoryEntry;
 import com.specmate.model.history.HistoryPackage;
 
 import java.util.Collection;
+
 import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EList;

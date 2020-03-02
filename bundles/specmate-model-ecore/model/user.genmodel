@@ -31,6 +31,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute user.ecore#//UserSession/TargetSystem"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute user.ecore#//UserSession/libraryFolders"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute user.ecore#//UserSession/isDeleted"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute user.ecore#//UserSession/exporters"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

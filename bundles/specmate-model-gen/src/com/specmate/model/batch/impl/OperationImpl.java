@@ -3,6 +3,7 @@
 package com.specmate.model.batch.impl;
 
 import com.specmate.model.base.IContentElement;
+
 import com.specmate.model.batch.BatchPackage;
 import com.specmate.model.batch.Operation;
 import com.specmate.model.batch.OperationType;

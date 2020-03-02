@@ -31,10 +31,6 @@ public interface Change extends CDOObject {
 	/**
 	 * Returns the value of the '<em><b>Object Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Object Name</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Object Name</em>' attribute.
 	 * @see #setObjectName(String)
@@ -58,10 +54,6 @@ public interface Change extends CDOObject {
 	 * Returns the value of the '<em><b>Object Type</b></em>' attribute.
 	 * The default value is <code>""</code>.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Object Type</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Object Type</em>' attribute.
 	 * @see #setObjectType(String)
@@ -84,10 +76,6 @@ public interface Change extends CDOObject {
 	/**
 	 * Returns the value of the '<em><b>Old Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Old Value</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Old Value</em>' attribute.
 	 * @see #setOldValue(String)
@@ -110,10 +98,6 @@ public interface Change extends CDOObject {
 	/**
 	 * Returns the value of the '<em><b>New Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>New Value</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>New Value</em>' attribute.
 	 * @see #setNewValue(String)
@@ -136,10 +120,6 @@ public interface Change extends CDOObject {
 	/**
 	 * Returns the value of the '<em><b>Feature</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Feature</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Feature</em>' attribute.
 	 * @see #setFeature(String)
@@ -162,10 +142,6 @@ public interface Change extends CDOObject {
 	/**
 	 * Returns the value of the '<em><b>Is Create</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Is Create</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Is Create</em>' attribute.
 	 * @see #setIsCreate(boolean)
@@ -188,10 +164,6 @@ public interface Change extends CDOObject {
 	/**
 	 * Returns the value of the '<em><b>Is Delete</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Is Delete</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Is Delete</em>' attribute.
 	 * @see #setIsDelete(boolean)

@@ -25,10 +25,6 @@ public interface TestProcedure extends IContainer, IExternal {
 	/**
 	 * Returns the value of the '<em><b>Is Regression Test</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Is Regression Test</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Is Regression Test</em>' attribute.
 	 * @see #setIsRegressionTest(boolean)

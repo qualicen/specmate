@@ -33,10 +33,6 @@ public interface Requirement extends ISpecmateModelObject, IExternal {
 	/**
 	 * Returns the value of the '<em><b>Number Of Tests</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Number Of Tests</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Number Of Tests</em>' attribute.
 	 * @see #setNumberOfTests(int)
@@ -59,10 +55,6 @@ public interface Requirement extends ISpecmateModelObject, IExternal {
 	/**
 	 * Returns the value of the '<em><b>Tac</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Tac</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Tac</em>' attribute.
 	 * @see #setTac(String)
@@ -85,10 +77,6 @@ public interface Requirement extends ISpecmateModelObject, IExternal {
 	/**
 	 * Returns the value of the '<em><b>Implementing Unit</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Implementing Unit</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Implementing Unit</em>' attribute.
 	 * @see #setImplementingUnit(String)
@@ -111,10 +99,6 @@ public interface Requirement extends ISpecmateModelObject, IExternal {
 	/**
 	 * Returns the value of the '<em><b>Implementing BO Team</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Implementing BO Team</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Implementing BO Team</em>' attribute.
 	 * @see #setImplementingBOTeam(String)
@@ -137,10 +121,6 @@ public interface Requirement extends ISpecmateModelObject, IExternal {
 	/**
 	 * Returns the value of the '<em><b>Implementing IT Team</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Implementing IT Team</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Implementing IT Team</em>' attribute.
 	 * @see #setImplementingITTeam(String)
@@ -163,10 +143,6 @@ public interface Requirement extends ISpecmateModelObject, IExternal {
 	/**
 	 * Returns the value of the '<em><b>Planned Release</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Planned Release</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Planned Release</em>' attribute.
 	 * @see #setPlannedRelease(String)
@@ -189,10 +165,6 @@ public interface Requirement extends ISpecmateModelObject, IExternal {
 	/**
 	 * Returns the value of the '<em><b>Status</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Status</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Status</em>' attribute.
 	 * @see #setStatus(String)
@@ -215,10 +187,6 @@ public interface Requirement extends ISpecmateModelObject, IExternal {
 	/**
 	 * Returns the value of the '<em><b>Is Regression Requirement</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Is Regression Requirement</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Is Regression Requirement</em>' attribute.
 	 * @see #setIsRegressionRequirement(boolean)
@@ -241,10 +209,6 @@ public interface Requirement extends ISpecmateModelObject, IExternal {
 	/**
 	 * Returns the value of the '<em><b>Platform</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Platform</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Platform</em>' attribute.
 	 * @see #setPlatform(String)

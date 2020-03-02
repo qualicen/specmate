@@ -16,6 +16,7 @@ import com.specmate.rest.RestResult;
 import com.specmate.test.integration.support.DummyProject;
 import com.specmate.test.integration.support.DummyProjectService;
 import com.specmate.usermodel.UserSession;
+import com.specmate.usermodel.UsermodelPackage;
 
 public class AuthenticationTest extends EmfRestTest {
 	private String projectAName, projectBName;
@@ -60,29 +61,33 @@ public class AuthenticationTest extends EmfRestTest {
 
 		resetSelectedProject();
 	}
-	
+
 	@Test
 	public void testWrongProjectAtLogin() throws SpecmateException {
 		RestClient clientProjectA = new RestClient(REST_ENDPOINT, session.getId(), logService);
-		
+
 		// correct login
-		String rightLoginJson = "{\"___nsuri\":\"http://specmate.com/20200130/model/user\",\"className\":\"User\",\"userName\":\"resttest\",\"passWord\":\"resttest\",\"projectName\":\"" + projectAName + "\"}";
+		String rightLoginJson = "{\"___nsuri\":\"" + UsermodelPackage.eNS_URI
+				+ "\",\"className\":\"User\",\"userName\":\"resttest\",\"passWord\":\"resttest\",\"projectName\":\""
+				+ projectAName + "\"}";
 		RestResult<JSONObject> result = clientProjectA.post("login", new JSONObject(rightLoginJson));
 		int loginStatus = result.getResponse().getStatus();
 		assertEquals(Status.OK.getStatusCode(), loginStatus);
-		
+
 		// wrong project name in login
 		String wrongProjectName = "wrongProjectName";
-		String wrongLoginJson = "{\"___nsuri\":\"http://specmate.com/20200130/model/user\",\"className\":\"User\",\"userName\":\"resttest\",\"passWord\":\"resttest\",\"projectName\":\"" + wrongProjectName + "\"}";
+		String wrongLoginJson = "{\"___nsuri\":\"" + UsermodelPackage.eNS_URI
+				+ "\",\"className\":\"User\",\"userName\":\"resttest\",\"passWord\":\"resttest\",\"projectName\":\""
+				+ wrongProjectName + "\"}";
 		result = clientProjectA.post("login", new JSONObject(wrongLoginJson));
 		loginStatus = result.getResponse().getStatus();
 		assertEquals(Status.UNAUTHORIZED.getStatusCode(), loginStatus);
-		
+
 		// correct login
 		result = clientProjectA.post("login", new JSONObject(rightLoginJson));
 		loginStatus = result.getResponse().getStatus();
 		assertEquals(Status.OK.getStatusCode(), loginStatus);
-		
+
 		result.getResponse().close();
 
 		resetSelectedProject();

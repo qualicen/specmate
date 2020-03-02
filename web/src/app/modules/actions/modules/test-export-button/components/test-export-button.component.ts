@@ -3,9 +3,11 @@ import { Component, Input } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { saveAs } from 'file-saver';
 import { TestSpecification } from '../../../../../model/TestSpecification';
-import { TestSpecificationSkeleton } from '../../../../../model/TestSpecificationSkeleton';
+import { Export } from '../../../../../model/Export';
 import { SpecmateDataService } from '../../../../data/modules/data-service/services/specmate-data.service';
 import { IContainer } from '../../../../../model/IContainer';
+import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
+import { ValidationService } from 'src/app/modules/forms/modules/validation/services/validation.service';
 
 @Component({
     moduleId: module.id.toString(),
@@ -17,6 +19,7 @@ import { IContainer } from '../../../../../model/IContainer';
 export class TestExportButton {
 
     private _element: IContainer;
+    private _contents: IContainer[];
 
     private _lang: string;
 
@@ -36,24 +39,32 @@ export class TestExportButton {
     }
 
     constructor(private dataService: SpecmateDataService,
-        private translate: TranslateService) { }
+        private translate: TranslateService,
+        private modal: ConfirmationModal,
+        private validation: ValidationService) { }
+
+    ngOnInit(): void {
+        this.dataService.readContents(this._element.url).then((contents: IContainer[]) => this._contents = contents);
+    }
 
     public async getskeleton(): Promise<void> {
         if (!this.enabled) {
             return;
         }
 
-        const data: TestSpecificationSkeleton = await this.dataService.performQuery(this._element.url, 'export',
+        const data: Export = await this.dataService.performQuery(this._element.url, 'export',
             {
-                language: new LowerCasePipe().transform(this._lang),
-                exportDate: (new Date().getTime()).toString()
+                language: new LowerCasePipe().transform(this._lang)
             });
 
-        if (data === undefined) {
-            throw new Error('Could not load test specification skeleton for ' + this._lang);
-        }
+        if (data === null || data === undefined) {
+            // no failure but no content --> export to background system
+            this.modal.openOk(this.translate.instant('successful'), this.translate.instant('exportSuccessful'));
 
-        saveAs(new Blob([TestExportButton.UTF8_BOM + data.code], { type: 'text/plain;charset=utf-8' }), data.name);
+        } else {
+            // there is content --> save it (not modal needed in this case)
+            saveAs(new Blob([TestExportButton.UTF8_BOM + data.content], { type: 'text/plain;charset=utf-8' }), data.name);
+        }
     }
 
     public get language(): string {
@@ -65,6 +76,12 @@ export class TestExportButton {
             return false;
         }
 
-        return true;
+        return this.isValid();
     }
+
+
+    private isValid(): boolean {
+        return this.validation.isValid(this._element) && this.validation.allValid(this._contents);
+    }
+
 }

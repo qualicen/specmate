@@ -220,26 +220,6 @@ public class ParameterAssignmentImpl extends CDOObjectImpl implements ParameterA
 	 * @generated
 	 */
 	@Override
-	public String getCondition() {
-		return (String)eDynamicGet(TestspecificationPackage.PARAMETER_ASSIGNMENT__CONDITION, TestspecificationPackage.Literals.PARAMETER_ASSIGNMENT__CONDITION, true, true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setCondition(String newCondition) {
-		eDynamicSet(TestspecificationPackage.PARAMETER_ASSIGNMENT__CONDITION, TestspecificationPackage.Literals.PARAMETER_ASSIGNMENT__CONDITION, newCondition);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public String getValue() {
 		return (String)eDynamicGet(TestspecificationPackage.PARAMETER_ASSIGNMENT__VALUE, TestspecificationPackage.Literals.PARAMETER_ASSIGNMENT__VALUE, true, true);
 	}
@@ -252,6 +232,26 @@ public class ParameterAssignmentImpl extends CDOObjectImpl implements ParameterA
 	@Override
 	public void setValue(String newValue) {
 		eDynamicSet(TestspecificationPackage.PARAMETER_ASSIGNMENT__VALUE, TestspecificationPackage.Literals.PARAMETER_ASSIGNMENT__VALUE, newValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getCondition() {
+		return (String)eDynamicGet(TestspecificationPackage.PARAMETER_ASSIGNMENT__CONDITION, TestspecificationPackage.Literals.PARAMETER_ASSIGNMENT__CONDITION, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setCondition(String newCondition) {
+		eDynamicSet(TestspecificationPackage.PARAMETER_ASSIGNMENT__CONDITION, TestspecificationPackage.Literals.PARAMETER_ASSIGNMENT__CONDITION, newCondition);
 	}
 
 	/**

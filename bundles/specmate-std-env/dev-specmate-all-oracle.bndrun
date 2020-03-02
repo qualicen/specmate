@@ -48,7 +48,8 @@
 	osgi.identity;filter:='(osgi.identity=specmate-dbprovider-oracle)',\
 	osgi.identity;filter:='(osgi.identity=specmate-nlp)',\
 	osgi.identity;filter:='(osgi.identity=specmate-model-generation)',\
-	bnd.identity;id='log4j'
+	bnd.identity;id='log4j',\
+	bnd.identity;id='specmate-export'
 -runbundles: \
 	javassist;version='[3.18.1,3.18.2)',\
 	javax.annotation-api;version='[1.2.0,1.2.1)',\
@@ -224,7 +225,8 @@
 	javax.activation-api;version='[1.2.0,1.2.1)',\
 	jaxb-api;version='[2.3.1,2.3.2)',\
 	specmate-xtext;version=snapshot,\
-	specmate-objectif;version=snapshot
+	specmate-objectif;version=snapshot,\
+	specmate-export;version=snapshot
 
 -runproperties: \
 	jetty.http.port=8080,\

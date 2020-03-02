@@ -22,7 +22,13 @@ import com.specmate.model.base.ISpecmatePositionableModelObject;
 import com.specmate.model.base.ITracingElement;
 
 import com.specmate.model.batch.BatchPackage;
+
 import com.specmate.model.batch.impl.BatchPackageImpl;
+
+import com.specmate.model.export.ExportPackage;
+
+import com.specmate.model.export.impl.ExportPackageImpl;
+
 import com.specmate.model.history.HistoryPackage;
 
 import com.specmate.model.history.impl.HistoryPackageImpl;
@@ -38,6 +44,7 @@ import com.specmate.model.requirements.impl.RequirementsPackageImpl;
 import com.specmate.model.testspecification.TestspecificationPackage;
 
 import com.specmate.model.testspecification.impl.TestspecificationPackageImpl;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
@@ -203,6 +210,8 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 		AdministrationPackageImpl theAdministrationPackage = (AdministrationPackageImpl)(registeredPackage instanceof AdministrationPackageImpl ? registeredPackage : AdministrationPackage.eINSTANCE);
 		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(BatchPackage.eNS_URI);
 		BatchPackageImpl theBatchPackage = (BatchPackageImpl)(registeredPackage instanceof BatchPackageImpl ? registeredPackage : BatchPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(ExportPackage.eNS_URI);
+		ExportPackageImpl theExportPackage = (ExportPackageImpl)(registeredPackage instanceof ExportPackageImpl ? registeredPackage : ExportPackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theBasePackage.createPackageContents();
@@ -212,6 +221,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 		theHistoryPackage.createPackageContents();
 		theAdministrationPackage.createPackageContents();
 		theBatchPackage.createPackageContents();
+		theExportPackage.createPackageContents();
 
 		// Initialize created meta-data
 		theBasePackage.initializePackageContents();
@@ -221,6 +231,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 		theHistoryPackage.initializePackageContents();
 		theAdministrationPackage.initializePackageContents();
 		theBatchPackage.initializePackageContents();
+		theExportPackage.initializePackageContents();
 
 		// Mark meta-data to indicate it can't be changed
 		theBasePackage.freeze();

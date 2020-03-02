@@ -174,4 +174,3 @@ Test-Cases: \
 	osgi.compatibility.bootdelegation=true,\
 	equinox.log.history.max=1000,\
 	org.osgi.service.log.admin.loglevel=DEBUG 
--resolve: auto

@@ -1,0 +1,27 @@
+-buildpath: \
+	osgi.cmpn,\
+	osgi.core,\
+	specmate-model-gen;version=latest,\
+	specmate-model-support;version=latest,\
+	org.eclipse.emf,\
+	org.eclipse.emf.ecore,\
+	org.eclipse.emf.common,\
+	org.eclipse.emf.cdo,\
+	org.eclipse.emf.cdo.common,\
+	specmate-metrics;version=latest,\
+	specmate-emfrest-api;version=latest,\
+	specmate-common;version=latest,\
+	javax.ws.rs-api,\
+	specmate-rest;version=latest,\
+	org.apache.commons.lang3,\
+	org.apache.servicemix.bundles.junit,\
+	specmate-auth-api;version=latest,\
+	specmate-connectors-api;version=latest,\
+	specmate-export-api;version=latest,\
+	org.apache.commons.collections4,\
+	org.eclipse.net4j.util,\
+	org.eclipse.equinox.common
+
+-privatepackage: \
+	com.specmate.export.internal.exporters,\
+	com.specmate.export.internal.services

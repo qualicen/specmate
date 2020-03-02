@@ -1,17 +1,15 @@
 package com.specmate.auth.internal;
 
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Reference;
 
 import com.specmate.auth.api.IAuthenticationService;
 import com.specmate.auth.api.ISessionService;
-import com.specmate.auth.config.AuthenticationServiceConfig;
 import com.specmate.common.exception.SpecmateAuthorizationException;
 import com.specmate.common.exception.SpecmateException;
-import com.specmate.connectors.api.IExportService;
 import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.api.IProjectService;
+import com.specmate.export.api.IExporter;
 import com.specmate.usermodel.AccessRights;
 import com.specmate.usermodel.UserSession;
 
@@ -19,7 +17,7 @@ import com.specmate.usermodel.UserSession;
  * Authentication design based on this implementation:
  * https://stackoverflow.com/a/26778123
  */
-@Component(immediate = true, service = IAuthenticationService.class, configurationPid = AuthenticationServiceConfig.PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
+@Component(immediate = true, service = IAuthenticationService.class)
 public class AuthenticationServiceImpl implements IAuthenticationService {
 	private ISessionService sessionService;
 	private IProjectService projectService;
@@ -38,7 +36,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 		AccessRights targetRights = retrieveTargetAccessRights(project, username, password);
 
 		try {
-			return sessionService.create(AccessRights.ALL, targetRights, username, projectname);
+			return sessionService.create(AccessRights.ALL, targetRights, username, password, projectname);
 		} catch (SpecmateException e) {
 			// Something went wrong when creating the session. We act as if the
 			// Authorization failed
@@ -102,7 +100,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 	}
 
 	private AccessRights retrieveTargetAccessRights(IProject project, String username, String password) {
-		IExportService exporter = project.getExporter();
+		IExporter exporter = project.getExporter();
 		if (exporter == null) {
 			return AccessRights.NONE;
 		}

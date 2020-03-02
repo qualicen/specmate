@@ -28,7 +28,7 @@ public class Migrator20180925 implements IMigrator {
 
 	@Override
 	public void migrate(Connection connection) throws SpecmateException {
-		String objectName = "TestSpecificationSkeleton";
+		String objectName = "Export";
 		String packageName = "model/testspecification";
 		IObjectToSQLMapper oMapper = dbProvider.getObjectToSQLMapper(packageName, getSourceVersion(),
 				getTargetVersion());

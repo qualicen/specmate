@@ -3,6 +3,7 @@
 package com.specmate.model.batch;
 
 import org.eclipse.emf.cdo.CDOObject;
+
 import org.eclipse.emf.common.util.EList;
 
 /**
@@ -23,15 +24,10 @@ import org.eclipse.emf.common.util.EList;
  * @generated
  */
 public interface BatchOperation extends CDOObject {
-
 	/**
 	 * Returns the value of the '<em><b>Operations</b></em>' containment reference list.
 	 * The list contents are of type {@link com.specmate.model.batch.Operation}.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Operations</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Operations</em>' containment reference list.
 	 * @see com.specmate.model.batch.BatchPackage#getBatchOperation_Operations()
@@ -39,4 +35,5 @@ public interface BatchOperation extends CDOObject {
 	 * @generated
 	 */
 	EList<Operation> getOperations();
+
 } // BatchOperation

@@ -3,6 +3,7 @@
 package com.specmate.usermodel;
 
 import org.eclipse.emf.cdo.CDOObject;
+
 import org.eclipse.emf.common.util.EList;
 
 /**
@@ -22,6 +23,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.specmate.usermodel.UserSession#getTargetSystem <em>Target System</em>}</li>
  *   <li>{@link com.specmate.usermodel.UserSession#getLibraryFolders <em>Library Folders</em>}</li>
  *   <li>{@link com.specmate.usermodel.UserSession#isIsDeleted <em>Is Deleted</em>}</li>
+ *   <li>{@link com.specmate.usermodel.UserSession#getExporters <em>Exporters</em>}</li>
  * </ul>
  *
  * @see com.specmate.usermodel.UsermodelPackage#getUserSession()
@@ -33,10 +35,6 @@ public interface UserSession extends CDOObject {
 	/**
 	 * Returns the value of the '<em><b>Id</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Id</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Id</em>' attribute.
 	 * @see #setId(String)
@@ -59,10 +57,6 @@ public interface UserSession extends CDOObject {
 	/**
 	 * Returns the value of the '<em><b>Allowed Path Pattern</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Allowed Path Pattern</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Allowed Path Pattern</em>' attribute.
 	 * @see #setAllowedPathPattern(String)
@@ -85,10 +79,6 @@ public interface UserSession extends CDOObject {
 	/**
 	 * Returns the value of the '<em><b>User Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>User Name</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>User Name</em>' attribute.
 	 * @see #setUserName(String)
@@ -111,10 +101,6 @@ public interface UserSession extends CDOObject {
 	/**
 	 * Returns the value of the '<em><b>Last Active</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Last Active</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Last Active</em>' attribute.
 	 * @see #setLastActive(long)
@@ -138,10 +124,6 @@ public interface UserSession extends CDOObject {
 	 * Returns the value of the '<em><b>Source System</b></em>' attribute.
 	 * The literals are from the enumeration {@link com.specmate.usermodel.AccessRights}.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Source System</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Source System</em>' attribute.
 	 * @see com.specmate.usermodel.AccessRights
@@ -167,10 +149,6 @@ public interface UserSession extends CDOObject {
 	 * Returns the value of the '<em><b>Target System</b></em>' attribute.
 	 * The literals are from the enumeration {@link com.specmate.usermodel.AccessRights}.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Target System</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Target System</em>' attribute.
 	 * @see com.specmate.usermodel.AccessRights
@@ -196,10 +174,6 @@ public interface UserSession extends CDOObject {
 	 * Returns the value of the '<em><b>Library Folders</b></em>' attribute list.
 	 * The list contents are of type {@link java.lang.String}.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Library Folders</em>' attribute list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Library Folders</em>' attribute list.
 	 * @see com.specmate.usermodel.UsermodelPackage#getUserSession_LibraryFolders()
@@ -229,5 +203,17 @@ public interface UserSession extends CDOObject {
 	 * @generated
 	 */
 	void setIsDeleted(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Exporters</b></em>' attribute list.
+	 * The list contents are of type {@link java.lang.String}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Exporters</em>' attribute list.
+	 * @see com.specmate.usermodel.UsermodelPackage#getUserSession_Exporters()
+	 * @model
+	 * @generated
+	 */
+	EList<String> getExporters();
 
 } // UserSession

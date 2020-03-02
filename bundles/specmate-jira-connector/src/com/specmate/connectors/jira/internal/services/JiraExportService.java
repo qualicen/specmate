@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.StreamSupport;
 
-import org.eclipse.emf.ecore.EObject;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
@@ -23,23 +23,41 @@ import com.atlassian.jira.rest.client.api.domain.input.IssueInputBuilder;
 import com.atlassian.util.concurrent.Promise;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
-import com.specmate.connectors.api.IExportService;
 import com.specmate.connectors.jira.config.JiraConnectorConfig;
+import com.specmate.export.api.IExporter;
+import com.specmate.export.api.ExporterBase;
 import com.specmate.model.administration.ErrorCode;
 import com.specmate.model.support.util.SpecmateEcoreUtil;
 import com.specmate.model.testspecification.TestProcedure;
 import com.specmate.model.testspecification.TestSpecification;
+import com.specmate.model.export.Export;
 import com.specmate.model.testspecification.TestStep;
 
-@Component(immediate = true, service = IExportService.class, configurationPid = JiraConnectorConfig.EXPORTER_PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
-public class JiraExportService implements IExportService {
+/** Exorter for jira x-ray */
+@Component(immediate = true, service = IExporter.class, configurationPid = JiraConnectorConfig.EXPORTER_PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
+public class JiraExportService extends ExporterBase {
 
+	/** Reference to the logging service */
 	private LogService logService;
+
+	/** The issue type for tests */
 	private IssueType testType;
+
+	/** URL to the jira instance */
 	private String url;
+
+	/** Name of the jira project */
 	private String projectName;
+
+	/** User name of the techical user to acess jira */
 	private String username;
+
+	/** Password of the technical user */
 	private String password;
+
+	public JiraExportService() {
+		super("Atlassian JIRA");
+	}
 
 	@Activate
 	public void activate(Map<String, Object> properties) throws SpecmateException {
@@ -74,31 +92,34 @@ public class JiraExportService implements IExportService {
 	}
 
 	@Override
-	public void export(EObject exportTarget) throws SpecmateException {
+	public boolean canExportTestSpecification() {
+		return true;
+	}
+
+	@Override
+	public boolean canExportTestProcedure() {
+		return true;
+	}
+
+	@Override
+	public Optional<Export> export(Object exportTarget) throws SpecmateException {
 		if (exportTarget instanceof TestProcedure) {
-			exportTestProcedure((TestProcedure) exportTarget);
+			return exportTestProcedure((TestProcedure) exportTarget);
 		}
 		if (exportTarget instanceof TestSpecification) {
-			exportTestSpecification((TestSpecification) exportTarget);
+			return exportTestSpecification((TestSpecification) exportTarget);
 		}
+		throw new SpecmateInternalException(ErrorCode.JIRA,
+				"Cannot export object of type " + exportTarget.getClass().getName());
 	}
 
-	@Override
-	public boolean canExportTestProceure() {
-		return true;
+	private Optional<Export> exportTestSpecification(TestSpecification exportTarget)
+			throws SpecmateInternalException {
+		throw new SpecmateInternalException(ErrorCode.JIRA, "Test specification export to jira not supported");
 	}
 
-	@Override
-	public boolean canExportTextSpecification() {
-		return true;
-	}
-
-	private void exportTestSpecification(TestSpecification exportTarget) {
-		// not implemented yet
-
-	}
-
-	public void exportTestProcedure(TestProcedure testProcedure) throws SpecmateException {
+	public Optional<Export> exportTestProcedure(TestProcedure testProcedure)
+			throws SpecmateException {
 		JiraRestClient jiraClient = null;
 		try {
 			try {
@@ -127,6 +148,7 @@ public class JiraExportService implements IExportService {
 			} catch (Exception e) {
 				throw new SpecmateInternalException(ErrorCode.JIRA, e);
 			}
+			return Optional.empty();
 		} finally {
 			if (jiraClient != null) {
 				try {

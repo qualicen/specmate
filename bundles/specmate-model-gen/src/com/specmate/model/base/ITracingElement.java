@@ -30,10 +30,6 @@ public interface ITracingElement extends CDOObject {
 	 * The list contents are of type {@link com.specmate.model.base.ITracingElement}.
 	 * It is bidirectional and its opposite is '{@link com.specmate.model.base.ITracingElement#getTracesFrom <em>Traces From</em>}'.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Traces To</em>' reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Traces To</em>' reference list.
 	 * @see com.specmate.model.base.BasePackage#getITracingElement_TracesTo()
@@ -48,10 +44,6 @@ public interface ITracingElement extends CDOObject {
 	 * The list contents are of type {@link com.specmate.model.base.ITracingElement}.
 	 * It is bidirectional and its opposite is '{@link com.specmate.model.base.ITracingElement#getTracesTo <em>Traces To</em>}'.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Traces From</em>' reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Traces From</em>' reference list.
 	 * @see com.specmate.model.base.BasePackage#getITracingElement_TracesFrom()

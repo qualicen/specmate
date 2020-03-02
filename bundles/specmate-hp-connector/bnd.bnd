@@ -6,7 +6,6 @@
 	org.json;version=latest,\
 	javax.ws.rs-api,\
 	org.eclipse.emf.common,\
-	specmate-connectors;version=latest,\
 	org.apache.commons.collections4,\
 	org.eclipse.emf.cdo,\
 	org.eclipse.emf.cdo.common,\
@@ -19,7 +18,9 @@
 	specmate-emfrest-api;version=latest,\
 	specmate-config-api;version=latest,\
 	specmate-emfrest;version=latest,\
-	specmate-rest;version=latest
+	specmate-rest;version=latest,\
+	specmate-connectors-api;version=latest,\
+	specmate-export-api;version=latest
 Private-Package: \
 	com.specmate.connectors.hpconnector.internal,\
 	com.specmate.connectors.hpconnector.internal.config,\

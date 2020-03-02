@@ -24,7 +24,7 @@ public class TestExportTestSpecification {
 
 		JavaTestSpecificationExporter exporter = new JavaTestSpecificationExporter();
 		Optional<Export> result = exporter.export(ts);
-		String code = result.get().getType();
+		String code = result.get().getContent();
 
 		Assert.assertTrue(code.contains("public void TSTest___in1__in11___in2_____out1__out11___out2__out12()"));
 		Assert.assertTrue(code.contains("public void TSTest___in1__in21___in2__in22___out1__out21___out2__out22()"));

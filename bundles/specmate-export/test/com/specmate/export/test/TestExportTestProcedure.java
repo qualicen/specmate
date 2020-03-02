@@ -19,7 +19,7 @@ public class TestExportTestProcedure {
 
 		CSVTestProcedureExporter exporter = new CSVTestProcedureExporter();
 		Optional<Export> result = exporter.export(tp);
-		String code = result.get().getType();
+		String code = result.get().getContent();
 		Assert.assertEquals("Step Name;Action;Expected Outcome\n" + "step-1;Description1;Outcome1\n"
 				+ "step-2;Description2;Outcome2", code);
 	}
@@ -30,7 +30,7 @@ public class TestExportTestProcedure {
 		tp.getContents().clear();
 		CSVTestProcedureExporter exporter = new CSVTestProcedureExporter();
 		Optional<Export> result = exporter.export(tp);
-		String code = result.get().getType();
+		String code = result.get().getContent();
 		Assert.assertEquals("Step Name;Action;Expected Outcome", code);
 	}
 

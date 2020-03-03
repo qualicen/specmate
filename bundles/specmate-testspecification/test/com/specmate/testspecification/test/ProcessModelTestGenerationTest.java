@@ -52,8 +52,6 @@ public class ProcessModelTestGenerationTest {
 
 		List<TestCase> testCases = SpecmateEcoreUtil.pickInstancesOf(ts.getContents(), TestCase.class);
 		
-		testCases.forEach(tc -> printTestCase(tc));
-		
 		Assert.assertEquals(3, testCases.size());
 		
 		assertTestCase(testCases, Arrays.asList(

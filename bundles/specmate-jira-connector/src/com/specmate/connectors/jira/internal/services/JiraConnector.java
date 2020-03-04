@@ -51,8 +51,8 @@ import com.specmate.rest.RestResult;
 		IRequirementsSource.class }, configurationPid = JiraConnectorConfig.CONNECTOR_PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
 public class JiraConnector extends DetailsService implements IRequirementsSource, IRestService {
 
+	private static final int PAGINATION_SIZE_DEFAULT = 50;
 	private static final String JIRA_STORY_CACHE_NAME = "jiraStoryCache";
-
 	private static final String JIRA_SOURCE_ID = "jira";
 
 	private LogService logService;
@@ -68,6 +68,7 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 	private ICacheService cacheService;
 
 	private ICache<String, Issue> cache;
+	private int paginationSizeInt;
 
 	public JiraRestClient getJiraClient() {
 		return jiraClient;
@@ -82,7 +83,19 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 		projectName = (String) properties.get(JiraConnectorConfig.KEY_JIRA_PROJECT);
 		String username = (String) properties.get(JiraConnectorConfig.KEY_JIRA_USERNAME);
 		String password = (String) properties.get(JiraConnectorConfig.KEY_JIRA_PASSWORD);
+		String paginationSizeStr = (String) properties.get(JiraConnectorConfig.KEY_JIRA_PAGINATION_SIZE);
 
+		
+		this.paginationSizeInt = PAGINATION_SIZE_DEFAULT;
+		if (paginationSizeStr != null) {
+			try {
+				this.paginationSizeInt = Integer.parseInt(paginationSizeStr);
+			} catch (NumberFormatException nfe) {
+				this.paginationSizeInt = PAGINATION_SIZE_DEFAULT;
+			}
+		}
+
+		
 		try {
 			jiraClient = JiraUtil.createJiraRESTClient(url, username, password);
 		} catch (URISyntaxException e) {
@@ -186,7 +199,7 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 		int maxResults = Integer.MAX_VALUE;
 		while (issues.size() < maxResults) {
 			try {
-				SearchResult searchResult = jiraClient.getSearchClient().searchJql(jql, -1, issues.size(), null)
+				SearchResult searchResult = jiraClient.getSearchClient().searchJql(jql, this.paginationSizeInt, issues.size(), null)
 						.claim();
 				maxResults = searchResult.getTotal();
 				searchResult.getIssues().forEach(issue -> issues.add(issue));

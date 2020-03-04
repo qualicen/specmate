@@ -22,6 +22,7 @@ public class JiraConnectorConfig {
 	public static final String KEY_JIRA_PROJECT = "jira.project";
 	public static final String KEY_JIRA_USERNAME = "jira.username";
 	public static final String KEY_JIRA_PASSWORD = "jira.password";
+	public static final String KEY_JIRA_PAGINATION_SIZE = "jira.paginationSize";
 	private ConfigurationAdmin configurationAdmin;
 	private LogService logService;
 	private IConfigService configService;
@@ -38,12 +39,14 @@ public class JiraConnectorConfig {
 		String project = configService.getConfigurationProperty(KEY_JIRA_PROJECT);
 		String username = configService.getConfigurationProperty(KEY_JIRA_USERNAME);
 		String password = configService.getConfigurationProperty(KEY_JIRA_PASSWORD);
-
+		String paginationSize = configService.getConfigurationProperty(KEY_JIRA_PAGINATION_SIZE);
+		
 		if (project != null && username != null && password != null) {
 			properties.put(KEY_JIRA_URL, url);
 			properties.put(KEY_JIRA_PROJECT, project);
 			properties.put(KEY_JIRA_USERNAME, username);
 			properties.put(KEY_JIRA_PASSWORD, password);
+			properties.put(KEY_JIRA_PAGINATION_SIZE, paginationSize);
 			logService.log(LogService.LOG_DEBUG,
 					"Configuring Jira Connector with:\n" + OSGiUtil.configDictionaryToString(properties));
 

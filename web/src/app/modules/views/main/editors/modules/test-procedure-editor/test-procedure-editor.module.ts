@@ -8,7 +8,6 @@ import { MaximizeButtonModule } from '../maximize-button/maximize-button.module'
 import { TestCaseParameterMappingModule } from '../test-case-parameter-mapping/test-case-parameter-mapping.module';
 import { TestProcedureEditor } from './components/test-procedure-editor.component';
 import { TestStepRow } from './components/test-step-row.component';
-import { TextareaAutosizeModule } from 'ngx-textarea-autosize';
 
 @NgModule({
   imports: [
@@ -20,8 +19,7 @@ import { TextareaAutosizeModule } from 'ngx-textarea-autosize';
     TestCaseParameterMappingModule,
     FormsModule,
     SpecmateSharedModule,
-    ReactiveFormsModule,
-    TextareaAutosizeModule
+    ReactiveFormsModule
   ],
   declarations: [
     // COMPONENTS IN THIS MODULE

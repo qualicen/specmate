@@ -18,6 +18,8 @@ export class ProcessDecisionFactory extends PositionableElementFactoryBase<Proce
         node.description = Config.PROCESS_NEW_DECISION_DESCRIPTION;
         node.id = id;
         node.url = url;
+        node.isRecycled = false;
+        node.hasRecycledChildren = false;
         node.x = this.coords.x;
         node.y = this.coords.y;
         node.tracesFrom = [];

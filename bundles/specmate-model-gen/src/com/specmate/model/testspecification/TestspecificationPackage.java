@@ -41,7 +41,7 @@ public interface TestspecificationPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://specmate.com/20200228/model/testspecification";
+	String eNS_URI = "http://specmate.com/20200309/model/testspecification";
 
 	/**
 	 * The package namespace name.
@@ -95,6 +95,24 @@ public interface TestspecificationPackage extends EPackage {
 	 * @ordered
 	 */
 	int TEST_SPECIFICATION__DESCRIPTION = BasePackage.ICONTAINER__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TEST_SPECIFICATION__IS_RECYCLED = BasePackage.ICONTAINER__IS_RECYCLED;
+
+	/**
+	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TEST_SPECIFICATION__HAS_RECYCLED_CHILDREN = BasePackage.ICONTAINER__HAS_RECYCLED_CHILDREN;
 
 	/**
 	 * The feature id for the '<em><b>Contents</b></em>' containment reference list.
@@ -159,6 +177,24 @@ public interface TestspecificationPackage extends EPackage {
 	 * @ordered
 	 */
 	int TEST_PARAMETER__DESCRIPTION = BasePackage.ICONTENT_ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TEST_PARAMETER__IS_RECYCLED = BasePackage.ICONTENT_ELEMENT__IS_RECYCLED;
+
+	/**
+	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TEST_PARAMETER__HAS_RECYCLED_CHILDREN = BasePackage.ICONTENT_ELEMENT__HAS_RECYCLED_CHILDREN;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -232,6 +268,24 @@ public interface TestspecificationPackage extends EPackage {
 	 * @ordered
 	 */
 	int TEST_CASE__DESCRIPTION = BasePackage.ICONTAINER__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TEST_CASE__IS_RECYCLED = BasePackage.ICONTAINER__IS_RECYCLED;
+
+	/**
+	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TEST_CASE__HAS_RECYCLED_CHILDREN = BasePackage.ICONTAINER__HAS_RECYCLED_CHILDREN;
 
 	/**
 	 * The feature id for the '<em><b>Contents</b></em>' containment reference list.
@@ -316,6 +370,24 @@ public interface TestspecificationPackage extends EPackage {
 	int PARAMETER_ASSIGNMENT__DESCRIPTION = BasePackage.ICONTENT_ELEMENT__DESCRIPTION;
 
 	/**
+	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARAMETER_ASSIGNMENT__IS_RECYCLED = BasePackage.ICONTENT_ELEMENT__IS_RECYCLED;
+
+	/**
+	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARAMETER_ASSIGNMENT__HAS_RECYCLED_CHILDREN = BasePackage.ICONTENT_ELEMENT__HAS_RECYCLED_CHILDREN;
+
+	/**
 	 * The feature id for the '<em><b>Parameter</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -396,6 +468,24 @@ public interface TestspecificationPackage extends EPackage {
 	 * @ordered
 	 */
 	int TEST_PROCEDURE__DESCRIPTION = BasePackage.ICONTAINER__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TEST_PROCEDURE__IS_RECYCLED = BasePackage.ICONTAINER__IS_RECYCLED;
+
+	/**
+	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TEST_PROCEDURE__HAS_RECYCLED_CHILDREN = BasePackage.ICONTAINER__HAS_RECYCLED_CHILDREN;
 
 	/**
 	 * The feature id for the '<em><b>Contents</b></em>' containment reference list.
@@ -505,6 +595,24 @@ public interface TestspecificationPackage extends EPackage {
 	 * @ordered
 	 */
 	int TEST_STEP__DESCRIPTION = BasePackage.ICONTENT_ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TEST_STEP__IS_RECYCLED = BasePackage.ICONTENT_ELEMENT__IS_RECYCLED;
+
+	/**
+	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TEST_STEP__HAS_RECYCLED_CHILDREN = BasePackage.ICONTENT_ELEMENT__HAS_RECYCLED_CHILDREN;
 
 	/**
 	 * The feature id for the '<em><b>Position</b></em>' attribute.

@@ -12,6 +12,8 @@
 		 id: EString;
 		 name: EString;
 		 description: EString;
+		 isRecycled: EBoolean;
+		 hasRecycledChildren: EBoolean;
 
 		// References
 

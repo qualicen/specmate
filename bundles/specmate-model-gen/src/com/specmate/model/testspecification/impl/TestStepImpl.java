@@ -7,6 +7,7 @@ import com.specmate.model.base.IDescribed;
 import com.specmate.model.base.INamed;
 import com.specmate.model.base.IPositionable;
 
+import com.specmate.model.base.IRecycled;
 import com.specmate.model.testspecification.TestParameter;
 import com.specmate.model.testspecification.TestStep;
 import com.specmate.model.testspecification.TestspecificationPackage;
@@ -30,6 +31,8 @@ import org.eclipse.emf.internal.cdo.CDOObjectImpl;
  *   <li>{@link com.specmate.model.testspecification.impl.TestStepImpl#getId <em>Id</em>}</li>
  *   <li>{@link com.specmate.model.testspecification.impl.TestStepImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.specmate.model.testspecification.impl.TestStepImpl#getDescription <em>Description</em>}</li>
+ *   <li>{@link com.specmate.model.testspecification.impl.TestStepImpl#isIsRecycled <em>Is Recycled</em>}</li>
+ *   <li>{@link com.specmate.model.testspecification.impl.TestStepImpl#isHasRecycledChildren <em>Has Recycled Children</em>}</li>
  *   <li>{@link com.specmate.model.testspecification.impl.TestStepImpl#getPosition <em>Position</em>}</li>
  *   <li>{@link com.specmate.model.testspecification.impl.TestStepImpl#getExpectedOutcome <em>Expected Outcome</em>}</li>
  *   <li>{@link com.specmate.model.testspecification.impl.TestStepImpl#getReferencedTestParameters <em>Referenced Test Parameters</em>}</li>
@@ -67,6 +70,26 @@ public class TestStepImpl extends CDOObjectImpl implements TestStep {
 	 * @ordered
 	 */
 	protected static final String DESCRIPTION_EDEFAULT = null;
+
+	/**
+	 * The default value of the '{@link #isIsRecycled() <em>Is Recycled</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isIsRecycled()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean IS_RECYCLED_EDEFAULT = false;
+
+	/**
+	 * The default value of the '{@link #isHasRecycledChildren() <em>Has Recycled Children</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isHasRecycledChildren()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean HAS_RECYCLED_CHILDREN_EDEFAULT = false;
 
 	/**
 	 * The default value of the '{@link #getPosition() <em>Position</em>}' attribute.
@@ -183,6 +206,46 @@ public class TestStepImpl extends CDOObjectImpl implements TestStep {
 	 * @generated
 	 */
 	@Override
+	public boolean isIsRecycled() {
+		return (Boolean)eDynamicGet(TestspecificationPackage.TEST_STEP__IS_RECYCLED, BasePackage.Literals.IRECYCLED__IS_RECYCLED, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setIsRecycled(boolean newIsRecycled) {
+		eDynamicSet(TestspecificationPackage.TEST_STEP__IS_RECYCLED, BasePackage.Literals.IRECYCLED__IS_RECYCLED, newIsRecycled);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isHasRecycledChildren() {
+		return (Boolean)eDynamicGet(TestspecificationPackage.TEST_STEP__HAS_RECYCLED_CHILDREN, BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setHasRecycledChildren(boolean newHasRecycledChildren) {
+		eDynamicSet(TestspecificationPackage.TEST_STEP__HAS_RECYCLED_CHILDREN, BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN, newHasRecycledChildren);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public int getPosition() {
 		return (Integer)eDynamicGet(TestspecificationPackage.TEST_STEP__POSITION, BasePackage.Literals.IPOSITIONABLE__POSITION, true, true);
 	}
@@ -242,6 +305,10 @@ public class TestStepImpl extends CDOObjectImpl implements TestStep {
 				return getName();
 			case TestspecificationPackage.TEST_STEP__DESCRIPTION:
 				return getDescription();
+			case TestspecificationPackage.TEST_STEP__IS_RECYCLED:
+				return isIsRecycled();
+			case TestspecificationPackage.TEST_STEP__HAS_RECYCLED_CHILDREN:
+				return isHasRecycledChildren();
 			case TestspecificationPackage.TEST_STEP__POSITION:
 				return getPosition();
 			case TestspecificationPackage.TEST_STEP__EXPECTED_OUTCOME:
@@ -269,6 +336,12 @@ public class TestStepImpl extends CDOObjectImpl implements TestStep {
 				return;
 			case TestspecificationPackage.TEST_STEP__DESCRIPTION:
 				setDescription((String)newValue);
+				return;
+			case TestspecificationPackage.TEST_STEP__IS_RECYCLED:
+				setIsRecycled((Boolean)newValue);
+				return;
+			case TestspecificationPackage.TEST_STEP__HAS_RECYCLED_CHILDREN:
+				setHasRecycledChildren((Boolean)newValue);
 				return;
 			case TestspecificationPackage.TEST_STEP__POSITION:
 				setPosition((Integer)newValue);
@@ -301,6 +374,12 @@ public class TestStepImpl extends CDOObjectImpl implements TestStep {
 			case TestspecificationPackage.TEST_STEP__DESCRIPTION:
 				setDescription(DESCRIPTION_EDEFAULT);
 				return;
+			case TestspecificationPackage.TEST_STEP__IS_RECYCLED:
+				setIsRecycled(IS_RECYCLED_EDEFAULT);
+				return;
+			case TestspecificationPackage.TEST_STEP__HAS_RECYCLED_CHILDREN:
+				setHasRecycledChildren(HAS_RECYCLED_CHILDREN_EDEFAULT);
+				return;
 			case TestspecificationPackage.TEST_STEP__POSITION:
 				setPosition(POSITION_EDEFAULT);
 				return;
@@ -328,6 +407,10 @@ public class TestStepImpl extends CDOObjectImpl implements TestStep {
 				return NAME_EDEFAULT == null ? getName() != null : !NAME_EDEFAULT.equals(getName());
 			case TestspecificationPackage.TEST_STEP__DESCRIPTION:
 				return DESCRIPTION_EDEFAULT == null ? getDescription() != null : !DESCRIPTION_EDEFAULT.equals(getDescription());
+			case TestspecificationPackage.TEST_STEP__IS_RECYCLED:
+				return isIsRecycled() != IS_RECYCLED_EDEFAULT;
+			case TestspecificationPackage.TEST_STEP__HAS_RECYCLED_CHILDREN:
+				return isHasRecycledChildren() != HAS_RECYCLED_CHILDREN_EDEFAULT;
 			case TestspecificationPackage.TEST_STEP__POSITION:
 				return getPosition() != POSITION_EDEFAULT;
 			case TestspecificationPackage.TEST_STEP__EXPECTED_OUTCOME:
@@ -357,6 +440,13 @@ public class TestStepImpl extends CDOObjectImpl implements TestStep {
 				default: return -1;
 			}
 		}
+		if (baseClass == IRecycled.class) {
+			switch (derivedFeatureID) {
+				case TestspecificationPackage.TEST_STEP__IS_RECYCLED: return BasePackage.IRECYCLED__IS_RECYCLED;
+				case TestspecificationPackage.TEST_STEP__HAS_RECYCLED_CHILDREN: return BasePackage.IRECYCLED__HAS_RECYCLED_CHILDREN;
+				default: return -1;
+			}
+		}
 		if (baseClass == IPositionable.class) {
 			switch (derivedFeatureID) {
 				case TestspecificationPackage.TEST_STEP__POSITION: return BasePackage.IPOSITIONABLE__POSITION;
@@ -382,6 +472,13 @@ public class TestStepImpl extends CDOObjectImpl implements TestStep {
 		if (baseClass == IDescribed.class) {
 			switch (baseFeatureID) {
 				case BasePackage.IDESCRIBED__DESCRIPTION: return TestspecificationPackage.TEST_STEP__DESCRIPTION;
+				default: return -1;
+			}
+		}
+		if (baseClass == IRecycled.class) {
+			switch (baseFeatureID) {
+				case BasePackage.IRECYCLED__IS_RECYCLED: return TestspecificationPackage.TEST_STEP__IS_RECYCLED;
+				case BasePackage.IRECYCLED__HAS_RECYCLED_CHILDREN: return TestspecificationPackage.TEST_STEP__HAS_RECYCLED_CHILDREN;
 				default: return -1;
 			}
 		}

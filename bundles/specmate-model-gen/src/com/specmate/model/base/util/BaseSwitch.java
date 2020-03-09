@@ -90,6 +90,7 @@ public class BaseSwitch<T> extends Switch<T> {
 				if (result == null) result = caseIID(iContentElement);
 				if (result == null) result = caseINamed(iContentElement);
 				if (result == null) result = caseIDescribed(iContentElement);
+				if (result == null) result = caseIRecycled(iContentElement);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -100,6 +101,7 @@ public class BaseSwitch<T> extends Switch<T> {
 				if (result == null) result = caseIID(iContainer);
 				if (result == null) result = caseINamed(iContainer);
 				if (result == null) result = caseIDescribed(iContainer);
+				if (result == null) result = caseIRecycled(iContainer);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -112,6 +114,7 @@ public class BaseSwitch<T> extends Switch<T> {
 				if (result == null) result = caseIID(iSpecmateModelObject);
 				if (result == null) result = caseINamed(iSpecmateModelObject);
 				if (result == null) result = caseIDescribed(iSpecmateModelObject);
+				if (result == null) result = caseIRecycled(iSpecmateModelObject);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -125,6 +128,7 @@ public class BaseSwitch<T> extends Switch<T> {
 				if (result == null) result = caseIID(folder);
 				if (result == null) result = caseINamed(folder);
 				if (result == null) result = caseIDescribed(folder);
+				if (result == null) result = caseIRecycled(folder);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -150,6 +154,7 @@ public class BaseSwitch<T> extends Switch<T> {
 				if (result == null) result = caseIID(iSpecmatePositionableModelObject);
 				if (result == null) result = caseINamed(iSpecmatePositionableModelObject);
 				if (result == null) result = caseIDescribed(iSpecmatePositionableModelObject);
+				if (result == null) result = caseIRecycled(iSpecmatePositionableModelObject);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -163,6 +168,7 @@ public class BaseSwitch<T> extends Switch<T> {
 				if (result == null) result = caseIID(iModelConnection);
 				if (result == null) result = caseINamed(iModelConnection);
 				if (result == null) result = caseIDescribed(iModelConnection);
+				if (result == null) result = caseIRecycled(iModelConnection);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -177,12 +183,19 @@ public class BaseSwitch<T> extends Switch<T> {
 				if (result == null) result = caseIID(iModelNode);
 				if (result == null) result = caseINamed(iModelNode);
 				if (result == null) result = caseIDescribed(iModelNode);
+				if (result == null) result = caseIRecycled(iModelNode);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case BasePackage.ITRACING_ELEMENT: {
 				ITracingElement iTracingElement = (ITracingElement)theEObject;
 				T result = caseITracingElement(iTracingElement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case BasePackage.IRECYCLED: {
+				IRecycled iRecycled = (IRecycled)theEObject;
+				T result = caseIRecycled(iRecycled);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -382,6 +395,21 @@ public class BaseSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseITracingElement(ITracingElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>IRecycled</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>IRecycled</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseIRecycled(IRecycled object) {
 		return null;
 	}
 

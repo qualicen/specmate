@@ -4,7 +4,7 @@
 
 	export class ProcessDecision  {
 
-		___nsuri: string = "http://specmate.com/20200228/model/processes";
+		___nsuri: string = "http://specmate.com/20200309/model/processes";
 		public url: string;
 		public className: string = "ProcessDecision";
 		public static className: string = "ProcessDecision";
@@ -12,6 +12,8 @@
 		public id: EString;
 		public name: EString;
 		public description: EString;
+		public isRecycled: EBoolean;
+		public hasRecycledChildren: EBoolean;
 		public x: EDouble;
 		public y: EDouble;
 		public width: EDouble;

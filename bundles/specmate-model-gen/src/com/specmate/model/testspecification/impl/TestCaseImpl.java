@@ -8,6 +8,7 @@ import com.specmate.model.base.IDescribed;
 import com.specmate.model.base.INamed;
 import com.specmate.model.base.IPositionable;
 
+import com.specmate.model.base.IRecycled;
 import com.specmate.model.testspecification.TestCase;
 import com.specmate.model.testspecification.TestspecificationPackage;
 
@@ -35,6 +36,8 @@ import org.eclipse.emf.internal.cdo.CDOObjectImpl;
  *   <li>{@link com.specmate.model.testspecification.impl.TestCaseImpl#getId <em>Id</em>}</li>
  *   <li>{@link com.specmate.model.testspecification.impl.TestCaseImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.specmate.model.testspecification.impl.TestCaseImpl#getDescription <em>Description</em>}</li>
+ *   <li>{@link com.specmate.model.testspecification.impl.TestCaseImpl#isIsRecycled <em>Is Recycled</em>}</li>
+ *   <li>{@link com.specmate.model.testspecification.impl.TestCaseImpl#isHasRecycledChildren <em>Has Recycled Children</em>}</li>
  *   <li>{@link com.specmate.model.testspecification.impl.TestCaseImpl#getContents <em>Contents</em>}</li>
  *   <li>{@link com.specmate.model.testspecification.impl.TestCaseImpl#getPosition <em>Position</em>}</li>
  *   <li>{@link com.specmate.model.testspecification.impl.TestCaseImpl#isConsistent <em>Consistent</em>}</li>
@@ -72,6 +75,26 @@ public class TestCaseImpl extends CDOObjectImpl implements TestCase {
 	 * @ordered
 	 */
 	protected static final String DESCRIPTION_EDEFAULT = null;
+
+	/**
+	 * The default value of the '{@link #isIsRecycled() <em>Is Recycled</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isIsRecycled()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean IS_RECYCLED_EDEFAULT = false;
+
+	/**
+	 * The default value of the '{@link #isHasRecycledChildren() <em>Has Recycled Children</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isHasRecycledChildren()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean HAS_RECYCLED_CHILDREN_EDEFAULT = false;
 
 	/**
 	 * The default value of the '{@link #getPosition() <em>Position</em>}' attribute.
@@ -187,6 +210,46 @@ public class TestCaseImpl extends CDOObjectImpl implements TestCase {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public boolean isIsRecycled() {
+		return (Boolean)eDynamicGet(TestspecificationPackage.TEST_CASE__IS_RECYCLED, BasePackage.Literals.IRECYCLED__IS_RECYCLED, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setIsRecycled(boolean newIsRecycled) {
+		eDynamicSet(TestspecificationPackage.TEST_CASE__IS_RECYCLED, BasePackage.Literals.IRECYCLED__IS_RECYCLED, newIsRecycled);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isHasRecycledChildren() {
+		return (Boolean)eDynamicGet(TestspecificationPackage.TEST_CASE__HAS_RECYCLED_CHILDREN, BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setHasRecycledChildren(boolean newHasRecycledChildren) {
+		eDynamicSet(TestspecificationPackage.TEST_CASE__HAS_RECYCLED_CHILDREN, BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN, newHasRecycledChildren);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public EList<IContentElement> getContents() {
@@ -261,6 +324,10 @@ public class TestCaseImpl extends CDOObjectImpl implements TestCase {
 				return getName();
 			case TestspecificationPackage.TEST_CASE__DESCRIPTION:
 				return getDescription();
+			case TestspecificationPackage.TEST_CASE__IS_RECYCLED:
+				return isIsRecycled();
+			case TestspecificationPackage.TEST_CASE__HAS_RECYCLED_CHILDREN:
+				return isHasRecycledChildren();
 			case TestspecificationPackage.TEST_CASE__CONTENTS:
 				return getContents();
 			case TestspecificationPackage.TEST_CASE__POSITION:
@@ -288,6 +355,12 @@ public class TestCaseImpl extends CDOObjectImpl implements TestCase {
 				return;
 			case TestspecificationPackage.TEST_CASE__DESCRIPTION:
 				setDescription((String)newValue);
+				return;
+			case TestspecificationPackage.TEST_CASE__IS_RECYCLED:
+				setIsRecycled((Boolean)newValue);
+				return;
+			case TestspecificationPackage.TEST_CASE__HAS_RECYCLED_CHILDREN:
+				setHasRecycledChildren((Boolean)newValue);
 				return;
 			case TestspecificationPackage.TEST_CASE__CONTENTS:
 				getContents().clear();
@@ -320,6 +393,12 @@ public class TestCaseImpl extends CDOObjectImpl implements TestCase {
 			case TestspecificationPackage.TEST_CASE__DESCRIPTION:
 				setDescription(DESCRIPTION_EDEFAULT);
 				return;
+			case TestspecificationPackage.TEST_CASE__IS_RECYCLED:
+				setIsRecycled(IS_RECYCLED_EDEFAULT);
+				return;
+			case TestspecificationPackage.TEST_CASE__HAS_RECYCLED_CHILDREN:
+				setHasRecycledChildren(HAS_RECYCLED_CHILDREN_EDEFAULT);
+				return;
 			case TestspecificationPackage.TEST_CASE__CONTENTS:
 				getContents().clear();
 				return;
@@ -347,6 +426,10 @@ public class TestCaseImpl extends CDOObjectImpl implements TestCase {
 				return NAME_EDEFAULT == null ? getName() != null : !NAME_EDEFAULT.equals(getName());
 			case TestspecificationPackage.TEST_CASE__DESCRIPTION:
 				return DESCRIPTION_EDEFAULT == null ? getDescription() != null : !DESCRIPTION_EDEFAULT.equals(getDescription());
+			case TestspecificationPackage.TEST_CASE__IS_RECYCLED:
+				return isIsRecycled() != IS_RECYCLED_EDEFAULT;
+			case TestspecificationPackage.TEST_CASE__HAS_RECYCLED_CHILDREN:
+				return isHasRecycledChildren() != HAS_RECYCLED_CHILDREN_EDEFAULT;
 			case TestspecificationPackage.TEST_CASE__CONTENTS:
 				return !getContents().isEmpty();
 			case TestspecificationPackage.TEST_CASE__POSITION:
@@ -376,6 +459,13 @@ public class TestCaseImpl extends CDOObjectImpl implements TestCase {
 				default: return -1;
 			}
 		}
+		if (baseClass == IRecycled.class) {
+			switch (derivedFeatureID) {
+				case TestspecificationPackage.TEST_CASE__IS_RECYCLED: return BasePackage.IRECYCLED__IS_RECYCLED;
+				case TestspecificationPackage.TEST_CASE__HAS_RECYCLED_CHILDREN: return BasePackage.IRECYCLED__HAS_RECYCLED_CHILDREN;
+				default: return -1;
+			}
+		}
 		if (baseClass == IPositionable.class) {
 			switch (derivedFeatureID) {
 				case TestspecificationPackage.TEST_CASE__POSITION: return BasePackage.IPOSITIONABLE__POSITION;
@@ -401,6 +491,13 @@ public class TestCaseImpl extends CDOObjectImpl implements TestCase {
 		if (baseClass == IDescribed.class) {
 			switch (baseFeatureID) {
 				case BasePackage.IDESCRIBED__DESCRIPTION: return TestspecificationPackage.TEST_CASE__DESCRIPTION;
+				default: return -1;
+			}
+		}
+		if (baseClass == IRecycled.class) {
+			switch (baseFeatureID) {
+				case BasePackage.IRECYCLED__IS_RECYCLED: return TestspecificationPackage.TEST_CASE__IS_RECYCLED;
+				case BasePackage.IRECYCLED__HAS_RECYCLED_CHILDREN: return TestspecificationPackage.TEST_CASE__HAS_RECYCLED_CHILDREN;
 				default: return -1;
 			}
 		}

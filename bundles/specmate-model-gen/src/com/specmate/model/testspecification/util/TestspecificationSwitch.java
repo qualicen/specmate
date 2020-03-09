@@ -10,6 +10,7 @@ import com.specmate.model.base.IID;
 import com.specmate.model.base.INamed;
 import com.specmate.model.base.IPositionable;
 
+import com.specmate.model.base.IRecycled;
 import com.specmate.model.testspecification.*;
 
 import org.eclipse.emf.ecore.EObject;
@@ -82,6 +83,7 @@ public class TestspecificationSwitch<T> extends Switch<T> {
 				if (result == null) result = caseIID(testSpecification);
 				if (result == null) result = caseINamed(testSpecification);
 				if (result == null) result = caseIDescribed(testSpecification);
+				if (result == null) result = caseIRecycled(testSpecification);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -92,6 +94,7 @@ public class TestspecificationSwitch<T> extends Switch<T> {
 				if (result == null) result = caseIID(testParameter);
 				if (result == null) result = caseINamed(testParameter);
 				if (result == null) result = caseIDescribed(testParameter);
+				if (result == null) result = caseIRecycled(testParameter);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -104,6 +107,7 @@ public class TestspecificationSwitch<T> extends Switch<T> {
 				if (result == null) result = caseIID(testCase);
 				if (result == null) result = caseINamed(testCase);
 				if (result == null) result = caseIDescribed(testCase);
+				if (result == null) result = caseIRecycled(testCase);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -114,6 +118,7 @@ public class TestspecificationSwitch<T> extends Switch<T> {
 				if (result == null) result = caseIID(parameterAssignment);
 				if (result == null) result = caseINamed(parameterAssignment);
 				if (result == null) result = caseIDescribed(parameterAssignment);
+				if (result == null) result = caseIRecycled(parameterAssignment);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -126,6 +131,7 @@ public class TestspecificationSwitch<T> extends Switch<T> {
 				if (result == null) result = caseIID(testProcedure);
 				if (result == null) result = caseINamed(testProcedure);
 				if (result == null) result = caseIDescribed(testProcedure);
+				if (result == null) result = caseIRecycled(testProcedure);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -137,6 +143,7 @@ public class TestspecificationSwitch<T> extends Switch<T> {
 				if (result == null) result = caseIID(testStep);
 				if (result == null) result = caseINamed(testStep);
 				if (result == null) result = caseIDescribed(testStep);
+				if (result == null) result = caseIRecycled(testStep);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -276,6 +283,21 @@ public class TestspecificationSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseIDescribed(IDescribed object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>IRecycled</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>IRecycled</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseIRecycled(IRecycled object) {
 		return null;
 	}
 

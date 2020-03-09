@@ -39,7 +39,7 @@ public interface ProcessesPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://specmate.com/20200228/model/processes";
+	String eNS_URI = "http://specmate.com/20200309/model/processes";
 
 	/**
 	 * The package namespace name.
@@ -93,6 +93,24 @@ public interface ProcessesPackage extends EPackage {
 	 * @ordered
 	 */
 	int PROCESS__DESCRIPTION = BasePackage.ICONTAINER__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS__IS_RECYCLED = BasePackage.ICONTAINER__IS_RECYCLED;
+
+	/**
+	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS__HAS_RECYCLED_CHILDREN = BasePackage.ICONTAINER__HAS_RECYCLED_CHILDREN;
 
 	/**
 	 * The feature id for the '<em><b>Contents</b></em>' containment reference list.
@@ -157,6 +175,24 @@ public interface ProcessesPackage extends EPackage {
 	 * @ordered
 	 */
 	int PROCESS_NODE__DESCRIPTION = BasePackage.IMODEL_NODE__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS_NODE__IS_RECYCLED = BasePackage.IMODEL_NODE__IS_RECYCLED;
+
+	/**
+	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS_NODE__HAS_RECYCLED_CHILDREN = BasePackage.IMODEL_NODE__HAS_RECYCLED_CHILDREN;
 
 	/**
 	 * The feature id for the '<em><b>Contents</b></em>' containment reference list.
@@ -293,6 +329,24 @@ public interface ProcessesPackage extends EPackage {
 	 * @ordered
 	 */
 	int PROCESS_STEP__DESCRIPTION = PROCESS_NODE__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS_STEP__IS_RECYCLED = PROCESS_NODE__IS_RECYCLED;
+
+	/**
+	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS_STEP__HAS_RECYCLED_CHILDREN = PROCESS_NODE__HAS_RECYCLED_CHILDREN;
 
 	/**
 	 * The feature id for the '<em><b>Contents</b></em>' containment reference list.
@@ -440,6 +494,24 @@ public interface ProcessesPackage extends EPackage {
 	int PROCESS_DECISION__DESCRIPTION = PROCESS_NODE__DESCRIPTION;
 
 	/**
+	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS_DECISION__IS_RECYCLED = PROCESS_NODE__IS_RECYCLED;
+
+	/**
+	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS_DECISION__HAS_RECYCLED_CHILDREN = PROCESS_NODE__HAS_RECYCLED_CHILDREN;
+
+	/**
 	 * The feature id for the '<em><b>Contents</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -576,6 +648,24 @@ public interface ProcessesPackage extends EPackage {
 	int PROCESS_CONNECTION__DESCRIPTION = BasePackage.IMODEL_CONNECTION__DESCRIPTION;
 
 	/**
+	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS_CONNECTION__IS_RECYCLED = BasePackage.IMODEL_CONNECTION__IS_RECYCLED;
+
+	/**
+	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS_CONNECTION__HAS_RECYCLED_CHILDREN = BasePackage.IMODEL_CONNECTION__HAS_RECYCLED_CHILDREN;
+
+	/**
 	 * The feature id for the '<em><b>Contents</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -701,6 +791,24 @@ public interface ProcessesPackage extends EPackage {
 	 * @ordered
 	 */
 	int PROCESS_START__DESCRIPTION = PROCESS_NODE__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS_START__IS_RECYCLED = PROCESS_NODE__IS_RECYCLED;
+
+	/**
+	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS_START__HAS_RECYCLED_CHILDREN = PROCESS_NODE__HAS_RECYCLED_CHILDREN;
 
 	/**
 	 * The feature id for the '<em><b>Contents</b></em>' containment reference list.
@@ -837,6 +945,24 @@ public interface ProcessesPackage extends EPackage {
 	 * @ordered
 	 */
 	int PROCESS_END__DESCRIPTION = PROCESS_NODE__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS_END__IS_RECYCLED = PROCESS_NODE__IS_RECYCLED;
+
+	/**
+	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS_END__HAS_RECYCLED_CHILDREN = PROCESS_NODE__HAS_RECYCLED_CHILDREN;
 
 	/**
 	 * The feature id for the '<em><b>Contents</b></em>' containment reference list.

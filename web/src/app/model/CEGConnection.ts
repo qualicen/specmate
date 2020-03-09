@@ -4,7 +4,7 @@
 
 	export class CEGConnection  {
 
-		___nsuri: string = "http://specmate.com/20200228/model/requirements";
+		___nsuri: string = "http://specmate.com/20200309/model/requirements";
 		public url: string;
 		public className: string = "CEGConnection";
 		public static className: string = "CEGConnection";
@@ -12,6 +12,8 @@
 		public id: EString;
 		public name: EString;
 		public description: EString;
+		public isRecycled: EBoolean;
+		public hasRecycledChildren: EBoolean;
 		public negate: EBoolean;
 
 		// References

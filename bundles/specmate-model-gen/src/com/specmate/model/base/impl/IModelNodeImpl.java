@@ -8,6 +8,7 @@ import com.specmate.model.base.IDescribed;
 import com.specmate.model.base.IModelConnection;
 import com.specmate.model.base.IModelNode;
 import com.specmate.model.base.INamed;
+import com.specmate.model.base.IRecycled;
 import com.specmate.model.base.ITracingElement;
 
 import java.util.Collection;
@@ -34,6 +35,8 @@ import org.eclipse.emf.internal.cdo.CDOObjectImpl;
  *   <li>{@link com.specmate.model.base.impl.IModelNodeImpl#getId <em>Id</em>}</li>
  *   <li>{@link com.specmate.model.base.impl.IModelNodeImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.specmate.model.base.impl.IModelNodeImpl#getDescription <em>Description</em>}</li>
+ *   <li>{@link com.specmate.model.base.impl.IModelNodeImpl#isIsRecycled <em>Is Recycled</em>}</li>
+ *   <li>{@link com.specmate.model.base.impl.IModelNodeImpl#isHasRecycledChildren <em>Has Recycled Children</em>}</li>
  *   <li>{@link com.specmate.model.base.impl.IModelNodeImpl#getContents <em>Contents</em>}</li>
  *   <li>{@link com.specmate.model.base.impl.IModelNodeImpl#getTracesTo <em>Traces To</em>}</li>
  *   <li>{@link com.specmate.model.base.impl.IModelNodeImpl#getTracesFrom <em>Traces From</em>}</li>
@@ -77,6 +80,26 @@ public class IModelNodeImpl extends CDOObjectImpl implements IModelNode {
 	 * @ordered
 	 */
 	protected static final String DESCRIPTION_EDEFAULT = null;
+
+	/**
+	 * The default value of the '{@link #isIsRecycled() <em>Is Recycled</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isIsRecycled()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean IS_RECYCLED_EDEFAULT = false;
+
+	/**
+	 * The default value of the '{@link #isHasRecycledChildren() <em>Has Recycled Children</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isHasRecycledChildren()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean HAS_RECYCLED_CHILDREN_EDEFAULT = false;
 
 	/**
 	 * The default value of the '{@link #getX() <em>X</em>}' attribute.
@@ -205,6 +228,46 @@ public class IModelNodeImpl extends CDOObjectImpl implements IModelNode {
 	@Override
 	public void setDescription(String newDescription) {
 		eDynamicSet(BasePackage.IMODEL_NODE__DESCRIPTION, BasePackage.Literals.IDESCRIBED__DESCRIPTION, newDescription);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isIsRecycled() {
+		return (Boolean)eDynamicGet(BasePackage.IMODEL_NODE__IS_RECYCLED, BasePackage.Literals.IRECYCLED__IS_RECYCLED, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setIsRecycled(boolean newIsRecycled) {
+		eDynamicSet(BasePackage.IMODEL_NODE__IS_RECYCLED, BasePackage.Literals.IRECYCLED__IS_RECYCLED, newIsRecycled);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isHasRecycledChildren() {
+		return (Boolean)eDynamicGet(BasePackage.IMODEL_NODE__HAS_RECYCLED_CHILDREN, BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setHasRecycledChildren(boolean newHasRecycledChildren) {
+		eDynamicSet(BasePackage.IMODEL_NODE__HAS_RECYCLED_CHILDREN, BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN, newHasRecycledChildren);
 	}
 
 	/**
@@ -399,6 +462,10 @@ public class IModelNodeImpl extends CDOObjectImpl implements IModelNode {
 				return getName();
 			case BasePackage.IMODEL_NODE__DESCRIPTION:
 				return getDescription();
+			case BasePackage.IMODEL_NODE__IS_RECYCLED:
+				return isIsRecycled();
+			case BasePackage.IMODEL_NODE__HAS_RECYCLED_CHILDREN:
+				return isHasRecycledChildren();
 			case BasePackage.IMODEL_NODE__CONTENTS:
 				return getContents();
 			case BasePackage.IMODEL_NODE__TRACES_TO:
@@ -438,6 +505,12 @@ public class IModelNodeImpl extends CDOObjectImpl implements IModelNode {
 				return;
 			case BasePackage.IMODEL_NODE__DESCRIPTION:
 				setDescription((String)newValue);
+				return;
+			case BasePackage.IMODEL_NODE__IS_RECYCLED:
+				setIsRecycled((Boolean)newValue);
+				return;
+			case BasePackage.IMODEL_NODE__HAS_RECYCLED_CHILDREN:
+				setHasRecycledChildren((Boolean)newValue);
 				return;
 			case BasePackage.IMODEL_NODE__CONTENTS:
 				getContents().clear();
@@ -492,6 +565,12 @@ public class IModelNodeImpl extends CDOObjectImpl implements IModelNode {
 			case BasePackage.IMODEL_NODE__DESCRIPTION:
 				setDescription(DESCRIPTION_EDEFAULT);
 				return;
+			case BasePackage.IMODEL_NODE__IS_RECYCLED:
+				setIsRecycled(IS_RECYCLED_EDEFAULT);
+				return;
+			case BasePackage.IMODEL_NODE__HAS_RECYCLED_CHILDREN:
+				setHasRecycledChildren(HAS_RECYCLED_CHILDREN_EDEFAULT);
+				return;
 			case BasePackage.IMODEL_NODE__CONTENTS:
 				getContents().clear();
 				return;
@@ -537,6 +616,10 @@ public class IModelNodeImpl extends CDOObjectImpl implements IModelNode {
 				return NAME_EDEFAULT == null ? getName() != null : !NAME_EDEFAULT.equals(getName());
 			case BasePackage.IMODEL_NODE__DESCRIPTION:
 				return DESCRIPTION_EDEFAULT == null ? getDescription() != null : !DESCRIPTION_EDEFAULT.equals(getDescription());
+			case BasePackage.IMODEL_NODE__IS_RECYCLED:
+				return isIsRecycled() != IS_RECYCLED_EDEFAULT;
+			case BasePackage.IMODEL_NODE__HAS_RECYCLED_CHILDREN:
+				return isHasRecycledChildren() != HAS_RECYCLED_CHILDREN_EDEFAULT;
 			case BasePackage.IMODEL_NODE__CONTENTS:
 				return !getContents().isEmpty();
 			case BasePackage.IMODEL_NODE__TRACES_TO:
@@ -578,6 +661,13 @@ public class IModelNodeImpl extends CDOObjectImpl implements IModelNode {
 				default: return -1;
 			}
 		}
+		if (baseClass == IRecycled.class) {
+			switch (derivedFeatureID) {
+				case BasePackage.IMODEL_NODE__IS_RECYCLED: return BasePackage.IRECYCLED__IS_RECYCLED;
+				case BasePackage.IMODEL_NODE__HAS_RECYCLED_CHILDREN: return BasePackage.IRECYCLED__HAS_RECYCLED_CHILDREN;
+				default: return -1;
+			}
+		}
 		if (baseClass == ITracingElement.class) {
 			switch (derivedFeatureID) {
 				case BasePackage.IMODEL_NODE__TRACES_TO: return BasePackage.ITRACING_ELEMENT__TRACES_TO;
@@ -604,6 +694,13 @@ public class IModelNodeImpl extends CDOObjectImpl implements IModelNode {
 		if (baseClass == IDescribed.class) {
 			switch (baseFeatureID) {
 				case BasePackage.IDESCRIBED__DESCRIPTION: return BasePackage.IMODEL_NODE__DESCRIPTION;
+				default: return -1;
+			}
+		}
+		if (baseClass == IRecycled.class) {
+			switch (baseFeatureID) {
+				case BasePackage.IRECYCLED__IS_RECYCLED: return BasePackage.IMODEL_NODE__IS_RECYCLED;
+				case BasePackage.IRECYCLED__HAS_RECYCLED_CHILDREN: return BasePackage.IMODEL_NODE__HAS_RECYCLED_CHILDREN;
 				default: return -1;
 			}
 		}

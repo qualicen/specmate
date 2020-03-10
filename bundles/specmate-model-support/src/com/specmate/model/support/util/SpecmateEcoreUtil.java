@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -31,11 +32,31 @@ import com.specmate.model.base.IContainer;
 import com.specmate.model.base.IContentElement;
 
 public class SpecmateEcoreUtil {
+	
 	public static void copyAttributeValues(EObject source, EObject target) {
 		AssertUtil.preTrue(target.getClass().isAssignableFrom(source.getClass()));
 		for (EAttribute attribute : target.eClass().getEAllAttributes()) {
 			target.eSet(attribute, source.eGet(attribute));
 		}
+	}
+	
+	public static void setAttributeValue(EObject target, Object newValue, String attribute) {
+		target.eSet(target.eClass().getEStructuralFeature(attribute), newValue);
+	}
+	
+	public static EObject getParent(EObject target) {
+		return target.eContainer();
+	}
+	
+	public static LinkedList<EObject> getAllParents(EObject element){
+		LinkedList<EObject> parentsList = new LinkedList<EObject>();
+		
+		EObject parent = SpecmateEcoreUtil.getParent(element);
+		while (parent != null && !SpecmateEcoreUtil.isProject(parent)) {
+			parentsList.add(parent);
+			parent = SpecmateEcoreUtil.getParent(parent);
+		}
+		return parentsList;
 	}
 
 	public static void copyReferences(EObject source, EObject target) {

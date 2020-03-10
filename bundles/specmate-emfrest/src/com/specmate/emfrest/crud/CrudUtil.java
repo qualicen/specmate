@@ -2,6 +2,9 @@ package com.specmate.emfrest.crud;
 
 import static com.specmate.model.support.util.SpecmateEcoreUtil.getProjectId;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -9,19 +12,21 @@ import java.util.stream.Collectors;
 import javax.ws.rs.core.Response;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
 import com.specmate.common.exception.SpecmateAuthorizationException;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.model.administration.ErrorCode;
 import com.specmate.model.base.IContainer;
 import com.specmate.model.base.IContentElement;
-import com.specmate.model.base.ISpecmateModelObject;
 import com.specmate.model.support.util.SpecmateEcoreUtil;
 import com.specmate.rest.RestResult;
 
@@ -60,16 +65,68 @@ public class CrudUtil {
 		return new RestResult<>(Response.Status.OK, target, userName);
 	}
 
+	public static RestResult<?> recycle(Object target, String userName) {
+		EObject theTarget = (EObject) target;
+		SpecmateEcoreUtil.setAttributeValue(theTarget, true, "isRecycled");
+		SpecmateEcoreUtil.setAttributeValue(theTarget, true, "hasRecycledChildren");
+		ArrayList<EObject> children = Lists.newArrayList(theTarget.eAllContents());
+		for (Iterator<EObject> iterator = children.iterator(); iterator.hasNext();) {
+			EObject child = (EObject) iterator.next();
+			SpecmateEcoreUtil.setAttributeValue(child, true, "isRecycled");
+			SpecmateEcoreUtil.setAttributeValue(child, true, "hasRecycledChildren");
+		}
+		EObject parent = SpecmateEcoreUtil.getParent(theTarget);
+		while (parent != null && !SpecmateEcoreUtil.isProject(parent)) {
+			SpecmateEcoreUtil.setAttributeValue(parent, true, "hasRecycledChildren");
+			parent = SpecmateEcoreUtil.getParent(parent);
+		}
+		return new RestResult<>(Response.Status.OK, target, userName);
+	}
+
+	public static RestResult<?> restore(Object target, String userName) {
+		EObject theTarget = (EObject) target;
+		SpecmateEcoreUtil.setAttributeValue(theTarget, false, "isRecycled");
+		SpecmateEcoreUtil.setAttributeValue(theTarget, false, "hasRecycledChildren");
+		
+		// Update all children
+		ArrayList<EObject> children = Lists.newArrayList(theTarget.eAllContents());
+		for (Iterator<EObject> iterator = children.iterator(); iterator.hasNext();) {
+			EObject child = (EObject) iterator.next();
+			SpecmateEcoreUtil.setAttributeValue(child, false, "isRecycled");
+			SpecmateEcoreUtil.setAttributeValue(child, false, "hasRecycledChildren");
+		}
+
+		// Update all parents
+		LinkedList<EObject> parentsList = SpecmateEcoreUtil.getAllParents(theTarget);
+		while (parentsList.size() > 0) {
+			EObject element = parentsList.pop();
+			SpecmateEcoreUtil.setAttributeValue(element, false, "isRecycled");
+			TreeIterator<EObject> contents = ((EObject) element).eAllContents();
+			Iterator<EObject> filtered;
+			filtered = Iterators.filter(contents, o -> ((boolean) o.eGet(o.eClass().getEStructuralFeature("isRecycled"))) == true);
+			if (filtered.hasNext()) {
+				SpecmateEcoreUtil.setAttributeValue(element, true, "hasRecycledChildren");
+				while (parentsList.size() > 0) {
+					EObject child = parentsList.pop();
+					SpecmateEcoreUtil.setAttributeValue(child, true, "hasRecycledChildren");
+				}
+				return new RestResult<>(Response.Status.OK, target, userName);
+			} else {
+				SpecmateEcoreUtil.setAttributeValue(element, false, "hasRecycledChildren");
+			}
+		}
+		return new RestResult<>(Response.Status.OK, target, userName);
+	}
+
 	/**
 	 * Copies an object recursively with all children and adds the copy to the
 	 * parent of the object. The duplicate gets a name that is guaranteed to be
 	 * unique within the parent.
 	 *
-	 * @param target
-	 *            The target object that shall be duplicated
-	 * @param childrenCopyBlackList
-	 *            A list of element types. Child-Elements of target are only copied
-	 *            if the are of a type that is not on the blacklist
+	 * @param target                The target object that shall be duplicated
+	 * @param childrenCopyBlackList A list of element types. Child-Elements of
+	 *                              target are only copied if the are of a type that
+	 *                              is not on the blacklist
 	 * @return
 	 * @throws SpecmateException
 	 */
@@ -132,11 +189,9 @@ public class CrudUtil {
 	 * Checks whether the update is either detached from any project or is part of
 	 * the same project than the object represented by this resource.
 	 *
-	 * @param update
-	 *            The update object for which to check the project
-	 * @param recurse
-	 *            If true, also checks the projects for objects referenced by the
-	 *            update
+	 * @param update  The update object for which to check the project
+	 * @param recurse If true, also checks the projects for objects referenced by
+	 *                the update
 	 * @return
 	 */
 	private static boolean isProjectModificationRequestAuthorized(Object resourceObject, EObject update,
@@ -166,9 +221,6 @@ public class CrudUtil {
 				}
 			}
 		}
-
 		return true;
-
 	}
-
 }

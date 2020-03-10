@@ -1,8 +1,5 @@
 package com.specmate.uitests.pagemodel;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -18,7 +15,6 @@ public class CEGEditorElements extends EditorElements {
 
 	/**Editor Elements and their locators*/
 	By toolbarNode = By.id("toolbar-tools.addCegNode-button");
-	By toolbarConnection = By.id("toolbar-tools.addCegConnection-button");
 
 	/**Property Editor Elements and their locators*/
 	By propertiesVariable = By.id("properties-variable-textfield");
@@ -26,6 +22,8 @@ public class CEGEditorElements extends EditorElements {
 	By propertiesType = By.id("properties-type-dropdown");
 	By TypeAND = By.id("type-AND");
 	By TypeOR = By.id("type-OR");
+	
+	By nodeSelector = By.cssSelector("g > g:nth-child(2) > g[style='cursor: pointer; visibility: visible;']");
 
 
 	public CEGEditorElements(WebDriver driver, Actions builder) { // constructor
@@ -36,23 +34,19 @@ public class CEGEditorElements extends EditorElements {
 	 * creates a new node with corresponding variable and condition at position x,y
 	 * and returns the newly created node
 	 */
-	public WebElement createNode(String variable, String condition, int x, int y) {
+	public int createNode(String variable, String condition, int x, int y) {
 
-		List<WebElement> nodeList = new ArrayList<WebElement>();
-
-		int numberOfNodes = driver.findElements(By.cssSelector("g:first-child > [generic-graphical-node]")).size();
-
-		driver.findElement(toolbarNode).click();
+		int numberOfNodes = driver.findElements(By.cssSelector("g > g:nth-child(2) > g[style='cursor: pointer; visibility: visible;']")).size();
 		
-		WebElement editorField = driver.findElement(editor);
-		builder.moveToElement(editorField, x, y).click().build().perform();
+		
+		// Click node button and drag and drop to editorview 
+
+		UITestUtil.dragAndDrop(toolbarNode, x, y, driver);
+		
 
 		WebDriverWait wait = new WebDriverWait(driver, 30);
 		wait.until(ExpectedConditions
-				.visibilityOfElementLocated(By.cssSelector("g:first-child > [generic-graphical-node]")));
-		nodeList = driver.findElements(By.cssSelector("g:first-child > [generic-graphical-node]"));
-
-		WebElement nodeFromList = nodeList.get(numberOfNodes);
+				.visibilityOfElementLocated(By.cssSelector("g > g:nth-child(2) > g[style='cursor: pointer; visibility: visible;']")));
 
 		WebElement variableTextfield = driver.findElement(propertiesVariable);
 		WebElement conditionTextfield = driver.findElement(propertiesCondition);
@@ -61,20 +55,19 @@ public class CEGEditorElements extends EditorElements {
 		conditionTextfield.clear();
 		conditionTextfield.sendKeys(condition);
 
-		return nodeFromList;
+		return numberOfNodes;
 	}
 
 	/**
 	 * establishes a connection from node1 to node2 and returns the newly created
 	 * connection
 	 */
-	public WebElement connectNode(WebElement node1, WebElement node2) {
-		return super.connect(node1, node2, toolbarConnection);
+	public int connectNode(int node1, int node2) {
+		return super.connect(node1, node2, nodeSelector);
 	}
 	
 	public void toggleNegateButtonOn(WebElement connection) {
 		// Chose the Select tool from the toolbar in order to be able to select a connection
-		driver.findElement(toolbarMove).click();
 		
 		connection.click();
 		
@@ -98,11 +91,11 @@ public class CEGEditorElements extends EditorElements {
 	}
 	
 	public boolean negationDisplayed() {
-		return UITestUtil.isElementPresent(By.cssSelector(".tilde"), driver);
+		return UITestUtil.isElementPresent(By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;'] > path:nth-child(2)[stroke-dasharray='6 6']"), driver);
 	}
 	
 	public boolean checkUndoConnection() {
-		int numberOfConnections = driver.findElements(By.cssSelector("g:first-child > [generic-graphical-connection]"))
+		int numberOfConnections = driver.findElements(By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;'] > path:nth-child(2)"))
 				.size();
 		return numberOfConnections == 1; 
 	}
@@ -112,14 +105,22 @@ public class CEGEditorElements extends EditorElements {
 		driver.findElement(cancel).click();
 	}
 
-	public void changeTypeToAND(WebElement node) {
-		node.click();
+	public void changeTypeToAND(int node) {
+		// Click two times as clicking only once will minimize the node
+		WebElement nodeElement = UITestUtil.getElementWithIndex(node, driver, nodeSelector);
+		nodeElement.click();
+		WebElement sameNodeElement = UITestUtil.getElementWithIndex(node, driver, nodeSelector);
+		sameNodeElement.click();
 		driver.findElement(propertiesType).click();
 		driver.findElement(TypeAND).click();
 	}
 
-	public void changeTypeToOR(WebElement node) {
-		node.click();
+	public void changeTypeToOR(int node) {
+		// Click two times as clicking only once will minimize the node
+		WebElement nodeElement = UITestUtil.getElementWithIndex(node, driver, nodeSelector);
+		nodeElement.click();
+		WebElement sameNodeElement = UITestUtil.getElementWithIndex(node, driver, nodeSelector);
+		sameNodeElement.click();
 		driver.findElement(propertiesType).click();
 		driver.findElement(TypeOR).click();
 	}

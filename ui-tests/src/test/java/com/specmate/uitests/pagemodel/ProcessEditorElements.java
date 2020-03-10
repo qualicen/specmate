@@ -1,8 +1,5 @@
 package com.specmate.uitests.pagemodel;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -24,6 +21,8 @@ public class ProcessEditorElements extends EditorElements {
 	
 	By expectedOutcome = By.id("properties-expectedOutcome-textfield");
 	
+	By nodeSelector = By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;']");
+	
 	public ProcessEditorElements(WebDriver driver, Actions builder) {
 		super(driver, builder);
 	}
@@ -32,55 +31,42 @@ public class ProcessEditorElements extends EditorElements {
 	 * creates a new start with corresponding variable and condition at position x,y
 	 * and returns the newly created node
 	 */
-	public WebElement createStart(int x, int y) {
-
-		driver.findElement(toolbarStart).click();
+	public int createStart(int x, int y) {
 		
-		WebElement editorField = driver.findElement(editor);
-		builder.moveToElement(editorField, x, y).click().build().perform();
+		int index = driver.findElements(By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;']")).size();
 
-		WebDriverWait wait = new WebDriverWait(driver, 30);
-		wait.until(ExpectedConditions
-				.visibilityOfElementLocated(editor));
-		WebElement startNode = driver.findElement(By.cssSelector("[process-start-graphical-node]"));
+		UITestUtil.dragAndDrop(toolbarStart, x, y, driver);
 
-		return startNode;
+		return index;
 	}
 	
-	public WebElement createActivity(String variable, int x, int y) {
+	public int createActivity(String variable, int x, int y) {
 
-		List<WebElement> activityList = new ArrayList<WebElement>();
-
-		int numberOfActivities = driver.findElements(By.cssSelector("g:first-child > [generic-graphical-node]")).size();
-
-		driver.findElement(toolbarStep).click();
+		int index = driver.findElements(By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;']")).size();
 		
-		WebElement editorField = driver.findElement(editor);
-		builder.moveToElement(editorField, x, y).click().build().perform();
+		UITestUtil.dragAndDrop(toolbarStep, x, y, driver);
 
 		WebDriverWait wait = new WebDriverWait(driver, 30);
 		wait.until(ExpectedConditions
-				.visibilityOfElementLocated(By.cssSelector("g:first-child > [generic-graphical-node]")));
-		activityList = driver.findElements(By.cssSelector("g:first-child > [generic-graphical-node]"));
+				.visibilityOfElementLocated(By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;']")));
 
-		WebElement nodeFromList = activityList.get(numberOfActivities);
 
 		WebElement activityTextfield = driver.findElement(propertiesName);
 		activityTextfield.clear();
 		activityTextfield.sendKeys(variable);
 
-		return nodeFromList;
+		return index;
 	}
 	
-	public WebElement connectActivity(String connectionCondition, WebElement node1, WebElement node2) {
-		WebElement connection =  super.connect(node1, node2, toolbarConnection);
+	public int connectActivity(String connectionCondition, int node1, int node2) {
+		int connectionIndex = super.connect(node1, node2, nodeSelector);
 		
 		// A condition is required if the connection originated from a decision node
 		WebElement conditionTextfield = driver.findElement(propertiesCondition);
 		conditionTextfield.clear();
 		conditionTextfield.sendKeys(connectionCondition);
 		
-		return connection; 
+		return connectionIndex; 
 	}
 	
 	public void setExpectedOutcome(String outcome) {
@@ -93,47 +79,35 @@ public class ProcessEditorElements extends EditorElements {
 		outcomeTextfield.sendKeys(outcome);
 	}
 	
-	public WebElement createEnd(int x, int y) {
+	public int createEnd(int x, int y) {
 
-		driver.findElement(toolbarEnd).click();
+		int index = driver.findElements(By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;']")).size();
 		
-		WebElement editorField = driver.findElement(editor);
-		builder.moveToElement(editorField, x, y).click().build().perform();
+		UITestUtil.dragAndDrop(toolbarEnd, x, y, driver);
 
 		WebDriverWait wait = new WebDriverWait(driver, 30);
 		wait.until(ExpectedConditions
-				.visibilityOfElementLocated(By.cssSelector("[process-end-graphical-node]")));
-		WebElement endNode = driver.findElement(By.cssSelector("[process-end-graphical-node]"));
+				.visibilityOfElementLocated(By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;']")));
 
-		return endNode;
+		return index;
 	}
 	
-	public WebElement createDecison(String name, int x, int y) {
+	public int createDecison(String name, int x, int y) {
 
-		List<WebElement> decisionList = new ArrayList<WebElement>();
+		int numberOfDecisions = driver.findElements(By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;']")).size();
 
-		int numberOfDecisions = driver.findElements(By.cssSelector("[process-decision-graphical-node]")).size();
-
-		driver.findElement(toolbarDecision).click();
-		
-		WebElement editorField = driver.findElement(editor);
-		builder.moveToElement(editorField, x, y).click().build().perform();
+		UITestUtil.dragAndDrop(toolbarDecision, x, y, driver);
 
 		WebDriverWait wait = new WebDriverWait(driver, 30);
 		wait.until(ExpectedConditions
-				.visibilityOfElementLocated(By.cssSelector("[process-decision-graphical-node]")));
-		decisionList = driver.findElements(By.cssSelector("[process-decision-graphical-node]"));
+				.visibilityOfElementLocated(By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;']")));
 
-		WebElement decisionFromList = decisionList.get(numberOfDecisions);
-		
-		List<WebElement> childs = decisionFromList.findElements(By.xpath(".//*"));
-		WebElement decisionRectangle = childs.get(1);
 
 		WebElement decisionTextfield = driver.findElement(propertiesName);
 		decisionTextfield.clear();
 		decisionTextfield.sendKeys(name);
 
-		return decisionRectangle;
+		return numberOfDecisions;
 	}
 
 	public boolean relatedRequirementDisplayed() {

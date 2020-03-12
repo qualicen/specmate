@@ -114,6 +114,11 @@ public class ConnectorTaskTest {
 		public boolean authenticate(String username, String password) throws SpecmateException {
 			return true;
 		}
+
+		@Override
+		public String getOAuthUrl() {
+			return null;
+		}
 	}
 
 }

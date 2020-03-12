@@ -7,6 +7,7 @@ import { UserSession } from '../../../../../model/UserSession';
 import { Objects } from '../../../../../util/objects';
 import { Url } from '../../../../../util/url';
 import { UserToken } from '../../../../views/main/authentication/base/user-token';
+import { AuthProject } from 'src/app/model/AuthProject';
 
 export class ServiceInterface {
 
@@ -36,8 +37,8 @@ export class ServiceInterface {
         await  this.http.get(Url.urlDeauthenticate(), { headers: this.getAuthHeader(token), responseType: 'text' }).toPromise();
     }
 
-    public async projectnames(): Promise<string[]> {
-        return this.http.get<string[]>(Url.urlProjectNames()).toPromise();
+    public async projects(): Promise<AuthProject[]> {
+        return this.http.get<AuthProject[]>(Url.urlProjects()).toPromise();
     }
 
     public async performBatchOperation(batchOperation: BatchOperation, token: UserToken): Promise<void> {

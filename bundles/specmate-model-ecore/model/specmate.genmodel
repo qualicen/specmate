@@ -213,5 +213,11 @@
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//export/Export/content"/>
       </genClasses>
     </nestedGenPackages>
+    <nestedGenPackages prefix="Auth" disposableProviderFactory="true" ecorePackage="specmate.ecore#//auth">
+      <genClasses ecoreClass="specmate.ecore#//auth/AuthProject">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//auth/AuthProject/name"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//auth/AuthProject/oauthUrl"/>
+      </genClasses>
+    </nestedGenPackages>
   </genPackages>
 </genmodel:GenModel>

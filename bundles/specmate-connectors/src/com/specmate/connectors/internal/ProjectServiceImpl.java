@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -12,6 +13,7 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 
 import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.api.IProjectService;
+import com.specmate.model.auth.AuthProject;
 
 @Component
 public class ProjectServiceImpl implements IProjectService {
@@ -24,8 +26,8 @@ public class ProjectServiceImpl implements IProjectService {
 	}
 
 	@Override
-	public Set<String> getProjectNames() {
-		return Collections.unmodifiableSet(projects.keySet());
+	public Set<AuthProject> getProjects() {
+		return Collections.unmodifiableSet(projects.values().stream().map(p -> p.getAuthProject()).collect(Collectors.toSet()));
 	}
 
 	@Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)

@@ -17,7 +17,9 @@ Export-Package: \
 	com.specmate.model.testspecification.util,\
 	com.specmate.model.testspecification,\
 	com.specmate.model.history,\
-	com.specmate.model.history.util
+	com.specmate.model.history.util,\
+	com.specmate.model.auth.util,\
+	com.specmate.model.auth
 Private-Package: \
 	com.specmate.model.base.impl,\
 	com.specmate.model.batch.impl,\
@@ -40,4 +42,7 @@ Private-Package: \
 	org.eclipse.core.runtime
 
 
--privatepackage: com.specmate.model.export.impl
+-privatepackage: \
+	com.specmate.model.export.impl,\
+	com.specmate.model.auth.impl,\
+	com.specmate.model.auth.util

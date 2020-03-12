@@ -5,14 +5,14 @@ import java.util.List;
 import java.util.Optional;
 
 import com.specmate.common.exception.SpecmateException;
-import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.api.IRequirementsSource;
+import com.specmate.connectors.api.ProjectBase;
 import com.specmate.export.api.ExporterBase;
 import com.specmate.model.base.IContainer;
-import com.specmate.model.requirements.Requirement;
 import com.specmate.model.export.Export;
+import com.specmate.model.requirements.Requirement;
 
-public class DummyProject implements IProject {
+public class DummyProject extends ProjectBase {
 	private String projectId;
 
 	public DummyProject(String projectId) {
@@ -46,6 +46,11 @@ public class DummyProject implements IProject {
 			@Override
 			public boolean authenticate(String username, String password) throws SpecmateException {
 				return true;
+			}
+
+			@Override
+			public String getOAuthUrl() {
+				return null;
 			}
 		};
 	}

@@ -16,4 +16,5 @@ public interface IRequirementsSource {
 
 	boolean authenticate(String username, String password) throws SpecmateException;
 
+	String getOAuthUrl();
 }

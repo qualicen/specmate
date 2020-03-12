@@ -13,11 +13,12 @@ import org.osgi.service.component.annotations.ReferenceCardinality;
 import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.api.IProjectConfigService;
 import com.specmate.connectors.api.IRequirementsSource;
+import com.specmate.connectors.api.ProjectBase;
 import com.specmate.connectors.config.ProjectConfigService;
 import com.specmate.export.api.IExporter;
 
 @Component(service = IProject.class, configurationPid = ProjectConfigService.PROJECT_CONFIG_FACTORY_PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
-public class ProjectImpl implements IProject {
+public class ProjectImpl extends ProjectBase {
 	private String id = null;
 	private IRequirementsSource connector = null;
 	private IExporter exporter = null;
@@ -48,6 +49,7 @@ public class ProjectImpl implements IProject {
 	@Reference(name = "connector")
 	public void setConnector(IRequirementsSource connector) {
 		this.connector = connector;
+		this.oauthUrl = connector.getOAuthUrl();
 	}
 
 	@Override

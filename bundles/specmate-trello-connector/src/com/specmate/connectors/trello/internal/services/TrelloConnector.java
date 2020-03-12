@@ -147,4 +147,9 @@ public class TrelloConnector implements IRequirementsSource {
 		return true;
 	}
 
+	@Override
+	public String getOAuthUrl() {
+		return null;
+	}
+
 }

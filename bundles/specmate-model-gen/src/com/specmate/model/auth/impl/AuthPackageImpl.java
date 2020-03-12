@@ -1,15 +1,15 @@
 /**
  */
-package com.specmate.model.administration.impl;
+package com.specmate.model.auth.impl;
 
-import com.specmate.model.administration.AdministrationFactory;
 import com.specmate.model.administration.AdministrationPackage;
-import com.specmate.model.administration.ErrorCode;
-import com.specmate.model.administration.ProblemDetail;
-import com.specmate.model.administration.Status;
 
+import com.specmate.model.administration.impl.AdministrationPackageImpl;
+
+import com.specmate.model.auth.AuthFactory;
 import com.specmate.model.auth.AuthPackage;
-import com.specmate.model.auth.impl.AuthPackageImpl;
+import com.specmate.model.auth.AuthProject;
+
 import com.specmate.model.base.BasePackage;
 
 import com.specmate.model.base.impl.BasePackageImpl;
@@ -40,7 +40,6 @@ import com.specmate.model.testspecification.impl.TestspecificationPackageImpl;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.impl.EPackageImpl;
@@ -51,27 +50,13 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
  * <!-- end-user-doc -->
  * @generated
  */
-public class AdministrationPackageImpl extends EPackageImpl implements AdministrationPackage {
+public class AuthPackageImpl extends EPackageImpl implements AuthPackage {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass statusEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass problemDetailEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EEnum errorCodeEEnum = null;
+	private EClass authProjectEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -84,12 +69,12 @@ public class AdministrationPackageImpl extends EPackageImpl implements Administr
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see org.eclipse.emf.ecore.EPackage.Registry
-	 * @see com.specmate.model.administration.AdministrationPackage#eNS_URI
+	 * @see com.specmate.model.auth.AuthPackage#eNS_URI
 	 * @see #init()
 	 * @generated
 	 */
-	private AdministrationPackageImpl() {
-		super(eNS_URI, AdministrationFactory.eINSTANCE);
+	private AuthPackageImpl() {
+		super(eNS_URI, AuthFactory.eINSTANCE);
 	}
 
 	/**
@@ -102,7 +87,7 @@ public class AdministrationPackageImpl extends EPackageImpl implements Administr
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
 	 *
-	 * <p>This method is used to initialize {@link AdministrationPackage#eINSTANCE} when that field is accessed.
+	 * <p>This method is used to initialize {@link AuthPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -111,12 +96,12 @@ public class AdministrationPackageImpl extends EPackageImpl implements Administr
 	 * @see #initializePackageContents()
 	 * @generated
 	 */
-	public static AdministrationPackage init() {
-		if (isInited) return (AdministrationPackage)EPackage.Registry.INSTANCE.getEPackage(AdministrationPackage.eNS_URI);
+	public static AuthPackage init() {
+		if (isInited) return (AuthPackage)EPackage.Registry.INSTANCE.getEPackage(AuthPackage.eNS_URI);
 
 		// Obtain or create and register package
-		Object registeredAdministrationPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
-		AdministrationPackageImpl theAdministrationPackage = registeredAdministrationPackage instanceof AdministrationPackageImpl ? (AdministrationPackageImpl)registeredAdministrationPackage : new AdministrationPackageImpl();
+		Object registeredAuthPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		AuthPackageImpl theAuthPackage = registeredAuthPackage instanceof AuthPackageImpl ? (AuthPackageImpl)registeredAuthPackage : new AuthPackageImpl();
 
 		isInited = true;
 
@@ -131,41 +116,41 @@ public class AdministrationPackageImpl extends EPackageImpl implements Administr
 		ProcessesPackageImpl theProcessesPackage = (ProcessesPackageImpl)(registeredPackage instanceof ProcessesPackageImpl ? registeredPackage : ProcessesPackage.eINSTANCE);
 		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(HistoryPackage.eNS_URI);
 		HistoryPackageImpl theHistoryPackage = (HistoryPackageImpl)(registeredPackage instanceof HistoryPackageImpl ? registeredPackage : HistoryPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(AdministrationPackage.eNS_URI);
+		AdministrationPackageImpl theAdministrationPackage = (AdministrationPackageImpl)(registeredPackage instanceof AdministrationPackageImpl ? registeredPackage : AdministrationPackage.eINSTANCE);
 		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(BatchPackage.eNS_URI);
 		BatchPackageImpl theBatchPackage = (BatchPackageImpl)(registeredPackage instanceof BatchPackageImpl ? registeredPackage : BatchPackage.eINSTANCE);
 		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(ExportPackage.eNS_URI);
 		ExportPackageImpl theExportPackage = (ExportPackageImpl)(registeredPackage instanceof ExportPackageImpl ? registeredPackage : ExportPackage.eINSTANCE);
-		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(AuthPackage.eNS_URI);
-		AuthPackageImpl theAuthPackage = (AuthPackageImpl)(registeredPackage instanceof AuthPackageImpl ? registeredPackage : AuthPackage.eINSTANCE);
 
 		// Create package meta-data objects
-		theAdministrationPackage.createPackageContents();
+		theAuthPackage.createPackageContents();
 		theBasePackage.createPackageContents();
 		theRequirementsPackage.createPackageContents();
 		theTestspecificationPackage.createPackageContents();
 		theProcessesPackage.createPackageContents();
 		theHistoryPackage.createPackageContents();
+		theAdministrationPackage.createPackageContents();
 		theBatchPackage.createPackageContents();
 		theExportPackage.createPackageContents();
-		theAuthPackage.createPackageContents();
 
 		// Initialize created meta-data
-		theAdministrationPackage.initializePackageContents();
+		theAuthPackage.initializePackageContents();
 		theBasePackage.initializePackageContents();
 		theRequirementsPackage.initializePackageContents();
 		theTestspecificationPackage.initializePackageContents();
 		theProcessesPackage.initializePackageContents();
 		theHistoryPackage.initializePackageContents();
+		theAdministrationPackage.initializePackageContents();
 		theBatchPackage.initializePackageContents();
 		theExportPackage.initializePackageContents();
-		theAuthPackage.initializePackageContents();
 
 		// Mark meta-data to indicate it can't be changed
-		theAdministrationPackage.freeze();
+		theAuthPackage.freeze();
 
 		// Update the registry and return the package
-		EPackage.Registry.INSTANCE.put(AdministrationPackage.eNS_URI, theAdministrationPackage);
-		return theAdministrationPackage;
+		EPackage.Registry.INSTANCE.put(AuthPackage.eNS_URI, theAuthPackage);
+		return theAuthPackage;
 	}
 
 	/**
@@ -174,8 +159,8 @@ public class AdministrationPackageImpl extends EPackageImpl implements Administr
 	 * @generated
 	 */
 	@Override
-	public EClass getStatus() {
-		return statusEClass;
+	public EClass getAuthProject() {
+		return authProjectEClass;
 	}
 
 	/**
@@ -184,8 +169,8 @@ public class AdministrationPackageImpl extends EPackageImpl implements Administr
 	 * @generated
 	 */
 	@Override
-	public EAttribute getStatus_Value() {
-		return (EAttribute)statusEClass.getEStructuralFeatures().get(0);
+	public EAttribute getAuthProject_Name() {
+		return (EAttribute)authProjectEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -194,8 +179,8 @@ public class AdministrationPackageImpl extends EPackageImpl implements Administr
 	 * @generated
 	 */
 	@Override
-	public EClass getProblemDetail() {
-		return problemDetailEClass;
+	public EAttribute getAuthProject_OauthUrl() {
+		return (EAttribute)authProjectEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -204,58 +189,8 @@ public class AdministrationPackageImpl extends EPackageImpl implements Administr
 	 * @generated
 	 */
 	@Override
-	public EAttribute getProblemDetail_Ecode() {
-		return (EAttribute)problemDetailEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getProblemDetail_Status() {
-		return (EAttribute)problemDetailEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getProblemDetail_Detail() {
-		return (EAttribute)problemDetailEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getProblemDetail_Instance() {
-		return (EAttribute)problemDetailEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EEnum getErrorCode() {
-		return errorCodeEEnum;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public AdministrationFactory getAdministrationFactory() {
-		return (AdministrationFactory)getEFactoryInstance();
+	public AuthFactory getAuthFactory() {
+		return (AuthFactory)getEFactoryInstance();
 	}
 
 	/**
@@ -277,17 +212,9 @@ public class AdministrationPackageImpl extends EPackageImpl implements Administr
 		isCreated = true;
 
 		// Create classes and their features
-		statusEClass = createEClass(STATUS);
-		createEAttribute(statusEClass, STATUS__VALUE);
-
-		problemDetailEClass = createEClass(PROBLEM_DETAIL);
-		createEAttribute(problemDetailEClass, PROBLEM_DETAIL__ECODE);
-		createEAttribute(problemDetailEClass, PROBLEM_DETAIL__STATUS);
-		createEAttribute(problemDetailEClass, PROBLEM_DETAIL__DETAIL);
-		createEAttribute(problemDetailEClass, PROBLEM_DETAIL__INSTANCE);
-
-		// Create enums
-		errorCodeEEnum = createEEnum(ERROR_CODE);
+		authProjectEClass = createEClass(AUTH_PROJECT);
+		createEAttribute(authProjectEClass, AUTH_PROJECT__NAME);
+		createEAttribute(authProjectEClass, AUTH_PROJECT__OAUTH_URL);
 	}
 
 	/**
@@ -320,41 +247,12 @@ public class AdministrationPackageImpl extends EPackageImpl implements Administr
 		// Add supertypes to classes
 
 		// Initialize classes, features, and operations; add parameters
-		initEClass(statusEClass, Status.class, "Status", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getStatus_Value(), ecorePackage.getEString(), "value", null, 0, 1, Status.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(problemDetailEClass, ProblemDetail.class, "ProblemDetail", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getProblemDetail_Ecode(), this.getErrorCode(), "ecode", null, 0, 1, ProblemDetail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getProblemDetail_Status(), ecorePackage.getEInt(), "status", null, 0, 1, ProblemDetail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getProblemDetail_Detail(), ecorePackage.getEString(), "detail", null, 0, 1, ProblemDetail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getProblemDetail_Instance(), ecorePackage.getEString(), "instance", null, 0, 1, ProblemDetail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		// Initialize enums and add enum literals
-		initEEnum(errorCodeEEnum, ErrorCode.class, "ErrorCode");
-		addEEnumLiteral(errorCodeEEnum, ErrorCode.NO_SUCH_SERVICE);
-		addEEnumLiteral(errorCodeEEnum, ErrorCode.METHOD_NOT_ALLOWED);
-		addEEnumLiteral(errorCodeEEnum, ErrorCode.IN_MAINTENANCE_MODE);
-		addEEnumLiteral(errorCodeEEnum, ErrorCode.INVALID_DATA);
-		addEEnumLiteral(errorCodeEEnum, ErrorCode.VALIDATOR);
-		addEEnumLiteral(errorCodeEEnum, ErrorCode.NO_AUTHORIZATION);
-		addEEnumLiteral(errorCodeEEnum, ErrorCode.INTERNAL_PROBLEM);
-		addEEnumLiteral(errorCodeEEnum, ErrorCode.USER_SESSION);
-		addEEnumLiteral(errorCodeEEnum, ErrorCode.CONFIGURATION);
-		addEEnumLiteral(errorCodeEEnum, ErrorCode.PERSISTENCY);
-		addEEnumLiteral(errorCodeEEnum, ErrorCode.MIGRATION);
-		addEEnumLiteral(errorCodeEEnum, ErrorCode.SERALIZATION);
-		addEEnumLiteral(errorCodeEEnum, ErrorCode.REST_SERVICE);
-		addEEnumLiteral(errorCodeEEnum, ErrorCode.SCHEDULER);
-		addEEnumLiteral(errorCodeEEnum, ErrorCode.HP_PROXY);
-		addEEnumLiteral(errorCodeEEnum, ErrorCode.JIRA);
-		addEEnumLiteral(errorCodeEEnum, ErrorCode.METRICS);
-		addEEnumLiteral(errorCodeEEnum, ErrorCode.SEARCH);
-		addEEnumLiteral(errorCodeEEnum, ErrorCode.TESTGENERATION);
-		addEEnumLiteral(errorCodeEEnum, ErrorCode.TRELLO);
-		addEEnumLiteral(errorCodeEEnum, ErrorCode.NLP);
+		initEClass(authProjectEClass, AuthProject.class, "AuthProject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getAuthProject_Name(), ecorePackage.getEString(), "name", null, 0, 1, AuthProject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAuthProject_OauthUrl(), ecorePackage.getEString(), "oauthUrl", null, 0, 1, AuthProject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);
 	}
 
-} //AdministrationPackageImpl
+} //AuthPackageImpl

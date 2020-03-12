@@ -6,6 +6,8 @@ import com.specmate.model.administration.AdministrationPackage;
 
 import com.specmate.model.administration.impl.AdministrationPackageImpl;
 
+import com.specmate.model.auth.AuthPackage;
+import com.specmate.model.auth.impl.AuthPackageImpl;
 import com.specmate.model.base.BasePackage;
 
 import com.specmate.model.base.impl.BasePackageImpl;
@@ -134,6 +136,8 @@ public class BatchPackageImpl extends EPackageImpl implements BatchPackage {
 		AdministrationPackageImpl theAdministrationPackage = (AdministrationPackageImpl)(registeredPackage instanceof AdministrationPackageImpl ? registeredPackage : AdministrationPackage.eINSTANCE);
 		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(ExportPackage.eNS_URI);
 		ExportPackageImpl theExportPackage = (ExportPackageImpl)(registeredPackage instanceof ExportPackageImpl ? registeredPackage : ExportPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(AuthPackage.eNS_URI);
+		AuthPackageImpl theAuthPackage = (AuthPackageImpl)(registeredPackage instanceof AuthPackageImpl ? registeredPackage : AuthPackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theBatchPackage.createPackageContents();
@@ -144,6 +148,7 @@ public class BatchPackageImpl extends EPackageImpl implements BatchPackage {
 		theHistoryPackage.createPackageContents();
 		theAdministrationPackage.createPackageContents();
 		theExportPackage.createPackageContents();
+		theAuthPackage.createPackageContents();
 
 		// Initialize created meta-data
 		theBatchPackage.initializePackageContents();
@@ -154,6 +159,7 @@ public class BatchPackageImpl extends EPackageImpl implements BatchPackage {
 		theHistoryPackage.initializePackageContents();
 		theAdministrationPackage.initializePackageContents();
 		theExportPackage.initializePackageContents();
+		theAuthPackage.initializePackageContents();
 
 		// Mark meta-data to indicate it can't be changed
 		theBatchPackage.freeze();

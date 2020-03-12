@@ -7,12 +7,12 @@ import java.util.Optional;
 import org.osgi.service.component.annotations.Component;
 
 import com.specmate.common.exception.SpecmateException;
-import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.api.IRequirementsSource;
+import com.specmate.connectors.api.ProjectBase;
 import com.specmate.export.api.ExporterBase;
 import com.specmate.model.base.IContainer;
-import com.specmate.model.requirements.Requirement;
 import com.specmate.model.export.Export;
+import com.specmate.model.requirements.Requirement;
 
 /**
  * A project definition for the test-data that authorizes every user.
@@ -20,7 +20,7 @@ import com.specmate.model.export.Export;
  * @author junkerm
  */
 @Component(immediate = true)
-public class DummyProject implements IProject {
+public class DummyProject extends ProjectBase {
 
 	/* package */ static final String TEST_DATA_PROJECT = "test-data";
 
@@ -52,6 +52,11 @@ public class DummyProject implements IProject {
 			@Override
 			public boolean authenticate(String username, String password) throws SpecmateException {
 				return true;
+			}
+
+			@Override
+			public String getOAuthUrl() {
+				return null;
 			}
 		};
 	}

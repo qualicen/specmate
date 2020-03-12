@@ -190,15 +190,9 @@
 	com.google.guava;version='[18.0.0,18.0.1)',\
 	org.apache.commons.lang3;version='[3.5.0,3.5.1)',\
 	slf4j.api;version='[1.7.25,1.7.26)',\
-	com.atlassian.fugue;version='[2.7.0,2.7.1)',\
 	com.atlassian.sal.api;version='[3.0.7,3.0.8)',\
-	com.atlassian.util.concurrent.atlassian-util-concurrent;version='[3.0.0,3.0.1)',\
 	org.apache.commons.codec;version='[1.10.0,1.10.1)',\
-	org.apache.commons.logging;version='[1.1.1,1.1.2)',\
-	org.apache.httpcomponents.httpasyncclient;version='[4.1.3,4.1.4)',\
-	org.apache.httpcomponents.httpclient;version='[4.5.3,4.5.4)',\
 	org.apache.httpcomponents.httpcore;version='[4.4.6,4.4.7)',\
-	org.apache.servicemix.bundles.jcip-annotations;version='[1.0.0,1.0.1)',\
 	org.apache.servicemix.bundles.spring-beans;version='[4.1.7,4.1.8)',\
 	org.apache.servicemix.bundles.spring-core;version='[4.1.7,4.1.8)',\
 	org.codehaus.jettison.jettison;version='[1.1.0,1.1.1)',\
@@ -215,7 +209,13 @@
 	specmate-cause-effect-patterns;version=snapshot,\
 	jaxb-api;version='[2.3.1,2.3.2)',\
 	specmate-xtext;version=snapshot,\
-	specmate-objectif;version=snapshot
+	specmate-objectif;version=snapshot,\
+	com.google.guava;version='[26.0.0,26.0.1)',\
+	io.atlassian.fugue;version='[4.7.2,4.7.3)',\
+	io.atlassian.util.concurrent.atlassian-util-concurrent;version='[4.0.1,4.0.2)',\
+	org.apache.commons.logging;version='[1.2.0,1.2.1)',\
+	org.apache.httpcomponents.httpasyncclient;version='[4.1.4,4.1.5)',\
+	org.apache.httpcomponents.httpclient;version='[4.5.5,4.5.6)'
 
 -runproperties: \
 	jetty.http.port=8080,\

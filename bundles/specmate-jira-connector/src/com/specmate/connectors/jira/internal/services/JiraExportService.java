@@ -20,7 +20,6 @@ import com.atlassian.jira.rest.client.api.domain.BasicIssue;
 import com.atlassian.jira.rest.client.api.domain.IssueType;
 import com.atlassian.jira.rest.client.api.domain.input.IssueInput;
 import com.atlassian.jira.rest.client.api.domain.input.IssueInputBuilder;
-import com.atlassian.util.concurrent.Promise;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.connectors.api.IExportService;
@@ -30,6 +29,8 @@ import com.specmate.model.support.util.SpecmateEcoreUtil;
 import com.specmate.model.testspecification.TestProcedure;
 import com.specmate.model.testspecification.TestSpecification;
 import com.specmate.model.testspecification.TestStep;
+
+import io.atlassian.util.concurrent.Promise;
 
 @Component(immediate = true, service = IExportService.class, configurationPid = JiraConnectorConfig.EXPORTER_PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
 public class JiraExportService implements IExportService {

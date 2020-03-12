@@ -16,7 +16,7 @@ import com.specmate.usermodel.UserSession;
 
 @Component(service = IRestService.class)
 public class LoginOAuth extends RestServiceBase {
-	public static final String SERVICE_NAME = "login";
+	public static final String SERVICE_NAME = "oauth";
 	
 
 	private IAuthenticationService authService;

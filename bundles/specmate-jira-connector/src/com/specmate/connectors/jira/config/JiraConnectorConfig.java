@@ -23,6 +23,7 @@ public class JiraConnectorConfig {
 	public static final String KEY_JIRA_USERNAME = "jira.username";
 	public static final String KEY_JIRA_PASSWORD = "jira.password";
 	public static final String KEY_JIRA_PAGINATION_SIZE = "jira.paginationSize";
+	public static final String KEY_JIRA_OAUTH_URL = "oauthUrl";
 	private ConfigurationAdmin configurationAdmin;
 	private LogService logService;
 	private IConfigService configService;

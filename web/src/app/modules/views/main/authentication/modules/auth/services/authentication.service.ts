@@ -6,6 +6,7 @@ import { User } from '../../../../../../../model/User';
 import { Url } from '../../../../../../../util/url';
 import { ServiceInterface } from '../../../../../../data/modules/data-service/services/service-interface';
 import { UserToken } from '../../../base/user-token';
+import { AuthProject } from 'src/app/model/AuthProject';
 
 @Injectable()
 export class AuthenticationService {
@@ -160,7 +161,7 @@ export class AuthenticationService {
         }
     }
 
-    public async getProjectNames(): Promise<string[]> {
-        return await this.serviceInterface.projectnames();
+    public async getProjects(): Promise<AuthProject[]> {
+        return await this.serviceInterface.projects();
     }
 }

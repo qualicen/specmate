@@ -16,6 +16,7 @@
 		public SourceSystem: AccessRights;
 		public TargetSystem: AccessRights;
 		public libraryFolders: EString[];
+		public isDeleted: EBoolean;
 		public exporters: EString[];
 
 		// References

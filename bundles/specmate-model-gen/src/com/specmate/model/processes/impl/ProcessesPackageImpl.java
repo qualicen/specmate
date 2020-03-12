@@ -6,6 +6,8 @@ import com.specmate.model.administration.AdministrationPackage;
 
 import com.specmate.model.administration.impl.AdministrationPackageImpl;
 
+import com.specmate.model.auth.AuthPackage;
+import com.specmate.model.auth.impl.AuthPackageImpl;
 import com.specmate.model.base.BasePackage;
 
 import com.specmate.model.base.impl.BasePackageImpl;
@@ -163,6 +165,8 @@ public class ProcessesPackageImpl extends EPackageImpl implements ProcessesPacka
 		BatchPackageImpl theBatchPackage = (BatchPackageImpl)(registeredPackage instanceof BatchPackageImpl ? registeredPackage : BatchPackage.eINSTANCE);
 		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(ExportPackage.eNS_URI);
 		ExportPackageImpl theExportPackage = (ExportPackageImpl)(registeredPackage instanceof ExportPackageImpl ? registeredPackage : ExportPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(AuthPackage.eNS_URI);
+		AuthPackageImpl theAuthPackage = (AuthPackageImpl)(registeredPackage instanceof AuthPackageImpl ? registeredPackage : AuthPackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theProcessesPackage.createPackageContents();
@@ -173,6 +177,7 @@ public class ProcessesPackageImpl extends EPackageImpl implements ProcessesPacka
 		theAdministrationPackage.createPackageContents();
 		theBatchPackage.createPackageContents();
 		theExportPackage.createPackageContents();
+		theAuthPackage.createPackageContents();
 
 		// Initialize created meta-data
 		theProcessesPackage.initializePackageContents();
@@ -183,6 +188,7 @@ public class ProcessesPackageImpl extends EPackageImpl implements ProcessesPacka
 		theAdministrationPackage.initializePackageContents();
 		theBatchPackage.initializePackageContents();
 		theExportPackage.initializePackageContents();
+		theAuthPackage.initializePackageContents();
 
 		// Mark meta-data to indicate it can't be changed
 		theProcessesPackage.freeze();

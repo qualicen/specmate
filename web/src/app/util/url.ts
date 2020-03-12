@@ -159,7 +159,7 @@ export class Url {
         return Url.build([Config.URL_BASE, 'logout']);
     }
 
-    public static urlProjectNames(): string {
+    public static urlProjects(): string {
         return Url.build([Config.URL_BASE, 'projectnames']);
     }
 }

@@ -18,7 +18,7 @@ import org.osgi.service.log.LogService;
 
 import com.specmate.auth.api.IAuthenticationService;
 import com.specmate.common.exception.SpecmateException;
-import com.specmate.emfrest.authentication.Login;
+import com.specmate.emfrest.authentication.LoginUserPass;
 import com.specmate.emfrest.authentication.Logout;
 import com.specmate.emfrest.authentication.ProjectNames;
 import com.specmate.model.administration.AdministrationFactory;
@@ -31,7 +31,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 	private static final String REINDEX_SERVICE_NAME = "reindex";
 	private final String HEARTBEAT_PARAMETER = "heartbeat";
 	private final String REST_URL = ".+services/rest/";
-	private Pattern loginPattern = Pattern.compile(REST_URL + Login.SERVICE_NAME);
+	private Pattern loginPattern = Pattern.compile(REST_URL + LoginUserPass.SERVICE_NAME);
 	private Pattern logoutPattern = Pattern.compile(REST_URL + Logout.SERVICE_NAME);
 	private Pattern projectNamesPattern = Pattern.compile(REST_URL + ProjectNames.SERVICE_NAME);
 	private Pattern reindexPattern = Pattern.compile(REST_URL + REINDEX_SERVICE_NAME);

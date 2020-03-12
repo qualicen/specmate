@@ -513,5 +513,7 @@ export class MetaInfo {
 			position: '0',
 			allowedPattern: '^[^,;|]*$'		
 		}	];
+	public static AuthProject: FieldMetaItem[] = [
+	];
 }
 

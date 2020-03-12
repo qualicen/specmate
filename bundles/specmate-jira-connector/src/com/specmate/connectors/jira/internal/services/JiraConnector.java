@@ -60,6 +60,7 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 	private JiraRestClient jiraClient;
 	private String projectName;
 	private String url;
+	private String oauthUrl;
 
 	private Map<Issue, Folder> epicFolders = new HashMap<>();
 	private Map<Requirement, Issue> requirmentEpics = new HashMap<>();
@@ -81,6 +82,8 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 		id = (String) properties.get(IProjectConfigService.KEY_CONNECTOR_ID);
 		url = (String) properties.get(JiraConnectorConfig.KEY_JIRA_URL);
 		projectName = (String) properties.get(JiraConnectorConfig.KEY_JIRA_PROJECT);
+		oauthUrl = (String) properties.get(JiraConnectorConfig.KEY_JIRA_OAUTH_URL);
+		
 		String username = (String) properties.get(JiraConnectorConfig.KEY_JIRA_USERNAME);
 		String password = (String) properties.get(JiraConnectorConfig.KEY_JIRA_PASSWORD);
 		String paginationSizeStr = (String) properties.get(JiraConnectorConfig.KEY_JIRA_PAGINATION_SIZE);
@@ -348,4 +351,8 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 		return projectName;
 	}
 
+	@Override
+	public String getOAuthUrl() {
+		return oauthUrl;
+	}
 }

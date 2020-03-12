@@ -182,6 +182,7 @@
 		"Requirement": "",
 		"restoreZoom": ""
 	},
+	"oauthLogin": "OAuth login",
 	"ok": "OK",
 	"operation": "Operation",
 	"operationCouldNotBePerformed": "Operation could not be performed",

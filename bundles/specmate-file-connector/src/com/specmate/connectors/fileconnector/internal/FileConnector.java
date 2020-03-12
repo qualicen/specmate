@@ -184,4 +184,9 @@ public class FileConnector implements IRequirementsSource {
 	public void setLogService(LogService logService) {
 		this.logService = logService;
 	}
+
+	@Override
+	public String getOAuthUrl() {
+		return null;
+	}
 }

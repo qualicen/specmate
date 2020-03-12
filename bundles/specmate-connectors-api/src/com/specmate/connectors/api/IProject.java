@@ -3,6 +3,7 @@ package com.specmate.connectors.api;
 import java.util.List;
 
 import com.specmate.export.api.IExporter;
+import com.specmate.model.auth.AuthProject;
 
 public interface IProject {
 
@@ -28,5 +29,11 @@ public interface IProject {
 	 *         <code>null</code>.
 	 */
 	List<String> getLibraryFolders();
+
+	/**
+	 * @return the authorization project defining the auth mechanism for this
+	 *         project.
+	 */
+	AuthProject getAuthProject();
 
 }

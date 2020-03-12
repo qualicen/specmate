@@ -176,4 +176,9 @@ public class HPConnector extends DetailsService implements IRequirementsSource, 
 		return this.hpConnection.authenticateRead(username, password, this.hpProjectName);
 	}
 
+	@Override
+	public String getOAuthUrl() {
+		return null;
+	}
+
 }

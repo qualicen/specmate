@@ -1,15 +1,5 @@
 package com.specmate.rest;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.function.Predicate;
-
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -19,11 +9,8 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
-import org.apache.commons.lang3.StringUtils;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
-import org.glassfish.jersey.media.sse.EventInput;
-import org.glassfish.jersey.media.sse.InboundEvent;
 import org.glassfish.jersey.media.sse.SseFeature;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,7 +27,7 @@ public class RestClient {
 	private String authenticationToken;
 
 	public RestClient(String restUrl, String authenticationToken, int timeout, LogService logService) {
-		this.restClient = initializeClient();
+		restClient = initializeClient();
 		this.restUrl = restUrl;
 		this.timeout = timeout;
 		this.logService = logService;
@@ -48,7 +35,7 @@ public class RestClient {
 	}
 
 	public void close() {
-		this.restClient.close();
+		restClient.close();
 	}
 
 	public RestClient(String restUrl, String authenticationToken, LogService logService) {
@@ -65,45 +52,6 @@ public class RestClient {
 		config.property(ClientProperties.READ_TIMEOUT, timeout);
 		Client client = ClientBuilder.newBuilder().withConfig(config).register(SseFeature.class).build();
 		return client;
-	}
-
-	private Future<Boolean> startEventListener(String url, Collection<Predicate<JSONObject>> eventPredicates) {
-		final WebTarget eventTarget = restClient
-				.target(restUrl + (StringUtils.isEmpty(url) ? "" : "/" + url) + "/_events");
-
-		ExecutorService executor = Executors.newFixedThreadPool(1);
-		Future<Boolean> future = executor.submit(new Callable<Boolean>() {
-			@Override
-			public Boolean call() {
-				if (eventPredicates.isEmpty()) {
-					return true;
-				}
-				List<Predicate<JSONObject>> predicatesToCheck = new ArrayList<>(eventPredicates);
-				final EventInput eventInput = eventTarget.request().get(EventInput.class);
-				while (true) {
-					if (predicatesToCheck.isEmpty()) {
-						return true;
-					}
-					final InboundEvent inboundEvent = eventInput.read();
-					if (inboundEvent == null) {
-						return null;
-					}
-					JSONObject jsonObject = new JSONObject(new JSONTokener(inboundEvent.readData(String.class)));
-					Iterator<Predicate<JSONObject>> predicateIterator = predicatesToCheck.iterator();
-					while (predicateIterator.hasNext()) {
-						if (predicateIterator.next().test(jsonObject)) {
-							predicateIterator.remove();
-						}
-					}
-				}
-			}
-		});
-		try {
-			Thread.sleep(200);
-		} catch (InterruptedException e) {
-			// ingore
-		}
-		return future;
 	}
 
 	private Response rawGet(String url, String... params) {
@@ -145,6 +93,11 @@ public class RestClient {
 	}
 
 	public RestResult<JSONObject> post(String url, JSONObject jsonObject) {
+		Response response = rawPost(url, jsonObject);
+		return createResult(url, response);
+	}
+
+	public Response rawPost(String url, JSONObject jsonObject) {
 		Invocation.Builder invocationBuilder = getInvocationBuilder(url);
 		Entity<String> entity;
 		if (jsonObject == null) {
@@ -153,7 +106,7 @@ public class RestClient {
 			entity = Entity.entity(jsonObject.toString(), "application/json;charset=utf-8");
 		}
 		Response response = invocationBuilder.post(entity);
-		return createResult(url, response);
+		return response;
 	}
 
 	public RestResult<JSONObject> put(String url, JSONObject objectJson) {

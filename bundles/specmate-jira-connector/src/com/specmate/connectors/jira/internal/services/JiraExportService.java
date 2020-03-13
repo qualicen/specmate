@@ -34,7 +34,7 @@ import com.specmate.model.testspecification.TestStep;
 
 import io.atlassian.util.concurrent.Promise;
 
-/** Exorter for jira x-ray */
+/** Exorter for jira */
 @Component(immediate = true, service = IExporter.class, configurationPid = JiraConnectorConfig.EXPORTER_PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
 public class JiraExportService extends ExporterBase {
 
@@ -131,8 +131,7 @@ public class JiraExportService extends ExporterBase {
 			issueBuilder.setSummary("Specmate Exported Test Procedure: " + testProcedure.getName());
 			StringBuilder builder = new StringBuilder();
 			builder.append("||Step||Name||Description||Expected Result||\n");
-			List<TestStep> steps = SpecmateEcoreUtil.pickInstancesOf(testProcedure.getContents(), TestStep.class);
-			steps.sort((s1, s2) -> Integer.compare(s1.getPosition(), s2.getPosition()));
+			List<TestStep> steps = SpecmateEcoreUtil.getStepsSorted(testProcedure);
 			int stepNum = 0;
 			for (TestStep step : steps) {
 				stepNum++;

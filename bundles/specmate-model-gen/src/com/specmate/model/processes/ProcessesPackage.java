@@ -39,7 +39,7 @@ public interface ProcessesPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://specmate.com/20190125/model/processes";
+	String eNS_URI = "http://specmate.com/20200228/model/processes";
 
 	/**
 	 * The package namespace name.
@@ -204,6 +204,24 @@ public interface ProcessesPackage extends EPackage {
 	int PROCESS_NODE__Y = BasePackage.IMODEL_NODE__Y;
 
 	/**
+	 * The feature id for the '<em><b>Width</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS_NODE__WIDTH = BasePackage.IMODEL_NODE__WIDTH;
+
+	/**
+	 * The feature id for the '<em><b>Height</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS_NODE__HEIGHT = BasePackage.IMODEL_NODE__HEIGHT;
+
+	/**
 	 * The feature id for the '<em><b>Outgoing Connections</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -320,6 +338,24 @@ public interface ProcessesPackage extends EPackage {
 	 * @ordered
 	 */
 	int PROCESS_STEP__Y = PROCESS_NODE__Y;
+
+	/**
+	 * The feature id for the '<em><b>Width</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS_STEP__WIDTH = PROCESS_NODE__WIDTH;
+
+	/**
+	 * The feature id for the '<em><b>Height</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS_STEP__HEIGHT = PROCESS_NODE__HEIGHT;
 
 	/**
 	 * The feature id for the '<em><b>Outgoing Connections</b></em>' reference list.
@@ -449,6 +485,24 @@ public interface ProcessesPackage extends EPackage {
 	int PROCESS_DECISION__Y = PROCESS_NODE__Y;
 
 	/**
+	 * The feature id for the '<em><b>Width</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS_DECISION__WIDTH = PROCESS_NODE__WIDTH;
+
+	/**
+	 * The feature id for the '<em><b>Height</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS_DECISION__HEIGHT = PROCESS_NODE__HEIGHT;
+
+	/**
 	 * The feature id for the '<em><b>Outgoing Connections</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -576,13 +630,31 @@ public interface ProcessesPackage extends EPackage {
 	int PROCESS_CONNECTION__CONDITION = BasePackage.IMODEL_CONNECTION_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Label X</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS_CONNECTION__LABEL_X = BasePackage.IMODEL_CONNECTION_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Label Y</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS_CONNECTION__LABEL_Y = BasePackage.IMODEL_CONNECTION_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Process Connection</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROCESS_CONNECTION_FEATURE_COUNT = BasePackage.IMODEL_CONNECTION_FEATURE_COUNT + 1;
+	int PROCESS_CONNECTION_FEATURE_COUNT = BasePackage.IMODEL_CONNECTION_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of operations of the '<em>Process Connection</em>' class.
@@ -674,6 +746,24 @@ public interface ProcessesPackage extends EPackage {
 	 * @ordered
 	 */
 	int PROCESS_START__Y = PROCESS_NODE__Y;
+
+	/**
+	 * The feature id for the '<em><b>Width</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS_START__WIDTH = PROCESS_NODE__WIDTH;
+
+	/**
+	 * The feature id for the '<em><b>Height</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS_START__HEIGHT = PROCESS_NODE__HEIGHT;
 
 	/**
 	 * The feature id for the '<em><b>Outgoing Connections</b></em>' reference list.
@@ -794,6 +884,24 @@ public interface ProcessesPackage extends EPackage {
 	int PROCESS_END__Y = PROCESS_NODE__Y;
 
 	/**
+	 * The feature id for the '<em><b>Width</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS_END__WIDTH = PROCESS_NODE__WIDTH;
+
+	/**
+	 * The feature id for the '<em><b>Height</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS_END__HEIGHT = PROCESS_NODE__HEIGHT;
+
+	/**
 	 * The feature id for the '<em><b>Outgoing Connections</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -903,6 +1011,28 @@ public interface ProcessesPackage extends EPackage {
 	EAttribute getProcessConnection_Condition();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.specmate.model.processes.ProcessConnection#getLabelX <em>Label X</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Label X</em>'.
+	 * @see com.specmate.model.processes.ProcessConnection#getLabelX()
+	 * @see #getProcessConnection()
+	 * @generated
+	 */
+	EAttribute getProcessConnection_LabelX();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.specmate.model.processes.ProcessConnection#getLabelY <em>Label Y</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Label Y</em>'.
+	 * @see com.specmate.model.processes.ProcessConnection#getLabelY()
+	 * @see #getProcessConnection()
+	 * @generated
+	 */
+	EAttribute getProcessConnection_LabelY();
+
+	/**
 	 * Returns the meta object for class '{@link com.specmate.model.processes.ProcessStart <em>Process Start</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1010,6 +1140,22 @@ public interface ProcessesPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PROCESS_CONNECTION__CONDITION = eINSTANCE.getProcessConnection_Condition();
+
+		/**
+		 * The meta object literal for the '<em><b>Label X</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PROCESS_CONNECTION__LABEL_X = eINSTANCE.getProcessConnection_LabelX();
+
+		/**
+		 * The meta object literal for the '<em><b>Label Y</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PROCESS_CONNECTION__LABEL_Y = eINSTANCE.getProcessConnection_LabelY();
 
 		/**
 		 * The meta object literal for the '{@link com.specmate.model.processes.impl.ProcessStartImpl <em>Process Start</em>}' class.

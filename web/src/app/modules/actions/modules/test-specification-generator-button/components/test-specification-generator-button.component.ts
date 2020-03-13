@@ -49,8 +49,11 @@ export class TestSpecificationGeneratorButton {
         private logger: LoggingService,
         private translate: TranslateService) { }
 
-    public generate(): void {
+    public async generate(): Promise<void> {
+        await this.validator.validateCurrent();
         if (!this.enabled) {
+            let message = this.translate.instant('testspec.errorMessage') + '\n' + this.validator.getValidationResultAsString(false);
+            this.modal.openOk('testspec.errorTitle', message);
             return;
         }
         let testSpec: TestSpecification = new TestSpecification();

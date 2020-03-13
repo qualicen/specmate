@@ -14,5 +14,6 @@
 	specmate-search;version=latest,\
 	osgi.cmpn,\
 	osgi.core,\
-	specmate-connectors;version=latest,\
-	specmate-persistency-cdo;version=latest
+	specmate-persistency-cdo;version=latest,\
+	specmate-connectors-api;version=latest,\
+	specmate-export-api;version=latest

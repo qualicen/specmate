@@ -38,7 +38,7 @@ public interface AdministrationPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://specmate.com/20190125/model/administration";
+	String eNS_URI = "http://specmate.com/20200228/model/administration";
 
 	/**
 	 * The package namespace name.
@@ -92,7 +92,6 @@ public interface AdministrationPackage extends EPackage {
 	 * @ordered
 	 */
 	int STATUS_OPERATION_COUNT = 0;
-
 
 	/**
 	 * The meta object id for the '{@link com.specmate.model.administration.impl.ProblemDetailImpl <em>Problem Detail</em>}' class.
@@ -157,7 +156,6 @@ public interface AdministrationPackage extends EPackage {
 	 * @ordered
 	 */
 	int PROBLEM_DETAIL_OPERATION_COUNT = 0;
-
 
 	/**
 	 * The meta object id for the '{@link com.specmate.model.administration.ErrorCode <em>Error Code</em>}' enum.

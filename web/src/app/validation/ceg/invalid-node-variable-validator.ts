@@ -1,4 +1,3 @@
-import { CEGModel } from '../../model/CEGModel';
 import { CEGNode } from '../../model/CEGNode';
 import { IContainer } from '../../model/IContainer';
 import { ElementValidatorBase } from '../element-validator-base';
@@ -8,11 +7,12 @@ import { Validator } from '../validator-decorator';
 import { ValidationUtil } from '../validation-util';
 import { ValidationErrorSeverity } from '../validation-error-severity';
 
-/** 
+/**
  * Detects nodes in a model that have a character in the variable name that is not allowed for
- * element names. As from the variable name Specmate contstruct Testparameters with the same name, this 
+ * element names. As from the variable name Specmate contstruct Testparameters with the same name, this
  * would cause problems.
  */
+
 @Validator(CEGNode)
 export class InvalidNodeVariableValidator extends ElementValidatorBase<CEGNode> {
 

@@ -5,7 +5,7 @@
 
 	export class History  {
 
-		___nsuri: string = "http://specmate.com/20190125/model/history";
+		___nsuri: string = "http://specmate.com/20200228/model/history";
 		public url: string;
 		public className: string = "History";
 		public static className: string = "History";

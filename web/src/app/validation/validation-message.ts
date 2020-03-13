@@ -21,6 +21,8 @@ export class ValidationMessage {
     public static ERROR_PROCESS_DECISION_WITH_ONE_OR_FEWER_OUTGOING_CONNECTIONS = 'errorProcessDecisionWithOneOrFewerOutgoingConnections';
     public static ERROR_INVALID_NAME = 'errorInvalidName';
     public static ERROR_INVALID_VARIABLE = 'errorInvalidVariable';
+    public static ERROR_PROCESS_INVALID_CONDITION_TEXT = 'errorProcessInvalidConditionText';
+    public static ERROR_TEXT_TOO_LONG = 'errorTextTooLong';
 
 
     constructor(private messageKey: string, private interpolationParameters?: Object) {}

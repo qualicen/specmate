@@ -29,10 +29,6 @@ public interface ProblemDetail extends CDOObject {
 	 * Returns the value of the '<em><b>Ecode</b></em>' attribute.
 	 * The literals are from the enumeration {@link com.specmate.model.administration.ErrorCode}.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Ecode</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Ecode</em>' attribute.
 	 * @see com.specmate.model.administration.ErrorCode
@@ -57,10 +53,6 @@ public interface ProblemDetail extends CDOObject {
 	/**
 	 * Returns the value of the '<em><b>Status</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Status</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Status</em>' attribute.
 	 * @see #setStatus(int)
@@ -83,10 +75,6 @@ public interface ProblemDetail extends CDOObject {
 	/**
 	 * Returns the value of the '<em><b>Detail</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Detail</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Detail</em>' attribute.
 	 * @see #setDetail(String)
@@ -109,10 +97,6 @@ public interface ProblemDetail extends CDOObject {
 	/**
 	 * Returns the value of the '<em><b>Instance</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Instance</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Instance</em>' attribute.
 	 * @see #setInstance(String)

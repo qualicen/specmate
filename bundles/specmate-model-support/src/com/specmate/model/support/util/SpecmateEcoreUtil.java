@@ -63,10 +63,10 @@ public class SpecmateEcoreUtil {
 		return null;
 	}
 
-	public static EObject getEObjectWithName(String name, List<EObject> objects) {
+	public static EObject getEObjectWithName(String name, List<? extends EObject> objects) {
 		for (EObject object : objects) {
-			String currentNanme = SpecmateEcoreUtil.getName(object);
-			if (currentNanme != null && currentNanme.equals(name)) {
+			String currentName = SpecmateEcoreUtil.getName(object);
+			if (currentName != null && currentName.equals(name)) {
 				return object;
 			}
 		}
@@ -172,7 +172,7 @@ public class SpecmateEcoreUtil {
 		do {
 			candidate = String.format(format, type.getName(), i);
 			i++;
-		} while (getEObjectWithId(candidate, contents) != null);
+		} while (getEObjectWithName(candidate, contents) != null);
 
 		return candidate;
 	}

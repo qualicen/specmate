@@ -2,6 +2,7 @@ package com.specmate.connectors.internal;
 
 import javax.ws.rs.core.Response;
 
+import org.eclipse.emf.ecore.EObject;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.log.LogService;
@@ -15,6 +16,7 @@ import com.specmate.emfrest.api.IRestService;
 import com.specmate.emfrest.api.RestServiceBase;
 import com.specmate.model.support.util.SpecmateEcoreUtil;
 import com.specmate.model.testspecification.TestProcedure;
+import com.specmate.model.testspecification.TestSpecification;
 import com.specmate.rest.RestResult;
 import com.specmate.usermodel.AccessRights;
 
@@ -37,14 +39,14 @@ public class ALMExportService extends RestServiceBase {
 
 	@Override
 	public boolean canPost(Object target, Object object) {
-		return target instanceof TestProcedure;
+		return target instanceof TestProcedure || target instanceof TestSpecification;
 	}
 
 	@Override
 	public RestResult<?> post(Object target, Object object, String token) throws SpecmateException {
 		if (isAuthorizedToExport(token)) {
 			TestProcedure testProcedure = (TestProcedure) target;
-			String projectName = SpecmateEcoreUtil.getProjectId(testProcedure);
+			String projectName = SpecmateEcoreUtil.getProjectId((EObject)target);
 			logService.log(LogService.LOG_INFO, "Synchronizing test procedure " + testProcedure.getName());
 			IProject project = projectService.getProject(projectName);
 			project.getExporter().export(testProcedure);

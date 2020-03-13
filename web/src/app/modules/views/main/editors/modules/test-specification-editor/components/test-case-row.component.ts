@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { TestProcedureFactory } from '../../../../../../../factory/test-procedure-factory';
 import { IContainer } from '../../../../../../../model/IContainer';
@@ -38,6 +38,9 @@ export class TestCaseRow {
             .then((contents: IContainer[]) => this.testSpecificationContents = contents);
     }
 
+    @Output()
+    public onDelete = new EventEmitter();
+
     private contents: IContainer[];
 
     private testSpecificationContents: IContainer[];
@@ -61,6 +64,7 @@ export class TestCaseRow {
             const message = await this.translate.get('doYouReallyWantToDelete', { name: this.testCase.name }).toPromise();
             await this.modal.confirmDelete(this.translate.instant('ConfirmationRequired'), message);
             await this.dataService.deleteElement(this.testCase.url, true, Id.uuid);
+            this.onDelete.emit();
         } catch (e) { }
     }
 

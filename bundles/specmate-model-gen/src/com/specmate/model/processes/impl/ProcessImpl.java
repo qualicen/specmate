@@ -6,6 +6,7 @@ import com.specmate.model.base.BasePackage;
 import com.specmate.model.base.IContentElement;
 import com.specmate.model.base.IDescribed;
 import com.specmate.model.base.INamed;
+
 import com.specmate.model.processes.ProcessesPackage;
 
 import java.util.Collection;
@@ -102,6 +103,7 @@ public class ProcessImpl extends CDOObjectImpl implements com.specmate.model.pro
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getId() {
 		return (String)eDynamicGet(ProcessesPackage.PROCESS__ID, BasePackage.Literals.IID__ID, true, true);
 	}
@@ -111,6 +113,7 @@ public class ProcessImpl extends CDOObjectImpl implements com.specmate.model.pro
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setId(String newId) {
 		eDynamicSet(ProcessesPackage.PROCESS__ID, BasePackage.Literals.IID__ID, newId);
 	}
@@ -120,6 +123,7 @@ public class ProcessImpl extends CDOObjectImpl implements com.specmate.model.pro
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return (String)eDynamicGet(ProcessesPackage.PROCESS__NAME, BasePackage.Literals.INAMED__NAME, true, true);
 	}
@@ -129,6 +133,7 @@ public class ProcessImpl extends CDOObjectImpl implements com.specmate.model.pro
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		eDynamicSet(ProcessesPackage.PROCESS__NAME, BasePackage.Literals.INAMED__NAME, newName);
 	}
@@ -138,6 +143,7 @@ public class ProcessImpl extends CDOObjectImpl implements com.specmate.model.pro
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getDescription() {
 		return (String)eDynamicGet(ProcessesPackage.PROCESS__DESCRIPTION, BasePackage.Literals.IDESCRIBED__DESCRIPTION, true, true);
 	}
@@ -147,6 +153,7 @@ public class ProcessImpl extends CDOObjectImpl implements com.specmate.model.pro
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDescription(String newDescription) {
 		eDynamicSet(ProcessesPackage.PROCESS__DESCRIPTION, BasePackage.Literals.IDESCRIBED__DESCRIPTION, newDescription);
 	}
@@ -157,6 +164,7 @@ public class ProcessImpl extends CDOObjectImpl implements com.specmate.model.pro
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public EList<IContentElement> getContents() {
 		return (EList<IContentElement>)eDynamicGet(ProcessesPackage.PROCESS__CONTENTS, BasePackage.Literals.ICONTAINER__CONTENTS, true, true);
 	}

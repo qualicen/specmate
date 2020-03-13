@@ -27,10 +27,6 @@ public interface IModelNode extends ISpecmatePositionableModelObject {
 	 * The list contents are of type {@link com.specmate.model.base.IModelConnection}.
 	 * It is bidirectional and its opposite is '{@link com.specmate.model.base.IModelConnection#getSource <em>Source</em>}'.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Outgoing Connections</em>' reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Outgoing Connections</em>' reference list.
 	 * @see com.specmate.model.base.BasePackage#getIModelNode_OutgoingConnections()
@@ -45,10 +41,6 @@ public interface IModelNode extends ISpecmatePositionableModelObject {
 	 * The list contents are of type {@link com.specmate.model.base.IModelConnection}.
 	 * It is bidirectional and its opposite is '{@link com.specmate.model.base.IModelConnection#getTarget <em>Target</em>}'.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Incoming Connections</em>' reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Incoming Connections</em>' reference list.
 	 * @see com.specmate.model.base.BasePackage#getIModelNode_IncomingConnections()

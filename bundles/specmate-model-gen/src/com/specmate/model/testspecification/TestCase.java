@@ -25,10 +25,6 @@ public interface TestCase extends IContainer, IPositionable {
 	/**
 	 * Returns the value of the '<em><b>Consistent</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Consistent</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Consistent</em>' attribute.
 	 * @see #setConsistent(boolean)

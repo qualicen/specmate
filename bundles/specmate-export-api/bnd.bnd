@@ -1,0 +1,12 @@
+-buildpath: \
+	osgi.cmpn,\
+	osgi.core,\
+	specmate-model-gen;version=latest,\
+	specmate-model-support;version=latest,\
+	org.eclipse.emf,\
+	org.eclipse.emf.ecore,\
+	org.eclipse.emf.common,\
+	org.eclipse.emf.cdo,\
+	org.eclipse.emf.cdo.common,\
+	specmate-common;version=latest
+Export-Package: com.specmate.export.api

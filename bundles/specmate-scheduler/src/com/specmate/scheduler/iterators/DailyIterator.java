@@ -1,6 +1,8 @@
 package com.specmate.scheduler.iterators;
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 /**
@@ -8,38 +10,46 @@ import java.util.Date;
  * representing the same time each day.
  */
 public class DailyIterator implements ScheduleIterator {
-	private final Calendar calendar = Calendar.getInstance();
+	private ZonedDateTime zonedDateTime;
 
 	public DailyIterator(Date date, int... time) {
 		this(getHourOfDay(time), getMinute(time), getSecond(time), date);
 	}
 
 	public DailyIterator(int hourOfDay, int minute, int second, Date date) {
-		calendar.setTime(date);
-		calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-		calendar.set(Calendar.MINUTE, minute);
-		calendar.set(Calendar.SECOND, second);
-		calendar.set(Calendar.MILLISECOND, 0);
-		if (!calendar.getTime().before(date)) {
-			calendar.add(Calendar.DATE, -1);
+		ZoneId currentZone = ZoneId.systemDefault();
+
+		LocalDateTime localDT = LocalDateTime.ofInstant(date.toInstant(), currentZone);
+		localDT = localDT.withHour(hourOfDay).withMinute(minute).withSecond(second).withNano(0);
+
+		zonedDateTime = ZonedDateTime.of(localDT, currentZone);
+		
+		ZonedDateTime specifiedDate = date.toInstant().atZone(currentZone);
+		
+		if(zonedDateTime.isAfter(specifiedDate)) {
+			// if the time of the zonedDateTime lies in the future subtract one day to get the correct scheduled time
+			zonedDateTime = zonedDateTime.minusDays(1);
 		}
 	}
 
 	@Override
 	public Date next() {
-		calendar.add(Calendar.DATE, 1);
-		return calendar.getTime();
+		zonedDateTime = zonedDateTime.plusDays(1);
+		return Date.from(zonedDateTime.toInstant());
 	}
 
 	private static int getHourOfDay(int... time) {
-		return SchedulerUtils.getNumberIfExistsOrZero(0, time);
+		int temp = SchedulerUtils.getNumberIfExistsOrZero(0, time);
+		return SchedulerUtils.normalizeInput(temp, 24);
 	}
 
 	private static int getMinute(int... time) {
-		return SchedulerUtils.getNumberIfExistsOrZero(1, time);
+		int temp = SchedulerUtils.getNumberIfExistsOrZero(1, time);
+		return SchedulerUtils.normalizeInput(temp, 60);
 	}
 
 	private static int getSecond(int... time) {
-		return SchedulerUtils.getNumberIfExistsOrZero(2, time);
+		int temp = SchedulerUtils.getNumberIfExistsOrZero(2, time);
+		return SchedulerUtils.normalizeInput(temp, 60);
 	}
 }

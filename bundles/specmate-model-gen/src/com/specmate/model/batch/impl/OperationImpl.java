@@ -3,6 +3,7 @@
 package com.specmate.model.batch.impl;
 
 import com.specmate.model.base.IContentElement;
+
 import com.specmate.model.batch.BatchPackage;
 import com.specmate.model.batch.Operation;
 import com.specmate.model.batch.OperationType;
@@ -74,6 +75,7 @@ public class OperationImpl extends CDOObjectImpl implements Operation {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public OperationType getType() {
 		return (OperationType)eDynamicGet(BatchPackage.OPERATION__TYPE, BatchPackage.Literals.OPERATION__TYPE, true, true);
 	}
@@ -83,6 +85,7 @@ public class OperationImpl extends CDOObjectImpl implements Operation {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setType(OperationType newType) {
 		eDynamicSet(BatchPackage.OPERATION__TYPE, BatchPackage.Literals.OPERATION__TYPE, newType);
 	}
@@ -92,6 +95,7 @@ public class OperationImpl extends CDOObjectImpl implements Operation {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public IContentElement getTarget() {
 		return (IContentElement)eDynamicGet(BatchPackage.OPERATION__TARGET, BatchPackage.Literals.OPERATION__TARGET, true, true);
 	}
@@ -110,6 +114,7 @@ public class OperationImpl extends CDOObjectImpl implements Operation {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTarget(IContentElement newTarget) {
 		eDynamicSet(BatchPackage.OPERATION__TARGET, BatchPackage.Literals.OPERATION__TARGET, newTarget);
 	}
@@ -119,6 +124,7 @@ public class OperationImpl extends CDOObjectImpl implements Operation {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public IContentElement getValue() {
 		return (IContentElement)eDynamicGet(BatchPackage.OPERATION__VALUE, BatchPackage.Literals.OPERATION__VALUE, true, true);
 	}
@@ -138,6 +144,7 @@ public class OperationImpl extends CDOObjectImpl implements Operation {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setValue(IContentElement newValue) {
 		eDynamicSet(BatchPackage.OPERATION__VALUE, BatchPackage.Literals.OPERATION__VALUE, newValue);
 	}

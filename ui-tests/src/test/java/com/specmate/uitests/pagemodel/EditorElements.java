@@ -26,7 +26,7 @@ public class EditorElements {
 	protected By toolbarMove = By.id("toolbar-tools.select-button");
 	protected By toolbarDelete = By.id("toolbar-tools.delete-button");
 	protected By toolbarClear = By.id("toolbar-clear-button");
-	protected By editor = By.id("editor-field");
+	protected By editor = By.id("mxGraphContainer");
 
 	/** Pop-Up Elements and their locators */
 	protected By accept = By.id("popup-accept-button");
@@ -84,25 +84,33 @@ public class EditorElements {
 	 * establishes a connection from node1 to node2 and returns the newly created
 	 * connection
 	 */
-	public WebElement connect(WebElement node1, WebElement node2, By connectionSelector) {
-		List<WebElement> connectionList = new ArrayList<WebElement>();
+	public int connect(int node1, int node2, By selector) {
 
-		int numberOfConnections = driver.findElements(By.cssSelector("g:first-child > [generic-graphical-connection]"))
+		int numberOfConnections = driver.findElements(By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;'] > path:nth-child(2)"))
 				.size();
-
-		driver.findElement(connectionSelector).click();
-		node1.click();
-		node2.click();
-
+		
+		WebElement nodeElement1 = UITestUtil.getElementWithIndex(node1, driver, selector);
+		
+		builder.moveToElement(nodeElement1, 0, 15).click().build().perform();
+		
 		WebDriverWait wait = new WebDriverWait(driver, 30);
+		
+		// Get the connection pop up element, which needs to be dragged to the connecting node
+		wait.until(ExpectedConditions
+				.visibilityOfElementLocated(By.cssSelector("g > g:nth-child(3) > g[style='cursor: pointer; visibility: visible;']")));
+		WebElement connectionPopUp = driver.findElement(By.cssSelector("g > g:nth-child(3) > g[style='cursor: pointer; visibility: visible;']"));
+		
+		
+		Actions action = new Actions(driver);
+		
+		WebElement nodeElement2 = UITestUtil.getElementWithIndex(node2, driver, selector);
+		
+		action.dragAndDrop(connectionPopUp, nodeElement2).build().perform();;
 
 		wait.until(ExpectedConditions
-				.visibilityOfElementLocated(By.cssSelector("g:first-child > [generic-graphical-connection]")));
-		connectionList = driver.findElements(By.cssSelector("g:first-child > [generic-graphical-connection]"));
+				.visibilityOfElementLocated(By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;'] > path:nth-child(2)")));
 
-		WebElement connectionFromList = connectionList.get(numberOfConnections);
-
-		return connectionFromList;
+		return numberOfConnections;
 	}
 
 	/**
@@ -115,10 +123,16 @@ public class EditorElements {
 	public boolean correctModelCreated(int assertedNodeNumber, int assertedConnectionNumber) {
 		WebDriverWait wait = new WebDriverWait(driver, 30);
 		wait.until(ExpectedConditions
-				.visibilityOfElementLocated(By.cssSelector("g:first-child > [generic-graphical-connection]")));
-		int numberOfNodes = driver.findElements(By.cssSelector("g:first-child > [generic-graphical-node]")).size();
-		int numberOfConnections = driver.findElements(By.cssSelector("g:first-child > [generic-graphical-connection]"))
+				.visibilityOfElementLocated(By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;'] > path:nth-child(2)")));
+		
+		int numberOfStartEndNodes = driver.findElements(By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;'] > ellipse:nth-child(1)")).size();
+		
+		int numberOfActivities = driver.findElements(By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;'] > rect")).size();
+		int numberOfDecisions = driver.findElements(By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;'] > path[stroke-width='2']:nth-child(1)")).size();
+		int numberOfConnections = driver.findElements(By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;'] > path:nth-child(2)"))
 				.size();
+
+		int numberOfNodes = numberOfStartEndNodes + numberOfActivities + numberOfDecisions;
 
 		return (numberOfNodes == assertedNodeNumber && numberOfConnections == assertedConnectionNumber);
 	}
@@ -130,7 +144,7 @@ public class EditorElements {
 	public boolean noWarningsMessageDisplayed() {
 		WebDriverWait wait = new WebDriverWait(driver, 30);
 		wait.until(ExpectedConditions
-				.visibilityOfElementLocated(By.cssSelector("g:first-child > [generic-graphical-connection]")));
+				.visibilityOfElementLocated(By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;'] > path:nth-child(2)")));
 		return UITestUtil.isElementPresent(By.cssSelector(".text-success"), driver);
 	}
 

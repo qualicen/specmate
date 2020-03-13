@@ -4,7 +4,7 @@
 
 	export class ProcessStep  {
 
-		___nsuri: string = "http://specmate.com/20190125/model/processes";
+		___nsuri: string = "http://specmate.com/20200228/model/processes";
 		public url: string;
 		public className: string = "ProcessStep";
 		public static className: string = "ProcessStep";
@@ -14,6 +14,8 @@
 		public description: EString;
 		public x: EDouble;
 		public y: EDouble;
+		public width: EDouble;
+		public height: EDouble;
 		public expectedOutcome: EString;
 
 		// References

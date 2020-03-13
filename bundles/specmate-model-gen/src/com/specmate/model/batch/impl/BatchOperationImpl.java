@@ -4,15 +4,19 @@ package com.specmate.model.batch.impl;
 
 import com.specmate.model.batch.BatchOperation;
 import com.specmate.model.batch.BatchPackage;
-
 import com.specmate.model.batch.Operation;
-import java.util.Collection;
-import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EClass;
 
+import java.util.Collection;
+
+import org.eclipse.emf.common.notify.NotificationChain;
+
+import org.eclipse.emf.common.util.EList;
+
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.util.InternalEList;
+
 import org.eclipse.emf.internal.cdo.CDOObjectImpl;
 
 /**
@@ -64,6 +68,7 @@ public class BatchOperationImpl extends CDOObjectImpl implements BatchOperation 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public EList<Operation> getOperations() {
 		return (EList<Operation>)eDynamicGet(BatchPackage.BATCH_OPERATION__OPERATIONS, BatchPackage.Literals.BATCH_OPERATION__OPERATIONS, true, true);
 	}

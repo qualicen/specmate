@@ -1,11 +1,4 @@
-import { Component } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
-import { IContainer } from '../../../../../../../model/IContainer';
-import { SpecmateDataService } from '../../../../../../data/modules/data-service/services/specmate-data.service';
-import { NavigatorService } from '../../../../../../navigation/modules/navigator/services/navigator.service';
-import { ConfirmationModal } from '../../../../../../notification/modules/modals/services/confirmation-modal.service';
-import { SelectedElementService } from '../../../../../side/modules/selected-element/services/selected-element.service';
-import { ElementProvider } from '../../graphical-editor/providers/properties/element-provider';
+import { AfterViewChecked, Component } from '@angular/core';
 import { EditorToolsService } from '../services/editor-tools.service';
 import { ToolBase } from '../tools/tool-base';
 
@@ -15,55 +8,32 @@ import { ToolBase } from '../tools/tool-base';
     templateUrl: 'tool-pallette.component.html',
     styleUrls: ['tool-pallette.component.css']
 })
-export class ToolPallette {
+export class ToolPallette implements AfterViewChecked {
 
-    constructor(private dataService: SpecmateDataService,
-        private editorToolsService: EditorToolsService,
-        private navigator: NavigatorService,
-        private modal: ConfirmationModal,
-        private selectedElementService: SelectedElementService,
-        private translate: TranslateService) { }
+    constructor(private editorToolsService: EditorToolsService) { }
 
-    private get model(): IContainer {
-        return this.navigator.currentElement;
-    }
-
-    public onClick(tool: ToolBase, event: MouseEvent): void {
-        event.preventDefault();
-        event.stopPropagation();
-        this.activate(tool);
+    public ngAfterViewChecked() {
+        this.tools.forEach(tool => this.editorToolsService.addDOMElement(tool, document.getElementById(tool.elementId)));
     }
 
     public get tools(): ToolBase[] {
-        return this.editorToolsService.tools;
-    }
-
-    public isActive(tool: ToolBase): boolean {
-        return this.editorToolsService.isActive(tool);
-    }
-
-    public activate(tool: ToolBase): void {
-        this.editorToolsService.activate(tool);
-    }
-
-    public delete(event: MouseEvent): void {
-        event.preventDefault();
-        event.stopPropagation();
-        let message = this.translate.instant('doYouReallyWantToDeleteAll', {name: this.model.name});
-        let title = this.translate.instant('ConfirmationRequired');
-        this.modal.confirmDelete(title, message)
-            .then(() => this.dataService.readContents(this.model.url, true))
-            .then((contents: IContainer[]) => this.removeAllElements(contents))
-            .catch(() => {});
-    }
-
-    private removeAllElements(contents: IContainer[]): void {
-        this.selectedElementService.deselect();
-        let elementProvider = new ElementProvider(this.model, contents);
-        this.dataService.clearModel(elementProvider.nodes, elementProvider.connections);
+        if (this.editorToolsService.tools === undefined) {
+            return [];
+        }
+        return this.editorToolsService.tools.filter(tool => !tool.isHidden);
     }
 
     public get isVisible(): boolean {
-        return this.tools && this.tools.length > 0;
+        return this.tools.length > 0;
+    }
+
+    public getClasses(tool: ToolBase): string[] {
+        const classes = ['tool'];
+        if (tool.isDragTool) {
+            classes.push('drag-tool');
+        } else if (tool.isClickTool) {
+            classes.push('click-tool');
+        }
+        return classes;
     }
 }

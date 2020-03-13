@@ -1,9 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { CEGConnection } from '../../../../../model/CEGConnection';
 import { IContainer } from '../../../../../model/IContainer';
+import { IModelConnection } from '../../../../../model/IModelConnection';
+import { IModelNode } from '../../../../../model/IModelNode';
 import { IPositionable } from '../../../../../model/IPositionable';
+import { ProcessConnection } from '../../../../../model/ProcessConnection';
+import { Arrays } from '../../../../../util/arrays';
 import { Id } from '../../../../../util/id';
+import { Type } from '../../../../../util/type';
 import { Url } from '../../../../../util/url';
 import { ServerConnectionService } from '../../../../common/modules/connection/services/server-connection-service';
 import { AuthenticationService } from '../../../../views/main/authentication/modules/auth/services/authentication.service';
@@ -13,12 +19,6 @@ import { DataCache } from './data-cache';
 import { EOperation } from './e-operation';
 import { Scheduler } from './scheduler';
 import { ServiceInterface } from './service-interface';
-import { Type } from '../../../../../util/type';
-import { CEGConnection } from '../../../../../model/CEGConnection';
-import { ProcessConnection } from '../../../../../model/ProcessConnection';
-import { IModelConnection } from '../../../../../model/IModelConnection';
-import { IModelNode } from '../../../../../model/IModelNode';
-import { Arrays } from '../../../../../util/arrays';
 
 /**
  * The interface to all data handling things.
@@ -142,6 +142,10 @@ export class SpecmateDataService {
         return contents;
     }
 
+    public hasElement(url: string): boolean {
+        return this.cache.isCachedElement(url);
+    }
+
     public async readElement(url: string, virtual?: boolean): Promise<IContainer> {
         this.busy = true;
         let readElementTask: Promise<IContainer> = undefined;
@@ -199,7 +203,7 @@ export class SpecmateDataService {
         }
     }
 
-    public sanitizeContentPositions(elements: IPositionable[], update: boolean, compoundId?: string): void {
+    public async sanitizeContentPositions(elements: (IContainer & IPositionable)[], update: boolean, compoundId?: string): Promise<void> {
         if (!compoundId) {
             compoundId = Id.uuid;
         }
@@ -355,7 +359,7 @@ export class SpecmateDataService {
                 this.logFinished(this.translate.instant('log.delete'), url);
             })
             .catch((error) => {
-                this.handleError(this.translate.instant('elementCouldNotBeDeleted'), url, error)
+                this.handleError(this.translate.instant('elementCouldNotBeDeleted'), url, error);
             });
     }
 
@@ -373,7 +377,7 @@ export class SpecmateDataService {
                 this.busy = false;
                 this.handleError(this.translate.instant('operationCouldNotBePerformed') +
                     ' ' + this.translate.instant('operation') + ': ' + operation + ' ' +
-                    this.translate.instant('payload') + ': ' + JSON.stringify(payload), url, error)
+                    this.translate.instant('payload') + ': ' + JSON.stringify(payload), url, error);
                 return Promise.reject();
             }
             );
@@ -394,7 +398,7 @@ export class SpecmateDataService {
             .catch((error) => {
                 this.busy = false;
                 this.handleError(this.translate.instant('queryCouldNotBePerformed') + ' ' + this.translate.instant('operation') + ': ' +
-                    operation + ' ' + this.translate.instant('parameters') + ': ' + JSON.stringify(parameters), url, error)
+                    operation + ' ' + this.translate.instant('parameters') + ': ' + JSON.stringify(parameters), url, error);
                 return Promise.reject();
             });
     }

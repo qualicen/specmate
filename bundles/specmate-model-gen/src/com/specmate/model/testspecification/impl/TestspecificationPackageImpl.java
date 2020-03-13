@@ -11,7 +11,13 @@ import com.specmate.model.base.BasePackage;
 import com.specmate.model.base.impl.BasePackageImpl;
 
 import com.specmate.model.batch.BatchPackage;
+
 import com.specmate.model.batch.impl.BatchPackageImpl;
+
+import com.specmate.model.export.ExportPackage;
+
+import com.specmate.model.export.impl.ExportPackageImpl;
+
 import com.specmate.model.history.HistoryPackage;
 
 import com.specmate.model.history.impl.HistoryPackageImpl;
@@ -30,7 +36,6 @@ import com.specmate.model.testspecification.TestCase;
 import com.specmate.model.testspecification.TestParameter;
 import com.specmate.model.testspecification.TestProcedure;
 import com.specmate.model.testspecification.TestSpecification;
-import com.specmate.model.testspecification.TestSpecificationSkeleton;
 import com.specmate.model.testspecification.TestStep;
 import com.specmate.model.testspecification.TestspecificationFactory;
 import com.specmate.model.testspecification.TestspecificationPackage;
@@ -56,13 +61,6 @@ public class TestspecificationPackageImpl extends EPackageImpl implements Testsp
 	 * @generated
 	 */
 	private EClass testSpecificationEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass testSpecificationSkeletonEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -134,7 +132,7 @@ public class TestspecificationPackageImpl extends EPackageImpl implements Testsp
 
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-	 * 
+	 *
 	 * <p>This method is used to initialize {@link TestspecificationPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
@@ -148,17 +146,26 @@ public class TestspecificationPackageImpl extends EPackageImpl implements Testsp
 		if (isInited) return (TestspecificationPackage)EPackage.Registry.INSTANCE.getEPackage(TestspecificationPackage.eNS_URI);
 
 		// Obtain or create and register package
-		TestspecificationPackageImpl theTestspecificationPackage = (TestspecificationPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof TestspecificationPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new TestspecificationPackageImpl());
+		Object registeredTestspecificationPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		TestspecificationPackageImpl theTestspecificationPackage = registeredTestspecificationPackage instanceof TestspecificationPackageImpl ? (TestspecificationPackageImpl)registeredTestspecificationPackage : new TestspecificationPackageImpl();
 
 		isInited = true;
 
 		// Obtain or create and register interdependencies
-		BasePackageImpl theBasePackage = (BasePackageImpl)(EPackage.Registry.INSTANCE.getEPackage(BasePackage.eNS_URI) instanceof BasePackageImpl ? EPackage.Registry.INSTANCE.getEPackage(BasePackage.eNS_URI) : BasePackage.eINSTANCE);
-		RequirementsPackageImpl theRequirementsPackage = (RequirementsPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(RequirementsPackage.eNS_URI) instanceof RequirementsPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(RequirementsPackage.eNS_URI) : RequirementsPackage.eINSTANCE);
-		ProcessesPackageImpl theProcessesPackage = (ProcessesPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(ProcessesPackage.eNS_URI) instanceof ProcessesPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(ProcessesPackage.eNS_URI) : ProcessesPackage.eINSTANCE);
-		HistoryPackageImpl theHistoryPackage = (HistoryPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(HistoryPackage.eNS_URI) instanceof HistoryPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(HistoryPackage.eNS_URI) : HistoryPackage.eINSTANCE);
-		AdministrationPackageImpl theAdministrationPackage = (AdministrationPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(AdministrationPackage.eNS_URI) instanceof AdministrationPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(AdministrationPackage.eNS_URI) : AdministrationPackage.eINSTANCE);
-		BatchPackageImpl theBatchPackage = (BatchPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(BatchPackage.eNS_URI) instanceof BatchPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(BatchPackage.eNS_URI) : BatchPackage.eINSTANCE);
+		Object registeredPackage = EPackage.Registry.INSTANCE.getEPackage(BasePackage.eNS_URI);
+		BasePackageImpl theBasePackage = (BasePackageImpl)(registeredPackage instanceof BasePackageImpl ? registeredPackage : BasePackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(RequirementsPackage.eNS_URI);
+		RequirementsPackageImpl theRequirementsPackage = (RequirementsPackageImpl)(registeredPackage instanceof RequirementsPackageImpl ? registeredPackage : RequirementsPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(ProcessesPackage.eNS_URI);
+		ProcessesPackageImpl theProcessesPackage = (ProcessesPackageImpl)(registeredPackage instanceof ProcessesPackageImpl ? registeredPackage : ProcessesPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(HistoryPackage.eNS_URI);
+		HistoryPackageImpl theHistoryPackage = (HistoryPackageImpl)(registeredPackage instanceof HistoryPackageImpl ? registeredPackage : HistoryPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(AdministrationPackage.eNS_URI);
+		AdministrationPackageImpl theAdministrationPackage = (AdministrationPackageImpl)(registeredPackage instanceof AdministrationPackageImpl ? registeredPackage : AdministrationPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(BatchPackage.eNS_URI);
+		BatchPackageImpl theBatchPackage = (BatchPackageImpl)(registeredPackage instanceof BatchPackageImpl ? registeredPackage : BatchPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(ExportPackage.eNS_URI);
+		ExportPackageImpl theExportPackage = (ExportPackageImpl)(registeredPackage instanceof ExportPackageImpl ? registeredPackage : ExportPackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theTestspecificationPackage.createPackageContents();
@@ -168,6 +175,7 @@ public class TestspecificationPackageImpl extends EPackageImpl implements Testsp
 		theHistoryPackage.createPackageContents();
 		theAdministrationPackage.createPackageContents();
 		theBatchPackage.createPackageContents();
+		theExportPackage.createPackageContents();
 
 		// Initialize created meta-data
 		theTestspecificationPackage.initializePackageContents();
@@ -177,11 +185,11 @@ public class TestspecificationPackageImpl extends EPackageImpl implements Testsp
 		theHistoryPackage.initializePackageContents();
 		theAdministrationPackage.initializePackageContents();
 		theBatchPackage.initializePackageContents();
+		theExportPackage.initializePackageContents();
 
 		// Mark meta-data to indicate it can't be changed
 		theTestspecificationPackage.freeze();
 
-  
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(TestspecificationPackage.eNS_URI, theTestspecificationPackage);
 		return theTestspecificationPackage;
@@ -192,6 +200,7 @@ public class TestspecificationPackageImpl extends EPackageImpl implements Testsp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getTestSpecification() {
 		return testSpecificationEClass;
 	}
@@ -201,33 +210,7 @@ public class TestspecificationPackageImpl extends EPackageImpl implements Testsp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getTestSpecificationSkeleton() {
-		return testSpecificationSkeletonEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getTestSpecificationSkeleton_Language() {
-		return (EAttribute)testSpecificationSkeletonEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getTestSpecificationSkeleton_Code() {
-		return (EAttribute)testSpecificationSkeletonEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+	@Override
 	public EClass getTestParameter() {
 		return testParameterEClass;
 	}
@@ -237,6 +220,7 @@ public class TestspecificationPackageImpl extends EPackageImpl implements Testsp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getTestParameter_Type() {
 		return (EAttribute)testParameterEClass.getEStructuralFeatures().get(0);
 	}
@@ -246,6 +230,7 @@ public class TestspecificationPackageImpl extends EPackageImpl implements Testsp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getTestParameter_Assignments() {
 		return (EReference)testParameterEClass.getEStructuralFeatures().get(1);
 	}
@@ -255,6 +240,7 @@ public class TestspecificationPackageImpl extends EPackageImpl implements Testsp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getTestCase() {
 		return testCaseEClass;
 	}
@@ -264,6 +250,7 @@ public class TestspecificationPackageImpl extends EPackageImpl implements Testsp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getTestCase_Consistent() {
 		return (EAttribute)testCaseEClass.getEStructuralFeatures().get(0);
 	}
@@ -273,6 +260,7 @@ public class TestspecificationPackageImpl extends EPackageImpl implements Testsp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getParameterAssignment() {
 		return parameterAssignmentEClass;
 	}
@@ -282,6 +270,7 @@ public class TestspecificationPackageImpl extends EPackageImpl implements Testsp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getParameterAssignment_Parameter() {
 		return (EReference)parameterAssignmentEClass.getEStructuralFeatures().get(0);
 	}
@@ -291,15 +280,7 @@ public class TestspecificationPackageImpl extends EPackageImpl implements Testsp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getParameterAssignment_Condition() {
-		return (EAttribute)parameterAssignmentEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+	@Override
 	public EAttribute getParameterAssignment_Value() {
 		return (EAttribute)parameterAssignmentEClass.getEStructuralFeatures().get(1);
 	}
@@ -309,6 +290,17 @@ public class TestspecificationPackageImpl extends EPackageImpl implements Testsp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public EAttribute getParameterAssignment_Condition() {
+		return (EAttribute)parameterAssignmentEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getTestProcedure() {
 		return testProcedureEClass;
 	}
@@ -318,6 +310,7 @@ public class TestspecificationPackageImpl extends EPackageImpl implements Testsp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getTestProcedure_IsRegressionTest() {
 		return (EAttribute)testProcedureEClass.getEStructuralFeatures().get(0);
 	}
@@ -327,6 +320,7 @@ public class TestspecificationPackageImpl extends EPackageImpl implements Testsp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getTestStep() {
 		return testStepEClass;
 	}
@@ -336,6 +330,7 @@ public class TestspecificationPackageImpl extends EPackageImpl implements Testsp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getTestStep_ExpectedOutcome() {
 		return (EAttribute)testStepEClass.getEStructuralFeatures().get(0);
 	}
@@ -345,6 +340,7 @@ public class TestspecificationPackageImpl extends EPackageImpl implements Testsp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getTestStep_ReferencedTestParameters() {
 		return (EReference)testStepEClass.getEStructuralFeatures().get(1);
 	}
@@ -354,6 +350,7 @@ public class TestspecificationPackageImpl extends EPackageImpl implements Testsp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EEnum getParameterType() {
 		return parameterTypeEEnum;
 	}
@@ -363,6 +360,7 @@ public class TestspecificationPackageImpl extends EPackageImpl implements Testsp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public TestspecificationFactory getTestspecificationFactory() {
 		return (TestspecificationFactory)getEFactoryInstance();
 	}
@@ -387,10 +385,6 @@ public class TestspecificationPackageImpl extends EPackageImpl implements Testsp
 
 		// Create classes and their features
 		testSpecificationEClass = createEClass(TEST_SPECIFICATION);
-
-		testSpecificationSkeletonEClass = createEClass(TEST_SPECIFICATION_SKELETON);
-		createEAttribute(testSpecificationSkeletonEClass, TEST_SPECIFICATION_SKELETON__LANGUAGE);
-		createEAttribute(testSpecificationSkeletonEClass, TEST_SPECIFICATION_SKELETON__CODE);
 
 		testParameterEClass = createEClass(TEST_PARAMETER);
 		createEAttribute(testParameterEClass, TEST_PARAMETER__TYPE);
@@ -447,7 +441,6 @@ public class TestspecificationPackageImpl extends EPackageImpl implements Testsp
 
 		// Add supertypes to classes
 		testSpecificationEClass.getESuperTypes().add(theBasePackage.getIContainer());
-		testSpecificationSkeletonEClass.getESuperTypes().add(theBasePackage.getINamed());
 		testParameterEClass.getESuperTypes().add(theBasePackage.getIContentElement());
 		testCaseEClass.getESuperTypes().add(theBasePackage.getIContainer());
 		testCaseEClass.getESuperTypes().add(theBasePackage.getIPositionable());
@@ -459,10 +452,6 @@ public class TestspecificationPackageImpl extends EPackageImpl implements Testsp
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(testSpecificationEClass, TestSpecification.class, "TestSpecification", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
-		initEClass(testSpecificationSkeletonEClass, TestSpecificationSkeleton.class, "TestSpecificationSkeleton", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getTestSpecificationSkeleton_Language(), ecorePackage.getEString(), "language", "", 0, 1, TestSpecificationSkeleton.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getTestSpecificationSkeleton_Code(), ecorePackage.getEString(), "code", null, 0, 1, TestSpecificationSkeleton.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(testParameterEClass, TestParameter.class, "TestParameter", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getTestParameter_Type(), this.getParameterType(), "type", null, 0, 1, TestParameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -503,15 +492,15 @@ public class TestspecificationPackageImpl extends EPackageImpl implements Testsp
 	 * @generated
 	 */
 	protected void createForm_metaAnnotations() {
-		String source = "http://specmate.com/form_meta";	
+		String source = "http://specmate.com/form_meta";
 		addAnnotation
-		  (getTestProcedure_IsRegressionTest(), 
-		   source, 
+		  (getTestProcedure_IsRegressionTest(),
+		   source,
 		   new String[] {
-			 "shortDesc", "Regression Test",
-			 "type", "checkbox",
-			 "position", "3",
-			 "longDesc", ""
+			   "shortDesc", "Regression Test",
+			   "type", "checkbox",
+			   "position", "3",
+			   "longDesc", ""
 		   });
 	}
 

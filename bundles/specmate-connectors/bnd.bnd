@@ -1,4 +1,4 @@
-Export-Package: com.specmate.connectors.api
+
 -buildpath: \
 	specmate-common;version=latest,\
 	specmate-model-gen;version=latest,\
@@ -27,7 +27,9 @@ Export-Package: com.specmate.connectors.api
 	specmate-search;version=latest,\
 	specmate-persistency-cdo;version=latest,\
 	org.eclipse.net4j.util,\
-	org.eclipse.equinox.common
+	org.eclipse.equinox.common,\
+	specmate-export-api;version=latest,\
+	specmate-connectors-api;version=latest
 Private-Package: \
 	com.specmate.connectors.internal,\
 	com.specmate.connectors.internal.config,\

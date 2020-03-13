@@ -38,7 +38,7 @@ public interface UsermodelPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://specmate.com/20190125/model/user";
+	String eNS_URI = "http://specmate.com/20200228/model/user";
 
 	/**
 	 * The package namespace name.
@@ -194,13 +194,31 @@ public interface UsermodelPackage extends EPackage {
 	int USER_SESSION__LIBRARY_FOLDERS = 6;
 
 	/**
+	 * The feature id for the '<em><b>Is Deleted</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int USER_SESSION__IS_DELETED = 7;
+
+	/**
+	 * The feature id for the '<em><b>Exporters</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int USER_SESSION__EXPORTERS = 8;
+
+	/**
 	 * The number of structural features of the '<em>User Session</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SESSION_FEATURE_COUNT = 7;
+	int USER_SESSION_FEATURE_COUNT = 9;
 
 	/**
 	 * The number of operations of the '<em>User Session</em>' class.
@@ -364,6 +382,28 @@ public interface UsermodelPackage extends EPackage {
 	EAttribute getUserSession_LibraryFolders();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.specmate.usermodel.UserSession#isIsDeleted <em>Is Deleted</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Is Deleted</em>'.
+	 * @see com.specmate.usermodel.UserSession#isIsDeleted()
+	 * @see #getUserSession()
+	 * @generated
+	 */
+	EAttribute getUserSession_IsDeleted();
+
+	/**
+	 * Returns the meta object for the attribute list '{@link com.specmate.usermodel.UserSession#getExporters <em>Exporters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute list '<em>Exporters</em>'.
+	 * @see com.specmate.usermodel.UserSession#getExporters()
+	 * @see #getUserSession()
+	 * @generated
+	 */
+	EAttribute getUserSession_Exporters();
+
+	/**
 	 * Returns the meta object for enum '{@link com.specmate.usermodel.AccessRights <em>Access Rights</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -503,6 +543,22 @@ public interface UsermodelPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute USER_SESSION__LIBRARY_FOLDERS = eINSTANCE.getUserSession_LibraryFolders();
+
+		/**
+		 * The meta object literal for the '<em><b>Is Deleted</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute USER_SESSION__IS_DELETED = eINSTANCE.getUserSession_IsDeleted();
+
+		/**
+		 * The meta object literal for the '<em><b>Exporters</b></em>' attribute list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute USER_SESSION__EXPORTERS = eINSTANCE.getUserSession_Exporters();
 
 		/**
 		 * The meta object literal for the '{@link com.specmate.usermodel.AccessRights <em>Access Rights</em>}' enum.

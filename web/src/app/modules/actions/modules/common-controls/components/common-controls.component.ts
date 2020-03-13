@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { ValidationErrorSeverity } from '../../../../../validation/validation-error-severity';
 import { ServerConnectionService } from '../../../../common/modules/connection/services/server-connection-service';
 import { UISafe } from '../../../../common/modules/ui/ui-safe-decorator';
 import { SpecmateDataService } from '../../../../data/modules/data-service/services/specmate-data.service';
 import { ValidationService } from '../../../../forms/modules/validation/services/validation.service';
 import { NavigatorService } from '../../../../navigation/modules/navigator/services/navigator.service';
-import { ValidationErrorSeverity } from '../../../../../validation/validation-error-severity';
+import { UndoService } from '../services/undo.service';
+import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
 
 @Component({
     moduleId: module.id.toString(),
@@ -24,14 +26,19 @@ export class CommonControls {
             private connection: ServerConnectionService,
             private validator: ValidationService,
             private navigator: NavigatorService,
-            private translate: TranslateService) {
+            private translate: TranslateService,
+            private undoService: UndoService,
+            private modal: ConfirmationModal) {
     }
 
-    public save(): void {
+    public async save(): Promise<void> {
         if (this.isSaveEnabled) {
-            this.validator.validateCurrent();
-            if (this.isSaveEnabled) {
+            await this.validator.validateCurrent();
+            if (this.isSaveEnabled && this.validator.isSavingEnabled()) {
                 this.dataService.commit(this.translate.instant('save'));
+            } else {
+                let message = this.translate.instant('saveError.message') + '\n' + this.validator.getValidationResultAsString(true);
+                this.modal.openOk(this.translate.instant('saveError.title'), message);
             }
         }
     }
@@ -41,10 +48,11 @@ export class CommonControls {
     }
 
     public undo(): void {
-        if (this.isUndoEnabled) {
-            this.dataService.undo();
-            this.validator.validateCurrent();
-        }
+      this.undoService.undo();
+    }
+
+    public redo(): void {
+      this.undoService.redo();
     }
 
     public forward(): void {
@@ -65,13 +73,15 @@ export class CommonControls {
     }
 
     public get isSaveEnabled(): boolean {
-        const hasSaveDisablingError =
-            this.validator.currentSeverities.find(severity => severity === ValidationErrorSeverity.SAVE_DISABLED) !== undefined;
-        return this.isEnabled && this.hasCommits && !hasSaveDisablingError;
+        return this.isEnabled && this.hasCommits;
     }
 
     public get isUndoEnabled(): boolean {
-        return this.isEnabled && this.hasCommits;
+      return this.undoService.isUndoEnabled();
+    }
+
+    public get isRedoEnabled(): boolean {
+      return this.undoService.isRedoEnabled();
     }
 
     @UISafe()

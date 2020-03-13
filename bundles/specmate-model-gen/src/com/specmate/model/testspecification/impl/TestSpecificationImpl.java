@@ -6,6 +6,7 @@ import com.specmate.model.base.BasePackage;
 import com.specmate.model.base.IContentElement;
 import com.specmate.model.base.IDescribed;
 import com.specmate.model.base.INamed;
+
 import com.specmate.model.testspecification.TestSpecification;
 import com.specmate.model.testspecification.TestspecificationPackage;
 
@@ -103,6 +104,7 @@ public class TestSpecificationImpl extends CDOObjectImpl implements TestSpecific
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getId() {
 		return (String)eDynamicGet(TestspecificationPackage.TEST_SPECIFICATION__ID, BasePackage.Literals.IID__ID, true, true);
 	}
@@ -112,6 +114,7 @@ public class TestSpecificationImpl extends CDOObjectImpl implements TestSpecific
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setId(String newId) {
 		eDynamicSet(TestspecificationPackage.TEST_SPECIFICATION__ID, BasePackage.Literals.IID__ID, newId);
 	}
@@ -121,6 +124,7 @@ public class TestSpecificationImpl extends CDOObjectImpl implements TestSpecific
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return (String)eDynamicGet(TestspecificationPackage.TEST_SPECIFICATION__NAME, BasePackage.Literals.INAMED__NAME, true, true);
 	}
@@ -130,6 +134,7 @@ public class TestSpecificationImpl extends CDOObjectImpl implements TestSpecific
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		eDynamicSet(TestspecificationPackage.TEST_SPECIFICATION__NAME, BasePackage.Literals.INAMED__NAME, newName);
 	}
@@ -139,6 +144,7 @@ public class TestSpecificationImpl extends CDOObjectImpl implements TestSpecific
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getDescription() {
 		return (String)eDynamicGet(TestspecificationPackage.TEST_SPECIFICATION__DESCRIPTION, BasePackage.Literals.IDESCRIBED__DESCRIPTION, true, true);
 	}
@@ -148,6 +154,7 @@ public class TestSpecificationImpl extends CDOObjectImpl implements TestSpecific
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDescription(String newDescription) {
 		eDynamicSet(TestspecificationPackage.TEST_SPECIFICATION__DESCRIPTION, BasePackage.Literals.IDESCRIBED__DESCRIPTION, newDescription);
 	}
@@ -158,6 +165,7 @@ public class TestSpecificationImpl extends CDOObjectImpl implements TestSpecific
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public EList<IContentElement> getContents() {
 		return (EList<IContentElement>)eDynamicGet(TestspecificationPackage.TEST_SPECIFICATION__CONTENTS, BasePackage.Literals.ICONTAINER__CONTENTS, true, true);
 	}

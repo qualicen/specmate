@@ -8,6 +8,7 @@ import { ConfirmationModal } from '../../../../notification/modules/modals/servi
 import { ElementProvider } from '../../../../views/main/editors/modules/graphical-editor/providers/properties/element-provider';
 import { SelectedElementService } from '../../../../views/side/modules/selected-element/services/selected-element.service';
 import { ErrorNotificationModalService } from '../../../../notification/modules/modals/services/error-notification-modal.service';
+import { GraphicalEditorService } from 'src/app/modules/views/main/editors/modules/graphical-editor/services/graphical-editor.service';
 
 @Component({
     moduleId: module.id.toString(),
@@ -54,7 +55,8 @@ export class CegModelGeneratorButton {
         private modal: ConfirmationModal,
         private errorModal: ErrorNotificationModalService,
         private translate: TranslateService,
-        private selectedElementService: SelectedElementService) { }
+        private selectedElementService: SelectedElementService,
+        private graphicalEditorService: GraphicalEditorService) { }
 
     public async generate(): Promise<void> {
         if (!this.enabled) {
@@ -76,9 +78,10 @@ export class CegModelGeneratorButton {
             await this.dataService.readElement(this.model.url, false);
             let modelContents = await this.dataService.readContents(this.model.url, false);
             this.selectedElementService.select(this.model);
+            this.graphicalEditorService.triggerGraphicalModelInit();
 
-            if(modelContents.length==0){
-                this.errorModal.open(this.translate.instant('modelGenerationFailed'))
+            if (modelContents.length == 0) {
+                this.errorModal.open(this.translate.instant('modelGenerationFailed'));
             }
         } catch (e) {}
     }

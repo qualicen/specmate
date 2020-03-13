@@ -226,7 +226,7 @@ export class MetaInfo {
 			required: true,
 			type: 'text',
 			position: '1',
-			allowedPattern: '^[^,;|]*$'	
+			allowedPattern: '^[^,;|]*$'		
 		},			{
 			name: "condition",
 			shortDesc: 'Condition',
@@ -276,16 +276,6 @@ export class MetaInfo {
 			type: 'longText',
 			rows: '5',
 			position: '100'		
-		}	];
-	public static TestSpecificationSkeleton: FieldMetaItem[] = [
-			{
-			name: "name",
-			shortDesc: 'Name',
-			longDesc: '',
-			required: true,
-			type: 'text',
-			position: '0',
-			allowedPattern: '^[^,;|]*$'		
 		}	];
 	public static TestParameter: FieldMetaItem[] = [
 			{
@@ -481,14 +471,6 @@ export class MetaInfo {
 		}	];
 	public static ProcessStart: FieldMetaItem[] = [
 			{
-			name: "name",
-			shortDesc: 'Name',
-			longDesc: '',
-			required: true,
-			type: 'text',
-			position: '0',
-			allowedPattern: '^[^,;|]*$'		
-		},			{
 			name: "description",
 			shortDesc: 'Description',
 			longDesc: '',
@@ -499,14 +481,6 @@ export class MetaInfo {
 		}	];
 	public static ProcessEnd: FieldMetaItem[] = [
 			{
-			name: "name",
-			shortDesc: 'Name',
-			longDesc: '',
-			required: true,
-			type: 'text',
-			position: '0',
-			allowedPattern: '^[^,;|]*$'		
-		},			{
 			name: "description",
 			shortDesc: 'Description',
 			longDesc: '',
@@ -529,5 +503,15 @@ export class MetaInfo {
 	];
 	public static Operation: FieldMetaItem[] = [
 	];
+	public static Export: FieldMetaItem[] = [
+			{
+			name: "name",
+			shortDesc: 'Name',
+			longDesc: '',
+			required: true,
+			type: 'text',
+			position: '0',
+			allowedPattern: '^[^,;|]*$'		
+		}	];
 }
 

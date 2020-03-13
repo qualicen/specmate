@@ -24,7 +24,7 @@ import { AdditionalInformationService } from './services/additional-information.
     TranslateModule,
     CegModelGeneratorButtonModule,
     AuthModule,
-    NgbModule.forRoot()
+    NgbModule
   ],
   declarations: [
     // COMPONENTS IN THIS MODULE

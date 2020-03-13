@@ -1,14 +1,17 @@
 package com.specmate.auth.internal;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.osgi.service.component.annotations.Activate;
 
+import com.specmate.auth.api.ISessionListener;
 import com.specmate.auth.api.ISessionService;
 import com.specmate.auth.config.SessionServiceConfig;
 import com.specmate.common.exception.SpecmateException;
@@ -28,6 +31,7 @@ public abstract class BaseSessionService implements ISessionService {
 
 	/** Get access to the project configuration */
 	protected IConfigService configService;
+	private List<ISessionListener> sessionListeners = new ArrayList<>();
 
 	@Activate
 	public void activate(Map<String, Object> properties) throws SpecmateException {
@@ -94,7 +98,8 @@ public abstract class BaseSessionService implements ISessionService {
 		return sb.toString();
 	}
 
-	protected UserSession createSession(AccessRights source, AccessRights target, String userName, String projectName) {
+	protected UserSession createSession(AccessRights source, AccessRights target, String userName, String password,
+			String projectName) {
 		UserSession session = UsermodelFactory.eINSTANCE.createUserSession();
 		session.setSourceSystem(source);
 		session.setTargetSystem(target);
@@ -110,7 +115,11 @@ public abstract class BaseSessionService implements ISessionService {
 		if (libraryFolderIds != null) {
 			session.getLibraryFolders().addAll(Arrays.asList(libraryFolderIds));
 		}
-
+		try {
+			sessionListeners.forEach(l -> l.sessionCreated(session, userName, password));
+		} catch (Throwable t) {
+			// go on
+		}
 		return session;
 	}
 
@@ -134,4 +143,20 @@ public abstract class BaseSessionService implements ISessionService {
 			maxIdleMilliSeconds = maxIdleMinutes * 60 * 1000L;
 		}
 	}
+
+	@Override
+	public void registerSessionListener(ISessionListener listener) {
+		sessionListeners.add(listener);
+	}
+
+	@Override
+	public void removeSessionListener(ISessionListener listener) {
+		sessionListeners.remove(listener);
+	}
+
+	@Override
+	public List<String> getExporters(String userToken) throws SpecmateException {
+		return getSession(userToken).getExporters();
+	}
+
 }

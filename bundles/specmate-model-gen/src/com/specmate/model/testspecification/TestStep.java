@@ -28,10 +28,6 @@ public interface TestStep extends IContentElement, IPositionable {
 	/**
 	 * Returns the value of the '<em><b>Expected Outcome</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Expected Outcome</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Expected Outcome</em>' attribute.
 	 * @see #setExpectedOutcome(String)
@@ -55,10 +51,6 @@ public interface TestStep extends IContentElement, IPositionable {
 	 * Returns the value of the '<em><b>Referenced Test Parameters</b></em>' reference list.
 	 * The list contents are of type {@link com.specmate.model.testspecification.TestParameter}.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Referenced Test Parameters</em>' reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Referenced Test Parameters</em>' reference list.
 	 * @see com.specmate.model.testspecification.TestspecificationPackage#getTestStep_ReferencedTestParameters()

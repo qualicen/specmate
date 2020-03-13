@@ -63,11 +63,15 @@ export class Objects {
         let changedFields: string[] = [];
         for (let field in o1) {
             if (!Objects.isObject(o1[field])) {
-                if (o2[field] && !Objects.fieldsEqualIgnoreBooleanStrings(o1[field], o2[field])) {
+                if (o2.hasOwnProperty(field) && !Objects.fieldsEqualIgnoreBooleanStrings(o1[field], o2[field])) {
                     changedFields.push(field);
                 }
             } else if (Objects.isArray(o1[field])) {
-                if (o2[field] && !Objects.areArraysEqual(o1[field], o2[field])) {
+                if (o2.hasOwnProperty(field) && !Objects.areArraysEqual(o1[field], o2[field])) {
+                    changedFields.push(field);
+                }
+            } else if (Objects.isProxy(o1[field])) {
+                if (o2.hasOwnProperty(field) && Objects.changedFields(o1[field], o2[field]).length > 0) {
                     changedFields.push(field);
                 }
             }
@@ -83,6 +87,9 @@ export class Objects {
         }
         if (Objects.isObject(p1) && Objects.isObject(p2)) {
             return Objects.equals(p1, p2);
+        }
+        if (typeof(p1) === 'number' || typeof(p2) === 'number') {
+            return p1 + '' === p2 + '';
         }
         return p1 === p2;
     }
@@ -109,7 +116,7 @@ export class Objects {
     */
     private static pushTheNotMatchingFields(object1: any, object2: any, changedFields: string[]) {
         for (let field in object1) {
-            if (!object2[field]) {
+            if (!object2.hasOwnProperty(field)) {
                 changedFields.push(field);
             }
         }
@@ -138,6 +145,10 @@ export class Objects {
 
     private static isArray(element: any) {
         return Array.isArray(element);
+    }
+
+    private static isProxy(element: any) {
+        return element.hasOwnProperty('___proxy');
     }
 
     public static equals(o1: any, o2: any): boolean {

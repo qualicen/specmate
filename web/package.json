@@ -45,7 +45,6 @@
     "mxgraph": "github:jgraph/mxgraph#12621211eed3495188c95bbc4b3020a1db451df5",
     "ng2-dragula": "2.1.1",
     "ngx-cookie": "4.1.2",
-    "ngx-textarea-autosize": "2.0.3",
     "ngx-translate-core": "11.0.3",
     "ngx-translate-extract": "1.0.0",
     "popper.js": "1.16.0",

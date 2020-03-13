@@ -18,6 +18,7 @@ import org.osgi.service.log.LogService;
 
 import com.specmate.auth.api.IAuthenticationService;
 import com.specmate.common.exception.SpecmateException;
+import com.specmate.emfrest.authentication.LoginOAuth;
 import com.specmate.emfrest.authentication.LoginUserPass;
 import com.specmate.emfrest.authentication.Logout;
 import com.specmate.emfrest.authentication.ProjectNames;
@@ -31,6 +32,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 	private static final String REINDEX_SERVICE_NAME = "reindex";
 	private final String HEARTBEAT_PARAMETER = "heartbeat";
 	private final String REST_URL = ".+services/rest/";
+	private Pattern oauthPattern = Pattern.compile(REST_URL + LoginOAuth.SERVICE_NAME);
 	private Pattern loginPattern = Pattern.compile(REST_URL + LoginUserPass.SERVICE_NAME);
 	private Pattern logoutPattern = Pattern.compile(REST_URL + Logout.SERVICE_NAME);
 	private Pattern projectNamesPattern = Pattern.compile(REST_URL + ProjectNames.SERVICE_NAME);
@@ -106,11 +108,12 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
 	private boolean isNotSecured(ContainerRequestContext requestContext) {
 		String path = requestContext.getUriInfo().getAbsolutePath().toString();
+		Matcher matcherOauth = oauthPattern.matcher(path);
 		Matcher matcherLogin = loginPattern.matcher(path);
 		Matcher matcherLogout = logoutPattern.matcher(path);
 		Matcher matcherProjectNames = projectNamesPattern.matcher(path);
 		Matcher matcherReindex = reindexPattern.matcher(path);
-		return matcherLogin.matches() || matcherLogout.matches() || matcherProjectNames.matches()
+		return matcherOauth.matches() || matcherLogin.matches() || matcherLogout.matches() || matcherProjectNames.matches()
 				|| matcherReindex.matches();
 	}
 }

@@ -27,6 +27,9 @@ export class Login implements OnInit {
     }
 
     public get projectNames(): string[] {
+        if (this.projects === undefined) {
+            return [];
+        }
         return this.projects.map(project => project.name);
     }
 

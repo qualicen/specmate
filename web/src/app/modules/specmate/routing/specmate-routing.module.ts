@@ -22,6 +22,7 @@ import { PageNotFoundModule } from '../../views/main/static/modules/page-not-fou
 import { Welcome } from '../../views/main/static/modules/welcome-page/components/welcome.component';
 import { WelcomePageModule } from '../../views/main/static/modules/welcome-page/welcome-page.module';
 import { UnsavedChangesGuard } from '../guards/unsaved-changes-guard';
+import { OAuthCodeEndpoint } from '../../views/main/authentication/modules/login/components/oauth-code-endpoint.component';
 
 const routes: Routes = [
   {
@@ -55,6 +56,7 @@ const routes: Routes = [
     canDeactivate: [UnsavedChangesGuard],
     canActivate: [UserPermissionsGuard]
   },
+  { path: Config.OAUTH_CODE_ENDPOINT_URL, component: OAuthCodeEndpoint },
   { path: Config.LOGIN_URL, component: Login },
   { path: Config.WELCOME_URL, component: Welcome, canActivate: [UserPermissionsGuard] },
   { path: '', component: Welcome, canActivate: [UserPermissionsGuard] },

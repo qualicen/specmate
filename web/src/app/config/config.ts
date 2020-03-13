@@ -10,6 +10,7 @@ export class Config {
     public static VIEW_URL_PREFIX = '-/';
 
     public static LOGIN_URL = Config.VIEW_URL_PREFIX + 'login';
+    public static OAUTH_CODE_ENDPOINT_URL = Config.VIEW_URL_PREFIX + 'oauth';
     public static WELCOME_URL_PART = 'welcome';
     public static WELCOME_URL = Config.VIEW_URL_PREFIX + Config.WELCOME_URL_PART;
 

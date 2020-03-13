@@ -1,5 +1,6 @@
 package com.specmate.emfrest.authentication;
 
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
 import org.osgi.service.component.annotations.Component;
@@ -28,10 +29,22 @@ public class LoginOAuth extends RestServiceBase {
 	}
 
 	@Override
+	public boolean canGet(Object object) {
+		return true;
+	}
+	
+	@Override
 	public boolean canPost(Object object2, Object object) {
 		return object instanceof User;
 	}
 
+	@Override
+	public RestResult<?> get(Object object, MultivaluedMap<String, String> queryParams, String token)
+			throws SpecmateException {
+		// TODO Auto-generated method stub
+		return super.get(object, queryParams, token);
+	}
+	
 	@Override
 	public RestResult<?> post(Object object, Object object2, String token) throws SpecmateException {
 		User user = (User) object2;

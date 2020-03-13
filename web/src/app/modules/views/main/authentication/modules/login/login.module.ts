@@ -6,6 +6,7 @@ import { I18NModule } from '../../../../../common/modules/i18n/i18n.module';
 import { SpecmateSharedModule } from '../../../../../specmate/specmate.shared.module';
 import { AuthModule } from '../auth/auth.module';
 import { Login } from './components/login.component';
+import { OAuthCodeEndpoint } from './components/oauth-code-endpoint.component';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { Login } from './components/login.component';
   ],
   declarations: [
     // COMPONENTS IN THIS MODULE
-    Login
+    Login,
+    OAuthCodeEndpoint
   ],
   exports: [
     // THE COMPONENTS VISIBLE TO THE OUTSIDE

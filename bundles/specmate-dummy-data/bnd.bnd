@@ -16,4 +16,5 @@
 	osgi.core,\
 	specmate-persistency-cdo;version=latest,\
 	specmate-connectors-api;version=latest,\
-	specmate-export-api;version=latest
+	specmate-export-api;version=latest,\
+	specmate-auth-api

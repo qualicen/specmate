@@ -56,7 +56,7 @@ public class GenerateModelFromRequirementService extends RestServiceBase {
 	}
 
 	@Override
-	public RestResult<?> post(Object parent, Object child, String token) {
+	public RestResult<?> post(Object parent, Object child, String token, String sessionId) {
 		CEGModel model = (CEGModel) parent;
 		model.getContents().clear(); // Delete Contents
 

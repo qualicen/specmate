@@ -27,7 +27,7 @@ public class TestExportListService extends RestServiceBase {
 	}
 
 	@Override
-	public RestResult<?> get(Object object, MultivaluedMap<String, String> queryParams, String token)
+	public RestResult<?> get(Object object, MultivaluedMap<String, String> queryParams, String token, String sessionId)
 			throws SpecmateException {
 		return new RestResult<List<String>>(Status.OK, exportManager.getExporters(object, token));
 	}

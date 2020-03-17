@@ -29,7 +29,7 @@ public class DetailsService extends RestServiceBase {
 	}
 
 	@Override
-	public RestResult<?> get(Object target, MultivaluedMap<String, String> queryParams, String token)
+	public RestResult<?> get(Object target, MultivaluedMap<String, String> queryParams, String token, String sessionId)
 			throws SpecmateException {
 		return new RestResult<>(Response.Status.OK, target);
 	}
@@ -40,7 +40,7 @@ public class DetailsService extends RestServiceBase {
 	}
 
 	@Override
-	public RestResult<?> put(Object target, Object update, String token) throws SpecmateException {
+	public RestResult<?> put(Object target, Object update, String token, String sessionId) throws SpecmateException {
 		return CrudUtil.update(target, (EObject) update, authService.getUserName(token));
 	}
 

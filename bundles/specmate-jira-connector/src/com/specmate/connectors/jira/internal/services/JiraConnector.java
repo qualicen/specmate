@@ -28,6 +28,7 @@ import com.atlassian.jira.rest.client.api.RestClientException;
 import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.atlassian.jira.rest.client.api.domain.IssueField;
 import com.atlassian.jira.rest.client.api.domain.SearchResult;
+import com.specmate.auth.api.AuthData;
 import com.specmate.common.cache.ICache;
 import com.specmate.common.cache.ICacheLoader;
 import com.specmate.common.cache.ICacheService;
@@ -60,7 +61,6 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 	private JiraRestClient jiraClient;
 	private String projectName;
 	private String url;
-	private String oauthUrl;
 
 	private Map<Issue, Folder> epicFolders = new HashMap<>();
 	private Map<Requirement, Issue> requirmentEpics = new HashMap<>();
@@ -70,6 +70,7 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 
 	private ICache<String, Issue> cache;
 	private int paginationSizeInt;
+	private AuthData oauthData;
 
 	public JiraRestClient getJiraClient() {
 		return jiraClient;
@@ -82,7 +83,13 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 		id = (String) properties.get(IProjectConfigService.KEY_CONNECTOR_ID);
 		url = (String) properties.get(JiraConnectorConfig.KEY_JIRA_URL);
 		projectName = (String) properties.get(JiraConnectorConfig.KEY_JIRA_PROJECT);
-		oauthUrl = (String) properties.get(JiraConnectorConfig.KEY_JIRA_OAUTH_URL);
+		String oauthUrl = (String) properties.get(JiraConnectorConfig.KEY_JIRA_OAUTH_URL);
+		String oauthTokenUrl = (String) properties.get(JiraConnectorConfig.KEY_JIRA_OAUTH_TOKEN_URL);
+		String oauthClientId = (String) properties.get(JiraConnectorConfig.KEY_JIRA_OAUTH_CLIENT_ID);
+		String oauthClientSecret = (String) properties.get(JiraConnectorConfig.KEY_JIRA_OAUTH_CLIENT_SECRET);
+		String oauthRedirectUrl = (String) properties.get(JiraConnectorConfig.KEY_JIRA_OAUTH_REDIRECT_URL);
+		
+		oauthData = new AuthData(oauthUrl, oauthTokenUrl, oauthClientId, oauthClientSecret, oauthRedirectUrl);
 		
 		String username = (String) properties.get(JiraConnectorConfig.KEY_JIRA_USERNAME);
 		String password = (String) properties.get(JiraConnectorConfig.KEY_JIRA_PASSWORD);
@@ -317,15 +324,15 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 	 * the HP server.
 	 */
 	@Override
-	public RestResult<?> get(Object target, MultivaluedMap<String, String> queryParams, String token)
+	public RestResult<?> get(Object target, MultivaluedMap<String, String> queryParams, String token, String sessionId)
 			throws SpecmateException {
 		if (!(target instanceof Requirement)) {
-			return super.get(target, queryParams, token);
+			return super.get(target, queryParams, token, sessionId);
 		}
 		Requirement localRequirement = (Requirement) target;
 
 		if (localRequirement.getExtId() == null) {
-			return super.get(target, queryParams, token);
+			return super.get(target, queryParams, token, sessionId);
 		}
 
 		Issue issue;
@@ -352,7 +359,7 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 	}
 
 	@Override
-	public String getOAuthUrl() {
-		return oauthUrl;
+	public AuthData getAuthData() {
+		return oauthData;
 	}
 }

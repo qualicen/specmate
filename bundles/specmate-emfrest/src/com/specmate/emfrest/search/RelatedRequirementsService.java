@@ -43,7 +43,7 @@ public class RelatedRequirementsService extends RestServiceBase {
 	}
 
 	@Override
-	public RestResult<?> get(Object target, MultivaluedMap<String, String> queryParams, String token)
+	public RestResult<?> get(Object target, MultivaluedMap<String, String> queryParams, String token, String sessionId)
 			throws SpecmateException {
 		Requirement requirement = (Requirement) target;
 		String projectId = SpecmateEcoreUtil.getProjectId(requirement);

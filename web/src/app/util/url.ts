@@ -155,6 +155,10 @@ export class Url {
         return Url.build([Config.URL_BASE, 'login'], true);
     }
 
+    public static urlAuthenticateOAuth(): string {
+        return Url.build([Config.URL_BASE, 'oauth'], true);
+    }
+
     public static urlDeauthenticate(): string {
         return Url.build([Config.URL_BASE, 'logout']);
     }

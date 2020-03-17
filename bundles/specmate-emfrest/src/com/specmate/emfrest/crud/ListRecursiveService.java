@@ -32,7 +32,7 @@ public class ListRecursiveService extends RestServiceBase {
 	}
 
 	@Override
-	public RestResult<?> get(Object target, MultivaluedMap<String, String> queryParams, String token)
+	public RestResult<?> get(Object target, MultivaluedMap<String, String> queryParams, String token, String sessionId)
 			throws SpecmateException {
 		if (queryParams.containsKey("class")) {
 			return new RestResult<>(Response.Status.OK, getChildren(target, queryParams.getFirst("class")));

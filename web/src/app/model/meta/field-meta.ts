@@ -513,7 +513,11 @@ export class MetaInfo {
 			position: '0',
 			allowedPattern: '^[^,;|]*$'		
 		}	];
-	public static AuthProject: FieldMetaItem[] = [
+	public static IAuthProject: FieldMetaItem[] = [
+	];
+	public static UserPasswordAuthProject: FieldMetaItem[] = [
+	];
+	public static OAuthProject: FieldMetaItem[] = [
 	];
 }
 

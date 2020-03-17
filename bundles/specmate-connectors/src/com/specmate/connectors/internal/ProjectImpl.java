@@ -13,12 +13,12 @@ import org.osgi.service.component.annotations.ReferenceCardinality;
 import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.api.IProjectConfigService;
 import com.specmate.connectors.api.IRequirementsSource;
-import com.specmate.connectors.api.ProjectBase;
 import com.specmate.connectors.config.ProjectConfigService;
 import com.specmate.export.api.IExporter;
+import com.specmate.model.auth.IAuthProject;
 
 @Component(service = IProject.class, configurationPid = ProjectConfigService.PROJECT_CONFIG_FACTORY_PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
-public class ProjectImpl extends ProjectBase {
+public class ProjectImpl implements IProject {
 	private String id = null;
 	private IRequirementsSource connector = null;
 	private IExporter exporter = null;
@@ -49,7 +49,6 @@ public class ProjectImpl extends ProjectBase {
 	@Reference(name = "connector")
 	public void setConnector(IRequirementsSource connector) {
 		this.connector = connector;
-		this.oauthUrl = connector.getOAuthUrl();
 	}
 
 	@Override
@@ -72,6 +71,11 @@ public class ProjectImpl extends ProjectBase {
 	@Override
 	public List<String> getLibraryFolders() {
 		return libraryFolders;
+	}
+
+	@Override
+	public IAuthProject getAuthProject() {
+		return this.connector.getAuthData().getAuthProject(this.getID());
 	}
 
 }

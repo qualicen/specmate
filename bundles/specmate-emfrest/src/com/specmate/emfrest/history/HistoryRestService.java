@@ -35,7 +35,7 @@ public class HistoryRestService extends RestServiceBase {
 	}
 
 	@Override
-	public RestResult<?> get(Object object, MultivaluedMap<String, String> queryParams, String token)
+	public RestResult<?> get(Object object, MultivaluedMap<String, String> queryParams, String token, String sessionId)
 			throws SpecmateException {
 		String type = queryParams.getFirst(HPARAM);
 		if (type == null) {

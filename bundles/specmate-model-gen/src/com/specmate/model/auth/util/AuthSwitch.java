@@ -66,9 +66,23 @@ public class AuthSwitch<T> extends Switch<T> {
 	@Override
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
-			case AuthPackage.AUTH_PROJECT: {
-				AuthProject authProject = (AuthProject)theEObject;
-				T result = caseAuthProject(authProject);
+			case AuthPackage.IAUTH_PROJECT: {
+				IAuthProject iAuthProject = (IAuthProject)theEObject;
+				T result = caseIAuthProject(iAuthProject);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AuthPackage.USER_PASSWORD_AUTH_PROJECT: {
+				UserPasswordAuthProject userPasswordAuthProject = (UserPasswordAuthProject)theEObject;
+				T result = caseUserPasswordAuthProject(userPasswordAuthProject);
+				if (result == null) result = caseIAuthProject(userPasswordAuthProject);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AuthPackage.OAUTH_PROJECT: {
+				OAuthProject oAuthProject = (OAuthProject)theEObject;
+				T result = caseOAuthProject(oAuthProject);
+				if (result == null) result = caseIAuthProject(oAuthProject);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -77,17 +91,47 @@ public class AuthSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Project</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>IAuth Project</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Project</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>IAuth Project</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseAuthProject(AuthProject object) {
+	public T caseIAuthProject(IAuthProject object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>User Password Auth Project</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>User Password Auth Project</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseUserPasswordAuthProject(UserPasswordAuthProject object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>OAuth Project</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>OAuth Project</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseOAuthProject(OAuthProject object) {
 		return null;
 	}
 

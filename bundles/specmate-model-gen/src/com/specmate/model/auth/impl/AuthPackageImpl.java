@@ -8,8 +8,9 @@ import com.specmate.model.administration.impl.AdministrationPackageImpl;
 
 import com.specmate.model.auth.AuthFactory;
 import com.specmate.model.auth.AuthPackage;
-import com.specmate.model.auth.AuthProject;
-
+import com.specmate.model.auth.IAuthProject;
+import com.specmate.model.auth.OAuthProject;
+import com.specmate.model.auth.UserPasswordAuthProject;
 import com.specmate.model.base.BasePackage;
 
 import com.specmate.model.base.impl.BasePackageImpl;
@@ -56,8 +57,19 @@ public class AuthPackageImpl extends EPackageImpl implements AuthPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass authProjectEClass = null;
-
+	private EClass iAuthProjectEClass = null;
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass userPasswordAuthProjectEClass = null;
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass oAuthProjectEClass = null;
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
 	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
@@ -159,8 +171,8 @@ public class AuthPackageImpl extends EPackageImpl implements AuthPackage {
 	 * @generated
 	 */
 	@Override
-	public EClass getAuthProject() {
-		return authProjectEClass;
+	public EClass getIAuthProject() {
+		return iAuthProjectEClass;
 	}
 
 	/**
@@ -169,8 +181,8 @@ public class AuthPackageImpl extends EPackageImpl implements AuthPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getAuthProject_Name() {
-		return (EAttribute)authProjectEClass.getEStructuralFeatures().get(0);
+	public EAttribute getIAuthProject_Name() {
+		return (EAttribute)iAuthProjectEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -179,8 +191,68 @@ public class AuthPackageImpl extends EPackageImpl implements AuthPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getAuthProject_OauthUrl() {
-		return (EAttribute)authProjectEClass.getEStructuralFeatures().get(1);
+	public EClass getUserPasswordAuthProject() {
+		return userPasswordAuthProjectEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getOAuthProject() {
+		return oAuthProjectEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getOAuthProject_OauthUrl() {
+		return (EAttribute)oAuthProjectEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getOAuthProject_OauthTokenUrl() {
+		return (EAttribute)oAuthProjectEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getOAuthProject_OauthClientId() {
+		return (EAttribute)oAuthProjectEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getOAuthProject_OauthClientSecret() {
+		return (EAttribute)oAuthProjectEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getOAuthProject_OauthRedirectUrl() {
+		return (EAttribute)oAuthProjectEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -212,9 +284,17 @@ public class AuthPackageImpl extends EPackageImpl implements AuthPackage {
 		isCreated = true;
 
 		// Create classes and their features
-		authProjectEClass = createEClass(AUTH_PROJECT);
-		createEAttribute(authProjectEClass, AUTH_PROJECT__NAME);
-		createEAttribute(authProjectEClass, AUTH_PROJECT__OAUTH_URL);
+		iAuthProjectEClass = createEClass(IAUTH_PROJECT);
+		createEAttribute(iAuthProjectEClass, IAUTH_PROJECT__NAME);
+
+		userPasswordAuthProjectEClass = createEClass(USER_PASSWORD_AUTH_PROJECT);
+
+		oAuthProjectEClass = createEClass(OAUTH_PROJECT);
+		createEAttribute(oAuthProjectEClass, OAUTH_PROJECT__OAUTH_URL);
+		createEAttribute(oAuthProjectEClass, OAUTH_PROJECT__OAUTH_TOKEN_URL);
+		createEAttribute(oAuthProjectEClass, OAUTH_PROJECT__OAUTH_CLIENT_ID);
+		createEAttribute(oAuthProjectEClass, OAUTH_PROJECT__OAUTH_CLIENT_SECRET);
+		createEAttribute(oAuthProjectEClass, OAUTH_PROJECT__OAUTH_REDIRECT_URL);
 	}
 
 	/**
@@ -245,11 +325,21 @@ public class AuthPackageImpl extends EPackageImpl implements AuthPackage {
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
+		userPasswordAuthProjectEClass.getESuperTypes().add(this.getIAuthProject());
+		oAuthProjectEClass.getESuperTypes().add(this.getIAuthProject());
 
 		// Initialize classes, features, and operations; add parameters
-		initEClass(authProjectEClass, AuthProject.class, "AuthProject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getAuthProject_Name(), ecorePackage.getEString(), "name", null, 0, 1, AuthProject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getAuthProject_OauthUrl(), ecorePackage.getEString(), "oauthUrl", null, 0, 1, AuthProject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(iAuthProjectEClass, IAuthProject.class, "IAuthProject", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getIAuthProject_Name(), ecorePackage.getEString(), "name", null, 0, 1, IAuthProject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(userPasswordAuthProjectEClass, UserPasswordAuthProject.class, "UserPasswordAuthProject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(oAuthProjectEClass, OAuthProject.class, "OAuthProject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getOAuthProject_OauthUrl(), ecorePackage.getEString(), "oauthUrl", null, 0, 1, OAuthProject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getOAuthProject_OauthTokenUrl(), ecorePackage.getEString(), "oauthTokenUrl", null, 0, 1, OAuthProject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getOAuthProject_OauthClientId(), ecorePackage.getEString(), "oauthClientId", null, 0, 1, OAuthProject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getOAuthProject_OauthClientSecret(), ecorePackage.getEString(), "oauthClientSecret", null, 0, 1, OAuthProject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getOAuthProject_OauthRedirectUrl(), ecorePackage.getEString(), "oauthRedirectUrl", null, 0, 1, OAuthProject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

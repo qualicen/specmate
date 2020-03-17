@@ -24,6 +24,10 @@ public class JiraConnectorConfig {
 	public static final String KEY_JIRA_PASSWORD = "jira.password";
 	public static final String KEY_JIRA_PAGINATION_SIZE = "jira.paginationSize";
 	public static final String KEY_JIRA_OAUTH_URL = "oauthUrl";
+	public static final String KEY_JIRA_OAUTH_TOKEN_URL = "oauthTokenUrl";
+	public static final String KEY_JIRA_OAUTH_CLIENT_ID = "oauthClientId";
+	public static final String KEY_JIRA_OAUTH_CLIENT_SECRET = "oauthClientSecret";
+	public static final String KEY_JIRA_OAUTH_REDIRECT_URL = "oauthRedirectUri";
 	private ConfigurationAdmin configurationAdmin;
 	private LogService logService;
 	private IConfigService configService;

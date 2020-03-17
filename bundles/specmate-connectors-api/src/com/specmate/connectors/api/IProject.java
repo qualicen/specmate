@@ -3,7 +3,7 @@ package com.specmate.connectors.api;
 import java.util.List;
 
 import com.specmate.export.api.IExporter;
-import com.specmate.model.auth.AuthProject;
+import com.specmate.model.auth.IAuthProject;
 
 public interface IProject {
 
@@ -34,6 +34,6 @@ public interface IProject {
 	 * @return the authorization project defining the auth mechanism for this
 	 *         project.
 	 */
-	AuthProject getAuthProject();
+	IAuthProject getAuthProject();
 
 }

@@ -214,9 +214,16 @@
       </genClasses>
     </nestedGenPackages>
     <nestedGenPackages prefix="Auth" disposableProviderFactory="true" ecorePackage="specmate.ecore#//auth">
-      <genClasses ecoreClass="specmate.ecore#//auth/AuthProject">
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//auth/AuthProject/name"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//auth/AuthProject/oauthUrl"/>
+      <genClasses image="false" ecoreClass="specmate.ecore#//auth/IAuthProject">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//auth/IAuthProject/name"/>
+      </genClasses>
+      <genClasses ecoreClass="specmate.ecore#//auth/UserPasswordAuthProject"/>
+      <genClasses ecoreClass="specmate.ecore#//auth/OAuthProject">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//auth/OAuthProject/oauthUrl"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//auth/OAuthProject/oauthTokenUrl"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//auth/OAuthProject/oauthClientId"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//auth/OAuthProject/oauthClientSecret"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//auth/OAuthProject/oauthRedirectUrl"/>
       </genClasses>
     </nestedGenPackages>
   </genPackages>

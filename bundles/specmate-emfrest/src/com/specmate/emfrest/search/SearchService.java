@@ -44,7 +44,7 @@ public class SearchService extends RestServiceBase {
 	}
 
 	@Override
-	public RestResult<?> get(Object target, MultivaluedMap<String, String> queryParams, String token)
+	public RestResult<?> get(Object target, MultivaluedMap<String, String> queryParams, String token, String sessionId)
 			throws SpecmateException {
 		String queryString = queryParams.getFirst("query");
 		if (queryString == null) {

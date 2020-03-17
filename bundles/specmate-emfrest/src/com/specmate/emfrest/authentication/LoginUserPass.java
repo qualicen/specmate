@@ -33,7 +33,7 @@ public class LoginUserPass extends RestServiceBase {
 	}
 
 	@Override
-	public RestResult<?> post(Object object, Object object2, String token) throws SpecmateException {
+	public RestResult<?> post(Object object, Object object2, String token, String sessionId) throws SpecmateException {
 		User user = (User) object2;
 
 		UserSession session = authService.authenticate(user.getUserName(), user.getPassWord(), user.getProjectName());

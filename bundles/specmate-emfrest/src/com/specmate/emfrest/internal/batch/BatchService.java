@@ -50,7 +50,7 @@ public class BatchService extends RestServiceBase {
 	}
 
 	@Override
-	public RestResult<?> post(Object projectObj, Object batchOperationObj, String token) throws SpecmateException {
+	public RestResult<?> post(Object projectObj, Object batchOperationObj, String token, String sessionId) throws SpecmateException {
 		Folder project = (Folder) projectObj;
 		EMFJsonDeserializer emfJsonDeserializer = new EMFJsonDeserializer(resolver, project.eResource());
 		JSONObject batchObj = new JSONObject(new JSONTokener((String) batchOperationObj));

@@ -26,7 +26,7 @@ public class DeleteService extends RestServiceBase {
 	}
 
 	@Override
-	public RestResult<?> delete(Object target, String token) throws SpecmateException {
+	public RestResult<?> delete(Object target, String token, String sessionId) throws SpecmateException {
 		return CrudUtil.delete(target, authService.getUserName(token));
 	}
 

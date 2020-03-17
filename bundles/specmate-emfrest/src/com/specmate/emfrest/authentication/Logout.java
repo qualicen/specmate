@@ -30,7 +30,7 @@ public class Logout extends RestServiceBase {
 	}
 
 	@Override
-	public RestResult<?> get(Object object, MultivaluedMap<String, String> queryParams, String token)
+	public RestResult<?> get(Object object, MultivaluedMap<String, String> queryParams, String token, String sessionId)
 			throws SpecmateException {
 
 		authService.deauthenticate(token);

@@ -13,6 +13,7 @@ import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.log.LogService;
 
+import com.specmate.auth.api.AuthData;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.connectors.api.ConnectorUtil;
@@ -148,10 +149,10 @@ public class HPConnector extends DetailsService implements IRequirementsSource, 
 	 * from the HP server.
 	 */
 	@Override
-	public RestResult<?> get(Object target, MultivaluedMap<String, String> queryParams, String token)
+	public RestResult<?> get(Object target, MultivaluedMap<String, String> queryParams, String token, String sessionId)
 			throws SpecmateException {
 		if (!(target instanceof Requirement)) {
-			return super.get(target, queryParams, token);
+			return super.get(target, queryParams, token, sessionId);
 		}
 		Requirement localRequirement = (Requirement) target;
 
@@ -177,7 +178,7 @@ public class HPConnector extends DetailsService implements IRequirementsSource, 
 	}
 
 	@Override
-	public String getOAuthUrl() {
+	public AuthData getAuthData() {
 		return null;
 	}
 

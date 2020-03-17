@@ -28,13 +28,14 @@ export class ServiceInterface {
         }
     }
 
-    public async authenticate(user: User): Promise<UserToken> {
-        const session: UserSession = await this.http.post(Url.urlAuthenticate(), user).toPromise() as UserSession;
+    public async authenticate(user: User, oauth = false): Promise<UserToken> {
+        const url = oauth ? Url.urlAuthenticateOAuth() : Url.urlAuthenticate();
+        const session: UserSession = await this.http.post(url, user).toPromise() as UserSession;
         return new UserToken(session, user.projectName, session.libraryFolders);
     }
 
     public async deauthenticate(token: UserToken): Promise<void> {
-        await  this.http.get(Url.urlDeauthenticate(), { headers: this.getAuthHeader(token), responseType: 'text' }).toPromise();
+        await this.http.get(Url.urlDeauthenticate(), { headers: this.getAuthHeader(token), responseType: 'text' }).toPromise();
     }
 
     public async projects(): Promise<AuthProject[]> {

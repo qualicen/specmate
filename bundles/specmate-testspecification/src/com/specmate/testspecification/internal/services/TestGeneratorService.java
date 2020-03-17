@@ -54,7 +54,7 @@ public class TestGeneratorService extends RestServiceBase {
 
 	/** {@inheritDoc} */
 	@Override
-	public RestResult<?> post(Object target, Object object, String token) throws SpecmateException {
+	public RestResult<?> post(Object target, Object object, String token, String sessionId) throws SpecmateException {
 		TestSpecification specification = (TestSpecification) target;
 		EObject container = specification.eContainer();
 		if (container instanceof CEGModel) {

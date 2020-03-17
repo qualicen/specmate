@@ -68,8 +68,16 @@ public class AuthAdapterFactory extends AdapterFactoryImpl {
 	protected AuthSwitch<Adapter> modelSwitch =
 		new AuthSwitch<Adapter>() {
 			@Override
-			public Adapter caseAuthProject(AuthProject object) {
-				return createAuthProjectAdapter();
+			public Adapter caseIAuthProject(IAuthProject object) {
+				return createIAuthProjectAdapter();
+			}
+			@Override
+			public Adapter caseUserPasswordAuthProject(UserPasswordAuthProject object) {
+				return createUserPasswordAuthProjectAdapter();
+			}
+			@Override
+			public Adapter caseOAuthProject(OAuthProject object) {
+				return createOAuthProjectAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -92,16 +100,44 @@ public class AuthAdapterFactory extends AdapterFactoryImpl {
 
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.specmate.model.auth.AuthProject <em>Project</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.specmate.model.auth.IAuthProject <em>IAuth Project</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.specmate.model.auth.AuthProject
+	 * @see com.specmate.model.auth.IAuthProject
 	 * @generated
 	 */
-	public Adapter createAuthProjectAdapter() {
+	public Adapter createIAuthProjectAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.specmate.model.auth.UserPasswordAuthProject <em>User Password Auth Project</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.specmate.model.auth.UserPasswordAuthProject
+	 * @generated
+	 */
+	public Adapter createUserPasswordAuthProjectAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.specmate.model.auth.OAuthProject <em>OAuth Project</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.specmate.model.auth.OAuthProject
+	 * @generated
+	 */
+	public Adapter createOAuthProjectAdapter() {
 		return null;
 	}
 

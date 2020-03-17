@@ -2,14 +2,17 @@ package com.specmate.auth.internal;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.log.LogService;
 
 import com.specmate.auth.api.IAuthenticationService;
 import com.specmate.auth.api.ISessionService;
+import com.specmate.auth.api.AuthData;
 import com.specmate.common.exception.SpecmateAuthorizationException;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.api.IProjectService;
 import com.specmate.export.api.IExporter;
+import com.specmate.rest.RestClient;
 import com.specmate.usermodel.AccessRights;
 import com.specmate.usermodel.UserSession;
 
@@ -21,6 +24,7 @@ import com.specmate.usermodel.UserSession;
 public class AuthenticationServiceImpl implements IAuthenticationService {
 	private ISessionService sessionService;
 	private IProjectService projectService;
+	private LogService logService;
 
 	@Override
 	public UserSession authenticate(String username, String password, String projectname) throws SpecmateException {
@@ -28,6 +32,9 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 		if (project == null) {
 			throw new SpecmateAuthorizationException("Project " + projectname + " does not exist.");
 		}
+		
+		
+		
 		boolean authenticated = project.getConnector().authenticate(username, password);
 		if (!authenticated) {
 			throw new SpecmateAuthorizationException("User " + username + " not authenticated.");
@@ -44,6 +51,29 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 		}
 	}
 
+	@Override
+	public UserSession authenticateOAuth(String sessionId, String code, String projectname) throws SpecmateAuthorizationException {
+		IProject project = projectService.getProject(projectname);
+		if (project == null) {
+			throw new SpecmateAuthorizationException("Project " + projectname + " does not exist.");
+		}
+		
+		AuthData oauthData = project.getConnector().getAuthData();
+		OAuthCodeAuthenticator authenticator = new OAuthCodeAuthenticator(oauthData, logService);
+		
+		try {
+			boolean authenticationSuccessful = authenticator.authenticateCode(code);
+			if(authenticationSuccessful) {
+				AccessRights targetRights = AccessRights.ALL;
+				return sessionService.create(AccessRights.ALL, targetRights, sessionId, code, projectname);
+			}
+		} catch (SpecmateException e) {
+			throw new SpecmateAuthorizationException("Error during OAuth.", e);
+		}
+		
+		throw new SpecmateAuthorizationException("User not authenticated via OAuth.");
+	}
+	
 	/**
 	 * Use this method only in tests to create a session that authorizes requests to
 	 * all resources.
@@ -110,5 +140,10 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 		} else {
 			return AccessRights.NONE;
 		}
+	}
+
+	@Reference
+	public void setLogService(LogService logService) {
+		this.logService = logService;
 	}
 }

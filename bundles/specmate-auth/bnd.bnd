@@ -15,7 +15,9 @@
 	specmate-auth-api;version=latest,\
 	specmate-metrics;version=latest,\
 	specmate-connectors-api;version=latest,\
-	specmate-export-api;version=latest
+	specmate-export-api;version=latest,\
+	specmate-rest;version=latest,\
+	org.json;version=latest
 Private-Package: \
 	com.specmate.auth.internal
 Export-Package: com.specmate.auth.config

@@ -43,7 +43,7 @@ public class ALMExportService extends RestServiceBase {
 	}
 
 	@Override
-	public RestResult<?> post(Object target, Object object, String token) throws SpecmateException {
+	public RestResult<?> post(Object target, Object object, String token, String sessionId) throws SpecmateException {
 		if (isAuthorizedToExport(token)) {
 			TestProcedure testProcedure = (TestProcedure) target;
 			String projectName = SpecmateEcoreUtil.getProjectId((EObject)target);

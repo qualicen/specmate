@@ -20,6 +20,7 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.log.LogService;
 
 import com.google.common.io.PatternFilenameFilter;
+import com.specmate.auth.api.AuthData;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.connectors.api.ConnectorUtil;
@@ -186,7 +187,7 @@ public class FileConnector implements IRequirementsSource {
 	}
 
 	@Override
-	public String getOAuthUrl() {
+	public AuthData getAuthData() {
 		return null;
 	}
 }

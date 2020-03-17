@@ -11,19 +11,19 @@ public interface IRestService extends Comparable<IRestService> {
 
 	boolean canGet(Object object);
 
-	RestResult<?> get(Object object, MultivaluedMap<String, String> queryParams, String token) throws SpecmateException;
+	RestResult<?> get(Object object, MultivaluedMap<String, String> queryParams, String token, String sessionId) throws SpecmateException;
 
 	boolean canPost(Object object2, Object object);
 
-	RestResult<?> post(Object object2, Object object, String token) throws SpecmateException;
+	RestResult<?> post(Object object2, Object object, String token, String sessionId) throws SpecmateException;
 
 	boolean canPut(Object object2, Object object);
 
-	RestResult<?> put(Object object2, Object object, String token) throws SpecmateException;
+	RestResult<?> put(Object object2, Object object, String token, String sessionId) throws SpecmateException;
 
 	boolean canDelete(Object object);
 
-	RestResult<?> delete(Object object, String token) throws SpecmateException;
+	RestResult<?> delete(Object object, String token, String sessionId) throws SpecmateException;
 
 	int getPriority();
 

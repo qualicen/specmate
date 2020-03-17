@@ -22,13 +22,22 @@ public interface AuthFactory extends EFactory {
 	AuthFactory eINSTANCE = com.specmate.model.auth.impl.AuthFactoryImpl.init();
 
 	/**
-	 * Returns a new object of class '<em>Project</em>'.
+	 * Returns a new object of class '<em>User Password Auth Project</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Project</em>'.
+	 * @return a new object of class '<em>User Password Auth Project</em>'.
 	 * @generated
 	 */
-	AuthProject createAuthProject();
+	UserPasswordAuthProject createUserPasswordAuthProject();
+
+	/**
+	 * Returns a new object of class '<em>OAuth Project</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>OAuth Project</em>'.
+	 * @generated
+	 */
+	OAuthProject createOAuthProject();
 
 	/**
 	 * Returns the package supported by this factory.

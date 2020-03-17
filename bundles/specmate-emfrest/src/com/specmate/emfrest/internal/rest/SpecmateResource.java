@@ -75,10 +75,9 @@ public abstract class SpecmateResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final Object get(@PathParam(SERVICE_KEY) String serviceName, @Context UriInfo uriInfo,
-			@Context HttpHeaders headers) {
-
+			@Context HttpHeaders headers, @Context HttpServletRequest request) {
 		return handleRequest(serviceName, s -> s.canGet(getResourceObject()),
-				s -> s.get(getResourceObject(), uriInfo.getQueryParameters(), getAuthenticationToken(headers)), false);
+				s -> s.get(getResourceObject(), uriInfo.getQueryParameters(), getAuthenticationToken(headers), request.getSession().getId()), false);
 
 	}
 
@@ -87,9 +86,10 @@ public abstract class SpecmateResource {
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public final Object put(@PathParam(SERVICE_KEY) String serviceName, EObject update, @Context HttpHeaders headers) {
+	public final Object put(@PathParam(SERVICE_KEY) String serviceName, EObject update, @Context HttpHeaders headers,
+			@Context HttpServletRequest request) {
 		return handleRequest(serviceName, s -> s.canPut(getResourceObject(), update),
-				s -> s.put(getResourceObject(), update, getAuthenticationToken(headers)), true);
+				s -> s.put(getResourceObject(), update, getAuthenticationToken(headers), request.getSession().getId()), true);
 
 	}
 
@@ -98,9 +98,10 @@ public abstract class SpecmateResource {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public final Object post(@PathParam(SERVICE_KEY) String serviceName, EObject posted, @Context HttpHeaders headers) {
+	public final Object post(@PathParam(SERVICE_KEY) String serviceName, EObject posted, @Context HttpHeaders headers,
+			@Context HttpServletRequest request) {
 		return handleRequest(serviceName, s -> s.canPost(getResourceObject(), posted),
-				s -> s.post(getResourceObject(), posted, getAuthenticationToken(headers)), true);
+				s -> s.post(getResourceObject(), posted, getAuthenticationToken(headers), request.getSession().getId()), true);
 
 	}
 
@@ -109,9 +110,10 @@ public abstract class SpecmateResource {
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public final Object delete(@PathParam(SERVICE_KEY) String serviceName, @Context HttpHeaders headers) {
+	public final Object delete(@PathParam(SERVICE_KEY) String serviceName, @Context HttpHeaders headers,
+			@Context HttpServletRequest request) {
 		return handleRequest(serviceName, s -> s.canDelete(getResourceObject()),
-				s -> s.delete(getResourceObject(), getAuthenticationToken(headers)), true);
+				s -> s.delete(getResourceObject(), getAuthenticationToken(headers), request.getSession().getId()), true);
 
 	}
 
@@ -120,9 +122,9 @@ public abstract class SpecmateResource {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public final Object batch(String postedJson, @Context HttpHeaders headers) {
+	public final Object batch(String postedJson, @Context HttpHeaders headers, @Context HttpServletRequest request) {
 		return handleRequest("batch", s -> s.canPost(getResourceObject(), postedJson),
-				s -> s.post(getResourceObject(), postedJson, getAuthenticationToken(headers)), true);
+				s -> s.post(getResourceObject(), postedJson, getAuthenticationToken(headers), request.getSession().getId()), true);
 
 	}
 

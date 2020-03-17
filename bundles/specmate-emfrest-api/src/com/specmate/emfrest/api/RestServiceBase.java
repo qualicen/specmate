@@ -31,7 +31,7 @@ public abstract class RestServiceBase implements IRestService {
 	 * @see com.specmate.emfrest.api.IRestService#get(java.lang.Object)
 	 */
 	@Override
-	public RestResult<?> get(Object object, MultivaluedMap<String, String> queryParams, String token)
+	public RestResult<?> get(Object object, MultivaluedMap<String, String> queryParams, String token, String sessionId)
 			throws SpecmateException {
 		return null;
 	}
@@ -53,7 +53,7 @@ public abstract class RestServiceBase implements IRestService {
 	 * org.eclipse.emf.ecore.EObject)
 	 */
 	@Override
-	public RestResult<?> post(Object parent, Object child, String token) throws SpecmateException {
+	public RestResult<?> post(Object parent, Object child, String token, String sessionId) throws SpecmateException {
 		return null;
 	}
 
@@ -74,7 +74,7 @@ public abstract class RestServiceBase implements IRestService {
 	 * org.eclipse.emf.ecore.EObject)
 	 */
 	@Override
-	public RestResult<?> put(Object object2, Object object, String token) throws SpecmateException {
+	public RestResult<?> put(Object object2, Object object, String token, String sessionId) throws SpecmateException {
 		return null;
 	}
 
@@ -94,8 +94,8 @@ public abstract class RestServiceBase implements IRestService {
 	 * @see com.specmate.emfrest.api.IRestService#delete(java.lang.Object)
 	 */
 	@Override
-	public RestResult<?> delete(Object object, String token) throws SpecmateException {
-		return null;
+	public RestResult<?> delete(Object object, String token, String sessionId) throws SpecmateException {
+		return delete(object, token, null);
 	}
 
 	/*

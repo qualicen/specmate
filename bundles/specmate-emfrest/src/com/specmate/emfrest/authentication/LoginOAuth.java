@@ -8,6 +8,7 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.log.LogService;
 
 import com.specmate.auth.api.IAuthenticationService;
+import com.specmate.common.exception.SpecmateAuthorizationException;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.emfrest.api.IRestService;
 import com.specmate.emfrest.api.RestServiceBase;
@@ -29,30 +30,26 @@ public class LoginOAuth extends RestServiceBase {
 	}
 
 	@Override
-	public boolean canGet(Object object) {
-		return true;
-	}
-	
-	@Override
 	public boolean canPost(Object object2, Object object) {
 		return object instanceof User;
 	}
 
 	@Override
-	public RestResult<?> get(Object object, MultivaluedMap<String, String> queryParams, String token)
-			throws SpecmateException {
-		// TODO Auto-generated method stub
-		return super.get(object, queryParams, token);
-	}
-	
-	@Override
-	public RestResult<?> post(Object object, Object object2, String token) throws SpecmateException {
+	public RestResult<?> post(Object object, Object object2, String token, String jettySessionId) throws SpecmateException {
 		User user = (User) object2;
 
-		UserSession session = authService.authenticate(user.getUserName(), user.getPassWord(), user.getProjectName());
+		String sentSessionId = user.getUserName();
+		
+		if(!sentSessionId.equals(jettySessionId)) {
+			throw new SpecmateAuthorizationException("State does not match.");
+		}
+		
+		String code = user.getPassWord();
+		String projectname = user.getProjectName();
+		UserSession scoutSession = authService.authenticateOAuth(sentSessionId, code, projectname);
 		logService.log(LogService.LOG_INFO,
-				"Session " + session.getId() + " for user " + user.getUserName() + " created.");
-		return new RestResult<>(Response.Status.OK, session);
+				"Session " + scoutSession.getId() + " for user " + sentSessionId + " created.");
+		return new RestResult<>(Response.Status.OK, scoutSession);
 	}
 
 	@Reference

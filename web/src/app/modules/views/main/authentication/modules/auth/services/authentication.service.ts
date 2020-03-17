@@ -81,22 +81,26 @@ export class AuthenticationService {
         return this._authChanged;
     }
 
-    public async authenticate(user: User): Promise<UserToken> {
+    public async authenticate(user: User, oauth = false): Promise<UserToken> {
         try {
             const wasAuthenticated: boolean = this.isAuthenticated;
-            this.token = await this.serviceInterface.authenticate(user);
+            this.token = await this.serviceInterface.authenticate(user, oauth);
             if (this.isAuthenticated) {
-                if (wasAuthenticated !== this.isAuthenticated) {
-                    this.authChanged.emit(true);
-                }
-                this.authFailed = false;
-                this.inactivityLoggedOut = false;
-                this.errorLoggedOut = false;
+                this.onPostAuthentication(wasAuthenticated);
                 return this.token;
             }
         } catch (e) {
             this.authFailed = true;
         }
+    }
+
+    private onPostAuthentication(wasAuthenticated: boolean) {
+        if (wasAuthenticated !== this.isAuthenticated) {
+            this.authChanged.emit(true);
+        }
+        this.authFailed = false;
+        this.inactivityLoggedOut = false;
+        this.errorLoggedOut = false;
     }
 
     public get isAuthenticated(): boolean {
@@ -144,7 +148,7 @@ export class AuthenticationService {
             if (UserToken.isInvalid(token)) {
                 try {
                     // The cached token should never be invalid. If it is, we want to deuath prior to auth.
-                    this.serviceInterface.deauthenticate(this.cachedToken);
+                    await this.serviceInterface.deauthenticate(this.cachedToken);
                     this.cachedToken = undefined;
                 } catch (e) {
                     // We silently ignore errors on invalidating cached tokens,

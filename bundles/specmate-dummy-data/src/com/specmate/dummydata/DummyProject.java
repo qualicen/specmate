@@ -6,10 +6,14 @@ import java.util.Optional;
 
 import org.osgi.service.component.annotations.Component;
 
+import com.specmate.auth.api.AuthData;
 import com.specmate.common.exception.SpecmateException;
+import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.api.IRequirementsSource;
-import com.specmate.connectors.api.ProjectBase;
 import com.specmate.export.api.ExporterBase;
+import com.specmate.model.auth.AuthFactory;
+import com.specmate.model.auth.IAuthProject;
+import com.specmate.model.auth.UserPasswordAuthProject;
 import com.specmate.model.base.IContainer;
 import com.specmate.model.export.Export;
 import com.specmate.model.requirements.Requirement;
@@ -20,7 +24,7 @@ import com.specmate.model.requirements.Requirement;
  * @author junkerm
  */
 @Component(immediate = true)
-public class DummyProject extends ProjectBase {
+public class DummyProject implements IProject {
 
 	/* package */ static final String TEST_DATA_PROJECT = "test-data";
 
@@ -55,7 +59,7 @@ public class DummyProject extends ProjectBase {
 			}
 
 			@Override
-			public String getOAuthUrl() {
+			public AuthData getAuthData() {
 				return null;
 			}
 		};
@@ -90,6 +94,13 @@ public class DummyProject extends ProjectBase {
 	@Override
 	public List<String> getLibraryFolders() {
 		return null;
+	}
+
+	@Override
+	public IAuthProject getAuthProject() {
+		UserPasswordAuthProject authProject = AuthFactory.eINSTANCE.createUserPasswordAuthProject();
+		authProject.setName(TEST_DATA_PROJECT);
+		return authProject;
 	}
 
 }

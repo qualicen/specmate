@@ -20,7 +20,8 @@
 	specmate-emfrest;version=latest,\
 	specmate-rest;version=latest,\
 	specmate-connectors-api;version=latest,\
-	specmate-export-api;version=latest
+	specmate-export-api;version=latest,\
+	specmate-auth-api
 Private-Package: \
 	com.specmate.connectors.hpconnector.internal,\
 	com.specmate.connectors.hpconnector.internal.config,\

@@ -317,9 +317,16 @@
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="auth" nsURI="http://specmate.com/20200228/model/auth" nsPrefix="com.specmate.model.auth">
-    <eClassifiers xsi:type="ecore:EClass" name="AuthProject">
+    <eClassifiers xsi:type="ecore:EClass" name="IAuthProject" abstract="true" interface="true">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="UserPasswordAuthProject" eSuperTypes="#//auth/IAuthProject"/>
+    <eClassifiers xsi:type="ecore:EClass" name="OAuthProject" eSuperTypes="#//auth/IAuthProject">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="oauthUrl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="oauthTokenUrl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="oauthClientId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="oauthClientSecret" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="oauthRedirectUrl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eClassifiers>
   </eSubpackages>
 </ecore:EPackage>

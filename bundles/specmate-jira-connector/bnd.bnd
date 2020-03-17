@@ -40,7 +40,8 @@
 	org.apache.commons.codec,\
 	specmate-connectors-api;version=latest,\
 	specmate-export-api;version=latest,\
-	com.google.guava; version=26.0
+	com.google.guava;version=26.0,\
+	specmate-auth-api
 
 Private-Package: \
 	com.specmate.connectors.jira.internal.services,\

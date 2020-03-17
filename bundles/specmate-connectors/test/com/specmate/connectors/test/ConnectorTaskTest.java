@@ -16,6 +16,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.osgi.service.log.LogService;
 
+import com.specmate.auth.api.AuthData;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.connectors.api.IRequirementsSource;
 import com.specmate.connectors.internal.ConnectorTask;
@@ -116,7 +117,7 @@ public class ConnectorTaskTest {
 		}
 
 		@Override
-		public String getOAuthUrl() {
+		public AuthData getAuthData() {
 			return null;
 		}
 	}

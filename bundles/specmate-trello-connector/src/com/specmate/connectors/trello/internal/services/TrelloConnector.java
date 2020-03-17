@@ -17,6 +17,7 @@ import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.log.LogService;
 
+import com.specmate.auth.api.AuthData;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.connectors.api.IProjectConfigService;
@@ -148,8 +149,8 @@ public class TrelloConnector implements IRequirementsSource {
 	}
 
 	@Override
-	public String getOAuthUrl() {
-		return null;
+	public AuthData getAuthData() {
+		return new AuthData(true);
 	}
 
 }

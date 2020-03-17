@@ -56,7 +56,8 @@ public class AuthFactoryImpl extends EFactoryImpl implements AuthFactory {
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case AuthPackage.AUTH_PROJECT: return (EObject)createAuthProject();
+			case AuthPackage.USER_PASSWORD_AUTH_PROJECT: return (EObject)createUserPasswordAuthProject();
+			case AuthPackage.OAUTH_PROJECT: return (EObject)createOAuthProject();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -68,9 +69,20 @@ public class AuthFactoryImpl extends EFactoryImpl implements AuthFactory {
 	 * @generated
 	 */
 	@Override
-	public AuthProject createAuthProject() {
-		AuthProjectImpl authProject = new AuthProjectImpl();
-		return authProject;
+	public UserPasswordAuthProject createUserPasswordAuthProject() {
+		UserPasswordAuthProjectImpl userPasswordAuthProject = new UserPasswordAuthProjectImpl();
+		return userPasswordAuthProject;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public OAuthProject createOAuthProject() {
+		OAuthProjectImpl oAuthProject = new OAuthProjectImpl();
+		return oAuthProject;
 	}
 
 	/**

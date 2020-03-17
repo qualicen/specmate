@@ -1,16 +1,14 @@
 package com.specmate.test.integration.support;
 
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.osgi.service.component.annotations.Component;
 
 import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.api.IProjectService;
-import com.specmate.model.auth.AuthProject;
 
 /**
  * Dummy implementation that does not require the config service. Pulling in the
@@ -26,13 +24,13 @@ public class DummyProjectService implements IProjectService {
 		return projects.get(projectId);
 	}
 
-	@Override
-	public Set<AuthProject> getProjects() {
-		return Collections.unmodifiableSet(projects.values().stream().map(p -> p.getAuthProject()).collect(Collectors.toSet()));
-	}
-
 	public void addProject(IProject project) {
 		projects.put(project.getID(), project);
+	}
+
+	@Override
+	public Set<IProject> getProjects() {
+		return new HashSet<IProject>(projects.values());
 	}
 
 }

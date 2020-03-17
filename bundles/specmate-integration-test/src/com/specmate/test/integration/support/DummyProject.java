@@ -4,15 +4,17 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import com.specmate.auth.api.AuthData;
 import com.specmate.common.exception.SpecmateException;
+import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.api.IRequirementsSource;
-import com.specmate.connectors.api.ProjectBase;
 import com.specmate.export.api.ExporterBase;
+import com.specmate.model.auth.IAuthProject;
 import com.specmate.model.base.IContainer;
 import com.specmate.model.export.Export;
 import com.specmate.model.requirements.Requirement;
 
-public class DummyProject extends ProjectBase {
+public class DummyProject implements IProject {
 	private String projectId;
 
 	public DummyProject(String projectId) {
@@ -49,7 +51,7 @@ public class DummyProject extends ProjectBase {
 			}
 
 			@Override
-			public String getOAuthUrl() {
+			public AuthData getAuthData() {
 				return null;
 			}
 		};
@@ -83,6 +85,12 @@ public class DummyProject extends ProjectBase {
 
 	@Override
 	public List<String> getLibraryFolders() {
+		return null;
+	}
+
+	@Override
+	public IAuthProject getAuthProject() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 }

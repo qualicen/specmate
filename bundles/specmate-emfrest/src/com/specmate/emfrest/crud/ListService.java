@@ -31,7 +31,7 @@ public class ListService extends RestServiceBase {
 	}
 
 	@Override
-	public RestResult<?> get(Object target, MultivaluedMap<String, String> queryParams, String token)
+	public RestResult<?> get(Object target, MultivaluedMap<String, String> queryParams, String token, String sessionId)
 			throws SpecmateException {
 		return new RestResult<>(Response.Status.OK, SpecmateEcoreUtil.getChildren(target));
 	}
@@ -42,7 +42,7 @@ public class ListService extends RestServiceBase {
 	}
 
 	@Override
-	public RestResult<?> post(Object parent, Object toAdd, String token) throws SpecmateException {
+	public RestResult<?> post(Object parent, Object toAdd, String token, String sessionId) throws SpecmateException {
 		return CrudUtil.create(parent, (EObject) toAdd, authService.getUserName(token));
 	}
 

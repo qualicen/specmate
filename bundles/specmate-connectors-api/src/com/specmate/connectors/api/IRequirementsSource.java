@@ -2,6 +2,7 @@ package com.specmate.connectors.api;
 
 import java.util.Collection;
 
+import com.specmate.auth.api.AuthData;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.model.base.IContainer;
 import com.specmate.model.requirements.Requirement;
@@ -16,5 +17,5 @@ public interface IRequirementsSource {
 
 	boolean authenticate(String username, String password) throws SpecmateException;
 
-	String getOAuthUrl();
+	AuthData getAuthData();
 }

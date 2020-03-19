@@ -40,7 +40,8 @@ export class OAuthCodeEndpoint implements OnInit {
             return Promise.resolve(this.auth.isAuthenticated);
         } else {
             this.auth.authFailed = true;
-            this.auth.deauthenticate();
+            this.auth.deauthenticate(true);
+            this.navigator.navigateToWelcome();
         }
     }
 

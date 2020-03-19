@@ -29,7 +29,7 @@
                 </div>
             </div>
         </div>
-        <hr>
+        <hr />
         <ng-container *ngIf="project !== undefined && !isOAuthProject">
             <div class="form-group">
                 <div class="input-group input-group-sm">
@@ -53,28 +53,29 @@
                         placeholder="{{'password' | translate}}" type="password">
                 </div>
             </div>
+            <div class="form-group">
+                <button id="login-button" title="{{'login' | translate}}"
+                    [ngClass]="{'disabled': !canLogin || isAuthenticating, 'waiting': isAuthenticating, 'not-allowed': !canLogin, 'btn-outline-primary': !canLogin, 'btn-primary': canLogin}"
+                    (click)="authenticate()" class="btn btn-sm">
+                    <ng-container *ngIf="isAuthenticating">
+                        <i class="fa fa-circle-o-notch fa-spin"></i>
+                    </ng-container>
+                    <ng-container *ngIf="!isAuthenticating">
+                        <i class="fa fa-sign-in"></i>&nbsp;{{'login' | translate}}
+                    </ng-container>
+                </button>
+            </div>
         </ng-container>
         <ng-container *ngIf="project !== undefined && isOAuthProject">
             <div class="form-group">
-                <a [href]="project.oauthUrl" class="btn btn-sm btn-outline-primary"
-                    role="button">{{'oauthLogin' | translate}}</a>
+                <a [href]="project.oauthUrl" class="btn btn-sm btn-outline-primary" role="button"><i
+                        class="fa fa-sign-in"></i>&nbsp;{{'login' | translate}}</a>
             </div>
         </ng-container>
-        <div class="form-group">
-            <button id="login-button" title="{{'login' | translate}}"
-                [ngClass]="{'disabled': !canLogin || isAuthenticating, 'waiting': isAuthenticating, 'not-allowed': !canLogin, 'btn-outline-primary': !canLogin, 'btn-primary': canLogin}"
-                (click)="authenticate()" class="btn btn-sm">
-                <ng-container *ngIf="isAuthenticating">
-                    <i class="fa fa-circle-o-notch fa-spin"></i>
-                </ng-container>
-                <ng-container *ngIf="!isAuthenticating">
-                    <i class="fa fa-sign-in"></i>&nbsp;{{'login' | translate}}
-                </ng-container>
-            </button>
-            <span id="login-language-dropdown" class="pull-right">
-                <language-chooser></language-chooser>
-            </span>
-        </div>
+        <hr *ngIf="project !== undefined" />
+        <span id="login-language-dropdown">
+            <language-chooser></language-chooser>
+        </span>
     </div>
     <div class="col-md-5"></div>
 </div>

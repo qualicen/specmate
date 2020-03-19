@@ -35,7 +35,7 @@ export class ServiceInterface {
     }
 
     public async deauthenticate(token: UserToken): Promise<void> {
-        await this.http.get(Url.urlDeauthenticate(), { headers: this.getAuthHeader(token), responseType: 'text' }).toPromise();
+        await this.http.get(Url.urlDeauthenticate(), { headers: this.getAuthHeader(token), responseType: 'text' }).toPromise().catch();
     }
 
     public async projects(): Promise<AuthProject[]> {

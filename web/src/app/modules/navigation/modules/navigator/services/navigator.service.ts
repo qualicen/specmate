@@ -101,7 +101,7 @@ export class NavigatorService {
       return this._navigationCancel;
   }
 
-    private navigateToWelcome(): void {
+    public navigateToWelcome(): void {
         this.router.navigate([Config.WELCOME_URL]);
     }
 

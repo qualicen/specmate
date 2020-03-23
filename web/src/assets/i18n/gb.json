@@ -212,6 +212,7 @@
 		"title": "Saving is not possible"
 	},
 	"search": "search",
+	"searchClear": "Delete contents of search bar",
 	"searchRequirements": "Search",
 	"searchResults": "Search results",
 	"searching": "Searching",

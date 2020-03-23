@@ -13,6 +13,7 @@ import { Type } from '../../../../../util/type';
 import { Url } from '../../../../../util/url';
 import { SpecmateDataService } from '../../../../data/modules/data-service/services/specmate-data.service';
 import { NavigatorService } from '../../navigator/services/navigator.service';
+import { Id } from 'src/app/util/id';
 
 @Component({
     moduleId: module.id.toString(),
@@ -30,6 +31,9 @@ export class ElementTree implements OnInit {
 
     @Input()
     private library = false;
+
+    @Input()
+    private recycleBin = false;
 
     public numChildrenDisplayed = Config.ELEMENT_CHUNK_SIZE;
 
@@ -140,7 +144,7 @@ export class ElementTree implements OnInit {
     }
 
     private initContents(): void {
-        this.dataService.readContents(this.baseUrl).then((contents: IContainer[]) => {
+        this.dataService.readContents(this.baseUrl, false).then((contents: IContainer[]) => {
             this._contents = contents;
         });
     }
@@ -181,7 +185,11 @@ export class ElementTree implements OnInit {
     }
 
     public get hasLink(): boolean {
-        return !this.isFolderNode || (this.library);
+        return (!this.isFolderNode || (this.library)) && !this.element.isRecycled;
+    }
+
+    public get hasRestore(): boolean {
+        return this.element.isRecycled;
     }
 
     private get isRoot(): boolean {
@@ -189,12 +197,28 @@ export class ElementTree implements OnInit {
     }
 
     public get showElement(): boolean {
-        return this.isCEGModelNode || this.isProcessNode || this.isRequirementNode
-            || this.isTestSpecificationNode || this.isFolderNode || this.isTestProcedureNode;
+        return (this.isCEGModelNode || this.isProcessNode || this.isRequirementNode
+            || this.isTestSpecificationNode || this.isFolderNode || this.isTestProcedureNode)
+            && ((!this.recycleBin && !this.element.isRecycled) || (this.recycleBin && this.element.hasRecycledChildren));
     }
 
     public loadMore(): void {
         this.numChildrenDisplayed += Config.ELEMENT_CHUNK_SIZE;
+    }
+
+    public async delete(): Promise<void> {
+        try {
+            await this.dataService.deleteElement(this.element.url, false, Id.uuid);
+            // await this.dataService.commit(this.translate.instant('delete'));
+            await this.dataService.readContents(this.parent.url, false);
+            this.initContents();
+        } catch (e) { }
+    }
+
+    public async restore(): Promise<void> {
+        await this.dataService.performOperations(this.element.url, 'restore');
+        this.dataService.readContents(this.parent.url, false);
+        this.initContents();
     }
 
     public handleKey(event: KeyboardEvent, shouldToggle?: boolean): void {

@@ -201,6 +201,7 @@
 	"resolve": "Resolve",
 	"resourceNotFound": "Element not found.",
 	"restart": "Restart",
+	"restore": "",
 	"restoreWindow": "Restore window",
 	"restoreZoom": "Restore zoom",
 	"save": "Save",

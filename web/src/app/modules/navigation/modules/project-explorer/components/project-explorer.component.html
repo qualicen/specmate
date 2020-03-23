@@ -14,9 +14,9 @@
         </div>
         <ul role="tablist" class="nav nav-tabs justify-content-start" *ngIf="!searchBox.value" id="explorer">
             <li class="nav-item">
-                <button [ngClass]="{'active' : !showLibrary}" role="tab" (click)="switchToProject()" class="nav-link"
-                    id="ngb-tab-0" aria-disabled="false" [attr.aria-expanded]="!showLibrary ? 'true' : 'false'"
-                    [attr.aria-controls]="!showLibrary ? 'ngb-tab-0-panel' : null">{{'project'
+                <button [ngClass]="{'active' : showProject}" role="tab" (click)="switchToProject()" class="nav-link"
+                    id="ngb-tab-0" aria-disabled="false" [attr.aria-expanded]="showProject ? 'true' : 'false'"
+                    [attr.aria-controls]="showProject ? 'ngb-tab-0-panel' : null">{{'project'
                     | translate}}</button>
             </li>
             <li class="nav-item">
@@ -24,6 +24,13 @@
                     id="ngb-tab-1" aria-disabled="false" [attr.aria-expanded]="showLibrary ? 'true' : 'false'"
                     [attr.aria-controls]="showLibrary ? 'ngb-tab-1-panel' : null">{{'library'
                     | translate}}</button>
+            </li>
+            <li class="nav-item">
+                <button [ngClass]="{'active' : showRecycleBin}" role="tab" (click)="switchToRecycleBin()" class="nav-link"
+                    id="ngb-tab-1" aria-disabled="false" [attr.aria-expanded]="showRecycleBin ? 'true' : 'false'"
+                    [attr.aria-controls]="showRecycleBin ? 'ngb-tab-1-panel' : null">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                </button>
             </li>
         </ul>
         <table class="table" *ngIf="searchBox.value">
@@ -35,7 +42,7 @@
         </table>
     </div>
     <div id="list-wrapper" *ngIf="!searchBox.value">
-        <ul id="projectList" *ngIf="!showLibrary">
+        <ul id="projectList" *ngIf="showProject">
             <element-tree *ngFor="let element of rootElements;" [baseUrl]="element.url"
                 [currentElement]="currentElement" [withExpand]="true"></element-tree>
             <li *ngIf="canLoadMoreProjectFolders">
@@ -49,6 +56,15 @@
                 [currentElement]="currentElement" [withExpand]="true" [library]="true"></element-tree>
             <li *ngIf="canLoadMoreLibraryFolders">
                 <button (click)="loadMoreLibraryFolders()" class="btn btn-sm btn-outline-primary btn-sm">
+                    <i class="fa fa-ellipsis-v"></i>&nbsp;{{'loadMore' | translate}}
+                </button>
+            </li>
+        </ul>
+        <ul id="recycleBinList" *ngIf="showRecycleBin">
+            <element-tree *ngFor="let element of rootRecycleBin;" [baseUrl]="element.url"
+                [currentElement]="currentElement" [withExpand]="true" [library]="true" [recycleBin]="true"></element-tree>
+            <li *ngIf="canLoadMoreRecycleBinFolders">
+                <button (click)="loadMoreReycleBinFolders()" class="btn btn-sm btn-outline-primary btn-sm">
                     <i class="fa fa-ellipsis-v"></i>&nbsp;{{'loadMore' | translate}}
                 </button>
             </li>

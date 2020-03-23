@@ -201,6 +201,7 @@
 	"resolve": "auflösen",
 	"resourceNotFound": "Element konnte nicht gefunden werden.",
 	"restart": "Neu starten",
+	"restore": "",
 	"restoreWindow": "Fenster wiederherstellen",
 	"restoreZoom": "Zoom wiederherstellen",
 	"save": "Speichern",

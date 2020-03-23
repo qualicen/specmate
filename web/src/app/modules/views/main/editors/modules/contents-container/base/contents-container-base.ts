@@ -66,6 +66,18 @@ export abstract class ContentContainerBase<T extends IContainer> implements OnIn
         await this.readContents();
     }
 
+    public async recycle(element: IContainer): Promise<void> {
+        await this.dataService.performOperations(element.url, 'recycle');
+        // await this.dataService.commit(this.translate.instant('duplicate'));
+        await this.readContents();
+    }
+
+    public async restore(element: IContainer): Promise<void> {
+        await this.dataService.performOperations(element.url, 'restore');
+        // await this.dataService.commit(this.translate.instant('duplicate'));
+        await this.readContents();
+    }
+
     protected async readContents(): Promise<void> {
         this.contents = undefined;
         const contents = await this.dataService.readContents(this.parent.url, false);
@@ -135,5 +147,9 @@ export abstract class ContentContainerBase<T extends IContainer> implements OnIn
     }
     public get errorMessage(): string {
         return this.translate.instant('invalidCharacter');
+    }
+
+    public showElement(element: IContainer): boolean {
+        return !element.isRecycled;
     }
 }

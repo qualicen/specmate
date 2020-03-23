@@ -485,6 +485,22 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 		Assert.assertEquals(Status.OK.getStatusCode(), deleteResult.getResponse().getStatus());
 		deleteResult.getResponse().close();
 	}
+	
+	protected void recycleObject(String... segments) {
+		String recycleUrl = recycleUrl(segments);
+		logService.log(LogService.LOG_DEBUG, "Recycling object with URL " + recycleUrl);
+		RestResult<JSONObject> recycleResult = restClient.post(recycleUrl, null);
+		Assert.assertEquals(Status.OK.getStatusCode(), recycleResult.getResponse().getStatus());
+		recycleResult.getResponse().close();
+	}
+	
+	protected void restoreObject(String... segments) {
+		String restoreUrl = restoreUrl(segments);
+		logService.log(LogService.LOG_DEBUG, "Restore object with URL " + restoreUrl);
+		RestResult<JSONObject> restoreResult = restClient.post(restoreUrl, null);
+		Assert.assertEquals(Status.OK.getStatusCode(), restoreResult.getResponse().getStatus());
+		restoreResult.getResponse().close();
+	}
 
 	protected String listUrl(String... segments) {
 		return buildUrl("list", segments);
@@ -496,5 +512,13 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 
 	protected String deleteUrl(String... segments) {
 		return buildUrl("delete", segments);
+	}
+	
+	protected String recycleUrl(String... segments) {
+		return buildUrl("recycle", segments);
+	}
+	
+	protected String restoreUrl(String... segments) {
+		return buildUrl("restore", segments);
 	}
 }

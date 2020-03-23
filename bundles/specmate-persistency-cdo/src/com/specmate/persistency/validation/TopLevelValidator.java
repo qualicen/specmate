@@ -16,8 +16,9 @@ public class TopLevelValidator extends ValidatorBase {
 	public void changedObject(EObject object, EStructuralFeature feature, EChangeKind changeKind, Object oldValue,
 			Object newValue, String objectClassName) throws SpecmateValidationException {
 		// we allow to add and remove objects to top level folders, but not to change
-		// (SET) it, except the attribute "hasRecycledChildren
-		if (changeKind == EChangeKind.SET && !object.eClass().getEStructuralFeature("hasRecycledChildren").equals(feature)) {
+		// (SET) it, except the attribute "hasRecycledChildren" and "isRecycled"
+		if (changeKind == EChangeKind.SET && !object.eClass().getEStructuralFeature("hasRecycledChildren").equals(feature) &&
+				!object.eClass().getEStructuralFeature("isRecycled").equals(feature)) {
 			validateNotTopLevel(object);
 		}
 	}

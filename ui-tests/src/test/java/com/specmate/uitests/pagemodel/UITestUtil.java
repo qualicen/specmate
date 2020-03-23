@@ -1,5 +1,7 @@
 package com.specmate.uitests.pagemodel;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
@@ -8,6 +10,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -81,5 +84,24 @@ public class UITestUtil {
     	} while(!displayed);
     	// Change timeout back to the defined value
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+    }
+    
+    public static WebElement getElementWithIndex(int index, WebDriver driver, By selector) {
+    	List<WebElement> nodeList = new ArrayList<WebElement>();
+		
+		nodeList = driver.findElements(selector);
+		
+		return nodeList.get(index);
+    }
+    
+    public static void dragAndDrop(By element, int x, int y, WebDriver driver) {
+    	// Create object of actions class
+		Actions act = new Actions(driver);
+ 
+		// find element which we need to drag
+		WebElement drag = driver.findElement(element);
+		
+		// calling the method and x,y cordinates should be in the editor
+		act.dragAndDropBy(drag, x, y).build().perform();
     }
 }

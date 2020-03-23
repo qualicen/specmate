@@ -7,7 +7,6 @@ import java.sql.Timestamp;
 
 import org.junit.Test;
 import org.openqa.selenium.InvalidElementStateException;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
 import com.specmate.uitests.pagemodel.CommonControlElements;
@@ -52,10 +51,10 @@ public class ProcessModelTest extends TestBase {
 		requirementOverview.createProcessModelFromRequirement(processName);		
 
 		// Create Start node
-		WebElement startNode = processEditor.createStart(300, 50);
+		int startNode = processEditor.createStart(50, 80);
 
 		// Create Activity 
-		WebElement initActivity = processEditor.createActivity("Initialise", 300, 150);
+		int initActivity = processEditor.createActivity("Initialise", 200, 170);
 
 		// Set expected outcome of init activity 
 		processEditor.setExpectedOutcome("Initialisation completed");
@@ -64,13 +63,13 @@ public class ProcessModelTest extends TestBase {
 		processEditor.setDescription("Description for activity");
 
 		// Create Decision
-		WebElement decision1 = processEditor.createDecison("Age-Check", 300, 250);
+		int decision1 = processEditor.createDecison("Age-Check", 150, 270);
 
 		// Create Activity 
-		WebElement childActivity = processEditor.createActivity("Child", 100, 300);
+		int childActivity = processEditor.createActivity("Child", 75, 350);
 
 		// Create Activity 
-		WebElement parentActivity = processEditor.createActivity("Parent", 500, 300);
+		int parentActivity = processEditor.createActivity("Parent", 350, 350);
 
 		// Reference requirement 
 		processEditor.addRelatedRequirement("Zellenmarkierung");
@@ -87,7 +86,7 @@ public class ProcessModelTest extends TestBase {
 		processEditor.addRelatedRequirement("Zellenmarkierung");
 
 		// Create End node
-		WebElement endNode = processEditor.createEnd(300, 350);
+		int endNode = processEditor.createEnd(0, 450);
 
 		// Check if error message is shown (Assert true)
 		assertTrue(processEditor.errorMessageDisplayed());

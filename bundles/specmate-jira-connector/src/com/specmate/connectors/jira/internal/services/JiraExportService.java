@@ -20,18 +20,19 @@ import com.atlassian.jira.rest.client.api.domain.BasicIssue;
 import com.atlassian.jira.rest.client.api.domain.IssueType;
 import com.atlassian.jira.rest.client.api.domain.input.IssueInput;
 import com.atlassian.jira.rest.client.api.domain.input.IssueInputBuilder;
-import com.atlassian.util.concurrent.Promise;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.connectors.jira.config.JiraConnectorConfig;
-import com.specmate.export.api.IExporter;
 import com.specmate.export.api.ExporterBase;
+import com.specmate.export.api.IExporter;
 import com.specmate.model.administration.ErrorCode;
+import com.specmate.model.export.Export;
 import com.specmate.model.support.util.SpecmateEcoreUtil;
 import com.specmate.model.testspecification.TestProcedure;
 import com.specmate.model.testspecification.TestSpecification;
-import com.specmate.model.export.Export;
 import com.specmate.model.testspecification.TestStep;
+
+import io.atlassian.util.concurrent.Promise;
 
 /** Exorter for jira x-ray */
 @Component(immediate = true, service = IExporter.class, configurationPid = JiraConnectorConfig.EXPORTER_PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
@@ -113,13 +114,11 @@ public class JiraExportService extends ExporterBase {
 				"Cannot export object of type " + exportTarget.getClass().getName());
 	}
 
-	private Optional<Export> exportTestSpecification(TestSpecification exportTarget)
-			throws SpecmateInternalException {
+	private Optional<Export> exportTestSpecification(TestSpecification exportTarget) throws SpecmateInternalException {
 		throw new SpecmateInternalException(ErrorCode.JIRA, "Test specification export to jira not supported");
 	}
 
-	public Optional<Export> exportTestProcedure(TestProcedure testProcedure)
-			throws SpecmateException {
+	public Optional<Export> exportTestProcedure(TestProcedure testProcedure) throws SpecmateException {
 		JiraRestClient jiraClient = null;
 		try {
 			try {

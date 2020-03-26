@@ -14,6 +14,7 @@ import org.eclipse.emf.cdo.CDOState;
 import org.eclipse.emf.cdo.common.id.CDOID;
 import org.eclipse.emf.cdo.common.id.CDOIDUtil;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -22,6 +23,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
+import com.google.common.collect.Iterators;
 import com.specmate.common.AssertUtil;
 import com.specmate.common.UUIDUtil;
 import com.specmate.common.exception.SpecmateException;
@@ -57,6 +59,31 @@ public class SpecmateEcoreUtil {
 			parent = SpecmateEcoreUtil.getParent(parent);
 		}
 		return parentsList;
+	}
+	
+	public static void updateParentsOnRecycle(EObject firstParent) {
+		if(firstParent == null) {
+			return;
+		}
+		LinkedList<EObject> parentsList = SpecmateEcoreUtil.getAllParents(firstParent);
+		parentsList.addFirst(firstParent);
+		while (parentsList.size() > 0) {
+			EObject parent = parentsList.pop();
+			SpecmateEcoreUtil.setAttributeValue(parent, false, "isRecycled");
+			TreeIterator<EObject> contents = ((EObject) parent).eAllContents();
+			Iterator<EObject> filtered;
+			filtered = Iterators.filter(contents, o -> ((boolean) o.eGet(o.eClass().getEStructuralFeature("isRecycled"))) == true);
+			if (filtered.hasNext()) {
+				SpecmateEcoreUtil.setAttributeValue(parent, true, "hasRecycledChildren");
+				while (parentsList.size() > 0) {
+					EObject child = parentsList.pop();
+					SpecmateEcoreUtil.setAttributeValue(child, true, "hasRecycledChildren");
+				}
+				return;
+			} else {
+				SpecmateEcoreUtil.setAttributeValue(parent, false, "hasRecycledChildren");
+			}
+		}
 	}
 
 	public static void copyReferences(EObject source, EObject target) {

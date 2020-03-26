@@ -97,26 +97,11 @@ public class CrudUtil {
 		}
 
 		// Update all parents
-		LinkedList<EObject> parentsList = SpecmateEcoreUtil.getAllParents(theTarget);
-		while (parentsList.size() > 0) {
-			EObject element = parentsList.pop();
-			SpecmateEcoreUtil.setAttributeValue(element, false, "isRecycled");
-			TreeIterator<EObject> contents = ((EObject) element).eAllContents();
-			Iterator<EObject> filtered;
-			filtered = Iterators.filter(contents, o -> ((boolean) o.eGet(o.eClass().getEStructuralFeature("isRecycled"))) == true);
-			if (filtered.hasNext()) {
-				SpecmateEcoreUtil.setAttributeValue(element, true, "hasRecycledChildren");
-				while (parentsList.size() > 0) {
-					EObject child = parentsList.pop();
-					SpecmateEcoreUtil.setAttributeValue(child, true, "hasRecycledChildren");
-				}
-				return new RestResult<>(Response.Status.OK, target, userName);
-			} else {
-				SpecmateEcoreUtil.setAttributeValue(element, false, "hasRecycledChildren");
-			}
-		}
+		SpecmateEcoreUtil.updateParentsOnRecycle(SpecmateEcoreUtil.getParent(theTarget));
 		return new RestResult<>(Response.Status.OK, target, userName);
 	}
+	
+	
 
 	/**
 	 * Copies an object recursively with all children and adds the copy to the
@@ -178,7 +163,9 @@ public class CrudUtil {
 
 	public static RestResult<?> delete(Object target, String userName) throws SpecmateException {
 		if (target instanceof EObject && !(target instanceof Resource)) {
+			EObject parent = SpecmateEcoreUtil.getParent((EObject) target);
 			SpecmateEcoreUtil.detach((EObject) target);
+			SpecmateEcoreUtil.updateParentsOnRecycle(parent);
 			return new RestResult<>(Response.Status.OK, target, userName);
 		} else {
 			throw new SpecmateInternalException(ErrorCode.REST_SERVICE, "Attempt to delete non EObject.");

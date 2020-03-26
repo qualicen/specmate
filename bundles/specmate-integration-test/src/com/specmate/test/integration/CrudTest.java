@@ -1082,4 +1082,29 @@ public class CrudTest extends EmfRestTest {
 		Assert.assertTrue(retrievedTestSpec2.getBoolean("hasRecycledChildren") == true);
 		Assert.assertTrue(retrievedTestSpec2.getBoolean("isRecycled") == true);
 	}
+	
+	@Test
+	public void testDeleteRecycledCEG() {
+		JSONObject folder = postFolderToTopFolder();
+		String folderName = getId(folder);
+
+		JSONObject requirement = postRequirement(folderName);
+		String requirementName = getId(requirement);
+
+		JSONObject ceg = postCEG(folderName, requirementName);
+		String cegName = getId(ceg);
+
+		JSONObject testSpec = postTestSpecification(folderName, requirementName, cegName);
+
+		recycleObject(folderName, requirementName, cegName);
+		deleteObject(folderName, requirementName, cegName);
+
+		JSONObject retrievedFolder = getObject(folderName);
+		Assert.assertTrue(retrievedFolder.getBoolean("hasRecycledChildren") == false);
+		Assert.assertTrue(retrievedFolder.getBoolean("isRecycled") == false);
+
+		JSONObject retrievedRequirement = getObject(folderName, requirementName);
+		Assert.assertTrue(retrievedRequirement.getBoolean("hasRecycledChildren") == false);
+		Assert.assertTrue(retrievedRequirement.getBoolean("isRecycled") == false);
+	}
 }

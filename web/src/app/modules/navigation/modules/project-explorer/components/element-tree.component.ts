@@ -211,13 +211,14 @@ export class ElementTree implements OnInit {
             await this.dataService.deleteElement(this.element.url, false, Id.uuid);
             // await this.dataService.commit(this.translate.instant('delete'));
             await this.dataService.readContents(this.parent.url, false);
-            this.initContents();
+            await this.dataService.readElement(this.parent.url, false);
         } catch (e) { }
     }
 
     public async restore(): Promise<void> {
         await this.dataService.performOperations(this.element.url, 'restore');
-        this.dataService.readContents(this.parent.url, false);
+        await this.dataService.readContents(this.parent.url, false);
+        await this.dataService.readElement(this.parent.url, false);
         this.initContents();
     }
 

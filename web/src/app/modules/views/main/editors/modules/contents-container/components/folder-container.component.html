@@ -9,34 +9,39 @@
         </span>
     </div>
     <ul *ngIf="contents && contents.length > 0" class="list-group list-group-flush">
-        <li *ngFor="let element of contents" class="list-group-item">
-            <table style="width:100%">
-                <tr>
-                    <td>
-                        <a [navigationTarget]="element">
-                            <i class="fa fa-angle-right" aria-hidden="true"></i>&nbsp;{{element.name}}
-                        </a>
-                        &nbsp;
-                        <span class="text-muted">{{element.description | truncate: 60}}</span>
-                    </td>
-                    <td style="text-align:right">
-                        <button id="{{'folder-' + element.name + '-deletefolder-button'}}" title="{{'delete' | translate}}" (click)="recycle(element)"
-                            class="btn btn-sm btn-outline-danger">
-                            <i class="fa fa-trash" aria-hidden="true"></i>
-                        </button>
-                    </td>
-                </tr>
-            </table>
-        </li>
+        <ng-container *ngFor="let element of contents">
+            <li *ngIf="showElement(element)" class="list-group-item">
+                <table style="width:100%">
+                    <tr>
+                        <td>
+                            <a [navigationTarget]="element">
+                                <i class="fa fa-angle-right" aria-hidden="true"></i>&nbsp;{{element.name}}
+                            </a>
+                            &nbsp;
+                            <span class="text-muted">{{element.description | truncate: 60}}</span>
+                        </td>
+                        <td style="text-align:right">
+                            <button id="{{'folder-' + element.name + '-deletefolder-button'}}"
+                                title="{{'delete' | translate}}" (click)="recycle(element)"
+                                class="btn btn-sm btn-outline-danger">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </li>
+        </ng-container>
     </ul>
     <div *ngIf="contents" class="card-body">
         <div class="row">
             <div class="col">
                 <div class="input-group input-group-sm">
-                    <input type="text" #newNameInput (keyup)="0" class="form-control form-control-sm" placeholder="{{'name' | translate}}" />
+                    <input type="text" #newNameInput (keyup)="0" class="form-control form-control-sm"
+                        placeholder="{{'name' | translate}}" />
                     <div class="input-group-append">
-                        <button id="requirement-createfolder-button" title="{{'createFolder' | translate}}" (click)="create(newNameInput.value)"
-                            class="btn btn-sm btn-outline-primary" [disabled]="!isCreateButtonEnabled(newNameInput.value)"
+                        <button id="requirement-createfolder-button" title="{{'createFolder' | translate}}"
+                            (click)="create(newNameInput.value)" class="btn btn-sm btn-outline-primary"
+                            [disabled]="!isCreateButtonEnabled(newNameInput.value)"
                             [class.disabled]="!isCreateButtonEnabled(newNameInput.value)">
                             <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;{{'createFolder' | translate}}
                         </button>

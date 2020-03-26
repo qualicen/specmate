@@ -9,6 +9,7 @@ import { NavigatorService } from '../../../../../../navigation/modules/navigator
 import { ConfirmationModal } from '../../../../../../notification/modules/modals/services/confirmation-modal.service';
 import { ClipboardService } from '../../tool-pallette/services/clipboard-service';
 import { GraphTransformer } from '../../tool-pallette/util/graph-transformer';
+import { Url } from 'src/app/util/url';
 
 export abstract class ContentContainerBase<T extends IContainer> implements OnInit {
 

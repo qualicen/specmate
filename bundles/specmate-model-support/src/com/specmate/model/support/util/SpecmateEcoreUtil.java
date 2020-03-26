@@ -65,7 +65,6 @@ public class SpecmateEcoreUtil {
 		if(firstParent == null) {
 			return;
 		}
-		
 		LinkedList<EObject> parentsList = SpecmateEcoreUtil.getAllParents(firstParent);
 		parentsList.addFirst(firstParent);
 		while (parentsList.size() > 0) {

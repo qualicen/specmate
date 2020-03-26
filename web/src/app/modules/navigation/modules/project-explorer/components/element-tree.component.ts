@@ -14,6 +14,8 @@ import { Url } from '../../../../../util/url';
 import { SpecmateDataService } from '../../../../data/modules/data-service/services/specmate-data.service';
 import { NavigatorService } from '../../navigator/services/navigator.service';
 import { Id } from 'src/app/util/id';
+import { TranslateService } from '@ngx-translate/core';
+import { ContentsContainerService } from 'src/app/modules/views/main/editors/modules/contents-container/services/content-container.service';
 
 @Component({
     moduleId: module.id.toString(),
@@ -36,6 +38,12 @@ export class ElementTree implements OnInit {
     private recycleBin = false;
 
     public numChildrenDisplayed = Config.ELEMENT_CHUNK_SIZE;
+
+    constructor(
+        private dataService: SpecmateDataService,
+        private navigator: NavigatorService,
+        private translate: TranslateService,
+        private contentService: ContentsContainerService) { }
 
     public get contents(): IContainer[] {
         if (this._contents === undefined || this._contents === null) {
@@ -88,8 +96,8 @@ export class ElementTree implements OnInit {
     public get expanded(): boolean {
         if (this._collapsed) {
             if (!this._expanded && this.isMustOpen) {
-                 this._expanded = true;
-                 this._collapsed = false;
+                this._expanded = true;
+                this._collapsed = false;
             }
         }
         return this._expanded;
@@ -110,7 +118,7 @@ export class ElementTree implements OnInit {
         return false;
     }
 
-    constructor(private dataService: SpecmateDataService, private navigator: NavigatorService) { }
+
 
     async ngOnInit() {
         const siblings = await this.dataService.readContents(Url.parent(this.baseUrl));
@@ -209,16 +217,17 @@ export class ElementTree implements OnInit {
     public async delete(): Promise<void> {
         try {
             await this.dataService.deleteElement(this.element.url, false, Id.uuid);
-            // await this.dataService.commit(this.translate.instant('delete'));
+            await this.dataService.commit(this.translate.instant('delete'));
             await this.dataService.readContents(this.parent.url, false);
-            await this.dataService.readElement(this.parent.url, false);
         } catch (e) { }
     }
 
     public async restore(): Promise<void> {
-        await this.dataService.performOperations(this.element.url, 'restore');
-        await this.dataService.readContents(this.parent.url, false);
-        await this.dataService.readElement(this.parent.url, false);
+        await this.dataService.restoreElement(this.element.url);
+        await this.dataService.readElement(this.element.url, false);
+        if (Type.is(this.currentElement, Requirement) || Type.is(this.currentElement, Folder)) {
+            this.contentService.isDeleted();
+        }
         this.initContents();
     }
 

@@ -34,7 +34,7 @@ export class TestSpecificationContainer extends ContentContainerBase<TestSpecifi
         super(dataService, navigator, translate, modal, clipboardService);
 
         contentService.onModelDeleted.subscribe(
-            () => {this.readContents();});
+            () => {this.readContents(); });
     }
 
     protected condition = (element: IContainer) => Type.is(element, TestSpecification);
@@ -44,17 +44,12 @@ export class TestSpecificationContainer extends ContentContainerBase<TestSpecifi
         return await factory.create(this.parent, true, Id.uuid, name);
     }
 
-    public async delete(element: IContainer): Promise<void> {
+    public async recycle(element: IContainer): Promise<void> {
         const contents = await this.dataService.readContents(element.url, true);
         const numberOfChlidren = contents.filter(element => Type.is(element, TestCase)).length;
         const additionalMessage = this.translate.instant('attentionNumberOfTestCasesWillBeDeleted', {num: numberOfChlidren});
         const baseMessage = this.translate.instant('doYouReallyWantToDelete', { name: element.name });
-        await super.delete(element, baseMessage + ' ' + additionalMessage);
-        await this.dataService.readContents(Url.parent(element.url), false);
-    }
-
-    public async recycle(element: IContainer): Promise<void> {
-        await super.recycle(element);
+        await super.recycle(element, baseMessage + ' ' + additionalMessage);
         await this.dataService.readContents(Url.parent(element.url), false);
     }
 

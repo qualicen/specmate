@@ -51,32 +51,19 @@ export abstract class ContentContainerBase<T extends IContainer> implements OnIn
 
     public abstract async createElement(name: string): Promise<T>;
 
-    public async delete(element: T,
-        message: string = this.translate.instant('doYouReallyWantToDelete', { name: element.name })): Promise<void> {
-        try {
-            await this.modal.openOkCancel('ConfirmationRequired', message);
-            await this.dataService.deleteElement(element.url, false, Id.uuid);
-            await this.dataService.commit(this.translate.instant('delete'));
-            await this.readContents();
-        } catch (e) { }
-    }
-
     public async duplicate(element: IContainer): Promise<void> {
         await this.dataService.performOperations(element.url, 'duplicate');
         await this.dataService.commit(this.translate.instant('duplicate'));
         await this.readContents();
     }
 
-    public async recycle(element: IContainer): Promise<void> {
-        await this.dataService.performOperations(element.url, 'recycle');
-        // await this.dataService.commit(this.translate.instant('duplicate'));
-        await this.readContents();
-    }
-
-    public async restore(element: IContainer): Promise<void> {
-        await this.dataService.performOperations(element.url, 'restore');
-        // await this.dataService.commit(this.translate.instant('duplicate'));
-        await this.readContents();
+    public async recycle(element: T,
+        message: string = this.translate.instant('doYouReallyWantToDelete', { name: element.name })): Promise<void> {
+        try {
+            await this.modal.openOkCancel('ConfirmationRequired', message);
+            await this.dataService.recycleElement(element.url);
+            await this.readContents();
+        } catch (e) { }
     }
 
     protected async readContents(): Promise<void> {

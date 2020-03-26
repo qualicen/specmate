@@ -64,9 +64,6 @@ export class IconSelector implements OnInit {
     get isRecycled() {
         return this.model.isRecycled;
     }
-    get isLibrary() {
-        return ((this.model as Folder).library);
-    }
 
     private isElementChildOfModel(): boolean {
          return this.parent && (Type.is(this.parent, CEGModel) || Type.is(this.parent, Process));

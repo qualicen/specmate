@@ -118,8 +118,6 @@ export class ElementTree implements OnInit {
         return false;
     }
 
-
-
     async ngOnInit() {
         const siblings = await this.dataService.readContents(Url.parent(this.baseUrl));
         const element = siblings.find(element => element.url === this.baseUrl);
@@ -197,7 +195,7 @@ export class ElementTree implements OnInit {
     }
 
     public get hasRestore(): boolean {
-        return this.element.isRecycled;
+        return this.element.isRecycled && this.parent && this.parent.isRecycled === false;
     }
 
     private get isRoot(): boolean {

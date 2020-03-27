@@ -1107,4 +1107,47 @@ public class CrudTest extends EmfRestTest {
 		Assert.assertTrue(retrievedRequirement.getBoolean("hasRecycledChildren") == false);
 		Assert.assertTrue(retrievedRequirement.getBoolean("isRecycled") == false);
 	}
+	
+	@Test
+	public void testRestoreTestSpecInMultipleFolder() {
+		JSONObject folder = postFolderToTopFolder();
+		String folderName = getId(folder);
+		
+		JSONObject subFolder = postFolder(folderName);
+		String subFolderName = getId(subFolder);
+		
+		JSONObject subSubFolder = postFolder(folderName, subFolderName);
+		String subSubFolderName = getId(subSubFolder);
+
+
+		JSONObject ceg = postCEG(folderName, subFolderName, subSubFolderName);
+		String cegName = getId(ceg);
+
+		JSONObject testSpec = postTestSpecification(folderName, subFolderName, subSubFolderName, cegName);
+		String testSpecName = getId(testSpec);
+
+		recycleObject(folderName, subFolderName, subSubFolderName, cegName);
+
+		restoreObject(folderName, subFolderName, subSubFolderName, cegName, testSpecName);
+
+		JSONObject retrievedFolder = getObject(folderName);
+		Assert.assertTrue(retrievedFolder.getBoolean("hasRecycledChildren") == false);
+		Assert.assertTrue(retrievedFolder.getBoolean("isRecycled") == false);
+		
+		JSONObject retrievedSubFolder = getObject(folderName, subFolderName);
+		Assert.assertTrue(retrievedSubFolder.getBoolean("hasRecycledChildren") == false);
+		Assert.assertTrue(retrievedSubFolder.getBoolean("isRecycled") == false);
+		
+		JSONObject retrievedSubSubFolder = getObject(folderName, subFolderName, subSubFolderName);
+		Assert.assertTrue(retrievedSubSubFolder.getBoolean("hasRecycledChildren") == false);
+		Assert.assertTrue(retrievedSubSubFolder.getBoolean("isRecycled") == false);
+
+		JSONObject retrievedCeg = getObject(folderName, subFolderName, subSubFolderName, cegName);
+		Assert.assertTrue(retrievedCeg.getBoolean("hasRecycledChildren") == false);
+		Assert.assertTrue(retrievedCeg.getBoolean("isRecycled") == false);
+
+		JSONObject retrievedTestSpec = getObject(folderName, subFolderName, subSubFolderName, cegName, testSpecName);
+		Assert.assertTrue(retrievedTestSpec.getBoolean("hasRecycledChildren") == false);
+		Assert.assertTrue(retrievedTestSpec.getBoolean("isRecycled") == false);
+	}
 }

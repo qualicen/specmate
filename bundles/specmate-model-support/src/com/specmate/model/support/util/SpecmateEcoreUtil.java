@@ -77,6 +77,7 @@ public class SpecmateEcoreUtil {
 				SpecmateEcoreUtil.setAttributeValue(parent, true, "hasRecycledChildren");
 				while (parentsList.size() > 0) {
 					EObject child = parentsList.pop();
+					SpecmateEcoreUtil.setAttributeValue(child, false, "isRecycled");
 					SpecmateEcoreUtil.setAttributeValue(child, true, "hasRecycledChildren");
 				}
 				return;

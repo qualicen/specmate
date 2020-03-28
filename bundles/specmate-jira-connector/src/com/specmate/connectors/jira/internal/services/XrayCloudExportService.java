@@ -1,10 +1,14 @@
 package com.specmate.connectors.jira.internal.services;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.osgi.service.component.annotations.Activate;
@@ -25,6 +29,7 @@ import com.specmate.model.testspecification.TestProcedure;
 import com.specmate.model.testspecification.TestSpecification;
 import com.specmate.model.testspecification.TestStep;
 import com.specmate.rest.RestClient;
+import com.specmate.rest.RestResult;
 
 /** Exporter for jira */
 @Component(immediate = true, service = IExporter.class, configurationPid = XrayCloudExportService.PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
@@ -48,7 +53,7 @@ public class XrayCloudExportService extends ExporterBase {
 	/** The issue type for tests */
 	private String testType;
 
-	/** URL to the jira instance */
+	/** URL to the xray cloud */
 	private String url;
 
 	/** Name of the jira project */
@@ -73,6 +78,28 @@ public class XrayCloudExportService extends ExporterBase {
 		clientId = (String) properties.get(KEY_XRAY_CLIENT_ID);
 		clientSecret = (String) properties.get(KEY_XRAY_CLIENT_SECRET);
 		testType = (String) properties.get(KEY_XRAY_TEST_TYPE);
+
+		try {
+			new URL(url);
+		} catch (MalformedURLException e) {
+			throw new SpecmateInternalException(ErrorCode.CONFIGURATION, "Malformed xray cloud URL: " + url);
+		}
+		if (StringUtils.isBlank(xrayProjectName)) {
+			throw new SpecmateInternalException(ErrorCode.CONFIGURATION,
+					"No or empty project name given for xray cloud exporter.");
+		}
+		if (StringUtils.isBlank(clientId)) {
+			throw new SpecmateInternalException(ErrorCode.CONFIGURATION,
+					"No or empty client id given for xray cloud exporter.");
+		}
+		if (StringUtils.isBlank(clientSecret)) {
+			throw new SpecmateInternalException(ErrorCode.CONFIGURATION,
+					"No or empty client secret given for xray cloud exporter.");
+		}
+		if (StringUtils.isBlank(testType)) {
+			logService.log(LogService.LOG_WARNING, "No test type provided for xray cloud export, assuming \"Manual\"");
+			testType = "Manual";
+		}
 		restClient = new RestClient(url, 10000, logService);
 	}
 
@@ -109,8 +136,16 @@ public class XrayCloudExportService extends ExporterBase {
 
 	public Optional<Export> exportTestProcedure(TestProcedure testProcedure) throws SpecmateException {
 		String token = authenticate();
+		token = token.replaceAll("^\"|\"$", "");
+		Map<String, String> headers = new HashMap<>();
+		headers.put("Authorization", "Bearer " + token);
 		JSONArray exportObjs = getExportObjects(testProcedure);
-
+		RestResult<JSONObject> result = restClient.post(xrayPath("/import/test/bulk"), exportObjs, null, headers);
+		if (result.getResponse().getStatus() == Response.Status.OK.getStatusCode()) {
+			return Optional.empty();
+		} else {
+			throw new SpecmateInternalException(ErrorCode.JIRA, "Could not export test procedure");
+		}
 	}
 
 	private JSONArray getExportObjects(TestProcedure testProcedure) {
@@ -127,9 +162,14 @@ public class XrayCloudExportService extends ExporterBase {
 		JSONArray steps = new JSONArray();
 		for (TestStep step : SpecmateEcoreUtil.getStepsSorted(testProcedure)) {
 			JSONObject stepObj = new JSONObject();
-			stepObj.put("action", step.getDescription());
-			stepObj.put("result", step.getExpectedOutcome());
-			steps.put(step);
+			String action = step.getDescription();
+			String result = step.getExpectedOutcome();
+			if (StringUtils.isBlank(action)) {
+				action = "<empty>";
+			}
+			stepObj.put("action", action);
+			stepObj.put("result", result);
+			steps.put(stepObj);
 		}
 		exportObj.put("steps", steps);
 
@@ -142,7 +182,7 @@ public class XrayCloudExportService extends ExporterBase {
 		JSONObject authObj = new JSONObject();
 		authObj.put("client_id", clientId);
 		authObj.put("client_secret", clientSecret);
-		Response result = restClient.rawPost("/authenticate", authObj);
+		Response result = restClient.rawPost(xrayPath("/authenticate"), authObj, null, null);
 		if (result.getStatus() == Response.Status.OK.getStatusCode()) {
 			return result.readEntity(String.class);
 		} else {
@@ -150,14 +190,14 @@ public class XrayCloudExportService extends ExporterBase {
 		}
 	}
 
+	private String xrayPath(String path) {
+		return "/api/v1" + path;
+	}
+
 	@Override
 	public boolean isAuthorizedToExport(String username, String password) {
-		try {
-			return JiraUtil.authenticate(url, projectName, username, password);
-		} catch (SpecmateException e) {
-			logService.log(LogService.LOG_ERROR, "Exception occured when authorizing for export", e);
-			return false;
-		}
+		// we cannot check on a per user basis, assume true
+		return true;
 	}
 
 	@Reference

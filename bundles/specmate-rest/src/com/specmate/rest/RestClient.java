@@ -1,5 +1,7 @@
 package com.specmate.rest;
 
+import java.util.Map;
+
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -54,36 +56,49 @@ public class RestClient {
 		return client;
 	}
 
-	private Response rawGet(String url, String... params) {
-		Invocation.Builder invocationBuilder = getInvocationBuilder(url, params);
+	private Response rawGet(String url, Map<String, String> params, Map<String, String> headers) {
+		Invocation.Builder invocationBuilder = getInvocationBuilder(url, params, headers);
 		Response response = invocationBuilder.get();
 		return response;
 	}
 
-	private Invocation.Builder getInvocationBuilder(String url, String... params) {
+	private Invocation.Builder getInvocationBuilder(String url, Map<String, String> params,
+			Map<String, String> headers) {
 		UriBuilder uriBuilder = UriBuilder.fromUri(restUrl);
 		uriBuilder.path(url);
-		for (int i = 0; i < params.length; i += 2) {
-			if (i < params.length - 1) {
-				uriBuilder.queryParam(params[i], params[i + 1]);
-			}
+		if (params != null) {
+			params.forEach((key, val) -> uriBuilder.queryParam(key, val));
 		}
+
 		if (logService != null) {
 			logService.log(LogService.LOG_DEBUG, "Building Invocation for " + uriBuilder);
 		}
 		WebTarget getTarget = restClient.target(uriBuilder);
-		Invocation.Builder invocationBuilder = getTarget.request().header(HttpHeaders.AUTHORIZATION,
-				"Token " + authenticationToken);
+		Invocation.Builder invocationBuilder = getTarget.request();
+		if (authenticationToken != null && !authenticationToken.isEmpty()) {
+			invocationBuilder.header(HttpHeaders.AUTHORIZATION, "Token " + authenticationToken);
+		}
+		if (headers != null) {
+			headers.forEach((key, val) -> invocationBuilder.header(key, val));
+		}
 		return invocationBuilder;
 	}
 
-	public RestResult<JSONObject> get(String url, String... params) {
-		Response response = rawGet(url, params);
+	public RestResult<JSONObject> get(String url, Map<String, String> params, Map<String, String> headers) {
+		Response response = rawGet(url, params, headers);
 		return createResult(url, response);
 	}
 
-	public RestResult<JSONArray> getList(String url, String... params) {
-		Response response = rawGet(url, params);
+	public RestResult<JSONObject> get(String url, Map<String, String> params) {
+		return get(url, params, null);
+	}
+
+	public RestResult<JSONObject> get(String url) {
+		return get(url, null, null);
+	}
+
+	public RestResult<JSONArray> getList(String url, Map<String, String> params, Map<String, String> headers) {
+		Response response = rawGet(url, params, headers);
 		if (response.hasEntity()) {
 			String result = response.readEntity(String.class);
 			return new RestResult<>(response, url, new JSONArray(new JSONTokener(result)));
@@ -92,33 +107,67 @@ public class RestClient {
 		}
 	}
 
-	public RestResult<JSONObject> post(String url, JSONObject jsonObject) {
-		Response response = rawPost(url, jsonObject);
+	public RestResult<JSONArray> getList(String url, Map<String, String> params) {
+		return getList(url, params, null);
+	}
+
+	public RestResult<JSONArray> getList(String url) {
+		return getList(url, null, null);
+	}
+
+	public RestResult<JSONObject> post(String url, Object object, Map<String, String> params,
+			Map<String, String> headers) {
+		Response response = rawPost(url, object, params, headers);
 		return createResult(url, response);
 	}
 
-	public Response rawPost(String url, JSONObject jsonObject) {
-		Invocation.Builder invocationBuilder = getInvocationBuilder(url);
+	public RestResult<JSONObject> post(String url, Object object, Map<String, String> params) {
+		return post(url, object, params, null);
+	}
+
+	public RestResult<JSONObject> post(String url, Object object) {
+		return post(url, object, null, null);
+	}
+
+	public Response rawPost(String url, Object object, Map<String, String> params, Map<String, String> headers) {
+		Invocation.Builder invocationBuilder = getInvocationBuilder(url, params, headers);
 		Entity<String> entity;
-		if (jsonObject == null) {
+		if (object == null) {
 			entity = null;
 		} else {
-			entity = Entity.entity(jsonObject.toString(), "application/json;charset=utf-8");
+			entity = Entity.entity(object.toString(), "application/json;charset=utf-8");
 		}
 		Response response = invocationBuilder.post(entity);
 		return response;
 	}
 
-	public RestResult<JSONObject> put(String url, JSONObject objectJson) {
-		Invocation.Builder invocationBuilder = getInvocationBuilder(url);
+	public RestResult<JSONObject> put(String url, JSONObject objectJson, Map<String, String> params,
+			Map<String, String> headers) {
+		Invocation.Builder invocationBuilder = getInvocationBuilder(url, params, headers);
 		Response response = invocationBuilder.put(Entity.json(objectJson.toString()));
 		return createResult(url, response);
 	}
 
-	public RestResult<JSONObject> delete(String url) {
-		Invocation.Builder invocationBuilder = getInvocationBuilder(url);
+	public RestResult<JSONObject> put(String url, JSONObject objectJson, Map<String, String> params) {
+		return put(url, objectJson, params, null);
+	}
+
+	public RestResult<JSONObject> put(String url, JSONObject objectJson) {
+		return put(url, objectJson, null, null);
+	}
+
+	public RestResult<JSONObject> delete(String url, Map<String, String> params, Map<String, String> headers) {
+		Invocation.Builder invocationBuilder = getInvocationBuilder(url, params, headers);
 		Response response = invocationBuilder.delete();
 		return createResult(url, response);
+	}
+
+	public RestResult<JSONObject> delete(String url, Map<String, String> params) {
+		return delete(url, params, null);
+	}
+
+	public RestResult<JSONObject> delete(String url) {
+		return delete(url, null, null);
 	}
 
 	private RestResult<JSONObject> createResult(String url, Response response) {

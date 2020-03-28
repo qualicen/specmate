@@ -51,36 +51,36 @@ public class InMemorySessionServiceTest {
 		String projectName = "testIsAuthorized";
 		UserSession session = sessionService.create(AccessRights.ALL, AccessRights.ALL, userName, password,
 				projectName);
-		assertTrue(sessionService.isAuthorized(session.getId(), baseURL + projectName + "/resource1"));
-		assertTrue(sessionService.isAuthorized(session.getId(), baseURL + projectName + "/resource1/resource2"));
-		assertTrue(sessionService.isAuthorized(session.getId(), baseURL + projectName + "/"));
-		assertFalse(sessionService.isAuthorized(session.getId(), baseURL + projectName));
-		assertFalse(sessionService.isAuthorized(session.getId(), baseURL));
-		assertFalse(sessionService.isAuthorized(session.getId(), baseURL.substring(0, baseURL.length() - 1)));
+		assertTrue(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName + "/resource1"));
+		assertTrue(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName + "/resource1/resource2"));
+		assertTrue(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName + "/"));
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName));
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL));
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL.substring(0, baseURL.length() - 1)));
 	}
 
 	@Test
 	public void testRegexInjection() throws SpecmateException {
 		UserSession session = sessionService.create(AccessRights.ALL, AccessRights.ALL, userName, password,
 				"testRegexInjection");
-		assertFalse(sessionService.isAuthorized(session.getId(), baseURL + "project/resource1"));
-		assertFalse(sessionService.isAuthorized(session.getId(), baseURL + "project/"));
-		assertFalse(sessionService.isAuthorized(session.getId(), baseURL + "project"));
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL + "project/resource1"));
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL + "project/"));
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL + "project"));
 
 		session = sessionService.create(AccessRights.ALL, AccessRights.ALL, userName, password, "");
-		assertFalse(sessionService.isAuthorized(session.getId(), baseURL + "pro/resource1"));
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL + "pro/resource1"));
 		sessionService.delete(session.getId());
 
 		session = sessionService.create(AccessRights.ALL, AccessRights.ALL, userName, password, "?");
-		assertFalse(sessionService.isAuthorized(session.getId(), baseURL + "p/resource1"));
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL + "p/resource1"));
 		sessionService.delete(session.getId());
 
 		session = sessionService.create(AccessRights.ALL, AccessRights.ALL, userName, password, ".*");
-		assertFalse(sessionService.isAuthorized(session.getId(), baseURL + "pr/resource1"));
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL + "pr/resource1"));
 		sessionService.delete(session.getId());
 
 		session = sessionService.create(AccessRights.ALL, AccessRights.ALL, userName, password, ".+");
-		assertFalse(sessionService.isAuthorized(session.getId(), baseURL + "pro/resource1"));
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL + "pro/resource1"));
 	}
 
 	@Test
@@ -88,9 +88,9 @@ public class InMemorySessionServiceTest {
 		String projectName = "testDeleteSession";
 		UserSession session = sessionService.create(AccessRights.ALL, AccessRights.ALL, userName, password,
 				projectName);
-		assertTrue(sessionService.isAuthorized(session.getId(), baseURL + projectName + "/resource1"));
+		assertTrue(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName + "/resource1"));
 		sessionService.delete(session.getId());
-		assertFalse(sessionService.isAuthorized(session.getId(), baseURL + projectName + "/resource1"));
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName + "/resource1"));
 	}
 
 	private static ISessionService getSessionService() throws Exception {

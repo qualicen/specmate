@@ -22,7 +22,7 @@ import com.atlassian.jira.rest.client.api.domain.input.IssueInput;
 import com.atlassian.jira.rest.client.api.domain.input.IssueInputBuilder;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
-import com.specmate.connectors.jira.config.JiraConnectorConfig;
+import com.specmate.connectors.jira.config.JiraConfigConstants;
 import com.specmate.export.api.ExporterBase;
 import com.specmate.export.api.IExporter;
 import com.specmate.model.administration.ErrorCode;
@@ -35,7 +35,7 @@ import com.specmate.model.testspecification.TestStep;
 import io.atlassian.util.concurrent.Promise;
 
 /** Exorter for jira */
-@Component(immediate = true, service = IExporter.class, configurationPid = JiraConnectorConfig.EXPORTER_PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
+@Component(immediate = true, service = IExporter.class, configurationPid = JiraConfigConstants.EXPORTER_PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
 public class JiraExportService extends ExporterBase {
 
 	/** Reference to the logging service */
@@ -62,10 +62,10 @@ public class JiraExportService extends ExporterBase {
 
 	@Activate
 	public void activate(Map<String, Object> properties) throws SpecmateException {
-		url = (String) properties.get(JiraConnectorConfig.KEY_JIRA_URL);
-		projectName = (String) properties.get(JiraConnectorConfig.KEY_JIRA_PROJECT);
-		username = (String) properties.get(JiraConnectorConfig.KEY_JIRA_USERNAME);
-		password = (String) properties.get(JiraConnectorConfig.KEY_JIRA_PASSWORD);
+		url = (String) properties.get(JiraConfigConstants.KEY_JIRA_URL);
+		projectName = (String) properties.get(JiraConfigConstants.KEY_JIRA_PROJECT);
+		username = (String) properties.get(JiraConfigConstants.KEY_JIRA_USERNAME);
+		password = (String) properties.get(JiraConfigConstants.KEY_JIRA_PASSWORD);
 
 		JiraRestClient jiraClient = null;
 		try {

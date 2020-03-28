@@ -24,7 +24,7 @@ import com.specmate.usermodel.UserSession;
 public class InMemorySessionServiceTest {
 	private static ISessionService sessionService;
 	private static BundleContext context;
-	private String baseURL = "localhost/services/rest/";
+	private String baseURL = "/services/rest/";
 	private String userName = "testuser";
 	private String password = "testpass";
 

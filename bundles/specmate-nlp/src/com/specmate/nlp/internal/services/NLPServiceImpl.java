@@ -71,7 +71,7 @@ public class NLPServiceImpl implements INLPService {
 			posTagger = createEngineDescription(OpenNlpPosTagger.class, OpenNlpPosTagger.PARAM_LANGUAGE, lang,
 					OpenNlpPosTagger.PARAM_VARIANT, "maxent");
 			chunker = createEngineDescription(OpenNlpChunker.class, OpenNlpChunker.PARAM_LANGUAGE, lang);
-			dependencyParser = createEngineDescription(DependencyParserAnalysisComponent.class, lang);
+			dependencyParser = createEngineDescription(DependencyParserAnalysisComponent.class, DependencyParserAnalysisComponent.PARAM_LANGUAGE, lang);
 			parser = createEngineDescription(OpenNlpParser.class, OpenNlpParser.PARAM_PRINT_TAGSET, true,
 					OpenNlpParser.PARAM_LANGUAGE, lang, OpenNlpParser.PARAM_WRITE_PENN_TREE, true,
 					OpenNlpParser.PARAM_WRITE_POS, true);

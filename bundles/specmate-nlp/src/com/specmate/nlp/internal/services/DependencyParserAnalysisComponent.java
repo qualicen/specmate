@@ -2,8 +2,17 @@ package com.specmate.nlp.internal.services;
 
 import java.util.List;
 
+import javax.ws.rs.core.Response.Status;
+
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+import org.osgi.service.log.LogService;
+
+import com.specmate.common.exception.SpecmateInternalException;
+import com.specmate.model.administration.ErrorCode;
+import com.specmate.rest.RestClient;
+import com.specmate.rest.RestResult;
 
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.fit.component.JCasAnnotator_ImplBase;
@@ -21,9 +30,18 @@ public class DependencyParserAnalysisComponent extends JCasAnnotator_ImplBase {
 
 	public static final java.lang.String PARAM_LANGUAGE = "language";
 
+	// Variablen für den REST Call an die Spacy API
+	private static final String SPACY_API_BASE_URL = "http://localhost...";
+	private static final int TIMEOUT = 5000;
+	private LogService logService;
+	private RestClient restClient;
+
 	@Override
 	public void process(JCas jcas) throws AnalysisEngineProcessException {
 		String text = jcas.getDocumentText();
+		// Call Spacy API
+		// JSONObject result = this.accessSpacyAPI(text);
+
 		JSONObject result = new JSONObject();
 
 		// "Fake Data" --> Rest Call muss noch hinzugefügt werden.
@@ -48,50 +66,55 @@ public class DependencyParserAnalysisComponent extends JCasAnnotator_ImplBase {
 
 			// Nur wenn beide Methoden die gleichen Tokens erzeugt haben, macht es Sinn die
 			// Dependencies zu erzeugen.
+			try {
+				if (checkTokenization(tokens, allWords)) {
+					for (int i = 0; i < tokens.size(); i++) {
+						// 1. Schritt: Suche alle Dependencies in denen der Token eine Rolle spielt.
+						// Dazu holen wir uns erst alle Dependencies bzw. Arcs
+						JSONArray allArcs = result.getJSONArray("arcs");
 
-			if (checkTokenization(tokens, allWords)) {
-				for (int i = 0; i < tokens.size(); i++) {
-					// 1. Schritt: Suche alle Dependencies in denen der Token eine Rolle spielt.
-					// Dazu holen wir uns erst alle Dependencies bzw. Arcs
-					JSONArray allArcs = result.getJSONArray("arcs");
+						// Wir iterieren über alle Dependencies
+						for (int j = 1; j < allArcs.length(); j++) {
+							Object currentArc = allArcs.get(j - 1);
 
-					// Wir iterieren über alle Dependencies
-					for (int j = 1; j < allArcs.length(); j++) {
-						Object currentArc = allArcs.get(j - 1);
+							// Get description of current dependency
+							Object start = ((JSONObject) currentArc).get("start");
+							Object end = ((JSONObject) currentArc).get("end");
+							Object label = ((JSONObject) currentArc).get("label");
+							Object dir = ((JSONObject) currentArc).get("dir");
 
-						// Get description of current dependency
-						Object start = ((JSONObject) currentArc).get("start");
-						Object end = ((JSONObject) currentArc).get("end");
-						Object label = ((JSONObject) currentArc).get("label");
-						Object dir = ((JSONObject) currentArc).get("dir");
+							// Überprüfe ob Token als Start einer Dependency auftaucht
+							// Dann erzeugen wir eine Dependency.
+							if ((int) start == i) {
+								Dependency dep = new Dependency(jcas);
+								dep.setDependencyType((String) label);
+								dep.setFlavor(DependencyFlavor.BASIC);
 
-						// Überprüfe ob Token als Start einer Dependency auftaucht
-						// Dann erzeugen wir eine Dependency. 
-						if ((int) start == i) {
-							Dependency dep = new Dependency(jcas);
-							dep.setDependencyType((String) label);
-							dep.setFlavor(DependencyFlavor.BASIC);
-
-							// Ist der Token Governor oder Dependent?
-							// Dependent, wenn der Pfeil auf den Token zeigt und vice versa
-							if (dir.equals("left")) {
-								dep.setDependent(tokens.get(i));
-								dep.setGovernor(tokens.get((int) end));
-							} else if (dir.equals("right")) {
-								dep.setGovernor(tokens.get(i));
-								dep.setDependent(tokens.get((int) end));
+								// Ist der Token Governor oder Dependent?
+								// Dependent, wenn der Pfeil auf den Token zeigt und vice versa
+								if (dir.equals("left")) {
+									dep.setDependent(tokens.get(i));
+									dep.setGovernor(tokens.get((int) end));
+								} else if (dir.equals("right")) {
+									dep.setGovernor(tokens.get(i));
+									dep.setDependent(tokens.get((int) end));
+								}
+								dep.setBegin(dep.getDependent().getBegin());
+								dep.setEnd(dep.getDependent().getEnd());
+								dep.addToIndexes();
 							}
-							dep.setBegin(dep.getDependent().getBegin());
-							dep.setEnd(dep.getDependent().getEnd());
-							dep.addToIndexes();
 						}
 					}
 				}
+			} catch (SpecmateInternalException e) {
+				e.printStackTrace();
+			} catch (JSONException e) {
+				e.printStackTrace();
 			}
 		}
 	}
 
-	public boolean checkTokenization(List<Token> DKProTokens, JSONArray SpacyTokens) {
+	public boolean checkTokenization(List<Token> DKProTokens, JSONArray SpacyTokens) throws SpecmateInternalException {
 
 		int sameTokenziationCounter = 0;
 
@@ -109,12 +132,36 @@ public class DependencyParserAnalysisComponent extends JCasAnnotator_ImplBase {
 			}
 		}
 
-		if (sameTokenziationCounter == DKProTokens.size()) {
+		// 1. Haben DKPro und Spacy die gleiche Anzahl an Tokens erstellt (Quantitativer
+		// Vergleich)?
+		// 2. Sind die Tokens absolut identisch (Inhaltlicher Vergleich)?
+		if (sameTokenziationCounter == DKProTokens.size() && DKProTokens.size() == SpacyTokens.length()) {
 			return true;
 		} else {
-			return false;
+			throw new SpecmateInternalException(ErrorCode.SPACY,
+					"DKPro and Spacy generate different set of tokens. Dependency tree can not be created.");
 		}
+	}
 
+	public JSONObject accessSpacyAPI(String requirement) throws SpecmateInternalException {
+		restClient = new RestClient(SPACY_API_BASE_URL, TIMEOUT, logService);
+
+		// Set model parameters
+		JSONObject request = new JSONObject();
+		request.put("text", requirement);
+		request.put("model", "en");
+		request.put("collapse_punctuation", 0);
+		request.put("collapse_phrases", 0);
+
+		RestResult<JSONObject> result = this.restClient.post("/dep", request);
+		if (result.getResponse().getStatus() == Status.OK.getStatusCode()) {
+			result.getResponse().close();
+			return result.getPayload();
+		} else {
+			result.getResponse().close();
+			throw new SpecmateInternalException(ErrorCode.SPACY,
+					"Could not access Spacy API. Dependencies could not be loaded.");
+		}
 	}
 
 }

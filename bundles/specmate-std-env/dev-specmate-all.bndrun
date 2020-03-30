@@ -219,7 +219,6 @@
 	specmate-cause-effect-patterns;version=snapshot,\
 	specmate-xtext;version=snapshot,\
 	specmate-objectif;version=snapshot,\
-	jaxb-api;version='[2.3.1,2.3.2)',\
 	specmate-export;version=snapshot,\
 	specmate-connectors-api;version=snapshot,\
 	specmate-export-api;version=snapshot,\
@@ -229,7 +228,8 @@
 	io.atlassian.util.concurrent.atlassian-util-concurrent;version='[4.0.1,4.0.2)',\
 	org.apache.commons.logging;version='[1.2.0,1.2.1)',\
 	org.apache.httpcomponents.httpasyncclient;version='[4.1.4,4.1.5)',\
-	org.apache.httpcomponents.httpclient;version='[4.5.5,4.5.6)'
+	org.apache.httpcomponents.httpclient;version='[4.5.5,4.5.6)',\
+	jaxb-api;version='[2.3.0,2.3.1)'
 
 -runproperties: \
 	jetty.http.port=8080,\

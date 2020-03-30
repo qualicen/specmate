@@ -16,6 +16,7 @@ import { NavigatorService } from '../../navigator/services/navigator.service';
 import { Id } from 'src/app/util/id';
 import { TranslateService } from '@ngx-translate/core';
 import { ContentsContainerService } from 'src/app/modules/views/main/editors/modules/contents-container/services/content-container.service';
+import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
 
 @Component({
     moduleId: module.id.toString(),
@@ -43,6 +44,7 @@ export class ElementTree implements OnInit {
         private dataService: SpecmateDataService,
         private navigator: NavigatorService,
         private translate: TranslateService,
+        private modal: ConfirmationModal,
         private contentService: ContentsContainerService) { }
 
     public get contents(): IContainer[] {
@@ -214,6 +216,11 @@ export class ElementTree implements OnInit {
 
     public async delete(): Promise<void> {
         try {
+            let message = this.translate.instant('doYouReallyWantToDeletePermanent', { name: this.element.name });
+            if (Type.is(this.element, Folder)) {
+                message = this.translate.instant('doYouReallyWantToDeleteFolderPermanent', { name: this.element.name });
+            }
+            await this.modal.openOkCancel('ConfirmationRequired', message);
             await this.dataService.deleteElement(this.element.url, false, Id.uuid);
             await this.dataService.commit(this.translate.instant('delete'));
             await this.dataService.readContents(this.parent.url, false);
@@ -221,10 +228,14 @@ export class ElementTree implements OnInit {
     }
 
     public async restore(): Promise<void> {
-        await this.dataService.restoreElement(this.element.url);
-        await this.dataService.readElement(this.element.url, false);
-        this.contentService.isDeleted();
-        this.initContents();
+        try {
+            let message = this.translate.instant('doYouReallyWantToRestore', { name: this.element.name });
+            await this.modal.openOkCancel('ConfirmationRequired', this.translate.instant('doYouReallyWantToRestore', { name: this.element.name }));
+            await this.dataService.restoreElement(this.element.url);
+            await this.dataService.readElement(this.element.url, false);
+            this.contentService.isDeleted();
+            this.initContents();
+        } catch (e) { }
     }
 
     public handleKey(event: KeyboardEvent, shouldToggle?: boolean): void {

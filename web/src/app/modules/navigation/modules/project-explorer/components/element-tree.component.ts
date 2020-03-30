@@ -230,7 +230,7 @@ export class ElementTree implements OnInit {
     public async restore(): Promise<void> {
         try {
             let message = this.translate.instant('doYouReallyWantToRestore', { name: this.element.name });
-            await this.modal.openOkCancel('ConfirmationRequired', this.translate.instant('doYouReallyWantToRestore', { name: this.element.name }));
+            await this.modal.openOkCancel('ConfirmationRequired', message);
             await this.dataService.restoreElement(this.element.url);
             await this.dataService.readElement(this.element.url, false);
             this.contentService.isDeleted();

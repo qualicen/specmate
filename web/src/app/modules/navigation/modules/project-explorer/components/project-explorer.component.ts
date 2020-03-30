@@ -131,7 +131,8 @@ export class ProjectExplorer implements OnInit {
         this._rootElements = projectContents.filter(c => Type.is(c, Folder) && !(c as Folder).library);
         this._rootLibraries = projectContents.filter(c => Type.is(c, Folder) && (c as Folder).library && libraryFolders.indexOf(c.id) > -1);
         this._rootRecycleBinProject = projectContents.filter(c => Type.is(c, Folder) && !(c as Folder).library);
-        this._rootRecycleBinLibrary = projectContents.filter(c => Type.is(c, Folder) && (c as Folder).library && libraryFolders.indexOf(c.id) > -1);
+        this._rootRecycleBinLibrary = projectContents.filter(c => Type.is(c, Folder) && (c as Folder).library
+                                && libraryFolders.indexOf(c.id) > -1);
 
         let filter = { '-type': 'Folder' };
 
@@ -153,6 +154,11 @@ export class ProjectExplorer implements OnInit {
                 }
             }
             );
+    }
+
+    public get recycleBinIsEmpty(): boolean {
+        return this._rootRecycleBinProject.filter(e => e.hasRecycledChildren === true).length === 0 &&
+            this._rootRecycleBinLibrary.filter(e => e.hasRecycledChildren === true).length === 0;
     }
 
     public loadMoreProjectFolders(): void {

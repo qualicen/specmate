@@ -223,9 +223,7 @@ export class ElementTree implements OnInit {
     public async restore(): Promise<void> {
         await this.dataService.restoreElement(this.element.url);
         await this.dataService.readElement(this.element.url, false);
-        if (Type.is(this.currentElement, Requirement) || Type.is(this.currentElement, Folder)) {
-            this.contentService.isDeleted();
-        }
+        this.contentService.isDeleted();
         this.initContents();
     }
 

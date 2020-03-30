@@ -13,8 +13,8 @@ Export-Package: \
 	org.eclipse.emf.cdo.common,\
 	org.eclipse.net4j.util,\
 	org.apache.commons.lang3,\
-	specmate-config-api;version=latest,\
-	com.google.guava
+	com.google.guava;version=latest,\
+	specmate-config-api;version=latest
 -dsannotations:  \
 	*
 Private-Package: com.specmate.model.support.internal

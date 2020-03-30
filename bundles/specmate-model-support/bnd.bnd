@@ -3,6 +3,7 @@ Export-Package: \
 	com.specmate.model.support.util,\
 	com.specmate.urihandler
 -buildpath: \
+	com.google.guava,\
 	org.eclipse.emf.common,\
 	org.eclipse.emf.ecore,\
 	org.eclipse.emf.cdo,\
@@ -13,7 +14,6 @@ Export-Package: \
 	org.eclipse.emf.cdo.common,\
 	org.eclipse.net4j.util,\
 	org.apache.commons.lang3,\
-	com.google.guava,\
 	specmate-config-api;version=latest
 -dsannotations:  \
 	*

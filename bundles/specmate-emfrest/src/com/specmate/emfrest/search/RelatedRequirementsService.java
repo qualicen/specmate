@@ -50,12 +50,14 @@ public class RelatedRequirementsService extends RestServiceBase {
 
 		List<ProcessStep> ownedProcessSteps = SpecmateEcoreUtil.pickInstancesOf(requirement.eAllContents(),
 				ProcessStep.class);
+		List<ProcessStep> ownedProcessStepsWithoutRecycled = filterRecycledProcessSteps(ownedProcessSteps);
 		Stream<EObject> relatedRequirementsFromOwnedProcess = extractRelatedRequirementsFromSteps(requirement,
-				ownedProcessSteps);
+				ownedProcessStepsWithoutRecycled);
 
 		List<ProcessStep> tracedProcessSteps = pickInstancesOf(requirement.getTracesFrom(), ProcessStep.class);
+		List<ProcessStep> tracedProcessStepsWithoutRecycled = filterRecycledProcessSteps(tracedProcessSteps);
 		Stream<EObject> relatedRequirementsFromTraces = extractRelatedRequirementsFromSteps(requirement,
-				tracedProcessSteps);
+				tracedProcessStepsWithoutRecycled);
 
 		return new RestResult<>(Response.Status.OK,
 				Stream.concat(relatedRequirementsFromOwnedProcess, relatedRequirementsFromTraces).distinct()
@@ -71,5 +73,10 @@ public class RelatedRequirementsService extends RestServiceBase {
 	private Stream<EObject> getRelatedRequirements(ProcessStep step) {
 		return Stream.concat(step.getTracesTo().stream(),
 				Stream.of((ITracingElement) SpecmateEcoreUtil.getFirstAncestorOfType(step, Requirement.class)));
+	}
+
+	private List<ProcessStep> filterRecycledProcessSteps(List<ProcessStep> processStepList) {
+		return processStepList.stream().filter(step -> ((ProcessStep) step).isIsRecycled() == false)
+				.collect(Collectors.toList());
 	}
 }

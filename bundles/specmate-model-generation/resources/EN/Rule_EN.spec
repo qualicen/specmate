@@ -12,7 +12,7 @@ def rule LimitedCondition_2 {
 }
 
 
-def subtrees Cause, Effect, TMP, Effect_SubA, Cause_SubA, Cause_SubB, Cause_SubC
+def subtrees Cause, Effect, TMP, Effect_SubA, Cause_SubA, Cause_SubB, Cause_SubC, Cause_SubD
 
 //  If the tool detects an error then the tool beeps.
 def rule Condition1_1 {
@@ -80,17 +80,23 @@ def rule Condition2_6 {
 	[Cause_SubC] - dep -> [Effect]
 }
 
-// When the tool detects an error, the tool beeps.
 def rule Condition2_7 {
+	[Cause] - mark -> IN:'If'
+	[Cause] - dobj -> [Cause_SubA] - dep -> [Cause_SubB] - dep -> [Cause_SubC] - prep -> [Cause_SubD]  - advmod -> RB:'then'
+	[Cause_SubD] - dep -> [Effect]
+}
+
+// When the tool detects an error, the tool beeps.
+def rule Condition2_8 {
 	[Effect] - dep -> [Cause] - advmod -> WRB:'when'
 }
 
 // The tool beeps when the tool detects an error.
-def rule Condition2_8 {
+def rule Condition2_9 {
 	[Effect] - advcl -> [Cause] - advmod -> WRB:'when'
 }
 
-def rule Condition2_9 {
+def rule Condition2_10 {
 	[Cause] - advmod -> WRB: 'when'
 	[Cause] - parataxis -> [Effect]
 }

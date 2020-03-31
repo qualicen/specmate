@@ -23,6 +23,7 @@ import com.specmate.nlp.api.ELanguage;
 import com.specmate.nlp.api.INLPService;
 import com.specmate.nlp.util.NLPUtil;
 import com.specmate.rest.RestResult;
+import com.specmate.xtext.XTextException;
 
 /**
  * Service to create automatic a CEGModel from a requirement
@@ -41,7 +42,7 @@ public class GenerateModelFromRequirementService extends RestServiceBase {
 
 	@Activate
 	public void activate() throws SpecmateException {
-		this.modelGenCounter = metricsService.createCounter("model_generation_counter",
+		modelGenCounter = metricsService.createCounter("model_generation_counter",
 				"Total number of generated models");
 	}
 
@@ -61,12 +62,12 @@ public class GenerateModelFromRequirementService extends RestServiceBase {
 		model.getContents().clear(); // Delete Contents
 
 		try {
-			this.logService.log(LogService.LOG_INFO, "Model Generation STARTED");
+			logService.log(LogService.LOG_INFO, "Model Generation STARTED");
 			model = generateModelFromDescription(model);
-			this.logService.log(LogService.LOG_INFO, "Model Generation FINISHED");
-			this.modelGenCounter.inc();
+			logService.log(LogService.LOG_INFO, "Model Generation FINISHED");
+			modelGenCounter.inc();
 		} catch (SpecmateException e) {
-			this.logService.log(LogService.LOG_ERROR,
+			logService.log(LogService.LOG_ERROR,
 					"Model Generation failed with following error:\n" + e.getMessage());
 			return new RestResult<>(Response.Status.INTERNAL_SERVER_ERROR);
 		}
@@ -92,16 +93,16 @@ public class GenerateModelFromRequirementService extends RestServiceBase {
 		if (lang == ELanguage.PSEUDO) {
 			generator = new GenerateModelFromPseudoCode();
 		} else {
-			generator = new PatternbasedCEGGenerator(lang, tagger, this.configService);
+			generator = new PatternbasedCEGGenerator(lang, tagger, configService, logService);
 		}
 
 		try {
 			generator.createModel(model, text);
 		} catch (SpecmateException e) {
 			// Generation Backof
-			this.logService.log(LogService.LOG_INFO,
+			logService.log(LogService.LOG_INFO,
 					"NLP model generation failed with the following error: \"" + e.getMessage() + "\"");
-			this.logService.log(LogService.LOG_INFO, "Backing off to rule based generation...");
+			logService.log(LogService.LOG_INFO, "Backing off to rule based generation...");
 			if (lang == ELanguage.DE) {
 				generator = new GermanCEGFromRequirementGenerator(logService, tagger);
 			} else {

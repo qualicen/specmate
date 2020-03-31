@@ -3,8 +3,8 @@ package com.specmate.modelgeneration.stages.processors;
 import com.specmate.cause_effect_patterns.parse.wrapper.LeafTreeNode;
 
 public class ConditionVariableNode extends LeafTreeNode {
-	private final String condition;
-	private final String variable;
+	private String condition;
+	private String variable;
 
 	public ConditionVariableNode(String condition, String variable) {
 		super(variable + " " + condition);
@@ -18,6 +18,20 @@ public class ConditionVariableNode extends LeafTreeNode {
 
 	public String getVariable() {
 		return variable;
+	}
+
+	public void setCondition(String newCondition) {
+		if(newCondition == null) {
+			throw new NullPointerException("Condition can not be null");
+		}
+		condition = newCondition;
+	}
+
+	public void setVariable(String newVariable) {
+		if(newVariable == null) {
+			throw new NullPointerException("Variable can not be null");
+		}
+		variable = newVariable;
 	}
 
 	@Override

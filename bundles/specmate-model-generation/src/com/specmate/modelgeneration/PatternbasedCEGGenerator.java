@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.osgi.service.log.LogService;
+
 import com.specmate.cause_effect_patterns.parse.matcher.MatchResult;
 import com.specmate.cause_effect_patterns.parse.wrapper.BinaryMatchResultTreeNode;
 import com.specmate.cause_effect_patterns.parse.wrapper.MatchResultTreeNode;
@@ -17,40 +19,34 @@ import com.specmate.modelgeneration.stages.GraphBuilder;
 import com.specmate.modelgeneration.stages.GraphLayouter;
 import com.specmate.modelgeneration.stages.MatcherPostProcesser;
 import com.specmate.modelgeneration.stages.RuleMatcher;
+import com.specmate.modelgeneration.stages.TextPreProcessor;
 import com.specmate.modelgeneration.stages.graph.Graph;
 import com.specmate.nlp.api.ELanguage;
 import com.specmate.nlp.api.INLPService;
-import com.specmate.nlp.util.EnglishSentenceUnfolder;
-import com.specmate.nlp.util.GermanSentenceUnfolder;
-import com.specmate.nlp.util.SentenceUnfolderBase;
 
 public class PatternbasedCEGGenerator implements ICEGFromRequirementGenerator {
 	private final INLPService tagger;
 	private final CEGCreation creation;
 	private final ELanguage lang;
 	private final RuleMatcher matcher;
+	private final LogService log;
+	private final TextPreProcessor preProcessor;
 
-	public PatternbasedCEGGenerator(ELanguage lang, INLPService tagger, IConfigService configService)
+	public PatternbasedCEGGenerator(ELanguage lang, INLPService tagger, IConfigService configService, LogService logService)
 			throws SpecmateException {
 		this.tagger = tagger;
 		creation = new CEGCreation();
 		this.lang = lang;
 		matcher = new RuleMatcher(this.tagger, configService, lang);
-	}
-
-	private String preprocessData(String text) throws SpecmateException {
-		SentenceUnfolderBase unfolder;
-		if (lang == ELanguage.DE) {
-			unfolder = new GermanSentenceUnfolder();
-		} else {
-			unfolder = new EnglishSentenceUnfolder();
-		}
-		return unfolder.unfold(tagger, text, lang);
+		log = logService;
+		preProcessor = new TextPreProcessor(lang, tagger);
 	}
 
 	@Override
 	public CEGModel createModel(CEGModel model, String text) throws SpecmateException {
-		text = preprocessData(text);
+		log.log(LogService.LOG_INFO, "Textinput: "+text);
+		text = preProcessor.preProcess(text);
+		log.log(LogService.LOG_INFO, "Text Pre Processing: "+text);
 		final List<MatchResult> results = matcher.matchText(text);
 
 		final MatchTreeBuilder builder = new MatchTreeBuilder();

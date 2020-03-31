@@ -2,6 +2,7 @@ package com.specmate.cause_effect_patterns.parse.wrapper;
 
 import com.specmate.cause_effect_patterns.parse.matcher.MatchResult;
 
+@Deprecated
 public class MatchResultWrapper {
 	public static class SubtreeNames {
 		public static final String CONDITIONAL = "Conditional";

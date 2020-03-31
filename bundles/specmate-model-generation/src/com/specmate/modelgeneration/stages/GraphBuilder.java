@@ -37,14 +37,29 @@ public class GraphBuilder {
 	 * [cause 1, cause 2, ..., cause n, effect]
 	 */
 	private List<MatchResultTreeNode> getClauses(BinaryMatchResultTreeNode root) {
+
+		Vector<MatchResultTreeNode> worklist = new Vector<MatchResultTreeNode>();
+		worklist.add(root);
+		MatchResultTreeNode effect = root;
 		Vector<MatchResultTreeNode> result = new Vector<MatchResultTreeNode>();
-		MatchResultTreeNode current = root;
-		while (current.getType().isCondition()) {
-			result.add( ((BinaryMatchResultTreeNode)current).getFirstArgument());
-			// Decent until we reach the final effect
-			current = ((BinaryMatchResultTreeNode)current).getSecondArgument();
+
+		while(!worklist.isEmpty()) {
+			MatchResultTreeNode current = worklist.remove(0);
+			if(current.getType().isCondition()) {
+				MatchResultTreeNode left = ((BinaryMatchResultTreeNode)current).getFirstArgument();
+				MatchResultTreeNode right = ((BinaryMatchResultTreeNode)current).getSecondArgument();
+				worklist.add(left);
+				worklist.add(right);
+				if(current == effect) {
+					effect = right;
+				}
+			} else {
+				if(current != effect) {
+					result.add(current);
+				}
+			}
 		}
-		result.add(current);
+		result.add(effect);
 		return result;
 	}
 

@@ -6,7 +6,7 @@ See [Wiki](https://github.com/qualicen/specmate/wiki/How-to-setup-a-Specmate-dev
 ## Frontend Commands
 See [Wiki](https://github.com/qualicen/specmate/wiki/Frontend-Commands)
 
-## Frontend Stucture
+## Frontend Structure
 See [Wiki](https://github.com/qualicen/specmate/wiki/Frontend-Code-Overview)
 
 ## Build

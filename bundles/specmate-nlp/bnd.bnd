@@ -78,7 +78,8 @@
 	org.sat4j.pb,\
 	specmate-emfrest-api;version=latest,\
 	specmate-rest;version=latest,\
-	org.apache.servicemix.bundles.junit
+	org.apache.servicemix.bundles.junit,\
+	org.json
 
 
 Private-Package: \

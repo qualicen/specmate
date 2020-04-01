@@ -60,7 +60,7 @@
     "@angular-devkit/build-angular": "0.803.18",
     "@angular/cli": "8.3.18",
     "@angular/compiler-cli": "8.2.13",
-    "@biesbjerg/ngx-translate-extract": "5.0.0",
+    "@biesbjerg/ngx-translate-extract": "5.0.1",
     "@types/file-saver": "2.0.1",
     "@types/he": "^1.1.0",
     "@types/jquery": "3.3.31",
@@ -74,6 +74,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/junkerm/specmate/"
+    "url": "https://github.com/qualicen/specmate/"
   }
 }

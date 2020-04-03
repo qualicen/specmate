@@ -7,6 +7,14 @@
 
 import aQute.lib.io.IO
 
+plugins {
+  id 'biz.aQute.bnd.builder' version '5.0.1'
+}
+
+repositories {
+  jcenter()
+}
+
 if (JavaVersion.current().isJava9Compatible()) {
   ext.jpmsOptions = [
     '--illegal-access=warn',

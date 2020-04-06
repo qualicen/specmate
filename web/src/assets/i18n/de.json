@@ -212,6 +212,7 @@
 		"title": "Speichern nicht möglich"
 	},
 	"search": "suchen",
+	"searchClear": "Inhalt des Suchfelds löschen",
 	"searchRequirements": "Suchen",
 	"searchResults": "Resultate",
 	"searching": "suchen",

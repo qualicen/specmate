@@ -1,9 +1,16 @@
 package com.specmate.nlp.internal.services;
 
+import static org.apache.uima.fit.util.JCasUtil.select;
+import static org.apache.uima.fit.util.JCasUtil.selectCovered;
+
 import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
+import org.apache.uima.fit.component.JCasAnnotator_ImplBase;
+import org.apache.uima.fit.descriptor.ConfigurationParameter;
+import org.apache.uima.jcas.JCas;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,14 +20,6 @@ import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.model.administration.ErrorCode;
 import com.specmate.rest.RestClient;
 import com.specmate.rest.RestResult;
-
-import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
-import org.apache.uima.fit.component.JCasAnnotator_ImplBase;
-import org.apache.uima.fit.descriptor.ConfigurationParameter;
-import org.apache.uima.jcas.JCas;
-
-import static org.apache.uima.fit.util.JCasUtil.select;
-import static org.apache.uima.fit.util.JCasUtil.selectCovered;
 
 import de.tudarmstadt.ukp.dkpro.core.api.parameter.ComponentParameters;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
@@ -35,7 +34,7 @@ public class DependencyParserAnalysisComponent extends JCasAnnotator_ImplBase {
 	protected String language;
 
 	// Variables for REST Call (Spacy API)
-	private static final String SPACY_API_BASE_URL = "spacy_docker_url";
+	private static final String SPACY_API_BASE_URL = "http://localhost:8080";
 	private static final int TIMEOUT = 5000;
 	private LogService logService;
 	private RestClient restClient;
@@ -46,7 +45,7 @@ public class DependencyParserAnalysisComponent extends JCasAnnotator_ImplBase {
 		// Call Spacy API
 		JSONObject result = null;
 		try {
-			result = this.accessSpacyAPI(text);
+			result = accessSpacyAPI(text);
 		} catch (SpecmateInternalException e1) {
 			e1.printStackTrace();
 		}
@@ -124,7 +123,7 @@ public class DependencyParserAnalysisComponent extends JCasAnnotator_ImplBase {
 				Object currentWord = SpacyTokens.get(j - 1);
 				// Token of Spacy
 				Object token = ((JSONObject) currentWord).get("text");
-				if (tokenText.equals((String) token)) {
+				if (tokenText.equals(token)) {
 					sameTokenziationCounter++;
 					break;
 				}
@@ -148,11 +147,11 @@ public class DependencyParserAnalysisComponent extends JCasAnnotator_ImplBase {
 		// Set model parameters
 		JSONObject request = new JSONObject();
 		request.put("text", requirement);
-		request.put("model", this.language);
+		request.put("model", language);
 		request.put("collapse_punctuation", 0);
 		request.put("collapse_phrases", 0);
 
-		RestResult<JSONObject> result = this.restClient.post("/dep", request);
+		RestResult<JSONObject> result = restClient.post("/dep", request);
 		if (result.getResponse().getStatus() == Status.OK.getStatusCode()) {
 			result.getResponse().close();
 			return result.getPayload();

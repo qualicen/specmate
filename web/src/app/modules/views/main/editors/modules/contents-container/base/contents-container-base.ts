@@ -138,6 +138,6 @@ export abstract class ContentContainerBase<T extends IContainer> implements OnIn
     }
 
     public showElement(element: IContainer): boolean {
-        return !element.isRecycled;
+        return !element.recycled;
     }
 }

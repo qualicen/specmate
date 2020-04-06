@@ -13,7 +13,7 @@ export abstract class ModelFactoryBase extends ElementFactoryBase<CEGModel | Pro
         element.url = Url.build([parent.url, element.id]);
         element.name = name || this.name;
         element.description = this.description;
-        element.isRecycled = false;
+        element.recycled = false;
         element.hasRecycledChildren = false;
 
         return this.dataService.createElement(element, true, compoundId)

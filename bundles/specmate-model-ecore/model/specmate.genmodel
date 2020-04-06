@@ -63,7 +63,7 @@
             ecoreFeature="ecore:EReference specmate.ecore#//base/ITracingElement/tracesFrom"/>
       </genClasses>
       <genClasses image="false" ecoreClass="specmate.ecore#//base/IRecycled">
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//base/IRecycled/isRecycled"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//base/IRecycled/recycled"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//base/IRecycled/hasRecycledChildren"/>
       </genClasses>
     </nestedGenPackages>

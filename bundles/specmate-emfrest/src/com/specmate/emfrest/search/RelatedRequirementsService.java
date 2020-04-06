@@ -76,7 +76,7 @@ public class RelatedRequirementsService extends RestServiceBase {
 	}
 
 	private List<ProcessStep> filterRecycledProcessSteps(List<ProcessStep> processStepList) {
-		return processStepList.stream().filter(step -> !((ProcessStep) step).isIsRecycled())
+		return processStepList.stream().filter(step -> !((ProcessStep) step).isRecycled())
 				.collect(Collectors.toList());
 	}
 }

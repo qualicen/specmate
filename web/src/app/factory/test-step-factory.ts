@@ -18,7 +18,7 @@ export class TestStepFactory extends ElementFactoryBase<TestStep> {
         testStep.expectedOutcome = Config.TESTSTEP_EXPECTED_OUTCOME;
         testStep.id = id;
         testStep.url = url;
-        testStep.isRecycled = false;
+        testStep.recycled = false;
         testStep.hasRecycledChildren = false;
         testStep.position = position;
         testStep.referencedTestParameters = [];

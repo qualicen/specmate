@@ -204,6 +204,6 @@ export class ProjectExplorer implements OnInit {
     }
 
     private isRecycled(element: IContainer) {
-        return element.isRecycled;
+        return element.recycled;
     }
 }

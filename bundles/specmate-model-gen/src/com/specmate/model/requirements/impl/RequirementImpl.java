@@ -37,7 +37,7 @@ import org.eclipse.emf.internal.cdo.CDOObjectImpl;
  *   <li>{@link com.specmate.model.requirements.impl.RequirementImpl#getId <em>Id</em>}</li>
  *   <li>{@link com.specmate.model.requirements.impl.RequirementImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.specmate.model.requirements.impl.RequirementImpl#getDescription <em>Description</em>}</li>
- *   <li>{@link com.specmate.model.requirements.impl.RequirementImpl#isIsRecycled <em>Is Recycled</em>}</li>
+ *   <li>{@link com.specmate.model.requirements.impl.RequirementImpl#isRecycled <em>Recycled</em>}</li>
  *   <li>{@link com.specmate.model.requirements.impl.RequirementImpl#isHasRecycledChildren <em>Has Recycled Children</em>}</li>
  *   <li>{@link com.specmate.model.requirements.impl.RequirementImpl#getContents <em>Contents</em>}</li>
  *   <li>{@link com.specmate.model.requirements.impl.RequirementImpl#getTracesTo <em>Traces To</em>}</li>
@@ -91,14 +91,14 @@ public class RequirementImpl extends CDOObjectImpl implements Requirement {
 	protected static final String DESCRIPTION_EDEFAULT = null;
 
 	/**
-	 * The default value of the '{@link #isIsRecycled() <em>Is Recycled</em>}' attribute.
+	 * The default value of the '{@link #isRecycled() <em>Recycled</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isIsRecycled()
+	 * @see #isRecycled()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final boolean IS_RECYCLED_EDEFAULT = false;
+	protected static final boolean RECYCLED_EDEFAULT = false;
 
 	/**
 	 * The default value of the '{@link #isHasRecycledChildren() <em>Has Recycled Children</em>}' attribute.
@@ -335,8 +335,8 @@ public class RequirementImpl extends CDOObjectImpl implements Requirement {
 	 * @generated
 	 */
 	@Override
-	public boolean isIsRecycled() {
-		return (Boolean)eDynamicGet(RequirementsPackage.REQUIREMENT__IS_RECYCLED, BasePackage.Literals.IRECYCLED__IS_RECYCLED, true, true);
+	public boolean isRecycled() {
+		return (Boolean)eDynamicGet(RequirementsPackage.REQUIREMENT__RECYCLED, BasePackage.Literals.IRECYCLED__RECYCLED, true, true);
 	}
 
 	/**
@@ -345,8 +345,8 @@ public class RequirementImpl extends CDOObjectImpl implements Requirement {
 	 * @generated
 	 */
 	@Override
-	public void setIsRecycled(boolean newIsRecycled) {
-		eDynamicSet(RequirementsPackage.REQUIREMENT__IS_RECYCLED, BasePackage.Literals.IRECYCLED__IS_RECYCLED, newIsRecycled);
+	public void setRecycled(boolean newRecycled) {
+		eDynamicSet(RequirementsPackage.REQUIREMENT__RECYCLED, BasePackage.Literals.IRECYCLED__RECYCLED, newRecycled);
 	}
 
 	/**
@@ -711,8 +711,8 @@ public class RequirementImpl extends CDOObjectImpl implements Requirement {
 				return getName();
 			case RequirementsPackage.REQUIREMENT__DESCRIPTION:
 				return getDescription();
-			case RequirementsPackage.REQUIREMENT__IS_RECYCLED:
-				return isIsRecycled();
+			case RequirementsPackage.REQUIREMENT__RECYCLED:
+				return isRecycled();
 			case RequirementsPackage.REQUIREMENT__HAS_RECYCLED_CHILDREN:
 				return isHasRecycledChildren();
 			case RequirementsPackage.REQUIREMENT__CONTENTS:
@@ -769,8 +769,8 @@ public class RequirementImpl extends CDOObjectImpl implements Requirement {
 			case RequirementsPackage.REQUIREMENT__DESCRIPTION:
 				setDescription((String)newValue);
 				return;
-			case RequirementsPackage.REQUIREMENT__IS_RECYCLED:
-				setIsRecycled((Boolean)newValue);
+			case RequirementsPackage.REQUIREMENT__RECYCLED:
+				setRecycled((Boolean)newValue);
 				return;
 			case RequirementsPackage.REQUIREMENT__HAS_RECYCLED_CHILDREN:
 				setHasRecycledChildren((Boolean)newValue);
@@ -847,8 +847,8 @@ public class RequirementImpl extends CDOObjectImpl implements Requirement {
 			case RequirementsPackage.REQUIREMENT__DESCRIPTION:
 				setDescription(DESCRIPTION_EDEFAULT);
 				return;
-			case RequirementsPackage.REQUIREMENT__IS_RECYCLED:
-				setIsRecycled(IS_RECYCLED_EDEFAULT);
+			case RequirementsPackage.REQUIREMENT__RECYCLED:
+				setRecycled(RECYCLED_EDEFAULT);
 				return;
 			case RequirementsPackage.REQUIREMENT__HAS_RECYCLED_CHILDREN:
 				setHasRecycledChildren(HAS_RECYCLED_CHILDREN_EDEFAULT);
@@ -919,8 +919,8 @@ public class RequirementImpl extends CDOObjectImpl implements Requirement {
 				return NAME_EDEFAULT == null ? getName() != null : !NAME_EDEFAULT.equals(getName());
 			case RequirementsPackage.REQUIREMENT__DESCRIPTION:
 				return DESCRIPTION_EDEFAULT == null ? getDescription() != null : !DESCRIPTION_EDEFAULT.equals(getDescription());
-			case RequirementsPackage.REQUIREMENT__IS_RECYCLED:
-				return isIsRecycled() != IS_RECYCLED_EDEFAULT;
+			case RequirementsPackage.REQUIREMENT__RECYCLED:
+				return isRecycled() != RECYCLED_EDEFAULT;
 			case RequirementsPackage.REQUIREMENT__HAS_RECYCLED_CHILDREN:
 				return isHasRecycledChildren() != HAS_RECYCLED_CHILDREN_EDEFAULT;
 			case RequirementsPackage.REQUIREMENT__CONTENTS:
@@ -980,7 +980,7 @@ public class RequirementImpl extends CDOObjectImpl implements Requirement {
 		}
 		if (baseClass == IRecycled.class) {
 			switch (derivedFeatureID) {
-				case RequirementsPackage.REQUIREMENT__IS_RECYCLED: return BasePackage.IRECYCLED__IS_RECYCLED;
+				case RequirementsPackage.REQUIREMENT__RECYCLED: return BasePackage.IRECYCLED__RECYCLED;
 				case RequirementsPackage.REQUIREMENT__HAS_RECYCLED_CHILDREN: return BasePackage.IRECYCLED__HAS_RECYCLED_CHILDREN;
 				default: return -1;
 			}
@@ -1025,7 +1025,7 @@ public class RequirementImpl extends CDOObjectImpl implements Requirement {
 		}
 		if (baseClass == IRecycled.class) {
 			switch (baseFeatureID) {
-				case BasePackage.IRECYCLED__IS_RECYCLED: return RequirementsPackage.REQUIREMENT__IS_RECYCLED;
+				case BasePackage.IRECYCLED__RECYCLED: return RequirementsPackage.REQUIREMENT__RECYCLED;
 				case BasePackage.IRECYCLED__HAS_RECYCLED_CHILDREN: return RequirementsPackage.REQUIREMENT__HAS_RECYCLED_CHILDREN;
 				default: return -1;
 			}

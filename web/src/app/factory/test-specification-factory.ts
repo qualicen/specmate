@@ -16,7 +16,7 @@ export class TestSpecificationFactory extends ElementFactoryBase<TestSpecificati
         testSpec.url = Url.build([parent.url, testSpec.id]);
         testSpec.name = name || Config.TESTSPEC_NAME + ' ' + ElementFactoryBase.getDateStr();
         testSpec.description = Config.TESTSPEC_DESCRIPTION;
-        testSpec.isRecycled = false;
+        testSpec.recycled = false;
         testSpec.hasRecycledChildren = false;
 
         return this.dataService.createElement(testSpec, true, compoundId)

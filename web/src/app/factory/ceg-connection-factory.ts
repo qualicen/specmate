@@ -25,7 +25,7 @@ export class CEGConnectionFactory extends ConnectionElementFactoryBase<CEGConnec
         connection.description = Config.CEG_NEW_CONNECTION_DESCRIPTION;
         connection.id = id;
         connection.url = url;
-        connection.isRecycled = false;
+        connection.recycled = false;
         connection.hasRecycledChildren = false;
         connection.negate = this.negated;
         connection.source = new Proxy();

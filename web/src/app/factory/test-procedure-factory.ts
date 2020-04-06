@@ -17,7 +17,7 @@ export class TestProcedureFactory extends ElementFactoryBase<TestProcedure> {
         testProcedure.description = Config.TESTPROCEDURE_DESCRIPTION;
         testProcedure.id = id;
         testProcedure.url = url;
-        testProcedure.isRecycled = false;
+        testProcedure.recycled = false;
         testProcedure.hasRecycledChildren = false;
         testProcedure.isRegressionTest = false;
 

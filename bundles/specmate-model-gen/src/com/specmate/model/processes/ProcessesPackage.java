@@ -95,13 +95,13 @@ public interface ProcessesPackage extends EPackage {
 	int PROCESS__DESCRIPTION = BasePackage.ICONTAINER__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROCESS__IS_RECYCLED = BasePackage.ICONTAINER__IS_RECYCLED;
+	int PROCESS__RECYCLED = BasePackage.ICONTAINER__RECYCLED;
 
 	/**
 	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
@@ -177,13 +177,13 @@ public interface ProcessesPackage extends EPackage {
 	int PROCESS_NODE__DESCRIPTION = BasePackage.IMODEL_NODE__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROCESS_NODE__IS_RECYCLED = BasePackage.IMODEL_NODE__IS_RECYCLED;
+	int PROCESS_NODE__RECYCLED = BasePackage.IMODEL_NODE__RECYCLED;
 
 	/**
 	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
@@ -331,13 +331,13 @@ public interface ProcessesPackage extends EPackage {
 	int PROCESS_STEP__DESCRIPTION = PROCESS_NODE__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROCESS_STEP__IS_RECYCLED = PROCESS_NODE__IS_RECYCLED;
+	int PROCESS_STEP__RECYCLED = PROCESS_NODE__RECYCLED;
 
 	/**
 	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
@@ -494,13 +494,13 @@ public interface ProcessesPackage extends EPackage {
 	int PROCESS_DECISION__DESCRIPTION = PROCESS_NODE__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROCESS_DECISION__IS_RECYCLED = PROCESS_NODE__IS_RECYCLED;
+	int PROCESS_DECISION__RECYCLED = PROCESS_NODE__RECYCLED;
 
 	/**
 	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
@@ -648,13 +648,13 @@ public interface ProcessesPackage extends EPackage {
 	int PROCESS_CONNECTION__DESCRIPTION = BasePackage.IMODEL_CONNECTION__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROCESS_CONNECTION__IS_RECYCLED = BasePackage.IMODEL_CONNECTION__IS_RECYCLED;
+	int PROCESS_CONNECTION__RECYCLED = BasePackage.IMODEL_CONNECTION__RECYCLED;
 
 	/**
 	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
@@ -793,13 +793,13 @@ public interface ProcessesPackage extends EPackage {
 	int PROCESS_START__DESCRIPTION = PROCESS_NODE__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROCESS_START__IS_RECYCLED = PROCESS_NODE__IS_RECYCLED;
+	int PROCESS_START__RECYCLED = PROCESS_NODE__RECYCLED;
 
 	/**
 	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
@@ -947,13 +947,13 @@ public interface ProcessesPackage extends EPackage {
 	int PROCESS_END__DESCRIPTION = PROCESS_NODE__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROCESS_END__IS_RECYCLED = PROCESS_NODE__IS_RECYCLED;
+	int PROCESS_END__RECYCLED = PROCESS_NODE__RECYCLED;
 
 	/**
 	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.

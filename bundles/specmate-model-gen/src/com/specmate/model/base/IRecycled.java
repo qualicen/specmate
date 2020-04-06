@@ -13,7 +13,7 @@ import org.eclipse.emf.cdo.CDOObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link com.specmate.model.base.IRecycled#isIsRecycled <em>Is Recycled</em>}</li>
+ *   <li>{@link com.specmate.model.base.IRecycled#isRecycled <em>Recycled</em>}</li>
  *   <li>{@link com.specmate.model.base.IRecycled#isHasRecycledChildren <em>Has Recycled Children</em>}</li>
  * </ul>
  *
@@ -24,26 +24,26 @@ import org.eclipse.emf.cdo.CDOObject;
  */
 public interface IRecycled extends CDOObject {
 	/**
-	 * Returns the value of the '<em><b>Is Recycled</b></em>' attribute.
+	 * Returns the value of the '<em><b>Recycled</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Is Recycled</em>' attribute.
-	 * @see #setIsRecycled(boolean)
-	 * @see com.specmate.model.base.BasePackage#getIRecycled_IsRecycled()
+	 * @return the value of the '<em>Recycled</em>' attribute.
+	 * @see #setRecycled(boolean)
+	 * @see com.specmate.model.base.BasePackage#getIRecycled_Recycled()
 	 * @model
 	 * @generated
 	 */
-	boolean isIsRecycled();
+	boolean isRecycled();
 
 	/**
-	 * Sets the value of the '{@link com.specmate.model.base.IRecycled#isIsRecycled <em>Is Recycled</em>}' attribute.
+	 * Sets the value of the '{@link com.specmate.model.base.IRecycled#isRecycled <em>Recycled</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Is Recycled</em>' attribute.
-	 * @see #isIsRecycled()
+	 * @param value the new value of the '<em>Recycled</em>' attribute.
+	 * @see #isRecycled()
 	 * @generated
 	 */
-	void setIsRecycled(boolean value);
+	void setRecycled(boolean value);
 
 	/**
 	 * Returns the value of the '<em><b>Has Recycled Children</b></em>' attribute.

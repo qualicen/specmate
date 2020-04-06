@@ -76,7 +76,7 @@
           eType="#//base/ITracingElement" eOpposite="#//base/ITracingElement/tracesTo"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="IRecycled" abstract="true" interface="true">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="isRecycled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="recycled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="hasRecycledChildren"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     </eClassifiers>

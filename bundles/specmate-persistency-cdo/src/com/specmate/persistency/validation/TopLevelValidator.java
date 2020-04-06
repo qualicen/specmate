@@ -6,6 +6,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.specmate.common.exception.SpecmateValidationException;
+import com.specmate.model.base.BasePackage;
 import com.specmate.model.base.Folder;
 import com.specmate.model.support.util.SpecmateEcoreUtil;
 import com.specmate.persistency.event.EChangeKind;
@@ -16,9 +17,9 @@ public class TopLevelValidator extends ValidatorBase {
 	public void changedObject(EObject object, EStructuralFeature feature, EChangeKind changeKind, Object oldValue,
 			Object newValue, String objectClassName) throws SpecmateValidationException {
 		// we allow to add and remove objects to top level folders, but not to change
-		// (SET) it, except the attribute "hasRecycledChildren" and "isRecycled"
-		if (changeKind == EChangeKind.SET && !object.eClass().getEStructuralFeature("hasRecycledChildren").equals(feature) &&
-				!object.eClass().getEStructuralFeature("isRecycled").equals(feature)) {
+		// (SET) it, except the attribute "hasRecycledChildren" and "recycled"
+		if (changeKind == EChangeKind.SET && !object.eClass().getEStructuralFeature(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()).equals(feature) &&
+				!object.eClass().getEStructuralFeature(BasePackage.Literals.IRECYCLED__RECYCLED.getName()).equals(feature)) {
 			validateNotTopLevel(object);
 		}
 	}

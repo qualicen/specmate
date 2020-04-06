@@ -96,13 +96,13 @@ public interface RequirementsPackage extends EPackage {
 	int REQUIREMENT__DESCRIPTION = BasePackage.ISPECMATE_MODEL_OBJECT__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int REQUIREMENT__IS_RECYCLED = BasePackage.ISPECMATE_MODEL_OBJECT__IS_RECYCLED;
+	int REQUIREMENT__RECYCLED = BasePackage.ISPECMATE_MODEL_OBJECT__RECYCLED;
 
 	/**
 	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
@@ -313,13 +313,13 @@ public interface RequirementsPackage extends EPackage {
 	int CEG_MODEL__DESCRIPTION = BasePackage.ISPECMATE_MODEL_OBJECT__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CEG_MODEL__IS_RECYCLED = BasePackage.ISPECMATE_MODEL_OBJECT__IS_RECYCLED;
+	int CEG_MODEL__RECYCLED = BasePackage.ISPECMATE_MODEL_OBJECT__RECYCLED;
 
 	/**
 	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
@@ -422,13 +422,13 @@ public interface RequirementsPackage extends EPackage {
 	int CEG_NODE__DESCRIPTION = BasePackage.IMODEL_NODE__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CEG_NODE__IS_RECYCLED = BasePackage.IMODEL_NODE__IS_RECYCLED;
+	int CEG_NODE__RECYCLED = BasePackage.IMODEL_NODE__RECYCLED;
 
 	/**
 	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
@@ -603,13 +603,13 @@ public interface RequirementsPackage extends EPackage {
 	int CEG_CONNECTION__DESCRIPTION = BasePackage.IMODEL_CONNECTION__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CEG_CONNECTION__IS_RECYCLED = BasePackage.IMODEL_CONNECTION__IS_RECYCLED;
+	int CEG_CONNECTION__RECYCLED = BasePackage.IMODEL_CONNECTION__RECYCLED;
 
 	/**
 	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.

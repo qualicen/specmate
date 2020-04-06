@@ -32,27 +32,28 @@ import com.specmate.model.administration.ErrorCode;
 import com.specmate.model.base.Folder;
 import com.specmate.model.base.IContainer;
 import com.specmate.model.base.IContentElement;
+import com.specmate.model.base.IRecycled;
 
 public class SpecmateEcoreUtil {
-	
+
 	public static void copyAttributeValues(EObject source, EObject target) {
 		AssertUtil.preTrue(target.getClass().isAssignableFrom(source.getClass()));
 		for (EAttribute attribute : target.eClass().getEAllAttributes()) {
 			target.eSet(attribute, source.eGet(attribute));
 		}
 	}
-	
+
 	public static void setAttributeValue(EObject target, Object newValue, String attribute) {
 		target.eSet(target.eClass().getEStructuralFeature(attribute), newValue);
 	}
-	
+
 	public static EObject getParent(EObject target) {
 		return target.eContainer();
 	}
-	
-	public static LinkedList<EObject> getAllParents(EObject element){
+
+	public static LinkedList<EObject> getAllParents(EObject element) {
 		LinkedList<EObject> parentsList = new LinkedList<EObject>();
-		
+
 		EObject parent = SpecmateEcoreUtil.getParent(element);
 		while (parent != null && !SpecmateEcoreUtil.isProject(parent)) {
 			parentsList.add(parent);
@@ -60,9 +61,9 @@ public class SpecmateEcoreUtil {
 		}
 		return parentsList;
 	}
-	
-	public static void updateParentsOnRecycle(EObject firstParent) {
-		if(firstParent == null) {
+
+	public static void updateParentsOnRestore(EObject firstParent) {
+		if (firstParent == null) {
 			return;
 		}
 		LinkedList<EObject> parentsList = SpecmateEcoreUtil.getAllParents(firstParent);
@@ -71,16 +72,23 @@ public class SpecmateEcoreUtil {
 			EObject parent = parentsList.pop();
 			TreeIterator<EObject> contents = ((EObject) parent).eAllContents();
 			Iterator<EObject> filtered;
-			filtered = Iterators.filter(contents, o -> ((boolean) o.eGet(o.eClass().getEStructuralFeature("isRecycled"))) == true);
+			filtered = Iterators.filter(contents,
+					o -> ((IRecycled) o).isRecycled());
 			if (filtered.hasNext()) {
-				SpecmateEcoreUtil.setAttributeValue(parent, true, "hasRecycledChildren");
+				if (parent instanceof IRecycled) {
+					((IRecycled) parent).setHasRecycledChildren(true);
+				}
 				while (parentsList.size() > 0) {
-					EObject child = parentsList.pop();
-					SpecmateEcoreUtil.setAttributeValue(child, true, "hasRecycledChildren");
+					EObject ancestor = parentsList.pop();
+					if (ancestor instanceof IRecycled) {
+						((IRecycled) ancestor).setHasRecycledChildren(true);
+					}
 				}
 				return;
 			} else {
-				SpecmateEcoreUtil.setAttributeValue(parent, false, "hasRecycledChildren");
+				if (parent instanceof IRecycled) {
+					((IRecycled) parent).setHasRecycledChildren(false);
+				}
 			}
 		}
 	}
@@ -210,7 +218,7 @@ public class SpecmateEcoreUtil {
 	public static String getIdForChild() {
 		return UUIDUtil.generateUUID();
 	}
-	
+
 	public static String getNameForChild(IContainer parent, EClass type) {
 		int i = 1;
 		String format = "%s-%d";

@@ -13,7 +13,7 @@ export class FolderFactory extends ElementFactoryBase<Folder> {
         element.url = Url.build([parent.url, element.id]);
         element.name = name || Config.FOLDER_NEW_NAME + ' ' + ElementFactoryBase.getDateStr();
         element.description = Config.FOLDER_NEW_DESCRIPTION;
-        element.isRecycled = false;
+        element.recycled = false;
         element.hasRecycledChildren = false;
 
         return this.dataService.createElement(element, true, compoundId)

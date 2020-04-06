@@ -62,7 +62,7 @@ export class IconSelector implements OnInit {
     }
 
     get isRecycled() {
-        return this.model.isRecycled;
+        return this.model.recycled;
     }
 
     private isElementChildOfModel(): boolean {

@@ -12,7 +12,7 @@
 		 id: EString;
 		 name: EString;
 		 description: EString;
-		 isRecycled: EBoolean;
+		 recycled: EBoolean;
 		 hasRecycledChildren: EBoolean;
 
 		// References

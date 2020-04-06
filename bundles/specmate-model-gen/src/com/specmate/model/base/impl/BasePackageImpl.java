@@ -595,7 +595,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getIRecycled_IsRecycled() {
+	public EAttribute getIRecycled_Recycled() {
 		return (EAttribute)iRecycledEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -685,7 +685,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 		createEReference(iTracingElementEClass, ITRACING_ELEMENT__TRACES_FROM);
 
 		iRecycledEClass = createEClass(IRECYCLED);
-		createEAttribute(iRecycledEClass, IRECYCLED__IS_RECYCLED);
+		createEAttribute(iRecycledEClass, IRECYCLED__RECYCLED);
 		createEAttribute(iRecycledEClass, IRECYCLED__HAS_RECYCLED_CHILDREN);
 	}
 
@@ -777,7 +777,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 		initEReference(getITracingElement_TracesFrom(), this.getITracingElement(), this.getITracingElement_TracesTo(), "tracesFrom", null, 0, -1, ITracingElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(iRecycledEClass, IRecycled.class, "IRecycled", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getIRecycled_IsRecycled(), ecorePackage.getEBoolean(), "isRecycled", null, 0, 1, IRecycled.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getIRecycled_Recycled(), ecorePackage.getEBoolean(), "recycled", null, 0, 1, IRecycled.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getIRecycled_HasRecycledChildren(), ecorePackage.getEBoolean(), "hasRecycledChildren", null, 0, 1, IRecycled.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource

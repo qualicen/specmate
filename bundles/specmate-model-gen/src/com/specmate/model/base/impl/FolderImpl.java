@@ -34,7 +34,7 @@ import org.eclipse.emf.internal.cdo.CDOObjectImpl;
  *   <li>{@link com.specmate.model.base.impl.FolderImpl#getId <em>Id</em>}</li>
  *   <li>{@link com.specmate.model.base.impl.FolderImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.specmate.model.base.impl.FolderImpl#getDescription <em>Description</em>}</li>
- *   <li>{@link com.specmate.model.base.impl.FolderImpl#isIsRecycled <em>Is Recycled</em>}</li>
+ *   <li>{@link com.specmate.model.base.impl.FolderImpl#isRecycled <em>Recycled</em>}</li>
  *   <li>{@link com.specmate.model.base.impl.FolderImpl#isHasRecycledChildren <em>Has Recycled Children</em>}</li>
  *   <li>{@link com.specmate.model.base.impl.FolderImpl#getContents <em>Contents</em>}</li>
  *   <li>{@link com.specmate.model.base.impl.FolderImpl#getTracesTo <em>Traces To</em>}</li>
@@ -76,14 +76,14 @@ public class FolderImpl extends CDOObjectImpl implements Folder {
 	protected static final String DESCRIPTION_EDEFAULT = null;
 
 	/**
-	 * The default value of the '{@link #isIsRecycled() <em>Is Recycled</em>}' attribute.
+	 * The default value of the '{@link #isRecycled() <em>Recycled</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isIsRecycled()
+	 * @see #isRecycled()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final boolean IS_RECYCLED_EDEFAULT = false;
+	protected static final boolean RECYCLED_EDEFAULT = false;
 
 	/**
 	 * The default value of the '{@link #isHasRecycledChildren() <em>Has Recycled Children</em>}' attribute.
@@ -200,8 +200,8 @@ public class FolderImpl extends CDOObjectImpl implements Folder {
 	 * @generated
 	 */
 	@Override
-	public boolean isIsRecycled() {
-		return (Boolean)eDynamicGet(BasePackage.FOLDER__IS_RECYCLED, BasePackage.Literals.IRECYCLED__IS_RECYCLED, true, true);
+	public boolean isRecycled() {
+		return (Boolean)eDynamicGet(BasePackage.FOLDER__RECYCLED, BasePackage.Literals.IRECYCLED__RECYCLED, true, true);
 	}
 
 	/**
@@ -210,8 +210,8 @@ public class FolderImpl extends CDOObjectImpl implements Folder {
 	 * @generated
 	 */
 	@Override
-	public void setIsRecycled(boolean newIsRecycled) {
-		eDynamicSet(BasePackage.FOLDER__IS_RECYCLED, BasePackage.Literals.IRECYCLED__IS_RECYCLED, newIsRecycled);
+	public void setRecycled(boolean newRecycled) {
+		eDynamicSet(BasePackage.FOLDER__RECYCLED, BasePackage.Literals.IRECYCLED__RECYCLED, newRecycled);
 	}
 
 	/**
@@ -336,8 +336,8 @@ public class FolderImpl extends CDOObjectImpl implements Folder {
 				return getName();
 			case BasePackage.FOLDER__DESCRIPTION:
 				return getDescription();
-			case BasePackage.FOLDER__IS_RECYCLED:
-				return isIsRecycled();
+			case BasePackage.FOLDER__RECYCLED:
+				return isRecycled();
 			case BasePackage.FOLDER__HAS_RECYCLED_CHILDREN:
 				return isHasRecycledChildren();
 			case BasePackage.FOLDER__CONTENTS:
@@ -370,8 +370,8 @@ public class FolderImpl extends CDOObjectImpl implements Folder {
 			case BasePackage.FOLDER__DESCRIPTION:
 				setDescription((String)newValue);
 				return;
-			case BasePackage.FOLDER__IS_RECYCLED:
-				setIsRecycled((Boolean)newValue);
+			case BasePackage.FOLDER__RECYCLED:
+				setRecycled((Boolean)newValue);
 				return;
 			case BasePackage.FOLDER__HAS_RECYCLED_CHILDREN:
 				setHasRecycledChildren((Boolean)newValue);
@@ -412,8 +412,8 @@ public class FolderImpl extends CDOObjectImpl implements Folder {
 			case BasePackage.FOLDER__DESCRIPTION:
 				setDescription(DESCRIPTION_EDEFAULT);
 				return;
-			case BasePackage.FOLDER__IS_RECYCLED:
-				setIsRecycled(IS_RECYCLED_EDEFAULT);
+			case BasePackage.FOLDER__RECYCLED:
+				setRecycled(RECYCLED_EDEFAULT);
 				return;
 			case BasePackage.FOLDER__HAS_RECYCLED_CHILDREN:
 				setHasRecycledChildren(HAS_RECYCLED_CHILDREN_EDEFAULT);
@@ -448,8 +448,8 @@ public class FolderImpl extends CDOObjectImpl implements Folder {
 				return NAME_EDEFAULT == null ? getName() != null : !NAME_EDEFAULT.equals(getName());
 			case BasePackage.FOLDER__DESCRIPTION:
 				return DESCRIPTION_EDEFAULT == null ? getDescription() != null : !DESCRIPTION_EDEFAULT.equals(getDescription());
-			case BasePackage.FOLDER__IS_RECYCLED:
-				return isIsRecycled() != IS_RECYCLED_EDEFAULT;
+			case BasePackage.FOLDER__RECYCLED:
+				return isRecycled() != RECYCLED_EDEFAULT;
 			case BasePackage.FOLDER__HAS_RECYCLED_CHILDREN:
 				return isHasRecycledChildren() != HAS_RECYCLED_CHILDREN_EDEFAULT;
 			case BasePackage.FOLDER__CONTENTS:
@@ -485,7 +485,7 @@ public class FolderImpl extends CDOObjectImpl implements Folder {
 		}
 		if (baseClass == IRecycled.class) {
 			switch (derivedFeatureID) {
-				case BasePackage.FOLDER__IS_RECYCLED: return BasePackage.IRECYCLED__IS_RECYCLED;
+				case BasePackage.FOLDER__RECYCLED: return BasePackage.IRECYCLED__RECYCLED;
 				case BasePackage.FOLDER__HAS_RECYCLED_CHILDREN: return BasePackage.IRECYCLED__HAS_RECYCLED_CHILDREN;
 				default: return -1;
 			}
@@ -521,7 +521,7 @@ public class FolderImpl extends CDOObjectImpl implements Folder {
 		}
 		if (baseClass == IRecycled.class) {
 			switch (baseFeatureID) {
-				case BasePackage.IRECYCLED__IS_RECYCLED: return BasePackage.FOLDER__IS_RECYCLED;
+				case BasePackage.IRECYCLED__RECYCLED: return BasePackage.FOLDER__RECYCLED;
 				case BasePackage.IRECYCLED__HAS_RECYCLED_CHILDREN: return BasePackage.FOLDER__HAS_RECYCLED_CHILDREN;
 				default: return -1;
 			}

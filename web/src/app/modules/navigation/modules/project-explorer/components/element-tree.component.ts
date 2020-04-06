@@ -193,11 +193,11 @@ export class ElementTree implements OnInit {
     }
 
     public get hasLink(): boolean {
-        return (!this.isFolderNode || (this.library)) && !this.element.isRecycled;
+        return (!this.isFolderNode || (this.library)) && !this.element.recycled;
     }
 
     public get hasRestore(): boolean {
-        return this.element.isRecycled && this.parent && this.parent.isRecycled === false;
+        return this.element.recycled && this.parent && this.parent.recycled === false;
     }
 
     private get isRoot(): boolean {
@@ -207,7 +207,7 @@ export class ElementTree implements OnInit {
     public get showElement(): boolean {
         return (this.isCEGModelNode || this.isProcessNode || this.isRequirementNode
             || this.isTestSpecificationNode || this.isFolderNode || this.isTestProcedureNode)
-            && ((!this.recycleBin && !this.element.isRecycled) || (this.recycleBin && this.element.hasRecycledChildren));
+            && ((!this.recycleBin && !this.element.recycled) || (this.recycleBin && this.element.hasRecycledChildren));
     }
 
     public loadMore(): void {

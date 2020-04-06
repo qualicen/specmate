@@ -205,13 +205,13 @@ public interface BasePackage extends EPackage {
 	int ICONTENT_ELEMENT__DESCRIPTION = IID_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ICONTENT_ELEMENT__IS_RECYCLED = IID_FEATURE_COUNT + 2;
+	int ICONTENT_ELEMENT__RECYCLED = IID_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
@@ -278,13 +278,13 @@ public interface BasePackage extends EPackage {
 	int ICONTAINER__DESCRIPTION = ICONTENT_ELEMENT__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ICONTAINER__IS_RECYCLED = ICONTENT_ELEMENT__IS_RECYCLED;
+	int ICONTAINER__RECYCLED = ICONTENT_ELEMENT__RECYCLED;
 
 	/**
 	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
@@ -360,13 +360,13 @@ public interface BasePackage extends EPackage {
 	int ISPECMATE_MODEL_OBJECT__DESCRIPTION = ICONTAINER__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ISPECMATE_MODEL_OBJECT__IS_RECYCLED = ICONTAINER__IS_RECYCLED;
+	int ISPECMATE_MODEL_OBJECT__RECYCLED = ICONTAINER__RECYCLED;
 
 	/**
 	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
@@ -460,13 +460,13 @@ public interface BasePackage extends EPackage {
 	int FOLDER__DESCRIPTION = ISPECMATE_MODEL_OBJECT__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FOLDER__IS_RECYCLED = ISPECMATE_MODEL_OBJECT__IS_RECYCLED;
+	int FOLDER__RECYCLED = ISPECMATE_MODEL_OBJECT__RECYCLED;
 
 	/**
 	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
@@ -670,13 +670,13 @@ public interface BasePackage extends EPackage {
 	int ISPECMATE_POSITIONABLE_MODEL_OBJECT__DESCRIPTION = ISPECMATE_MODEL_OBJECT__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ISPECMATE_POSITIONABLE_MODEL_OBJECT__IS_RECYCLED = ISPECMATE_MODEL_OBJECT__IS_RECYCLED;
+	int ISPECMATE_POSITIONABLE_MODEL_OBJECT__RECYCLED = ISPECMATE_MODEL_OBJECT__RECYCLED;
 
 	/**
 	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
@@ -806,13 +806,13 @@ public interface BasePackage extends EPackage {
 	int IMODEL_CONNECTION__DESCRIPTION = ISPECMATE_MODEL_OBJECT__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int IMODEL_CONNECTION__IS_RECYCLED = ISPECMATE_MODEL_OBJECT__IS_RECYCLED;
+	int IMODEL_CONNECTION__RECYCLED = ISPECMATE_MODEL_OBJECT__RECYCLED;
 
 	/**
 	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
@@ -924,13 +924,13 @@ public interface BasePackage extends EPackage {
 	int IMODEL_NODE__DESCRIPTION = ISPECMATE_POSITIONABLE_MODEL_OBJECT__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int IMODEL_NODE__IS_RECYCLED = ISPECMATE_POSITIONABLE_MODEL_OBJECT__IS_RECYCLED;
+	int IMODEL_NODE__RECYCLED = ISPECMATE_POSITIONABLE_MODEL_OBJECT__RECYCLED;
 
 	/**
 	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
@@ -1098,13 +1098,13 @@ public interface BasePackage extends EPackage {
 	int IRECYCLED = 13;
 
 	/**
-	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int IRECYCLED__IS_RECYCLED = 0;
+	int IRECYCLED__RECYCLED = 0;
 
 	/**
 	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
@@ -1495,15 +1495,15 @@ public interface BasePackage extends EPackage {
 	EClass getIRecycled();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.specmate.model.base.IRecycled#isIsRecycled <em>Is Recycled</em>}'.
+	 * Returns the meta object for the attribute '{@link com.specmate.model.base.IRecycled#isRecycled <em>Recycled</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Is Recycled</em>'.
-	 * @see com.specmate.model.base.IRecycled#isIsRecycled()
+	 * @return the meta object for the attribute '<em>Recycled</em>'.
+	 * @see com.specmate.model.base.IRecycled#isRecycled()
 	 * @see #getIRecycled()
 	 * @generated
 	 */
-	EAttribute getIRecycled_IsRecycled();
+	EAttribute getIRecycled_Recycled();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.specmate.model.base.IRecycled#isHasRecycledChildren <em>Has Recycled Children</em>}'.
@@ -1840,12 +1840,12 @@ public interface BasePackage extends EPackage {
 		EClass IRECYCLED = eINSTANCE.getIRecycled();
 
 		/**
-		 * The meta object literal for the '<em><b>Is Recycled</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Recycled</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute IRECYCLED__IS_RECYCLED = eINSTANCE.getIRecycled_IsRecycled();
+		EAttribute IRECYCLED__RECYCLED = eINSTANCE.getIRecycled_Recycled();
 
 		/**
 		 * The meta object literal for the '<em><b>Has Recycled Children</b></em>' attribute feature.

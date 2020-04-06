@@ -19,7 +19,7 @@ export class ProcessConnectionFactory extends ConnectionElementFactoryBase<Proce
         connection.condition = Config.PROCESS_NEW_CONNECTION_DESCRIPTION;
         connection.id = id;
         connection.url = url;
-        connection.isRecycled = false;
+        connection.recycled = false;
         connection.hasRecycledChildren = false;
         connection.labelX = 0;
         connection.labelY = 0;

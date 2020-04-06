@@ -24,6 +24,7 @@ import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.model.administration.ErrorCode;
 import com.specmate.model.base.IContainer;
 import com.specmate.model.base.IContentElement;
+import com.specmate.model.base.IRecycled;
 import com.specmate.model.support.util.SpecmateEcoreUtil;
 import com.specmate.rest.RestResult;
 
@@ -63,42 +64,55 @@ public class CrudUtil {
 	}
 
 	public static RestResult<?> recycle(Object target, String userName) {
-		EObject theTarget = (EObject) target;
-		SpecmateEcoreUtil.setAttributeValue(theTarget, true, "isRecycled");
-		SpecmateEcoreUtil.setAttributeValue(theTarget, true, "hasRecycledChildren");
-		ArrayList<EObject> children = Lists.newArrayList(theTarget.eAllContents());
-		for (Iterator<EObject> iterator = children.iterator(); iterator.hasNext();) {
-			EObject child = (EObject) iterator.next();
-			SpecmateEcoreUtil.setAttributeValue(child, true, "isRecycled");
-			SpecmateEcoreUtil.setAttributeValue(child, true, "hasRecycledChildren");
+		if (target instanceof IRecycled) {
+			IRecycled theTarget = (IRecycled) target;
+			theTarget.setRecycled(true);
+			theTarget.setHasRecycledChildren(true);
+			ArrayList<EObject> children = Lists.newArrayList(theTarget.eAllContents());
+			for (Iterator<EObject> iterator = children.iterator(); iterator.hasNext();) {
+				EObject child = (EObject) iterator.next();
+				if (child instanceof IRecycled) {
+					IRecycled theChild = (IRecycled) child;
+					theChild.setRecycled(true);
+					theChild.setHasRecycledChildren(true);
+				}
+			}
+			EObject parent = SpecmateEcoreUtil.getParent(theTarget);
+			while (parent != null && !SpecmateEcoreUtil.isProject(parent)) {
+				if (parent instanceof IRecycled) {
+					((IRecycled) parent).setHasRecycledChildren(true);
+				}
+				parent = SpecmateEcoreUtil.getParent(parent);
+			}
+			return new RestResult<>(Response.Status.OK, target, userName);
 		}
-		EObject parent = SpecmateEcoreUtil.getParent(theTarget);
-		while (parent != null && !SpecmateEcoreUtil.isProject(parent)) {
-			SpecmateEcoreUtil.setAttributeValue(parent, true, "hasRecycledChildren");
-			parent = SpecmateEcoreUtil.getParent(parent);
-		}
-		return new RestResult<>(Response.Status.OK, target, userName);
+		return new RestResult<>(Response.Status.UNSUPPORTED_MEDIA_TYPE, target, userName);
+
 	}
 
 	public static RestResult<?> restore(Object target, String userName) {
-		EObject theTarget = (EObject) target;
-		SpecmateEcoreUtil.setAttributeValue(theTarget, false, "isRecycled");
-		SpecmateEcoreUtil.setAttributeValue(theTarget, false, "hasRecycledChildren");
-		
-		// Update all children
-		ArrayList<EObject> children = Lists.newArrayList(theTarget.eAllContents());
-		for (Iterator<EObject> iterator = children.iterator(); iterator.hasNext();) {
-			EObject child = (EObject) iterator.next();
-			SpecmateEcoreUtil.setAttributeValue(child, false, "isRecycled");
-			SpecmateEcoreUtil.setAttributeValue(child, false, "hasRecycledChildren");
-		}
+		if (target instanceof IRecycled) {
+			IRecycled theTarget = (IRecycled) target;
+			theTarget.setRecycled(false);
+			theTarget.setHasRecycledChildren(false);
 
-		// Update all parents
-		SpecmateEcoreUtil.updateParentsOnRecycle(SpecmateEcoreUtil.getParent(theTarget));
-		return new RestResult<>(Response.Status.OK, target, userName);
+			// Update all children
+			ArrayList<EObject> children = Lists.newArrayList(theTarget.eAllContents());
+			for (Iterator<EObject> iterator = children.iterator(); iterator.hasNext();) {
+				EObject child = (EObject) iterator.next();
+				if(child instanceof IRecycled) {
+					IRecycled theChild = (IRecycled) child;
+					theChild.setRecycled(false);
+					theChild.setHasRecycledChildren(false);
+				}
+			}
+
+			// Update all parents
+			SpecmateEcoreUtil.updateParentsOnRestore(SpecmateEcoreUtil.getParent(theTarget));
+			return new RestResult<>(Response.Status.OK, target, userName);
+		}
+		return new RestResult<>(Response.Status.UNSUPPORTED_MEDIA_TYPE, target, userName);
 	}
-	
-	
 
 	/**
 	 * Copies an object recursively with all children and adds the copy to the
@@ -162,7 +176,7 @@ public class CrudUtil {
 		if (target instanceof EObject && !(target instanceof Resource)) {
 			EObject parent = SpecmateEcoreUtil.getParent((EObject) target);
 			SpecmateEcoreUtil.detach((EObject) target);
-			SpecmateEcoreUtil.updateParentsOnRecycle(parent);
+			SpecmateEcoreUtil.updateParentsOnRestore(parent);
 			return new RestResult<>(Response.Status.OK, target, userName);
 		} else {
 			throw new SpecmateInternalException(ErrorCode.REST_SERVICE, "Attempt to delete non EObject.");

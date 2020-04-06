@@ -12,7 +12,7 @@
 		public id: EString;
 		public name: EString;
 		public description: EString;
-		public isRecycled: EBoolean;
+		public recycled: EBoolean;
 		public hasRecycledChildren: EBoolean;
 		public position: EInt;
 		public consistent: EBoolean;

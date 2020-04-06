@@ -9,6 +9,7 @@ import com.specmate.common.exception.SpecmateException;
 import com.specmate.dbprovider.api.IDBProvider;
 import com.specmate.dbprovider.api.migration.IAttributeToSQLMapper;
 import com.specmate.migration.api.IMigrator;
+import com.specmate.model.base.BasePackage;
 
 @Component(property = "sourceVersion=20200228", service = IMigrator.class)
 public class Migrator20200228 implements IMigrator {
@@ -27,32 +28,32 @@ public class Migrator20200228 implements IMigrator {
 
 	@Override
 	public void migrate(Connection connection) throws SpecmateException {
-		createIsRecycledAttribute("model/base", "Folder");
-		createIsRecycledAttribute("model/base", "IModelConnection");
-		createIsRecycledAttribute("model/base", "IModelNode");
-		createIsRecycledAttribute("model/requirements", "Requirement");
-		createIsRecycledAttribute("model/requirements", "CEGModel");
-		createIsRecycledAttribute("model/requirements", "CEGNode");
-		createIsRecycledAttribute("model/requirements", "CEGConnection");
-		createIsRecycledAttribute("model/testspecification", "TestSpecification");
-		createIsRecycledAttribute("model/testspecification", "TestParameter");
-		createIsRecycledAttribute("model/testspecification", "TestCase");
-		createIsRecycledAttribute("model/testspecification", "ParameterAssignment");
-		createIsRecycledAttribute("model/testspecification", "TestProcedure");
-		createIsRecycledAttribute("model/testspecification", "TestStep");
-		createIsRecycledAttribute("model/processes", "Process");
-		createIsRecycledAttribute("model/processes", "ProcessStep");
-		createIsRecycledAttribute("model/processes", "ProcessDecision");
-		createIsRecycledAttribute("model/processes", "ProcessConnection");
-		createIsRecycledAttribute("model/processes", "ProcessStart");
-		createIsRecycledAttribute("model/processes", "ProcessEnd");
+		createRecycledAttributes("model/base", "Folder");
+		createRecycledAttributes("model/base", "IModelConnection");
+		createRecycledAttributes("model/base", "IModelNode");
+		createRecycledAttributes("model/requirements", "Requirement");
+		createRecycledAttributes("model/requirements", "CEGModel");
+		createRecycledAttributes("model/requirements", "CEGNode");
+		createRecycledAttributes("model/requirements", "CEGConnection");
+		createRecycledAttributes("model/testspecification", "TestSpecification");
+		createRecycledAttributes("model/testspecification", "TestParameter");
+		createRecycledAttributes("model/testspecification", "TestCase");
+		createRecycledAttributes("model/testspecification", "ParameterAssignment");
+		createRecycledAttributes("model/testspecification", "TestProcedure");
+		createRecycledAttributes("model/testspecification", "TestStep");
+		createRecycledAttributes("model/processes", "Process");
+		createRecycledAttributes("model/processes", "ProcessStep");
+		createRecycledAttributes("model/processes", "ProcessDecision");
+		createRecycledAttributes("model/processes", "ProcessConnection");
+		createRecycledAttributes("model/processes", "ProcessStart");
+		createRecycledAttributes("model/processes", "ProcessEnd");
 	}
 
-	private void createIsRecycledAttribute(String packageName, String objectName) throws SpecmateException {
+	private void createRecycledAttributes(String packageName, String objectName) throws SpecmateException {
 		IAttributeToSQLMapper aMapper = dbProvider.getAttributeToSQLMapper(packageName, getSourceVersion(),
 				getTargetVersion());
-		aMapper.migrateNewBooleanAttribute(objectName, "isRecycled", false);
-		aMapper.migrateNewBooleanAttribute(objectName, "hasRecycledChildren", false);
+		aMapper.migrateNewBooleanAttribute(objectName, BasePackage.Literals.IRECYCLED__RECYCLED.getName(), false);
+		aMapper.migrateNewBooleanAttribute(objectName, BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName(), false);
 	}
 
 	@Reference

@@ -63,7 +63,7 @@ export class AdditionalInformationService {
         }
 
         const testSpecifications = await this.dataService.performQuery(baseUrl, 'listRecursive', { class: TestSpecification.className });
-        this._testSpecifications = Sort.sortArray(testSpecifications).filter(testSpec => testSpec.isRecycled === false);
+        this._testSpecifications = Sort.sortArray(testSpecifications).filter(testSpec => testSpec.recycled === false);
     }
 
     private async loadParents(): Promise<void> {

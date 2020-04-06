@@ -97,13 +97,13 @@ public interface TestspecificationPackage extends EPackage {
 	int TEST_SPECIFICATION__DESCRIPTION = BasePackage.ICONTAINER__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TEST_SPECIFICATION__IS_RECYCLED = BasePackage.ICONTAINER__IS_RECYCLED;
+	int TEST_SPECIFICATION__RECYCLED = BasePackage.ICONTAINER__RECYCLED;
 
 	/**
 	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
@@ -179,13 +179,13 @@ public interface TestspecificationPackage extends EPackage {
 	int TEST_PARAMETER__DESCRIPTION = BasePackage.ICONTENT_ELEMENT__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TEST_PARAMETER__IS_RECYCLED = BasePackage.ICONTENT_ELEMENT__IS_RECYCLED;
+	int TEST_PARAMETER__RECYCLED = BasePackage.ICONTENT_ELEMENT__RECYCLED;
 
 	/**
 	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
@@ -270,13 +270,13 @@ public interface TestspecificationPackage extends EPackage {
 	int TEST_CASE__DESCRIPTION = BasePackage.ICONTAINER__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TEST_CASE__IS_RECYCLED = BasePackage.ICONTAINER__IS_RECYCLED;
+	int TEST_CASE__RECYCLED = BasePackage.ICONTAINER__RECYCLED;
 
 	/**
 	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
@@ -370,13 +370,13 @@ public interface TestspecificationPackage extends EPackage {
 	int PARAMETER_ASSIGNMENT__DESCRIPTION = BasePackage.ICONTENT_ELEMENT__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARAMETER_ASSIGNMENT__IS_RECYCLED = BasePackage.ICONTENT_ELEMENT__IS_RECYCLED;
+	int PARAMETER_ASSIGNMENT__RECYCLED = BasePackage.ICONTENT_ELEMENT__RECYCLED;
 
 	/**
 	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
@@ -470,13 +470,13 @@ public interface TestspecificationPackage extends EPackage {
 	int TEST_PROCEDURE__DESCRIPTION = BasePackage.ICONTAINER__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TEST_PROCEDURE__IS_RECYCLED = BasePackage.ICONTAINER__IS_RECYCLED;
+	int TEST_PROCEDURE__RECYCLED = BasePackage.ICONTAINER__RECYCLED;
 
 	/**
 	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
@@ -597,13 +597,13 @@ public interface TestspecificationPackage extends EPackage {
 	int TEST_STEP__DESCRIPTION = BasePackage.ICONTENT_ELEMENT__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Is Recycled</b></em>' attribute.
+	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TEST_STEP__IS_RECYCLED = BasePackage.ICONTENT_ELEMENT__IS_RECYCLED;
+	int TEST_STEP__RECYCLED = BasePackage.ICONTENT_ELEMENT__RECYCLED;
 
 	/**
 	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.

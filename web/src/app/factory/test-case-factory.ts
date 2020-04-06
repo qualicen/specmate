@@ -23,7 +23,7 @@ export class TestCaseFactory extends ElementFactoryBase<TestCase> {
         testCase.name = name || Config.TESTCASE_NAME + ' ' + ElementFactoryBase.getDateStr();
         testCase.id = id;
         testCase.url = url;
-        testCase.isRecycled = false;
+        testCase.recycled = false;
         testCase.hasRecycledChildren = false;
         testCase.consistent = consistent;
 

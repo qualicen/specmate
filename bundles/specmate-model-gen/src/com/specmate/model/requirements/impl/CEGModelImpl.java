@@ -36,7 +36,7 @@ import org.eclipse.emf.internal.cdo.CDOObjectImpl;
  *   <li>{@link com.specmate.model.requirements.impl.CEGModelImpl#getId <em>Id</em>}</li>
  *   <li>{@link com.specmate.model.requirements.impl.CEGModelImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.specmate.model.requirements.impl.CEGModelImpl#getDescription <em>Description</em>}</li>
- *   <li>{@link com.specmate.model.requirements.impl.CEGModelImpl#isIsRecycled <em>Is Recycled</em>}</li>
+ *   <li>{@link com.specmate.model.requirements.impl.CEGModelImpl#isRecycled <em>Recycled</em>}</li>
  *   <li>{@link com.specmate.model.requirements.impl.CEGModelImpl#isHasRecycledChildren <em>Has Recycled Children</em>}</li>
  *   <li>{@link com.specmate.model.requirements.impl.CEGModelImpl#getContents <em>Contents</em>}</li>
  *   <li>{@link com.specmate.model.requirements.impl.CEGModelImpl#getTracesTo <em>Traces To</em>}</li>
@@ -78,14 +78,14 @@ public class CEGModelImpl extends CDOObjectImpl implements CEGModel {
 	protected static final String DESCRIPTION_EDEFAULT = null;
 
 	/**
-	 * The default value of the '{@link #isIsRecycled() <em>Is Recycled</em>}' attribute.
+	 * The default value of the '{@link #isRecycled() <em>Recycled</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isIsRecycled()
+	 * @see #isRecycled()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final boolean IS_RECYCLED_EDEFAULT = false;
+	protected static final boolean RECYCLED_EDEFAULT = false;
 
 	/**
 	 * The default value of the '{@link #isHasRecycledChildren() <em>Has Recycled Children</em>}' attribute.
@@ -202,8 +202,8 @@ public class CEGModelImpl extends CDOObjectImpl implements CEGModel {
 	 * @generated
 	 */
 	@Override
-	public boolean isIsRecycled() {
-		return (Boolean)eDynamicGet(RequirementsPackage.CEG_MODEL__IS_RECYCLED, BasePackage.Literals.IRECYCLED__IS_RECYCLED, true, true);
+	public boolean isRecycled() {
+		return (Boolean)eDynamicGet(RequirementsPackage.CEG_MODEL__RECYCLED, BasePackage.Literals.IRECYCLED__RECYCLED, true, true);
 	}
 
 	/**
@@ -212,8 +212,8 @@ public class CEGModelImpl extends CDOObjectImpl implements CEGModel {
 	 * @generated
 	 */
 	@Override
-	public void setIsRecycled(boolean newIsRecycled) {
-		eDynamicSet(RequirementsPackage.CEG_MODEL__IS_RECYCLED, BasePackage.Literals.IRECYCLED__IS_RECYCLED, newIsRecycled);
+	public void setRecycled(boolean newRecycled) {
+		eDynamicSet(RequirementsPackage.CEG_MODEL__RECYCLED, BasePackage.Literals.IRECYCLED__RECYCLED, newRecycled);
 	}
 
 	/**
@@ -338,8 +338,8 @@ public class CEGModelImpl extends CDOObjectImpl implements CEGModel {
 				return getName();
 			case RequirementsPackage.CEG_MODEL__DESCRIPTION:
 				return getDescription();
-			case RequirementsPackage.CEG_MODEL__IS_RECYCLED:
-				return isIsRecycled();
+			case RequirementsPackage.CEG_MODEL__RECYCLED:
+				return isRecycled();
 			case RequirementsPackage.CEG_MODEL__HAS_RECYCLED_CHILDREN:
 				return isHasRecycledChildren();
 			case RequirementsPackage.CEG_MODEL__CONTENTS:
@@ -372,8 +372,8 @@ public class CEGModelImpl extends CDOObjectImpl implements CEGModel {
 			case RequirementsPackage.CEG_MODEL__DESCRIPTION:
 				setDescription((String)newValue);
 				return;
-			case RequirementsPackage.CEG_MODEL__IS_RECYCLED:
-				setIsRecycled((Boolean)newValue);
+			case RequirementsPackage.CEG_MODEL__RECYCLED:
+				setRecycled((Boolean)newValue);
 				return;
 			case RequirementsPackage.CEG_MODEL__HAS_RECYCLED_CHILDREN:
 				setHasRecycledChildren((Boolean)newValue);
@@ -414,8 +414,8 @@ public class CEGModelImpl extends CDOObjectImpl implements CEGModel {
 			case RequirementsPackage.CEG_MODEL__DESCRIPTION:
 				setDescription(DESCRIPTION_EDEFAULT);
 				return;
-			case RequirementsPackage.CEG_MODEL__IS_RECYCLED:
-				setIsRecycled(IS_RECYCLED_EDEFAULT);
+			case RequirementsPackage.CEG_MODEL__RECYCLED:
+				setRecycled(RECYCLED_EDEFAULT);
 				return;
 			case RequirementsPackage.CEG_MODEL__HAS_RECYCLED_CHILDREN:
 				setHasRecycledChildren(HAS_RECYCLED_CHILDREN_EDEFAULT);
@@ -450,8 +450,8 @@ public class CEGModelImpl extends CDOObjectImpl implements CEGModel {
 				return NAME_EDEFAULT == null ? getName() != null : !NAME_EDEFAULT.equals(getName());
 			case RequirementsPackage.CEG_MODEL__DESCRIPTION:
 				return DESCRIPTION_EDEFAULT == null ? getDescription() != null : !DESCRIPTION_EDEFAULT.equals(getDescription());
-			case RequirementsPackage.CEG_MODEL__IS_RECYCLED:
-				return isIsRecycled() != IS_RECYCLED_EDEFAULT;
+			case RequirementsPackage.CEG_MODEL__RECYCLED:
+				return isRecycled() != RECYCLED_EDEFAULT;
 			case RequirementsPackage.CEG_MODEL__HAS_RECYCLED_CHILDREN:
 				return isHasRecycledChildren() != HAS_RECYCLED_CHILDREN_EDEFAULT;
 			case RequirementsPackage.CEG_MODEL__CONTENTS:
@@ -487,7 +487,7 @@ public class CEGModelImpl extends CDOObjectImpl implements CEGModel {
 		}
 		if (baseClass == IRecycled.class) {
 			switch (derivedFeatureID) {
-				case RequirementsPackage.CEG_MODEL__IS_RECYCLED: return BasePackage.IRECYCLED__IS_RECYCLED;
+				case RequirementsPackage.CEG_MODEL__RECYCLED: return BasePackage.IRECYCLED__RECYCLED;
 				case RequirementsPackage.CEG_MODEL__HAS_RECYCLED_CHILDREN: return BasePackage.IRECYCLED__HAS_RECYCLED_CHILDREN;
 				default: return -1;
 			}
@@ -523,7 +523,7 @@ public class CEGModelImpl extends CDOObjectImpl implements CEGModel {
 		}
 		if (baseClass == IRecycled.class) {
 			switch (baseFeatureID) {
-				case BasePackage.IRECYCLED__IS_RECYCLED: return RequirementsPackage.CEG_MODEL__IS_RECYCLED;
+				case BasePackage.IRECYCLED__RECYCLED: return RequirementsPackage.CEG_MODEL__RECYCLED;
 				case BasePackage.IRECYCLED__HAS_RECYCLED_CHILDREN: return RequirementsPackage.CEG_MODEL__HAS_RECYCLED_CHILDREN;
 				default: return -1;
 			}

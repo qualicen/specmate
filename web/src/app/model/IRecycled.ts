@@ -9,7 +9,7 @@
 		 className: string;
 		
 		// Attributes
-		 isRecycled: EBoolean;
+		 recycled: EBoolean;
 		 hasRecycledChildren: EBoolean;
 
 		// References

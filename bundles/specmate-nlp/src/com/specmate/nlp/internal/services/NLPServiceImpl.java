@@ -71,8 +71,14 @@ public class NLPServiceImpl implements INLPService {
 			posTagger = createEngineDescription(OpenNlpPosTagger.class, OpenNlpPosTagger.PARAM_LANGUAGE, lang,
 					OpenNlpPosTagger.PARAM_VARIANT, "maxent");
 			chunker = createEngineDescription(OpenNlpChunker.class, OpenNlpChunker.PARAM_LANGUAGE, lang);
-			dependencyParser = createEngineDescription(DependencyParserAnalysisComponent.class,
-					DependencyParserAnalysisComponent.PARAM_LANGUAGE, lang);
+			dependencyParser = createEngineDescription(DependencyParser.class,
+					MaltParser.PARAM_IGNORE_MISSING_FEATURES, true,
+					MaltParser.PARAM_LANGUAGE, lang,
+					DependencyParser.PARAM_PARSE_MODE, DependencyParser.MODE_SPACY,
+					DependencyParser.PARAM_SPACY_URL, "http://127.0.0.1:80"
+					);
+
+
 			parser = createEngineDescription(OpenNlpParser.class, OpenNlpParser.PARAM_PRINT_TAGSET, true,
 					OpenNlpParser.PARAM_LANGUAGE, lang, OpenNlpParser.PARAM_WRITE_PENN_TREE, true,
 					OpenNlpParser.PARAM_WRITE_POS, true);
@@ -107,8 +113,8 @@ public class NLPServiceImpl implements INLPService {
 			chunker = createEngineDescription(OpenNlpChunker.class, OpenNlpParser.PARAM_PRINT_TAGSET, true,
 					OpenNlpChunker.PARAM_LANGUAGE, lang, OpenNlpChunker.PARAM_MODEL_LOCATION,
 					"classpath:/models/de-chunker.bin");
-			dependencyParser = createEngineDescription(DependencyParserAnalysisComponent.class,
-					DependencyParserAnalysisComponent.PARAM_LANGUAGE, lang);
+			dependencyParser = createEngineDescription(DependencyParser.class,
+					DependencyParser.PARAM_LANGUAGE, lang);
 			parser = createEngineDescription(OpenNlpParser.class, OpenNlpParser.PARAM_PRINT_TAGSET, true,
 					OpenNlpParser.PARAM_LANGUAGE, lang, OpenNlpParser.PARAM_WRITE_PENN_TREE, false,
 					OpenNlpParser.PARAM_WRITE_POS, false, OpenNlpParser.PARAM_MODEL_LOCATION,

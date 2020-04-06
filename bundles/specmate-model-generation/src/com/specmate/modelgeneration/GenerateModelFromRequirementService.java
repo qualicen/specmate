@@ -87,6 +87,8 @@ public class GenerateModelFromRequirementService extends RestServiceBase {
 		if (text == null || StringUtils.isEmpty(text)) {
 			return model;
 		}
+		// Fixes some issues with the dkpro/spacy backoff.
+		text = text.replaceAll("[^,.!? ](?=[,.!?])", "$0 ").replaceAll("\\s+", " ");
 		text = new PersonalPronounsReplacer(tagger).replacePronouns(text);
 		ELanguage lang = NLPUtil.detectLanguage(text);
 		ICEGFromRequirementGenerator generator;

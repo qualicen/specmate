@@ -30,6 +30,6 @@ public class TextPreProcessor {
 
 	private String generalProcessing(String text) {
 		// Add Space before punctuation.
-		return text.replaceAll("[^,.!?](?=[,.!?])", "$0 ");
+		return text.replaceAll("[^,.!? ](?=[,.!?])", "$0 ").replaceAll("\\s+", " ");
 	}
 }

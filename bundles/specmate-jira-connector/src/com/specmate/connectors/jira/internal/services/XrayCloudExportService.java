@@ -2,7 +2,6 @@ package com.specmate.connectors.jira.internal.services;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -14,7 +13,6 @@ import org.json.JSONObject;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
-import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.log.LogService;
 
@@ -29,6 +27,7 @@ import com.specmate.model.testspecification.TestProcedure;
 import com.specmate.model.testspecification.TestSpecification;
 import com.specmate.model.testspecification.TestStep;
 import com.specmate.rest.RestClient;
+import com.specmate.rest.RestClient.EAuthType;
 import com.specmate.rest.RestResult;
 
 /** Exporter for jira */
@@ -68,7 +67,7 @@ public class XrayCloudExportService extends ExporterBase {
 	private RestClient restClient;
 
 	public XrayCloudExportService() {
-		super("XRay");
+		super("Xray Cloud");
 	}
 
 	@Activate
@@ -100,12 +99,6 @@ public class XrayCloudExportService extends ExporterBase {
 			logService.log(LogService.LOG_WARNING, "No test type provided for xray cloud export, assuming \"Manual\"");
 			testType = "Manual";
 		}
-		restClient = new RestClient(url, 10000, logService);
-	}
-
-	@Deactivate
-	public void deactivate() {
-		restClient.close();
 	}
 
 	@Override
@@ -136,15 +129,18 @@ public class XrayCloudExportService extends ExporterBase {
 
 	public Optional<Export> exportTestProcedure(TestProcedure testProcedure) throws SpecmateException {
 		String token = authenticate();
-		token = token.replaceAll("^\"|\"$", "");
-		Map<String, String> headers = new HashMap<>();
-		headers.put("Authorization", "Bearer " + token);
-		JSONArray exportObjs = getExportObjects(testProcedure);
-		RestResult<JSONObject> result = restClient.post(xrayPath("/import/test/bulk"), exportObjs, null, headers);
-		if (result.getResponse().getStatus() == Response.Status.OK.getStatusCode()) {
-			return Optional.empty();
-		} else {
-			throw new SpecmateInternalException(ErrorCode.JIRA, "Could not export test procedure");
+		restClient = new RestClient(url, EAuthType.BEARER, token, 10000, logService);
+		try {
+			token = token.replaceAll("^\"|\"$", "");
+			JSONArray exportObjs = getExportObjects(testProcedure);
+			RestResult<JSONObject> result = restClient.post(xrayPath("/import/test/bulk"), exportObjs);
+			if (result.getResponse().getStatus() == Response.Status.OK.getStatusCode()) {
+				return Optional.empty();
+			} else {
+				throw new SpecmateInternalException(ErrorCode.JIRA, "Could not export test procedure");
+			}
+		} finally {
+			restClient.close();
 		}
 	}
 

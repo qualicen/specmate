@@ -20,32 +20,49 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.osgi.service.log.LogService;
 
-public class RestClient {
+public class RestClient implements AutoCloseable {
 
 	private Client restClient;
 	private String restUrl;
 	private int timeout;
 	private LogService logService;
-	private String authenticationToken;
+	private String authorization;
 
-	public RestClient(String restUrl, String authenticationToken, int timeout, LogService logService) {
+	public enum EAuthType {
+
+		BASIC("Basic"), TOKEN("Token"), BEARER("Bearer");
+
+		String authType;
+
+		EAuthType(String authType) {
+			this.authType = authType;
+		}
+
+		@Override
+		public String toString() {
+			return authType;
+		}
+	}
+
+	public RestClient(String restUrl, EAuthType authType, String authentication, int timeout, LogService logService) {
 		restClient = initializeClient();
 		this.restUrl = restUrl;
 		this.timeout = timeout;
 		this.logService = logService;
-		this.authenticationToken = authenticationToken != null ? authenticationToken : "";
+		authorization = authType != null ? authType.toString() + " " + authentication : "";
 	}
 
+	@Override
 	public void close() {
 		restClient.close();
 	}
 
-	public RestClient(String restUrl, String authenticationToken, LogService logService) {
-		this(restUrl, authenticationToken, 5000, logService);
+	public RestClient(String restUrl, EAuthType authType, String authentication, LogService logService) {
+		this(restUrl, authType, authentication, 5000, logService);
 	}
 
 	public RestClient(String restUrl, int timeout, LogService logService) {
-		this(restUrl, null, timeout, logService);
+		this(restUrl, null, null, timeout, logService);
 	}
 
 	private Client initializeClient() {
@@ -75,8 +92,8 @@ public class RestClient {
 		}
 		WebTarget getTarget = restClient.target(uriBuilder);
 		Invocation.Builder invocationBuilder = getTarget.request();
-		if (authenticationToken != null && !authenticationToken.isEmpty()) {
-			invocationBuilder.header(HttpHeaders.AUTHORIZATION, "Token " + authenticationToken);
+		if (authorization != null && !authorization.isEmpty()) {
+			invocationBuilder.header(HttpHeaders.AUTHORIZATION, authorization);
 		}
 		if (headers != null) {
 			headers.forEach((key, val) -> invocationBuilder.header(key, val));

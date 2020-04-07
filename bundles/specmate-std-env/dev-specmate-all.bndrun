@@ -183,7 +183,6 @@
 	org.eclipse.emf.cdo.server.db;version='[4.4.0,4.4.1)',\
 	specmate-jira-connector;version=snapshot,\
 	specmate-rest;version=snapshot,\
-	specmate-scheduler;version=snapshot,\
 	com.ibm.icu;version='[63.1.0,63.1.1)',\
 	io.reactivex.rxjava2.rxjava;version='[2.2.3,2.2.4)',\
 	it.unimi.dsi.fastutil;version='[8.2.2,8.2.3)',\
@@ -244,5 +243,7 @@
 	Local
 -runvm: -Xmx6000m\n\
 	-Djdk.crypto.KeyAgreement.legacyKDF=true
--resolve: auto
+	-Djavax.net.ssl.trustStore=C:\Users\junkerm\GIT\specmate_neu\bundles\specmate-std-env\keystore-jira-qualicen.p12
+	-Djavax.net.ssl.trustStorePassword=000000  
+
 -runee: JavaSE-11

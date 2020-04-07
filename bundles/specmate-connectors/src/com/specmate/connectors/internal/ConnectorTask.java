@@ -27,6 +27,7 @@ import com.specmate.scheduler.SchedulerTask;
 
 public class ConnectorTask extends SchedulerTask {
 
+	private static final int BATCH_SIZE = 100;
 	private static final int MAX_FIELD_LENGTH = 4000;
 	private LogService logService;
 	private ITransaction transaction;
@@ -55,12 +56,18 @@ public class ConnectorTask extends SchedulerTask {
 				if (requirements == null) {
 					continue;
 				}
-				IContainer localContainer = getOrCreateLocalContainer(resource, source.getId());
+
+				IContainer localRootContainer = getOrCreateLocalRootContainer(resource, source.getId());
+				// Build hashset (extid -> requirement) for local requirements
+				TreeIterator<EObject> localIterator = localRootContainer.eAllContents();
+				HashMap<String, EObject> localRequirementsMap = new HashMap<>();
+				buildExtIdMap(localIterator, localRequirementsMap);
+
 				Requirement[] reqArray = requirements.toArray(new Requirement[0]);
 				int greatestUnhandledIndex = 0;
 				int maxIndex = requirements.size() - 1;
 				while (greatestUnhandledIndex <= maxIndex) {
-					int upperIndexExclusive = Math.min(greatestUnhandledIndex + 100, maxIndex + 1);
+					int upperIndexExclusive = Math.min(greatestUnhandledIndex + BATCH_SIZE, maxIndex + 1);
 					Requirement[] current = Arrays.copyOfRange(reqArray, greatestUnhandledIndex, upperIndexExclusive);
 					greatestUnhandledIndex = upperIndexExclusive;
 					List<Requirement> tosync = Arrays.asList(current);
@@ -69,7 +76,7 @@ public class ConnectorTask extends SchedulerTask {
 						transaction.doAndCommit(new IChange<Object>() {
 							@Override
 							public Object doChange() throws SpecmateException {
-								syncContainers(localContainer, tosync, source);
+								syncContainers(localRootContainer, localRequirementsMap, tosync, source);
 								return null;
 							}
 						});
@@ -87,31 +94,15 @@ public class ConnectorTask extends SchedulerTask {
 		}
 	}
 
-	private void syncContainers(IContainer localContainer, Collection<Requirement> requirements,
-			IRequirementsSource source) {
-		// Build hashset (extid -> requirement) for local requirements
-		TreeIterator<EObject> localIterator = localContainer.eAllContents();
-		HashMap<String, EObject> localRequirementsMap = new HashMap<>();
-		buildExtIdMap(localIterator, localRequirementsMap);
-
+	private void syncContainers(IContainer localRootContainer, HashMap<String, EObject> localRequirementsMap,
+			Collection<Requirement> requirements, IRequirementsSource source) {
 		// Build hashset (extid -> requirement) for remote requirements
 		HashMap<String, EObject> remoteRequirementsMap = new HashMap<>();
 		buildExtIdMap(requirements.iterator(), remoteRequirementsMap);
-		logService.log(LogService.LOG_INFO, "Retrieved " + remoteRequirementsMap.entrySet().size() + " requirements.");
-
-		// find new requirements
-		remoteRequirementsMap.keySet().removeAll(localRequirementsMap.keySet());
-
-		logService.log(LogService.LOG_INFO, "Adding " + remoteRequirementsMap.size() + " new requirements.");
 
 		// add new requirements to local container and all folders on the way
 		for (Entry<String, EObject> entry : remoteRequirementsMap.entrySet()) {
-			Requirement requirementToAdd = (Requirement) entry.getValue();
-			boolean valid = ensureValid(requirementToAdd);
-			if (!valid) {
-				logService.log(LogService.LOG_WARNING, "Found invalid requirement with id " + requirementToAdd.getId());
-				continue;
-			}
+
 			IContainer reqContainer;
 			try {
 				reqContainer = source.getContainerForRequirement((Requirement) entry.getValue());
@@ -120,20 +111,31 @@ public class ConnectorTask extends SchedulerTask {
 				logService.log(LogService.LOG_ERROR, e.getMessage());
 				continue;
 			}
-			IContainer foundContainer = (IContainer) SpecmateEcoreUtil.getEObjectWithId(reqContainer.getId(),
-					localContainer.eContents());
+
+			IContainer foundContainer = getOrCreateLocalSubContainer(localRootContainer, reqContainer);
 			if (foundContainer == null) {
-				logService.log(LogService.LOG_DEBUG, "Creating new folder " + reqContainer.getName());
-				foundContainer = BaseFactory.eINSTANCE.createFolder();
-				SpecmateEcoreUtil.copyAttributeValues(reqContainer, foundContainer);
-				valid = ensureValid(foundContainer);
-				if (!valid) {
-					logService.log(LogService.LOG_WARNING, "Found invalid folder with id " + foundContainer.getId());
-					continue;
-				}
-				localContainer.getContents().add(foundContainer);
+				continue;
 			}
 
+			Requirement requirementToAdd = (Requirement) entry.getValue();
+			boolean valid = ensureValid(requirementToAdd);
+			if (!valid) {
+				logService.log(LogService.LOG_WARNING, "Found invalid requirement with id " + requirementToAdd.getId());
+				continue;
+			}
+
+			Requirement localRequirement = (Requirement) localRequirementsMap.get(requirementToAdd.getExtId());
+
+			if (localRequirement != null) {
+				// Requirement exists
+				// --> update attributes
+				SpecmateEcoreUtil.copyAttributeValues(requirementToAdd, localRequirement);
+				// --> if requirement has moved, move to new folder
+				foundContainer.getContents().add(localRequirement);
+				continue;
+			}
+
+			// new requirement: add to folder
 			logService.log(LogService.LOG_DEBUG, "Adding requirement " + requirementToAdd.getId());
 			foundContainer.getContents().add(requirementToAdd);
 		}
@@ -156,7 +158,27 @@ public class ConnectorTask extends SchedulerTask {
 		return true;
 	}
 
-	private IContainer getOrCreateLocalContainer(Resource resource, String name) {
+	private IContainer getOrCreateLocalSubContainer(IContainer rootContainer, IContainer reqContainer) {
+		IContainer foundContainer = rootContainer;
+		if (reqContainer != null) {
+			foundContainer = (IContainer) SpecmateEcoreUtil.getEObjectWithId(reqContainer.getId(),
+					rootContainer.eContents());
+			if (foundContainer == null) {
+				logService.log(LogService.LOG_DEBUG, "Creating new folder " + reqContainer.getName());
+				foundContainer = BaseFactory.eINSTANCE.createFolder();
+				SpecmateEcoreUtil.copyAttributeValues(reqContainer, foundContainer);
+				boolean valid = ensureValid(foundContainer);
+				if (!valid) {
+					logService.log(LogService.LOG_WARNING, "Found invalid folder with id " + foundContainer.getId());
+					return null;
+				}
+				rootContainer.getContents().add(foundContainer);
+			}
+		}
+		return foundContainer;
+	}
+
+	private IContainer getOrCreateLocalRootContainer(Resource resource, String name) {
 		EObject object = SpecmateEcoreUtil.getEObjectWithId(name, resource.getContents());
 		if (object != null) {
 			if (object instanceof IContainer) {

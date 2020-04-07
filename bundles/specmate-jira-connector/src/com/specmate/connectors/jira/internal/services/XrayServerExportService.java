@@ -4,7 +4,8 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.runtime.Status;
+import javax.ws.rs.core.Response.Status;
+
 import org.json.JSONObject;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -41,7 +42,7 @@ public class XrayServerExportService extends JiraExportServiceBase {
 
 	@Override
 	protected void exportTestStepsPost(TestProcedure procedure, BasicIssue issue) throws SpecmateException {
-		String basicAuth = Base64.getEncoder().encodeToString(String.format("%:%", username, password).getBytes());
+		String basicAuth = Base64.getEncoder().encodeToString(String.format("%s:%s", username, password).getBytes());
 		RestClient restClient = new RestClient(url, EAuthType.BASIC, basicAuth, 10000, logService);
 
 		try (restClient) {
@@ -50,8 +51,9 @@ public class XrayServerExportService extends JiraExportServiceBase {
 				JSONObject stepObj = new JSONObject();
 				stepObj.put("step", step.getDescription());
 				stepObj.put("data", step.getExpectedOutcome());
-				RestResult<JSONObject> result = restClient.put("/rest/raven/1.0/api/test/" + issue.getKey(), stepObj);
-				if (result.getResponse().getStatus() != Status.OK) {
+				RestResult<JSONObject> result = restClient.put("/rest/raven/1.0/api/test/" + issue.getKey() + "/step",
+						stepObj);
+				if (result.getResponse().getStatus() != Status.OK.getStatusCode()) {
 					throw new SpecmateInternalException(ErrorCode.JIRA, "Error while exporting test step");
 				}
 			}

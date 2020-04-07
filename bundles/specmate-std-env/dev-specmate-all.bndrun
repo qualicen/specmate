@@ -243,7 +243,6 @@
 	Local
 -runvm: -Xmx6000m\n\
 	-Djdk.crypto.KeyAgreement.legacyKDF=true
-	-Djavax.net.ssl.trustStore=C:\Users\junkerm\GIT\specmate_neu\bundles\specmate-std-env\keystore-jira-qualicen.p12
-	-Djavax.net.ssl.trustStorePassword=000000  
+	 
 
 -runee: JavaSE-11

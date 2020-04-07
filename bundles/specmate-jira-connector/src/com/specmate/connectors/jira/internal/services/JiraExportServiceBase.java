@@ -1,13 +1,16 @@
 package com.specmate.connectors.jira.internal.services;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.StreamSupport;
 
+import org.apache.commons.lang3.StringUtils;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.log.LogService;
 
@@ -57,6 +60,24 @@ public abstract class JiraExportServiceBase extends ExporterBase {
 		projectName = (String) properties.get(JiraConfigConstants.KEY_JIRA_PROJECT);
 		username = (String) properties.get(JiraConfigConstants.KEY_JIRA_USERNAME);
 		password = (String) properties.get(JiraConfigConstants.KEY_JIRA_PASSWORD);
+
+		try {
+			new URL(url);
+		} catch (MalformedURLException e) {
+			throw new SpecmateInternalException(ErrorCode.CONFIGURATION, "Malformed jira URL: " + url);
+		}
+		if (StringUtils.isBlank(projectName)) {
+			throw new SpecmateInternalException(ErrorCode.CONFIGURATION,
+					"No or empty project name given for jira exporter.");
+		}
+		if (StringUtils.isBlank(username)) {
+			throw new SpecmateInternalException(ErrorCode.CONFIGURATION,
+					"No or empty client id given for jira exporter.");
+		}
+		if (StringUtils.isBlank(password)) {
+			throw new SpecmateInternalException(ErrorCode.CONFIGURATION,
+					"No or empty password given for jira exporter.");
+		}
 
 		JiraRestClient jiraClient = null;
 		try {

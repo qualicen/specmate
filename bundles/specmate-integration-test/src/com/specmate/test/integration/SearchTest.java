@@ -4,6 +4,7 @@ import static com.specmate.test.integration.EmfRestTestUtil.matches;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.Map;
 
 import javax.ws.rs.core.Response.Status;
 
@@ -58,7 +59,7 @@ public class SearchTest extends EmfRestTest {
 
 	private JSONArray performSearch(String query) {
 		String searchUrl = buildProjectUrl("search");
-		RestResult<JSONArray> result = restClient.getList(searchUrl, "query", query);
+		RestResult<JSONArray> result = restClient.getList(searchUrl, Map.of("query", query));
 		Assert.assertEquals(Status.OK.getStatusCode(), result.getResponse().getStatus());
 		result.getResponse().close();
 		JSONArray foundObjects = result.getPayload();
@@ -236,7 +237,7 @@ public class SearchTest extends EmfRestTest {
 
 	@Test
 	public void testReIndexing() throws InterruptedException {
-		this.getSearchService().disableIndexing();
+		getSearchService().disableIndexing();
 
 		JSONObject folder = createTestFolder();
 		folder.put(BasePackage.Literals.INAMED__NAME.getName(), "Test");

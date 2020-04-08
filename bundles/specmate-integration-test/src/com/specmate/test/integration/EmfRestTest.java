@@ -59,7 +59,7 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 			session = authenticationService.authenticate("resttest", "resttest");
 
 			if (restClient == null) {
-				restClient = new RestClient(REST_ENDPOINT, session.getId(), logService);
+				restClient = new RestClient(REST_ENDPOINT, RestClient.EAuthType.TOKEN, session.getId(), logService);
 			}
 		}
 

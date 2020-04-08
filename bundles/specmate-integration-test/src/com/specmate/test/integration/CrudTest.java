@@ -2,6 +2,7 @@ package com.specmate.test.integration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.core.Response.Status;
 
@@ -772,7 +773,7 @@ public class CrudTest extends EmfRestTest {
 
 		// Perform recursive list call
 		String listUrl = buildUrl("listRecursive", requirementId);
-		RestResult<JSONArray> listResult = restClient.getList(listUrl, "class", "TestSpecification");
+		RestResult<JSONArray> listResult = restClient.getList(listUrl, Map.of("class", "TestSpecification"));
 		Assert.assertEquals(Status.OK.getStatusCode(), listResult.getResponse().getStatus());
 		JSONArray retrievedTestSpecifications = listResult.getPayload();
 		logService.log(LogService.LOG_DEBUG,
@@ -806,7 +807,7 @@ public class CrudTest extends EmfRestTest {
 
 		// Perform recursive list call
 		String listUrl = buildUrl("listRecursive", requirementId);
-		RestResult<JSONArray> listResult = restClient.getList(listUrl, "class", "TestSpecification");
+		RestResult<JSONArray> listResult = restClient.getList(listUrl, Map.of("class", "TestSpecification"));
 		Assert.assertEquals(Status.OK.getStatusCode(), listResult.getResponse().getStatus());
 		JSONArray retrievedTestSpecifications = listResult.getPayload();
 		logService.log(LogService.LOG_DEBUG,

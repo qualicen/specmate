@@ -33,6 +33,8 @@ import com.specmate.model.base.Folder;
 import com.specmate.model.base.IContainer;
 import com.specmate.model.base.IContentElement;
 import com.specmate.model.base.IRecycled;
+import com.specmate.model.testspecification.TestProcedure;
+import com.specmate.model.testspecification.TestStep;
 
 public class SpecmateEcoreUtil {
 
@@ -313,6 +315,12 @@ public class SpecmateEcoreUtil {
 		} else {
 			throw new SpecmateInternalException(ErrorCode.INTERNAL_PROBLEM, "Object is no resource and no EObject.");
 		}
+	}
+
+	public static List<TestStep> getStepsSorted(TestProcedure testProcedure) {
+		List<TestStep> steps = SpecmateEcoreUtil.pickInstancesOf(testProcedure.getContents(), TestStep.class);
+		steps.sort((s1, s2) -> Integer.compare(s1.getPosition(), s2.getPosition()));
+		return steps;
 	}
 
 }

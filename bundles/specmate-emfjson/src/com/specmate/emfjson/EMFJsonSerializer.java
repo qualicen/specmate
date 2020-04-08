@@ -2,6 +2,8 @@ package com.specmate.emfjson;
 
 import java.util.List;
 
+
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -17,6 +19,7 @@ import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.model.administration.ErrorCode;
 import com.specmate.urihandler.IURIFactory;
+import org.owasp.encoder.*;
 
 /**
  * Serializer for EMF models to JSON
@@ -133,6 +136,7 @@ public class EMFJsonSerializer {
 	 */
 	private JSONObject serializeObject(EObject eObject) throws SpecmateException {
 		JSONObject result = new JSONObject();
+		
 		serializeType(eObject, result);
 		serializeUri(eObject, result);
 		serializeFeatures(eObject, result);
@@ -190,7 +194,8 @@ public class EMFJsonSerializer {
 		} else if (value instanceof Boolean) {
 			return value;
 		} else {
-			return value.toString();
+			String v = value.toString();
+			return Encode.forHtml(v);
 		}
 	}
 

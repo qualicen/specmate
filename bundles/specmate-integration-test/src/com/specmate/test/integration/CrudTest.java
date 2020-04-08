@@ -965,32 +965,32 @@ public class CrudTest extends EmfRestTest {
 		recycleObject(folderName, requirementName, cegName);
 
 		JSONObject retrievedFolder = getObject(folderName);
-		Assert.assertTrue(retrievedFolder.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()) == true);
-		Assert.assertTrue(retrievedFolder.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()) == false);
+		Assert.assertTrue(retrievedFolder.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()));
+		Assert.assertFalse(retrievedFolder.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()));
 
 		JSONObject retrievedRequirement = getObject(folderName, requirementName);
-		Assert.assertTrue(retrievedRequirement.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()) == true);
-		Assert.assertTrue(retrievedRequirement.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()) == false);
+		Assert.assertTrue(retrievedRequirement.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()));
+		Assert.assertFalse(retrievedRequirement.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()));
 
 		JSONObject retrievedCeg = getObject(folderName, requirementName, cegName);
-		Assert.assertTrue(retrievedCeg.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()) == true);
-		Assert.assertTrue(retrievedCeg.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()) == true);
+		Assert.assertTrue(retrievedCeg.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()));
+		Assert.assertTrue(retrievedCeg.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()));
 
 		JSONObject retrievedTestSpec = getObject(folderName, requirementName, cegName, testSpecName);
-		Assert.assertTrue(retrievedTestSpec.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()) == true);
-		Assert.assertTrue(retrievedTestSpec.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()) == true);
+		Assert.assertTrue(retrievedTestSpec.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()));
+		Assert.assertTrue(retrievedTestSpec.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()));
 
 		JSONObject retrievedTestSpec2 = getObject(folderName, requirementName, cegName, testSpecName2);
-		Assert.assertTrue(retrievedTestSpec2.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()) == true);
-		Assert.assertTrue(retrievedTestSpec2.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()) == true);
+		Assert.assertTrue(retrievedTestSpec2.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()));
+		Assert.assertTrue(retrievedTestSpec2.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()));
 
 		JSONObject retrievedProcess = getObject(folderName, requirementName, processName);
-		Assert.assertTrue(retrievedProcess.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()) == false);
-		Assert.assertTrue(retrievedProcess.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()) == false);
+		Assert.assertFalse(retrievedProcess.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()));
+		Assert.assertFalse(retrievedProcess.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()));
 
 		JSONObject retrievedTestSpec3 = getObject(folderName, requirementName, processName, testSpecName3);
-		Assert.assertTrue(retrievedTestSpec3.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()) == false);
-		Assert.assertTrue(retrievedTestSpec3.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()) == false);
+		Assert.assertFalse(retrievedTestSpec3.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()));
+		Assert.assertFalse(retrievedTestSpec3.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()));
 	}
 
 	@Test
@@ -1013,29 +1013,29 @@ public class CrudTest extends EmfRestTest {
 		recycleObject(folderName, requirementName, cegName);
 
 		JSONObject retrievedCegRecycled = getObject(folderName, requirementName, cegName);
-		Assert.assertTrue(retrievedCegRecycled.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()) == true);
+		Assert.assertTrue(retrievedCegRecycled.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()));
 
 		restoreObject(folderName, requirementName, cegName);
 
 		JSONObject retrievedFolder = getObject(folderName);
-		Assert.assertTrue(retrievedFolder.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()) == false);
-		Assert.assertTrue(retrievedFolder.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()) == false);
+		Assert.assertFalse(retrievedFolder.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()));
+		Assert.assertFalse(retrievedFolder.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()));
 
 		JSONObject retrievedRequirement = getObject(folderName, requirementName);
-		Assert.assertTrue(retrievedRequirement.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()) == false);
-		Assert.assertTrue(retrievedRequirement.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()) == false);
+		Assert.assertFalse(retrievedRequirement.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()));
+		Assert.assertFalse(retrievedRequirement.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()));
 
 		JSONObject retrievedCeg = getObject(folderName, requirementName, cegName);
-		Assert.assertTrue(retrievedCeg.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()) == false);
-		Assert.assertTrue(retrievedCeg.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()) == false);
+		Assert.assertFalse(retrievedCeg.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()));
+		Assert.assertFalse(retrievedCeg.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()));
 
 		JSONObject retrievedTestSpec = getObject(folderName, requirementName, cegName, testSpecName);
-		Assert.assertTrue(retrievedTestSpec.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()) == false);
-		Assert.assertTrue(retrievedTestSpec.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()) == false);
+		Assert.assertFalse(retrievedTestSpec.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()));
+		Assert.assertFalse(retrievedTestSpec.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()));
 
 		JSONObject retrievedTestSpec2 = getObject(folderName, requirementName, cegName, testSpecName2);
-		Assert.assertTrue(retrievedTestSpec2.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()) == false);
-		Assert.assertTrue(retrievedTestSpec2.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()) == false);
+		Assert.assertFalse(retrievedTestSpec2.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()));
+		Assert.assertFalse(retrievedTestSpec2.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()));
 	}
 	
 	@Test
@@ -1055,11 +1055,11 @@ public class CrudTest extends EmfRestTest {
 		deleteObject(folderName, requirementName, cegName);
 
 		JSONObject retrievedFolder = getObject(folderName);
-		Assert.assertTrue(retrievedFolder.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()) == false);
-		Assert.assertTrue(retrievedFolder.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()) == false);
+		Assert.assertFalse(retrievedFolder.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()));
+		Assert.assertFalse(retrievedFolder.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()));
 
 		JSONObject retrievedRequirement = getObject(folderName, requirementName);
-		Assert.assertTrue(retrievedRequirement.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()) == false);
-		Assert.assertTrue(retrievedRequirement.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()) == false);
+		Assert.assertFalse(retrievedRequirement.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()));
+		Assert.assertFalse(retrievedRequirement.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()));
 	}
 }

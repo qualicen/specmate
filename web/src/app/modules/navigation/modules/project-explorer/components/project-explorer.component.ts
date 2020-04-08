@@ -13,7 +13,7 @@ import { Type } from '../../../../../util/type';
 import { SpecmateDataService } from '../../../../data/modules/data-service/services/specmate-data.service';
 import { AuthenticationService } from '../../../../views/main/authentication/modules/auth/services/authentication.service';
 import { NavigatorService } from '../../navigator/services/navigator.service';
-
+enum ActiveTab { project, library, recycleBin }
 
 @Component({
     moduleId: module.id.toString(),
@@ -27,9 +27,7 @@ export class ProjectExplorer implements OnInit {
     public _rootLibraries: IContainer[];
     public _rootRecycleBinProject: IContainer[];
     public _rootRecycleBinLibrary: IContainer[];
-    public showProject = true;
-    public showLibrary = false;
-    public showRecycleBin = false;
+    public currentActiveTab = ActiveTab.project;
 
     private searchQueries: Subject<string>;
     protected searchResults: IContentElement[];
@@ -95,14 +93,14 @@ export class ProjectExplorer implements OnInit {
     }
 
     public get canLoadMoreRecycleBinFoldersProject(): boolean {
-        if (this._rootRecycleBinProject === undefined || this._rootRecycleBinProject === null ) {
+        if (this._rootRecycleBinProject === undefined || this._rootRecycleBinProject === null) {
             return false;
         }
         return this._rootRecycleBinProject.length > this.numRecycleBinFoldersDisplayed;
     }
 
     public get canLoadMoreRecycleBinFoldersLibrary(): boolean {
-        if (this._rootRecycleBinLibrary === undefined || this._rootRecycleBinLibrary === null ) {
+        if (this._rootRecycleBinLibrary === undefined || this._rootRecycleBinLibrary === null) {
             return false;
         }
         return this._rootRecycleBinLibrary.length > this.numRecycleBinFoldersDisplayed;
@@ -132,7 +130,7 @@ export class ProjectExplorer implements OnInit {
         this._rootLibraries = projectContents.filter(c => Type.is(c, Folder) && (c as Folder).library && libraryFolders.indexOf(c.id) > -1);
         this._rootRecycleBinProject = projectContents.filter(c => Type.is(c, Folder) && !(c as Folder).library);
         this._rootRecycleBinLibrary = projectContents.filter(c => Type.is(c, Folder) && (c as Folder).library
-                                && libraryFolders.indexOf(c.id) > -1);
+            && libraryFolders.indexOf(c.id) > -1);
 
         let filter = { '-type': 'Folder' };
 
@@ -174,20 +172,14 @@ export class ProjectExplorer implements OnInit {
     }
 
     public switchToProject(): void {
-        this.showProject = true;
-        this.showLibrary = false;
-        this.showRecycleBin = false;
+        this.currentActiveTab = ActiveTab.project;
     }
 
     public switchToLibrary(): void {
-        this.showProject = false;
-        this.showLibrary = true;
-        this.showRecycleBin = false;
+        this.currentActiveTab = ActiveTab.library;
     }
     public switchToRecycleBin(): void {
-        this.showProject = false;
-        this.showLibrary = false;
-        this.showRecycleBin = true;
+        this.currentActiveTab = ActiveTab.recycleBin;
     }
 
     private clean(): void {

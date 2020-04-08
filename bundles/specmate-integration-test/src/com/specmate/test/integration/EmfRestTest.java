@@ -490,7 +490,6 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 		String recycleUrl = recycleUrl(segments);
 		logService.log(LogService.LOG_DEBUG, "Recycling object with URL " + recycleUrl);
 		RestResult<JSONObject> recycleResult = restClient.post(recycleUrl, null);
-		System.out.println("AAA " + recycleResult.getResponse());
 		Assert.assertEquals(Status.OK.getStatusCode(), recycleResult.getResponse().getStatus());
 		recycleResult.getResponse().close();
 	}

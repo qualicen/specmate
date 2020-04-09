@@ -13,6 +13,7 @@ import { Type } from '../../../../../util/type';
 import { SpecmateDataService } from '../../../../data/modules/data-service/services/specmate-data.service';
 import { AuthenticationService } from '../../../../views/main/authentication/modules/auth/services/authentication.service';
 import { NavigatorService } from '../../navigator/services/navigator.service';
+
 enum ActiveTab { project, library, recycleBin }
 
 @Component({
@@ -22,6 +23,7 @@ enum ActiveTab { project, library, recycleBin }
     styleUrls: ['project-explorer.component.css']
 })
 export class ProjectExplorer implements OnInit {
+    ActiveTab = ActiveTab;
 
     public _rootElements: IContainer[];
     public _rootLibraries: IContainer[];

@@ -47,21 +47,17 @@ button.expand:focus {
     color: #fff;
 }
 
-table {
-    table-layout: fixed;
-}
-
 .button-column {
     text-align: right;
     width: 70px;
+    position: -webkit-sticky;
+    position: sticky;
+    right: 0;
+    background: white;
 }
 
 .button-column button {
     border: 1px solid;
-}
-
-td {
-    overflow: hidden;
 }
 
 .button-column i {

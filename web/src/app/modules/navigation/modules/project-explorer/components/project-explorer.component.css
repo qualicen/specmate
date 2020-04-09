@@ -17,6 +17,7 @@ ul {
     padding: 0 0 0 0;
     margin-bottom: 0;
     padding-top: 3px;
+    display: inline-table;
 }
 
 .left-sidebar {
@@ -41,7 +42,6 @@ ul {
     margin-bottom: 0;
 }
 
-
 /* clears the 'X' from Internet Explorer */
 
 .form-control::-ms-clear {
@@ -55,7 +55,6 @@ ul {
     width: 0;
     height: 0;
 }
-
 
 /* clears the 'X' from Chrome */
 

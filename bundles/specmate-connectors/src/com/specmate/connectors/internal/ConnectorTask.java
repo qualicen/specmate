@@ -27,10 +27,19 @@ import com.specmate.scheduler.SchedulerTask;
 
 public class ConnectorTask extends SchedulerTask {
 
-	private static final int BATCH_SIZE = 100;
+	/** How many retrieved requirements to process in one transaction */
+	public static final int BATCH_SIZE = 100;
+
+	/** Max size of field */
 	private static final int MAX_FIELD_LENGTH = 4000;
+
+	/** The logging service */
 	private LogService logService;
+
+	/** The transaction */
 	private ITransaction transaction;
+
+	/** List of registered requirements sources */
 	private List<IRequirementsSource> requirementsSources;
 
 	public ConnectorTask(List<IRequirementsSource> requirementsSources, ITransaction transaction,
@@ -46,6 +55,10 @@ public class ConnectorTask extends SchedulerTask {
 		syncRequirementsFromSources();
 	}
 
+	/**
+	 * Retrieves requirements from all sources and processes them in batches of
+	 * BATCH_SIZE
+	 */
 	private void syncRequirementsFromSources() {
 		logService.log(LogService.LOG_INFO, "Synchronizing requirements");
 		Resource resource = transaction.getResource();
@@ -94,6 +107,9 @@ public class ConnectorTask extends SchedulerTask {
 		}
 	}
 
+	/**
+	 * Syncs remote requirements with locally available requirements.
+	 */
 	private void syncContainers(IContainer localRootContainer, HashMap<String, EObject> localRequirementsMap,
 			Collection<Requirement> requirements, IRequirementsSource source) {
 		// Build hashset (extid -> requirement) for remote requirements
@@ -141,6 +157,7 @@ public class ConnectorTask extends SchedulerTask {
 		}
 	}
 
+	/** Ensures a requirement is valid */
 	private boolean ensureValid(IContentElement element) {
 		if (StringUtils.isEmpty(element.getId())) {
 			return false;
@@ -158,6 +175,13 @@ public class ConnectorTask extends SchedulerTask {
 		return true;
 	}
 
+	/**
+	 * Retrieves a folder matching reqContainer or creates a new one.
+	 *
+	 * @param rootContainer
+	 * @param reqContainer
+	 * @return
+	 */
 	private IContainer getOrCreateLocalSubContainer(IContainer rootContainer, IContainer reqContainer) {
 		IContainer foundContainer = rootContainer;
 		if (reqContainer != null) {
@@ -178,6 +202,13 @@ public class ConnectorTask extends SchedulerTask {
 		return foundContainer;
 	}
 
+	/**
+	 * Retrieves a root folder with the given name or creates a new one
+	 *
+	 * @param resource
+	 * @param name
+	 * @return
+	 */
 	private IContainer getOrCreateLocalRootContainer(Resource resource, String name) {
 		EObject object = SpecmateEcoreUtil.getEObjectWithId(name, resource.getContents());
 		if (object != null) {
@@ -194,6 +225,12 @@ public class ConnectorTask extends SchedulerTask {
 		return folder;
 	}
 
+	/**
+	 * Builds a map from ext-ids to requirements
+	 *
+	 * @param iterator
+	 * @param requirementsMap
+	 */
 	private void buildExtIdMap(Iterator<? extends EObject> iterator, HashMap<String, EObject> requirementsMap) {
 		while (iterator.hasNext()) {
 			EObject content = iterator.next();

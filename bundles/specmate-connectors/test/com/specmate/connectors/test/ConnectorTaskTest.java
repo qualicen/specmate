@@ -117,7 +117,25 @@ public class ConnectorTaskTest {
 	}
 
 	@Test
-	public void testParentChange() {
+	public void testParentChange() throws SpecmateException {
+		IRequirementsSource reqSource = new TestRequirementSource_ParentChange();
+		runConnectorTaskWithSource(reqSource);
+
+		Folder folder = (Folder) contentList.get(0);
+
+		Folder subfolder1 = (Folder) SpecmateEcoreUtil.getEObjectWithId("folder1", folder.getContents());
+
+		Requirement req = (Requirement) SpecmateEcoreUtil.getEObjectWithId("id1", subfolder1.getContents());
+		assertEquals("id1", req.getId());
+		assertEquals("req1", req.getName());
+
+		runConnectorTaskWithSource(reqSource);
+		assertEquals(0, subfolder1.getContents().size());
+
+		Folder subfolder2 = (Folder) SpecmateEcoreUtil.getEObjectWithId("folder2", folder.getContents());
+		req = (Requirement) SpecmateEcoreUtil.getEObjectWithId("id1", subfolder2.getContents());
+		assertEquals("id1", req.getId());
+		assertEquals("req1", req.getName());
 	}
 
 	@Test
@@ -147,7 +165,6 @@ public class ConnectorTaskTest {
 		req = (Requirement) SpecmateEcoreUtil.getEObjectWithId("id3", subfolder.getContents());
 		assertNotNull(req);
 		assertEquals(req.getId(), req.getName());
-
 	}
 
 	private void runConnectorTaskWithSource(IRequirementsSource reqSource) throws SpecmateException {
@@ -252,7 +269,31 @@ public class ConnectorTaskTest {
 			requestCounter++;
 			return Arrays.asList(req);
 		}
+	}
 
+	private class TestRequirementSource_ParentChange extends TestRequirementSourceBase {
+
+		int requestCounter = 1;
+
+		@Override
+		public Collection<Requirement> getRequirements() throws SpecmateException {
+
+			Requirement req = RequirementsFactory.eINSTANCE.createRequirement();
+			req.setName("req1");
+			req.setId("id1");
+			req.setExtId("id1");
+			return Arrays.asList(req);
+		}
+
+		@Override
+		public IContainer getContainerForRequirement(Requirement requirement) throws SpecmateException {
+			Folder folder = BaseFactory.eINSTANCE.createFolder();
+			folder = BaseFactory.eINSTANCE.createFolder();
+			folder.setId("folder" + requestCounter);
+			folder.setName("folder" + requestCounter);
+			requestCounter++;
+			return folder;
+		}
 	}
 
 	private class TestRequirementSource_InvalidRequirements extends TestRequirementSourceBase {

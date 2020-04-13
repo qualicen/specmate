@@ -13,6 +13,7 @@ import { Type } from '../../../../../util/type';
 import { SpecmateDataService } from '../../../../data/modules/data-service/services/specmate-data.service';
 import { AuthenticationService } from '../../../../views/main/authentication/modules/auth/services/authentication.service';
 import { NavigatorService } from '../../navigator/services/navigator.service';
+import { Requirement } from 'src/app/model/Requirement';
 
 
 @Component({
@@ -95,7 +96,7 @@ export class ProjectExplorer implements OnInit {
             return;
         }
 
-        this._rootElements = projectContents.filter(c => Type.is(c, Folder) && !(c as Folder).library);
+        this._rootElements = projectContents.filter(c => Type.is(c,Requirement) || (Type.is(c, Folder) && !(c as Folder).library));
         this._rootLibraries = projectContents.filter(c => Type.is(c, Folder) && (c as Folder).library && libraryFolders.indexOf(c.id) > -1);
 
         let filter = {'-type': 'Folder'};

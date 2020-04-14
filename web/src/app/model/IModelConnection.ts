@@ -4,7 +4,7 @@
 
 	export class IModelConnection  {
 
-		___nsuri: string = "http://specmate.com/20200228/model/base";
+		___nsuri: string = "http://specmate.com/20200309/model/base";
 		public url: string;
 		public className: string = "IModelConnection";
 		public static className: string = "IModelConnection";
@@ -12,6 +12,8 @@
 		public id: EString;
 		public name: EString;
 		public description: EString;
+		public recycled: EBoolean;
+		public hasRecycledChildren: EBoolean;
 
 		// References
 		

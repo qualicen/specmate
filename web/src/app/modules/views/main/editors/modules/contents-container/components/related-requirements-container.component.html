@@ -9,7 +9,8 @@
         </span>
     </div>
     <ul *ngIf="contents && contents.length > 0" class="list-group list-group-flush">
-        <li *ngFor="let element of contents" class="list-group-item">
+        <ng-container *ngFor="let element of contents">
+            <li *ngIf="showElement(element)" class="list-group-item">
             <table style="width:100%">
                 <tr>
                     <td>
@@ -22,5 +23,6 @@
                 </tr>
             </table>
         </li>
+        </ng-container>
     </ul>
 </div>

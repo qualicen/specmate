@@ -6,6 +6,7 @@ import com.specmate.model.base.BasePackage;
 import com.specmate.model.base.IDescribed;
 import com.specmate.model.base.INamed;
 
+import com.specmate.model.base.IRecycled;
 import com.specmate.model.testspecification.ParameterAssignment;
 import com.specmate.model.testspecification.TestParameter;
 import com.specmate.model.testspecification.TestspecificationPackage;
@@ -28,6 +29,8 @@ import org.eclipse.emf.internal.cdo.CDOObjectImpl;
  *   <li>{@link com.specmate.model.testspecification.impl.ParameterAssignmentImpl#getId <em>Id</em>}</li>
  *   <li>{@link com.specmate.model.testspecification.impl.ParameterAssignmentImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.specmate.model.testspecification.impl.ParameterAssignmentImpl#getDescription <em>Description</em>}</li>
+ *   <li>{@link com.specmate.model.testspecification.impl.ParameterAssignmentImpl#isRecycled <em>Recycled</em>}</li>
+ *   <li>{@link com.specmate.model.testspecification.impl.ParameterAssignmentImpl#isHasRecycledChildren <em>Has Recycled Children</em>}</li>
  *   <li>{@link com.specmate.model.testspecification.impl.ParameterAssignmentImpl#getParameter <em>Parameter</em>}</li>
  *   <li>{@link com.specmate.model.testspecification.impl.ParameterAssignmentImpl#getValue <em>Value</em>}</li>
  *   <li>{@link com.specmate.model.testspecification.impl.ParameterAssignmentImpl#getCondition <em>Condition</em>}</li>
@@ -65,6 +68,26 @@ public class ParameterAssignmentImpl extends CDOObjectImpl implements ParameterA
 	 * @ordered
 	 */
 	protected static final String DESCRIPTION_EDEFAULT = null;
+
+	/**
+	 * The default value of the '{@link #isRecycled() <em>Recycled</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRecycled()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean RECYCLED_EDEFAULT = false;
+
+	/**
+	 * The default value of the '{@link #isHasRecycledChildren() <em>Has Recycled Children</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isHasRecycledChildren()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean HAS_RECYCLED_CHILDREN_EDEFAULT = false;
 
 	/**
 	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
@@ -173,6 +196,46 @@ public class ParameterAssignmentImpl extends CDOObjectImpl implements ParameterA
 	@Override
 	public void setDescription(String newDescription) {
 		eDynamicSet(TestspecificationPackage.PARAMETER_ASSIGNMENT__DESCRIPTION, BasePackage.Literals.IDESCRIBED__DESCRIPTION, newDescription);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isRecycled() {
+		return (Boolean)eDynamicGet(TestspecificationPackage.PARAMETER_ASSIGNMENT__RECYCLED, BasePackage.Literals.IRECYCLED__RECYCLED, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setRecycled(boolean newRecycled) {
+		eDynamicSet(TestspecificationPackage.PARAMETER_ASSIGNMENT__RECYCLED, BasePackage.Literals.IRECYCLED__RECYCLED, newRecycled);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isHasRecycledChildren() {
+		return (Boolean)eDynamicGet(TestspecificationPackage.PARAMETER_ASSIGNMENT__HAS_RECYCLED_CHILDREN, BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setHasRecycledChildren(boolean newHasRecycledChildren) {
+		eDynamicSet(TestspecificationPackage.PARAMETER_ASSIGNMENT__HAS_RECYCLED_CHILDREN, BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN, newHasRecycledChildren);
 	}
 
 	/**
@@ -299,6 +362,10 @@ public class ParameterAssignmentImpl extends CDOObjectImpl implements ParameterA
 				return getName();
 			case TestspecificationPackage.PARAMETER_ASSIGNMENT__DESCRIPTION:
 				return getDescription();
+			case TestspecificationPackage.PARAMETER_ASSIGNMENT__RECYCLED:
+				return isRecycled();
+			case TestspecificationPackage.PARAMETER_ASSIGNMENT__HAS_RECYCLED_CHILDREN:
+				return isHasRecycledChildren();
 			case TestspecificationPackage.PARAMETER_ASSIGNMENT__PARAMETER:
 				if (resolve) return getParameter();
 				return basicGetParameter();
@@ -326,6 +393,12 @@ public class ParameterAssignmentImpl extends CDOObjectImpl implements ParameterA
 				return;
 			case TestspecificationPackage.PARAMETER_ASSIGNMENT__DESCRIPTION:
 				setDescription((String)newValue);
+				return;
+			case TestspecificationPackage.PARAMETER_ASSIGNMENT__RECYCLED:
+				setRecycled((Boolean)newValue);
+				return;
+			case TestspecificationPackage.PARAMETER_ASSIGNMENT__HAS_RECYCLED_CHILDREN:
+				setHasRecycledChildren((Boolean)newValue);
 				return;
 			case TestspecificationPackage.PARAMETER_ASSIGNMENT__PARAMETER:
 				setParameter((TestParameter)newValue);
@@ -357,6 +430,12 @@ public class ParameterAssignmentImpl extends CDOObjectImpl implements ParameterA
 			case TestspecificationPackage.PARAMETER_ASSIGNMENT__DESCRIPTION:
 				setDescription(DESCRIPTION_EDEFAULT);
 				return;
+			case TestspecificationPackage.PARAMETER_ASSIGNMENT__RECYCLED:
+				setRecycled(RECYCLED_EDEFAULT);
+				return;
+			case TestspecificationPackage.PARAMETER_ASSIGNMENT__HAS_RECYCLED_CHILDREN:
+				setHasRecycledChildren(HAS_RECYCLED_CHILDREN_EDEFAULT);
+				return;
 			case TestspecificationPackage.PARAMETER_ASSIGNMENT__PARAMETER:
 				setParameter((TestParameter)null);
 				return;
@@ -384,6 +463,10 @@ public class ParameterAssignmentImpl extends CDOObjectImpl implements ParameterA
 				return NAME_EDEFAULT == null ? getName() != null : !NAME_EDEFAULT.equals(getName());
 			case TestspecificationPackage.PARAMETER_ASSIGNMENT__DESCRIPTION:
 				return DESCRIPTION_EDEFAULT == null ? getDescription() != null : !DESCRIPTION_EDEFAULT.equals(getDescription());
+			case TestspecificationPackage.PARAMETER_ASSIGNMENT__RECYCLED:
+				return isRecycled() != RECYCLED_EDEFAULT;
+			case TestspecificationPackage.PARAMETER_ASSIGNMENT__HAS_RECYCLED_CHILDREN:
+				return isHasRecycledChildren() != HAS_RECYCLED_CHILDREN_EDEFAULT;
 			case TestspecificationPackage.PARAMETER_ASSIGNMENT__PARAMETER:
 				return basicGetParameter() != null;
 			case TestspecificationPackage.PARAMETER_ASSIGNMENT__VALUE:
@@ -413,6 +496,13 @@ public class ParameterAssignmentImpl extends CDOObjectImpl implements ParameterA
 				default: return -1;
 			}
 		}
+		if (baseClass == IRecycled.class) {
+			switch (derivedFeatureID) {
+				case TestspecificationPackage.PARAMETER_ASSIGNMENT__RECYCLED: return BasePackage.IRECYCLED__RECYCLED;
+				case TestspecificationPackage.PARAMETER_ASSIGNMENT__HAS_RECYCLED_CHILDREN: return BasePackage.IRECYCLED__HAS_RECYCLED_CHILDREN;
+				default: return -1;
+			}
+		}
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
 	}
 
@@ -432,6 +522,13 @@ public class ParameterAssignmentImpl extends CDOObjectImpl implements ParameterA
 		if (baseClass == IDescribed.class) {
 			switch (baseFeatureID) {
 				case BasePackage.IDESCRIBED__DESCRIPTION: return TestspecificationPackage.PARAMETER_ASSIGNMENT__DESCRIPTION;
+				default: return -1;
+			}
+		}
+		if (baseClass == IRecycled.class) {
+			switch (baseFeatureID) {
+				case BasePackage.IRECYCLED__RECYCLED: return TestspecificationPackage.PARAMETER_ASSIGNMENT__RECYCLED;
+				case BasePackage.IRECYCLED__HAS_RECYCLED_CHILDREN: return TestspecificationPackage.PARAMETER_ASSIGNMENT__HAS_RECYCLED_CHILDREN;
 				default: return -1;
 			}
 		}

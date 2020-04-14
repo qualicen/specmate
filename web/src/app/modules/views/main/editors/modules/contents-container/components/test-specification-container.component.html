@@ -9,7 +9,8 @@
         </span>
     </div>
     <ul *ngIf="contents && contents.length > 0" class="list-group list-group-flush">
-        <li *ngFor="let element of contents" class="list-group-item">
+        <ng-container *ngFor="let element of contents">
+            <li *ngIf="showElement(element)" class="list-group-item">
             <table style="width:100%">
                 <tr>
                     <td>
@@ -24,7 +25,7 @@
                             class="btn btn-sm btn-outline-primary">
                             <i class="fa fa-clone" aria-hidden="ture"></i>&nbsp;{{'duplicate' | translate}}
                         </button>
-                        <button id="{{'requirement-' + element.name + '-deletetestspec-button'}}" (click)="delete(element)" title="{{'delete' | translate}}"
+                        <button id="{{'requirement-' + element.name + '-deletetestspec-button'}}" (click)="recycle(element)" title="{{'delete' | translate}}"
                             class="btn btn-sm btn-outline-danger">
                             <i class="fa fa-trash" aria-hidden="true"></i>
                         </button>
@@ -32,6 +33,7 @@
                 </tr>
             </table>
         </li>
+        </ng-container>
     </ul>
     <div *ngIf="contents" class="card-body">
         <div class="row">
@@ -40,7 +42,7 @@
                     <input type="text" #newNameInput (keyup)="0" class="form-control form-control-sm" placeholder="{{'name' | translate}}" />
                     <div class="input-group-append">
                         <button id="requirement-createprocess-button" title="{{'createTestSpecification' | translate}}" (click)="create(newNameInput.value)"
-                            class="btn btn-sm btn-outline-primary" [disabled]="!isCreateButtonEnabled(newNameInput.value)" 
+                            class="btn btn-sm btn-outline-primary" [disabled]="!isCreateButtonEnabled(newNameInput.value)"
                             [class.disabled]="!isCreateButtonEnabled(newNameInput.value)">
                             <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;{{'createTestSpecification' | translate}}
                         </button>

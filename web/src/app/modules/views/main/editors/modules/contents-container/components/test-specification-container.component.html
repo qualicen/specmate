@@ -22,11 +22,11 @@
                     </td>
                     <td style="text-align:right">
                         <button id="{{'requirement-' + element.name + '-duplicatetestspec-button'}}" title="{{'duplicate' | translate}}" (click)="duplicate(element)"
-                            class="btn btn-sm btn-outline-primary">
+                            class="btn btn-sm expand btn-outline-primary">
                             <i class="fa fa-clone" aria-hidden="ture"></i>&nbsp;{{'duplicate' | translate}}
                         </button>
                         <button id="{{'requirement-' + element.name + '-deletetestspec-button'}}" (click)="recycle(element)" title="{{'delete' | translate}}"
-                            class="btn btn-sm btn-outline-danger">
+                            class="btn btn-sm expand btn-outline-danger">
                             <i class="fa fa-trash" aria-hidden="true"></i>
                         </button>
                     </td>
@@ -42,7 +42,7 @@
                     <input type="text" #newNameInput (keyup)="0" class="form-control form-control-sm" placeholder="{{'name' | translate}}" />
                     <div class="input-group-append">
                         <button id="requirement-createprocess-button" title="{{'createTestSpecification' | translate}}" (click)="create(newNameInput.value)"
-                            class="btn btn-sm btn-outline-primary" [disabled]="!isCreateButtonEnabled(newNameInput.value)"
+                            class="btn btn-sm expand btn-outline-primary" [disabled]="!isCreateButtonEnabled(newNameInput.value)"
                             [class.disabled]="!isCreateButtonEnabled(newNameInput.value)">
                             <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;{{'createTestSpecification' | translate}}
                         </button>

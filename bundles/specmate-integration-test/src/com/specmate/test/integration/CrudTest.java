@@ -71,6 +71,27 @@ public class CrudTest extends EmfRestTest {
 		Assert.assertTrue(EmfRestTestUtil.compare(folder, retrievedFolder, true));
 		getResult.getResponse().close();
 	}
+	
+	@Test
+	public void testFilterXSS() {
+		String postUrl = listUrl();
+		JSONObject folder = createTestFolder("TestFolder", "<script>alert(\"XSS\")</script>");
+		logService.log(LogService.LOG_DEBUG, "Posting the object " + folder.toString() + " to url " + postUrl);
+		RestResult<JSONObject> result = restClient.post(postUrl, folder);
+		Assert.assertEquals(result.getResponse().getStatus(), Status.OK.getStatusCode());
+		result.getResponse().close();
+		
+		String expectedEscapedString = "&lt;script&gt;alert(\\&#34;XSS\\&#34;)&lt;/script&gt;";
+		
+		String retrieveUrl = detailUrl(getId(folder));
+		RestResult<JSONObject> getResult = restClient.get(retrieveUrl);
+		JSONObject retrievedFolder = getResult.getPayload();
+		logService.log(LogService.LOG_DEBUG,
+				"Retrieved the object " + retrievedFolder.toString() + " from url " + retrieveUrl);
+		String retrievedFolderName = retrievedFolder.getString(BasePackage.Literals.IID__ID.getName());
+		Assert.assertTrue(retrievedFolderName.equals(expectedEscapedString));
+		getResult.getResponse().close();	
+	}
 
 	/**
 	 * Tests posting a folder to another folder. Checks, if the return code of the

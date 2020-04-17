@@ -44,12 +44,16 @@ public class RestClient implements AutoCloseable {
 		}
 	}
 
-	public RestClient(String restUrl, EAuthType authType, String authentication, int timeout, LogService logService) {
+	public RestClient(String restUrl, EAuthType authType, String credentials, int timeout, LogService logService) {
 		restClient = initializeClient();
 		this.restUrl = restUrl;
 		this.timeout = timeout;
 		this.logService = logService;
-		authorization = authType != null ? authType.toString() + " " + authentication : "";
+		setAuthorization(authType, credentials);
+	}
+
+	public void setAuthorization(EAuthType authType, String credentials) {
+		authorization = authType != null ? authType.toString() + " " + credentials : "";
 	}
 
 	@Override

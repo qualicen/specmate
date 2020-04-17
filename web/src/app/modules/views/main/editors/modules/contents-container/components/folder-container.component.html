@@ -23,7 +23,7 @@
                         <td style="text-align:right">
                             <button id="{{'folder-' + element.name + '-deletefolder-button'}}"
                                 title="{{'delete' | translate}}" (click)="recycle(element)"
-                                class="btn btn-sm btn-outline-danger">
+                                class="btn btn-sm expand btn-outline-danger">
                                 <i class="fa fa-trash" aria-hidden="true"></i>
                             </button>
                         </td>
@@ -40,7 +40,7 @@
                         placeholder="{{'name' | translate}}" />
                     <div class="input-group-append">
                         <button id="requirement-createfolder-button" title="{{'createFolder' | translate}}"
-                            (click)="create(newNameInput.value)" class="btn btn-sm btn-outline-primary"
+                            (click)="create(newNameInput.value)" class="btn btn-sm expand btn-outline-primary"
                             [disabled]="!isCreateButtonEnabled(newNameInput.value)"
                             [class.disabled]="!isCreateButtonEnabled(newNameInput.value)">
                             <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;{{'createFolder' | translate}}

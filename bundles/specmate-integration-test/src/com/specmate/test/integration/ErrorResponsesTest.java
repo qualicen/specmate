@@ -3,6 +3,8 @@ package com.specmate.test.integration;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.Map;
+
 import javax.ws.rs.core.Response.Status;
 
 import org.json.JSONObject;
@@ -23,7 +25,7 @@ public class ErrorResponsesTest extends EmfRestTest {
 	@Test
 	public void testUnknownRESTservice() {
 		String unknownService = "thisEndpointDoesNotExist";
-		RestResult<JSONObject> result = restClient.get(unknownService, "some parameter");
+		RestResult<JSONObject> result = restClient.get(unknownService, Map.of("some parameter", "some value"));
 		assertEquals(Status.NOT_FOUND.getStatusCode(), result.getResponse().getStatus());
 		JSONObject obj = result.getPayload();
 		assertNotNull(obj);
@@ -59,7 +61,8 @@ public class ErrorResponsesTest extends EmfRestTest {
 	public void testTamperedUserSessionError() {
 		UserSession tampered = SpecmateEcoreUtil.shallowCopy(session);
 		tampered.setId("tampered");
-		RestClient tamperedClient = new RestClient(REST_ENDPOINT, tampered.getId(), logService);
+		RestClient tamperedClient = new RestClient(REST_ENDPOINT, RestClient.EAuthType.TOKEN, tampered.getId(),
+				logService);
 		JSONObject folder = createTestFolder();
 		RestResult<JSONObject> result = tamperedClient.post("list", folder);
 		assertEquals(Status.UNAUTHORIZED.getStatusCode(), result.getResponse().getStatus());

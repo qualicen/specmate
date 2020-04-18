@@ -25,7 +25,8 @@ import com.specmate.usermodel.UsermodelFactory;
 
 public abstract class BaseSessionService implements ISessionService {
 	private static final Set<Character> ALLOWED_PROJECTNAME_CHARS = new HashSet<>(Arrays.asList(' ', '_', '-'));
-	protected String pathPattern = ".+services/rest/%s/.*";
+	protected String pathTemplate = "/services/rest/%s/";
+	protected String pathPattern = pathTemplate + ".*";
 	protected long maxIdleMilliSeconds;
 	protected RandomString randomString = new RandomString();
 
@@ -39,9 +40,26 @@ public abstract class BaseSessionService implements ISessionService {
 	}
 
 	@Override
-	public boolean isAuthorized(String token, String path) throws SpecmateException {
+	public boolean isAuthorizedPath(String token, String path) throws SpecmateException {
 		UserSession session = getSession(token);
+		return isAuthorizedPath(session, path);
+	}
+
+	@Override
+	public boolean isAuthorizedPath(UserSession session, String path) throws SpecmateException {
 		return session != null && checkAuthorization(session.getAllowedPathPattern(), path);
+	}
+
+	@Override
+	public boolean isAuthorizedProject(String token, String project) throws SpecmateException {
+		UserSession session = getSession(token);
+		return isAuthorizedProject(session, project);
+	}
+
+	@Override
+	public boolean isAuthorizedProject(UserSession session, String project) throws SpecmateException {
+		return session != null
+				&& checkAuthorization(session.getAllowedPathPattern(), String.format(pathTemplate, project));
 	}
 
 	@Override
@@ -152,11 +170,6 @@ public abstract class BaseSessionService implements ISessionService {
 	@Override
 	public void removeSessionListener(ISessionListener listener) {
 		sessionListeners.remove(listener);
-	}
-
-	@Override
-	public List<String> getExporters(String userToken) throws SpecmateException {
-		return getSession(userToken).getExporters();
 	}
 
 }

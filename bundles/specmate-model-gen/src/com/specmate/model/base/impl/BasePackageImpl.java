@@ -17,6 +17,7 @@ import com.specmate.model.base.IModelConnection;
 import com.specmate.model.base.IModelNode;
 import com.specmate.model.base.INamed;
 import com.specmate.model.base.IPositionable;
+import com.specmate.model.base.IRecycled;
 import com.specmate.model.base.ISpecmateModelObject;
 import com.specmate.model.base.ISpecmatePositionableModelObject;
 import com.specmate.model.base.ITracingElement;
@@ -149,6 +150,13 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 	 * @generated
 	 */
 	private EClass iTracingElementEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass iRecycledEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -577,6 +585,36 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getIRecycled() {
+		return iRecycledEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getIRecycled_Recycled() {
+		return (EAttribute)iRecycledEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getIRecycled_HasRecycledChildren() {
+		return (EAttribute)iRecycledEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public BaseFactory getBaseFactory() {
 		return (BaseFactory)getEFactoryInstance();
 	}
@@ -645,6 +683,10 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 		iTracingElementEClass = createEClass(ITRACING_ELEMENT);
 		createEReference(iTracingElementEClass, ITRACING_ELEMENT__TRACES_TO);
 		createEReference(iTracingElementEClass, ITRACING_ELEMENT__TRACES_FROM);
+
+		iRecycledEClass = createEClass(IRECYCLED);
+		createEAttribute(iRecycledEClass, IRECYCLED__RECYCLED);
+		createEAttribute(iRecycledEClass, IRECYCLED__HAS_RECYCLED_CHILDREN);
 	}
 
 	/**
@@ -678,6 +720,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 		iContentElementEClass.getESuperTypes().add(this.getIID());
 		iContentElementEClass.getESuperTypes().add(this.getINamed());
 		iContentElementEClass.getESuperTypes().add(this.getIDescribed());
+		iContentElementEClass.getESuperTypes().add(this.getIRecycled());
 		iContainerEClass.getESuperTypes().add(this.getIContentElement());
 		iSpecmateModelObjectEClass.getESuperTypes().add(this.getIContainer());
 		iSpecmateModelObjectEClass.getESuperTypes().add(this.getITracingElement());
@@ -732,6 +775,10 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 		initEClass(iTracingElementEClass, ITracingElement.class, "ITracingElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getITracingElement_TracesTo(), this.getITracingElement(), this.getITracingElement_TracesFrom(), "tracesTo", null, 0, -1, ITracingElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getITracingElement_TracesFrom(), this.getITracingElement(), this.getITracingElement_TracesTo(), "tracesFrom", null, 0, -1, ITracingElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(iRecycledEClass, IRecycled.class, "IRecycled", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getIRecycled_Recycled(), ecorePackage.getEBoolean(), "recycled", null, 0, 1, IRecycled.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getIRecycled_HasRecycledChildren(), ecorePackage.getEBoolean(), "hasRecycledChildren", null, 0, 1, IRecycled.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

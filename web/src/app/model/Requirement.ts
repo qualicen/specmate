@@ -4,7 +4,7 @@
 
 	export class Requirement  {
 
-		___nsuri: string = "http://specmate.com/20200228/model/requirements";
+		___nsuri: string = "http://specmate.com/20200309/model/requirements";
 		public url: string;
 		public className: string = "Requirement";
 		public static className: string = "Requirement";
@@ -12,6 +12,8 @@
 		public id: EString;
 		public name: EString;
 		public description: EString;
+		public recycled: EBoolean;
+		public hasRecycledChildren: EBoolean;
 		public extId: EString;
 		public extId2: EString;
 		public source: EString;

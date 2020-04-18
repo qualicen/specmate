@@ -1,7 +1,5 @@
 package com.specmate.auth.api;
 
-import java.util.List;
-
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.usermodel.AccessRights;
@@ -29,7 +27,28 @@ public interface ISessionService {
 	 *
 	 * @throws SpecmateInternalException if there is no session for the token
 	 */
-	public boolean isAuthorized(String token, String path) throws SpecmateException;
+	public boolean isAuthorizedPath(String token, String path) throws SpecmateException;
+
+	/**
+	 * Determine if a certain path may be accessed
+	 *
+	 * @throws SpecmateInternalException if there is no session for the token
+	 */
+	public boolean isAuthorizedPath(UserSession session, String path) throws SpecmateException;
+
+	/**
+	 * Determine if a certain project may be accessed
+	 *
+	 * @throws SpecmateInternalException if there is no session for the token
+	 */
+	boolean isAuthorizedProject(String token, String project) throws SpecmateException;
+
+	/**
+	 * Determine if a certain project may be accessed
+	 *
+	 * @throws SpecmateInternalException if there is no session for the token
+	 */
+	boolean isAuthorizedProject(UserSession session, String project) throws SpecmateException;
 
 	/**
 	 * Refresh a session
@@ -58,13 +77,6 @@ public interface ISessionService {
 	 * @throws SpecmateInternalException if there is no session for the token
 	 */
 	public AccessRights getTargetAccessRights(String token) throws SpecmateException;
-
-	/**
-	 * Retrieves the registered exporters for a session
-	 * 
-	 * @throws SpecmateInternalException if there is no session for the token
-	 */
-	public List<String> getExporters(String userToken) throws SpecmateException;
 
 	/**
 	 * Delets a session

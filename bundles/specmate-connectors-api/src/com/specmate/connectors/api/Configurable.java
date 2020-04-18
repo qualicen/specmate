@@ -13,7 +13,7 @@ public class Configurable {
 	}
 
 	public void setConfig(Hashtable<String, Object> configTable) {
-		this.config = configTable;
+		config = configTable;
 	}
 
 	public String getPid() {
@@ -22,6 +22,14 @@ public class Configurable {
 
 	public void setPid(String pid) {
 		this.pid = pid;
+	}
+
+	public void addConfigValue(String key, Object value) {
+		config.put(key, value);
+	}
+
+	public Object getConfigValue(String key) {
+		return config.get(key);
 	}
 
 }

@@ -183,7 +183,6 @@
 	org.eclipse.emf.cdo.server.db;version='[4.4.0,4.4.1)',\
 	specmate-jira-connector;version=snapshot,\
 	specmate-rest;version=snapshot,\
-	specmate-scheduler;version=snapshot,\
 	com.ibm.icu;version='[63.1.0,63.1.1)',\
 	io.reactivex.rxjava2.rxjava;version='[2.2.3,2.2.4)',\
 	it.unimi.dsi.fastutil;version='[8.2.2,8.2.3)',\
@@ -219,7 +218,6 @@
 	specmate-cause-effect-patterns;version=snapshot,\
 	specmate-xtext;version=snapshot,\
 	specmate-objectif;version=snapshot,\
-	jaxb-api;version='[2.3.1,2.3.2)',\
 	specmate-export;version=snapshot,\
 	specmate-connectors-api;version=snapshot,\
 	specmate-export-api;version=snapshot,\
@@ -229,7 +227,8 @@
 	io.atlassian.util.concurrent.atlassian-util-concurrent;version='[4.0.1,4.0.2)',\
 	org.apache.commons.logging;version='[1.2.0,1.2.1)',\
 	org.apache.httpcomponents.httpasyncclient;version='[4.1.4,4.1.5)',\
-	org.apache.httpcomponents.httpclient;version='[4.5.5,4.5.6)'
+	org.apache.httpcomponents.httpclient;version='[4.5.5,4.5.6)',\
+	jaxb-api;version='[2.3.0,2.3.1)'
 
 -runproperties: \
 	jetty.http.port=8080,\
@@ -244,5 +243,6 @@
 	Local
 -runvm: -Xmx6000m\n\
 	-Djdk.crypto.KeyAgreement.legacyKDF=true
--resolve: auto
+	 
+
 -runee: JavaSE-11

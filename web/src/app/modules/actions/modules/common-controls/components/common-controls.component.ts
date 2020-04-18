@@ -8,6 +8,9 @@ import { ValidationService } from '../../../../forms/modules/validation/services
 import { NavigatorService } from '../../../../navigation/modules/navigator/services/navigator.service';
 import { UndoService } from '../services/undo.service';
 import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
+import { CEGModel } from 'src/app/model/CEGModel';
+import { Process } from 'src/app/model/Process';
+import { Type } from 'src/app/util/type';
 
 @Component({
     moduleId: module.id.toString(),
@@ -22,13 +25,13 @@ export class CommonControls {
     }
 
     constructor(
-            private dataService: SpecmateDataService,
-            private connection: ServerConnectionService,
-            private validator: ValidationService,
-            private navigator: NavigatorService,
-            private translate: TranslateService,
-            private undoService: UndoService,
-            private modal: ConfirmationModal) {
+        private dataService: SpecmateDataService,
+        private connection: ServerConnectionService,
+        private validator: ValidationService,
+        private navigator: NavigatorService,
+        private translate: TranslateService,
+        private undoService: UndoService,
+        private modal: ConfirmationModal) {
     }
 
     public async save(): Promise<void> {
@@ -48,11 +51,15 @@ export class CommonControls {
     }
 
     public undo(): void {
-      this.undoService.undo();
+        if (!this.isModel()) {
+            this.dataService.undo();
+        }
+        this.undoService.undo();
+
     }
 
     public redo(): void {
-      this.undoService.redo();
+        this.undoService.redo();
     }
 
     public forward(): void {
@@ -77,11 +84,14 @@ export class CommonControls {
     }
 
     public get isUndoEnabled(): boolean {
-      return this.undoService.isUndoEnabled();
+        if (this.isModel()) {
+            return this.undoService.isUndoEnabled();
+        }
+        return this.hasCommits;
     }
 
     public get isRedoEnabled(): boolean {
-      return this.undoService.isRedoEnabled();
+        return this.undoService.isRedoEnabled();
     }
 
     @UISafe()
@@ -99,5 +109,8 @@ export class CommonControls {
 
     public get isEnabled(): boolean {
         return true;
+    }
+    private isModel(): boolean {
+        return Type.is(this.navigator.currentElement, CEGModel) || Type.is(this.navigator.currentElement, Process);
     }
 }

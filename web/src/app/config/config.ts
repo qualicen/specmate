@@ -132,7 +132,7 @@ export class Config {
 
     public static readonly SUPPORTED_BROWSERS = [
       { browser: 'ie', minVersion: 12 },
-      { browser: 'chrome', minVersion: 43 },
+      { browser: 'chrome', minVersion: 48 },
       { browser: 'firefox', minVersion: 45 },
       { browser: 'edge', minVersion: 15 },
       { browser: 'safari', minVersion: 10 },

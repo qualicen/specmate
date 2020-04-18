@@ -6,6 +6,7 @@ import com.specmate.model.base.BasePackage;
 import com.specmate.model.base.IDescribed;
 import com.specmate.model.base.INamed;
 
+import com.specmate.model.base.IRecycled;
 import com.specmate.model.testspecification.ParameterAssignment;
 import com.specmate.model.testspecification.ParameterType;
 import com.specmate.model.testspecification.TestParameter;
@@ -35,6 +36,8 @@ import org.eclipse.emf.internal.cdo.CDOObjectImpl;
  *   <li>{@link com.specmate.model.testspecification.impl.TestParameterImpl#getId <em>Id</em>}</li>
  *   <li>{@link com.specmate.model.testspecification.impl.TestParameterImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.specmate.model.testspecification.impl.TestParameterImpl#getDescription <em>Description</em>}</li>
+ *   <li>{@link com.specmate.model.testspecification.impl.TestParameterImpl#isRecycled <em>Recycled</em>}</li>
+ *   <li>{@link com.specmate.model.testspecification.impl.TestParameterImpl#isHasRecycledChildren <em>Has Recycled Children</em>}</li>
  *   <li>{@link com.specmate.model.testspecification.impl.TestParameterImpl#getType <em>Type</em>}</li>
  *   <li>{@link com.specmate.model.testspecification.impl.TestParameterImpl#getAssignments <em>Assignments</em>}</li>
  * </ul>
@@ -71,6 +74,26 @@ public class TestParameterImpl extends CDOObjectImpl implements TestParameter {
 	 * @ordered
 	 */
 	protected static final String DESCRIPTION_EDEFAULT = null;
+
+	/**
+	 * The default value of the '{@link #isRecycled() <em>Recycled</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRecycled()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean RECYCLED_EDEFAULT = false;
+
+	/**
+	 * The default value of the '{@link #isHasRecycledChildren() <em>Has Recycled Children</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isHasRecycledChildren()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean HAS_RECYCLED_CHILDREN_EDEFAULT = false;
 
 	/**
 	 * The default value of the '{@link #getType() <em>Type</em>}' attribute.
@@ -177,6 +200,46 @@ public class TestParameterImpl extends CDOObjectImpl implements TestParameter {
 	 * @generated
 	 */
 	@Override
+	public boolean isRecycled() {
+		return (Boolean)eDynamicGet(TestspecificationPackage.TEST_PARAMETER__RECYCLED, BasePackage.Literals.IRECYCLED__RECYCLED, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setRecycled(boolean newRecycled) {
+		eDynamicSet(TestspecificationPackage.TEST_PARAMETER__RECYCLED, BasePackage.Literals.IRECYCLED__RECYCLED, newRecycled);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isHasRecycledChildren() {
+		return (Boolean)eDynamicGet(TestspecificationPackage.TEST_PARAMETER__HAS_RECYCLED_CHILDREN, BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setHasRecycledChildren(boolean newHasRecycledChildren) {
+		eDynamicSet(TestspecificationPackage.TEST_PARAMETER__HAS_RECYCLED_CHILDREN, BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN, newHasRecycledChildren);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public ParameterType getType() {
 		return (ParameterType)eDynamicGet(TestspecificationPackage.TEST_PARAMETER__TYPE, TestspecificationPackage.Literals.TEST_PARAMETER__TYPE, true, true);
 	}
@@ -245,6 +308,10 @@ public class TestParameterImpl extends CDOObjectImpl implements TestParameter {
 				return getName();
 			case TestspecificationPackage.TEST_PARAMETER__DESCRIPTION:
 				return getDescription();
+			case TestspecificationPackage.TEST_PARAMETER__RECYCLED:
+				return isRecycled();
+			case TestspecificationPackage.TEST_PARAMETER__HAS_RECYCLED_CHILDREN:
+				return isHasRecycledChildren();
 			case TestspecificationPackage.TEST_PARAMETER__TYPE:
 				return getType();
 			case TestspecificationPackage.TEST_PARAMETER__ASSIGNMENTS:
@@ -270,6 +337,12 @@ public class TestParameterImpl extends CDOObjectImpl implements TestParameter {
 				return;
 			case TestspecificationPackage.TEST_PARAMETER__DESCRIPTION:
 				setDescription((String)newValue);
+				return;
+			case TestspecificationPackage.TEST_PARAMETER__RECYCLED:
+				setRecycled((Boolean)newValue);
+				return;
+			case TestspecificationPackage.TEST_PARAMETER__HAS_RECYCLED_CHILDREN:
+				setHasRecycledChildren((Boolean)newValue);
 				return;
 			case TestspecificationPackage.TEST_PARAMETER__TYPE:
 				setType((ParameterType)newValue);
@@ -299,6 +372,12 @@ public class TestParameterImpl extends CDOObjectImpl implements TestParameter {
 			case TestspecificationPackage.TEST_PARAMETER__DESCRIPTION:
 				setDescription(DESCRIPTION_EDEFAULT);
 				return;
+			case TestspecificationPackage.TEST_PARAMETER__RECYCLED:
+				setRecycled(RECYCLED_EDEFAULT);
+				return;
+			case TestspecificationPackage.TEST_PARAMETER__HAS_RECYCLED_CHILDREN:
+				setHasRecycledChildren(HAS_RECYCLED_CHILDREN_EDEFAULT);
+				return;
 			case TestspecificationPackage.TEST_PARAMETER__TYPE:
 				setType(TYPE_EDEFAULT);
 				return;
@@ -323,6 +402,10 @@ public class TestParameterImpl extends CDOObjectImpl implements TestParameter {
 				return NAME_EDEFAULT == null ? getName() != null : !NAME_EDEFAULT.equals(getName());
 			case TestspecificationPackage.TEST_PARAMETER__DESCRIPTION:
 				return DESCRIPTION_EDEFAULT == null ? getDescription() != null : !DESCRIPTION_EDEFAULT.equals(getDescription());
+			case TestspecificationPackage.TEST_PARAMETER__RECYCLED:
+				return isRecycled() != RECYCLED_EDEFAULT;
+			case TestspecificationPackage.TEST_PARAMETER__HAS_RECYCLED_CHILDREN:
+				return isHasRecycledChildren() != HAS_RECYCLED_CHILDREN_EDEFAULT;
 			case TestspecificationPackage.TEST_PARAMETER__TYPE:
 				return getType() != TYPE_EDEFAULT;
 			case TestspecificationPackage.TEST_PARAMETER__ASSIGNMENTS:
@@ -350,6 +433,13 @@ public class TestParameterImpl extends CDOObjectImpl implements TestParameter {
 				default: return -1;
 			}
 		}
+		if (baseClass == IRecycled.class) {
+			switch (derivedFeatureID) {
+				case TestspecificationPackage.TEST_PARAMETER__RECYCLED: return BasePackage.IRECYCLED__RECYCLED;
+				case TestspecificationPackage.TEST_PARAMETER__HAS_RECYCLED_CHILDREN: return BasePackage.IRECYCLED__HAS_RECYCLED_CHILDREN;
+				default: return -1;
+			}
+		}
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
 	}
 
@@ -369,6 +459,13 @@ public class TestParameterImpl extends CDOObjectImpl implements TestParameter {
 		if (baseClass == IDescribed.class) {
 			switch (baseFeatureID) {
 				case BasePackage.IDESCRIBED__DESCRIPTION: return TestspecificationPackage.TEST_PARAMETER__DESCRIPTION;
+				default: return -1;
+			}
+		}
+		if (baseClass == IRecycled.class) {
+			switch (baseFeatureID) {
+				case BasePackage.IRECYCLED__RECYCLED: return TestspecificationPackage.TEST_PARAMETER__RECYCLED;
+				case BasePackage.IRECYCLED__HAS_RECYCLED_CHILDREN: return TestspecificationPackage.TEST_PARAMETER__HAS_RECYCLED_CHILDREN;
 				default: return -1;
 			}
 		}

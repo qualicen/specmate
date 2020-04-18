@@ -19,6 +19,8 @@ export class CEGNodeFactory extends PositionableElementFactoryBase<CEGNode> {
         node.description = Config.CEG_NEW_NODE_DESCRIPTION;
         node.id = id;
         node.url = url;
+        node.recycled = false;
+        node.hasRecycledChildren = false;
         node.type = Config.CEG_NODE_NEW_TYPE;
         node.variable = Config.CEG_NODE_NEW_VARIABLE;
         node.condition = Config.CEG_NODE_NEW_CONDITION;

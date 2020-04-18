@@ -61,6 +61,10 @@ export class IconSelector implements OnInit {
         return Type.is(this.model, TestProcedure);
     }
 
+    get isRecycled() {
+        return this.model.recycled;
+    }
+
     private isElementChildOfModel(): boolean {
          return this.parent && (Type.is(this.parent, CEGModel) || Type.is(this.parent, Process));
     }

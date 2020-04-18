@@ -12,6 +12,7 @@ import { SpecmateDataService } from '../../../../../data/modules/data-service/se
 import { NavigatorService } from '../../../../../navigation/modules/navigator/services/navigator.service';
 import { AuthenticationService } from '../../../../main/authentication/modules/auth/services/authentication.service';
 import { Folder } from '../../../../../../model/Folder';
+import { ContentsContainerService } from 'src/app/modules/views/main/editors/modules/contents-container/services/content-container.service';
 
 @Injectable()
 export class AdditionalInformationService {
@@ -21,12 +22,17 @@ export class AdditionalInformationService {
     private _exports: string[];
     private _testSpecifications: TestSpecification[];
 
-    constructor(private dataService: SpecmateDataService, navigator: NavigatorService, private auth: AuthenticationService) {
+    constructor(private dataService: SpecmateDataService,
+        navigator: NavigatorService,
+        private auth: AuthenticationService,
+        private contentService: ContentsContainerService) {
         navigator.hasNavigated.subscribe((element: IContainer) => {
             this.element = element;
             this.load();
         });
         auth.authChanged.subscribe(() => this.reset());
+        contentService.onModelDeleted.subscribe(
+            () => { this.loadTestSpecifications(); });
     }
 
     private reset(): void {
@@ -57,7 +63,7 @@ export class AdditionalInformationService {
         }
 
         const testSpecifications = await this.dataService.performQuery(baseUrl, 'listRecursive', { class: TestSpecification.className });
-        this._testSpecifications = Sort.sortArray(testSpecifications);
+        this._testSpecifications = Sort.sortArray(testSpecifications).filter(testSpec => testSpec.recycled === false);
     }
 
     private async loadParents(): Promise<void> {

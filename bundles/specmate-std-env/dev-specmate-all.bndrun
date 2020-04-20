@@ -228,8 +228,7 @@
 	io.atlassian.util.concurrent.atlassian-util-concurrent;version='[4.0.1,4.0.2)',\
 	org.apache.commons.logging;version='[1.2.0,1.2.1)',\
 	org.apache.httpcomponents.httpasyncclient;version='[4.1.4,4.1.5)',\
-	org.apache.httpcomponents.httpclient;version='[4.5.5,4.5.6)',\
-	specmate-scheduler;version='[0.0.0,0.0.1)'
+	org.apache.httpcomponents.httpclient;version='[4.5.5,4.5.6)'
 
 -runproperties: \
 	jetty.http.port=8080,\

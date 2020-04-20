@@ -18,6 +18,7 @@ import org.osgi.service.log.LogService;
 
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
+import com.specmate.config.api.IConfigService;
 import com.specmate.model.administration.ErrorCode;
 import com.specmate.nlp.api.ELanguage;
 import com.specmate.nlp.api.INLPService;
@@ -41,6 +42,7 @@ public class NLPServiceImpl implements INLPService {
 
 	private Map<String, AnalysisEngine> engines = new HashMap<String, AnalysisEngine>();
 	private LogService logService;
+	private IConfigService configService;
 
 	/**
 	 * Start the NLP Engine
@@ -58,6 +60,8 @@ public class NLPServiceImpl implements INLPService {
 	private void createEnglishPipeline() throws SpecmateInternalException {
 		logService.log(LogService.LOG_DEBUG, "Initializing english NLP pipeline");
 
+		String spacyUrl = configService.getConfigurationProperty("nlp.spacy.url", "http://127.0.0.1:80");
+
 		AnalysisEngineDescription segmenter = null;
 		AnalysisEngineDescription posTagger = null;
 		AnalysisEngineDescription parser = null;
@@ -74,8 +78,9 @@ public class NLPServiceImpl implements INLPService {
 			dependencyParser = createEngineDescription(DependencyParser.class,
 					MaltParser.PARAM_IGNORE_MISSING_FEATURES, true,
 					MaltParser.PARAM_LANGUAGE, lang,
+					MaltParser.PARAM_MODEL_LOCATION, "classpath:/de/tudarmstadt/ukp/dkpro/core/maltparser/lib/parser-en-linear.mco",
 					DependencyParser.PARAM_PARSE_MODE, DependencyParser.MODE_SPACY,
-					DependencyParser.PARAM_SPACY_URL, "http://127.0.0.1:80"
+					DependencyParser.PARAM_SPACY_URL, spacyUrl
 					);
 
 
@@ -114,7 +119,9 @@ public class NLPServiceImpl implements INLPService {
 					OpenNlpChunker.PARAM_LANGUAGE, lang, OpenNlpChunker.PARAM_MODEL_LOCATION,
 					"classpath:/models/de-chunker.bin");
 			dependencyParser = createEngineDescription(DependencyParser.class,
-					DependencyParser.PARAM_LANGUAGE, lang);
+					MaltParser.PARAM_LANGUAGE, lang,
+					MaltParser.PARAM_IGNORE_MISSING_FEATURES, true, MaltParser.PARAM_MODEL_LOCATION,
+					"classpath:/models/de-dependencies.mco");
 			parser = createEngineDescription(OpenNlpParser.class, OpenNlpParser.PARAM_PRINT_TAGSET, true,
 					OpenNlpParser.PARAM_LANGUAGE, lang, OpenNlpParser.PARAM_WRITE_PENN_TREE, false,
 					OpenNlpParser.PARAM_WRITE_POS, false, OpenNlpParser.PARAM_MODEL_LOCATION,
@@ -174,6 +181,11 @@ public class NLPServiceImpl implements INLPService {
 	@Reference
 	public void setLogService(LogService logService) {
 		this.logService = logService;
+	}
+
+	@Reference
+	public void setConfigurationService(IConfigService configService) {
+		this.configService = configService;
 	}
 
 }

@@ -72,7 +72,8 @@
 	specmate-migration;version='[0.0.0,0.0.1)',\
 	specmate-model-gen;version='[0.0.0,0.0.1)',\
 	specmate-model-support;version='[0.0.0,0.0.1)',\
-	specmate-persistency-api;version='[0.0.0,0.0.1)'
+	specmate-persistency-api;version='[0.0.0,0.0.1)',\
+	com.google.guava;version='[18.0.0,18.0.1)'
 
 -runproperties: \
 	osgi.console=,\

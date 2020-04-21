@@ -215,7 +215,6 @@
 	specmate-persistency-api;version='[0.0.0,0.0.1)',\
 	specmate-persistency-cdo;version='[0.0.0,0.0.1)',\
 	specmate-rest;version='[0.0.0,0.0.1)',\
-	specmate-scheduler;version='[0.0.0,0.0.1)',\
 	specmate-search;version='[0.0.0,0.0.1)',\
 	specmate-testspecification;version='[0.0.0,0.0.1)',\
 	specmate-trello-connector;version='[0.0.0,0.0.1)',\

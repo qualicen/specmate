@@ -20,7 +20,11 @@
 	specmate-export-api;version=latest,\
 	org.apache.commons.collections4,\
 	org.eclipse.net4j.util,\
-	org.eclipse.equinox.common
+	org.eclipse.equinox.common,\
+	org.mockito.mockito-core,\
+	org.objenesis,\
+	net.bytebuddy.byte-buddy,\
+	net.bytebuddy.byte-buddy-agent
 
 -privatepackage: \
 	com.specmate.export.internal.exporters,\

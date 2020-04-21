@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Map;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Test;
@@ -20,7 +22,7 @@ public class HistoryTest extends EmfRestTest {
 
 	private JSONArray getEntries(String type, String... segments) {
 		String historyUrl = buildUrl("history", segments);
-		RestResult<JSONObject> result = restClient.get(historyUrl, "type", type);
+		RestResult<JSONObject> result = restClient.get(historyUrl, Map.of("type", type));
 		JSONObject history = result.getPayload();
 		result.getResponse().close();
 		return history.getJSONArray(HistoryPackage.Literals.HISTORY__ENTRIES.getName());
@@ -81,37 +83,37 @@ public class HistoryTest extends EmfRestTest {
 	 * @Test public void testRecursiveHistory() { // Changes 1 JSONObject
 	 * requirement = postRequirementToRoot(); String requirementId =
 	 * getId(requirement);
-	 * 
+	 *
 	 * // Changes 3 JSONObject cegModel = postCEG(requirementId); String cegId =
 	 * getId(cegModel);
-	 * 
+	 *
 	 * // Changes 5 JSONObject cegNode1 = postCEGNode(requirementId, cegId); String
 	 * node1Id = getId(cegNode1);
-	 * 
+	 *
 	 * JSONObject retrievedCegNode1 = getObject(requirementId, cegId, node1Id);
 	 * Assert.assertTrue(EmfRestTestUtil.compare(cegNode1, retrievedCegNode1,
 	 * true));
-	 * 
+	 *
 	 * // Changes 7 JSONObject cegNode2 = postCEGNode(requirementId, cegId); String
 	 * node2Id = getId(cegNode2);
-	 * 
+	 *
 	 * JSONObject retrievedCegNode2 = getObject(requirementId, cegId, node2Id);
 	 * Assert.assertTrue(EmfRestTestUtil.compare(cegNode2, retrievedCegNode2,
 	 * true));
-	 * 
+	 *
 	 * // Change 9 JSONObject connection = postCEGConnection(retrievedCegNode1,
 	 * retrievedCegNode2, false, requirementId, cegId); String connectionId =
 	 * getId(connection);
-	 * 
+	 *
 	 * JSONArray entries = getEntries(HistoryRestService.HRECURSIVE, requirementId);
 	 * assertEquals(9, entries.length());
-	 * 
+	 *
 	 * // Change 9: since we deleted an object, is does not appear in history
 	 * anymore // (-1), but we catch the deletion with // the change event on the
 	 * containment (+1). As a result, the number of history // entries does not
 	 * change when deleting // an object. deleteObject(requirementId, cegId,
 	 * connectionId);
-	 * 
+	 *
 	 * entries = getEntries(HistoryRestService.HRECURSIVE, requirementId);
 	 * assertEquals(9, entries.length()); JSONObject entry =
 	 * entries.getJSONObject(0); JSONArray changes =

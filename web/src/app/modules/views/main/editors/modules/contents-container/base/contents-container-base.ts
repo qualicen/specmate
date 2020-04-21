@@ -9,6 +9,7 @@ import { NavigatorService } from '../../../../../../navigation/modules/navigator
 import { ConfirmationModal } from '../../../../../../notification/modules/modals/services/confirmation-modal.service';
 import { ClipboardService } from '../../tool-pallette/services/clipboard-service';
 import { GraphTransformer } from '../../tool-pallette/util/graph-transformer';
+import { Url } from 'src/app/util/url';
 
 export abstract class ContentContainerBase<T extends IContainer> implements OnInit {
 
@@ -50,20 +51,19 @@ export abstract class ContentContainerBase<T extends IContainer> implements OnIn
 
     public abstract async createElement(name: string): Promise<T>;
 
-    public async delete(element: T,
-        message: string = this.translate.instant('doYouReallyWantToDelete', { name: element.name })): Promise<void> {
-        try {
-            await this.modal.openOkCancel('ConfirmationRequired', message);
-            await this.dataService.deleteElement(element.url, false, Id.uuid);
-            await this.dataService.commit(this.translate.instant('delete'));
-            await this.readContents();
-        } catch (e) { }
-    }
-
     public async duplicate(element: IContainer): Promise<void> {
         await this.dataService.performOperations(element.url, 'duplicate');
         await this.dataService.commit(this.translate.instant('duplicate'));
         await this.readContents();
+    }
+
+    public async recycle(element: T,
+        message: string = this.translate.instant('doYouReallyWantToDelete', { name: element.name })): Promise<void> {
+        try {
+            await this.modal.openOkCancel('ConfirmationRequired', message);
+            await this.dataService.recycleElement(element.url);
+            await this.readContents();
+        } catch (e) { }
     }
 
     protected async readContents(): Promise<void> {
@@ -135,5 +135,9 @@ export abstract class ContentContainerBase<T extends IContainer> implements OnIn
     }
     public get errorMessage(): string {
         return this.translate.instant('invalidCharacter');
+    }
+
+    public showElement(element: IContainer): boolean {
+        return !element.recycled;
     }
 }

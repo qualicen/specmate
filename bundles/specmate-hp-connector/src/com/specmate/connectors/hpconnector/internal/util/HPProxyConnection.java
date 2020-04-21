@@ -3,6 +3,7 @@ package com.specmate.connectors.hpconnector.internal.util;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -58,7 +59,7 @@ public class HPProxyConnection {
 	 */
 	public HPProxyConnection(String host, String port, int timeout, LogService logService) throws SpecmateException {
 		validateConfig(host, port, timeout);
-		this.restClient = new RestClient("http://" + host + ":" + port, timeout * 1000, this.logService);
+		restClient = new RestClient("http://" + host + ":" + port, timeout * 1000, this.logService);
 	}
 
 	/** Validates if all configuration parameters are available. */
@@ -76,15 +77,15 @@ public class HPProxyConnection {
 
 	/** Service deactivation */
 	public void deactivate() {
-		this.restClient.close();
-		this.logService.log(LogService.LOG_INFO, "Shut down HP Server Proxy.");
+		restClient.close();
+		logService.log(LogService.LOG_INFO, "Shut down HP Server Proxy.");
 	}
 
 	/** Retrieves requirements details from the HP server. */
 	public Requirement getRequirementsDetails(String extId) throws SpecmateException {
 		RestResult<JSONObject> result;
 
-		result = this.restClient.get("/getRequirementDetails", "extId", extId);
+		result = restClient.get("/getRequirementDetails", Map.of("extId", extId));
 		Response response = result.getResponse();
 		if (response.getStatus() != Response.Status.OK.getStatusCode()) {
 			throw new SpecmateInternalException(ErrorCode.HP_PROXY,
@@ -106,8 +107,8 @@ public class HPProxyConnection {
 		do {
 			RestResult<JSONArray> result;
 
-			result = this.restClient.getList("/getRequirements", QUERY_PARAM_PROJECT, project, "page",
-					Integer.toString(page));
+			result = restClient.getList("/getRequirements",
+					Map.of(QUERY_PARAM_PROJECT, project, "page", Integer.toString(page)));
 
 			Response response = result.getResponse();
 			jsonRequirements = result.getPayload();
@@ -133,7 +134,7 @@ public class HPProxyConnection {
 	public void exportTestProcedure(TestProcedure procedure) throws SpecmateException {
 		JSONObject procedureAsJSON = HPUtil.getJSONForTestProcedure(procedure);
 		if (StringUtils.isEmpty(procedure.getExtId())) {
-			RestResult<JSONObject> result = this.restClient.post("/createTestProcedure", procedureAsJSON);
+			RestResult<JSONObject> result = restClient.post("/createTestProcedure", procedureAsJSON);
 			if (result.getResponse().getStatus() != Status.OK.getStatusCode()) {
 				throw new SpecmateInternalException(ErrorCode.HP_PROXY, "Could not sync test procedure to ALM.");
 			}
@@ -151,10 +152,10 @@ public class HPProxyConnection {
 	private boolean checkAuthenticated(String endpoint, String username, String password, String projectName) {
 		RestResult<JSONObject> result;
 		if (projectName != null) {
-			result = this.restClient.get("/" + endpoint, QUERY_PARAM_USER, username, QUERY_PARAM_PASSWORD, password,
-					QUERY_PARAM_PROJECT, projectName);
+			result = restClient.get("/" + endpoint, Map.of(QUERY_PARAM_USER, username, QUERY_PARAM_PASSWORD, password,
+					QUERY_PARAM_PROJECT, projectName));
 		} else {
-			result = this.restClient.get("/" + endpoint, QUERY_PARAM_USER, username, QUERY_PARAM_PASSWORD, password);
+			result = restClient.get("/" + endpoint, Map.of(QUERY_PARAM_USER, username, QUERY_PARAM_PASSWORD, password));
 		}
 
 		return result.getResponse().getStatus() == Status.OK.getStatusCode();

@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LogElement } from '../../../../views/side/modules/log-list/services/log-element';
 import { LoggingService } from '../../../../views/side/modules/log-list/services/logging.service';
 import { TypedModalContent } from '../components/typed-modal-content.component';
 import { Dialogtype } from '../modal-dialog-type';
+import { ModalService } from './modal-service';
 
 @Injectable()
 export class ErrorNotificationModalService {
 
     private isOpen = false;
 
-    constructor(private modalService: NgbModal, private logger: LoggingService) {
+    constructor(private modalService: ModalService, private logger: LoggingService) {
         this.logger.logObservable.switchMap((logElement: LogElement) => {
             if (logElement.isError) {
                 return this.open(logElement.message).catch(() => { /* We catch the original error here. */ });

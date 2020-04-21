@@ -26,10 +26,10 @@ export abstract class TestSpecificationContentContainerBase<T extends IContainer
         return this.additionalInformationService.canGenerateTestSpecifications;
     }
 
-    public async delete(element: T,
+    public async recycle(element: T,
         message: string = this.translate.instant('doYouReallyWantToDelete', { name: element.name })): Promise<void> {
-        await super.delete(element, message);
-        await this.contentService.isDeleted();
+        await super.recycle(element, message);
+        this.contentService.isDeleted();
     }
 
 }

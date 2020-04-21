@@ -149,8 +149,7 @@ export class SpecmateDataService {
     public async readElement(url: string, virtual?: boolean): Promise<IContainer> {
         this.busy = true;
         let readElementTask: Promise<IContainer> = undefined;
-
-        if (virtual || this.scheduler.isVirtualElement(url) || this.cache.isCachedElement(url)) {
+        if (virtual === undefined && (this.scheduler.isVirtualElement(url) || this.cache.isCachedElement(url)) || virtual) {
             let element: IContainer = this.readElementVirtual(url);
             if (element) {
                 if (!((<any>element).live)) {
@@ -357,6 +356,7 @@ export class SpecmateDataService {
             .then(() => {
                 this.scheduler.resolve(url);
                 this.logFinished(this.translate.instant('log.delete'), url);
+                this.readAllParentsServer(url);
             })
             .catch((error) => {
                 this.handleError(this.translate.instant('elementCouldNotBeDeleted'), url, error);
@@ -436,5 +436,23 @@ export class SpecmateDataService {
         console.error(message);
         this.connectionService.handleErrorResponse(error, url);
         return Promise.resolve(undefined);
+    }
+
+    public async recycleElement(url: string): Promise<void> {
+        await this.performOperations(url, 'recycle');
+        this.readAllParentsServer(url);
+    }
+
+    public async restoreElement(url: string): Promise<void> {
+        await this.performOperations(url, 'restore');
+        this.readAllParentsServer(url);
+    }
+
+    public async readAllParentsServer(url: string) {
+        let parents = Url.allParents(url);
+        for (let i = 0; i < parents.length; i++) {
+            let parent = parents[i];
+            await this.readElement(parent, false);
+        }
     }
 }

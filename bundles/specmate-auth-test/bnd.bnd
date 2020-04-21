@@ -116,7 +116,6 @@ Test-Cases: \
 	specmate-config;version='[0.0.0,0.0.1)',\
 	specmate-config-api;version='[0.0.0,0.0.1)',\
 	specmate-connectors-api;version='[0.0.0,0.0.1)',\
-	specmate-export-api;version='[0.0.0,0.0.1)',\
 	specmate-logging;version='[0.0.0,0.0.1)',\
 	specmate-logging-slf4j;version='[0.0.0,0.0.1)',\
 	specmate-logging-slf4j-julbridge;version='[1.6.0,1.6.1)',\
@@ -124,4 +123,8 @@ Test-Cases: \
 	specmate-model-gen;version='[0.0.0,0.0.1)',\
 	specmate-model-support;version='[0.0.0,0.0.1)',\
 	specmate-persistency-api;version='[0.0.0,0.0.1)',\
-	specmate-rest;version='[0.0.0,0.0.1)'
+	specmate-rest;version='[0.0.0,0.0.1)',\
+	specmate-metrics;version=snapshot,\
+	specmate-connectors-api;version=snapshot,\
+	specmate-export-api;version=snapshot,\
+	com.google.guava;version='[18.0.0,18.0.1)'

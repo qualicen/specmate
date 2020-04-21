@@ -36,7 +36,7 @@ import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.connectors.api.IProjectConfigService;
 import com.specmate.connectors.api.IRequirementsSource;
-import com.specmate.connectors.jira.config.JiraConnectorConfig;
+import com.specmate.connectors.jira.config.JiraConfigConstants;
 import com.specmate.emfrest.api.IRestService;
 import com.specmate.emfrest.crud.DetailsService;
 import com.specmate.model.administration.ErrorCode;
@@ -49,7 +49,7 @@ import com.specmate.model.support.util.SpecmateEcoreUtil;
 import com.specmate.rest.RestResult;
 
 @Component(immediate = true, service = { IRestService.class,
-		IRequirementsSource.class }, configurationPid = JiraConnectorConfig.CONNECTOR_PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
+		IRequirementsSource.class }, configurationPid = JiraConfigConstants.CONNECTOR_PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
 public class JiraConnector extends DetailsService implements IRequirementsSource, IRestService {
 
 	private static final int PAGINATION_SIZE_DEFAULT = 50;
@@ -81,20 +81,20 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 		validateConfig(properties);
 
 		id = (String) properties.get(IProjectConfigService.KEY_CONNECTOR_ID);
-		url = (String) properties.get(JiraConnectorConfig.KEY_JIRA_URL);
-		projectName = (String) properties.get(JiraConnectorConfig.KEY_JIRA_PROJECT);
-		String oauthUrl = (String) properties.get(JiraConnectorConfig.KEY_JIRA_OAUTH_URL);
-		String oauthTokenUrl = (String) properties.get(JiraConnectorConfig.KEY_JIRA_OAUTH_TOKEN_URL);
-		String oauthClientId = (String) properties.get(JiraConnectorConfig.KEY_JIRA_OAUTH_CLIENT_ID);
-		String oauthClientSecret = (String) properties.get(JiraConnectorConfig.KEY_JIRA_OAUTH_CLIENT_SECRET);
-		String oauthRedirectUrl = (String) properties.get(JiraConnectorConfig.KEY_JIRA_OAUTH_REDIRECT_URL);
+
+		url = (String) properties.get(JiraConfigConstants.KEY_JIRA_URL);
+		projectName = (String) properties.get(JiraConfigConstants.KEY_JIRA_PROJECT);
+		String username = (String) properties.get(JiraConfigConstants.KEY_JIRA_USERNAME);
+		String password = (String) properties.get(JiraConfigConstants.KEY_JIRA_PASSWORD);
+		String paginationSizeStr = (String) properties.get(JiraConfigConstants.KEY_JIRA_PAGINATION_SIZE);
+
+		String oauthUrl = (String) properties.get(JiraConfigConstants.KEY_JIRA_OAUTH_URL);
+		String oauthTokenUrl = (String) properties.get(JiraConfigConstants.KEY_JIRA_OAUTH_TOKEN_URL);
+		String oauthClientId = (String) properties.get(JiraConfigConstants.KEY_JIRA_OAUTH_CLIENT_ID);
+		String oauthClientSecret = (String) properties.get(JiraConfigConstants.KEY_JIRA_OAUTH_CLIENT_SECRET);
+		String oauthRedirectUrl = (String) properties.get(JiraConfigConstants.KEY_JIRA_OAUTH_REDIRECT_URL);
 		
 		oauthData = new AuthData(oauthUrl, oauthTokenUrl, oauthClientId, oauthClientSecret, oauthRedirectUrl);
-		
-		String username = (String) properties.get(JiraConnectorConfig.KEY_JIRA_USERNAME);
-		String password = (String) properties.get(JiraConnectorConfig.KEY_JIRA_PASSWORD);
-		String paginationSizeStr = (String) properties.get(JiraConnectorConfig.KEY_JIRA_PAGINATION_SIZE);
-
 		
 		this.paginationSizeInt = PAGINATION_SIZE_DEFAULT;
 		if (paginationSizeStr != null) {
@@ -137,9 +137,9 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 	}
 
 	private void validateConfig(Map<String, Object> properties) throws SpecmateException {
-		String aProject = (String) properties.get(JiraConnectorConfig.KEY_JIRA_PROJECT);
-		String aUsername = (String) properties.get(JiraConnectorConfig.KEY_JIRA_USERNAME);
-		String aPassword = (String) properties.get(JiraConnectorConfig.KEY_JIRA_PASSWORD);
+		String aProject = (String) properties.get(JiraConfigConstants.KEY_JIRA_PROJECT);
+		String aUsername = (String) properties.get(JiraConfigConstants.KEY_JIRA_USERNAME);
+		String aPassword = (String) properties.get(JiraConfigConstants.KEY_JIRA_PASSWORD);
 
 		if (isEmpty(aProject) || isEmpty(aUsername) || isEmpty(aPassword)) {
 			throw new SpecmateInternalException(ErrorCode.CONFIGURATION, "Jira Connector is not well configured.");

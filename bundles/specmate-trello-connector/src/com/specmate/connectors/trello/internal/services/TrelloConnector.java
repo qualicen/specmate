@@ -76,8 +76,8 @@ public class TrelloConnector implements IRequirementsSource {
 
 	@Override
 	public Collection<Requirement> getRequirements() throws SpecmateException {
-		RestResult<JSONArray> restResult = restClient.getList("/1/boards/" + boardId + "/cards", "key", key, "token",
-				token);
+		RestResult<JSONArray> restResult = restClient.getList("/1/boards/" + boardId + "/cards",
+				Map.of("key", key, "token", token));
 		if (restResult.getResponse().getStatus() == Status.OK.getStatusCode()) {
 			restResult.getResponse().close();
 			List<Requirement> requirements = new ArrayList<>();
@@ -95,8 +95,8 @@ public class TrelloConnector implements IRequirementsSource {
 
 	@Override
 	public IContainer getContainerForRequirement(Requirement requirement) throws SpecmateException {
-		RestResult<JSONObject> restResult = restClient.get("/1/cards/" + requirement.getExtId2() + "/list", "key", key,
-				"token", token);
+		RestResult<JSONObject> restResult = restClient.get("/1/cards/" + requirement.getExtId2() + "/list",
+				Map.of("key", key, "token", token));
 		if (restResult.getResponse().getStatus() == Status.OK.getStatusCode()) {
 			JSONObject listObject = restResult.getPayload();
 			return makeFolderFromList(listObject);
@@ -107,8 +107,8 @@ public class TrelloConnector implements IRequirementsSource {
 	}
 
 	public List<Folder> getLists() throws SpecmateException {
-		RestResult<JSONArray> restResult = restClient.getList("/1/boards/" + boardId + "/lists", "cards", "open", "key",
-				key, "token", token);
+		RestResult<JSONArray> restResult = restClient.getList("/1/boards/" + boardId + "/lists",
+				Map.of("cards", "open", "key", key, "token", token));
 		if (restResult.getResponse().getStatus() == Status.OK.getStatusCode()) {
 			restResult.getResponse().close();
 			List<Folder> folders = new ArrayList<>();

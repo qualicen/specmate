@@ -667,7 +667,7 @@ public class ModelGenerationTestDe extends ModelGenerationTestBase {
 		checkResultingModel(generated, model);
 	}
 
-	// This test seems to be flaky. This one runs in eclipse, but not in travis. 
+	// This test seems to be flaky. This one runs in eclipse, but not in gradle. 
 	@Test
 	@Ignore
 	public void testModelGenerationDE50_pattern15_2() {

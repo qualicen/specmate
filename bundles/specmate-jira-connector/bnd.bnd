@@ -41,7 +41,8 @@
 	specmate-connectors-api;version=latest,\
 	specmate-export-api;version=latest,\
 	com.google.guava;version=26.0,\
-	specmate-auth-api
+	specmate-auth-api,\
+	org.json;version=latest
 
 Private-Package: \
 	com.specmate.connectors.jira.internal.services,\

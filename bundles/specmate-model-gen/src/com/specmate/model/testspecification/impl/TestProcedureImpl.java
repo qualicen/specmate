@@ -8,6 +8,7 @@ import com.specmate.model.base.IDescribed;
 import com.specmate.model.base.IExternal;
 import com.specmate.model.base.INamed;
 
+import com.specmate.model.base.IRecycled;
 import com.specmate.model.testspecification.TestProcedure;
 import com.specmate.model.testspecification.TestspecificationPackage;
 
@@ -35,6 +36,8 @@ import org.eclipse.emf.internal.cdo.CDOObjectImpl;
  *   <li>{@link com.specmate.model.testspecification.impl.TestProcedureImpl#getId <em>Id</em>}</li>
  *   <li>{@link com.specmate.model.testspecification.impl.TestProcedureImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.specmate.model.testspecification.impl.TestProcedureImpl#getDescription <em>Description</em>}</li>
+ *   <li>{@link com.specmate.model.testspecification.impl.TestProcedureImpl#isRecycled <em>Recycled</em>}</li>
+ *   <li>{@link com.specmate.model.testspecification.impl.TestProcedureImpl#isHasRecycledChildren <em>Has Recycled Children</em>}</li>
  *   <li>{@link com.specmate.model.testspecification.impl.TestProcedureImpl#getContents <em>Contents</em>}</li>
  *   <li>{@link com.specmate.model.testspecification.impl.TestProcedureImpl#getExtId <em>Ext Id</em>}</li>
  *   <li>{@link com.specmate.model.testspecification.impl.TestProcedureImpl#getExtId2 <em>Ext Id2</em>}</li>
@@ -75,6 +78,26 @@ public class TestProcedureImpl extends CDOObjectImpl implements TestProcedure {
 	 * @ordered
 	 */
 	protected static final String DESCRIPTION_EDEFAULT = null;
+
+	/**
+	 * The default value of the '{@link #isRecycled() <em>Recycled</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRecycled()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean RECYCLED_EDEFAULT = false;
+
+	/**
+	 * The default value of the '{@link #isHasRecycledChildren() <em>Has Recycled Children</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isHasRecycledChildren()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean HAS_RECYCLED_CHILDREN_EDEFAULT = false;
 
 	/**
 	 * The default value of the '{@link #getExtId() <em>Ext Id</em>}' attribute.
@@ -220,6 +243,46 @@ public class TestProcedureImpl extends CDOObjectImpl implements TestProcedure {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public boolean isRecycled() {
+		return (Boolean)eDynamicGet(TestspecificationPackage.TEST_PROCEDURE__RECYCLED, BasePackage.Literals.IRECYCLED__RECYCLED, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setRecycled(boolean newRecycled) {
+		eDynamicSet(TestspecificationPackage.TEST_PROCEDURE__RECYCLED, BasePackage.Literals.IRECYCLED__RECYCLED, newRecycled);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isHasRecycledChildren() {
+		return (Boolean)eDynamicGet(TestspecificationPackage.TEST_PROCEDURE__HAS_RECYCLED_CHILDREN, BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setHasRecycledChildren(boolean newHasRecycledChildren) {
+		eDynamicSet(TestspecificationPackage.TEST_PROCEDURE__HAS_RECYCLED_CHILDREN, BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN, newHasRecycledChildren);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public EList<IContentElement> getContents() {
@@ -354,6 +417,10 @@ public class TestProcedureImpl extends CDOObjectImpl implements TestProcedure {
 				return getName();
 			case TestspecificationPackage.TEST_PROCEDURE__DESCRIPTION:
 				return getDescription();
+			case TestspecificationPackage.TEST_PROCEDURE__RECYCLED:
+				return isRecycled();
+			case TestspecificationPackage.TEST_PROCEDURE__HAS_RECYCLED_CHILDREN:
+				return isHasRecycledChildren();
 			case TestspecificationPackage.TEST_PROCEDURE__CONTENTS:
 				return getContents();
 			case TestspecificationPackage.TEST_PROCEDURE__EXT_ID:
@@ -387,6 +454,12 @@ public class TestProcedureImpl extends CDOObjectImpl implements TestProcedure {
 				return;
 			case TestspecificationPackage.TEST_PROCEDURE__DESCRIPTION:
 				setDescription((String)newValue);
+				return;
+			case TestspecificationPackage.TEST_PROCEDURE__RECYCLED:
+				setRecycled((Boolean)newValue);
+				return;
+			case TestspecificationPackage.TEST_PROCEDURE__HAS_RECYCLED_CHILDREN:
+				setHasRecycledChildren((Boolean)newValue);
 				return;
 			case TestspecificationPackage.TEST_PROCEDURE__CONTENTS:
 				getContents().clear();
@@ -428,6 +501,12 @@ public class TestProcedureImpl extends CDOObjectImpl implements TestProcedure {
 			case TestspecificationPackage.TEST_PROCEDURE__DESCRIPTION:
 				setDescription(DESCRIPTION_EDEFAULT);
 				return;
+			case TestspecificationPackage.TEST_PROCEDURE__RECYCLED:
+				setRecycled(RECYCLED_EDEFAULT);
+				return;
+			case TestspecificationPackage.TEST_PROCEDURE__HAS_RECYCLED_CHILDREN:
+				setHasRecycledChildren(HAS_RECYCLED_CHILDREN_EDEFAULT);
+				return;
 			case TestspecificationPackage.TEST_PROCEDURE__CONTENTS:
 				getContents().clear();
 				return;
@@ -464,6 +543,10 @@ public class TestProcedureImpl extends CDOObjectImpl implements TestProcedure {
 				return NAME_EDEFAULT == null ? getName() != null : !NAME_EDEFAULT.equals(getName());
 			case TestspecificationPackage.TEST_PROCEDURE__DESCRIPTION:
 				return DESCRIPTION_EDEFAULT == null ? getDescription() != null : !DESCRIPTION_EDEFAULT.equals(getDescription());
+			case TestspecificationPackage.TEST_PROCEDURE__RECYCLED:
+				return isRecycled() != RECYCLED_EDEFAULT;
+			case TestspecificationPackage.TEST_PROCEDURE__HAS_RECYCLED_CHILDREN:
+				return isHasRecycledChildren() != HAS_RECYCLED_CHILDREN_EDEFAULT;
 			case TestspecificationPackage.TEST_PROCEDURE__CONTENTS:
 				return !getContents().isEmpty();
 			case TestspecificationPackage.TEST_PROCEDURE__EXT_ID:
@@ -499,6 +582,13 @@ public class TestProcedureImpl extends CDOObjectImpl implements TestProcedure {
 				default: return -1;
 			}
 		}
+		if (baseClass == IRecycled.class) {
+			switch (derivedFeatureID) {
+				case TestspecificationPackage.TEST_PROCEDURE__RECYCLED: return BasePackage.IRECYCLED__RECYCLED;
+				case TestspecificationPackage.TEST_PROCEDURE__HAS_RECYCLED_CHILDREN: return BasePackage.IRECYCLED__HAS_RECYCLED_CHILDREN;
+				default: return -1;
+			}
+		}
 		if (baseClass == IExternal.class) {
 			switch (derivedFeatureID) {
 				case TestspecificationPackage.TEST_PROCEDURE__EXT_ID: return BasePackage.IEXTERNAL__EXT_ID;
@@ -527,6 +617,13 @@ public class TestProcedureImpl extends CDOObjectImpl implements TestProcedure {
 		if (baseClass == IDescribed.class) {
 			switch (baseFeatureID) {
 				case BasePackage.IDESCRIBED__DESCRIPTION: return TestspecificationPackage.TEST_PROCEDURE__DESCRIPTION;
+				default: return -1;
+			}
+		}
+		if (baseClass == IRecycled.class) {
+			switch (baseFeatureID) {
+				case BasePackage.IRECYCLED__RECYCLED: return TestspecificationPackage.TEST_PROCEDURE__RECYCLED;
+				case BasePackage.IRECYCLED__HAS_RECYCLED_CHILDREN: return TestspecificationPackage.TEST_PROCEDURE__HAS_RECYCLED_CHILDREN;
 				default: return -1;
 			}
 		}

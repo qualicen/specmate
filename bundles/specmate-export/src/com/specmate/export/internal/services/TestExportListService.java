@@ -1,6 +1,7 @@
 package com.specmate.export.internal.services;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response.Status;
@@ -29,7 +30,8 @@ public class TestExportListService extends RestServiceBase {
 	@Override
 	public RestResult<?> get(Object object, MultivaluedMap<String, String> queryParams, String token, String sessionId)
 			throws SpecmateException {
-		return new RestResult<List<String>>(Status.OK, exportManager.getExporters(object, token));
+		return new RestResult<List<String>>(Status.OK,
+				exportManager.getExporters(object, token).stream().map(e -> e.getType()).collect(Collectors.toList()));
 	}
 
 	@Override

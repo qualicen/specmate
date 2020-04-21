@@ -13,5 +13,5 @@ package com.specmate.model.base;
  * @model interface="true" abstract="true"
  * @generated
  */
-public interface IContentElement extends IID, INamed, IDescribed {
+public interface IContentElement extends IID, INamed, IDescribed, IRecycled {
 } // IContentElement

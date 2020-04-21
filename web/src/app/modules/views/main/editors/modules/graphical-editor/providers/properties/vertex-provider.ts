@@ -138,13 +138,10 @@ export class VertexProvider extends ProviderBase {
         };
 
         graph.getTooltipForCell = (cell) => {
-            if (cell.getId().endsWith(VertexProvider.ID_SUFFIX_TYPE)) {
+            if (cell.getId().endsWith(VertexProvider.ID_SUFFIX_TYPE) || cell.value === null || cell.value === undefined) {
                 return '';
             }
-            if (cell.value !== undefined && cell.value !== null) {
-                return he.encode(cell.value);
-            }
-            return '';
+            return he.encode(cell.value);
         };
     }
 

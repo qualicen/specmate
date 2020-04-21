@@ -28,7 +28,7 @@ ul {
 }
 
 button {
-    border: 0px solid rgba(0, 0, 0, 0);
+    border: 1px solid rgba(0, 0, 0, 0);
     background-color: rgba(0, 0, 0, 0);
     margin-left: -10px;
 }
@@ -45,4 +45,21 @@ button.expand:focus {
 
 .fg-white {
     color: #fff;
+}
+
+.button-column {
+    text-align: right;
+    width: 70px;
+    position: -webkit-sticky;
+    position: sticky;
+    right: 0;
+    background: white;
+}
+
+.button-column button {
+    border: 1px solid;
+}
+
+.button-column i {
+    width: auto;
 }

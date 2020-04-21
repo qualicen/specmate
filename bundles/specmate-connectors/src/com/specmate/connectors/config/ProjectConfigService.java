@@ -62,11 +62,11 @@ public class ProjectConfigService implements IProjectConfigService {
 			try {
 				String projectPrefix = PROJECT_PREFIX + projectID;
 
-				Configurable connector = createConnector(projectPrefix);
+				Configurable connector = createConnector(projectPrefix, projectID);
 				if (connector != null) {
 					configureConfigurable(connector);
 				}
-				Configurable exporter = createExporter(projectPrefix);
+				Configurable exporter = createExporter(projectPrefix, projectID);
 				if (exporter != null) {
 					configureConfigurable(exporter);
 				}
@@ -75,7 +75,7 @@ public class ProjectConfigService implements IProjectConfigService {
 				configureProject(projectID, connector, exporter);
 				bootstrapProjectLibrary(projectID);
 			} catch (SpecmateException e) {
-				this.logService.log(LogService.LOG_ERROR, "Could not create project " + projectID, e);
+				logService.log(LogService.LOG_ERROR, "Could not create project " + projectID, e);
 			}
 		}
 	}
@@ -84,7 +84,7 @@ public class ProjectConfigService implements IProjectConfigService {
 		ITransaction trans = null;
 
 		try {
-			trans = this.persistencyService.openTransaction();
+			trans = persistencyService.openTransaction();
 			trans.removeValidator(TopLevelValidator.class.getName());
 			EList<EObject> projects = trans.getResource().getContents();
 
@@ -114,14 +114,14 @@ public class ProjectConfigService implements IProjectConfigService {
 			throws SpecmateException {
 		String exporterFilter;
 		if (exporter != null) {
-			exporterFilter = "(" + KEY_EXPORTER_ID + "=" + exporter.getConfig().get(KEY_EXPORTER_ID) + ")";
+			exporterFilter = "(" + KEY_EXPORTER_ID + "=" + projectID + ")";
 		} else {
 			exporterFilter = "(" + KEY_EXPORTER_ID + "= NO_ID)";
 		}
 
 		String connectorFilter;
 		if (connector != null) {
-			connectorFilter = "(" + KEY_CONNECTOR_ID + "=" + connector.getConfig().get(KEY_CONNECTOR_ID) + ")";
+			connectorFilter = "(" + KEY_CONNECTOR_ID + "=" + projectID + ")";
 		} else {
 			connectorFilter = "(" + KEY_CONNECTOR_ID + "= NO_ID)";
 		}
@@ -149,21 +149,29 @@ public class ProjectConfigService implements IProjectConfigService {
 	/**
 	 * Creates an exporter from the config for the project given by the config
 	 * prefix.
+	 *
+	 * @param projectID
 	 */
-	private Configurable createExporter(String projectPrefix) {
+	private Configurable createExporter(String projectPrefix, String projectID) {
 		String exporterPrefix = projectPrefix + "." + "exporter";
 		Configurable exporter = new Configurable();
-		return fillConfigurable(exporter, exporterPrefix);
+		fillConfigurable(exporter, exporterPrefix);
+		exporter.addConfigValue(KEY_EXPORTER_ID, projectID);
+		return exporter;
 	}
 
 	/**
 	 * Creates an connector from the config for the project given by the config
 	 * prefix.
+	 *
+	 * @param projectID
 	 */
-	private Configurable createConnector(String projectPrefix) {
+	private Configurable createConnector(String projectPrefix, String projectID) {
 		String connectorPrefix = projectPrefix + "." + "connector";
 		Configurable connector = new Configurable();
-		return fillConfigurable(connector, connectorPrefix);
+		fillConfigurable(connector, connectorPrefix);
+		connector.addConfigValue(KEY_CONNECTOR_ID, projectID);
+		return connector;
 	}
 
 	/** Configures a configurable with the ConfigAdmin */
@@ -171,7 +179,7 @@ public class ProjectConfigService implements IProjectConfigService {
 		try {
 			OSGiUtil.configureFactory(configAdmin, configurable.getPid(), configurable.getConfig());
 		} catch (SpecmateException e) {
-			this.logService.log(LogService.LOG_ERROR, "Failed attempt to configure " + configurable.getPid()
+			logService.log(LogService.LOG_ERROR, "Failed attempt to configure " + configurable.getPid()
 					+ " with config " + OSGiUtil.configDictionaryToString(configurable.getConfig()), e);
 		}
 	}
@@ -204,7 +212,7 @@ public class ProjectConfigService implements IProjectConfigService {
 		ITransaction trans = null;
 
 		try {
-			trans = this.persistencyService.openTransaction();
+			trans = persistencyService.openTransaction();
 			trans.removeValidator(TopLevelValidator.class.getName());
 			EList<EObject> projects = trans.getResource().getContents();
 			if (projects == null || projects.size() == 0) {

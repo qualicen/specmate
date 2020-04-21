@@ -65,7 +65,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 			throw new SpecmateAuthorizationException("Session " + token + " is expired.");
 		}
 
-		if (!sessionService.isAuthorized(token, path)) {
+		if (!sessionService.isAuthorizedPath(token, path)) {
 			throw new SpecmateAuthorizationException("Session " + token + " not authorized for " + path + ".");
 		}
 

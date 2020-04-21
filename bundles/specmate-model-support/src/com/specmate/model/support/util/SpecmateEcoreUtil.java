@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -13,6 +14,7 @@ import org.eclipse.emf.cdo.CDOState;
 import org.eclipse.emf.cdo.common.id.CDOID;
 import org.eclipse.emf.cdo.common.id.CDOIDUtil;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -21,6 +23,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
+import com.google.common.collect.Iterators;
 import com.specmate.common.AssertUtil;
 import com.specmate.common.UUIDUtil;
 import com.specmate.common.exception.SpecmateException;
@@ -29,12 +32,66 @@ import com.specmate.model.administration.ErrorCode;
 import com.specmate.model.base.Folder;
 import com.specmate.model.base.IContainer;
 import com.specmate.model.base.IContentElement;
+import com.specmate.model.base.IRecycled;
+import com.specmate.model.testspecification.TestProcedure;
+import com.specmate.model.testspecification.TestStep;
 
 public class SpecmateEcoreUtil {
+
 	public static void copyAttributeValues(EObject source, EObject target) {
 		AssertUtil.preTrue(target.getClass().isAssignableFrom(source.getClass()));
 		for (EAttribute attribute : target.eClass().getEAllAttributes()) {
 			target.eSet(attribute, source.eGet(attribute));
+		}
+	}
+
+	public static void setAttributeValue(EObject target, Object newValue, String attribute) {
+		target.eSet(target.eClass().getEStructuralFeature(attribute), newValue);
+	}
+
+	public static EObject getParent(EObject target) {
+		return target.eContainer();
+	}
+
+	public static LinkedList<EObject> getAllParents(EObject element) {
+		LinkedList<EObject> parentsList = new LinkedList<EObject>();
+
+		EObject parent = SpecmateEcoreUtil.getParent(element);
+		while (parent != null && !SpecmateEcoreUtil.isProject(parent)) {
+			parentsList.add(parent);
+			parent = SpecmateEcoreUtil.getParent(parent);
+		}
+		return parentsList;
+	}
+
+	public static void updateParentsOnRestore(EObject firstParent) {
+		if (firstParent == null) {
+			return;
+		}
+		LinkedList<EObject> parentsList = SpecmateEcoreUtil.getAllParents(firstParent);
+		parentsList.addFirst(firstParent);
+		while (parentsList.size() > 0) {
+			EObject parent = parentsList.pop();
+			TreeIterator<EObject> contents = ((EObject) parent).eAllContents();
+			Iterator<EObject> filtered;
+			filtered = Iterators.filter(contents,
+					o -> ((IRecycled) o).isRecycled());
+			if (filtered.hasNext()) {
+				if (parent instanceof IRecycled) {
+					((IRecycled) parent).setHasRecycledChildren(true);
+				}
+				while (parentsList.size() > 0) {
+					EObject ancestor = parentsList.pop();
+					if (ancestor instanceof IRecycled) {
+						((IRecycled) ancestor).setHasRecycledChildren(true);
+					}
+				}
+				return;
+			} else {
+				if (parent instanceof IRecycled) {
+					((IRecycled) parent).setHasRecycledChildren(false);
+				}
+			}
 		}
 	}
 
@@ -163,7 +220,7 @@ public class SpecmateEcoreUtil {
 	public static String getIdForChild() {
 		return UUIDUtil.generateUUID();
 	}
-	
+
 	public static String getNameForChild(IContainer parent, EClass type) {
 		int i = 1;
 		String format = "%s-%d";
@@ -258,6 +315,12 @@ public class SpecmateEcoreUtil {
 		} else {
 			throw new SpecmateInternalException(ErrorCode.INTERNAL_PROBLEM, "Object is no resource and no EObject.");
 		}
+	}
+
+	public static List<TestStep> getStepsSorted(TestProcedure testProcedure) {
+		List<TestStep> steps = SpecmateEcoreUtil.pickInstancesOf(testProcedure.getContents(), TestStep.class);
+		steps.sort((s1, s2) -> Integer.compare(s1.getPosition(), s2.getPosition()));
+		return steps;
 	}
 
 }

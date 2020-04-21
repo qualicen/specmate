@@ -46,7 +46,6 @@
     "mxgraph": "github:jgraph/mxgraph#12621211eed3495188c95bbc4b3020a1db451df5",
     "ng2-dragula": "2.1.1",
     "ngx-cookie": "4.1.2",
-    "ngx-textarea-autosize": "2.0.3",
     "ngx-translate-core": "11.0.3",
     "ngx-translate-extract": "1.0.0",
     "popper.js": "1.16.1",
@@ -62,7 +61,7 @@
     "@angular-devkit/build-angular": "0.900.5",
     "@angular/cli": "9.0.5",
     "@angular/compiler-cli": "9.0.5",
-    "@biesbjerg/ngx-translate-extract": "4.2.0",
+    "@biesbjerg/ngx-translate-extract": "5.0.1",
     "@types/express-serve-static-core": "^4.17.2",
     "@types/file-saver": "2.0.1",
     "@types/he": "^1.1.0",
@@ -77,6 +76,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/junkerm/specmate/"
+    "url": "https://github.com/qualicen/specmate/"
   }
 }

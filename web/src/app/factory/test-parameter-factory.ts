@@ -16,6 +16,8 @@ export abstract class TestParameterFactory extends ElementFactoryBase<TestParame
         parameter.name = name || Config.TESTPARAMETER_NAME + ' ' + ElementFactoryBase.getDateStr();
         parameter.id = id;
         parameter.url = url;
+        parameter.recycled = false;
+        parameter.hasRecycledChildren = false;
         parameter.type = this.parameterType;
         parameter.assignments = [];
 

@@ -10,7 +10,6 @@ import { TestCaseNameForm } from './components/test-case-name-form.component';
 import { TestCaseRow } from './components/test-case-row.component';
 import { TestParameterForm } from './components/test-parameter-form.component';
 import { TestSpecificationEditor } from './components/test-specification-editor.component';
-import { TextareaAutosizeModule } from 'ngx-textarea-autosize';
 
 @NgModule({
   imports: [
@@ -21,8 +20,7 @@ import { TextareaAutosizeModule } from 'ngx-textarea-autosize';
     FormsModule,
     ReactiveFormsModule,
     SpecmateSharedModule,
-    NavigatorModule,
-    TextareaAutosizeModule
+    NavigatorModule
   ],
   declarations: [
     // COMPONENTS IN THIS MODULE

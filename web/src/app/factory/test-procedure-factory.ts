@@ -17,6 +17,8 @@ export class TestProcedureFactory extends ElementFactoryBase<TestProcedure> {
         testProcedure.description = Config.TESTPROCEDURE_DESCRIPTION;
         testProcedure.id = id;
         testProcedure.url = url;
+        testProcedure.recycled = false;
+        testProcedure.hasRecycledChildren = false;
         testProcedure.isRegressionTest = false;
 
         return this.dataService.createElement(testProcedure, true, compoundId)

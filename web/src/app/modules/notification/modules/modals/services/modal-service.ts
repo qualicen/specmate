@@ -7,7 +7,7 @@ export class ModalService {
     constructor(private ngbModalService: NgbModal) {
     }
 
-    public open<T>(content: T, options?: NgbModalOptions): NgbModalRef<T> {
+    public open<T>(content: T, options?: NgbModalOptions): NgbModalRef {
         // Remove the focus of the current element, because this leads to errors in combination with forms
         (document.activeElement as HTMLElement).blur();
         return this.ngbModalService.open(content, options);

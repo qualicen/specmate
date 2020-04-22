@@ -7,6 +7,7 @@ import { ConfirmationModal } from './services/confirmation-modal.service';
 import { ErrorNotificationModalService } from './services/error-notification-modal.service';
 import { LoadingModalService } from './services/loading-model-service';
 import { LoadingModalContent } from './components/loading-modal-content.component';
+import { ModalService } from './services/modal-service';
 
 @NgModule({
     imports: [
@@ -27,7 +28,8 @@ import { LoadingModalContent } from './components/loading-modal-content.componen
         // SERVICES
         ConfirmationModal,
         ErrorNotificationModalService,
-        LoadingModalService
+        LoadingModalService,
+        ModalService
     ],
     bootstrap: [
         // COMPONENTS THAT ARE BOOTSTRAPPED HERE

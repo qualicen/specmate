@@ -24,10 +24,10 @@ export class ErrorNotificationModalService {
             this.isOpen = true;
             const modalRef = this.modalService.open(TypedModalContent);
             modalRef.componentInstance.options = Dialogtype.errorDialog(message);
-            return modalRef.result.then((result) => {
+            return modalRef.result.then((result: any) => {
                 this.isOpen = false;
                 return Promise.resolve(result);
-            }).catch((result) => {
+            }).catch((result: any) => {
                 this.isOpen = false;
                 return Promise.reject(result);
             });

@@ -23,7 +23,7 @@
                         {{project ? project.name : ('project' | translate)}}
                     </button>
                     <div ngbDropdownMenu aria-labelledby="projectDropdown">
-                        <button *ngFor="let projectName of projectNames" id="project-{{name}}" class="dropdown-item"
+                        <button *ngFor="let projectName of projectNames" id="project-{{projectName}}" class="dropdown-item"
                             (click)="selectedProject = projectName">{{projectName}}</button>
                     </div>
                 </div>

@@ -65,7 +65,7 @@ public class LoginElements {
 	/**change project to <code>name</code> using the project dropdown*/
 	public void changeToProject(String name) {
 		driver.findElement(project).click();
-		driver.findElement(By.id("project-" + name)).click();
+		driver.findElement(By.id("project-")).click();
 	}
 	
 	public boolean isLoggedIn() {

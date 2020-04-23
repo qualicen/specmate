@@ -127,11 +127,11 @@ public class TestBase implements SauceOnDemandSessionIdProvider {
     
 	public void performLogin(LoginElements login) {
 		UITestUtil.waitForProjectsToLoad(driver);
+		login.changeToProject("test-data");
 		login.username("username");
 		login.password("password");
 		login.changeToEnglish();
 		login.changeToGerman();
-		login.changeToProject("test-data");
 		login.login();
 	}
 }

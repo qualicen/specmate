@@ -77,7 +77,7 @@ public class UITestUtil {
     	do {
     		try {
     			counter--;
-    			displayed = (counter<0) || driver.findElement(By.id("login-username-textfield")).isDisplayed();
+    			displayed = (counter<0) || driver.findElement(By.id("language-dropdown")).isDisplayed();
     		} catch (NoSuchElementException e) {
     			driver.navigate().refresh();
     		}

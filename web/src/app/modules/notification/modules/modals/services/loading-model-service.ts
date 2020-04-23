@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { NgbModal, NgbModalConfig, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalConfig, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { LoggingService } from '../../../../views/side/modules/log-list/services/logging.service';
 import { LoadingModalContent } from '../components/loading-modal-content.component';
+import { ModalService } from './modal-service';
 
 @Injectable()
 export class LoadingModalService {
@@ -9,7 +10,7 @@ export class LoadingModalService {
     private isOpen = false;
     private modalRef: NgbModalRef;
 
-    constructor(private modalService: NgbModal, private logger: LoggingService) {
+    constructor(private modalService: ModalService, private logger: LoggingService) {
     }
 
     public open() {
@@ -24,7 +25,8 @@ export class LoadingModalService {
                 // don't allow to hide the modal by hitting ESC
                 keyboard: false,
                 // center modal vertically
-                centered: true });
+                centered: true
+            });
 
             this.modalRef.result.then((result) => {
                 this.isOpen = false;

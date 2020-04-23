@@ -140,6 +140,7 @@ export class VertexProvider extends ProviderBase {
         graph.getTooltipForCell = (cell) => {
             if (cell.getId().endsWith(VertexProvider.ID_SUFFIX_TYPE) || cell.value === null || cell.value === undefined) {
                 return '';
+
             }
             return he.encode(cell.value);
         };

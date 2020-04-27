@@ -144,7 +144,7 @@ export class ProjectExplorer implements OnInit {
             .debounceTime(300)
             .distinctUntilChanged()
             .subscribe(query => {
-                if (query && query.length >= 3) {
+                if (query && query.length >= 2) {
                     query = Search.processSearchQuery(query);
                     this.dataService.search(query, filter).then(results => {
                         this.searchResults = results;

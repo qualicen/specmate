@@ -63,13 +63,12 @@ public class CrudTest extends EmfRestTest {
 		Assert.assertEquals(result.getResponse().getStatus(), Status.OK.getStatusCode());
 		result.getResponse().close();
 
-		folder.put(BasePackage.Literals.INAMED__NAME.getName(), "Ã¤Ã¶Ã¼Ã^ßÂ§$% &amp;=?!/\\\\^$?!/\\\\^_:.#&#39;+~*(){}[]");
 		String retrieveUrl = detailUrl(getId(folder));
 		RestResult<JSONObject> getResult = restClient.get(retrieveUrl);
 		JSONObject retrievedFolder = getResult.getPayload();
 		logService.log(LogService.LOG_ERROR,
 				"Retrieved the object " + retrievedFolder.toString() + " from url " + retrieveUrl);
-		Assert.assertTrue(EmfRestTestUtil.compare(folder, retrievedFolder, true));
+		Assert.assertTrue(EmfRestTestUtil.compare(folder, retrievedFolder, true, true));
 		getResult.getResponse().close();
 	}
 	

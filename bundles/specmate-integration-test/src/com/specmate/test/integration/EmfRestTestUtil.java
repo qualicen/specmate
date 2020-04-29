@@ -9,10 +9,15 @@ public class EmfRestTestUtil {
 
 	protected static final String URL_KEY = "url";
 	protected static final String PROXY_KEY = "___proxy";
-
+	protected static final String NAME = "name";
+	
 	public static boolean compare(JSONObject jsonObject1, JSONObject jsonObject2, boolean ignoreUri) {
+		return compare(jsonObject1, jsonObject2, ignoreUri, false);
+	}
+
+	public static boolean compare(JSONObject jsonObject1, JSONObject jsonObject2, boolean ignoreUri, boolean ignoreName) {
 		for (String key : jsonObject1.keySet()) {
-			if (ignoreUri && key.equals(URL_KEY)) {
+			if ((ignoreUri && key.equals(URL_KEY)) || (ignoreName && key.equals(NAME))) {
 				continue;
 			}
 			Object object = jsonObject1.get(key);

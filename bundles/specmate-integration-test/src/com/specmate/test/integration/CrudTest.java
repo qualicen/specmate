@@ -57,21 +57,27 @@ public class CrudTest extends EmfRestTest {
 	@Test
 	public void testPostFolderWithSpecialChars() {
 		String postUrl = listUrl();
-		JSONObject folder = createTestFolder("TestFolder", "äöüß§$% &=?!/\\^_:.,#'+~*(){}[]");
+		JSONObject folder = createTestFolder("TestFolder", "äöüß§$% &=?!/\\^_:.#'+~*(){}[]");
 		logService.log(LogService.LOG_DEBUG, "Posting the object " + folder.toString() + " to url " + postUrl);
 		RestResult<JSONObject> result = restClient.post(postUrl, folder);
 		Assert.assertEquals(result.getResponse().getStatus(), Status.OK.getStatusCode());
 		result.getResponse().close();
 
+		folder.put(BasePackage.Literals.INAMED__NAME.getName(), "Ã¤Ã¶Ã¼Ã^ßÂ§$% &amp;=?!/\\\\^$?!/\\\\^_:.#&#39;+~*(){}[]");
 		String retrieveUrl = detailUrl(getId(folder));
 		RestResult<JSONObject> getResult = restClient.get(retrieveUrl);
 		JSONObject retrievedFolder = getResult.getPayload();
-		logService.log(LogService.LOG_DEBUG,
+		logService.log(LogService.LOG_ERROR,
 				"Retrieved the object " + retrievedFolder.toString() + " from url " + retrieveUrl);
 		Assert.assertTrue(EmfRestTestUtil.compare(folder, retrievedFolder, true));
 		getResult.getResponse().close();
 	}
 	
+	/**
+	 * Tests posting a folder that contains a cross-site scripting attack vector in its name. Checks,
+	 * if the return code of the post request is OK and if retrieving the object
+	 * again returns the the folder with an escaped name.
+	 */
 	@Test
 	public void testFilterXSS() {
 		String postUrl = listUrl();
@@ -81,15 +87,14 @@ public class CrudTest extends EmfRestTest {
 		Assert.assertEquals(result.getResponse().getStatus(), Status.OK.getStatusCode());
 		result.getResponse().close();
 		
-		String expectedEscapedString = "&lt;script&gt;alert(\\&#34;XSS\\&#34;)&lt;/script&gt;";
+		folder.put(BasePackage.Literals.INAMED__NAME.getName(), "&lt;script&gt;alert(&#34;XSS&#34;)&lt;/script&gt;");
 		
 		String retrieveUrl = detailUrl(getId(folder));
 		RestResult<JSONObject> getResult = restClient.get(retrieveUrl);
 		JSONObject retrievedFolder = getResult.getPayload();
-		logService.log(LogService.LOG_DEBUG,
+		logService.log(LogService.LOG_ERROR,
 				"Retrieved the object " + retrievedFolder.toString() + " from url " + retrieveUrl);
-		String retrievedFolderName = retrievedFolder.getString(BasePackage.Literals.IID__ID.getName());
-		Assert.assertTrue(retrievedFolderName.equals(expectedEscapedString));
+		Assert.assertTrue(EmfRestTestUtil.compare(folder, retrievedFolder, true));
 		getResult.getResponse().close();	
 	}
 

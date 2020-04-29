@@ -26,6 +26,8 @@ export class ParameterAssignmentFactory extends ElementFactoryBase<ParameterAssi
         parameterAssignment.name = name || Config.TESTPARAMETERASSIGNMENT_NAME;
         parameterAssignment.id = id;
         parameterAssignment.url = Url.build([parent.url, id]);
+        parameterAssignment.recycled = false;
+        parameterAssignment.hasRecycledChildren = false;
         let assignmentProxy = new Proxy();
         assignmentProxy.url = parameterAssignment.url;
         this.testParameter.assignments.push(assignmentProxy);

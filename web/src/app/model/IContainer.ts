@@ -7,14 +7,16 @@
 		___nsuri: string;
 		 url: string;
 		 className: string;
-		
+
 		// Attributes
 		 id: EString;
 		 name: EString;
 		 description: EString;
+		 recycled: EBoolean;
+		 hasRecycledChildren: EBoolean;
 
 		// References
-		
+
 
 		// Containment
 

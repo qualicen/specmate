@@ -9,6 +9,7 @@ import com.specmate.model.base.IID;
 import com.specmate.model.base.IModelConnection;
 import com.specmate.model.base.IModelNode;
 import com.specmate.model.base.INamed;
+import com.specmate.model.base.IRecycled;
 import com.specmate.model.base.ISpecmateModelObject;
 import com.specmate.model.base.ISpecmatePositionableModelObject;
 import com.specmate.model.base.ITracingElement;
@@ -91,6 +92,7 @@ public class ProcessesSwitch<T> extends Switch<T> {
 				if (result == null) result = caseIID(process);
 				if (result == null) result = caseINamed(process);
 				if (result == null) result = caseIDescribed(process);
+				if (result == null) result = caseIRecycled(process);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -106,6 +108,7 @@ public class ProcessesSwitch<T> extends Switch<T> {
 				if (result == null) result = caseIID(processNode);
 				if (result == null) result = caseINamed(processNode);
 				if (result == null) result = caseIDescribed(processNode);
+				if (result == null) result = caseIRecycled(processNode);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -122,6 +125,7 @@ public class ProcessesSwitch<T> extends Switch<T> {
 				if (result == null) result = caseIID(processStep);
 				if (result == null) result = caseINamed(processStep);
 				if (result == null) result = caseIDescribed(processStep);
+				if (result == null) result = caseIRecycled(processStep);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -138,6 +142,7 @@ public class ProcessesSwitch<T> extends Switch<T> {
 				if (result == null) result = caseIID(processDecision);
 				if (result == null) result = caseINamed(processDecision);
 				if (result == null) result = caseIDescribed(processDecision);
+				if (result == null) result = caseIRecycled(processDecision);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -152,6 +157,7 @@ public class ProcessesSwitch<T> extends Switch<T> {
 				if (result == null) result = caseIID(processConnection);
 				if (result == null) result = caseINamed(processConnection);
 				if (result == null) result = caseIDescribed(processConnection);
+				if (result == null) result = caseIRecycled(processConnection);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -168,6 +174,7 @@ public class ProcessesSwitch<T> extends Switch<T> {
 				if (result == null) result = caseIID(processStart);
 				if (result == null) result = caseINamed(processStart);
 				if (result == null) result = caseIDescribed(processStart);
+				if (result == null) result = caseIRecycled(processStart);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -184,6 +191,7 @@ public class ProcessesSwitch<T> extends Switch<T> {
 				if (result == null) result = caseIID(processEnd);
 				if (result == null) result = caseINamed(processEnd);
 				if (result == null) result = caseIDescribed(processEnd);
+				if (result == null) result = caseIRecycled(processEnd);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -338,6 +346,21 @@ public class ProcessesSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseIDescribed(IDescribed object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>IRecycled</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>IRecycled</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseIRecycled(IRecycled object) {
 		return null;
 	}
 

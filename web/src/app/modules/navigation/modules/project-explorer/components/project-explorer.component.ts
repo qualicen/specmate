@@ -15,6 +15,7 @@ import { AuthenticationService } from '../../../../views/main/authentication/mod
 import { NavigatorService } from '../../navigator/services/navigator.service';
 import { Requirement } from 'src/app/model/Requirement';
 
+enum ActiveTab { project, library, recycleBin }
 
 @Component({
     moduleId: module.id.toString(),
@@ -23,16 +24,20 @@ import { Requirement } from 'src/app/model/Requirement';
     styleUrls: ['project-explorer.component.css']
 })
 export class ProjectExplorer implements OnInit {
+    ActiveTab = ActiveTab;
 
     public _rootElements: IContainer[];
     public _rootLibraries: IContainer[];
-    public showLibrary = false;
+    public _rootRecycleBinProject: IContainer[];
+    public _rootRecycleBinLibrary: IContainer[];
+    public currentActiveTab = ActiveTab.project;
 
     private searchQueries: Subject<string>;
     protected searchResults: IContentElement[];
 
     private numProjectFoldersDisplayed = Config.ELEMENT_CHUNK_SIZE;
     private numLibraryFoldersDisplayed = Config.ELEMENT_CHUNK_SIZE;
+    private numRecycleBinFoldersDisplayed = Config.ELEMENT_CHUNK_SIZE;
 
     public get currentElement(): IContainer {
         return this.navigator.currentElement;
@@ -50,6 +55,20 @@ export class ProjectExplorer implements OnInit {
             return [];
         }
         return this._rootLibraries.slice(0, Math.min(this.numLibraryFoldersDisplayed, this._rootLibraries.length));
+    }
+
+    public get rootRecycleBinProject(): IContainer[] {
+        if (this._rootRecycleBinProject === undefined || this._rootRecycleBinProject === null) {
+            return [];
+        }
+        return this._rootRecycleBinProject.slice(0, Math.min(this.numRecycleBinFoldersDisplayed, this._rootRecycleBinProject.length));
+    }
+
+    public get rootRecycleBinLibrary(): IContainer[] {
+        if (this._rootRecycleBinLibrary === undefined || this._rootRecycleBinLibrary === null) {
+            return [];
+        }
+        return this._rootRecycleBinLibrary.slice(0, Math.min(this.numRecycleBinFoldersDisplayed, this._rootRecycleBinLibrary.length));
     }
 
     constructor(private translate: TranslateService, private dataService: SpecmateDataService,
@@ -76,6 +95,20 @@ export class ProjectExplorer implements OnInit {
         return this._rootLibraries.length > this.numLibraryFoldersDisplayed;
     }
 
+    public get canLoadMoreRecycleBinFoldersProject(): boolean {
+        if (this._rootRecycleBinProject === undefined || this._rootRecycleBinProject === null) {
+            return false;
+        }
+        return this._rootRecycleBinProject.length > this.numRecycleBinFoldersDisplayed;
+    }
+
+    public get canLoadMoreRecycleBinFoldersLibrary(): boolean {
+        if (this._rootRecycleBinLibrary === undefined || this._rootRecycleBinLibrary === null) {
+            return false;
+        }
+        return this._rootRecycleBinLibrary.length > this.numRecycleBinFoldersDisplayed;
+    }
+
     public search(query: string): void {
         this.searchQueries.next(query);
     }
@@ -98,8 +131,11 @@ export class ProjectExplorer implements OnInit {
 
         this._rootElements = projectContents.filter(c => Type.is(c,Requirement) || (Type.is(c, Folder) && !(c as Folder).library));
         this._rootLibraries = projectContents.filter(c => Type.is(c, Folder) && (c as Folder).library && libraryFolders.indexOf(c.id) > -1);
+        this._rootRecycleBinProject = projectContents.filter(c => Type.is(c, Folder) && !(c as Folder).library);
+        this._rootRecycleBinLibrary = projectContents.filter(c => Type.is(c, Folder) && (c as Folder).library
+            && libraryFolders.indexOf(c.id) > -1);
 
-        let filter = {'-type': 'Folder'};
+        let filter = { '-type': 'Folder' };
 
         // We clean this in case we're logged out. Thus, we need to reinit here.
         if (this.searchQueries === undefined) {
@@ -108,17 +144,22 @@ export class ProjectExplorer implements OnInit {
         this.searchQueries
             .debounceTime(300)
             .distinctUntilChanged()
-            .subscribe( query => {
-                if (query && query.length >= 3) {
-                 query = Search.processSearchQuery(query);
-                 this.dataService.search(query, filter).then(results => {
-                     this.searchResults = results;
+            .subscribe(query => {
+                if (query && query.length >= 2) {
+                    query = Search.processSearchQuery(query);
+                    this.dataService.search(query, filter).then(results => {
+                        this.searchResults = results;
                     });
                 } else {
                     this.searchResults = [];
                 }
             }
-        );
+            );
+    }
+
+    public get recycleBinIsEmpty(): boolean {
+        return this._rootRecycleBinProject.filter(e => e.hasRecycledChildren === true).length === 0 &&
+            this._rootRecycleBinLibrary.filter(e => e.hasRecycledChildren === true).length === 0;
     }
 
     public loadMoreProjectFolders(): void {
@@ -129,22 +170,35 @@ export class ProjectExplorer implements OnInit {
         this.numLibraryFoldersDisplayed += Config.ELEMENT_CHUNK_SIZE;
     }
 
-    public switchToLibrary(): void {
-        this.showLibrary = true;
+    public loadMoreRecycleBinFolders(): void {
+        this.numRecycleBinFoldersDisplayed += Config.ELEMENT_CHUNK_SIZE;
     }
 
     public switchToProject(): void {
-        this.showLibrary = false;
+        this.currentActiveTab = ActiveTab.project;
+    }
+
+    public switchToLibrary(): void {
+        this.currentActiveTab = ActiveTab.library;
+    }
+    public switchToRecycleBin(): void {
+        this.currentActiveTab = ActiveTab.recycleBin;
     }
 
     private clean(): void {
         this._rootElements = undefined;
         this._rootLibraries = undefined;
+        this._rootRecycleBinProject = undefined;
+        this._rootRecycleBinLibrary = undefined;
         this.searchQueries = undefined;
         this.searchResults = undefined;
     }
 
     public get projectName(): string {
         return this.auth.token.project;
+    }
+
+    private isRecycled(element: IContainer) {
+        return element.recycled;
     }
 }

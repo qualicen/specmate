@@ -166,6 +166,8 @@ export class MetaInfo {
 		}	];
 	public static ITracingElement: FieldMetaItem[] = [
 	];
+	public static IRecycled: FieldMetaItem[] = [
+	];
 	public static Requirement: FieldMetaItem[] = [
 			{
 			name: "name",

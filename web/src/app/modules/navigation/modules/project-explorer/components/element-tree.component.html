@@ -1,20 +1,49 @@
 <li *ngIf="element && showElement">
     <div #treeElement class="scroll-anchor"></div>
     <span>
-        <button id="projectexplorer-expand-{{element['extId'] ? element['extId'] + ': ' : ''}}{{element.name}}" type="button" (click)="toggle()" (keydown)="handleKey($event, false);" title="{{'expand' | translate}}" class="btn btn-sm expand" [style.visibility]="canExpand ? 'visible' : 'hidden'">
-            <i *ngIf="!expanded" class="fa fa-plus-square-o" aria-hidden="true"></i>
-            <i *ngIf="expanded" class="fa fa-minus-square-o" aria-hidden="true"></i>
-        </button>
-        <button type="button" *ngIf="!hasLink" type="button" (click)="toggle()" (keydown)="handleKey($event, true);" title="{{element.name}}" class="btn btn-sm">
-            <icon-selector [model]="element" [expanded]="expanded && withExpand"></icon-selector>&nbsp;{{element.name}}
-        </button>
-        <a *ngIf="hasLink" id="{{element['extId'] ? element['extId'] + ': ' : ''}}{{element.name}}" [navigationTarget]="element" (keydown)="handleKey($event, true);" class="treeLink btn btn-sm" [ngClass]="isActive ? 'btn-primary fg-white' : ''">
-            <icon-selector [model]="element" [expanded]="expanded && withExpand"></icon-selector>&nbsp;{{element['extId'] ? element['extId'] + ': ' : ''}}{{element.name}}
-        </a>
+        <table style="width:100%">
+            <tr>
+                <td>
+                    <button
+                        id="projectexplorer-expand-{{element['extId'] ? element['extId'] + ': ' : ''}}{{element.name}}"
+                        type="button" (click)="toggle()" (keydown)="handleKey($event, false);"
+                        title="{{'expand' | translate}}" class="btn btn-sm expand"
+                        [style.visibility]="canExpand ? 'visible' : 'hidden'">
+                        <i *ngIf="!expanded" class="fa fa-plus-square-o" aria-hidden="true"></i>
+                        <i *ngIf="expanded" class="fa fa-minus-square-o" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" *ngIf="!hasLink" type="button" (click)="toggle()"
+                        (keydown)="handleKey($event, true);" title="{{element.name}}" class="btn btn-sm">
+                        <icon-selector [model]="element" [expanded]="expanded && withExpand"></icon-selector>
+                        &nbsp;{{element.name}}
+                    </button>
+                    <a *ngIf="hasLink" id="{{element['extId'] ? element['extId'] + ': ' : ''}}{{element.name}}"
+                        [navigationTarget]="element" (keydown)="handleKey($event, true);" class="treeLink btn btn-sm"
+                        [ngClass]="isActive ? 'btn-primary fg-white' : ''">
+                        <icon-selector [model]="element" [expanded]="expanded && withExpand"></icon-selector>
+                        &nbsp;{{element['extId'] ? element['extId'] + ': ' : ''}}{{element.name}}
+                    </a>
+                </td>
+                <td *ngIf="hasRestore" class="button-column">
+                    <button id="{{'recyclebin-' + element.name + '-restoremodel-button'}}"
+                        title="{{'restore' | translate}}" (click)="restore()"
+                        class="btn btn-sm expand btn-outline-primary">
+                        <i class="fa fa-repeat" aria-hidden="true"></i>
+                    </button>
+                    <button id="{{'recyclebin-' + element.name + '-deletemodel-button'}}"
+                        title="{{'delete' | translate}}" (click)="delete()"
+                        class="btn btn-sm expand btn-outline-danger">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                    </button>&nbsp;
+                </td>
+            </tr>
+        </table>
     </span>
-   
+
     <ul *ngIf="expanded && canExpand">
-        <element-tree #treeItem *ngFor="let childElement of contents" [baseUrl]="childElement.url" [parent]="element" [currentElement]="currentElement" [withExpand]="true" [library]="library" class="element-tree"></element-tree>
+        <element-tree #treeItem *ngFor="let childElement of contents" [baseUrl]="childElement.url" [parent]="element"
+            [currentElement]="currentElement" [withExpand]="true" [library]="library" [recycleBin]="recycleBin"
+            class="element-tree"></element-tree>
         <li *ngIf="canLoadMore">
             <button (click)="loadMore()" class="btn btn-sm btn-outline-primary">
                 <i class="fa fa-ellipsis-v"></i>&nbsp;{{'loadMore' | translate}}

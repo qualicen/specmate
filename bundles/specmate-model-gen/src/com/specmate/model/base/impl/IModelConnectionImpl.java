@@ -8,6 +8,7 @@ import com.specmate.model.base.IDescribed;
 import com.specmate.model.base.IModelConnection;
 import com.specmate.model.base.IModelNode;
 import com.specmate.model.base.INamed;
+import com.specmate.model.base.IRecycled;
 import com.specmate.model.base.ITracingElement;
 
 import java.util.Collection;
@@ -34,6 +35,8 @@ import org.eclipse.emf.internal.cdo.CDOObjectImpl;
  *   <li>{@link com.specmate.model.base.impl.IModelConnectionImpl#getId <em>Id</em>}</li>
  *   <li>{@link com.specmate.model.base.impl.IModelConnectionImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.specmate.model.base.impl.IModelConnectionImpl#getDescription <em>Description</em>}</li>
+ *   <li>{@link com.specmate.model.base.impl.IModelConnectionImpl#isRecycled <em>Recycled</em>}</li>
+ *   <li>{@link com.specmate.model.base.impl.IModelConnectionImpl#isHasRecycledChildren <em>Has Recycled Children</em>}</li>
  *   <li>{@link com.specmate.model.base.impl.IModelConnectionImpl#getContents <em>Contents</em>}</li>
  *   <li>{@link com.specmate.model.base.impl.IModelConnectionImpl#getTracesTo <em>Traces To</em>}</li>
  *   <li>{@link com.specmate.model.base.impl.IModelConnectionImpl#getTracesFrom <em>Traces From</em>}</li>
@@ -73,6 +76,26 @@ public class IModelConnectionImpl extends CDOObjectImpl implements IModelConnect
 	 * @ordered
 	 */
 	protected static final String DESCRIPTION_EDEFAULT = null;
+
+	/**
+	 * The default value of the '{@link #isRecycled() <em>Recycled</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRecycled()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean RECYCLED_EDEFAULT = false;
+
+	/**
+	 * The default value of the '{@link #isHasRecycledChildren() <em>Has Recycled Children</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isHasRecycledChildren()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean HAS_RECYCLED_CHILDREN_EDEFAULT = false;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -161,6 +184,46 @@ public class IModelConnectionImpl extends CDOObjectImpl implements IModelConnect
 	@Override
 	public void setDescription(String newDescription) {
 		eDynamicSet(BasePackage.IMODEL_CONNECTION__DESCRIPTION, BasePackage.Literals.IDESCRIBED__DESCRIPTION, newDescription);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isRecycled() {
+		return (Boolean)eDynamicGet(BasePackage.IMODEL_CONNECTION__RECYCLED, BasePackage.Literals.IRECYCLED__RECYCLED, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setRecycled(boolean newRecycled) {
+		eDynamicSet(BasePackage.IMODEL_CONNECTION__RECYCLED, BasePackage.Literals.IRECYCLED__RECYCLED, newRecycled);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isHasRecycledChildren() {
+		return (Boolean)eDynamicGet(BasePackage.IMODEL_CONNECTION__HAS_RECYCLED_CHILDREN, BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setHasRecycledChildren(boolean newHasRecycledChildren) {
+		eDynamicSet(BasePackage.IMODEL_CONNECTION__HAS_RECYCLED_CHILDREN, BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN, newHasRecycledChildren);
 	}
 
 	/**
@@ -337,6 +400,10 @@ public class IModelConnectionImpl extends CDOObjectImpl implements IModelConnect
 				return getName();
 			case BasePackage.IMODEL_CONNECTION__DESCRIPTION:
 				return getDescription();
+			case BasePackage.IMODEL_CONNECTION__RECYCLED:
+				return isRecycled();
+			case BasePackage.IMODEL_CONNECTION__HAS_RECYCLED_CHILDREN:
+				return isHasRecycledChildren();
 			case BasePackage.IMODEL_CONNECTION__CONTENTS:
 				return getContents();
 			case BasePackage.IMODEL_CONNECTION__TRACES_TO:
@@ -370,6 +437,12 @@ public class IModelConnectionImpl extends CDOObjectImpl implements IModelConnect
 				return;
 			case BasePackage.IMODEL_CONNECTION__DESCRIPTION:
 				setDescription((String)newValue);
+				return;
+			case BasePackage.IMODEL_CONNECTION__RECYCLED:
+				setRecycled((Boolean)newValue);
+				return;
+			case BasePackage.IMODEL_CONNECTION__HAS_RECYCLED_CHILDREN:
+				setHasRecycledChildren((Boolean)newValue);
 				return;
 			case BasePackage.IMODEL_CONNECTION__CONTENTS:
 				getContents().clear();
@@ -410,6 +483,12 @@ public class IModelConnectionImpl extends CDOObjectImpl implements IModelConnect
 			case BasePackage.IMODEL_CONNECTION__DESCRIPTION:
 				setDescription(DESCRIPTION_EDEFAULT);
 				return;
+			case BasePackage.IMODEL_CONNECTION__RECYCLED:
+				setRecycled(RECYCLED_EDEFAULT);
+				return;
+			case BasePackage.IMODEL_CONNECTION__HAS_RECYCLED_CHILDREN:
+				setHasRecycledChildren(HAS_RECYCLED_CHILDREN_EDEFAULT);
+				return;
 			case BasePackage.IMODEL_CONNECTION__CONTENTS:
 				getContents().clear();
 				return;
@@ -443,6 +522,10 @@ public class IModelConnectionImpl extends CDOObjectImpl implements IModelConnect
 				return NAME_EDEFAULT == null ? getName() != null : !NAME_EDEFAULT.equals(getName());
 			case BasePackage.IMODEL_CONNECTION__DESCRIPTION:
 				return DESCRIPTION_EDEFAULT == null ? getDescription() != null : !DESCRIPTION_EDEFAULT.equals(getDescription());
+			case BasePackage.IMODEL_CONNECTION__RECYCLED:
+				return isRecycled() != RECYCLED_EDEFAULT;
+			case BasePackage.IMODEL_CONNECTION__HAS_RECYCLED_CHILDREN:
+				return isHasRecycledChildren() != HAS_RECYCLED_CHILDREN_EDEFAULT;
 			case BasePackage.IMODEL_CONNECTION__CONTENTS:
 				return !getContents().isEmpty();
 			case BasePackage.IMODEL_CONNECTION__TRACES_TO:
@@ -476,6 +559,13 @@ public class IModelConnectionImpl extends CDOObjectImpl implements IModelConnect
 				default: return -1;
 			}
 		}
+		if (baseClass == IRecycled.class) {
+			switch (derivedFeatureID) {
+				case BasePackage.IMODEL_CONNECTION__RECYCLED: return BasePackage.IRECYCLED__RECYCLED;
+				case BasePackage.IMODEL_CONNECTION__HAS_RECYCLED_CHILDREN: return BasePackage.IRECYCLED__HAS_RECYCLED_CHILDREN;
+				default: return -1;
+			}
+		}
 		if (baseClass == ITracingElement.class) {
 			switch (derivedFeatureID) {
 				case BasePackage.IMODEL_CONNECTION__TRACES_TO: return BasePackage.ITRACING_ELEMENT__TRACES_TO;
@@ -502,6 +592,13 @@ public class IModelConnectionImpl extends CDOObjectImpl implements IModelConnect
 		if (baseClass == IDescribed.class) {
 			switch (baseFeatureID) {
 				case BasePackage.IDESCRIBED__DESCRIPTION: return BasePackage.IMODEL_CONNECTION__DESCRIPTION;
+				default: return -1;
+			}
+		}
+		if (baseClass == IRecycled.class) {
+			switch (baseFeatureID) {
+				case BasePackage.IRECYCLED__RECYCLED: return BasePackage.IMODEL_CONNECTION__RECYCLED;
+				case BasePackage.IRECYCLED__HAS_RECYCLED_CHILDREN: return BasePackage.IMODEL_CONNECTION__HAS_RECYCLED_CHILDREN;
 				default: return -1;
 			}
 		}

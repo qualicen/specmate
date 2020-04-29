@@ -1,5 +1,4 @@
 import { Coords, GraphElementFactorySelector } from '../../../../../../../factory/util/graph-element-factory-selector';
-import { IConnection } from '../../../../../../../model/IConnection';
 import { IContainer } from '../../../../../../../model/IContainer';
 import { IModelConnection } from '../../../../../../../model/IModelConnection';
 import { IModelNode } from '../../../../../../../model/IModelNode';
@@ -134,7 +133,7 @@ export class GraphTransformer {
         // Filter Connections that are within the subgraph
         for (const template of templates) {
             if (this.elementProvider.isConnection(template)) {
-                let temp = <IConnection> template;
+                let temp = <IModelConnection> template;
                 if ((temp.target.url in urlMap) && (temp.source.url in urlMap)) {
                     let source = urlMap[temp.source.url];
                     let target = urlMap[temp.target.url];

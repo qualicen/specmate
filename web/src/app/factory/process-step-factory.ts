@@ -17,6 +17,8 @@ export class ProcessStepFactory extends PositionableElementFactoryBase<ProcessSt
         node.description = Config.PROCESS_NEW_STEP_DESCRIPTION;
         node.id = id;
         node.url = url;
+        node.recycled = false;
+        node.hasRecycledChildren = false;
         node.x = this.coords.x;
         node.y = this.coords.y;
         node.tracesFrom = [];

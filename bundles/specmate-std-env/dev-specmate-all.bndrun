@@ -229,7 +229,8 @@
 	specmate-trello-connector;version='[0.0.0,0.0.1)',\
 	specmate-ui-core;version='[0.0.0,0.0.1)',\
 	specmate-xtext;version='[0.0.0,0.0.1)',\
-	specmate-owasp-encoder;version='[0.0.0,0.0.1)'
+	specmate-owasp-encoder;version='[0.0.0,0.0.1)',\
+	specmate-scheduler;version='[0.0.0,0.0.1)'
 
 -runproperties: \
 	jetty.http.port=8080,\

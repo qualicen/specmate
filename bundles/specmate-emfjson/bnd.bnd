@@ -7,6 +7,6 @@ Bundle-Version: 0.0.0.${tstamp}
 	org.apache.commons.lang3,\
 	specmate-model-support;version=latest,\
 	specmate-model-gen;version=latest,\
-	specmate-owasp-encoder;version=latest
+	specmate-owasp-encoder
 Export-Package:  \
 	com.specmate.emfjson

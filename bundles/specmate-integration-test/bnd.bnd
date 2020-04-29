@@ -59,6 +59,7 @@ Test-Cases: \
 	specmate-cause-effect-patterns;version=latest,\
 	specmate-objectif;version=latest,\
 	specmate-xtext,\
+	specmate-owasp-encoder,\
 	specmate-connectors-api;version=latest,\
 	specmate-connectors;version=latest,\
 	specmate-export-api
@@ -116,6 +117,7 @@ Bundle-Version: 0.0.0.${tstamp}
 	osgi.identity;filter:='(osgi.identity=specmate-config-api)',\
 	osgi.identity;filter:='(osgi.identity=specmate-config)',\
 	osgi.identity;filter:='(osgi.identity=specmate-connectors)',\
+	osgi.identity;filter:='(osgi.identity=specmate-owasp-encoder)',\
 	osgi.identity;filter:='(osgi.identity=org.apache.servicemix.bundles.generex)',\
 	bnd.identity;id='specmate-nlp',\
 	bnd.identity;id='specmate-model-generation',\
@@ -171,6 +173,7 @@ Bundle-Version: 0.0.0.${tstamp}
 	specmate-model-support;version=snapshot,\
 	specmate-ui-core;version=snapshot,\
 	specmate-connectors;version=snapshot,\
+	specmate-owasp-encoder;version=snapshot,\
 	org.eclipse.emf.cdo;version='[4.5.0,4.5.1)',\
 	org.eclipse.emf.cdo.common;version='[4.5.0,4.5.1)',\
 	org.eclipse.emf.cdo.net4j;version='[4.1.400,4.1.401)',\

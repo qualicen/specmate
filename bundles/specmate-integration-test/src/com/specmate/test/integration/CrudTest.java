@@ -66,7 +66,7 @@ public class CrudTest extends EmfRestTest {
 		String retrieveUrl = detailUrl(getId(folder));
 		RestResult<JSONObject> getResult = restClient.get(retrieveUrl);
 		JSONObject retrievedFolder = getResult.getPayload();
-		logService.log(LogService.LOG_ERROR,
+		logService.log(LogService.LOG_DEBUG,
 				"Retrieved the object " + retrievedFolder.toString() + " from url " + retrieveUrl);
 		Assert.assertTrue(EmfRestTestUtil.compare(folder, retrievedFolder, true, true));
 		getResult.getResponse().close();
@@ -91,7 +91,7 @@ public class CrudTest extends EmfRestTest {
 		String retrieveUrl = detailUrl(getId(folder));
 		RestResult<JSONObject> getResult = restClient.get(retrieveUrl);
 		JSONObject retrievedFolder = getResult.getPayload();
-		logService.log(LogService.LOG_ERROR,
+		logService.log(LogService.LOG_DEBUG,
 				"Retrieved the object " + retrievedFolder.toString() + " from url " + retrieveUrl);
 		Assert.assertTrue(EmfRestTestUtil.compare(folder, retrievedFolder, true));
 		getResult.getResponse().close();	

@@ -59,7 +59,7 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 			session = authenticationService.authenticate("resttest", "resttest");
 
 			if (restClient == null) {
-				restClient = new RestClient(REST_ENDPOINT, session.getId(), logService);
+				restClient = new RestClient(REST_ENDPOINT, RestClient.EAuthType.TOKEN, session.getId(), logService);
 			}
 		}
 
@@ -111,6 +111,8 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 		folder.put(ECLASS, BasePackage.Literals.FOLDER.getName());
 		folder.put(BasePackage.Literals.IID__ID.getName(), folderId);
 		folder.put(BasePackage.Literals.INAMED__NAME.getName(), folderName);
+		folder.put(BasePackage.Literals.IRECYCLED__RECYCLED.getName(), false);
+		folder.put(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName(), false);
 		folder.put(BasePackage.Literals.FOLDER__LIBRARY.getName(), false);
 		return folder;
 	}
@@ -131,6 +133,8 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 		requirement.put(ECLASS, RequirementsPackage.Literals.REQUIREMENT.getName());
 		requirement.put(BasePackage.Literals.INAMED__NAME.getName(), requirementsName);
 		requirement.put(BasePackage.Literals.IID__ID.getName(), requirementsName);
+		requirement.put(BasePackage.Literals.IRECYCLED__RECYCLED.getName(), false);
+		requirement.put(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName(), false);
 		requirement.put(BasePackage.Literals.IDESCRIBED__DESCRIPTION.getName(), "description");
 		requirement.put(BasePackage.Literals.IEXTERNAL__EXT_ID.getName(), "extid123");
 		requirement.put(BasePackage.Literals.IEXTERNAL__EXT_ID2.getName(), "extid456");
@@ -157,6 +161,8 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 		ceg.put(ECLASS, RequirementsPackage.Literals.CEG_MODEL.getName());
 		ceg.put(BasePackage.Literals.IID__ID.getName(), id);
 		ceg.put(BasePackage.Literals.INAMED__NAME.getName(), id);
+		ceg.put(BasePackage.Literals.IRECYCLED__RECYCLED.getName(), false);
+		ceg.put(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName(), false);
 		return ceg;
 	}
 
@@ -167,6 +173,8 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 		process.put(ECLASS, ProcessesPackage.Literals.PROCESS.getName());
 		process.put(BasePackage.Literals.IID__ID.getName(), processName);
 		process.put(BasePackage.Literals.INAMED__NAME.getName(), processName);
+		process.put(BasePackage.Literals.IRECYCLED__RECYCLED.getName(), false);
+		process.put(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName(), false);
 		return process;
 	}
 
@@ -183,6 +191,8 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 		cegNode.put(ECLASS, RequirementsPackage.Literals.CEG_NODE.getName());
 		cegNode.put(BasePackage.Literals.IID__ID.getName(), id);
 		cegNode.put(BasePackage.Literals.INAMED__NAME.getName(), id);
+		cegNode.put(BasePackage.Literals.IRECYCLED__RECYCLED.getName(), false);
+		cegNode.put(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName(), false);
 		cegNode.put(RequirementsPackage.Literals.CEG_NODE__VARIABLE.getName(), variable);
 		cegNode.put(RequirementsPackage.Literals.CEG_NODE__CONDITION.getName(), condition);
 		cegNode.put(RequirementsPackage.Literals.CEG_NODE__TYPE.getName(), operation);
@@ -196,6 +206,8 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 		startNode.put(ECLASS, ProcessesPackage.Literals.PROCESS_START.getName());
 		startNode.put(BasePackage.Literals.IID__ID.getName(), nodeName);
 		startNode.put(BasePackage.Literals.INAMED__NAME.getName(), nodeName);
+		startNode.put(BasePackage.Literals.IRECYCLED__RECYCLED.getName(), false);
+		startNode.put(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName(), false);
 		return startNode;
 	}
 
@@ -206,6 +218,8 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 		endNode.put(ECLASS, ProcessesPackage.Literals.PROCESS_END.getName());
 		endNode.put(BasePackage.Literals.IID__ID.getName(), nodeName);
 		endNode.put(BasePackage.Literals.INAMED__NAME.getName(), nodeName);
+		endNode.put(BasePackage.Literals.IRECYCLED__RECYCLED.getName(), false);
+		endNode.put(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName(), false);
 		return endNode;
 	}
 
@@ -216,6 +230,8 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 		stepNode.put(ECLASS, ProcessesPackage.Literals.PROCESS_STEP.getName());
 		stepNode.put(BasePackage.Literals.IID__ID.getName(), nodeName);
 		stepNode.put(BasePackage.Literals.INAMED__NAME.getName(), nodeName);
+		stepNode.put(BasePackage.Literals.IRECYCLED__RECYCLED.getName(), false);
+		stepNode.put(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName(), false);
 		return stepNode;
 	}
 
@@ -226,6 +242,8 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 		decisionNode.put(ECLASS, ProcessesPackage.Literals.PROCESS_DECISION.getName());
 		decisionNode.put(BasePackage.Literals.IID__ID.getName(), nodeName);
 		decisionNode.put(BasePackage.Literals.INAMED__NAME.getName(), nodeName);
+		decisionNode.put(BasePackage.Literals.IRECYCLED__RECYCLED.getName(), false);
+		decisionNode.put(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName(), false);
 		return decisionNode;
 	}
 
@@ -236,6 +254,8 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 		connection.put(ECLASS, RequirementsPackage.Literals.CEG_CONNECTION.getName());
 		connection.put(BasePackage.Literals.IID__ID.getName(), connectionName);
 		connection.put(BasePackage.Literals.INAMED__NAME.getName(), connectionName);
+		connection.put(BasePackage.Literals.IRECYCLED__RECYCLED.getName(), false);
+		connection.put(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName(), false);
 		connection.put(BasePackage.Literals.IMODEL_CONNECTION__SOURCE.getName(), EmfRestTestUtil.proxy(node1));
 		connection.put(BasePackage.Literals.IMODEL_CONNECTION__TARGET.getName(), EmfRestTestUtil.proxy(node2));
 		connection.put(RequirementsPackage.Literals.CEG_CONNECTION__NEGATE.getName(), isNegated);
@@ -249,6 +269,8 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 		connection.put(ECLASS, ProcessesPackage.Literals.PROCESS_CONNECTION.getName());
 		connection.put(BasePackage.Literals.IID__ID.getName(), connectionName);
 		connection.put(BasePackage.Literals.INAMED__NAME.getName(), connectionName);
+		connection.put(BasePackage.Literals.IRECYCLED__RECYCLED.getName(), false);
+		connection.put(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName(), false);
 		connection.put(BasePackage.Literals.IMODEL_CONNECTION__SOURCE.getName(), EmfRestTestUtil.proxy(node1));
 		connection.put(BasePackage.Literals.IMODEL_CONNECTION__TARGET.getName(), EmfRestTestUtil.proxy(node2));
 		connection.put(ProcessesPackage.Literals.PROCESS_CONNECTION__LABEL_X.getName(), 0);
@@ -263,6 +285,8 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 		connection.put(ECLASS, ProcessesPackage.Literals.PROCESS_CONNECTION.getName());
 		connection.put(BasePackage.Literals.IID__ID.getName(), connectionName);
 		connection.put(BasePackage.Literals.INAMED__NAME.getName(), connectionName);
+		connection.put(BasePackage.Literals.IRECYCLED__RECYCLED.getName(), false);
+		connection.put(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName(), false);
 		connection.put(BasePackage.Literals.IMODEL_CONNECTION__SOURCE.getName(), EmfRestTestUtil.proxy(node1));
 		connection.put(BasePackage.Literals.IMODEL_CONNECTION__TARGET.getName(), EmfRestTestUtil.proxy(node2));
 		connection.put(ProcessesPackage.Literals.PROCESS_CONNECTION__LABEL_X.getName(), 0);
@@ -278,6 +302,8 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 		testSpecification.put(ECLASS, TestspecificationPackage.Literals.TEST_SPECIFICATION.getName());
 		testSpecification.put(BasePackage.Literals.IID__ID.getName(), testSpecName);
 		testSpecification.put(BasePackage.Literals.INAMED__NAME.getName(), testSpecName);
+		testSpecification.put(BasePackage.Literals.IRECYCLED__RECYCLED.getName(), false);
+		testSpecification.put(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName(), false);
 		return testSpecification;
 	}
 
@@ -459,6 +485,22 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 		Assert.assertEquals(Status.OK.getStatusCode(), deleteResult.getResponse().getStatus());
 		deleteResult.getResponse().close();
 	}
+	
+	protected void recycleObject(String... segments) {
+		String recycleUrl = recycleUrl(segments);
+		logService.log(LogService.LOG_DEBUG, "Recycling object with URL " + recycleUrl);
+		RestResult<JSONObject> recycleResult = restClient.post(recycleUrl, null);
+		Assert.assertEquals(Status.OK.getStatusCode(), recycleResult.getResponse().getStatus());
+		recycleResult.getResponse().close();
+	}
+	
+	protected void restoreObject(String... segments) {
+		String restoreUrl = restoreUrl(segments);
+		logService.log(LogService.LOG_DEBUG, "Restore object with URL " + restoreUrl);
+		RestResult<JSONObject> restoreResult = restClient.post(restoreUrl, null);
+		Assert.assertEquals(Status.OK.getStatusCode(), restoreResult.getResponse().getStatus());
+		restoreResult.getResponse().close();
+	}
 
 	protected String listUrl(String... segments) {
 		return buildUrl("list", segments);
@@ -470,5 +512,13 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 
 	protected String deleteUrl(String... segments) {
 		return buildUrl("delete", segments);
+	}
+	
+	protected String recycleUrl(String... segments) {
+		return buildUrl("recycle", segments);
+	}
+	
+	protected String restoreUrl(String... segments) {
+		return buildUrl("restore", segments);
 	}
 }

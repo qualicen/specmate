@@ -38,7 +38,7 @@ public interface BasePackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://specmate.com/20200228/model/base";
+	String eNS_URI = "http://specmate.com/20200309/model/base";
 
 	/**
 	 * The package namespace name.
@@ -205,13 +205,31 @@ public interface BasePackage extends EPackage {
 	int ICONTENT_ELEMENT__DESCRIPTION = IID_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ICONTENT_ELEMENT__RECYCLED = IID_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ICONTENT_ELEMENT__HAS_RECYCLED_CHILDREN = IID_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>IContent Element</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ICONTENT_ELEMENT_FEATURE_COUNT = IID_FEATURE_COUNT + 2;
+	int ICONTENT_ELEMENT_FEATURE_COUNT = IID_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of operations of the '<em>IContent Element</em>' class.
@@ -258,6 +276,24 @@ public interface BasePackage extends EPackage {
 	 * @ordered
 	 */
 	int ICONTAINER__DESCRIPTION = ICONTENT_ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ICONTAINER__RECYCLED = ICONTENT_ELEMENT__RECYCLED;
+
+	/**
+	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ICONTAINER__HAS_RECYCLED_CHILDREN = ICONTENT_ELEMENT__HAS_RECYCLED_CHILDREN;
 
 	/**
 	 * The feature id for the '<em><b>Contents</b></em>' containment reference list.
@@ -322,6 +358,24 @@ public interface BasePackage extends EPackage {
 	 * @ordered
 	 */
 	int ISPECMATE_MODEL_OBJECT__DESCRIPTION = ICONTAINER__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ISPECMATE_MODEL_OBJECT__RECYCLED = ICONTAINER__RECYCLED;
+
+	/**
+	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ISPECMATE_MODEL_OBJECT__HAS_RECYCLED_CHILDREN = ICONTAINER__HAS_RECYCLED_CHILDREN;
 
 	/**
 	 * The feature id for the '<em><b>Contents</b></em>' containment reference list.
@@ -404,6 +458,24 @@ public interface BasePackage extends EPackage {
 	 * @ordered
 	 */
 	int FOLDER__DESCRIPTION = ISPECMATE_MODEL_OBJECT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOLDER__RECYCLED = ISPECMATE_MODEL_OBJECT__RECYCLED;
+
+	/**
+	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOLDER__HAS_RECYCLED_CHILDREN = ISPECMATE_MODEL_OBJECT__HAS_RECYCLED_CHILDREN;
 
 	/**
 	 * The feature id for the '<em><b>Contents</b></em>' containment reference list.
@@ -598,6 +670,24 @@ public interface BasePackage extends EPackage {
 	int ISPECMATE_POSITIONABLE_MODEL_OBJECT__DESCRIPTION = ISPECMATE_MODEL_OBJECT__DESCRIPTION;
 
 	/**
+	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ISPECMATE_POSITIONABLE_MODEL_OBJECT__RECYCLED = ISPECMATE_MODEL_OBJECT__RECYCLED;
+
+	/**
+	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ISPECMATE_POSITIONABLE_MODEL_OBJECT__HAS_RECYCLED_CHILDREN = ISPECMATE_MODEL_OBJECT__HAS_RECYCLED_CHILDREN;
+
+	/**
 	 * The feature id for the '<em><b>Contents</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -716,6 +806,24 @@ public interface BasePackage extends EPackage {
 	int IMODEL_CONNECTION__DESCRIPTION = ISPECMATE_MODEL_OBJECT__DESCRIPTION;
 
 	/**
+	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int IMODEL_CONNECTION__RECYCLED = ISPECMATE_MODEL_OBJECT__RECYCLED;
+
+	/**
+	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int IMODEL_CONNECTION__HAS_RECYCLED_CHILDREN = ISPECMATE_MODEL_OBJECT__HAS_RECYCLED_CHILDREN;
+
+	/**
 	 * The feature id for the '<em><b>Contents</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -814,6 +922,24 @@ public interface BasePackage extends EPackage {
 	 * @ordered
 	 */
 	int IMODEL_NODE__DESCRIPTION = ISPECMATE_POSITIONABLE_MODEL_OBJECT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int IMODEL_NODE__RECYCLED = ISPECMATE_POSITIONABLE_MODEL_OBJECT__RECYCLED;
+
+	/**
+	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int IMODEL_NODE__HAS_RECYCLED_CHILDREN = ISPECMATE_POSITIONABLE_MODEL_OBJECT__HAS_RECYCLED_CHILDREN;
 
 	/**
 	 * The feature id for the '<em><b>Contents</b></em>' containment reference list.
@@ -959,6 +1085,53 @@ public interface BasePackage extends EPackage {
 	 * @ordered
 	 */
 	int ITRACING_ELEMENT_OPERATION_COUNT = 0;
+
+
+	/**
+	 * The meta object id for the '{@link com.specmate.model.base.IRecycled <em>IRecycled</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.specmate.model.base.IRecycled
+	 * @see com.specmate.model.base.impl.BasePackageImpl#getIRecycled()
+	 * @generated
+	 */
+	int IRECYCLED = 13;
+
+	/**
+	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int IRECYCLED__RECYCLED = 0;
+
+	/**
+	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int IRECYCLED__HAS_RECYCLED_CHILDREN = 1;
+
+	/**
+	 * The number of structural features of the '<em>IRecycled</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int IRECYCLED_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>IRecycled</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int IRECYCLED_OPERATION_COUNT = 0;
 
 
 	/**
@@ -1312,6 +1485,38 @@ public interface BasePackage extends EPackage {
 	EReference getITracingElement_TracesFrom();
 
 	/**
+	 * Returns the meta object for class '{@link com.specmate.model.base.IRecycled <em>IRecycled</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>IRecycled</em>'.
+	 * @see com.specmate.model.base.IRecycled
+	 * @generated
+	 */
+	EClass getIRecycled();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.specmate.model.base.IRecycled#isRecycled <em>Recycled</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Recycled</em>'.
+	 * @see com.specmate.model.base.IRecycled#isRecycled()
+	 * @see #getIRecycled()
+	 * @generated
+	 */
+	EAttribute getIRecycled_Recycled();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.specmate.model.base.IRecycled#isHasRecycledChildren <em>Has Recycled Children</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Has Recycled Children</em>'.
+	 * @see com.specmate.model.base.IRecycled#isHasRecycledChildren()
+	 * @see #getIRecycled()
+	 * @generated
+	 */
+	EAttribute getIRecycled_HasRecycledChildren();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1623,6 +1828,32 @@ public interface BasePackage extends EPackage {
 		 * @generated
 		 */
 		EReference ITRACING_ELEMENT__TRACES_FROM = eINSTANCE.getITracingElement_TracesFrom();
+
+		/**
+		 * The meta object literal for the '{@link com.specmate.model.base.IRecycled <em>IRecycled</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.specmate.model.base.IRecycled
+		 * @see com.specmate.model.base.impl.BasePackageImpl#getIRecycled()
+		 * @generated
+		 */
+		EClass IRECYCLED = eINSTANCE.getIRecycled();
+
+		/**
+		 * The meta object literal for the '<em><b>Recycled</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute IRECYCLED__RECYCLED = eINSTANCE.getIRecycled_Recycled();
+
+		/**
+		 * The meta object literal for the '<em><b>Has Recycled Children</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute IRECYCLED__HAS_RECYCLED_CHILDREN = eINSTANCE.getIRecycled_HasRecycledChildren();
 
 	}
 

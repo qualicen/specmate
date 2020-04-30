@@ -4,7 +4,7 @@
 
 	export class TestStep  {
 
-		___nsuri: string = "http://specmate.com/20200228/model/testspecification";
+		___nsuri: string = "http://specmate.com/20200309/model/testspecification";
 		public url: string;
 		public className: string = "TestStep";
 		public static className: string = "TestStep";
@@ -12,6 +12,8 @@
 		public id: EString;
 		public name: EString;
 		public description: EString;
+		public recycled: EBoolean;
+		public hasRecycledChildren: EBoolean;
 		public position: EInt;
 		public expectedOutcome: EString;
 

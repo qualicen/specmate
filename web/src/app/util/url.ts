@@ -70,6 +70,20 @@ export class Url {
         return parentUrl;
     }
 
+    public static allParents(url: string): string[] {
+        if (url === undefined) {
+            return undefined;
+        }
+        let parents = [];
+        let parts: string[] = url.split(Url.SEP);
+        for (let i = 1; i < parts.length; i++) {
+            let parent = parts.slice(0, parts.length - i);
+            let parentUrl: string = Url.build(parent);
+            parents.push(parentUrl);
+        }
+        return parents;
+    }
+
     public static isRoot(url: string, project: string): boolean {
         return project === url;
     }

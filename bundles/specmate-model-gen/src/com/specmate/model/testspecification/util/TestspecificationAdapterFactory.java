@@ -10,6 +10,7 @@ import com.specmate.model.base.IID;
 import com.specmate.model.base.INamed;
 import com.specmate.model.base.IPositionable;
 
+import com.specmate.model.base.IRecycled;
 import com.specmate.model.testspecification.*;
 
 import org.eclipse.emf.common.notify.Adapter;
@@ -110,6 +111,10 @@ public class TestspecificationAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseIDescribed(IDescribed object) {
 				return createIDescribedAdapter();
+			}
+			@Override
+			public Adapter caseIRecycled(IRecycled object) {
+				return createIRecycledAdapter();
 			}
 			@Override
 			public Adapter caseIContentElement(IContentElement object) {
@@ -270,6 +275,20 @@ public class TestspecificationAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createIDescribedAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.specmate.model.base.IRecycled <em>IRecycled</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.specmate.model.base.IRecycled
+	 * @generated
+	 */
+	public Adapter createIRecycledAdapter() {
 		return null;
 	}
 

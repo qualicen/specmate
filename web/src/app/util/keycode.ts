@@ -16,7 +16,7 @@ export enum Key {
 
 export function simulateKeyEvent(character: string) {
     const evt = document.createEvent('KeyboardEvent');
-    (evt['initKeyEvent'] || evt.initKeyboardEvent)('keypress', true, true, window,
+    (evt['initKeyEvent'] || evt['initKeyboardEvent'])('keypress', true, true, window,
                       0, 0, 0, 0,
                       0, character.charCodeAt(0));
     let canceled = !document.body.dispatchEvent(evt);

@@ -2,6 +2,7 @@ package com.specmate.test.integration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.core.Response.Status;
 
@@ -213,7 +214,8 @@ public class CrudTest extends EmfRestTest {
 		JSONObject requirement = postRequirement(folderName);
 		String requirementName = getId(requirement);
 
-		getObject(folderName, requirementName);
+		JSONObject retrievedRequirement = getObject(folderName, requirementName);
+		Assert.assertTrue(EmfRestTestUtil.compare(requirement, retrievedRequirement, true));
 	}
 
 	@Test
@@ -796,7 +798,7 @@ public class CrudTest extends EmfRestTest {
 
 		// Perform recursive list call
 		String listUrl = buildUrl("listRecursive", requirementId);
-		RestResult<JSONArray> listResult = restClient.getList(listUrl, "class", "TestSpecification");
+		RestResult<JSONArray> listResult = restClient.getList(listUrl, Map.of("class", "TestSpecification"));
 		Assert.assertEquals(Status.OK.getStatusCode(), listResult.getResponse().getStatus());
 		JSONArray retrievedTestSpecifications = listResult.getPayload();
 		logService.log(LogService.LOG_DEBUG,
@@ -830,7 +832,7 @@ public class CrudTest extends EmfRestTest {
 
 		// Perform recursive list call
 		String listUrl = buildUrl("listRecursive", requirementId);
-		RestResult<JSONArray> listResult = restClient.getList(listUrl, "class", "TestSpecification");
+		RestResult<JSONArray> listResult = restClient.getList(listUrl, Map.of("class", "TestSpecification"));
 		Assert.assertEquals(Status.OK.getStatusCode(), listResult.getResponse().getStatus());
 		JSONArray retrievedTestSpecifications = listResult.getPayload();
 		logService.log(LogService.LOG_DEBUG,
@@ -961,5 +963,129 @@ public class CrudTest extends EmfRestTest {
 		// Assert.assertTrue(EmfRestTestUtil.compare(payload.getJSONObject(0),
 		// payload.getJSONObject(1), true));
 
+	}
+
+	@Test
+	public void testRecycleCEG() {
+		JSONObject folder = postFolderToTopFolder();
+		String folderName = getId(folder);
+
+		JSONObject requirement = postRequirement(folderName);
+		String requirementName = getId(requirement);
+
+		JSONObject ceg = postCEG(folderName, requirementName);
+		String cegName = getId(ceg);
+
+		JSONObject testSpec = postTestSpecification(folderName, requirementName, cegName);
+		String testSpecName = getId(testSpec);
+
+		JSONObject testSpec2 = postTestSpecification(folderName, requirementName, cegName);
+		String testSpecName2 = getId(testSpec2);
+
+		JSONObject process = postProcess(folderName, requirementName);
+		String processName = getId(process);
+
+		JSONObject testSpec3 = postTestSpecification(folderName, requirementName, processName);
+		String testSpecName3 = getId(testSpec3);
+
+		recycleObject(folderName, requirementName, cegName);
+
+		JSONObject retrievedFolder = getObject(folderName);
+		Assert.assertTrue(retrievedFolder.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()));
+		Assert.assertFalse(retrievedFolder.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()));
+
+		JSONObject retrievedRequirement = getObject(folderName, requirementName);
+		Assert.assertTrue(retrievedRequirement.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()));
+		Assert.assertFalse(retrievedRequirement.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()));
+
+		JSONObject retrievedCeg = getObject(folderName, requirementName, cegName);
+		Assert.assertTrue(retrievedCeg.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()));
+		Assert.assertTrue(retrievedCeg.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()));
+
+		JSONObject retrievedTestSpec = getObject(folderName, requirementName, cegName, testSpecName);
+		Assert.assertTrue(retrievedTestSpec.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()));
+		Assert.assertTrue(retrievedTestSpec.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()));
+
+		JSONObject retrievedTestSpec2 = getObject(folderName, requirementName, cegName, testSpecName2);
+		Assert.assertTrue(retrievedTestSpec2.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()));
+		Assert.assertTrue(retrievedTestSpec2.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()));
+
+		JSONObject retrievedProcess = getObject(folderName, requirementName, processName);
+		Assert.assertFalse(retrievedProcess.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()));
+		Assert.assertFalse(retrievedProcess.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()));
+
+		JSONObject retrievedTestSpec3 = getObject(folderName, requirementName, processName, testSpecName3);
+		Assert.assertFalse(retrievedTestSpec3.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()));
+		Assert.assertFalse(retrievedTestSpec3.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()));
+	}
+
+	@Test
+	public void testRestoreCEG() {
+		JSONObject folder = postFolderToTopFolder();
+		String folderName = getId(folder);
+
+		JSONObject requirement = postRequirement(folderName);
+		String requirementName = getId(requirement);
+
+		JSONObject ceg = postCEG(folderName, requirementName);
+		String cegName = getId(ceg);
+
+		JSONObject testSpec = postTestSpecification(folderName, requirementName, cegName);
+		String testSpecName = getId(testSpec);
+
+		JSONObject testSpec2 = postTestSpecification(folderName, requirementName, cegName);
+		String testSpecName2 = getId(testSpec2);
+
+		recycleObject(folderName, requirementName, cegName);
+
+		JSONObject retrievedCegRecycled = getObject(folderName, requirementName, cegName);
+		Assert.assertTrue(retrievedCegRecycled.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()));
+
+		restoreObject(folderName, requirementName, cegName);
+
+		JSONObject retrievedFolder = getObject(folderName);
+		Assert.assertFalse(retrievedFolder.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()));
+		Assert.assertFalse(retrievedFolder.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()));
+
+		JSONObject retrievedRequirement = getObject(folderName, requirementName);
+		Assert.assertFalse(retrievedRequirement.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()));
+		Assert.assertFalse(retrievedRequirement.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()));
+
+		JSONObject retrievedCeg = getObject(folderName, requirementName, cegName);
+		Assert.assertFalse(retrievedCeg.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()));
+		Assert.assertFalse(retrievedCeg.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()));
+
+		JSONObject retrievedTestSpec = getObject(folderName, requirementName, cegName, testSpecName);
+		Assert.assertFalse(retrievedTestSpec.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()));
+		Assert.assertFalse(retrievedTestSpec.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()));
+
+		JSONObject retrievedTestSpec2 = getObject(folderName, requirementName, cegName, testSpecName2);
+		Assert.assertFalse(retrievedTestSpec2.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()));
+		Assert.assertFalse(retrievedTestSpec2.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()));
+	}
+	
+	@Test
+	public void testDeleteRecycledCEG() {
+		JSONObject folder = postFolderToTopFolder();
+		String folderName = getId(folder);
+
+		JSONObject requirement = postRequirement(folderName);
+		String requirementName = getId(requirement);
+
+		JSONObject ceg = postCEG(folderName, requirementName);
+		String cegName = getId(ceg);
+
+		JSONObject testSpec = postTestSpecification(folderName, requirementName, cegName);
+
+		recycleObject(folderName, requirementName, cegName);
+		deleteObject(folderName, requirementName, cegName);
+
+		JSONObject retrievedFolder = getObject(folderName);
+		Assert.assertFalse(retrievedFolder.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()));
+		Assert.assertFalse(retrievedFolder.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()));
+
+		JSONObject retrievedRequirement = getObject(folderName, requirementName);
+		Assert.assertFalse(retrievedRequirement.getBoolean(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName()));
+		Assert.assertFalse(retrievedRequirement.getBoolean(BasePackage.Literals.IRECYCLED__RECYCLED.getName()));
 	}
 }

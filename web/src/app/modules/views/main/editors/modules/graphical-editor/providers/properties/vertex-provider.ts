@@ -130,17 +130,20 @@ export class VertexProvider extends ProviderBase {
 
         graph.getLabel = function (cell: mxgraph.mxCell) {
             if (VertexProvider.isCEGTextInputCell(cell)) {
-                return he.encode(cell.value);
+                if (cell.value !== undefined && cell.value !== null) {
+                    return he.encode(cell.value);
+                }
             }
             return mx.mxGraph.prototype.getLabel.bind(graph)(cell);
         };
 
         graph.getTooltipForCell = (cell) => {
-            if (cell.getId().endsWith(VertexProvider.ID_SUFFIX_TYPE)) {
-              return '';
+            if (cell.getId().endsWith(VertexProvider.ID_SUFFIX_TYPE) || cell.value === null || cell.value === undefined) {
+                return '';
+
             }
             return he.encode(cell.value);
-          };
+        };
     }
 
     public static isCEGTextInputCell(cell: mxgraph.mxCell): boolean {

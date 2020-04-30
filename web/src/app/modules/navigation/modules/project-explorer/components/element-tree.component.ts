@@ -13,6 +13,10 @@ import { Type } from '../../../../../util/type';
 import { Url } from '../../../../../util/url';
 import { SpecmateDataService } from '../../../../data/modules/data-service/services/specmate-data.service';
 import { NavigatorService } from '../../navigator/services/navigator.service';
+import { Id } from 'src/app/util/id';
+import { TranslateService } from '@ngx-translate/core';
+import { ContentsContainerService } from 'src/app/modules/views/main/editors/modules/contents-container/services/content-container.service';
+import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
 
 @Component({
     moduleId: module.id.toString(),
@@ -31,7 +35,17 @@ export class ElementTree implements OnInit {
     @Input()
     private library = false;
 
+    @Input()
+    private recycleBin = false;
+
     public numChildrenDisplayed = Config.ELEMENT_CHUNK_SIZE;
+
+    constructor(
+        private dataService: SpecmateDataService,
+        private navigator: NavigatorService,
+        private translate: TranslateService,
+        private modal: ConfirmationModal,
+        private contentService: ContentsContainerService) { }
 
     public get contents(): IContainer[] {
         if (this._contents === undefined || this._contents === null) {
@@ -84,8 +98,8 @@ export class ElementTree implements OnInit {
     public get expanded(): boolean {
         if (this._collapsed) {
             if (!this._expanded && this.isMustOpen) {
-                 this._expanded = true;
-                 this._collapsed = false;
+                this._expanded = true;
+                this._collapsed = false;
             }
         }
         return this._expanded;
@@ -105,8 +119,6 @@ export class ElementTree implements OnInit {
         }
         return false;
     }
-
-    constructor(private dataService: SpecmateDataService, private navigator: NavigatorService) { }
 
     async ngOnInit() {
         const siblings = await this.dataService.readContents(Url.parent(this.baseUrl));
@@ -140,7 +152,7 @@ export class ElementTree implements OnInit {
     }
 
     private initContents(): void {
-        this.dataService.readContents(this.baseUrl).then((contents: IContainer[]) => {
+        this.dataService.readContents(this.baseUrl, false).then((contents: IContainer[]) => {
             this._contents = contents;
         });
     }
@@ -181,7 +193,11 @@ export class ElementTree implements OnInit {
     }
 
     public get hasLink(): boolean {
-        return !this.isFolderNode || (this.library);
+        return (!this.isFolderNode || (this.library)) && !this.element.recycled;
+    }
+
+    public get hasRestore(): boolean {
+        return this.element.recycled && this.parent && this.parent.recycled === false;
     }
 
     private get isRoot(): boolean {
@@ -189,12 +205,37 @@ export class ElementTree implements OnInit {
     }
 
     public get showElement(): boolean {
-        return this.isCEGModelNode || this.isProcessNode || this.isRequirementNode
-            || this.isTestSpecificationNode || this.isFolderNode || this.isTestProcedureNode;
+        return (this.isCEGModelNode || this.isProcessNode || this.isRequirementNode
+            || this.isTestSpecificationNode || this.isFolderNode || this.isTestProcedureNode)
+            && ((!this.recycleBin && !this.element.recycled) || (this.recycleBin && this.element.hasRecycledChildren));
     }
 
     public loadMore(): void {
         this.numChildrenDisplayed += Config.ELEMENT_CHUNK_SIZE;
+    }
+
+    public async delete(): Promise<void> {
+        try {
+            let message = this.translate.instant('doYouReallyWantToDeletePermanent', { name: this.element.name });
+            if (Type.is(this.element, Folder)) {
+                message = this.translate.instant('doYouReallyWantToDeleteFolderPermanent', { name: this.element.name });
+            }
+            await this.modal.openOkCancel('ConfirmationRequired', message);
+            await this.dataService.deleteElement(this.element.url, false, Id.uuid);
+            await this.dataService.commit(this.translate.instant('delete'));
+            await this.dataService.readContents(this.parent.url, false);
+        } catch (e) { }
+    }
+
+    public async restore(): Promise<void> {
+        try {
+            let message = this.translate.instant('doYouReallyWantToRestore', { name: this.element.name });
+            await this.modal.openOkCancel('ConfirmationRequired', message);
+            await this.dataService.restoreElement(this.element.url);
+            await this.dataService.readElement(this.element.url, false);
+            this.contentService.isDeleted();
+            this.initContents();
+        } catch (e) { }
     }
 
     public handleKey(event: KeyboardEvent, shouldToggle?: boolean): void {

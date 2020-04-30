@@ -14,16 +14,26 @@
         </div>
         <ul role="tablist" class="nav nav-tabs justify-content-start" *ngIf="!searchBox.value" id="explorer">
             <li class="nav-item">
-                <button [ngClass]="{'active' : !showLibrary}" role="tab" (click)="switchToProject()" class="nav-link"
-                    id="ngb-tab-0" aria-disabled="false" [attr.aria-expanded]="!showLibrary ? 'true' : 'false'"
-                    [attr.aria-controls]="!showLibrary ? 'ngb-tab-0-panel' : null">{{'project'
+                <button [ngClass]="{'active' : currentActiveTab === ActiveTab.project}" role="tab"
+                    (click)="switchToProject()" class="nav-link" id="ngb-tab-0" aria-disabled="false"
+                    [attr.aria-expanded]="currentActiveTab === ActiveTab.project ? 'true' : 'false'"
+                    [attr.aria-controls]="currentActiveTab === ActiveTab.project ? 'ngb-tab-0-panel' : null">{{'project'
                     | translate}}</button>
             </li>
             <li class="nav-item">
-                <button [ngClass]="{'active' : showLibrary}" role="tab" (click)="switchToLibrary()" class="nav-link"
-                    id="ngb-tab-1" aria-disabled="false" [attr.aria-expanded]="showLibrary ? 'true' : 'false'"
-                    [attr.aria-controls]="showLibrary ? 'ngb-tab-1-panel' : null">{{'library'
+                <button [ngClass]="{'active' : currentActiveTab === ActiveTab.library}" role="tab"
+                    (click)="switchToLibrary()" class="nav-link" id="ngb-tab-1" aria-disabled="false"
+                    [attr.aria-expanded]="currentActiveTab === ActiveTab.library ? 'true' : 'false'"
+                    [attr.aria-controls]="currentActiveTab === ActiveTab.library ? 'ngb-tab-1-panel' : null">{{'library'
                     | translate}}</button>
+            </li>
+            <li class="nav-item">
+                <button [ngClass]="{'active' : currentActiveTab === ActiveTab.recycleBin}" role="tab"
+                    (click)="switchToRecycleBin()" class="nav-link" id="ngb-tab-1" aria-disabled="false"
+                    [attr.aria-expanded]="currentActiveTab === ActiveTab.recycleBin ? 'true' : 'false'"
+                    [attr.aria-controls]="currentActiveTab === ActiveTab.recycleBin ? 'ngb-tab-1-panel' : null">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                </button>
             </li>
         </ul>
         <table class="table" *ngIf="searchBox.value">
@@ -35,7 +45,7 @@
         </table>
     </div>
     <div id="list-wrapper" *ngIf="!searchBox.value">
-        <ul id="projectList" *ngIf="!showLibrary">
+        <ul id="projectList" class="explorer-list" *ngIf="currentActiveTab === ActiveTab.project">
             <element-tree *ngFor="let element of rootElements;" [baseUrl]="element.url"
                 [currentElement]="currentElement" [withExpand]="true"></element-tree>
             <li *ngIf="canLoadMoreProjectFolders">
@@ -44,7 +54,7 @@
                 </button>
             </li>
         </ul>
-        <ul id="libraryList" *ngIf="showLibrary">
+        <ul id="libraryList" class="explorer-list" *ngIf="currentActiveTab === ActiveTab.library">
             <element-tree *ngFor="let element of rootLibraries;" [baseUrl]="element.url"
                 [currentElement]="currentElement" [withExpand]="true" [library]="true"></element-tree>
             <li *ngIf="canLoadMoreLibraryFolders">
@@ -53,15 +63,41 @@
                 </button>
             </li>
         </ul>
+        <ul id="recycleBinListProject" class="explorer-list" *ngIf="currentActiveTab === ActiveTab.recycleBin">
+            <element-tree *ngFor="let element of rootRecycleBinProject;" [baseUrl]="element.url"
+                [currentElement]="currentElement" [withExpand]="true" [recycleBin]="true"></element-tree>
+            <li *ngIf="canLoadMoreRecycleBinFoldersProject">
+                <button (click)="loadMoreReycleBinFoldersProject()" class="btn btn-sm btn-outline-primary btn-sm">
+                    <i class="fa fa-ellipsis-v"></i>&nbsp;{{'loadMore' | translate}}
+                </button>
+            </li>
+        </ul>
+        <ul id="recycleBinListLibrary" class="explorer-list" *ngIf="currentActiveTab === ActiveTab.recycleBin">
+            <element-tree *ngFor="let element of rootRecycleBinLibrary;" [baseUrl]="element.url"
+                [currentElement]="currentElement" [withExpand]="true" [library]="true" [recycleBin]="true">
+            </element-tree>
+            <li *ngIf="canLoadMoreRecycleBinFoldersLibrary">
+                <button (click)="loadMoreReycleBinFoldersLibrary()" class="btn btn-sm btn-outline-primary btn-sm">
+                    <i class="fa fa-ellipsis-v"></i>&nbsp;{{'loadMore' | translate}}
+                </button>
+            </li>
+        </ul>
+        <ul *ngIf="currentActiveTab === ActiveTab.recycleBin && recycleBinIsEmpty">
+            <span class="text-muted">{{'recycleBinIsEmpty' | translate}}.</span>
+        </ul>
     </div>
     <div id="table-wrapper" *ngIf="searchBox.value">
         <table class="table">
             <tbody>
                 <tr *ngFor="let element of searchResults; let i = index;">
                     <td>
-                        <a [navigationTarget]="element">
-                            <icon-selector [model]="element" expanded="false"></icon-selector>{{element['extId'] ?
-                            element['extId'] + ': ' : ''}}{{element.name}}
+                        <a *ngIf="!isRecycled(element)" [navigationTarget]="element">
+                            <icon-selector [model]="element" expanded="false"></icon-selector>
+                            &nbsp;{{element['extId'] ? element['extId'] + ': ' : ''}}{{element.name}}
+                        </a>
+                        <a *ngIf="isRecycled(element)">
+                            <icon-selector [model]="element" expanded="false"></icon-selector>
+                            &nbsp;{{element['extId'] ? element['extId'] + ': ' : ''}}{{element.name}}
                         </a>
                     </td>
                 </tr>

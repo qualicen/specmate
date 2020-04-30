@@ -160,8 +160,8 @@ Test-Cases: \
 	slf4j.api;version='[1.7.25,1.7.26)',\
 	log4j;version='[1.2.17,1.2.18)',\
 	com.sun.activation.javax.activation;version='[1.2.0,1.2.1)',\
-	javax.activation-api;version='[1.2.0,1.2.1)',\
-	jaxb-api;version='[2.3.1,2.3.2)'
+	com.google.guava;version='[18.0.0,18.0.1)',\
+	jaxb-api;version='[2.3.0,2.3.1)'
 -runvm: -ea, -Djdk.crypto.KeyAgreement.legacyKDF=true
 -runproperties: \
 	jetty.http.port=8088,\

@@ -7,6 +7,7 @@ import com.specmate.model.base.IContentElement;
 import com.specmate.model.base.IDescribed;
 import com.specmate.model.base.INamed;
 
+import com.specmate.model.base.IRecycled;
 import com.specmate.model.processes.ProcessesPackage;
 
 import java.util.Collection;
@@ -33,6 +34,8 @@ import org.eclipse.emf.internal.cdo.CDOObjectImpl;
  *   <li>{@link com.specmate.model.processes.impl.ProcessImpl#getId <em>Id</em>}</li>
  *   <li>{@link com.specmate.model.processes.impl.ProcessImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.specmate.model.processes.impl.ProcessImpl#getDescription <em>Description</em>}</li>
+ *   <li>{@link com.specmate.model.processes.impl.ProcessImpl#isRecycled <em>Recycled</em>}</li>
+ *   <li>{@link com.specmate.model.processes.impl.ProcessImpl#isHasRecycledChildren <em>Has Recycled Children</em>}</li>
  *   <li>{@link com.specmate.model.processes.impl.ProcessImpl#getContents <em>Contents</em>}</li>
  * </ul>
  *
@@ -68,6 +71,26 @@ public class ProcessImpl extends CDOObjectImpl implements com.specmate.model.pro
 	 * @ordered
 	 */
 	protected static final String DESCRIPTION_EDEFAULT = null;
+
+	/**
+	 * The default value of the '{@link #isRecycled() <em>Recycled</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRecycled()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean RECYCLED_EDEFAULT = false;
+
+	/**
+	 * The default value of the '{@link #isHasRecycledChildren() <em>Has Recycled Children</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isHasRecycledChildren()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean HAS_RECYCLED_CHILDREN_EDEFAULT = false;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -163,6 +186,46 @@ public class ProcessImpl extends CDOObjectImpl implements com.specmate.model.pro
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public boolean isRecycled() {
+		return (Boolean)eDynamicGet(ProcessesPackage.PROCESS__RECYCLED, BasePackage.Literals.IRECYCLED__RECYCLED, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setRecycled(boolean newRecycled) {
+		eDynamicSet(ProcessesPackage.PROCESS__RECYCLED, BasePackage.Literals.IRECYCLED__RECYCLED, newRecycled);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isHasRecycledChildren() {
+		return (Boolean)eDynamicGet(ProcessesPackage.PROCESS__HAS_RECYCLED_CHILDREN, BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setHasRecycledChildren(boolean newHasRecycledChildren) {
+		eDynamicSet(ProcessesPackage.PROCESS__HAS_RECYCLED_CHILDREN, BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN, newHasRecycledChildren);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public EList<IContentElement> getContents() {
@@ -197,6 +260,10 @@ public class ProcessImpl extends CDOObjectImpl implements com.specmate.model.pro
 				return getName();
 			case ProcessesPackage.PROCESS__DESCRIPTION:
 				return getDescription();
+			case ProcessesPackage.PROCESS__RECYCLED:
+				return isRecycled();
+			case ProcessesPackage.PROCESS__HAS_RECYCLED_CHILDREN:
+				return isHasRecycledChildren();
 			case ProcessesPackage.PROCESS__CONTENTS:
 				return getContents();
 		}
@@ -220,6 +287,12 @@ public class ProcessImpl extends CDOObjectImpl implements com.specmate.model.pro
 				return;
 			case ProcessesPackage.PROCESS__DESCRIPTION:
 				setDescription((String)newValue);
+				return;
+			case ProcessesPackage.PROCESS__RECYCLED:
+				setRecycled((Boolean)newValue);
+				return;
+			case ProcessesPackage.PROCESS__HAS_RECYCLED_CHILDREN:
+				setHasRecycledChildren((Boolean)newValue);
 				return;
 			case ProcessesPackage.PROCESS__CONTENTS:
 				getContents().clear();
@@ -246,6 +319,12 @@ public class ProcessImpl extends CDOObjectImpl implements com.specmate.model.pro
 			case ProcessesPackage.PROCESS__DESCRIPTION:
 				setDescription(DESCRIPTION_EDEFAULT);
 				return;
+			case ProcessesPackage.PROCESS__RECYCLED:
+				setRecycled(RECYCLED_EDEFAULT);
+				return;
+			case ProcessesPackage.PROCESS__HAS_RECYCLED_CHILDREN:
+				setHasRecycledChildren(HAS_RECYCLED_CHILDREN_EDEFAULT);
+				return;
 			case ProcessesPackage.PROCESS__CONTENTS:
 				getContents().clear();
 				return;
@@ -267,6 +346,10 @@ public class ProcessImpl extends CDOObjectImpl implements com.specmate.model.pro
 				return NAME_EDEFAULT == null ? getName() != null : !NAME_EDEFAULT.equals(getName());
 			case ProcessesPackage.PROCESS__DESCRIPTION:
 				return DESCRIPTION_EDEFAULT == null ? getDescription() != null : !DESCRIPTION_EDEFAULT.equals(getDescription());
+			case ProcessesPackage.PROCESS__RECYCLED:
+				return isRecycled() != RECYCLED_EDEFAULT;
+			case ProcessesPackage.PROCESS__HAS_RECYCLED_CHILDREN:
+				return isHasRecycledChildren() != HAS_RECYCLED_CHILDREN_EDEFAULT;
 			case ProcessesPackage.PROCESS__CONTENTS:
 				return !getContents().isEmpty();
 		}
@@ -292,6 +375,13 @@ public class ProcessImpl extends CDOObjectImpl implements com.specmate.model.pro
 				default: return -1;
 			}
 		}
+		if (baseClass == IRecycled.class) {
+			switch (derivedFeatureID) {
+				case ProcessesPackage.PROCESS__RECYCLED: return BasePackage.IRECYCLED__RECYCLED;
+				case ProcessesPackage.PROCESS__HAS_RECYCLED_CHILDREN: return BasePackage.IRECYCLED__HAS_RECYCLED_CHILDREN;
+				default: return -1;
+			}
+		}
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
 	}
 
@@ -311,6 +401,13 @@ public class ProcessImpl extends CDOObjectImpl implements com.specmate.model.pro
 		if (baseClass == IDescribed.class) {
 			switch (baseFeatureID) {
 				case BasePackage.IDESCRIBED__DESCRIPTION: return ProcessesPackage.PROCESS__DESCRIPTION;
+				default: return -1;
+			}
+		}
+		if (baseClass == IRecycled.class) {
+			switch (baseFeatureID) {
+				case BasePackage.IRECYCLED__RECYCLED: return ProcessesPackage.PROCESS__RECYCLED;
+				case BasePackage.IRECYCLED__HAS_RECYCLED_CHILDREN: return ProcessesPackage.PROCESS__HAS_RECYCLED_CHILDREN;
 				default: return -1;
 			}
 		}

@@ -18,6 +18,7 @@ import { SpecmateDataService } from '../../../../../../data/modules/data-service
 import { NavigatorService } from '../../../../../../navigation/modules/navigator/services/navigator.service';
 import { ConfirmationModal } from '../../../../../../notification/modules/modals/services/confirmation-modal.service';
 import { DraggableSupportingViewBase } from '../../../base/draggable-supporting-view-base';
+import { UndoService } from 'src/app/modules/actions/modules/common-controls/services/undo.service';
 
 @Component({
     moduleId: module.id.toString(),
@@ -39,9 +40,14 @@ export class TestSpecificationEditor extends DraggableSupportingViewBase {
         route: ActivatedRoute,
         modal: ConfirmationModal,
         dragulaService: DragulaService,
+        private undoService: UndoService,
         translate: TranslateService
     ) {
         super(dataService, navigator, route, modal, dragulaService, translate);
+        this.undoService.undoPressed.subscribe(() => {
+            this.updateContents();
+          });
+
     }
 
     public onElementResolved(element: IContainer): Promise<void> {

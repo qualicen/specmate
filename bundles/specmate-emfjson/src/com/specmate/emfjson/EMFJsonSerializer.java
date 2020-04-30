@@ -2,8 +2,6 @@ package com.specmate.emfjson;
 
 import java.util.List;
 
-
-
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -136,7 +134,6 @@ public class EMFJsonSerializer {
 	 */
 	private JSONObject serializeObject(EObject eObject) throws SpecmateException {
 		JSONObject result = new JSONObject();
-		
 		serializeType(eObject, result);
 		serializeUri(eObject, result);
 		serializeFeatures(eObject, result);

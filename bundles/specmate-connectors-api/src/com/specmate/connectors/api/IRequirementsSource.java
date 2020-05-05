@@ -12,6 +12,14 @@ public interface IRequirementsSource {
 
 	String getId();
 
+	/**
+	 * Returns the parent folder for a requirement, or null if the requirement has
+	 * no parent folder
+	 * 
+	 * @param requirement
+	 * @return
+	 * @throws SpecmateException
+	 */
 	IContainer getContainerForRequirement(Requirement requirement) throws SpecmateException;
 
 	boolean authenticate(String username, String password) throws SpecmateException;

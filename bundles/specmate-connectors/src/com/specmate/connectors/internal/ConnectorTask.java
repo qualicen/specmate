@@ -94,13 +94,15 @@ public class ConnectorTask extends SchedulerTask {
 							}
 						});
 					} catch (Exception e) {
-						logService.log(LogService.LOG_ERROR, e.getMessage());
+						logService.log(LogService.LOG_ERROR,
+								"An error occured while committing synced requirements. Reason:" + e.getMessage(), e);
 						transaction.rollback();
 					}
 
 				}
 			} catch (Exception e) {
-				logService.log(LogService.LOG_ERROR, e.getMessage());
+				logService.log(LogService.LOG_ERROR,
+						"An error occured synching requirements. Resonon: " + e.getMessage(), e);
 				transaction.rollback();
 			}
 

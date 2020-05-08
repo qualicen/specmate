@@ -29,12 +29,14 @@ import com.specmate.model.administration.ProblemDetail;
 @Provider
 public class AuthenticationFilter implements ContainerRequestFilter {
 	private static final String REINDEX_SERVICE_NAME = "reindex";
+	private static final String ONE_TIME_GEN_SERVICE_NAME = "generateTestsOnce";
 	private final String HEARTBEAT_PARAMETER = "heartbeat";
 	private final String REST_URL = ".+services/rest/";
 	private Pattern loginPattern = Pattern.compile(REST_URL + Login.SERVICE_NAME);
 	private Pattern logoutPattern = Pattern.compile(REST_URL + Logout.SERVICE_NAME);
 	private Pattern projectNamesPattern = Pattern.compile(REST_URL + ProjectNames.SERVICE_NAME);
 	private Pattern reindexPattern = Pattern.compile(REST_URL + REINDEX_SERVICE_NAME);
+	private Pattern oneTimeGenPattern = Pattern.compile(REST_URL + ONE_TIME_GEN_SERVICE_NAME);
 
 	@Inject
 	IAuthenticationService authService;
@@ -110,7 +112,8 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 		Matcher matcherLogout = logoutPattern.matcher(path);
 		Matcher matcherProjectNames = projectNamesPattern.matcher(path);
 		Matcher matcherReindex = reindexPattern.matcher(path);
-		return matcherLogin.matches() || matcherLogout.matches() || matcherProjectNames.matches()
-				|| matcherReindex.matches();
+		Matcher oneTimeGen = oneTimeGenPattern.matcher(path);
+		return oneTimeGen.matches() || matcherLogin.matches() || matcherLogout.matches()
+				|| matcherProjectNames.matches() || matcherReindex.matches();
 	}
 }

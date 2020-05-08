@@ -15,7 +15,7 @@ import com.specmate.model.testspecification.TestParameter;
 import com.specmate.model.testspecification.TestSpecification;
 
 /** Exports a test specification as CSV */
-@Component(immediate = true, service = IExporter.class)
+@Component(immediate = true, service = IExporter.class, property = { "type=csv" })
 public class CSVTestSpecificationExporter extends TestSpecificationExporterBase {
 
 	public CSVTestSpecificationExporter() {

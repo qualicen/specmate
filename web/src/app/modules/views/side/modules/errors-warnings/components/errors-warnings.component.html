@@ -6,7 +6,7 @@
                 *ngIf="isCollapsed" class="fa fa-angle-double-down"></i><i *ngIf="!isCollapsed"
                 class="fa fa-angle-double-up"></i></button>
     </h5>
-    <div class="card-body">
+    <div class="card-body" *ngIf="!isCollapsed">
         <p class="card-text">
             <span *ngIf="validationResults && validationResults.length == 0" class="text-success">
                 <i aria-hidden="true" class="fa fa-check"></i>&nbsp;{{'NoWarnings' | translate}}.

@@ -155,7 +155,10 @@ public class ProjectConfigService implements IProjectConfigService {
 	private Configurable createExporter(String projectPrefix, String projectID) {
 		String exporterPrefix = projectPrefix + "." + "exporter";
 		Configurable exporter = new Configurable();
-		fillConfigurable(exporter, exporterPrefix);
+		exporter = fillConfigurable(exporter, exporterPrefix);
+		if (exporter == null) {
+			return null;
+		}
 		exporter.addConfigValue(KEY_EXPORTER_ID, projectID);
 		return exporter;
 	}
@@ -169,7 +172,10 @@ public class ProjectConfigService implements IProjectConfigService {
 	private Configurable createConnector(String projectPrefix, String projectID) {
 		String connectorPrefix = projectPrefix + "." + "connector";
 		Configurable connector = new Configurable();
-		fillConfigurable(connector, connectorPrefix);
+		connector = fillConfigurable(connector, connectorPrefix);
+		if (connector == null) {
+			return null;
+		}
 		connector.addConfigValue(KEY_CONNECTOR_ID, projectID);
 		return connector;
 	}

@@ -13,6 +13,7 @@ import { Type } from '../../../../../util/type';
 import { SpecmateDataService } from '../../../../data/modules/data-service/services/specmate-data.service';
 import { AuthenticationService } from '../../../../views/main/authentication/modules/auth/services/authentication.service';
 import { NavigatorService } from '../../navigator/services/navigator.service';
+import { Requirement } from 'src/app/model/Requirement';
 
 enum ActiveTab { project, library, recycleBin }
 
@@ -128,7 +129,7 @@ export class ProjectExplorer implements OnInit {
             return;
         }
 
-        this._rootElements = projectContents.filter(c => Type.is(c, Folder) && !(c as Folder).library);
+        this._rootElements = projectContents.filter(c => Type.is(c,Requirement) || (Type.is(c, Folder) && !(c as Folder).library));
         this._rootLibraries = projectContents.filter(c => Type.is(c, Folder) && (c as Folder).library && libraryFolders.indexOf(c.id) > -1);
         this._rootRecycleBinProject = projectContents.filter(c => Type.is(c, Folder) && !(c as Folder).library);
         this._rootRecycleBinLibrary = projectContents.filter(c => Type.is(c, Folder) && (c as Folder).library
@@ -144,7 +145,7 @@ export class ProjectExplorer implements OnInit {
             .debounceTime(300)
             .distinctUntilChanged()
             .subscribe(query => {
-                if (query && query.length >= 3) {
+                if (query && query.length >= 2) {
                     query = Search.processSearchQuery(query);
                     this.dataService.search(query, filter).then(results => {
                         this.searchResults = results;

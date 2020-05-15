@@ -64,8 +64,6 @@ public class XrayCloudExportService extends ExporterBase {
 	/** Client secret to access xray */
 	private String clientSecret;
 
-	private RestClient restClient;
-
 	public XrayCloudExportService() {
 		super("Xray Cloud");
 	}
@@ -128,10 +126,9 @@ public class XrayCloudExportService extends ExporterBase {
 	}
 
 	public Optional<Export> exportTestProcedure(TestProcedure testProcedure) throws SpecmateException {
-		String token = authenticate();
-		restClient = new RestClient(url, EAuthType.BEARER, token, 10000, logService);
+		RestClient restClient = new RestClient(url, 10000, logService);
 		try {
-			token = token.replaceAll("^\"|\"$", "");
+			authenticate(restClient);
 			JSONArray exportObjs = getExportObjects(testProcedure);
 			RestResult<JSONObject> result = restClient.post(xrayPath("/import/test/bulk"), exportObjs);
 			if (result.getResponse().getStatus() == Response.Status.OK.getStatusCode()) {
@@ -157,14 +154,7 @@ public class XrayCloudExportService extends ExporterBase {
 
 		JSONArray steps = new JSONArray();
 		for (TestStep step : SpecmateEcoreUtil.getStepsSorted(testProcedure)) {
-			JSONObject stepObj = new JSONObject();
-			String action = step.getDescription();
-			String result = step.getExpectedOutcome();
-			if (StringUtils.isBlank(action)) {
-				action = "<empty>";
-			}
-			stepObj.put("action", action);
-			stepObj.put("result", result);
+			JSONObject stepObj = JiraUtil.stepToJson(step, true);
 			steps.put(stepObj);
 		}
 		exportObj.put("steps", steps);
@@ -174,16 +164,20 @@ public class XrayCloudExportService extends ExporterBase {
 		return allTests;
 	}
 
-	private String authenticate() throws SpecmateException {
+	private void authenticate(RestClient restClient) throws SpecmateException {
 		JSONObject authObj = new JSONObject();
 		authObj.put("client_id", clientId);
 		authObj.put("client_secret", clientSecret);
 		Response result = restClient.rawPost(xrayPath("/authenticate"), authObj, null, null);
 		if (result.getStatus() == Response.Status.OK.getStatusCode()) {
-			return result.readEntity(String.class);
-		} else {
-			throw new SpecmateInternalException(ErrorCode.JIRA, "Could not authenticate with Xray cloud.");
+			String token = result.readEntity(String.class);
+			if (!StringUtils.isEmpty(token)) {
+				token = token.replaceAll("^\"|\"$", "");
+				restClient.setAuthorization(EAuthType.BEARER, token);
+				return;
+			}
 		}
+		throw new SpecmateInternalException(ErrorCode.JIRA, "Could not authenticate with Xray cloud.");
 	}
 
 	private String xrayPath(String path) {

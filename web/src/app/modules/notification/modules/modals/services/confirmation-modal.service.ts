@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { SpecmateDataService } from '../../../../data/modules/data-service/services/specmate-data.service';
 import { TypedModalContent } from '../components/typed-modal-content.component';
 import { Dialogtype } from '../modal-dialog-type';
 import { ValidationService } from 'src/app/modules/forms/modules/validation/services/validation.service';
+import { ModalService } from './modal-service';
 
 @Injectable()
 export class ConfirmationModal {
-    constructor(private modalService: NgbModal,
+    constructor(private modalService: ModalService,
         private dataService: SpecmateDataService,
         private translate: TranslateService,
         private validator: ValidationService) { }

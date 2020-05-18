@@ -4,11 +4,15 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.apache.commons.lang3.StringUtils;
+import org.json.JSONObject;
+
 import com.atlassian.jira.rest.client.api.JiraRestClient;
 import com.atlassian.jira.rest.client.api.RestClientException;
 import com.atlassian.jira.rest.client.internal.async.AsynchronousJiraRestClientFactory;
 import com.specmate.common.exception.SpecmateAuthorizationException;
 import com.specmate.common.exception.SpecmateException;
+import com.specmate.model.testspecification.TestStep;
 
 public class JiraUtil {
 
@@ -43,6 +47,18 @@ public class JiraUtil {
 			}
 		}
 		return true;
+	}
+
+	public static JSONObject stepToJson(TestStep step, boolean isCloud) {
+		JSONObject stepObj = new JSONObject();
+		String action = step.getDescription();
+		String result = step.getExpectedOutcome();
+		if (StringUtils.isBlank(action)) {
+			action = "(empty)";
+		}
+		stepObj.put(isCloud ? "action" : "step", action);
+		stepObj.put("result", result);
+		return stepObj;
 	}
 
 }

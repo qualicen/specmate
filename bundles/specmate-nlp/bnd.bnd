@@ -79,7 +79,8 @@
 	specmate-emfrest-api;version=latest,\
 	specmate-rest;version=latest,\
 	org.apache.servicemix.bundles.junit,\
-	org.json
+	org.json,\
+	specmate-config-api
 
 
 Private-Package: \

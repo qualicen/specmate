@@ -10,6 +10,7 @@ import com.specmate.model.base.IID;
 import com.specmate.model.base.IModelConnection;
 import com.specmate.model.base.IModelNode;
 import com.specmate.model.base.INamed;
+import com.specmate.model.base.IRecycled;
 import com.specmate.model.base.ISpecmateModelObject;
 import com.specmate.model.base.ISpecmatePositionableModelObject;
 import com.specmate.model.base.ITracingElement;
@@ -89,6 +90,7 @@ public class RequirementsSwitch<T> extends Switch<T> {
 				if (result == null) result = caseIID(requirement);
 				if (result == null) result = caseINamed(requirement);
 				if (result == null) result = caseIDescribed(requirement);
+				if (result == null) result = caseIRecycled(requirement);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -102,6 +104,7 @@ public class RequirementsSwitch<T> extends Switch<T> {
 				if (result == null) result = caseIID(cegModel);
 				if (result == null) result = caseINamed(cegModel);
 				if (result == null) result = caseIDescribed(cegModel);
+				if (result == null) result = caseIRecycled(cegModel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -117,6 +120,7 @@ public class RequirementsSwitch<T> extends Switch<T> {
 				if (result == null) result = caseIID(cegNode);
 				if (result == null) result = caseINamed(cegNode);
 				if (result == null) result = caseIDescribed(cegNode);
+				if (result == null) result = caseIRecycled(cegNode);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -131,6 +135,7 @@ public class RequirementsSwitch<T> extends Switch<T> {
 				if (result == null) result = caseIID(cegConnection);
 				if (result == null) result = caseINamed(cegConnection);
 				if (result == null) result = caseIDescribed(cegConnection);
+				if (result == null) result = caseIRecycled(cegConnection);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -240,6 +245,21 @@ public class RequirementsSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseIDescribed(IDescribed object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>IRecycled</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>IRecycled</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseIRecycled(IRecycled object) {
 		return null;
 	}
 

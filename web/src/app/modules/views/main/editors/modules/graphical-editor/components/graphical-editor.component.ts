@@ -295,7 +295,7 @@ export class GraphicalEditor {
 
     VertexProvider.initRenderer(this.graph);
     EditorStyle.initEditorStyles(this.graph);
-    EditorKeyHandler.initKeyHandler(this.graph);
+    EditorKeyHandler.initKeyHandler(this.graph, this.undoService);
     this.initUndoManager();
 
     this.popup = new EditorPopup(this.graph, this.contents, this.translate);

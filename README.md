@@ -1,21 +1,12 @@
 # Specmate
+Specmate is a Web-based Modeling and Test-Generation Tool
 
-## How to set up your development environment
-1. Install Java 11 JDK
-2. Install Eclipse 2019-06 Modeling Tools
-3. From the Eclipse Marketplace, install 
-    - bndtools 4.2
-4. From the update site http://download.eclipse.org/acceleo/updates/releases/3.7, install Acceleo
-5. Install node js version 10
-6. In the folder web, `run npm run init`.
-7. Import all projects in the bundles folder into your Eclipse workspace
-8. In the folder web, `run npm run build-dev`.
-9. Refresh the specmate-ui-core project. 
-10. Open specmate-std-env/dev-specmate-all.bndrun and hit the run button
+## Setup
+See [Wiki](https://github.com/qualicen/specmate/wiki/How-to-setup-a-Specmate-development-environment)
 
 ## Developing the GUI
 
-See ```web/README.md```
+See ```web/README.md``` and [Wiki](https://github.com/qualicen/specmate/wiki)
 
 ## Big Thanks
 

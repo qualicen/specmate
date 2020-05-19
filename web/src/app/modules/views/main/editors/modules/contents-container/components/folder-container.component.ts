@@ -36,8 +36,8 @@ export class FolderContainer extends ContentContainerBase<Folder> {
         return element;
     }
 
-    public async delete(element: Folder): Promise<void> {
+    public async recycle(element: Folder): Promise<void> {
         const message = this.translate.instant('doYouReallyWantToDeleteFolder', { name: element.name });
-        await super.delete(element, message);
+        await super.recycle(element, message);
     }
 }

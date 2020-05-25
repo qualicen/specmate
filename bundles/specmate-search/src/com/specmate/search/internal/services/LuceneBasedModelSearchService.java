@@ -124,8 +124,7 @@ public class LuceneBasedModelSearchService extends RestServiceBase implements Ev
 	private AtomicBoolean isReindexRunning = new AtomicBoolean(false);
 
 	/** List of classes included in the index */
-	private List<String> indexedClasses = Arrays.asList("Requirement", "CEGModel", "TestSpecification",
-			"TestProcedure");
+	private List<String> indexedClasses = Arrays.asList("Requirement", "CEGModel", "TestSpecification", "Process");
 
 	/**
 	 * Flag to signal if this search service is enabled. Only if it is enabled it
@@ -423,7 +422,7 @@ public class LuceneBasedModelSearchService extends RestServiceBase implements Ev
 			featureMap.put(attribute, object.eGet(attribute));
 		}
 		String className = object.eClass().getName();
-		if(!indexedClasses.contains(className)) {
+		if (!indexedClasses.contains(className)) {
 			return;
 		}
 		Document doc = getDocumentForModelObject(id, project, className, featureMap);

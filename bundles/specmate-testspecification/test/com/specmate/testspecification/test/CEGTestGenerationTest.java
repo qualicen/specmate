@@ -2,6 +2,7 @@ package com.specmate.testspecification.test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -78,21 +79,18 @@ public class CEGTestGenerationTest {
 		TestSpecification spec = getTestSpecificationSameVariable();
 		CEGTestCaseGenerator generator = new CEGTestCaseGenerator(spec);
 		generator.generate();
-		List<TestCase> testcases = SpecmateEcoreUtil.pickInstancesOf(spec.getContents(), TestCase.class);
+		List<TestCase> testcases = SpecmateEcoreUtil.pickInstancesOf(spec.getContents(), TestCase.class).stream()
+				.filter(tc -> tc.isConsistent()).collect(Collectors.toList());
+		Assert.assertTrue(testcases.size() == 2);
 		Assert.assertTrue(testcases.stream().anyMatch(tc -> {
 			List<ParameterAssignment> assignments = SpecmateEcoreUtil.pickInstancesOf(tc.getContents(),
 					ParameterAssignment.class);
-			return assignments.stream().anyMatch(a -> a.getCondition().startsWith("=A"));
+			return assignments.stream().anyMatch(a -> a.getCondition().equals("=A"));
 		}));
 		Assert.assertTrue(testcases.stream().anyMatch(tc -> {
 			List<ParameterAssignment> assignments = SpecmateEcoreUtil.pickInstancesOf(tc.getContents(),
 					ParameterAssignment.class);
-			return assignments.stream().anyMatch(a -> a.getCondition().startsWith("=B"));
-		}));
-		Assert.assertTrue(testcases.stream().anyMatch(tc -> {
-			List<ParameterAssignment> assignments = SpecmateEcoreUtil.pickInstancesOf(tc.getContents(),
-					ParameterAssignment.class);
-			return assignments.stream().anyMatch(a -> a.getCondition().startsWith("not =A,not =B"));
+			return assignments.stream().anyMatch(a -> a.getCondition().equals("=B"));
 		}));
 	}
 

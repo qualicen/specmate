@@ -1,4 +1,5 @@
 import { mxgraph } from 'mxgraph'; // Typings only - no code!
+import { UndoService } from 'src/app/modules/actions/modules/common-controls/services/undo.service';
 
 declare var require: any;
 
@@ -10,7 +11,7 @@ const mx: typeof mxgraph = require('mxgraph')({
  * Keybindings for the graphical editor
  */
 export class EditorKeyHandler {
-    public static initKeyHandler(graph: mxgraph.mxGraph) {
+    public static initKeyHandler(graph: mxgraph.mxGraph, undoService: UndoService) {
         let keyHandler = new mx.mxKeyHandler(graph);
 
         // Support Mac command-key
@@ -66,6 +67,22 @@ export class EditorKeyHandler {
                 const sel = EditorKeyHandler.getFilteredSelectedCells(graph);
                 mx.mxClipboard.copy(graph, sel);
                 EditorKeyHandler.deleteSelectedCells(graph);
+            }
+        });
+
+        // Ctrl+Z
+        keyHandler.bindControlKey(90, (evt: KeyboardEvent) => {
+            EditorKeyHandler.stopEvent(evt);
+            if (graph.isEnabled()) {
+                undoService.undo();
+            }
+        });
+
+        // Ctrl+Y
+        keyHandler.bindControlKey(89, (evt: KeyboardEvent) => {
+            EditorKeyHandler.stopEvent(evt);
+            if (graph.isEnabled()) {
+                undoService.redo();
             }
         });
         return keyHandler;

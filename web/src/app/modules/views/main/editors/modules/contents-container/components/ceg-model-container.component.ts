@@ -23,12 +23,12 @@ import { ContentsContainerService } from '../services/content-container.service'
 export class CEGModelContainer extends TestSpecificationContentContainerBase<CEGModel> {
 
     constructor(dataService: SpecmateDataService,
-                navigator: NavigatorService,
-                translate: TranslateService,
-                modal: ConfirmationModal,
-                clipboardService: ClipboardService,
-                contentService: ContentsContainerService,
-                additionalInformationService: AdditionalInformationService) {
+        navigator: NavigatorService,
+        translate: TranslateService,
+        modal: ConfirmationModal,
+        clipboardService: ClipboardService,
+        contentService: ContentsContainerService,
+        additionalInformationService: AdditionalInformationService) {
         super(dataService, navigator, translate, modal, clipboardService, contentService, additionalInformationService);
     }
 
@@ -60,8 +60,13 @@ export class CEGModelContainer extends TestSpecificationContentContainerBase<CEG
                 await this.dataService.deleteElement(element.url, true, Id.uuid);
                 await this.dataService.commit(this.translate.instant('save'));
                 await this.dataService.deleteCachedContent(element.url);
-                await this.modal.openOk(this.translate.instant('CEGGenerator.couldNotGenerateTitle'),
-                                        this.translate.instant('CEGGenerator.couldNotGenerate'));
+                try {
+                    await this.modal.openOk(this.translate.instant('CEGGenerator.couldNotGenerateTitle'),
+                        this.translate.instant('CEGGenerator.couldNotGenerate'));
+                } catch (e) {
+                    this.modal.openOk(this.translate.instant('CEGGenerator.couldNotGenerateTitleError'),
+                        this.translate.instant('CEGGenerator.couldNotGenerate'));
+                }
                 return undefined;
             }
         }

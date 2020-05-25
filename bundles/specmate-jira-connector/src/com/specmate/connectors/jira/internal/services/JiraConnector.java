@@ -283,11 +283,12 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 		return getIssues(jql);
 	}
 
-	private Issue getStory(String id) throws SpecmateException {
-		logService.log(LogService.LOG_DEBUG, String.format("Jira connector (%s) retrieving item with id %s", id));
-		List<Issue> issues = getIssues("project=" + projectName + " AND id=" + id);
+	private Issue getStory(String storyId) throws SpecmateException {
+		logService.log(LogService.LOG_DEBUG,
+				String.format("Jira connector (%s) retrieving item with id %s", id, storyId));
+		List<Issue> issues = getIssues("project=" + projectName + " AND id=" + storyId);
 		if (issues == null || issues.size() == 0) {
-			throw new SpecmateInternalException(ErrorCode.INTERNAL_PROBLEM, "JIRA Issue not found: " + id);
+			throw new SpecmateInternalException(ErrorCode.INTERNAL_PROBLEM, "JIRA Issue not found: " + storyId);
 		}
 		return issues.get(0);
 	}

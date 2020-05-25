@@ -33,21 +33,42 @@ import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.Constituent;
 public class NLPServiceTest {
 
 	@Test
-	public void testOpenNlpService() throws SpecmateException {
+	public void testNlpServiceEnglish() throws SpecmateException {
 		INLPService nlpService = getNLPService();
 		JCas result = nlpService.processText("If the tool detects an error, it shows a warning window.", ELanguage.EN);
-
-		String parseString = NLPUtil.printParse(result);
-		Assert.assertEquals(
-				"( ROOT ( S ( SBAR If ( S ( NP the tool ) ( VP detects ( NP an error ) ) ) ) , ( NP it ) ( VP shows ( NP a warning window ) ) . ) )",
-				parseString);
 
 		String posString = NLPUtil.printPOSTags(result);
 		Assert.assertEquals(
 				"If (IN) the (DT) tool (NN) detects (VBZ) an (DT) error (NN) , (,) it (PRP) shows (VBZ) a (DT) warning (NN) window (NN) . (.)",
 				posString);
 
-		result = nlpService.processText("Wenn das Werkzeug einen Fehler erkennt, zeigt es ein Warnfenster.",
+		String sentText = NLPUtil.printSentences(result);
+		Assert.assertEquals("(If the tool detects an error, it shows a warning window.)", sentText);
+
+		String parseString = NLPUtil.printParse(result);
+		Assert.assertEquals(
+				"( ROOT ( S ( SBAR If ( S ( NP the tool ) ( VP detects ( NP an error ) ) ) ) , ( NP it ) ( VP shows ( NP a warning window ) ) . ) )",
+				parseString);
+
+		String chunkText = NLPUtil.printChunks(result);
+		Assert.assertEquals(
+				"If (SBAR) the tool (NP) detects (VP) an error (NP) it (NP) shows (VP) a warning window (NP)",
+				chunkText);
+
+		String depText = NLPUtil.printDependencies(result);
+		// spacy uses compound, malt uses nn
+		depText = depText.replace("compound", "nn");
+
+		Assert.assertEquals("detects <--mark-- If\n" + "tool <--det-- the\n" + "detects <--nsubj-- tool\n"
+				+ "shows <--advcl-- detects\n" + "error <--det-- an\n" + "detects <--dobj-- error\n"
+				+ "shows <--punct-- ,\n" + "shows <--nsubj-- it\n" + "shows <--ROOT-- shows\n" + "window <--det-- a\n"
+				+ "window <--nn-- warning\n" + "shows <--dobj-- window\n" + "shows <--punct-- .", depText);
+	}
+
+	@Test
+	public void testNLPServiceGerman() throws SpecmateException {
+		INLPService nlpService = getNLPService();
+		JCas result = nlpService.processText("Wenn das Werkzeug einen Fehler erkennt, zeigt es ein Warnfenster.",
 				ELanguage.DE);
 
 		Assert.assertEquals(
@@ -66,7 +87,6 @@ public class NLPServiceTest {
 		Assert.assertEquals(
 				"( ROOT ( S ( S Wenn ( NP das Werkzeug ) ( NP einen Fehler ) ( S erkennt ) ) , zeigt es ( NP ein Warnfenster ) . ) )",
 				NLPUtil.printParse(result));
-
 	}
 
 	@Test

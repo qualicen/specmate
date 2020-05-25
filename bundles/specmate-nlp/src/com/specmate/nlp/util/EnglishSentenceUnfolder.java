@@ -2,8 +2,10 @@ package com.specmate.nlp.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.Vector;
 import java.util.regex.Pattern;
 
@@ -47,9 +49,9 @@ public class EnglishSentenceUnfolder extends SentenceUnfolderBase {
 
 	@Override
 	protected Optional<Pair<Annotation, EWordOrder>> findImplicitVerbSubjectByConjunction(JCas jCas, Chunk vp) {
-		Optional<Pair<Token, Token>> optRelatedVerb = followConjunctionFromAnnotation(jCas, vp);
-		if (optRelatedVerb.isPresent()) {
-			Token relatedVerb = optRelatedVerb.get().getLeft();
+		List<Pair<Token, Token>> relatedPairs = followConjunctionFromAnnotation(jCas, vp);
+		for (Pair<Token, Token> relatedPair : relatedPairs) {
+			Token relatedVerb = relatedPair.getLeft();
 			Optional<Dependency> subj = NLPUtil.findDependency(jCas, relatedVerb, DEPENDENCY_TYPE_SUBJECT, true);
 			if (subj.isPresent()) {
 				Token subjToken = subj.get().getDependent();
@@ -104,30 +106,34 @@ public class EnglishSentenceUnfolder extends SentenceUnfolderBase {
 	@Override
 	protected Optional<Triple<Annotation, EWordOrder, ENounRole>> findImplicitVerbByConjunction(JCas jCas,
 			Annotation np) {
-		Optional<Pair<Token, Token>> optConjTokens = followConjunctionFromAnnotation(jCas, np);
-		if (!optConjTokens.isPresent()) {
+		List<Pair<Token, Token>> conjTokens = followConjunctionFromAnnotation(jCas, np);
+		if (conjTokens.isEmpty()) {
 			return Optional.empty();
 		}
-		Token conjNounToken = optConjTokens.get().getLeft();
 
-		ENounRole role = ENounRole.OBJ;
-		Optional<Dependency> verbDependency = findObjectDependency(jCas, conjNounToken, false);
-		if (!verbDependency.isPresent()) {
-			role = ENounRole.SUBJ;
-			verbDependency = findSubjectDependency(jCas, conjNounToken, false);
-		}
+		for (Pair<Token, Token> conjToken : conjTokens) {
+			Token conjNounToken = conjToken.getLeft();
 
-		if (verbDependency.isPresent()) {
-			Token verbToken = verbDependency.get().getGovernor();
-			List<Chunk> verbChunk = JCasUtil.selectCovering(jCas, Chunk.class, verbToken);
-			Annotation conjuctVpOrToken;
-			if (verbChunk.size() > 0 && verbChunk.get(0).getChunkValue().equals(NLPUtil.ConstituentType.VP.getName())) {
-				conjuctVpOrToken = verbChunk.get(0);
-			} else {
-				conjuctVpOrToken = verbToken;
+			ENounRole role = ENounRole.OBJ;
+			Optional<Dependency> verbDependency = findObjectDependency(jCas, conjNounToken, false);
+			if (!verbDependency.isPresent()) {
+				role = ENounRole.SUBJ;
+				verbDependency = findSubjectDependency(jCas, conjNounToken, false);
 			}
-			if (conjuctVpOrToken != null) {
-				return Optional.of(Triple.of(conjuctVpOrToken, EWordOrder.SVO, role));
+
+			if (verbDependency.isPresent()) {
+				Token verbToken = verbDependency.get().getGovernor();
+				List<Chunk> verbChunk = JCasUtil.selectCovering(jCas, Chunk.class, verbToken);
+				Annotation conjuctVpOrToken;
+				if (verbChunk.size() > 0
+						&& verbChunk.get(0).getChunkValue().equals(NLPUtil.ConstituentType.VP.getName())) {
+					conjuctVpOrToken = verbChunk.get(0);
+				} else {
+					conjuctVpOrToken = verbToken;
+				}
+				if (conjuctVpOrToken != null) {
+					return Optional.of(Triple.of(conjuctVpOrToken, EWordOrder.SVO, role));
+				}
 			}
 		}
 
@@ -169,26 +175,38 @@ public class EnglishSentenceUnfolder extends SentenceUnfolderBase {
 	}
 
 	/** Follows a conjunction to the related Token */
-	private Optional<Pair<Token, Token>> followConjunctionFromAnnotation(JCas jCas, Annotation chunk) {
-		Token relatedToken = null;
-		Optional<Dependency> optConjDep = NLPUtil.findDependency(jCas, chunk, DEPENDENCY_TYPE_CONJUNCTION, false);
-		if (optConjDep.isPresent()) {
-			relatedToken = optConjDep.get().getGovernor();
-		} else {
-			optConjDep = NLPUtil.findDependency(jCas, chunk, DEPENDENCY_TYPE_CONJUNCTION, true);
-			if (optConjDep.isPresent()) {
-				relatedToken = optConjDep.get().getDependent();
-			}
-		}
-		if (relatedToken != null) {
-			Optional<Dependency> optCcDep = NLPUtil.findDependency(jCas, chunk, DEPENDENCY_TYPE_CC, true);
+	private List<Pair<Token, Token>> followConjunctionFromAnnotation(JCas jCas, Annotation startAnno) {
+		List<Token> relatedTokens = new ArrayList<>();
+		List<Annotation> workList = new ArrayList<>();
+		workList.add(startAnno);
+		Set<Annotation> doneSet = new HashSet<>();
+		List<Pair<Token, Token>> result = new ArrayList<>();
+
+		while (!workList.isEmpty()) {
+			Annotation currentAnno = workList.remove(0);
+			relatedTokens.clear();
+
+			List<Dependency> conjDeps = NLPUtil.findDependencies(jCas, currentAnno, DEPENDENCY_TYPE_CONJUNCTION, false);
+			conjDeps.stream().map(d -> d.getGovernor()).forEach(t -> relatedTokens.add(t));
+
+			conjDeps = NLPUtil.findDependencies(jCas, currentAnno, DEPENDENCY_TYPE_CONJUNCTION, false);
+			conjDeps.stream().map(d -> d.getDependent()).forEach(t -> relatedTokens.add(t));
+
+			doneSet.add(currentAnno);
+
+			relatedTokens.stream().filter(t -> !doneSet.contains(t)).forEach(t -> workList.add(t));
+
+			Optional<Dependency> optCcDep = NLPUtil.findDependency(jCas, currentAnno, DEPENDENCY_TYPE_CC, true);
 			Token conjunctionToken = null;
 			if (optCcDep.isPresent()) {
 				conjunctionToken = optCcDep.get().getGovernor();
 			}
-			return Optional.of(Pair.of(relatedToken, conjunctionToken));
+
+			for (Token relatedToken : relatedTokens) {
+				result.add(Pair.of(relatedToken, conjunctionToken));
+			}
 		}
-		return Optional.empty();
+		return result;
 	}
 
 	@Override

@@ -47,12 +47,13 @@ public abstract class SentenceUnfolderBase {
 			JCas jCasStageB = nlpService.processText(unfoldedStageA, language);
 			Sentence sentenceStageB = NLPUtil.getSentences(jCasStageB).iterator().next();
 			String unfoldedStageB = insertsImplicitVerbs(jCasStageB, sentenceStageB);
-			
+
 			JCas jCasStageC = nlpService.processText(unfoldedStageB, language);
 			Sentence sentenceStageC = NLPUtil.getSentences(jCasStageC).iterator().next();
 			String unfoldedStageC = insertImplicitSubjects(jCasStageC, sentenceStageC);
 
-			String result = insertCommasBeforeConjunctions(unfoldedStageC);
+			// String result = insertCommasBeforeConjunctions(unfoldedStageC);
+			String result = unfoldedStageC;
 
 			unfoldedText += result;
 		}

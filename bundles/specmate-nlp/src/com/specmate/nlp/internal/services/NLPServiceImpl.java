@@ -22,6 +22,7 @@ import com.specmate.config.api.IConfigService;
 import com.specmate.model.administration.ErrorCode;
 import com.specmate.nlp.api.ELanguage;
 import com.specmate.nlp.api.INLPService;
+import com.specmate.nlp.internal.nlpcomponents.Spacy;
 import com.specmate.nlp.util.NLPUtil;
 
 import de.tudarmstadt.ukp.dkpro.core.maltparser.MaltParser;
@@ -40,6 +41,8 @@ import de.tudarmstadt.ukp.dkpro.core.opennlp.OpenNlpSegmenter;
 @Component(immediate = true)
 public class NLPServiceImpl implements INLPService {
 
+	private static final String KEY_SPACY_URL = "nlp.spacy.url";
+	private static final String KEY_SPACY_MODEL = "nlp.spacy.model";
 	private Map<String, AnalysisEngine> engines = new HashMap<String, AnalysisEngine>();
 	private LogService logService;
 	private IConfigService configService;
@@ -51,17 +54,26 @@ public class NLPServiceImpl implements INLPService {
 	 */
 	@Activate
 	public void activate() throws SpecmateException {
-		// logService.log(org.osgi.service.log.LogService.LOG_DEBUG, "OpenNLP
 		createGermanPipeline();
 		createEnglishPipeline();
 
 	}
 
 	private void createEnglishPipeline() throws SpecmateInternalException {
-		logService.log(LogService.LOG_DEBUG, "Initializing english NLP pipeline");
+		logService.log(LogService.LOG_INFO, "Initializing english NLP pipeline");
 
-		String spacyUrl = configService.getConfigurationProperty("nlp.spacy.url", "http://127.0.0.1:80");
+		String spacyUrl = configService.getConfigurationProperty(KEY_SPACY_URL);
 
+		if (spacyUrl != null) {
+			logService.log(LogService.LOG_INFO,
+					"Spacy URL found. Configuring spacy pipeline with spacy at:" + spacyUrl);
+			buildSpacyEngine(spacyUrl);
+		} else {
+			buildEngine();
+		}
+	}
+
+	private void buildEngine() throws SpecmateInternalException {
 		AnalysisEngineDescription segmenter = null;
 		AnalysisEngineDescription posTagger = null;
 		AnalysisEngineDescription parser = null;
@@ -75,15 +87,8 @@ public class NLPServiceImpl implements INLPService {
 			posTagger = createEngineDescription(OpenNlpPosTagger.class, OpenNlpPosTagger.PARAM_LANGUAGE, lang,
 					OpenNlpPosTagger.PARAM_VARIANT, "maxent");
 			chunker = createEngineDescription(OpenNlpChunker.class, OpenNlpChunker.PARAM_LANGUAGE, lang);
-			dependencyParser = createEngineDescription(DependencyParser.class,
-					MaltParser.PARAM_IGNORE_MISSING_FEATURES, true,
-					MaltParser.PARAM_LANGUAGE, lang,
-					MaltParser.PARAM_MODEL_LOCATION, "classpath:/de/tudarmstadt/ukp/dkpro/core/maltparser/lib/parser-en-linear.mco",
-					DependencyParser.PARAM_PARSE_MODE, DependencyParser.MODE_SPACY,
-					DependencyParser.PARAM_SPACY_URL, spacyUrl
-					);
-
-
+			dependencyParser = createEngineDescription(MaltParser.class, MaltParser.PARAM_LANGUAGE, lang,
+					MaltParser.PARAM_IGNORE_MISSING_FEATURES, true);
 			parser = createEngineDescription(OpenNlpParser.class, OpenNlpParser.PARAM_PRINT_TAGSET, true,
 					OpenNlpParser.PARAM_LANGUAGE, lang, OpenNlpParser.PARAM_WRITE_PENN_TREE, true,
 					OpenNlpParser.PARAM_WRITE_POS, true);
@@ -98,8 +103,33 @@ public class NLPServiceImpl implements INLPService {
 		}
 	}
 
+	private void buildSpacyEngine(String spacyUrl) throws SpecmateInternalException {
+		AnalysisEngineDescription parser = null;
+		AnalysisEngineDescription chunker = null;
+		AnalysisEngineDescription spacy = null;
+
+		String model = configService.getConfigurationProperty(KEY_SPACY_MODEL, "en");
+		String lang = ELanguage.EN.getLanguage();
+
+		try {
+
+			spacy = createEngineDescription(Spacy.class, Spacy.PARAM_MODEL, model, Spacy.PARAM_SPACY_URL, spacyUrl);
+			chunker = createEngineDescription(OpenNlpChunker.class, OpenNlpChunker.PARAM_LANGUAGE, lang);
+			parser = createEngineDescription(OpenNlpParser.class, OpenNlpParser.PARAM_PRINT_TAGSET, true,
+					OpenNlpParser.PARAM_LANGUAGE, lang, OpenNlpParser.PARAM_WRITE_PENN_TREE, true,
+					OpenNlpParser.PARAM_WRITE_POS, true);
+
+			AnalysisEngine engine = createEngine(createEngineDescription(spacy, chunker, parser));
+
+			engines.put(lang, engine);
+		} catch (Throwable e) {
+			throw new SpecmateInternalException(ErrorCode.NLP,
+					"OpenNLP NLP service failed when starting. Reason: " + e.getMessage());
+		}
+	}
+
 	private void createGermanPipeline() throws SpecmateInternalException {
-		logService.log(LogService.LOG_DEBUG, "Initializing german NLP pipeline");
+		logService.log(LogService.LOG_INFO, "Initializing german NLP pipeline");
 		AnalysisEngineDescription segmenter = null;
 		AnalysisEngineDescription lemmatizer = null;
 		AnalysisEngineDescription posTagger = null;
@@ -118,8 +148,7 @@ public class NLPServiceImpl implements INLPService {
 			chunker = createEngineDescription(OpenNlpChunker.class, OpenNlpParser.PARAM_PRINT_TAGSET, true,
 					OpenNlpChunker.PARAM_LANGUAGE, lang, OpenNlpChunker.PARAM_MODEL_LOCATION,
 					"classpath:/models/de-chunker.bin");
-			dependencyParser = createEngineDescription(DependencyParser.class,
-					MaltParser.PARAM_LANGUAGE, lang,
+			dependencyParser = createEngineDescription(DependencyParser.class, MaltParser.PARAM_LANGUAGE, lang,
 					MaltParser.PARAM_IGNORE_MISSING_FEATURES, true, MaltParser.PARAM_MODEL_LOCATION,
 					"classpath:/models/de-dependencies.mco");
 			parser = createEngineDescription(OpenNlpParser.class, OpenNlpParser.PARAM_PRINT_TAGSET, true,

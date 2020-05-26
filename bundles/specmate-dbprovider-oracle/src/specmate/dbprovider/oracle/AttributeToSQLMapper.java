@@ -168,4 +168,11 @@ public class AttributeToSQLMapper extends SQLMapper implements IAttributeToSQLMa
 			throws SpecmateException {
 		throw new SpecmateInternalException(ErrorCode.MIGRATION, "Not yet supported for oracle DB.");
 	}
+
+	@Override
+	public void adaptContainingFeatureIndex(String objectName, int i) throws SpecmateException {
+		String failmsg = "Migration: The containg feature index in object " + objectName + " could not be migrated.";
+		String query = "Update " + objectName + " set CDO_FEATURE=CDO_FEATURE-" + i + " WHERE CDO_FEATURE<0";
+		SQLUtil.executeStatement(query, connection, failmsg);
+	}
 }

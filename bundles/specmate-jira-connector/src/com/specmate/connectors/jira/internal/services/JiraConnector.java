@@ -14,8 +14,6 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
@@ -26,7 +24,6 @@ import org.osgi.service.log.LogService;
 import com.atlassian.jira.rest.client.api.JiraRestClient;
 import com.atlassian.jira.rest.client.api.RestClientException;
 import com.atlassian.jira.rest.client.api.domain.Issue;
-import com.atlassian.jira.rest.client.api.domain.IssueField;
 import com.atlassian.jira.rest.client.api.domain.SearchResult;
 import com.specmate.common.cache.ICache;
 import com.specmate.common.cache.ICacheLoader;
@@ -189,7 +186,8 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 		try {
 			jiraClient = JiraUtil.createJiraRESTClient(url, username, password);
 		} catch (URISyntaxException e) {
-			throw new SpecmateInternalException(ErrorCode.JIRA, e);
+			logService.log(LogService.LOG_ERROR, "Could not create Jira REST client. Reason is: " + e.getMessage());
+			throw new SpecmateInternalException(ErrorCode.JIRA, "Could not create Jira REST client", e);
 		}
 
 		defaultFolder = createFolder(projectName + "-Default", projectName + "-Default");
@@ -222,7 +220,9 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 		String aPassword = (String) properties.get(JiraConfigConstants.KEY_JIRA_PASSWORD);
 
 		if (isEmpty(aProject) || isEmpty(aUsername) || isEmpty(aPassword)) {
-			throw new SpecmateInternalException(ErrorCode.CONFIGURATION, "Jira Connector is not well configured.");
+			throw new SpecmateInternalException(ErrorCode.CONFIGURATION, String.format(
+					"Jira Connector (%s) is not well configured. Username, password and project need to be provided.",
+					id));
 		}
 	}
 
@@ -238,7 +238,7 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 
 	@Override
 	public Collection<Requirement> getRequirements() throws SpecmateException {
-
+		logService.log(LogService.LOG_DEBUG, String.format("Jira connector (%s): retrieving requirements.", id));
 		List<Requirement> requirements = new ArrayList<>();
 
 		List<Issue> storiesWithoutEpic = getStoriesWithoutEpic();
@@ -270,24 +270,32 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 	}
 
 	private List<Issue> getStoriesWithoutEpic() throws SpecmateException {
+		logService.log(LogService.LOG_DEBUG,
+				String.format("Jira connector (%s): retrieving default requirements. Query is %s", id, directJQL));
 		String jql = directJQL.replaceAll(PROJECT_PLACEHOLDER, projectName);
 		return getIssues(jql);
 	}
 
 	private List<Issue> getEpics() throws SpecmateException {
+		logService.log(LogService.LOG_DEBUG,
+				String.format("Jira connector (%s): retrieving parent requirements. Query is %s", id, parentJQL));
 		String jql = parentJQL.replaceAll(PROJECT_PLACEHOLDER, projectName);
 		return getIssues(jql);
 	}
 
-	private Issue getStory(String id) throws SpecmateException {
-		List<Issue> issues = getIssues("project=" + projectName + " AND id=" + id);
+	private Issue getStory(String storyId) throws SpecmateException {
+		logService.log(LogService.LOG_DEBUG,
+				String.format("Jira connector (%s) retrieving item with id %s", id, storyId));
+		List<Issue> issues = getIssues("project=" + projectName + " AND id=" + storyId);
 		if (issues == null || issues.size() == 0) {
-			throw new SpecmateInternalException(ErrorCode.INTERNAL_PROBLEM, "JIRA Issue not found: " + id);
+			throw new SpecmateInternalException(ErrorCode.INTERNAL_PROBLEM, "JIRA Issue not found: " + storyId);
 		}
 		return issues.get(0);
 	}
 
 	private List<Issue> getIssues(String jql) throws SpecmateException {
+		logService.log(LogService.LOG_DEBUG, String.format("Jira connector (%s): executing query: %s", id, jql));
+
 		List<Issue> issues = new ArrayList<>();
 
 		int maxResults = Integer.MAX_VALUE;
@@ -297,12 +305,16 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 						.searchJql(jql, paginationSizeInt, issues.size(), null).claim();
 				maxResults = searchResult.getTotal();
 				searchResult.getIssues().forEach(issue -> issues.add(issue));
-				logService.log(LogService.LOG_DEBUG, "Loaded ~" + searchResult.getMaxResults() + " issues from Jira "
-						+ url + " project: " + projectName);
+				logService.log(LogService.LOG_DEBUG, "Jira Connector (" + id + "): Loaded ~"
+						+ searchResult.getMaxResults() + " issues from Jira " + url + " project: " + projectName);
 			} catch (RestClientException e) {
 				if (e.getStatusCode().get() == 400) {
+					logService.log(LogService.LOG_WARNING,
+							String.format("Jira Connector (%s): Received 400 status", id));
 					return issues;
 				} else {
+					logService.log(LogService.LOG_ERROR, String.format(
+							"Jira Connector (%s): Could not load issue from jira. Reason: %s", id, e.getMessage()));
 					throw new SpecmateInternalException(ErrorCode.INTERNAL_PROBLEM, "Could not load issues from jira",
 							e);
 				}
@@ -310,8 +322,8 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 
 		}
 
-		logService.log(LogService.LOG_INFO,
-				"Finished loading of " + issues.size() + " issues from Jira " + url + " project: " + projectName);
+		logService.log(LogService.LOG_INFO, "Jira Connector (" + id + "): Finished loading of " + issues.size()
+				+ " issues from Jira " + url + " project: " + projectName);
 
 		return issues;
 	}
@@ -333,7 +345,7 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 		return JiraUtil.authenticate(url, projectName, username, password);
 	}
 
-	private static Requirement createRequirement(Issue story) throws SpecmateException {
+	private static Requirement createRequirement(Issue story) {
 		Requirement requirement = RequirementsFactory.eINSTANCE.createRequirement();
 		String id = story.getKey();
 		String idShort = Long.toString(story.getId());
@@ -345,18 +357,6 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 		requirement.setDescription(story.getDescription());
 		requirement.setStatus(story.getStatus().getName());
 		requirement.setLive(true);
-		try {
-			IssueField teamField = story.getFieldByName("Team");
-			if (teamField != null) {
-				JSONObject teamObject = (JSONObject) teamField.getValue();
-				if (teamObject != null) {
-					String team = (String) teamObject.get("value");
-					requirement.setImplementingITTeam(team);
-				}
-			}
-		} catch (JSONException e) {
-			throw new SpecmateInternalException(ErrorCode.JIRA, e);
-		}
 		return requirement;
 	}
 

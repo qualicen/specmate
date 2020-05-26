@@ -183,4 +183,11 @@ public class AttributeToSQLMapper extends SQLMapper implements IAttributeToSQLMa
 				+ targetType.getTypeNameWithSize();
 		SQLUtil.executeStatement(query, connection, failmsg);
 	}
+
+	@Override
+	public void adaptContainingFeatureIndex(String objectName, int i) throws SpecmateException {
+		String failmsg = "Migration: The containg feature index in object " + objectName + " could not be migrated.";
+		String query = "Update " + objectName + " set CDO_FEATURE=CDO_FEATURE-" + i + " WHERE CDO_FEATURE<0";
+		SQLUtil.executeStatement(query, connection, failmsg);
+	}
 }

@@ -60,11 +60,5 @@ public class NameValidator extends ValidatorBase implements IChangeListener {
 		if (name.trim().length() == 0) {
 			throw new SpecmateValidationException(msg + "Name is empty.", getValidatorName(), null);
 		}
-
-		Matcher m = inValidNameChars.matcher(name);
-		if (m.find()) {
-			throw new SpecmateValidationException(msg + "Name contains an invalid character: " + name.charAt(m.start()),
-					getValidatorName(), getObjectName(obj));
-		}
 	}
 }

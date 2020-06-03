@@ -16,7 +16,6 @@ import { ViewControllerModule } from '../views/controller/modules/view-controlle
 import { AuthModule } from '../views/main/authentication/modules/auth/auth.module';
 import { LoginModule } from '../views/main/authentication/modules/login/login.module';
 import { ErrorsWarningsModule } from '../views/side/modules/errors-warnings/errors-warnings.module';
-import { HistoryViewModule } from '../views/side/modules/history-view/history-view.module';
 import { LinksActionsModule } from '../views/side/modules/links-actions/links-actions.module';
 import { LocalHistoryModule } from '../views/side/modules/local-history/local-history.module';
 import { LogListModule } from '../views/side/modules/log-list/log-list.module';
@@ -39,7 +38,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     DragulaModule.forRoot(),
     ProjectExplorerModule,
     PropertiesEditorModule,
-    HistoryViewModule,
     TracingLinksModule,
     LinksActionsModule,
     ErrorsWarningsModule,

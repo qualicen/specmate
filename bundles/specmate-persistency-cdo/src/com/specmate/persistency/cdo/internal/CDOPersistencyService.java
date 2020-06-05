@@ -68,6 +68,7 @@ import com.specmate.persistency.ITransaction;
 import com.specmate.persistency.IView;
 import com.specmate.persistency.event.EChangeKind;
 import com.specmate.persistency.event.ModelEvent;
+import com.specmate.persistency.hibernate.internal.HibernatePersistencyService;
 import com.specmate.urihandler.IURIFactory;
 
 @Component(service = IPersistencyService.class, configurationPolicy = ConfigurationPolicy.REQUIRE, configurationPid = CDOPersistencyServiceConfig.PID)
@@ -133,6 +134,8 @@ public class CDOPersistencyService implements IPersistencyService, IListener {
 	public void activate(Map<String, Object> properties) throws SpecmateException {
 		readConfig(properties);
 		this.transactionGauge = metricsService.createGauge("Transactions", "The number of open transactions");
+		HibernatePersistencyService hps = new HibernatePersistencyService();
+		hps.start();
 		start();
 	}
 

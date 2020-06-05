@@ -1,5 +1,7 @@
 Bundle-Version: 0.0.0.${tstamp}
 -buildpath: \
+	jar/msv-20050913.jar;version=file,\
+	jar/xsdlib-2013.2.jar;version=file,\
 	specmate-common;version=latest,\
 	org.eclipse.emf.cdo.net4j,\
 	org.eclipse.emf.cdo.server,\
@@ -28,15 +30,40 @@ Bundle-Version: 0.0.0.${tstamp}
 	specmate-dbprovider-api;version=latest,\
 	specmate-metrics;version=latest,\
 	org.eclipse.core.runtime,\
-	specmate-rest;version=latest
+	specmate-rest;version=latest,\
+	org.hibernate.orm.osgi,\
+	org.hibernate.orm.core,\
+	org.jboss.spec.javax.transaction.jboss-transaction-api_1.2_spec,\
+	javax.persistence-api
 
 
 
 -runfw: org.eclipse.osgi;version='[3.10.2.v20150203-1939,3.10.2.v20150203-1939]'
--runee: JavaSE-1.8
+-runee: JavaSE-11
 Private-Package: com.specmate.persistency.cdo.internal
 Export-Package: \
 	com.specmate.persistency.cdo,\
 	com.specmate.persistency.cdo.internal,\
-	com.specmate.persistency.validation
+	com.specmate.persistency.validation,\
+	com.sun.msv.datatype,\
+	com.sun.msv.datatype.regexp,\
+	com.sun.msv.datatype.xsd,\
+	com.sun.msv.datatype.xsd.datetime,\
+	com.sun.msv.datatype.xsd.regex,\
+	com.sun.msv.datatype.xsd.ngimpl,\
+	com.sun.xml.util,\
+	org.apache.xerces.impl.xpath.regex,\
+	org.jaxen,\
+	org.relaxng.datatype,\
+	org.relaxng.datatype.helpers,\
+	org.jaxen.dom4j,\
+	org.jaxen.pattern,\
+	org.jaxen.saxpath
 -resolve: auto
+-privatepackage: com.specmate.persistency.hibernate.internal
+-runrequires: \
+	bnd.identity;id='net.bytebuddy.byte-buddy',\
+	bnd.identity;id='net.bytebuddy.byte-buddy-agent'
+-runbundles: \
+	net.bytebuddy.byte-buddy;version='[1.10.10,1.10.11)',\
+	net.bytebuddy.byte-buddy-agent;version='[1.8.13,1.8.14)'

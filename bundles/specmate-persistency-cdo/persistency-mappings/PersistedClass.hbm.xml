@@ -1,0 +1,21 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name = "om.specmate.persistency.hibernate.internal.PersistedClass" table = "PERSISTED_CLASS">
+      
+      <meta attribute = "class-description">
+         This class contains the persisted class. 
+      </meta>
+      
+      <id name = "id" type = "int" column = "id">
+         <generator class="native"/>
+      </id>
+      
+      <property name = "str" column = "str" type = "string"/>
+      <property name = "flag" column = "flag" type = "boolean"/>
+      
+   </class>
+</hibernate-mapping>

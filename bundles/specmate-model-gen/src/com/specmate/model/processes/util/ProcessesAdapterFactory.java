@@ -6,6 +6,7 @@ import com.specmate.model.base.IContainer;
 import com.specmate.model.base.IContentElement;
 import com.specmate.model.base.IDescribed;
 import com.specmate.model.base.IID;
+import com.specmate.model.base.IModel;
 import com.specmate.model.base.IModelConnection;
 import com.specmate.model.base.IModelNode;
 import com.specmate.model.base.INamed;
@@ -136,6 +137,10 @@ public class ProcessesAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseIContainer(IContainer object) {
 				return createIContainerAdapter();
+			}
+			@Override
+			public Adapter caseIModel(IModel object) {
+				return createIModelAdapter();
 			}
 			@Override
 			public Adapter caseITracingElement(ITracingElement object) {
@@ -356,6 +361,20 @@ public class ProcessesAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createIContainerAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.specmate.model.base.IModel <em>IModel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.specmate.model.base.IModel
+	 * @generated
+	 */
+	public Adapter createIModelAdapter() {
 		return null;
 	}
 

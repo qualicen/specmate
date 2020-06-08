@@ -23,7 +23,6 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.specmate.usermodel.UserSession#getTargetSystem <em>Target System</em>}</li>
  *   <li>{@link com.specmate.usermodel.UserSession#getLibraryFolders <em>Library Folders</em>}</li>
  *   <li>{@link com.specmate.usermodel.UserSession#isIsDeleted <em>Is Deleted</em>}</li>
- *   <li>{@link com.specmate.usermodel.UserSession#getExporters <em>Exporters</em>}</li>
  * </ul>
  *
  * @see com.specmate.usermodel.UsermodelPackage#getUserSession()
@@ -203,17 +202,5 @@ public interface UserSession extends CDOObject {
 	 * @generated
 	 */
 	void setIsDeleted(boolean value);
-
-	/**
-	 * Returns the value of the '<em><b>Exporters</b></em>' attribute list.
-	 * The list contents are of type {@link java.lang.String}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Exporters</em>' attribute list.
-	 * @see com.specmate.usermodel.UsermodelPackage#getUserSession_Exporters()
-	 * @model
-	 * @generated
-	 */
-	EList<String> getExporters();
 
 } // UserSession

@@ -13,6 +13,7 @@ import com.specmate.model.base.IContainer;
 import com.specmate.model.base.IContentElement;
 import com.specmate.model.base.IDescribed;
 import com.specmate.model.base.IExternal;
+import com.specmate.model.base.IModel;
 import com.specmate.model.base.IModelConnection;
 import com.specmate.model.base.IModelNode;
 import com.specmate.model.base.INamed;
@@ -22,6 +23,7 @@ import com.specmate.model.base.ISpecmateModelObject;
 import com.specmate.model.base.ISpecmatePositionableModelObject;
 import com.specmate.model.base.ITracingElement;
 
+import com.specmate.model.base.ModelImage;
 import com.specmate.model.batch.BatchPackage;
 
 import com.specmate.model.batch.impl.BatchPackageImpl;
@@ -157,6 +159,20 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 	 * @generated
 	 */
 	private EClass iRecycledEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass modelImageEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass iModelEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -615,6 +631,46 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getModelImage() {
+		return modelImageEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getModelImage_ImageData() {
+		return (EAttribute)modelImageEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getIModel() {
+		return iModelEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getIModel_Image() {
+		return (EReference)iModelEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public BaseFactory getBaseFactory() {
 		return (BaseFactory)getEFactoryInstance();
 	}
@@ -687,6 +743,12 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 		iRecycledEClass = createEClass(IRECYCLED);
 		createEAttribute(iRecycledEClass, IRECYCLED__RECYCLED);
 		createEAttribute(iRecycledEClass, IRECYCLED__HAS_RECYCLED_CHILDREN);
+
+		modelImageEClass = createEClass(MODEL_IMAGE);
+		createEAttribute(modelImageEClass, MODEL_IMAGE__IMAGE_DATA);
+
+		iModelEClass = createEClass(IMODEL);
+		createEReference(iModelEClass, IMODEL__IMAGE);
 	}
 
 	/**
@@ -728,6 +790,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 		iSpecmatePositionableModelObjectEClass.getESuperTypes().add(this.getISpecmateModelObject());
 		iModelConnectionEClass.getESuperTypes().add(this.getISpecmateModelObject());
 		iModelNodeEClass.getESuperTypes().add(this.getISpecmatePositionableModelObject());
+		modelImageEClass.getESuperTypes().add(this.getIContainer());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(iNamedEClass, INamed.class, "INamed", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -779,6 +842,12 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 		initEClass(iRecycledEClass, IRecycled.class, "IRecycled", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getIRecycled_Recycled(), ecorePackage.getEBoolean(), "recycled", null, 0, 1, IRecycled.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getIRecycled_HasRecycledChildren(), ecorePackage.getEBoolean(), "hasRecycledChildren", null, 0, 1, IRecycled.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(modelImageEClass, ModelImage.class, "ModelImage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getModelImage_ImageData(), ecorePackage.getEString(), "imageData", null, 0, 1, ModelImage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(iModelEClass, IModel.class, "IModel", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getIModel_Image(), this.getModelImage(), null, "image", null, 0, 1, IModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

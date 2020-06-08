@@ -5,7 +5,7 @@ import { ElementFactoryBase } from './element-factory-base';
 import { ModelFactoryBase } from './model-factory-base';
 
 export class CEGModelFactory extends ModelFactoryBase {
-    protected get simpleModel(): IContainer {
+    protected get simpleModel(): CEGModel {
         return new CEGModel();
     }
 

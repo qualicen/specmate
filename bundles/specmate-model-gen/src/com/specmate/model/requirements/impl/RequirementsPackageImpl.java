@@ -457,6 +457,7 @@ public class RequirementsPackageImpl extends EPackageImpl implements Requirement
 		requirementEClass.getESuperTypes().add(theBasePackage.getISpecmateModelObject());
 		requirementEClass.getESuperTypes().add(theBasePackage.getIExternal());
 		cegModelEClass.getESuperTypes().add(theBasePackage.getISpecmateModelObject());
+		cegModelEClass.getESuperTypes().add(theBasePackage.getIModel());
 		cegNodeEClass.getESuperTypes().add(theBasePackage.getIModelNode());
 		cegConnectionEClass.getESuperTypes().add(theBasePackage.getIModelConnection());
 

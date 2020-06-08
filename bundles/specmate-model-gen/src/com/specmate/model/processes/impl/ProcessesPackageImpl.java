@@ -382,6 +382,7 @@ public class ProcessesPackageImpl extends EPackageImpl implements ProcessesPacka
 
 		// Add supertypes to classes
 		processEClass.getESuperTypes().add(theBasePackage.getIContainer());
+		processEClass.getESuperTypes().add(theBasePackage.getIModel());
 		processNodeEClass.getESuperTypes().add(theBasePackage.getIModelNode());
 		processStepEClass.getESuperTypes().add(this.getProcessNode());
 		processDecisionEClass.getESuperTypes().add(this.getProcessNode());

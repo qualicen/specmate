@@ -199,6 +199,24 @@ public class BaseSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case BasePackage.MODEL_IMAGE: {
+				ModelImage modelImage = (ModelImage)theEObject;
+				T result = caseModelImage(modelImage);
+				if (result == null) result = caseIContainer(modelImage);
+				if (result == null) result = caseIContentElement(modelImage);
+				if (result == null) result = caseIID(modelImage);
+				if (result == null) result = caseINamed(modelImage);
+				if (result == null) result = caseIDescribed(modelImage);
+				if (result == null) result = caseIRecycled(modelImage);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case BasePackage.IMODEL: {
+				IModel iModel = (IModel)theEObject;
+				T result = caseIModel(iModel);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -410,6 +428,36 @@ public class BaseSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseIRecycled(IRecycled object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Model Image</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Model Image</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseModelImage(ModelImage object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>IModel</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>IModel</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseIModel(IModel object) {
 		return null;
 	}
 

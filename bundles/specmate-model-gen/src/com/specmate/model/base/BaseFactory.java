@@ -67,6 +67,15 @@ public interface BaseFactory extends EFactory {
 	ITracingElement createITracingElement();
 
 	/**
+	 * Returns a new object of class '<em>Model Image</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Model Image</em>'.
+	 * @generated
+	 */
+	ModelImage createModelImage();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -39,7 +39,7 @@ public interface ProcessesPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://specmate.com/20200309/model/processes";
+	String eNS_URI = "http://specmate.com/20200605/model/processes";
 
 	/**
 	 * The package namespace name.
@@ -122,13 +122,22 @@ public interface ProcessesPackage extends EPackage {
 	int PROCESS__CONTENTS = BasePackage.ICONTAINER__CONTENTS;
 
 	/**
+	 * The feature id for the '<em><b>Image</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS__IMAGE = BasePackage.ICONTAINER_FEATURE_COUNT + 0;
+
+	/**
 	 * The number of structural features of the '<em>Process</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROCESS_FEATURE_COUNT = BasePackage.ICONTAINER_FEATURE_COUNT + 0;
+	int PROCESS_FEATURE_COUNT = BasePackage.ICONTAINER_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Process</em>' class.

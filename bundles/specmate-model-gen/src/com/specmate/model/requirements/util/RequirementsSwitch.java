@@ -7,6 +7,7 @@ import com.specmate.model.base.IContentElement;
 import com.specmate.model.base.IDescribed;
 import com.specmate.model.base.IExternal;
 import com.specmate.model.base.IID;
+import com.specmate.model.base.IModel;
 import com.specmate.model.base.IModelConnection;
 import com.specmate.model.base.IModelNode;
 import com.specmate.model.base.INamed;
@@ -98,6 +99,7 @@ public class RequirementsSwitch<T> extends Switch<T> {
 				CEGModel cegModel = (CEGModel)theEObject;
 				T result = caseCEGModel(cegModel);
 				if (result == null) result = caseISpecmateModelObject(cegModel);
+				if (result == null) result = caseIModel(cegModel);
 				if (result == null) result = caseIContainer(cegModel);
 				if (result == null) result = caseITracingElement(cegModel);
 				if (result == null) result = caseIContentElement(cegModel);
@@ -335,6 +337,21 @@ public class RequirementsSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseIExternal(IExternal object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>IModel</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>IModel</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseIModel(IModel object) {
 		return null;
 	}
 

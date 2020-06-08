@@ -2,6 +2,7 @@
  */
 package com.specmate.model.requirements;
 
+import com.specmate.model.base.IModel;
 import com.specmate.model.base.ISpecmateModelObject;
 
 /**
@@ -20,7 +21,7 @@ import com.specmate.model.base.ISpecmateModelObject;
  * @model
  * @generated
  */
-public interface CEGModel extends ISpecmateModelObject {
+public interface CEGModel extends ISpecmateModelObject, IModel {
 	/**
 	 * Returns the value of the '<em><b>Model Requirements</b></em>' attribute.
 	 * <!-- begin-user-doc -->

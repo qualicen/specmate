@@ -13,6 +13,7 @@ import { AdditionalInformationService } from '../../../../../side/modules/links-
 import { ClipboardService } from '../../tool-pallette/services/clipboard-service';
 import { TestSpecificationContentContainerBase } from '../base/testspecification-generatable-content-container-base';
 import { ContentsContainerService } from '../services/content-container.service';
+import { GraphicalEditorService } from '../../graphical-editor/services/graphical-editor.service';
 
 @Component({
     moduleId: module.id.toString(),
@@ -23,13 +24,15 @@ import { ContentsContainerService } from '../services/content-container.service'
 export class CEGModelContainer extends TestSpecificationContentContainerBase<CEGModel> {
 
     constructor(dataService: SpecmateDataService,
-                navigator: NavigatorService,
-                translate: TranslateService,
-                modal: ConfirmationModal,
-                clipboardService: ClipboardService,
-                contentService: ContentsContainerService,
-                additionalInformationService: AdditionalInformationService) {
-        super(dataService, navigator, translate, modal, clipboardService, contentService, additionalInformationService);
+        navigator: NavigatorService,
+        translate: TranslateService,
+        modal: ConfirmationModal,
+        clipboardService: ClipboardService,
+        contentService: ContentsContainerService,
+        additionalInformationService: AdditionalInformationService,
+        graphicalEditorService: GraphicalEditorService) {
+        super(dataService, navigator, translate, modal,
+            clipboardService, contentService, additionalInformationService, graphicalEditorService);
     }
 
     modelDescription: string;
@@ -61,7 +64,7 @@ export class CEGModelContainer extends TestSpecificationContentContainerBase<CEG
                 await this.dataService.commit(this.translate.instant('save'));
                 await this.dataService.deleteCachedContent(element.url);
                 await this.modal.openOk(this.translate.instant('CEGGenerator.couldNotGenerateTitle'),
-                                        this.translate.instant('CEGGenerator.couldNotGenerate'));
+                    this.translate.instant('CEGGenerator.couldNotGenerate'));
                 return undefined;
             }
         }

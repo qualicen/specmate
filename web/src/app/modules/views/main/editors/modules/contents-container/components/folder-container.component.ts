@@ -10,6 +10,7 @@ import { NavigatorService } from '../../../../../../navigation/modules/navigator
 import { ConfirmationModal } from '../../../../../../notification/modules/modals/services/confirmation-modal.service';
 import { ClipboardService } from '../../tool-pallette/services/clipboard-service';
 import { ContentContainerBase } from '../base/contents-container-base';
+import { GraphicalEditorService } from '../../graphical-editor/services/graphical-editor.service';
 
 @Component({
     moduleId: module.id.toString(),
@@ -24,8 +25,9 @@ export class FolderContainer extends ContentContainerBase<Folder> {
         navigator: NavigatorService,
         translate: TranslateService,
         modal: ConfirmationModal,
-        clipboardService: ClipboardService) {
-        super(dataService, navigator, translate, modal, clipboardService);
+        clipboardService: ClipboardService,
+        graphicalEditorService: GraphicalEditorService) {
+        super(dataService, navigator, translate, modal, clipboardService, graphicalEditorService);
     }
 
     protected condition = (element: IContainer) => Type.is(element, Folder);

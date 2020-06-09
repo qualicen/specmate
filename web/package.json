@@ -54,7 +54,8 @@
     "typeface-open-sans": "0.0.75",
     "typeface-roboto": "0.0.75",
     "typeface-roboto-mono": "0.0.75",
-    "zone.js": "0.10.2"
+    "zone.js": "0.10.2",
+    "save-svg-as-png": "1.4.17"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "0.900.5",
@@ -71,7 +72,8 @@
     "rimraf": "3.0.2",
     "tslint": "6.0.0",
     "typescript": "3.7.5",
-    "webpack": "4.42.0"
+    "webpack": "4.42.0",
+    "@types/save-svg-as-png": "github:wehrlean/save-svg-as-png-typings#a0bf7d6025ab42fb1e5355cf093806859b0b52a6"
   },
   "repository": {
     "type": "git",

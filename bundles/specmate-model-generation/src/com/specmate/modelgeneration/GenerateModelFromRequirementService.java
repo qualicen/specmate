@@ -58,7 +58,6 @@ public class GenerateModelFromRequirementService extends RestServiceBase {
 	@Override
 	public RestResult<?> post(Object parent, Object child, String token) {
 		CEGModel model = (CEGModel) parent;
-		model.getContents().clear(); // Delete Contents
 
 		try {
 			this.logService.log(LogService.LOG_INFO, "Model Generation STARTED");

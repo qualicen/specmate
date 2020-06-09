@@ -19,6 +19,12 @@ import { DataCache } from './data-cache';
 import { EOperation } from './e-operation';
 import { Scheduler } from './scheduler';
 import { ServiceInterface } from './service-interface';
+import * as saveAsPng from 'save-svg-as-png';
+import { ModelImage } from 'src/app/model/ModelImage';
+import { CEGModel } from 'src/app/model/CEGModel';
+import { Process } from 'src/app/model/Process';
+import { ModelImageFactory } from 'src/app/factory/model-image-factory';
+import { Proxy } from 'src/app/model/support/proxy';
 
 /**
  * The interface to all data handling things.
@@ -453,6 +459,38 @@ export class SpecmateDataService {
         for (let i = 0; i < parents.length; i++) {
             let parent = parents[i];
             await this.readElement(parent, false);
+        }
+    }
+
+    public async saveModelImage(element: IContainer) {
+        if (Type.is(element, CEGModel) || Type.is(element, Process)) {
+            let model = element as CEGModel | Process;
+            let svg: SVGSVGElement = document.getElementById('mxGraphContainer').getElementsByTagName('svg')[0];
+            let minWidth = svg.style.minWidth;
+            let minHeight = svg.style.minHeight;
+            svg.style.width = '0px';
+            svg.style.height = '0px';
+
+            let maxWidth = parseInt(minWidth.substring(0, minWidth.length - 2));
+            let maxHeight = parseInt(minHeight.substring(0, minHeight.length - 2));
+            let factor = 0.0 + 200 / maxWidth / 1.25;
+            maxHeight = Math.min(maxWidth, maxHeight);
+            let uri: string = await saveAsPng.svgAsPngUri(svg, { 'scale': factor, 'height': maxHeight, 'encoderOptions': 1.0 });
+            while (uri.length > 32000) {
+                factor = factor / 2;
+                uri = await saveAsPng.svgAsPngUri(svg, { 'scale': factor, 'height': maxHeight, 'encoderOptions': 1.0 });
+            }
+            let modelImage: ModelImage;
+            if (model.image === null || model.image === undefined) {
+                modelImage = await new ModelImageFactory(this).create(model, false);
+                model.image = new Proxy();
+                model.image.url = modelImage.url;
+            } else {
+                modelImage = await this.readElement(model.image.url) as ModelImage;
+            }
+            modelImage.imageData = uri;
+            await this.updateElement(modelImage, true, Id.uuid);
+            await this.updateElement(model, true, Id.uuid);
         }
     }
 }

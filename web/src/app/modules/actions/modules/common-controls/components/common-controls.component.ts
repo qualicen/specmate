@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { ValidationErrorSeverity } from '../../../../../validation/validation-error-severity';
 import { ServerConnectionService } from '../../../../common/modules/connection/services/server-connection-service';
 import { UISafe } from '../../../../common/modules/ui/ui-safe-decorator';
 import { SpecmateDataService } from '../../../../data/modules/data-service/services/specmate-data.service';
@@ -38,6 +37,9 @@ export class CommonControls {
         if (this.isSaveEnabled) {
             await this.validator.validateCurrent();
             if (this.isSaveEnabled && this.validator.isSavingEnabled()) {
+                if (this.isModel()) {
+                    await this.dataService.saveModelImage(this.navigator.currentElement);
+                }
                 this.dataService.commit(this.translate.instant('save'));
             } else {
                 let message = this.translate.instant('saveError.message') + '\n' + this.validator.getValidationResultAsString(true);

@@ -1,13 +1,10 @@
-import { CEGModel } from '../model/CEGModel';
 import { IContainer } from '../model/IContainer';
-import { Process } from '../model/Process';
 import { Id } from '../util/id';
 import { Url } from '../util/url';
 import { ElementFactoryBase } from './element-factory-base';
-import { Proxy } from '../model/support/proxy';
 import { ModelImage } from '../model/ModelImage';
 
-export  class ModelImageFactory extends ElementFactoryBase<ModelImage> {
+export class ModelImageFactory extends ElementFactoryBase<ModelImage> {
 
     public create(parent: IContainer, commit: boolean, compoundId?: string, name?: string): Promise<ModelImage> {
         compoundId = compoundId || Id.uuid;

@@ -1,6 +1,5 @@
 import { Config } from '../config/config';
 import { CEGModel } from '../model/CEGModel';
-import { IContainer } from '../model/IContainer';
 import { ElementFactoryBase } from './element-factory-base';
 import { ModelFactoryBase } from './model-factory-base';
 

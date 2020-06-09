@@ -13,6 +13,7 @@ import { AdditionalInformationService } from '../../../../../side/modules/links-
 import { ClipboardService } from '../../tool-pallette/services/clipboard-service';
 import { TestSpecificationContentContainerBase } from '../base/testspecification-generatable-content-container-base';
 import { ContentsContainerService } from '../services/content-container.service';
+import { GraphicalEditorService } from '../../graphical-editor/services/graphical-editor.service';
 
 @Component({
     moduleId: module.id.toString(),
@@ -29,8 +30,10 @@ export class ProcessModelContainer extends TestSpecificationContentContainerBase
         modal: ConfirmationModal,
         additionalInformationService: AdditionalInformationService,
         contentService: ContentsContainerService,
-        clipboardService: ClipboardService) {
-        super(dataService, navigator, translate, modal, clipboardService, contentService, additionalInformationService);
+        clipboardService: ClipboardService,
+        graphicalEditorService: GraphicalEditorService) {
+        super(dataService, navigator, translate, modal, clipboardService,
+            contentService, additionalInformationService, graphicalEditorService);
     }
 
     protected condition = (element: IContainer) => Type.is(element, Process);

@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.cdo.CDOObject;
 import org.eclipse.emf.cdo.CDOState;
@@ -29,10 +30,12 @@ import com.specmate.common.UUIDUtil;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.model.administration.ErrorCode;
+import com.specmate.model.base.BasePackage;
 import com.specmate.model.base.Folder;
 import com.specmate.model.base.IContainer;
 import com.specmate.model.base.IContentElement;
 import com.specmate.model.base.IRecycled;
+import com.specmate.model.base.ModelImage;
 import com.specmate.model.testspecification.TestProcedure;
 import com.specmate.model.testspecification.TestStep;
 
@@ -74,8 +77,7 @@ public class SpecmateEcoreUtil {
 			EObject parent = parentsList.pop();
 			TreeIterator<EObject> contents = ((EObject) parent).eAllContents();
 			Iterator<EObject> filtered;
-			filtered = Iterators.filter(contents,
-					o -> ((IRecycled) o).isRecycled());
+			filtered = Iterators.filter(contents, o -> ((IRecycled) o).isRecycled());
 			if (filtered.hasNext()) {
 				if (parent instanceof IRecycled) {
 					((IRecycled) parent).setHasRecycledChildren(true);
@@ -309,9 +311,14 @@ public class SpecmateEcoreUtil {
 
 	public static List<EObject> getChildren(Object target) throws SpecmateException {
 		if (target instanceof Resource) {
-			return ((Resource) target).getContents();
+			return ((Resource) target).getContents().stream()
+					.filter(element -> !element.eClass().getName().equals(BasePackage.Literals.MODEL_IMAGE.getName()))
+					.collect(Collectors.toList());
+
 		} else if (target instanceof EObject) {
-			return ((EObject) target).eContents();
+			return ((EObject) target).eContents().stream()
+					.filter(element -> !element.eClass().getName().equals(BasePackage.Literals.MODEL_IMAGE.getName()))
+					.collect(Collectors.toList());
 		} else {
 			throw new SpecmateInternalException(ErrorCode.INTERNAL_PROBLEM, "Object is no resource and no EObject.");
 		}

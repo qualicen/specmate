@@ -15,6 +15,7 @@ import { ConfirmationModal } from '../../../../../../notification/modules/modals
 import { ClipboardService } from '../../tool-pallette/services/clipboard-service';
 import { ContentContainerBase } from '../base/contents-container-base';
 import { ContentsContainerService } from '../services/content-container.service';
+import { GraphicalEditorService } from '../../graphical-editor/services/graphical-editor.service';
 
 @Component({
     moduleId: module.id.toString(),
@@ -30,11 +31,12 @@ export class TestSpecificationContainer extends ContentContainerBase<TestSpecifi
         translate: TranslateService,
         modal: ConfirmationModal,
         contentService: ContentsContainerService,
-        clipboardService: ClipboardService) {
-        super(dataService, navigator, translate, modal, clipboardService);
+        clipboardService: ClipboardService,
+        graphicalEditorService: GraphicalEditorService) {
+        super(dataService, navigator, translate, modal, clipboardService, graphicalEditorService);
 
         contentService.onModelDeleted.subscribe(
-            () => {this.readContents(); });
+            () => { this.readContents(); });
     }
 
     protected condition = (element: IContainer) => Type.is(element, TestSpecification);
@@ -47,7 +49,7 @@ export class TestSpecificationContainer extends ContentContainerBase<TestSpecifi
     public async recycle(element: IContainer): Promise<void> {
         const contents = await this.dataService.readContents(element.url, true);
         const numberOfChlidren = contents.filter(element => Type.is(element, TestCase)).length;
-        const additionalMessage = this.translate.instant('attentionNumberOfTestCasesWillBeDeleted', {num: numberOfChlidren});
+        const additionalMessage = this.translate.instant('attentionNumberOfTestCasesWillBeDeleted', { num: numberOfChlidren });
         const baseMessage = this.translate.instant('doYouReallyWantToDelete', { name: element.name });
         await super.recycle(element, baseMessage + ' ' + additionalMessage);
         await this.dataService.readContents(Url.parent(element.url), false);

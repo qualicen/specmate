@@ -42,8 +42,8 @@ public class PatternbasedCEGGenerator implements ICEGFromRequirementGenerator {
 	private ELanguage lang;
 	private IConfigService configService;
 	
-	private static final int XSTART  = 225;
-	private static final int YSTART  = 225;
+	private static final int XSTART  = 30;
+	private static final int YSTART  = 30;
 	
 	private static final int XOFFSET = 300;
 	private static final int YOFFSET = 150;

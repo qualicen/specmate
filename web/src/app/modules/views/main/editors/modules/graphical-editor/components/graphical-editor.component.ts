@@ -35,6 +35,7 @@ import { ChangeTranslator } from './util/change-translator';
 import { StyleChanger } from './util/style-changer';
 import { GraphicalEditorService } from '../services/graphical-editor.service';
 import { Process } from 'src/app/model/Process';
+import { ModelImage } from 'src/app/model/ModelImage';
 
 declare var require: any;
 
@@ -147,6 +148,7 @@ export class GraphicalEditor {
         this.isInGraphTransition = false;
         this.updateValidities();
         this.undoManager.clear();
+        this.graphicalEditorService.triggerGraphicalModelInitFinish();
     }
 
     private async createGraph(): Promise<void> {

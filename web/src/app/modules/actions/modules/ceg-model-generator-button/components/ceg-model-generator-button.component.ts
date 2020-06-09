@@ -21,9 +21,9 @@ export class CegModelGeneratorButton {
 
     private contents: IContainer[];
 
-    private _model: CEGModel ;
+    private _model: CEGModel;
 
-    private _requirement: Requirement ;
+    private _requirement: Requirement;
 
     public get requirement(): Requirement {
         return this._requirement;
@@ -36,7 +36,7 @@ export class CegModelGeneratorButton {
         }
         this._requirement = requirement;
     }
-    public get model(): CEGModel  {
+    public get model(): CEGModel {
         return this._model;
     }
 
@@ -75,15 +75,19 @@ export class CegModelGeneratorButton {
             await this.dataService.commit(this.translate.instant('save'));
             await this.dataService.performOperations(this.model.url, 'generateModel');
             await this.dataService.deleteCachedContent(this.model.url);
-            await this.dataService.readElement(this.model.url, false);
+            this.model = await this.dataService.readElement(this.model.url, false) as CEGModel;
             let modelContents = await this.dataService.readContents(this.model.url, false);
             this.selectedElementService.select(this.model);
             this.graphicalEditorService.triggerGraphicalModelInit();
+            this.graphicalEditorService.initModelFinish.subscribe(async () => {
+                await this.dataService.saveModelImage(this.model);
+                await this.dataService.commit(this.translate.instant('save'));
+            });
 
             if (modelContents.length == 0) {
                 this.errorModal.open(this.translate.instant('modelGenerationFailed'));
             }
-        } catch (e) {}
+        } catch (e) { }
     }
 
     public get enabled(): boolean {

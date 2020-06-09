@@ -9,6 +9,7 @@ import { ConfirmationModal } from '../../../../../../notification/modules/modals
 import { ClipboardService } from '../../tool-pallette/services/clipboard-service';
 import { ContentContainerBase } from '../base/contents-container-base';
 import { ContentsContainerService } from '../services/content-container.service';
+import { GraphicalEditorService } from '../../graphical-editor/services/graphical-editor.service';
 
 @Component({
     moduleId: module.id.toString(),
@@ -24,8 +25,9 @@ export class RelatedRequirementsContainer extends ContentContainerBase<Requireme
         translate: TranslateService,
         modal: ConfirmationModal,
         contentService: ContentsContainerService,
-        clipboardService: ClipboardService) {
-        super(dataService, navigator, translate, modal, clipboardService);
+        clipboardService: ClipboardService,
+        graphicalEditorService: GraphicalEditorService) {
+        super(dataService, navigator, translate, modal, clipboardService, graphicalEditorService);
         contentService.onModelDeleted.subscribe(
             () => {this.readContents(); });
     }

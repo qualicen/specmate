@@ -331,7 +331,7 @@ def rule Negation {
 }
 
 def rule Negation_2 {
-	[Head] -dobj-> [Head_tmp] - neg -> DT:*
+	[Head] - dobj -> [Head_tmp] - neg -> DT:*
 }
 
 def rule Negation_3 {
@@ -352,4 +352,10 @@ def subtrees Verb, Object
 
 def rule VerbObject {
 	[Verb] - dobj -> [Object]
+}
+	
+def subtrees Preposition
+
+def rule VerbPreposition {
+	[Verb] - prep -> [Preposition]
 }

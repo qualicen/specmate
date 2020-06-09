@@ -176,6 +176,7 @@ public class NLPServiceImpl implements INLPService {
 	 */
 	@Override
 	public synchronized JCas processText(String text, ELanguage language) throws SpecmateException {
+		text = text.strip();
 		AnalysisEngine engine = engines.get(language.getLanguage());
 		if (engine == null) {
 			throw new SpecmateInternalException(ErrorCode.NLP,

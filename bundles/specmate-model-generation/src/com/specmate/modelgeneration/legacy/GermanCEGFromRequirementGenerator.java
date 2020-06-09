@@ -53,7 +53,7 @@ public class GermanCEGFromRequirementGenerator extends CEGFromRequirementGenerat
 		Collection<Sentence> sentences = JCasUtil.select(result, Sentence.class);
 		StringJoiner joiner = new StringJoiner(" ");
 		for (Sentence sen : sentences) {
-			joiner.add(new GermanSentenceUnfolder().unfold(tagger, sen.getCoveredText(), ELanguage.DE));
+			joiner.add(new GermanSentenceUnfolder(tagger).unfold(sen.getCoveredText()).get(0));
 		}
 		return joiner.toString();
 

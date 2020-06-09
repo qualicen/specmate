@@ -1,5 +1,7 @@
 package com.specmate.modelgeneration.stages;
 
+import java.util.List;
+
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.nlp.api.ELanguage;
 import com.specmate.nlp.api.INLPService;
@@ -8,24 +10,23 @@ import com.specmate.nlp.util.GermanSentenceUnfolder;
 import com.specmate.nlp.util.SentenceUnfolderBase;
 
 public class TextPreProcessor {
-	private final ELanguage lang;
-	private final INLPService tagger;
+	private final ELanguage language;
+	private final INLPService nlpService;
 
 	public TextPreProcessor(ELanguage language, INLPService nlpService) {
-		lang = language;
-		tagger = nlpService;
+		this.language = language;
+		this.nlpService = nlpService;
 	}
 
-
-	public String preProcess(String text) throws SpecmateException {
+	public List<String> preProcess(String text) throws SpecmateException {
 		SentenceUnfolderBase unfolder;
-		if (lang == ELanguage.DE) {
-			unfolder = new GermanSentenceUnfolder();
+		if (language == ELanguage.DE) {
+			unfolder = new GermanSentenceUnfolder(nlpService);
 		} else {
-			unfolder = new EnglishSentenceUnfolder();
+			unfolder = new EnglishSentenceUnfolder(nlpService);
 		}
 		text = generalProcessing(text);
-		return unfolder.unfold(tagger, text, lang);
+		return unfolder.unfold(text);
 	}
 
 	private String generalProcessing(String text) {

@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import com.specmate.model.requirements.CEGModel;
 import com.specmate.model.requirements.CEGNode;
+import com.specmate.model.requirements.RequirementsFactory;
 import com.specmate.modelgeneration.CEGCreation;
 import com.specmate.modelgeneration.stages.graph.Graph;
 import com.specmate.modelgeneration.stages.graph.GraphEdge;
@@ -19,7 +20,8 @@ public class GraphLayouter {
 
 	private final ELanguage lang;
 	private final CEGCreation creation;
-	public GraphLayouter(ELanguage language,CEGCreation creation) {
+
+	public GraphLayouter(ELanguage language, CEGCreation creation) {
 		lang = language;
 		this.creation = creation;
 	}
@@ -38,12 +40,13 @@ public class GraphLayouter {
 		return "Is fulfilled";
 	}
 
-	public void createModel(Graph graph, CEGModel model) {
+	public CEGModel createModel(Graph graph) {
+		CEGModel model = RequirementsFactory.eINSTANCE.createCEGModel();
 		int graphDepth = graph.getDepth();
 		int[] positionTable = new int[graphDepth + 1];
 
 		HashMap<GraphNode, CEGNode> nodeMap = new HashMap<GraphNode, CEGNode>();
-		for(GraphNode node: graph.nodes) {
+		for (GraphNode node : graph.nodes) {
 			int xIndex = node.getHeight();
 			int yIndex = positionTable[xIndex];
 
@@ -53,9 +56,9 @@ public class GraphLayouter {
 			String condition = node.getCondition();
 			String variable = node.getVariable();
 
-			if(graph.isInnerNode(node)) {
+			if (graph.isInnerNode(node)) {
 				condition = innerConditionString();
-				variable = innerVariableString() + " "+xIndex+ " - "+yIndex;
+				variable = innerVariableString() + " " + xIndex + " - " + yIndex;
 			}
 
 			CEGNode cegNode = creation.createNode(model, variable, condition, x, y, node.getType());
@@ -63,11 +66,12 @@ public class GraphLayouter {
 			positionTable[xIndex]++;
 		}
 
-		for(GraphEdge edge: graph.edges) {
+		for (GraphEdge edge : graph.edges) {
 			CEGNode from = nodeMap.get(edge.getFrom());
 			CEGNode to = nodeMap.get(edge.getTo());
 			creation.createConnection(model, from, to, edge.isNegated());
 		}
+		return model;
 
 	}
 

@@ -14,6 +14,9 @@ import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.tcas.Annotation;
 
+import com.specmate.nlp.api.ELanguage;
+import com.specmate.nlp.api.INLPService;
+
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.chunk.Chunk;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
@@ -41,6 +44,10 @@ public class GermanSentenceUnfolder extends SentenceUnfolderBase {
 	private static final String DEPENDENCY_TYPE_CJ = "CJ";
 
 	private static final Pattern CONJ_PATTERN = Pattern.compile("(?<!,)(\\s+(und|oder))");
+
+	public GermanSentenceUnfolder(INLPService nlpService) {
+		super(nlpService, ELanguage.DE);
+	}
 
 	/** {@inheritDoc} */
 	@Override
@@ -319,6 +326,18 @@ public class GermanSentenceUnfolder extends SentenceUnfolderBase {
 		}
 
 		return Optional.empty();
+	}
+
+	@Override
+	protected Optional<Annotation> getNearestForwardConnective(JCas jcas, Annotation annotation) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected List<Annotation> identifyConjunctionsWithoutConnectives(JCas jCas) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

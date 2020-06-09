@@ -1,5 +1,6 @@
 package com.specmate.modelgeneration;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -32,8 +33,8 @@ public class PatternbasedCEGGenerator implements ICEGFromRequirementGenerator {
 	private final LogService log;
 	private final TextPreProcessor preProcessor;
 
-	public PatternbasedCEGGenerator(ELanguage lang, INLPService tagger, IConfigService configService, LogService logService)
-			throws SpecmateException {
+	public PatternbasedCEGGenerator(ELanguage lang, INLPService tagger, IConfigService configService,
+			LogService logService) throws SpecmateException {
 		this.tagger = tagger;
 		creation = new CEGCreation();
 		this.lang = lang;
@@ -43,46 +44,53 @@ public class PatternbasedCEGGenerator implements ICEGFromRequirementGenerator {
 	}
 
 	@Override
-	public CEGModel createModel(CEGModel model, String text) throws SpecmateException {
-		log.log(LogService.LOG_INFO, "Textinput: "+text);
-		text = preProcessor.preProcess(text);
-		log.log(LogService.LOG_INFO, "Text Pre Processing: "+text);
-		final List<MatchResult> results = matcher.matchText(text);
+	public CEGModel createModel(CEGModel originalModel, String input) throws SpecmateException {
+		log.log(LogService.LOG_INFO, "Textinput: " + input);
+		List<String> texts = preProcessor.preProcess(input);
+		List<CEGModel> candidates = new ArrayList<>();
 
-		final MatchTreeBuilder builder = new MatchTreeBuilder();
+		for (String text : texts) {
+			log.log(LogService.LOG_INFO, "Text Pre Processing: " + text);
+			final List<MatchResult> results = matcher.matchText(text);
 
-		// Convert all successful match results into an intermediate representation
-		final List<MatchResultTreeNode> trees = results.stream()
-				.filter(MatchResult::isSuccessfulMatch)
-				.map(builder::buildTree)
-				.filter(Optional::isPresent)
-				.map(Optional::get)
-				.collect(Collectors.toList());
+			final MatchTreeBuilder builder = new MatchTreeBuilder();
 
-		final MatcherPostProcesser matchPostProcesser = new MatcherPostProcesser(lang);
-		GraphBuilder  graphBuilder = new GraphBuilder();
-		GraphLayouter graphLayouter = new GraphLayouter(lang, creation);
+			// Convert all successful match results into an intermediate representation
+			final List<MatchResultTreeNode> trees = results.stream().filter(MatchResult::isSuccessfulMatch)
+					.map(builder::buildTree).filter(Optional::isPresent).map(Optional::get)
+					.collect(Collectors.toList());
 
-		boolean generatedSomething = false;
-		for (MatchResultTreeNode tree : trees) {
-			matchPostProcesser.process(tree);
-			while (tree.getType().isLimitedCondition()) {
-				tree = ((BinaryMatchResultTreeNode) tree).getSecondArgument();
+			final MatcherPostProcesser matchPostProcesser = new MatcherPostProcesser(lang);
+			GraphBuilder graphBuilder = new GraphBuilder();
+			GraphLayouter graphLayouter = new GraphLayouter(lang, creation);
 
+			for (MatchResultTreeNode tree : trees) {
+				try {
+					matchPostProcesser.process(tree);
+					while (tree.getType().isLimitedCondition()) {
+						tree = ((BinaryMatchResultTreeNode) tree).getSecondArgument();
+
+					}
+
+					if (!tree.getType().isCondition()) {
+						continue;
+					}
+
+					Graph graph = graphBuilder.buildGraph((BinaryMatchResultTreeNode) tree);
+					CEGModel model = graphLayouter.createModel(graph);
+					candidates.add(model);
+				} catch (Throwable t) {
+					// probably a wrong parse -> continue
+				}
 			}
 
-			if (!tree.getType().isCondition()) {
-				continue;
-			}
-			generatedSomething = true;
-
-			Graph graph = graphBuilder.buildGraph((BinaryMatchResultTreeNode) tree);
-			graphLayouter.createModel(graph, model);
 		}
-		if (!generatedSomething) {
+		if (candidates.isEmpty()) {
 			throw new SpecmateInternalException(ErrorCode.NLP, "No Cause-Effect Pair Found.");
 		}
 
-		return model;
+		candidates.sort((m1, m2) -> Integer.compare(m2.getContents().size(), m1.getContents().size()));
+		originalModel.getContents().addAll(candidates.get(0).getContents());
+		return originalModel;
 	}
 }

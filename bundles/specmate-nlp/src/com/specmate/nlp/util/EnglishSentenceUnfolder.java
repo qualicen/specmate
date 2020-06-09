@@ -15,6 +15,8 @@ import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.tcas.Annotation;
 
+import com.specmate.nlp.api.ELanguage;
+import com.specmate.nlp.api.INLPService;
 import com.specmate.nlp.util.NLPUtil.ConstituentType;
 
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
@@ -37,6 +39,10 @@ public class EnglishSentenceUnfolder extends SentenceUnfolderBase {
 	private static final String DEPENDENCY_TYPE_ADJECTIVE_MODIFIER = "amod";
 
 	private static final Pattern CONJ_PATTERN = Pattern.compile("(?<!,)(\\s+(and|or))");
+
+	public EnglishSentenceUnfolder(INLPService nlpService) {
+		super(nlpService, ELanguage.EN);
+	}
 
 	@Override
 	protected Optional<Dependency> findSubjectDependency(JCas jCas, Annotation vp, boolean isGovernor) {
@@ -256,4 +262,38 @@ public class EnglishSentenceUnfolder extends SentenceUnfolderBase {
 		return Optional.empty();
 	}
 
+	@Override
+	protected Optional<Annotation> getNearestForwardConnective(JCas jCas, Annotation annotation) {
+		Annotation source = annotation;
+		while (true) {
+			Optional<Dependency> optCCDep = NLPUtil.findDependency(jCas, source, DEPENDENCY_TYPE_CC, true);
+			if (optCCDep.isPresent()) {
+				return Optional.of(optCCDep.get().getDependent());
+			} else {
+				Optional<Dependency> optConjDep = NLPUtil.findDependency(jCas, source, DEPENDENCY_TYPE_CONJUNCTION,
+						true);
+				if (optConjDep.isPresent()) {
+					source = optConjDep.get().getDependent();
+				} else {
+					return Optional.empty();
+				}
+			}
+		}
+	}
+
+	@Override
+	protected List<Annotation> identifyConjunctionsWithoutConnectives(JCas jCas) {
+		List<Annotation> result = new ArrayList<Annotation>();
+		Collection<Dependency> dependencies = JCasUtil.select(jCas, Dependency.class);
+		for (Dependency dependency : dependencies) {
+			if (dependency.getDependencyType().contentEquals(DEPENDENCY_TYPE_CONJUNCTION)) {
+				Token conjSource = dependency.getGovernor();
+				Optional<Dependency> optCCDeps = NLPUtil.findDependency(jCas, conjSource, DEPENDENCY_TYPE_CC, true);
+				if (optCCDeps.isEmpty()) {
+					result.add(dependency.getDependent());
+				}
+			}
+		}
+		return result;
+	}
 }

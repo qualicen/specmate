@@ -17,11 +17,11 @@ import com.specmate.modelgeneration.stages.processors.ConditionVariableNode;
 public class GraphBuilder {
 
 	private Graph currentGraph;
+
 	public synchronized Graph buildGraph(BinaryMatchResultTreeNode root) {
 		List<MatchResultTreeNode> clauses = getClauses(root);
-		MatchResultTreeNode effect = clauses.remove(clauses.size()-1);
+		MatchResultTreeNode effect = clauses.remove(clauses.size() - 1);
 		List<MatchResultTreeNode> causes = clauses;
-
 
 		currentGraph = new Graph();
 		DirectCause cause = resolveCauses(causes);
@@ -33,8 +33,8 @@ public class GraphBuilder {
 	}
 
 	/**
-	 * Returns a list consisting of all causes and the effect as last element
-	 * [cause 1, cause 2, ..., cause n, effect]
+	 * Returns a list consisting of all causes and the effect as last element [cause
+	 * 1, cause 2, ..., cause n, effect]
 	 */
 	private List<MatchResultTreeNode> getClauses(BinaryMatchResultTreeNode root) {
 
@@ -43,18 +43,18 @@ public class GraphBuilder {
 		MatchResultTreeNode effect = root;
 		Vector<MatchResultTreeNode> result = new Vector<MatchResultTreeNode>();
 
-		while(!worklist.isEmpty()) {
+		while (!worklist.isEmpty()) {
 			MatchResultTreeNode current = worklist.remove(0);
-			if(current.getType().isCondition()) {
-				MatchResultTreeNode left = ((BinaryMatchResultTreeNode)current).getFirstArgument();
-				MatchResultTreeNode right = ((BinaryMatchResultTreeNode)current).getSecondArgument();
+			if (current.getType().isCondition()) {
+				MatchResultTreeNode left = ((BinaryMatchResultTreeNode) current).getFirstArgument();
+				MatchResultTreeNode right = ((BinaryMatchResultTreeNode) current).getSecondArgument();
 				worklist.add(left);
 				worklist.add(right);
-				if(current == effect) {
+				if (current == effect) {
 					effect = right;
 				}
 			} else {
-				if(current != effect) {
+				if (current != effect) {
 					result.add(current);
 				}
 			}
@@ -104,8 +104,8 @@ public class GraphBuilder {
 				final MatchResultTreeNode wrap = worklist.remove(0);
 				final RuleType typeWrap = wrap.getType();
 				if (type.equals(typeWrap)) {
-					worklist.add(((BinaryMatchResultTreeNode)wrap).getFirstArgument());
-					worklist.add(((BinaryMatchResultTreeNode)wrap).getSecondArgument());
+					worklist.add(((BinaryMatchResultTreeNode) wrap).getFirstArgument());
+					worklist.add(((BinaryMatchResultTreeNode) wrap).getSecondArgument());
 				} else {
 					final DirectCause argument = resolveCause(wrap);
 					final int argCauseCount = argument.positiveCauses.size() + argument.negativeCauses.size();
@@ -132,7 +132,7 @@ public class GraphBuilder {
 
 				for (GraphNode pNode : merge.positiveCauses) {
 					GraphNode xorNode = currentGraph.createInnerNode(NodeType.AND);
-					xorConnect( merge, xorNode, pNode);
+					xorConnect(merge, xorNode, pNode);
 					result.positiveCauses.add(xorNode);
 				}
 
@@ -164,7 +164,7 @@ public class GraphBuilder {
 			result.negativeCauses = dHead.positiveCauses;
 		} else {
 			// Create Direct Node
-			ConditionVariableNode cvNode = (ConditionVariableNode)cause;
+			ConditionVariableNode cvNode = (ConditionVariableNode) cause;
 
 			GraphNode node = currentGraph.createNode(cvNode.getCondition(), cvNode.getVariable(), NodeType.AND);
 			result.positiveCauses.add(node);
@@ -193,13 +193,13 @@ public class GraphBuilder {
 	private void resolveEffect(DirectCause cause, MatchResultTreeNode effect) {
 		if (effect.getType().isConjunction()) {
 			// Resolve Conjunctions
-			resolveEffect(cause, ((BinaryMatchResultTreeNode)effect).getFirstArgument());
-			resolveEffect(cause, ((BinaryMatchResultTreeNode)effect).getSecondArgument());
+			resolveEffect(cause, ((BinaryMatchResultTreeNode) effect).getFirstArgument());
+			resolveEffect(cause, ((BinaryMatchResultTreeNode) effect).getSecondArgument());
 		} else if (effect.getType().isNegation()) {
 			// Resolve Negations
-			resolveEffect(cause.swapPosNegCauses(), ((NegationTreeNode)effect).getClause());
+			resolveEffect(cause.swapPosNegCauses(), ((NegationTreeNode) effect).getClause());
 		} else {
-			ConditionVariableNode cvNode = (ConditionVariableNode)effect;
+			ConditionVariableNode cvNode = (ConditionVariableNode) effect;
 			GraphNode node = currentGraph.createNode(cvNode.getCondition(), cvNode.getVariable(), cause.effectType);
 			fullyConnect(cause, node);
 		}
@@ -240,7 +240,7 @@ public class GraphBuilder {
 
 		public DirectCause swapPosNegCauses() {
 			final DirectCause result = new DirectCause();
-			result.effectType = effectType;
+			result.effectType = effectType == NodeType.AND ? NodeType.OR : NodeType.AND;
 			result.negativeCauses = positiveCauses;
 			result.positiveCauses = negativeCauses;
 			return result;

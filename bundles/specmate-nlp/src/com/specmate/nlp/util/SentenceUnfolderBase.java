@@ -1,8 +1,11 @@
 package com.specmate.nlp.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
@@ -33,38 +36,92 @@ public abstract class SentenceUnfolderBase {
 		SUBJ, OBJ
 	}
 
+	/** Service for NLP processing */
+	private INLPService nlpService;
+
+	/** Language used for processing */
+	private ELanguage language;
+
+	public SentenceUnfolderBase(INLPService nlpService, ELanguage language) {
+		this.nlpService = nlpService;
+		this.language = language;
+	}
+
+	protected JCas processText(String text) throws SpecmateException {
+		return nlpService.processText(text, language);
+	}
+
 	/**
 	 * Unfolds a sentence by first adding implicit verbs and then adding implicit
 	 * subjects
 	 */
-	public String unfold(INLPService nlpService, String text, ELanguage language) throws SpecmateException {
+	public List<String> unfold(String text) throws SpecmateException {
+		String original = text;
+		String noComma = text.replace(",", "");
+		String allComma = insertCommasBeforeConjunctions(text);
+		Set<String> result = new HashSet<>();
+		for (String variant : Arrays.asList(original, noComma, allComma)) {
+			List<String> unfolded = doUnfold(variant);
+			result.addAll(unfolded);
+		}
+		return new ArrayList<String>(result);
+	}
+
+	private List<String> doUnfold(String text) throws SpecmateException {
 		JCas jCas = nlpService.processText(text, language);
 
-		String unfoldedText = "";
-		for (Sentence sentenceStageA : NLPUtil.getSentences(jCas)) {
-			String unfoldedStageA = insertImplicitNouns(jCas, sentenceStageA);
+		String unfoldedText1 = "";
+		String unfoldedText2 = "";
+		String unfoldedText3 = "";
 
-			JCas jCasStageB = nlpService.processText(unfoldedStageA, language);
-			Sentence sentenceStageB = NLPUtil.getSentences(jCasStageB).iterator().next();
-			String unfoldedStageB = insertsImplicitVerbs(jCasStageB, sentenceStageB);
+		for (Sentence origSentence : NLPUtil.getSentences(jCas)) {
+			String unfoldedCC = insertImplicitConjunctions(origSentence.getCoveredText());
+			String unfoldedImplicitNouns = insertImplicitNouns(unfoldedCC);
+			String unfoldedImplicitVerbs = insertsImplicitVerbs(unfoldedImplicitNouns);
+			String unfoldedImplicitSubjects = insertImplicitSubjects(unfoldedImplicitVerbs);
 
-			JCas jCasStageC = nlpService.processText(unfoldedStageB, language);
-			Sentence sentenceStageC = NLPUtil.getSentences(jCasStageC).iterator().next();
-			String unfoldedStageC = insertImplicitSubjects(jCasStageC, sentenceStageC);
+			String result1 = insertCommasBeforeConjunctions(unfoldedImplicitSubjects);
+			String result2 = unfoldedImplicitSubjects;
+			String result3 = unfoldedImplicitSubjects.replace(",", "");
 
-			// String result = insertCommasBeforeConjunctions(unfoldedStageC);
-			String result = unfoldedStageC;
-
-			unfoldedText += result;
+			unfoldedText1 += " " + result1;
+			unfoldedText2 += " " + result2;
+			unfoldedText3 += " " + result3;
 		}
-		return unfoldedText;
-
+		return Arrays.asList(unfoldedText1, unfoldedText2, unfoldedText3);
 	}
+
+	private String insertImplicitConjunctions(String text) throws SpecmateException {
+		JCas jCas = processText(text);
+		List<Pair<Integer, String>> insertions = new ArrayList<>();
+		List<Annotation> conjunctionsWithoutConnectives = identifyConjunctionsWithoutConnectives(jCas);
+		for (Annotation annotation : conjunctionsWithoutConnectives) {
+			Optional<Annotation> optConnective = getNearestForwardConnective(jCas, annotation);
+			if (optConnective.isPresent()) {
+				Annotation connective = optConnective.get();
+				String connectiveText = connective.getCoveredText();
+				int insertionPoint = annotation.getBegin();
+				insertions.add(Pair.of(insertionPoint, connectiveText));
+			}
+		}
+		return insert(text, insertions);
+	}
+
+	protected abstract Optional<Annotation> getNearestForwardConnective(JCas jcas, Annotation annotation);
+
+	protected abstract List<Annotation> identifyConjunctionsWithoutConnectives(JCas jCas);
 
 	protected abstract String insertCommasBeforeConjunctions(String unfoldedStageC);
 
-	/** Insert Nouns into adjective conjunctions */
-	private String insertImplicitNouns(JCas jCas, Sentence sentence) {
+	/**
+	 * Insert Nouns into adjective conjunctions
+	 *
+	 * @throws SpecmateException
+	 */
+	private String insertImplicitNouns(String text) throws SpecmateException {
+		JCas jCas = processText(text);
+		Sentence sentence = NLPUtil.getSentences(jCas).iterator().next();
+
 		List<Chunk> nounPhrases = NLPUtil.getNounPhraseChunks(jCas, sentence);
 		List<Pair<Integer, String>> insertions = new ArrayList<Pair<Integer, String>>();
 
@@ -75,8 +132,16 @@ public abstract class SentenceUnfolderBase {
 		return insert(sentence.getCoveredText(), insertions);
 	}
 
-	/** Inserts implicit subjects into a sentence */
-	private String insertImplicitSubjects(JCas jCas, Sentence sentence) {
+	/**
+	 * Inserts implicit subjects into a sentence
+	 *
+	 * @throws SpecmateException
+	 */
+	private String insertImplicitSubjects(String text) throws SpecmateException {
+
+		JCas jCas = processText(text);
+		Sentence sentence = NLPUtil.getSentences(jCas).iterator().next();
+
 		List<Pair<Integer, String>> insertions = new ArrayList<Pair<Integer, String>>();
 		List<Chunk> vpws = findVerbalPhraseWithoutSubject(jCas, sentence);
 		for (Chunk vp : vpws) {
@@ -109,8 +174,16 @@ public abstract class SentenceUnfolderBase {
 		return insert(sentence.getCoveredText(), insertions);
 	}
 
-	/** Inserts implicit verbs into a sentence */
-	private String insertsImplicitVerbs(JCas jCas, Sentence sentence) {
+	/**
+	 * Inserts implicit verbs into a sentence
+	 *
+	 * @throws SpecmateException
+	 */
+	private String insertsImplicitVerbs(String text) throws SpecmateException {
+
+		JCas jCas = processText(text);
+		Sentence sentence = NLPUtil.getSentences(jCas).iterator().next();
+
 		List<Pair<Integer, String>> insertions = new ArrayList<Pair<Integer, String>>();
 		List<Annotation> npwv = findNounPhraseWithoutVerb(jCas, sentence);
 		for (Annotation np : npwv) {

@@ -14,7 +14,7 @@ public class ConditionVariableNodeBuilder {
 		root.acceptVisitor(visitor);
 
 		MatchResultTreeNode newRoot = root;
-		if(visitor.replacementNode != null) {
+		if (visitor.replacementNode != null) {
 			newRoot = visitor.replacementNode;
 		}
 		return newRoot;
@@ -25,42 +25,42 @@ public class ConditionVariableNodeBuilder {
 
 		@Override
 		public void visit(BinaryMatchResultTreeNode node) {
-			if(node.getType().equals(RuleType.CONDITION_VARIABLE)) {
+			if (node.getType().equals(RuleType.CONDITION_VARIABLE)) {
 				String var = ((LeafTreeNode) node.getFirstArgument()).getContent();
 				String cond = "";
 
 				MatchResultTreeNode condition = node.getSecondArgument();
-				if(condition.getType()!=null && condition.getType().equals(RuleType.VERB_OBJECT)) {
+				if (condition.getType() != null && condition.getType().equals(RuleType.VERB_OBJECT)) {
 					BinaryMatchResultTreeNode binCondition = (BinaryMatchResultTreeNode) condition;
-					String object = ((LeafTreeNode)binCondition.getSecondArgument()).getContent();
+					String object = ((LeafTreeNode) binCondition.getSecondArgument()).getContent();
 					String verb = "";
 					MatchResultTreeNode verbNode = binCondition.getFirstArgument();
-					if(verbNode.getType()!=null && verbNode.getType().equals(RuleType.VERB_PREPOSITION)) {
+					if (verbNode.getType() != null && verbNode.getType().equals(RuleType.VERB_PREPOSITION)) {
 						BinaryMatchResultTreeNode verbBinNode = (BinaryMatchResultTreeNode) verbNode;
-						String prep = ((LeafTreeNode)verbBinNode.getSecondArgument()).getContent();
-						String vb = ((LeafTreeNode)verbBinNode.getFirstArgument()).getContent();
-						verb = vb + " " + prep;
+						String prep = ((LeafTreeNode) verbBinNode.getSecondArgument()).getContent();
+						String vb = ((LeafTreeNode) verbBinNode.getFirstArgument()).getContent();
+						cond = vb + " " + object + " " + prep;
 					} else {
-						verb = ((LeafTreeNode)verbNode).getContent();
+						verb = ((LeafTreeNode) verbNode).getContent();
+						cond = verb + " " + object;
 					}
-					cond = verb + " " + object;
 				} else {
-					cond = ((LeafTreeNode)condition).getContent();
+					cond = ((LeafTreeNode) condition).getContent();
 				}
 				replacementNode = new ConditionVariableNode(cond, var);
-			} else if(node.getType().equals(RuleType.VERB_OBJECT)) {
+			} else if (node.getType().equals(RuleType.VERB_OBJECT)) {
 				String var = ((LeafTreeNode) node.getFirstArgument()).getContent();
 				String cond = ((LeafTreeNode) node.getSecondArgument()).getContent();
 				replacementNode = new ConditionVariableNode(cond, var);
 			} else {
 				node.getFirstArgument().acceptVisitor(this);
-				if(replacementNode != null) {
+				if (replacementNode != null) {
 					node.setFirstArguement(replacementNode);
 					replacementNode = null;
 				}
 
 				node.getSecondArgument().acceptVisitor(this);
-				if(replacementNode != null) {
+				if (replacementNode != null) {
 					node.setSecondArguement(replacementNode);
 					replacementNode = null;
 				}
@@ -75,7 +75,7 @@ public class ConditionVariableNodeBuilder {
 		@Override
 		public void visit(NegationTreeNode node) {
 			node.getClause().acceptVisitor(this);
-			if(replacementNode != null) {
+			if (replacementNode != null) {
 				node.setClause(replacementNode);
 				replacementNode = null;
 			}

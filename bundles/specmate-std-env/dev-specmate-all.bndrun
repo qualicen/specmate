@@ -49,7 +49,8 @@
 	osgi.identity;filter:='(osgi.identity=specmate-model-generation)',\
 	bnd.identity;id='log4j',\
 	bnd.identity;id='specmate-objectif',\
-	bnd.identity;id='specmate-export'
+	bnd.identity;id='specmate-export',\
+	osgi.identity;filter:='(&(osgi.identity=net.bytebuddy.byte-buddy)(version>=1.10.10))'
 -runbundles: \
 	javax.annotation-api;version='[1.2.0,1.2.1)',\
 	javax.validation.api;version='[1.1.0,1.1.1)',\
@@ -185,7 +186,6 @@
 	org.apache.commons.logging;version='[1.2.0,1.2.1)',\
 	org.apache.httpcomponents.httpasyncclient;version='[4.1.4,4.1.5)',\
 	org.apache.httpcomponents.httpclient;version='[4.5.5,4.5.6)',\
-	jaxb-api;version='[2.3.0,2.3.1)',\
 	javassist;version='[3.24.0,3.24.1)',\
 	org.json;version='[0.0.0,0.0.1)',\
 	specmate-administration;version='[0.0.0,0.0.1)',\
@@ -238,7 +238,10 @@
 	org.jboss.logging.jboss-logging;version='[3.3.2,3.3.3)',\
 	org.jboss.spec.javax.transaction.jboss-transaction-api_1.2_spec;version='[1.1.1,1.1.2)',\
 	osgi.cmpn;version='[5.0.0,5.0.1)',\
-	target;version='[2.7.7,2.7.8)'
+	target;version='[2.7.7,2.7.8)',\
+	jaxb-api;version='[2.3.1,2.3.2)',\
+	net.bytebuddy.byte-buddy;version='[1.10.10,1.10.11)',\
+	specmate-scheduler;version='[0.0.0,0.0.1)'
 
 -runproperties: \
 	jetty.http.port=8080,\

@@ -47,9 +47,9 @@
 	osgi.identity;filter:='(osgi.identity=specmate-jira-connector)',\
 	osgi.identity;filter:='(osgi.identity=specmate-nlp)',\
 	osgi.identity;filter:='(osgi.identity=specmate-model-generation)',\
-	bnd.identity;id='log4j',\
-	bnd.identity;id='specmate-objectif',\
-	bnd.identity;id='specmate-export',\
+	osgi.identity;filter:='(osgi.identity=log4j'),\
+	osgi.identity;filter:='(osgi.identity=specmate-objectif'),\
+	osgi.identity;filter:='(osgi.identity=specmate-export'),\
 	osgi.identity;filter:='(&(osgi.identity=com.sun.xml.bind.jaxb-osgi)(version>=2.3.3))'
 -runbundles: \
 	javassist;version='[3.18.1,3.18.2)',\

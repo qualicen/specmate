@@ -2,7 +2,6 @@ package com.specmate.emfrest.authentication;
 
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.NewCookie;
@@ -16,11 +15,14 @@ import com.specmate.rest.RestResult;
 import com.specmate.usermodel.User;
 import com.specmate.usermodel.UserSession;
 
+/**
+ * Base class for authenticating users. It adds authentication cookies to responses.
+ */
 public abstract class AuthRestServiceBase extends RestServiceBase implements IResponseAlteringService {
 
 	@Override
-	public RestResult<?> post(Object object, Object object2, String token) throws SpecmateException {
-		UserSessionAndUser userSessionAndUser = getUserSessionAndUser(object, object2, token);
+	public RestResult<?> post(Object parent, Object child, String token) throws SpecmateException {
+		UserSessionAndUser userSessionAndUser = getUserSessionAndUser(parent, child, token);
 		return new RestResult<>(Response.Status.OK, userSessionAndUser);
 	}
 
@@ -37,7 +39,7 @@ public abstract class AuthRestServiceBase extends RestServiceBase implements IRe
 		return responseBuilder.build();
 	}
 
-	protected abstract UserSessionAndUser getUserSessionAndUser(Object object, Object object2, String token)
+	protected abstract UserSessionAndUser getUserSessionAndUser(Object parent, Object child, String token)
 			throws SpecmateException;
 
 	private NewCookie constructCookie(String name, String value, HttpServletRequest request) {

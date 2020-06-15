@@ -1,7 +1,5 @@
 package com.specmate.emfrest.authentication;
 
-import javax.ws.rs.core.Response;
-
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.log.LogService;
@@ -9,8 +7,6 @@ import org.osgi.service.log.LogService;
 import com.specmate.auth.api.IAuthenticationService;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.emfrest.api.IRestService;
-import com.specmate.emfrest.api.RestServiceBase;
-import com.specmate.rest.RestResult;
 import com.specmate.usermodel.User;
 import com.specmate.usermodel.UserSession;
 
@@ -42,9 +38,9 @@ public class Login extends AuthRestServiceBase {
 	}
 
 	@Override
-	protected UserSessionAndUser getUserSessionAndUser(Object object, Object object2, String token)
+	protected UserSessionAndUser getUserSessionAndUser(Object parent, Object child, String token)
 			throws SpecmateException {
-		User user = (User) object2;
+		User user = (User) child;
 
 		UserSession session = authService.authenticate(user.getUserName(), user.getPassWord(), user.getProjectName());
 		logService.log(LogService.LOG_INFO,

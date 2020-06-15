@@ -16,7 +16,8 @@ import com.specmate.usermodel.User;
 import com.specmate.usermodel.UserSession;
 
 /**
- * Base class for authenticating users. It adds authentication cookies to responses.
+ * Base class for authenticating users. It adds authentication cookies to
+ * responses. Use this base class for services that handle login requests.
  */
 public abstract class AuthRestServiceBase extends RestServiceBase implements IResponseAlteringService {
 
@@ -39,6 +40,10 @@ public abstract class AuthRestServiceBase extends RestServiceBase implements IRe
 		return responseBuilder.build();
 	}
 
+	/**
+	 * This method should return the User and Session object in case the login
+	 * attempt is valid and throw an exception otherwise.
+	 */
 	protected abstract UserSessionAndUser getUserSessionAndUser(Object parent, Object child, String token)
 			throws SpecmateException;
 

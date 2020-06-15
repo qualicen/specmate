@@ -129,15 +129,6 @@ public abstract class SpecmateResource {
 
 	}
 
-	/*
-	 * private String getAuthenticationToken(HttpHeaders headers) { String
-	 * authorizationHeader = AuthorizationHeader.getFrom(headers); if
-	 * (!AuthorizationHeader.isTokenBasedAuthentication(authorizationHeader)) {
-	 * return null; }
-	 * 
-	 * return AuthorizationHeader.extractTokenFrom(authorizationHeader); }
-	 */
-
 	private Object handleRequest(String serviceName, RestServiceChecker checkRestService,
 			RestServiceExcecutor<?> executeRestService, boolean commitTransaction, HttpServletRequest request) {
 

@@ -169,11 +169,6 @@
 	org.apache.httpcomponents.httpasyncclient;version='[4.1.4,4.1.5)',\
 	org.apache.httpcomponents.httpclient;version='[4.5.5,4.5.6)',\
 	com.sun.xml.bind.jaxb-osgi;version='[2.3.3,2.3.4)',\
-	jakarta.xml.bind-api;version='[2.3.3,2.3.4)',\
-	org.eclipse.equinox.app;version='[1.4.400,1.4.401)',\
-	org.eclipse.equinox.common;version='[3.11.0,3.11.1)',\
-	org.eclipse.equinox.event;version='[1.5.300,1.5.301)',\
-	org.eclipse.equinox.metatype;version='[1.5.200,1.5.201)',\
 	org.eclipse.jetty.servlets;version='[9.4.6,9.4.7)',\
 	org.json;version='[0.0.0,0.0.1)',\
 	specmate-administration;version='[0.0.0,0.0.1)',\
@@ -212,7 +207,12 @@
 	specmate-testspecification;version='[0.0.0,0.0.1)',\
 	specmate-trello-connector;version='[0.0.0,0.0.1)',\
 	specmate-ui-core;version='[0.0.0,0.0.1)',\
-	specmate-xtext;version='[0.0.0,0.0.1)'
+	specmate-xtext;version='[0.0.0,0.0.1)',\
+	jaxb-api;version='[2.3.1,2.3.2)',\
+	org.eclipse.equinox.app;version='[1.3.200,1.3.201)',\
+	org.eclipse.equinox.common;version='[3.6.200,3.6.201)',\
+	org.eclipse.equinox.event;version='[1.3.100,1.3.101)',\
+	org.eclipse.equinox.metatype;version='[1.4.0,1.4.1)'
 
 -runproperties: \
 	jetty.http.port=8080,\

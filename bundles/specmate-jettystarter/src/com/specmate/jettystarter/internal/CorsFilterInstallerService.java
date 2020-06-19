@@ -13,10 +13,14 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.log.LogService;
 
+/** Service to install a cross-origin-filter in the http service */
 @Component(immediate = true)
 public class CorsFilterInstallerService {
 
+	/** The http service */
 	private ExtendedHttpService httpService;
+
+	/** Logging service */
 	private LogService logService;
 
 	@Activate

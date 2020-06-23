@@ -103,13 +103,14 @@ def rule Condition2_10 {
 
 
 
-// The tool detects an error for this reason the tool beeps .
+// The tool detects an error and for this reason the tool beeps .
 def rule Condition3_1 {
-	[Cause] - advcl -> [Effect] - mark -> IN:'for'
-	[Effect] - nsubj -> NN:'reason' - det -> DT:'this'
+	[Cause] - conj -> [Effect]
+	[Cause] - cc -> 'and'
+	[Effect] - prep -> 'for' - pobj -> 'reason' - det -> 'this'
 }
 
-// The tool detects an error as a result the tool beeps.
+// The tool detects an error and as a result the tool beeps.
 def rule Condition4_1 {
 	[Cause] - advcl -> [Effect] - mark -> IN:'as'
 	[Effect] - nsubj -> NN:'result' - det -> DT:'a'
@@ -134,7 +135,7 @@ def rule Condition4_5 {
 
 // The tool beeps due to the tool detecting an error.
 def rule Condition5_1 {
-	[Cause] - amod -> JJ:'due' - prep -> TO:'to' - pobj -> [Effect]
+	[Cause] - prep -> 'due' - pcomp -> TO:'to' - pobj -> [Effect]
 }
 // Due to the tool detecting an error, the tool beeps.
 def rule Condition5_2 {

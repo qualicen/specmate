@@ -23,6 +23,7 @@ script:
 - (cd web && npm run build-prod)
 - (cd bundles && ./gradlew --no-daemon build --continue -x check)
 - (cd bundles && ./gradlew --no-daemon export -x check)
+- docker run -p "127.0.0.1:80:80" jgontrum/spacyapi:en_v2_lg
 - (cd bundles && ./gradlew --no-daemon check)
 - (cd bundles/specmate-std-env/generated/distributions/executable/ && java -Xmx6000m -Djdk.crypto.KeyAgreement.legacyKDF=true -jar dev-specmate-all.jar &)    
 - sleep 10    

@@ -17,6 +17,8 @@ import com.specmate.emfrest.api.RestServiceBase;
 import com.specmate.metrics.ICounter;
 import com.specmate.metrics.IMetricsService;
 import com.specmate.model.requirements.CEGModel;
+import com.specmate.modelgeneration.legacy.EnglishCEGFromRequirementGenerator;
+import com.specmate.modelgeneration.legacy.GermanCEGFromRequirementGenerator;
 import com.specmate.nlp.api.ELanguage;
 import com.specmate.nlp.api.INLPService;
 import com.specmate.nlp.util.NLPUtil;
@@ -94,20 +96,20 @@ public class GenerateModelFromRequirementService extends RestServiceBase {
 			generator = new PatternbasedCEGGenerator(lang, tagger, configService, logService);
 		}
 
-//		try {
-		generator.createModel(model, text);
-//		} catch (SpecmateException e) {
-//			// Generation Backof
-//			logService.log(LogService.LOG_INFO,
-//					"NLP model generation failed with the following error: \"" + e.getMessage() + "\"");
-//			logService.log(LogService.LOG_INFO, "Backing off to rule based generation...");
-//			if (lang == ELanguage.DE) {
-//				generator = new GermanCEGFromRequirementGenerator(logService, tagger);
-//			} else {
-//				generator = new EnglishCEGFromRequirementGenerator(logService, tagger);
-//			}
-//			generator.createModel(model, text);
-//		}
+		try {
+			generator.createModel(model, text);
+		} catch (SpecmateException e) {
+			// Generation Backof
+			logService.log(LogService.LOG_INFO,
+					"NLP model generation failed with the following error: \"" + e.getMessage() + "\"");
+			logService.log(LogService.LOG_INFO, "Backing off to rule based generation...");
+			if (lang == ELanguage.DE) {
+				generator = new GermanCEGFromRequirementGenerator(logService, tagger);
+			} else {
+				generator = new EnglishCEGFromRequirementGenerator(logService, tagger);
+			}
+			generator.createModel(model, text);
+		}
 		return model;
 	}
 

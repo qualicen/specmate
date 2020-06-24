@@ -188,7 +188,6 @@
 	org.apache.commons.logging;version='[1.2.0,1.2.1)',\
 	org.apache.httpcomponents.httpasyncclient;version='[4.1.4,4.1.5)',\
 	org.apache.httpcomponents.httpclient;version='[4.5.5,4.5.6)',\
-	jaxb-api;version='[2.3.1,2.3.2)',\
 	org.json;version='[0.0.0,0.0.1)',\
 	specmate-administration;version='[0.0.0,0.0.1)',\
 	specmate-auth;version='[0.0.0,0.0.1)',\
@@ -230,13 +229,15 @@
 	specmate-trello-connector;version='[0.0.0,0.0.1)',\
 	specmate-ui-core;version='[0.0.0,0.0.1)',\
 	specmate-xtext;version='[0.0.0,0.0.1)',\
-	com.sun.xml.bind.jaxb-osgi;version='[2.3.3,2.3.4)'
+	com.sun.xml.bind.jaxb-osgi;version='[2.3.3,2.3.4)',\
+	jaxb-api;version='[2.3.0,2.3.1)',\
+	org.eclipse.jetty.servlets;version='[9.4.6,9.4.7)'
 
 -runproperties: \
 	jetty.http.port=8080,\
-	#jetty.ssl.port=8443,\
-	#jetty.etc.config.urls='etc/jetty.xml,etc/jetty-ssl-context.xml,etc/jetty-http.xml,etc/jetty-ssl.xml,etc/jetty-https.xml,etc/jetty-deployer.xml,etc/jetty-rewrite.xml',\
-	jetty.etc.config.urls='etc/jetty.xml,etc/jetty-http.xml,etc/jetty-deployer.xml,etc/jetty-rewrite.xml',\
+	jetty.ssl.port=8443,\
+	jetty.etc.config.urls='etc/jetty.xml,etc/jetty-ssl-context.xml,etc/jetty-http.xml,etc/jetty-ssl.xml,etc/jetty-https.xml,etc/jetty-deployer.xml,etc/jetty-rewrite.xml',\
+	#jetty.etc.config.urls='etc/jetty.xml,etc/jetty-http.xml,etc/jetty-deployer.xml,etc/jetty-rewrite.xml',\
 	osgi.console=,\
 	jetty.home.bundle=specmate-jettystarter,\
 	osgi.compatibility.bootdelegation=true,\

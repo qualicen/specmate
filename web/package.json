@@ -42,7 +42,7 @@
     "flag-icon-css": "3.4.6",
     "font-awesome": "4.7.0",
     "he": "^1.2.0",
-    "jquery": "3.4.1",
+    "jquery": "3.5.0",
     "mxgraph": "github:jgraph/mxgraph#12621211eed3495188c95bbc4b3020a1db451df5",
     "ng2-dragula": "2.1.1",
     "ngx-cookie": "4.1.2",

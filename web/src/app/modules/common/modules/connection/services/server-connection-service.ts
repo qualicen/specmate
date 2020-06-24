@@ -20,7 +20,7 @@ export class ServerConnectionService {
         private auth: AuthenticationService,
         private logger: LoggingService,
         private translate: TranslateService,
-        private http: HttpClient) {
+        http: HttpClient) {
 
         this.serviceInterface = new ServiceInterface(http);
         this.initTime();
@@ -40,7 +40,16 @@ export class ServerConnectionService {
     private async checkConnection(): Promise<void> {
         try {
             if (this.auth.isAuthenticated) {
-                await this.serviceInterface.checkConnection(this.auth.token);
+                try {
+                    await this.serviceInterface.checkConnection(this.auth.token.project);
+                } catch (e) {
+                    if (e.status === 401) {
+                        this.auth.inactivityLoggedOut = true;
+                        this.auth.deauthenticate(true);
+                    } else {
+                        throw e;
+                    }
+                }
                 this.isConnected = true;
             }
         } catch (e) {

@@ -48,9 +48,7 @@ public class XrayServerExportService extends JiraExportServiceBase {
 		try (restClient) {
 			List<TestStep> steps = SpecmateEcoreUtil.getStepsSorted(procedure);
 			for (TestStep step : steps) {
-				JSONObject stepObj = new JSONObject();
-				stepObj.put("step", step.getDescription());
-				stepObj.put("data", step.getExpectedOutcome());
+				JSONObject stepObj = JiraUtil.stepToJson(step, false);
 				RestResult<JSONObject> result = restClient.put("/rest/raven/1.0/api/test/" + issue.getKey() + "/step",
 						stepObj);
 				if (result.getResponse().getStatus() != Status.OK.getStatusCode()) {

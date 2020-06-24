@@ -6,41 +6,64 @@ import { User } from '../../../../../../../model/User';
 import { Url } from '../../../../../../../util/url';
 import { ServiceInterface } from '../../../../../../data/modules/data-service/services/service-interface';
 import { UserToken } from '../../../base/user-token';
+import { UserSession } from 'src/app/model/UserSession';
 
 @Injectable()
 export class AuthenticationService {
 
-    private static TOKEN_COOKIE_KEY = 'specmate-user-token';
 
-    private requestCount = 0;
-    private refreshCount = 20;
+    private static SPECMATE_AUTH_COOKIE_BASE = 'specmate-auth-';
+    private static SPECMATE_AUTH_TOKEN_COOKIE_NAME = AuthenticationService.SPECMATE_AUTH_COOKIE_BASE + 'token';
+    private static SPECMATE_AUTH_PROJECT_COOKIE_NAME = AuthenticationService.SPECMATE_AUTH_COOKIE_BASE + 'project';
+    private static SPECMATE_AUTH_SESSION_COOKIE_NAME = AuthenticationService.SPECMATE_AUTH_COOKIE_BASE + 'session';
 
     public get token(): UserToken {
-        if (this.requestCount < this.refreshCount && this.cachedToken !== undefined) {
-            this.requestCount++;
-            return this.cachedToken;
+        const token = this.cookie.get(this.tokenCookieName);
+        const project = this.cookie.get(this.projectCookieName);
+
+        if (token !== undefined && project !== undefined) {
+            const userToken = new UserToken(token, project, this.session);
+            return userToken;
         }
-        const json = this.cookie.get(AuthenticationService.TOKEN_COOKIE_KEY);
-        if (json !== undefined) {
-            const token: UserToken = JSON.parse(json);
-            if (!UserToken.isInvalid(token)) {
-                this.cachedToken = token;
-            }
-            return token;
-        }
+
         return UserToken.INVALID;
     }
 
-    public set token(token: UserToken) {
-        if (!UserToken.isInvalid(token)) {
-            this.cachedToken = token;
-        }
-        this.storeTokenInCookie(token);
+    public set session(session: UserSession) {
+        this.cookie.putObject(this.sessionCookieName, session);
+    }
+
+    public get session(): UserSession {
+        return this.cookie.getObject(this.sessionCookieName) as UserSession;
     }
 
     private serviceInterface: ServiceInterface;
 
     private _authChanged: EventEmitter<boolean>;
+
+    private get tokenCookieName(): string {
+        return this.getCookieName(AuthenticationService.SPECMATE_AUTH_TOKEN_COOKIE_NAME);
+    }
+
+    private get projectCookieName(): string {
+        return this.getCookieName(AuthenticationService.SPECMATE_AUTH_PROJECT_COOKIE_NAME);
+    }
+
+    private get sessionCookieName(): string {
+        return this.getCookieName(AuthenticationService.SPECMATE_AUTH_SESSION_COOKIE_NAME);
+    }
+
+    private getCookieName(prefix: String): string {
+        return prefix + '-' + window.location.hostname;
+    }
+
+    private get isAllCookiesSet(): boolean {
+        const hasTokenCookie = this.cookie.get(this.tokenCookieName) !== undefined;
+        const hasProjectCookie = this.cookie.get(this.projectCookieName) !== undefined;
+        const hasSessionCookie = this.cookie.get(this.sessionCookieName) !== undefined;
+
+        return hasTokenCookie && hasProjectCookie && hasSessionCookie;
+    }
 
     private _authFailed: boolean;
     public get authFailed(): boolean {
@@ -66,10 +89,7 @@ export class AuthenticationService {
         this._errorLoggedOut = errorLoggedOut;
     }
 
-    private cachedToken: UserToken;
-
     constructor(http: HttpClient, private cookie: CookieService) {
-
         this.serviceInterface = new ServiceInterface(http);
     }
 
@@ -83,7 +103,7 @@ export class AuthenticationService {
     public async authenticate(user: User): Promise<UserToken> {
         try {
             const wasAuthenticated: boolean = this.isAuthenticated;
-            this.token = await this.serviceInterface.authenticate(user);
+            this.session = await this.serviceInterface.authenticate(user);
             if (this.isAuthenticated) {
                 if (wasAuthenticated !== this.isAuthenticated) {
                     this.authChanged.emit(true);
@@ -99,7 +119,7 @@ export class AuthenticationService {
     }
 
     public get isAuthenticated(): boolean {
-        return !UserToken.isInvalid(this.token);
+        return this.isAllCookiesSet && !UserToken.isInvalid(this.token);
     }
 
     public isAuthenticatedForUrl(url: string): boolean {
@@ -120,14 +140,9 @@ export class AuthenticationService {
     }
 
     private clearToken(): void {
-        this.token = UserToken.INVALID;
-        this.cookie.remove(AuthenticationService.TOKEN_COOKIE_KEY);
-    }
-
-    private storeTokenInCookie(token: UserToken): void {
-        this.cookie.put(
-            AuthenticationService.TOKEN_COOKIE_KEY,
-            JSON.stringify(token));
+        this.cookie.remove(this.tokenCookieName);
+        this.cookie.remove(this.projectCookieName);
+        this.cookie.remove(this.sessionCookieName);
     }
 
     public async deauthenticate(omitServer?: boolean): Promise<void> {
@@ -136,27 +151,20 @@ export class AuthenticationService {
 
     private async doDeauth(omitServer?: boolean): Promise<void> {
         const wasAuthenticated: boolean = this.isAuthenticated;
-        const token = this.token;
-        this.clearToken();
         this.authFailed = false;
         if (omitServer !== true) {
-            if (UserToken.isInvalid(token)) {
-                try {
-                    // The cached token should never be invalid. If it is, we want to deuath prior to auth.
-                    this.serviceInterface.deauthenticate(this.cachedToken);
-                    this.cachedToken = undefined;
-                } catch (e) {
-                    // We silently ignore errors on invalidating cached tokens,
-                    // as this should not be relevant for security,
-                    // just for cleanliness.
-                }
-            } else {
-                await this.serviceInterface.deauthenticate(token);
-                this.cachedToken = undefined;
+            try {
+                // The cached token should never be invalid. If it is, we want to deuath prior to auth.
+                await this.serviceInterface.deauthenticate();
+            } catch (e) {
+                // We silently ignore errors on invalidating cached tokens,
+                // as this should not be relevant for security,
+                // just for cleanliness.
             }
         }
+        this.clearToken();
         if (wasAuthenticated !== this.isAuthenticated) {
-            this.authChanged.emit(false);
+            this.authChanged.emit(this.isAuthenticated);
         }
     }
 

@@ -10,15 +10,15 @@ public class Activator implements BundleActivator {
 
 	@Override
 	public void start(BundleContext context) throws Exception {
+		Bundle bundle = FrameworkUtil.getBundle(org.eclipse.equinox.http.jetty.JettyConstants.class);
 
-				Bundle bundle = FrameworkUtil.getBundle(org.eclipse.equinox.http.jetty.JettyConstants.class);
+		BundleStartLevel bundleStartLevel = bundle.adapt(BundleStartLevel.class);
 
-				BundleStartLevel bundleStartLevel = bundle.adapt(BundleStartLevel.class);
+		if (bundleStartLevel.isActivationPolicyUsed()) {
+			bundle.stop();
+			bundle.start();
+		}
 
-				if (bundleStartLevel.isActivationPolicyUsed()) {
-					bundle.stop();
-					bundle.start();
-				}
 	}
 
 	@Override

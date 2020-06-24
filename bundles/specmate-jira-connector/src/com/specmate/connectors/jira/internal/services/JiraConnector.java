@@ -14,8 +14,6 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
@@ -26,7 +24,6 @@ import org.osgi.service.log.LogService;
 import com.atlassian.jira.rest.client.api.JiraRestClient;
 import com.atlassian.jira.rest.client.api.RestClientException;
 import com.atlassian.jira.rest.client.api.domain.Issue;
-import com.atlassian.jira.rest.client.api.domain.IssueField;
 import com.atlassian.jira.rest.client.api.domain.SearchResult;
 import com.specmate.common.cache.ICache;
 import com.specmate.common.cache.ICacheLoader;
@@ -47,28 +44,100 @@ import com.specmate.model.requirements.RequirementsFactory;
 import com.specmate.model.support.util.SpecmateEcoreUtil;
 import com.specmate.rest.RestResult;
 
+/**
+ * Connector to JIRA server and cloud
+ *
+ * @author junkerm
+ *
+ */
 @Component(immediate = true, service = { IRestService.class,
 		IRequirementsSource.class }, configurationPid = JiraConfigConstants.CONNECTOR_PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
 public class JiraConnector extends DetailsService implements IRequirementsSource, IRestService {
 
-	private static final int PAGINATION_SIZE_DEFAULT = 50;
+	/** Placeholder for the id of the parent element in a JQL query */
+	private static final String PARENT_ID_PLACEHOLDER = "%parentId%";
+
+	/** Placeholder for the project name in a JQL query */
+	private static final String PROJECT_PLACEHOLDER = "%project%";
+
+	/** Default value for pagination (i.e. number of items to query at once) */
+	private static final String PAGINATION_SIZE_DEFAULT = "50";
+
+	/** Name of the jira story cache */
 	private static final String JIRA_STORY_CACHE_NAME = "jiraStoryCache";
+
+	/** Source id of this connector */
 	private static final String JIRA_SOURCE_ID = "jira";
 
+	/**
+	 * Default jql query for fetching children (e.g. stories) of parent items (e.g.
+	 * epics)
+	 */
+	private static final String DEFAULT_CHILDREN_JQL = "project=" + PROJECT_PLACEHOLDER
+			+ " AND issueType=story AND \"Epic Link\"=\"" + PARENT_ID_PLACEHOLDER
+			+ "\" ORDER BY assignee, resolutiondate";
+
+	/**
+	 * Default jql query for fetching items (e.g. stories) with no parent when
+	 * option withFolders is true
+	 */
+	private static final String DEFAULT_DIRECT_JQL = "project=" + PROJECT_PLACEHOLDER
+			+ " AND issueType=story AND \"Epic Link\" IS EMPTY ORDER BY assignee, resolutiondate";
+
+	/** Default jql query for fetching items when option withFolders is false */
+	private static final String DEFAULT_DIRECT_JQL_NO_FOLDERS = "project=" + PROJECT_PLACEHOLDER
+			+ " AND issueType=story ORDER BY assignee, resolutiondate";
+
+	/** Default jql query for fetching parent items */
+	private static final String DEFAULT_PARENT_JQL = "project=" + PROJECT_PLACEHOLDER
+			+ " AND issueType=epic ORDER BY id";
+
+	/** Default evict time for the story cache */
+	private static final String DEFAULT_CACHE_TIME = "120";
+
+	/** The log service reference */
 	private LogService logService;
-	private String id;
-	private JiraRestClient jiraClient;
-	private String projectName;
-	private String url;
 
-	private Map<Issue, Folder> epicFolders = new HashMap<>();
-	private Map<Requirement, Issue> requirmentEpics = new HashMap<>();
-	private Folder defaultFolder;
-
+	/** The caching service reference */
 	private ICacheService cacheService;
 
-	private ICache<String, Issue> cache;
+	/** The configured id of this connector */
+	private String id;
+
+	/** The configured name of the project to pull items from */
+	private String projectName;
+
+	/** The configured Url of the jira server */
+	private String url;
+
+	/** The configured pagination size */
 	private int paginationSizeInt;
+
+	/** Configured jql query templates */
+	private String parentJQL;
+	private String directJQL;
+	private String childrenJQL;
+
+	/** Configured flag if connector should build a parent/child relationship */
+	private boolean withFolders;
+
+	/** Configured cache time */
+	private int cacheTime;
+
+	/** Map from issues to epics */
+	private Map<Issue, Folder> epicFolders = new HashMap<>();
+
+	/** Map from requirements to issues */
+	private Map<Requirement, Issue> requirmentEpics = new HashMap<>();
+
+	/** Default folder to put requirements that have no parent */
+	private Folder defaultFolder;
+
+	/** The story cache */
+	private ICache<String, Issue> cache;
+
+	/** The rest client to access jira */
+	private JiraRestClient jiraClient;
 
 	public JiraRestClient getJiraClient() {
 		return jiraClient;
@@ -83,28 +152,47 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 		projectName = (String) properties.get(JiraConfigConstants.KEY_JIRA_PROJECT);
 		String username = (String) properties.get(JiraConfigConstants.KEY_JIRA_USERNAME);
 		String password = (String) properties.get(JiraConfigConstants.KEY_JIRA_PASSWORD);
-		String paginationSizeStr = (String) properties.get(JiraConfigConstants.KEY_JIRA_PAGINATION_SIZE);
 
-		
-		this.paginationSizeInt = PAGINATION_SIZE_DEFAULT;
-		if (paginationSizeStr != null) {
-			try {
-				this.paginationSizeInt = Integer.parseInt(paginationSizeStr);
-			} catch (NumberFormatException nfe) {
-				this.paginationSizeInt = PAGINATION_SIZE_DEFAULT;
-			}
+		String paginationSizeStr = (String) properties.getOrDefault(JiraConfigConstants.KEY_JIRA_PAGINATION_SIZE,
+				PAGINATION_SIZE_DEFAULT);
+		try {
+			paginationSizeInt = Integer.parseInt(paginationSizeStr);
+		} catch (NumberFormatException nfe) {
+			throw new SpecmateInternalException(ErrorCode.CONFIGURATION,
+					"Not valid value for pagination size: " + paginationSizeStr);
 		}
 
-		
+		String cacheTimeStr = (String) properties.getOrDefault(JiraConfigConstants.KEY_JIRA_CACHE_TIME,
+				DEFAULT_CACHE_TIME);
+		try {
+			cacheTime = Integer.parseInt(cacheTimeStr);
+		} catch (NumberFormatException nfe) {
+			throw new SpecmateInternalException(ErrorCode.CONFIGURATION,
+					"Not valid value for cache time: " + cacheTimeStr);
+		}
+
+		String withFoldersStr = (String) properties.getOrDefault(JiraConfigConstants.KEY_JIRA_WITH_FOLDERS, "true");
+		withFolders = Boolean.parseBoolean(withFoldersStr.toLowerCase());
+
+		if (withFolders) {
+			directJQL = (String) properties.getOrDefault(JiraConfigConstants.KEY_JIRA_DIRECT_SQL, DEFAULT_DIRECT_JQL);
+		} else {
+			directJQL = (String) properties.getOrDefault(JiraConfigConstants.KEY_JIRA_DIRECT_SQL,
+					DEFAULT_DIRECT_JQL_NO_FOLDERS);
+		}
+		parentJQL = (String) properties.getOrDefault(JiraConfigConstants.KEY_JIRA_PARENT_SQL, DEFAULT_PARENT_JQL);
+		childrenJQL = (String) properties.getOrDefault(JiraConfigConstants.KEY_JIRA_CHILDREN_SQL, DEFAULT_CHILDREN_JQL);
+
 		try {
 			jiraClient = JiraUtil.createJiraRESTClient(url, username, password);
 		} catch (URISyntaxException e) {
-			throw new SpecmateInternalException(ErrorCode.JIRA, e);
+			logService.log(LogService.LOG_ERROR, "Could not create Jira REST client. Reason is: " + e.getMessage());
+			throw new SpecmateInternalException(ErrorCode.JIRA, "Could not create Jira REST client", e);
 		}
 
 		defaultFolder = createFolder(projectName + "-Default", projectName + "-Default");
 
-		cache = cacheService.createCache(JIRA_STORY_CACHE_NAME, 500, 3600, new ICacheLoader<String, Issue>() {
+		cache = cacheService.createCache(JIRA_STORY_CACHE_NAME, 500, cacheTime, new ICacheLoader<String, Issue>() {
 
 			@Override
 			public Issue load(String key) throws SpecmateException {
@@ -132,7 +220,9 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 		String aPassword = (String) properties.get(JiraConfigConstants.KEY_JIRA_PASSWORD);
 
 		if (isEmpty(aProject) || isEmpty(aUsername) || isEmpty(aPassword)) {
-			throw new SpecmateInternalException(ErrorCode.CONFIGURATION, "Jira Connector is not well configured.");
+			throw new SpecmateInternalException(ErrorCode.CONFIGURATION, String.format(
+					"Jira Connector (%s) is not well configured. Username, password and project need to be provided.",
+					id));
 		}
 	}
 
@@ -148,7 +238,7 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 
 	@Override
 	public Collection<Requirement> getRequirements() throws SpecmateException {
-
+		logService.log(LogService.LOG_DEBUG, String.format("Jira connector (%s): retrieving requirements.", id));
 		List<Requirement> requirements = new ArrayList<>();
 
 		List<Issue> storiesWithoutEpic = getStoriesWithoutEpic();
@@ -156,15 +246,17 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 			requirements.add(createRequirement(story));
 		}
 
-		List<Issue> epics = getEpics();
+		if (withFolders) {
+			List<Issue> epics = getEpics();
 
-		for (Issue epic : epics) {
-			createFolderIfNotExists(epic);
-			List<Issue> stories = getStoriesForEpic(epic);
-			for (Issue story : stories) {
-				Requirement requirement = createRequirement(story);
-				requirmentEpics.put(requirement, epic);
-				requirements.add(requirement);
+			for (Issue epic : epics) {
+				createFolderIfNotExists(epic);
+				List<Issue> stories = getStoriesForEpic(epic);
+				for (Issue story : stories) {
+					Requirement requirement = createRequirement(story);
+					requirmentEpics.put(requirement, epic);
+					requirements.add(requirement);
+				}
 			}
 		}
 
@@ -172,43 +264,57 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 	}
 
 	private List<Issue> getStoriesForEpic(Issue epic) throws SpecmateException {
-		return getIssues("project=" + projectName + " AND issueType=story AND \"Epic Link\"=\"" + epic.getKey()
-				+ "\" ORDER BY assignee, resolutiondate");
+		String jql = childrenJQL.replaceAll(PROJECT_PLACEHOLDER, projectName).replace(PARENT_ID_PLACEHOLDER,
+				epic.getKey());
+		return getIssues(jql);
 	}
 
 	private List<Issue> getStoriesWithoutEpic() throws SpecmateException {
-		return getIssues("project=" + projectName
-				+ " AND issueType=story AND \"Epic Link\" IS EMPTY ORDER BY assignee, resolutiondate");
+		logService.log(LogService.LOG_DEBUG,
+				String.format("Jira connector (%s): retrieving default requirements. Query is %s", id, directJQL));
+		String jql = directJQL.replaceAll(PROJECT_PLACEHOLDER, projectName);
+		return getIssues(jql);
 	}
 
 	private List<Issue> getEpics() throws SpecmateException {
-		return getIssues("project=" + projectName + " AND issueType=epic ORDER BY id");
+		logService.log(LogService.LOG_DEBUG,
+				String.format("Jira connector (%s): retrieving parent requirements. Query is %s", id, parentJQL));
+		String jql = parentJQL.replaceAll(PROJECT_PLACEHOLDER, projectName);
+		return getIssues(jql);
 	}
 
-	private Issue getStory(String id) throws SpecmateException {
-		List<Issue> issues = getIssues("project=" + projectName + " AND id=" + id);
+	private Issue getStory(String storyId) throws SpecmateException {
+		logService.log(LogService.LOG_DEBUG,
+				String.format("Jira connector (%s) retrieving item with id %s", id, storyId));
+		List<Issue> issues = getIssues("project=" + projectName + " AND id=" + storyId);
 		if (issues == null || issues.size() == 0) {
-			throw new SpecmateInternalException(ErrorCode.INTERNAL_PROBLEM, "JIRA Issue not found: " + id);
+			throw new SpecmateInternalException(ErrorCode.INTERNAL_PROBLEM, "JIRA Issue not found: " + storyId);
 		}
 		return issues.get(0);
 	}
 
 	private List<Issue> getIssues(String jql) throws SpecmateException {
+		logService.log(LogService.LOG_DEBUG, String.format("Jira connector (%s): executing query: %s", id, jql));
+
 		List<Issue> issues = new ArrayList<>();
 
 		int maxResults = Integer.MAX_VALUE;
 		while (issues.size() < maxResults) {
 			try {
-				SearchResult searchResult = jiraClient.getSearchClient().searchJql(jql, this.paginationSizeInt, issues.size(), null)
-						.claim();
+				SearchResult searchResult = jiraClient.getSearchClient()
+						.searchJql(jql, paginationSizeInt, issues.size(), null).claim();
 				maxResults = searchResult.getTotal();
 				searchResult.getIssues().forEach(issue -> issues.add(issue));
-				logService.log(LogService.LOG_DEBUG, "Loaded ~" + searchResult.getMaxResults() + " issues from Jira "
-						+ url + " project: " + projectName);
+				logService.log(LogService.LOG_DEBUG, "Jira Connector (" + id + "): Loaded ~"
+						+ searchResult.getMaxResults() + " issues from Jira " + url + " project: " + projectName);
 			} catch (RestClientException e) {
 				if (e.getStatusCode().get() == 400) {
+					logService.log(LogService.LOG_WARNING,
+							String.format("Jira Connector (%s): Received 400 status", id));
 					return issues;
 				} else {
+					logService.log(LogService.LOG_ERROR, String.format(
+							"Jira Connector (%s): Could not load issue from jira. Reason: %s", id, e.getMessage()));
 					throw new SpecmateInternalException(ErrorCode.INTERNAL_PROBLEM, "Could not load issues from jira",
 							e);
 				}
@@ -216,14 +322,17 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 
 		}
 
-		logService.log(LogService.LOG_INFO,
-				"Finished loading of " + issues.size() + " issues from Jira " + url + " project: " + projectName);
+		logService.log(LogService.LOG_INFO, "Jira Connector (" + id + "): Finished loading of " + issues.size()
+				+ " issues from Jira " + url + " project: " + projectName);
 
 		return issues;
 	}
 
 	@Override
 	public IContainer getContainerForRequirement(Requirement requirement) throws SpecmateException {
+		if (!withFolders) {
+			return null;
+		}
 		Issue epic = requirmentEpics.get(requirement);
 		if (epic == null) {
 			return defaultFolder;
@@ -236,7 +345,7 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 		return JiraUtil.authenticate(url, projectName, username, password);
 	}
 
-	private static Requirement createRequirement(Issue story) throws SpecmateException {
+	private static Requirement createRequirement(Issue story) {
 		Requirement requirement = RequirementsFactory.eINSTANCE.createRequirement();
 		String id = story.getKey();
 		String idShort = Long.toString(story.getId());
@@ -248,18 +357,6 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 		requirement.setDescription(story.getDescription());
 		requirement.setStatus(story.getStatus().getName());
 		requirement.setLive(true);
-		try {
-			IssueField teamField = story.getFieldByName("Team");
-			if (teamField != null) {
-				JSONObject teamObject = (JSONObject) teamField.getValue();
-				if (teamObject != null) {
-					String team = (String) teamObject.get("value");
-					requirement.setImplementingITTeam(team);
-				}
-			}
-		} catch (JSONException e) {
-			throw new SpecmateInternalException(ErrorCode.JIRA, e);
-		}
 		return requirement;
 	}
 

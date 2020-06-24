@@ -2,9 +2,9 @@ Bundle-Version: 0.0.0.${tstamp}
 Export-Package: \
 	com.specmate.model.base,\
 	com.specmate.model.base.util,\
+	com.specmate.model.export,\
 	com.specmate.model.export.util,\
 	com.specmate.model.administration.util,\
-	com.specmate.model.export,\
 	com.specmate.model.batch.util,\
 	com.specmate.model.batch,\
 	com.specmate.model.administration,\

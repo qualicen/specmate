@@ -140,27 +140,6 @@
       <genClasses ecoreClass="specmate.ecore#//processes/ProcessStart"/>
       <genClasses ecoreClass="specmate.ecore#//processes/ProcessEnd"/>
     </nestedGenPackages>
-    <nestedGenPackages prefix="History" disposableProviderFactory="true" ecorePackage="specmate.ecore#//history">
-      <genClasses ecoreClass="specmate.ecore#//history/History">
-        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference specmate.ecore#//history/History/entries"/>
-      </genClasses>
-      <genClasses ecoreClass="specmate.ecore#//history/HistoryEntry">
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//history/HistoryEntry/timestamp"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//history/HistoryEntry/user"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//history/HistoryEntry/deletedObjects"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//history/HistoryEntry/comment"/>
-        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference specmate.ecore#//history/HistoryEntry/changes"/>
-      </genClasses>
-      <genClasses ecoreClass="specmate.ecore#//history/Change">
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//history/Change/objectName"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//history/Change/objectType"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//history/Change/oldValue"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//history/Change/newValue"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//history/Change/feature"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//history/Change/isCreate"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//history/Change/isDelete"/>
-      </genClasses>
-    </nestedGenPackages>
     <nestedGenPackages prefix="Administration" disposableProviderFactory="true" ecorePackage="specmate.ecore#//administration">
       <genEnums typeSafeEnumCompatible="false" ecoreEnum="specmate.ecore#//administration/ErrorCode">
         <genEnumLiterals ecoreEnumLiteral="specmate.ecore#//administration/ErrorCode/noSuchService"/>

@@ -4,7 +4,7 @@
 
 	export class UserSession  {
 
-		___nsuri: string = "http://specmate.com/20200309/model/user";
+		___nsuri: string = "http://specmate.com/20200624/model/user";
 		public url: string;
 		public className: string = "UserSession";
 		public static className: string = "UserSession";
@@ -17,7 +17,6 @@
 		public TargetSystem: AccessRights;
 		public libraryFolders: EString[];
 		public isDeleted: EBoolean;
-		public exporters: EString[];
 
 		// References
 

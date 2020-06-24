@@ -3,7 +3,6 @@
 Test-Cases: \
 	com.specmate.test.integration.CrudTest,\
 	com.specmate.test.integration.SearchTest,\
-	com.specmate.test.integration.HistoryTest,\
 	com.specmate.test.integration.AuthenticationTest,\
 	com.specmate.test.integration.CDOPersistencyShutdownTest,\
 	com.specmate.test.integration.ProjectConfigServiceTest,\

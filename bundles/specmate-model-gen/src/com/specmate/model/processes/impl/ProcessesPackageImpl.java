@@ -17,11 +17,6 @@ import com.specmate.model.batch.impl.BatchPackageImpl;
 import com.specmate.model.export.ExportPackage;
 
 import com.specmate.model.export.impl.ExportPackageImpl;
-
-import com.specmate.model.history.HistoryPackage;
-
-import com.specmate.model.history.impl.HistoryPackageImpl;
-
 import com.specmate.model.processes.ProcessConnection;
 import com.specmate.model.processes.ProcessDecision;
 import com.specmate.model.processes.ProcessEnd;
@@ -155,8 +150,6 @@ public class ProcessesPackageImpl extends EPackageImpl implements ProcessesPacka
 		RequirementsPackageImpl theRequirementsPackage = (RequirementsPackageImpl)(registeredPackage instanceof RequirementsPackageImpl ? registeredPackage : RequirementsPackage.eINSTANCE);
 		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(TestspecificationPackage.eNS_URI);
 		TestspecificationPackageImpl theTestspecificationPackage = (TestspecificationPackageImpl)(registeredPackage instanceof TestspecificationPackageImpl ? registeredPackage : TestspecificationPackage.eINSTANCE);
-		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(HistoryPackage.eNS_URI);
-		HistoryPackageImpl theHistoryPackage = (HistoryPackageImpl)(registeredPackage instanceof HistoryPackageImpl ? registeredPackage : HistoryPackage.eINSTANCE);
 		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(AdministrationPackage.eNS_URI);
 		AdministrationPackageImpl theAdministrationPackage = (AdministrationPackageImpl)(registeredPackage instanceof AdministrationPackageImpl ? registeredPackage : AdministrationPackage.eINSTANCE);
 		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(BatchPackage.eNS_URI);
@@ -169,7 +162,6 @@ public class ProcessesPackageImpl extends EPackageImpl implements ProcessesPacka
 		theBasePackage.createPackageContents();
 		theRequirementsPackage.createPackageContents();
 		theTestspecificationPackage.createPackageContents();
-		theHistoryPackage.createPackageContents();
 		theAdministrationPackage.createPackageContents();
 		theBatchPackage.createPackageContents();
 		theExportPackage.createPackageContents();
@@ -179,7 +171,6 @@ public class ProcessesPackageImpl extends EPackageImpl implements ProcessesPacka
 		theBasePackage.initializePackageContents();
 		theRequirementsPackage.initializePackageContents();
 		theTestspecificationPackage.initializePackageContents();
-		theHistoryPackage.initializePackageContents();
 		theAdministrationPackage.initializePackageContents();
 		theBatchPackage.initializePackageContents();
 		theExportPackage.initializePackageContents();

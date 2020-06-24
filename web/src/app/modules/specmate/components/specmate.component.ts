@@ -37,16 +37,12 @@ export class SpecmateComponent {
         return this.viewController.linksActionsShown;
     }
 
-    public get historyShown(): boolean {
-        return this.viewController.historyShown;
-    }
-
     public get tracingLinksShown(): boolean {
         return this.viewController.tracingLinksShown;
     }
 
     public get rightShown(): boolean {
-        return this.propertiesShown || this.linksActionsShown || this.tracingLinksShown || this.historyShown;
+        return this.propertiesShown || this.linksActionsShown || this.tracingLinksShown;
     }
 
     public get leftShown(): boolean {

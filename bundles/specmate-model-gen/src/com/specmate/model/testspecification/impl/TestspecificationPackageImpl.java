@@ -17,11 +17,6 @@ import com.specmate.model.batch.impl.BatchPackageImpl;
 import com.specmate.model.export.ExportPackage;
 
 import com.specmate.model.export.impl.ExportPackageImpl;
-
-import com.specmate.model.history.HistoryPackage;
-
-import com.specmate.model.history.impl.HistoryPackageImpl;
-
 import com.specmate.model.processes.ProcessesPackage;
 
 import com.specmate.model.processes.impl.ProcessesPackageImpl;
@@ -158,8 +153,6 @@ public class TestspecificationPackageImpl extends EPackageImpl implements Testsp
 		RequirementsPackageImpl theRequirementsPackage = (RequirementsPackageImpl)(registeredPackage instanceof RequirementsPackageImpl ? registeredPackage : RequirementsPackage.eINSTANCE);
 		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(ProcessesPackage.eNS_URI);
 		ProcessesPackageImpl theProcessesPackage = (ProcessesPackageImpl)(registeredPackage instanceof ProcessesPackageImpl ? registeredPackage : ProcessesPackage.eINSTANCE);
-		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(HistoryPackage.eNS_URI);
-		HistoryPackageImpl theHistoryPackage = (HistoryPackageImpl)(registeredPackage instanceof HistoryPackageImpl ? registeredPackage : HistoryPackage.eINSTANCE);
 		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(AdministrationPackage.eNS_URI);
 		AdministrationPackageImpl theAdministrationPackage = (AdministrationPackageImpl)(registeredPackage instanceof AdministrationPackageImpl ? registeredPackage : AdministrationPackage.eINSTANCE);
 		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(BatchPackage.eNS_URI);
@@ -172,7 +165,6 @@ public class TestspecificationPackageImpl extends EPackageImpl implements Testsp
 		theBasePackage.createPackageContents();
 		theRequirementsPackage.createPackageContents();
 		theProcessesPackage.createPackageContents();
-		theHistoryPackage.createPackageContents();
 		theAdministrationPackage.createPackageContents();
 		theBatchPackage.createPackageContents();
 		theExportPackage.createPackageContents();
@@ -182,7 +174,6 @@ public class TestspecificationPackageImpl extends EPackageImpl implements Testsp
 		theBasePackage.initializePackageContents();
 		theRequirementsPackage.initializePackageContents();
 		theProcessesPackage.initializePackageContents();
-		theHistoryPackage.initializePackageContents();
 		theAdministrationPackage.initializePackageContents();
 		theBatchPackage.initializePackageContents();
 		theExportPackage.initializePackageContents();

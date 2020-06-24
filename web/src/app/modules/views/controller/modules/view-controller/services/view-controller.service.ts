@@ -25,10 +25,6 @@ export class ViewControllerService {
         return this.isLoggedIn && true;
     }
 
-    public get historyShown(): boolean {
-        return this.isLoggedIn && this.selectedElementService.hasSelection && !this.isTopLibraryFolder;
-    }
-
     public get loggingOutputShown(): boolean {
         return this.isLoggedIn && this._loggingOutputShown;
     }

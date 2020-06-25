@@ -77,9 +77,6 @@ public class ModelEditorTest extends TestBase {
 			// Check if tile is hidden (Assert false)
 			assertFalse(cegEditor.negationDisplayed());
 			
-			// Change condition in the node itself
-			cegEditor.changeConditionInNode(nodeAlter, "age");
-			
 			// Change connection type in sidebar
 			cegEditor.changeTypeToOR(nodeAutofahren);
 			cegEditor.changeTypeToAND(nodeAutofahren);

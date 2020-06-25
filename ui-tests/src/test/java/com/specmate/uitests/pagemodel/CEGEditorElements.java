@@ -57,29 +57,6 @@ public class CEGEditorElements extends EditorElements {
 
 		return numberOfNodes;
 	}
-	
-	/**
-	 * change the condition by using the inline (directly in the node) change functionality
-	 */
-	public void changeConditionInNode(int node, String name) {
-		
-		WebElement nodeElement1 = UITestUtil.getElementWithIndex(node, driver, By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;'] > rect"));
-		
-		builder.moveToElement(nodeElement1, 0, 0).click().click().build().perform();
-		
-		WebDriverWait wait = new WebDriverWait(driver, 30);
-		
-		
-		wait.until(ExpectedConditions
-				.visibilityOfElementLocated(By.cssSelector(".mxCellEditor")));
-		WebElement conditionTextfield = driver.findElement(By.cssSelector(".mxCellEditor"));
-		conditionTextfield.clear();
-		conditionTextfield.sendKeys(name);
-		
-		// Click the node to make the changes persistent
-		WebElement nodeElement = UITestUtil.getElementWithIndex(node, driver, nodeSelector);
-		builder.moveToElement(nodeElement, 5, 25).click().build().perform();
-	}
 
 	/**
 	 * establishes a connection from node1 to node2 and returns the newly created

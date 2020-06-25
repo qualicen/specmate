@@ -250,34 +250,6 @@ public class CDOPersistencyValidationTest extends IntegrationTestBase {
 	}
 
 	@Test
-	public void testNameInvalidChars() throws Exception {
-		ITransaction t = null;
-
-		try {
-			t = persistency.openTransaction();
-			t.clearValidators();
-			t.addValidator(new NameValidator());
-			Resource r = t.getResource();
-			t.doAndCommit(new IChange<Object>() {
-				@Override
-				public Object doChange() throws SpecmateException {
-					Folder folder = BaseFactory.eINSTANCE.createFolder();
-					folder.setName("This;");
-					r.getContents().add(folder);
-					return null;
-				}
-			});
-			fail("Invalid name not detected");
-		} catch (SpecmateValidationException e) {
-			// All OK
-		} finally {
-			if (t != null) {
-				t.close();
-			}
-		}
-	}
-
-	@Test
 	public void testUniqueID() throws Exception {
 		ITransaction t = null;
 

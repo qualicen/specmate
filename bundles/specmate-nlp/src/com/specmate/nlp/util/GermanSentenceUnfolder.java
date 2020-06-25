@@ -1,6 +1,7 @@
 package com.specmate.nlp.util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -330,14 +331,14 @@ public class GermanSentenceUnfolder extends SentenceUnfolderBase {
 
 	@Override
 	protected Optional<Annotation> getNearestForwardConnective(JCas jcas, Annotation annotation) {
-		// TODO Auto-generated method stub
-		return null;
+		// TODO: implement
+		return Optional.empty();
 	}
 
 	@Override
 	protected List<Annotation> identifyConjunctionsWithoutConnectives(JCas jCas) {
-		// TODO Auto-generated method stub
-		return null;
+		// TODO: implement
+		return Collections.emptyList();
 	}
 
 }

@@ -13,6 +13,7 @@ import { Type } from 'src/app/util/type';
 import { CEGModel } from 'src/app/model/CEGModel';
 import { Process } from 'src/app/model/Process';
 import { GraphicalEditorService } from '../../graphical-editor/services/graphical-editor.service';
+import { ModelImageService } from '../../graphical-editor/services/model-image.service';
 
 export abstract class ContentContainerBase<T extends IContainer> implements OnInit {
 
@@ -37,7 +38,8 @@ export abstract class ContentContainerBase<T extends IContainer> implements OnIn
         protected translate: TranslateService,
         protected modal: ConfirmationModal,
         private clipboardService: ClipboardService,
-        protected graphicalEditorService: GraphicalEditorService) {
+        protected graphicalEditorService: GraphicalEditorService,
+        protected modelImageService: ModelImageService) {
     }
 
     public async ngOnInit(): Promise<void> {
@@ -51,7 +53,7 @@ export abstract class ContentContainerBase<T extends IContainer> implements OnIn
                 await this.navigator.navigate(element);
                 if (Type.is(element, CEGModel) || Type.is(element, Process)) {
                     this.graphicalEditorService.initModelFinish.subscribe(async () => {
-                        await this.dataService.saveModelImage(element);
+                        await this.modelImageService.createModelImage(element);
                         await this.dataService.commit(this.translate.instant('save'));
                     });
                 }

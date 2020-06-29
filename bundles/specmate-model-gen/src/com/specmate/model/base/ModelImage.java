@@ -15,7 +15,8 @@ package com.specmate.model.base;
  * </ul>
  *
  * @see com.specmate.model.base.BasePackage#getModelImage()
- * @model
+ * @model annotation="http://specmate.com/form_meta disabled1='name' disabled2='description'"
+ *        annotation="http://specmate.com/notLoadingOnList"
  * @generated
  */
 public interface ModelImage extends IContainer {

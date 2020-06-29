@@ -9,6 +9,7 @@ import { Dialogtype } from '../modal-dialog-type';
 import { CEGModel } from 'src/app/model/CEGModel';
 import { Type } from 'src/app/util/type';
 import { Process } from 'src/app/model/Process';
+import { ModelImageService } from 'src/app/modules/views/main/editors/modules/graphical-editor/services/model-image.service';
 
 @Component({
     moduleId: module.id.toString(),
@@ -29,7 +30,8 @@ export class TypedModalContent extends ModalBase {
         private viewControllerService: ViewControllerService,
         private dataService: SpecmateDataService,
         public navigator: NavigatorService,
-        private translate: TranslateService) {
+        private translate: TranslateService,
+        private modelImageService: ModelImageService) {
         super(activeModal);
         this._options = Dialogtype.DEFAULT;
     }
@@ -39,7 +41,7 @@ export class TypedModalContent extends ModalBase {
         if (this.isSaveShown) {
             let element = this.navigator.currentElement;
             if (Type.is(element, CEGModel) || Type.is(element, Process)) {
-                await this.dataService.saveModelImage(element);
+                await this.modelImageService.createModelImage(element);
             }
             this.dataService.commit(this.translate.instant('save'))
                 .then(this.activeModal.close);

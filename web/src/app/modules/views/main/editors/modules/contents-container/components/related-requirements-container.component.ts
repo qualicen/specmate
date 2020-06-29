@@ -10,6 +10,7 @@ import { ClipboardService } from '../../tool-pallette/services/clipboard-service
 import { ContentContainerBase } from '../base/contents-container-base';
 import { ContentsContainerService } from '../services/content-container.service';
 import { GraphicalEditorService } from '../../graphical-editor/services/graphical-editor.service';
+import { ModelImageService } from '../../graphical-editor/services/model-image.service';
 
 @Component({
     moduleId: module.id.toString(),
@@ -26,8 +27,9 @@ export class RelatedRequirementsContainer extends ContentContainerBase<Requireme
         modal: ConfirmationModal,
         contentService: ContentsContainerService,
         clipboardService: ClipboardService,
-        graphicalEditorService: GraphicalEditorService) {
-        super(dataService, navigator, translate, modal, clipboardService, graphicalEditorService);
+        graphicalEditorService: GraphicalEditorService,
+        protected modelImageService: ModelImageService) {
+        super(dataService, navigator, translate, modal, clipboardService, graphicalEditorService, modelImageService);
         contentService.onModelDeleted.subscribe(
             () => {this.readContents(); });
     }

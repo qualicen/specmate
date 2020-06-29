@@ -11,6 +11,7 @@ import { ConfirmationModal } from '../../../../../../notification/modules/modals
 import { ClipboardService } from '../../tool-pallette/services/clipboard-service';
 import { ContentContainerBase } from '../base/contents-container-base';
 import { GraphicalEditorService } from '../../graphical-editor/services/graphical-editor.service';
+import { ModelImageService } from '../../graphical-editor/services/model-image.service';
 
 @Component({
     moduleId: module.id.toString(),
@@ -26,8 +27,9 @@ export class FolderContainer extends ContentContainerBase<Folder> {
         translate: TranslateService,
         modal: ConfirmationModal,
         clipboardService: ClipboardService,
-        graphicalEditorService: GraphicalEditorService) {
-        super(dataService, navigator, translate, modal, clipboardService, graphicalEditorService);
+        graphicalEditorService: GraphicalEditorService,
+        protected modelImageService: ModelImageService) {
+        super(dataService, navigator, translate, modal, clipboardService, graphicalEditorService, modelImageService);
     }
 
     protected condition = (element: IContainer) => Type.is(element, Folder);

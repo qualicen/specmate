@@ -20,7 +20,6 @@
 		
 		public tracesTo: Proxy[];
 		public tracesFrom: Proxy[];
-		public image: Proxy;
 
 		// Containment
 

@@ -128,10 +128,6 @@ public class BaseAdapterFactory extends AdapterFactoryImpl {
 				return createModelImageAdapter();
 			}
 			@Override
-			public Adapter caseIModel(IModel object) {
-				return createIModelAdapter();
-			}
-			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -358,20 +354,6 @@ public class BaseAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createModelImageAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.specmate.model.base.IModel <em>IModel</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.specmate.model.base.IModel
-	 * @generated
-	 */
-	public Adapter createIModelAdapter() {
 		return null;
 	}
 

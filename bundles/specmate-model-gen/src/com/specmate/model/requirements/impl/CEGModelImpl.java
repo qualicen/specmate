@@ -5,12 +5,9 @@ package com.specmate.model.requirements.impl;
 import com.specmate.model.base.BasePackage;
 import com.specmate.model.base.IContentElement;
 import com.specmate.model.base.IDescribed;
-import com.specmate.model.base.IModel;
 import com.specmate.model.base.INamed;
 import com.specmate.model.base.IRecycled;
 import com.specmate.model.base.ITracingElement;
-
-import com.specmate.model.base.ModelImage;
 import com.specmate.model.requirements.CEGModel;
 import com.specmate.model.requirements.RequirementsPackage;
 
@@ -43,7 +40,6 @@ import org.eclipse.emf.internal.cdo.CDOObjectImpl;
  *   <li>{@link com.specmate.model.requirements.impl.CEGModelImpl#getContents <em>Contents</em>}</li>
  *   <li>{@link com.specmate.model.requirements.impl.CEGModelImpl#getTracesTo <em>Traces To</em>}</li>
  *   <li>{@link com.specmate.model.requirements.impl.CEGModelImpl#getTracesFrom <em>Traces From</em>}</li>
- *   <li>{@link com.specmate.model.requirements.impl.CEGModelImpl#getImage <em>Image</em>}</li>
  *   <li>{@link com.specmate.model.requirements.impl.CEGModelImpl#getModelRequirements <em>Model Requirements</em>}</li>
  * </ul>
  *
@@ -278,35 +274,6 @@ public class CEGModelImpl extends CDOObjectImpl implements CEGModel {
 	 * @generated
 	 */
 	@Override
-	public ModelImage getImage() {
-		return (ModelImage)eDynamicGet(RequirementsPackage.CEG_MODEL__IMAGE, BasePackage.Literals.IMODEL__IMAGE, true, true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ModelImage basicGetImage() {
-		return (ModelImage)eDynamicGet(RequirementsPackage.CEG_MODEL__IMAGE, BasePackage.Literals.IMODEL__IMAGE, false, true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setImage(ModelImage newImage) {
-		eDynamicSet(RequirementsPackage.CEG_MODEL__IMAGE, BasePackage.Literals.IMODEL__IMAGE, newImage);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public String getModelRequirements() {
 		return (String)eDynamicGet(RequirementsPackage.CEG_MODEL__MODEL_REQUIREMENTS, RequirementsPackage.Literals.CEG_MODEL__MODEL_REQUIREMENTS, true, true);
 	}
@@ -380,9 +347,6 @@ public class CEGModelImpl extends CDOObjectImpl implements CEGModel {
 				return getTracesTo();
 			case RequirementsPackage.CEG_MODEL__TRACES_FROM:
 				return getTracesFrom();
-			case RequirementsPackage.CEG_MODEL__IMAGE:
-				if (resolve) return getImage();
-				return basicGetImage();
 			case RequirementsPackage.CEG_MODEL__MODEL_REQUIREMENTS:
 				return getModelRequirements();
 		}
@@ -425,9 +389,6 @@ public class CEGModelImpl extends CDOObjectImpl implements CEGModel {
 				getTracesFrom().clear();
 				getTracesFrom().addAll((Collection<? extends ITracingElement>)newValue);
 				return;
-			case RequirementsPackage.CEG_MODEL__IMAGE:
-				setImage((ModelImage)newValue);
-				return;
 			case RequirementsPackage.CEG_MODEL__MODEL_REQUIREMENTS:
 				setModelRequirements((String)newValue);
 				return;
@@ -467,9 +428,6 @@ public class CEGModelImpl extends CDOObjectImpl implements CEGModel {
 			case RequirementsPackage.CEG_MODEL__TRACES_FROM:
 				getTracesFrom().clear();
 				return;
-			case RequirementsPackage.CEG_MODEL__IMAGE:
-				setImage((ModelImage)null);
-				return;
 			case RequirementsPackage.CEG_MODEL__MODEL_REQUIREMENTS:
 				setModelRequirements(MODEL_REQUIREMENTS_EDEFAULT);
 				return;
@@ -501,8 +459,6 @@ public class CEGModelImpl extends CDOObjectImpl implements CEGModel {
 				return !getTracesTo().isEmpty();
 			case RequirementsPackage.CEG_MODEL__TRACES_FROM:
 				return !getTracesFrom().isEmpty();
-			case RequirementsPackage.CEG_MODEL__IMAGE:
-				return basicGetImage() != null;
 			case RequirementsPackage.CEG_MODEL__MODEL_REQUIREMENTS:
 				return MODEL_REQUIREMENTS_EDEFAULT == null ? getModelRequirements() != null : !MODEL_REQUIREMENTS_EDEFAULT.equals(getModelRequirements());
 		}
@@ -542,12 +498,6 @@ public class CEGModelImpl extends CDOObjectImpl implements CEGModel {
 				default: return -1;
 			}
 		}
-		if (baseClass == IModel.class) {
-			switch (derivedFeatureID) {
-				case RequirementsPackage.CEG_MODEL__IMAGE: return BasePackage.IMODEL__IMAGE;
-				default: return -1;
-			}
-		}
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
 	}
 
@@ -581,12 +531,6 @@ public class CEGModelImpl extends CDOObjectImpl implements CEGModel {
 			switch (baseFeatureID) {
 				case BasePackage.ITRACING_ELEMENT__TRACES_TO: return RequirementsPackage.CEG_MODEL__TRACES_TO;
 				case BasePackage.ITRACING_ELEMENT__TRACES_FROM: return RequirementsPackage.CEG_MODEL__TRACES_FROM;
-				default: return -1;
-			}
-		}
-		if (baseClass == IModel.class) {
-			switch (baseFeatureID) {
-				case BasePackage.IMODEL__IMAGE: return RequirementsPackage.CEG_MODEL__IMAGE;
 				default: return -1;
 			}
 		}

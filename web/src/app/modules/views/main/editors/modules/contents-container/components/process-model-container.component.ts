@@ -14,6 +14,7 @@ import { ClipboardService } from '../../tool-pallette/services/clipboard-service
 import { TestSpecificationContentContainerBase } from '../base/testspecification-generatable-content-container-base';
 import { ContentsContainerService } from '../services/content-container.service';
 import { GraphicalEditorService } from '../../graphical-editor/services/graphical-editor.service';
+import { ModelImageService } from '../../graphical-editor/services/model-image.service';
 
 @Component({
     moduleId: module.id.toString(),
@@ -31,9 +32,10 @@ export class ProcessModelContainer extends TestSpecificationContentContainerBase
         additionalInformationService: AdditionalInformationService,
         contentService: ContentsContainerService,
         clipboardService: ClipboardService,
-        graphicalEditorService: GraphicalEditorService) {
+        graphicalEditorService: GraphicalEditorService,
+        protected modelImageService: ModelImageService) {
         super(dataService, navigator, translate, modal, clipboardService,
-            contentService, additionalInformationService, graphicalEditorService);
+            contentService, additionalInformationService, graphicalEditorService, modelImageService);
     }
 
     protected condition = (element: IContainer) => Type.is(element, Process);

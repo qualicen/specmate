@@ -1226,44 +1226,6 @@ public interface BasePackage extends EPackage {
 	int MODEL_IMAGE_OPERATION_COUNT = ICONTAINER_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link com.specmate.model.base.IModel <em>IModel</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.specmate.model.base.IModel
-	 * @see com.specmate.model.base.impl.BasePackageImpl#getIModel()
-	 * @generated
-	 */
-	int IMODEL = 15;
-
-	/**
-	 * The feature id for the '<em><b>Image</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int IMODEL__IMAGE = 0;
-
-	/**
-	 * The number of structural features of the '<em>IModel</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int IMODEL_FEATURE_COUNT = 1;
-
-	/**
-	 * The number of operations of the '<em>IModel</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int IMODEL_OPERATION_COUNT = 0;
-
-
-	/**
 	 * Returns the meta object for class '{@link com.specmate.model.base.INamed <em>INamed</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1667,27 +1629,6 @@ public interface BasePackage extends EPackage {
 	EAttribute getModelImage_ImageData();
 
 	/**
-	 * Returns the meta object for class '{@link com.specmate.model.base.IModel <em>IModel</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>IModel</em>'.
-	 * @see com.specmate.model.base.IModel
-	 * @generated
-	 */
-	EClass getIModel();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.specmate.model.base.IModel#getImage <em>Image</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Image</em>'.
-	 * @see com.specmate.model.base.IModel#getImage()
-	 * @see #getIModel()
-	 * @generated
-	 */
-	EReference getIModel_Image();
-
-	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2043,24 +1984,6 @@ public interface BasePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute MODEL_IMAGE__IMAGE_DATA = eINSTANCE.getModelImage_ImageData();
-
-		/**
-		 * The meta object literal for the '{@link com.specmate.model.base.IModel <em>IModel</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.specmate.model.base.IModel
-		 * @see com.specmate.model.base.impl.BasePackageImpl#getIModel()
-		 * @generated
-		 */
-		EClass IMODEL = eINSTANCE.getIModel();
-
-		/**
-		 * The meta object literal for the '<em><b>Image</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference IMODEL__IMAGE = eINSTANCE.getIModel_Image();
 
 	}
 

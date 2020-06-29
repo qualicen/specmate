@@ -33,7 +33,7 @@ export class ServiceInterface {
     }
 
     public async deauthenticate(token: UserToken): Promise<void> {
-        await  this.http.get(Url.urlDeauthenticate(), { headers: this.getAuthHeader(token), responseType: 'text' }).toPromise();
+        await this.http.get(Url.urlDeauthenticate(), { headers: this.getAuthHeader(token), responseType: 'text' }).toPromise();
     }
 
     public async projectnames(): Promise<string[]> {
@@ -70,8 +70,12 @@ export class ServiceInterface {
         await this.http.delete(Url.urlDelete(url), { headers: this.getAuthHeader(token) }).toPromise();
     }
 
-    public async performOperation(url: string, serviceSuffix: string, payload: any, token: UserToken): Promise<any> {
+    public async performOperationPOST(url: string, serviceSuffix: string, payload: any, token: UserToken): Promise<any> {
         return await this.http.post(Url.urlCustomService(url, serviceSuffix), payload, { headers: this.getAuthHeader(token) }).toPromise();
+    }
+
+    public async performOperationGET(url: string, serviceSuffix: string, payload: any, token: UserToken): Promise<any> {
+        return await this.http.get(Url.urlCustomService(url, serviceSuffix), { headers: this.getAuthHeader(token) }).toPromise();
     }
 
     public async performQuery(url: string, serviceSuffix: string, parameters: { [key: string]: string }, token: UserToken): Promise<any> {

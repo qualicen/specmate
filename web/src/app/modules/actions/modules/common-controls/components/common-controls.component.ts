@@ -10,6 +10,7 @@ import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/s
 import { CEGModel } from 'src/app/model/CEGModel';
 import { Process } from 'src/app/model/Process';
 import { Type } from 'src/app/util/type';
+import { ModelImageService } from 'src/app/modules/views/main/editors/modules/graphical-editor/services/model-image.service';
 
 @Component({
     moduleId: module.id.toString(),
@@ -30,7 +31,8 @@ export class CommonControls {
         private navigator: NavigatorService,
         private translate: TranslateService,
         private undoService: UndoService,
-        private modal: ConfirmationModal) {
+        private modal: ConfirmationModal,
+        private modelImageService: ModelImageService) {
     }
 
     public async save(): Promise<void> {
@@ -38,7 +40,7 @@ export class CommonControls {
             await this.validator.validateCurrent();
             if (this.isSaveEnabled && this.validator.isSavingEnabled()) {
                 if (this.isModel()) {
-                    await this.dataService.saveModelImage(this.navigator.currentElement);
+                    await this.modelImageService.createModelImage(this.navigator.currentElement);
                 }
                 this.dataService.commit(this.translate.instant('save'));
             } else {

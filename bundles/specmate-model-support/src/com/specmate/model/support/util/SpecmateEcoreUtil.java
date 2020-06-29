@@ -16,11 +16,13 @@ import org.eclipse.emf.cdo.common.id.CDOID;
 import org.eclipse.emf.cdo.common.id.CDOIDUtil;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
@@ -311,14 +313,10 @@ public class SpecmateEcoreUtil {
 
 	public static List<EObject> getChildren(Object target) throws SpecmateException {
 		if (target instanceof Resource) {
-			return ((Resource) target).getContents().stream()
-					.filter(element -> !element.eClass().getName().equals(BasePackage.Literals.MODEL_IMAGE.getName()))
-					.collect(Collectors.toList());
+			return ((Resource) target).getContents();
 
 		} else if (target instanceof EObject) {
-			return ((EObject) target).eContents().stream()
-					.filter(element -> !element.eClass().getName().equals(BasePackage.Literals.MODEL_IMAGE.getName()))
-					.collect(Collectors.toList());
+			return ((EObject) target).eContents();
 		} else {
 			throw new SpecmateInternalException(ErrorCode.INTERNAL_PROBLEM, "Object is no resource and no EObject.");
 		}

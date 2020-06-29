@@ -3,7 +3,6 @@
 package com.specmate.model.processes;
 
 import com.specmate.model.base.IContainer;
-import com.specmate.model.base.IModel;
 
 /**
  * <!-- begin-user-doc -->
@@ -15,5 +14,5 @@ import com.specmate.model.base.IModel;
  * @model
  * @generated
  */
-public interface Process extends IContainer, IModel {
+public interface Process extends IContainer {
 } // Process

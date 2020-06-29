@@ -17,7 +17,6 @@
 
 		// References
 		
-		public image: Proxy;
 
 		// Containment
 

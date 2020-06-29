@@ -14,6 +14,7 @@ import { ClipboardService } from '../../tool-pallette/services/clipboard-service
 import { TestSpecificationContentContainerBase } from '../base/testspecification-generatable-content-container-base';
 import { ContentsContainerService } from '../services/content-container.service';
 import { GraphicalEditorService } from '../../graphical-editor/services/graphical-editor.service';
+import { ModelImageService } from '../../graphical-editor/services/model-image.service';
 
 @Component({
     moduleId: module.id.toString(),
@@ -30,9 +31,10 @@ export class CEGModelContainer extends TestSpecificationContentContainerBase<CEG
         clipboardService: ClipboardService,
         contentService: ContentsContainerService,
         additionalInformationService: AdditionalInformationService,
-        graphicalEditorService: GraphicalEditorService) {
+        graphicalEditorService: GraphicalEditorService,
+        modelImageService: ModelImageService) {
         super(dataService, navigator, translate, modal,
-            clipboardService, contentService, additionalInformationService, graphicalEditorService);
+            clipboardService, contentService, additionalInformationService, graphicalEditorService, modelImageService);
     }
 
     modelDescription: string;

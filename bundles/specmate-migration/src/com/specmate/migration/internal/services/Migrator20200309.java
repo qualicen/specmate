@@ -8,6 +8,7 @@ import org.osgi.service.component.annotations.Reference;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.dbprovider.api.IDBProvider;
 import com.specmate.dbprovider.api.migration.IAttributeToSQLMapper;
+import com.specmate.dbprovider.api.migration.IObjectToSQLMapper;
 import com.specmate.migration.api.IMigrator;
 import com.specmate.model.base.BasePackage;
 
@@ -27,14 +28,21 @@ public class Migrator20200309 implements IMigrator {
 
 	@Override
 	public void migrate(Connection connection) throws SpecmateException {
-		createImageReference("model/requirements", "CEGModel");
-		createImageReference("model/processes", "Process");
-	}
+		String objectName = "ModelImage";
+		String packageName = "model/base";
+		IObjectToSQLMapper oMapper = dbProvider.getObjectToSQLMapper(packageName, getSourceVersion(),
+				getTargetVersion());
 
-	private void createImageReference(String packageName, String objectName) throws SpecmateException {
+		oMapper.newObject(objectName);
+
+		// Add attributes
 		IAttributeToSQLMapper aMapper = dbProvider.getAttributeToSQLMapper(packageName, getSourceVersion(),
 				getTargetVersion());
-		aMapper.migrateNewObjectReference(objectName, BasePackage.Literals.IMODEL__IMAGE.getName());
+		aMapper.migrateNewStringAttribute(objectName, "name", "");
+		aMapper.migrateNewStringAttribute(objectName, "description", "");
+		aMapper.migrateNewBooleanAttribute(objectName, "recycled", false);
+		aMapper.migrateNewBooleanAttribute(objectName, "hasRecycledChildren", false);
+		aMapper.migrateNewStringAttribute(objectName, "imageData", "");
 	}
 
 	@Reference

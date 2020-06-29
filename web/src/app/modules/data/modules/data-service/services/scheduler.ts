@@ -175,13 +175,13 @@ export class Scheduler {
         switch (command.operationType) {
             case EOperation.CREATE:
                 this.scheduleCreateCommand(command);
-            break;
+                break;
             case EOperation.UPDATE:
                 this.scheduleUpdateCommand(command);
-            break;
+                break;
             case EOperation.DELETE:
                 this.scheduleDeleteCommand(command);
-            break;
+                break;
         }
     }
 

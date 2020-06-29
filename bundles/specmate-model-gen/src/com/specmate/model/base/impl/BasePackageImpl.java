@@ -13,7 +13,6 @@ import com.specmate.model.base.IContainer;
 import com.specmate.model.base.IContentElement;
 import com.specmate.model.base.IDescribed;
 import com.specmate.model.base.IExternal;
-import com.specmate.model.base.IModel;
 import com.specmate.model.base.IModelConnection;
 import com.specmate.model.base.IModelNode;
 import com.specmate.model.base.INamed;
@@ -166,13 +165,6 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 	 * @generated
 	 */
 	private EClass modelImageEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass iModelEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -651,26 +643,6 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 	 * @generated
 	 */
 	@Override
-	public EClass getIModel() {
-		return iModelEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getIModel_Image() {
-		return (EReference)iModelEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public BaseFactory getBaseFactory() {
 		return (BaseFactory)getEFactoryInstance();
 	}
@@ -746,9 +718,6 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 
 		modelImageEClass = createEClass(MODEL_IMAGE);
 		createEAttribute(modelImageEClass, MODEL_IMAGE__IMAGE_DATA);
-
-		iModelEClass = createEClass(IMODEL);
-		createEReference(iModelEClass, IMODEL__IMAGE);
 	}
 
 	/**
@@ -846,15 +815,14 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 		initEClass(modelImageEClass, ModelImage.class, "ModelImage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getModelImage_ImageData(), ecorePackage.getEString(), "imageData", null, 0, 1, ModelImage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(iModelEClass, IModel.class, "IModel", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getIModel_Image(), this.getModelImage(), null, "image", null, 0, 1, IModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
 		// Create resource
 		createResource(eNS_URI);
 
 		// Create annotations
 		// http://specmate.com/form_meta
 		createForm_metaAnnotations();
+		// http://specmate.com/notLoadingOnList
+		createNotLoadingOnListAnnotations();
 	}
 
 	/**
@@ -886,6 +854,28 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 			   "type", "longText",
 			   "rows", "5",
 			   "position", "100"
+		   });
+		addAnnotation
+		  (modelImageEClass,
+		   source,
+		   new String[] {
+			   "disabled1", "name",
+			   "disabled2", "description"
+		   });
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://specmate.com/notLoadingOnList</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createNotLoadingOnListAnnotations() {
+		String source = "http://specmate.com/notLoadingOnList";
+		addAnnotation
+		  (modelImageEClass,
+		   source,
+		   new String[] {
 		   });
 	}
 

@@ -133,9 +133,8 @@ export class GraphicalEditor {
 
 
     private async loadImage() {
-        if (this.model.image) {
-            let imageData = await this.dataService.readElement(this.model.image.url) as ModelImage;
-
+        let imageData = await this.dataService.performOperations(this.model.url, 'listModelImage', undefined, true) as ModelImage;
+        if (imageData !== null && imageData !== undefined) {
             let domElement = document.getElementById('image');
             let img = document.createElement('img');
             img.src = imageData.imageData;

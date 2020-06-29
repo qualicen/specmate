@@ -290,7 +290,9 @@ Bundle-Version: 0.0.0.${tstamp}
 	specmate-search;version='[0.0.0,0.0.1)',\
 	specmate-testspecification;version='[0.0.0,0.0.1)',\
 	specmate-ui-core;version='[0.0.0,0.0.1)',\
-	specmate-xtext;version='[0.0.0,0.0.1)'
+	specmate-xtext;version='[0.0.0,0.0.1)',\
+	specmate-scheduler;version='[0.0.0,0.0.1)',\
+	org.eclipse.jetty.servlets;version='[9.4.6,9.4.7)'
 
 -runproperties: \
 	jetty.http.port=8088,\

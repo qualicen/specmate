@@ -23,7 +23,7 @@ public class CEGEditorElements extends EditorElements {
 	By TypeAND = By.id("type-AND");
 	By TypeOR = By.id("type-OR");
 	
-	By nodeSelector = By.cssSelector("g > g:nth-child(2) > g[style='cursor: pointer; visibility: visible;']");
+	By nodeSelector = By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;'] > rect");
 
 
 	public CEGEditorElements(WebDriver driver, Actions builder) { // constructor
@@ -36,7 +36,7 @@ public class CEGEditorElements extends EditorElements {
 	 */
 	public int createNode(String variable, String condition, int x, int y) {
 
-		int numberOfNodes = driver.findElements(By.cssSelector("g > g:nth-child(2) > g[style='cursor: pointer; visibility: visible;']")).size();
+		int numberOfNodes = driver.findElements(By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;']")).size();
 		
 		
 		// Click node button and drag and drop to editorview 
@@ -46,7 +46,7 @@ public class CEGEditorElements extends EditorElements {
 
 		WebDriverWait wait = new WebDriverWait(driver, 30);
 		wait.until(ExpectedConditions
-				.visibilityOfElementLocated(By.cssSelector("g > g:nth-child(2) > g[style='cursor: pointer; visibility: visible;']")));
+				.visibilityOfElementLocated(By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;']")));
 
 		WebElement variableTextfield = driver.findElement(propertiesVariable);
 		WebElement conditionTextfield = driver.findElement(propertiesCondition);
@@ -104,13 +104,26 @@ public class CEGEditorElements extends EditorElements {
 		driver.findElement(toolbarClear).click();
 		driver.findElement(cancel).click();
 	}
+	
+	public void changeTypeToANDInNode(int node) {
+		WebElement nodeElement = UITestUtil.getElementWithIndex(node, driver, nodeSelector);
+		builder.moveToElement(nodeElement, 0, 25).click().build().perform();
+		driver.findElement(By.cssSelector("g > g > g > foreignObject > div > select")).click();
+		driver.findElement(By.cssSelector("g > g > g > foreignObject > div > select > option[value=AND]")).click();
+		
+	}
+	
+	public void changeTypeToORInNode(int node) {
+		WebElement nodeElement = UITestUtil.getElementWithIndex(node, driver, nodeSelector);
+		builder.moveToElement(nodeElement, 0, 25).click().build().perform();
+		driver.findElement(By.cssSelector("g > g > g > foreignObject > div > select")).click();
+		driver.findElement(By.cssSelector("g > g > g > foreignObject > div > select > option[value=OR]")).click();
+	}
 
 	public void changeTypeToAND(int node) {
 		// Click two times as clicking only once will minimize the node
 		WebElement nodeElement = UITestUtil.getElementWithIndex(node, driver, nodeSelector);
-		nodeElement.click();
-		WebElement sameNodeElement = UITestUtil.getElementWithIndex(node, driver, nodeSelector);
-		sameNodeElement.click();
+		builder.moveToElement(nodeElement, 0, 25).click().build().perform();
 		driver.findElement(propertiesType).click();
 		driver.findElement(TypeAND).click();
 	}
@@ -118,9 +131,7 @@ public class CEGEditorElements extends EditorElements {
 	public void changeTypeToOR(int node) {
 		// Click two times as clicking only once will minimize the node
 		WebElement nodeElement = UITestUtil.getElementWithIndex(node, driver, nodeSelector);
-		nodeElement.click();
-		WebElement sameNodeElement = UITestUtil.getElementWithIndex(node, driver, nodeSelector);
-		sameNodeElement.click();
+		builder.moveToElement(nodeElement, 0, 25).click().build().perform();
 		driver.findElement(propertiesType).click();
 		driver.findElement(TypeOR).click();
 	}

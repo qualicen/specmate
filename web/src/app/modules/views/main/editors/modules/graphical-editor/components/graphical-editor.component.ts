@@ -131,17 +131,6 @@ export class GraphicalEditor {
         this.init();
     }
 
-
-    private async loadImage() {
-        let imageData = await this.dataService.performOperations(this.model.url, 'listModelImage', undefined, true) as ModelImage;
-        if (imageData !== null && imageData !== undefined) {
-            let domElement = document.getElementById('image');
-            let img = document.createElement('img');
-            img.src = imageData.imageData;
-            domElement.appendChild(img);
-        }
-    }
-
     /*
      * Initialize the MXGraph
      */
@@ -159,7 +148,6 @@ export class GraphicalEditor {
         this.isInGraphTransition = false;
         this.updateValidities();
         this.undoManager.clear();
-        this.loadImage();
         this.graphicalEditorService.triggerGraphicalModelInitFinish();
     }
 

@@ -1,5 +1,6 @@
 package com.specmate.logging.internal;
 
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,12 +53,17 @@ public class SpecmateLogReader implements LogListener {
 		// the mapped level can be null in case the property is not a valid
 		// value
 		if (mappedLevel != null) {
-			this.logLevel = mappedLevel;
+			logLevel = mappedLevel;
 		} else {
 			System.out.println("Unknown log level " + confLogLevel);
-			this.logLevel = LogService.LOG_INFO;
+			logLevel = LogService.LOG_INFO;
 		}
-		System.out.println("Setting log level to " + level2String.get(this.logLevel));
+		System.out.println("Setting log level to " + level2String.get(logLevel));
+		Enumeration log = logReaderService.getLog();
+		while (log.hasMoreElements()) {
+			logged((LogEntry) log.nextElement());
+		}
+		logReaderService.addLogListener(this);
 	}
 
 	private String getStringFromLevel(int level) {
@@ -76,7 +82,6 @@ public class SpecmateLogReader implements LogListener {
 	@Reference
 	public void setLogReader(LogReaderService logReaderService) {
 		this.logReaderService = logReaderService;
-		logReaderService.addLogListener(this);
 	}
 
 	public void unsetLogReader(LogReaderService logReaderService) {
@@ -85,7 +90,7 @@ public class SpecmateLogReader implements LogListener {
 
 	@Override
 	public void logged(LogEntry entry) {
-		if (entry.getLevel() > this.logLevel) {
+		if (entry.getLevel() > logLevel) {
 			return;
 		}
 		String message = getStringFromLevel(entry.getLevel()) + ":" + entry.getBundle().getSymbolicName() + ":"

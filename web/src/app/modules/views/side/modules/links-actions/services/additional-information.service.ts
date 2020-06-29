@@ -52,18 +52,13 @@ export class AdditionalInformationService {
         if (!this.canHaveTestSpecifications) {
             return;
         }
-        if (this.requirement === undefined) {
-            return;
-        }
-        let baseUrl = '';
         if (this.isModel(this.element)) {
-            baseUrl = this.element.url;
+            const testSpecifications =
+                await this.dataService.performQuery(this.element.url, 'listRecursive', { class: TestSpecification.className });
+            this._testSpecifications = Sort.sortArray(testSpecifications).filter(testSpec => testSpec.recycled === false);
         } else {
-            baseUrl = this.requirement.url;
+            this._testSpecifications = undefined;
         }
-
-        const testSpecifications = await this.dataService.performQuery(baseUrl, 'listRecursive', { class: TestSpecification.className });
-        this._testSpecifications = Sort.sortArray(testSpecifications).filter(testSpec => testSpec.recycled === false);
     }
 
     private async loadParents(): Promise<void> {

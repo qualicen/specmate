@@ -440,6 +440,9 @@ export class SpecmateDataService {
 
     private handleError(message: string, url: string, error: any): Promise<any> {
         console.error(message);
+        if (error.status === 401) {
+            this.auth.deauthenticate();
+        }
         this.connectionService.handleErrorResponse(error, url);
         return Promise.resolve(undefined);
     }

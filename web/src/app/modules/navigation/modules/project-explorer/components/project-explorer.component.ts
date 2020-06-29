@@ -120,7 +120,7 @@ export class ProjectExplorer implements OnInit {
         }
 
         // const project: IContainer = await this.dataService.readElement(this.auth.token.project);
-        let libraryFolders: string[] = this.auth.token.libraryFolders;
+        let libraryFolders: string[] = this.auth.session.libraryFolders;
         let projectContents: IContainer[] = await this.dataService.readContents(this.auth.token.project);
 
         // In this case, we were logged out automatically.
@@ -129,7 +129,7 @@ export class ProjectExplorer implements OnInit {
             return;
         }
 
-        this._rootElements = projectContents.filter(c => Type.is(c,Requirement) || (Type.is(c, Folder) && !(c as Folder).library));
+        this._rootElements = projectContents.filter(c => Type.is(c, Requirement) || (Type.is(c, Folder) && !(c as Folder).library));
         this._rootLibraries = projectContents.filter(c => Type.is(c, Folder) && (c as Folder).library && libraryFolders.indexOf(c.id) > -1);
         this._rootRecycleBinProject = projectContents.filter(c => Type.is(c, Folder) && !(c as Folder).library);
         this._rootRecycleBinLibrary = projectContents.filter(c => Type.is(c, Folder) && (c as Folder).library

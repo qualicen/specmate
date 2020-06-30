@@ -251,7 +251,6 @@ Bundle-Version: 0.0.0.${tstamp}
 	jaxb-api;version='[2.3.1,2.3.2)',\
 	org.eclipse.emf.cdo.ecore.retrofit;version='[4.2.300,4.2.301)',\
 	org.apache.commons.collections4;version='[4.0.0,4.0.1)',\
-	org.eclipse.jetty.servlets;version='[9.4.6,9.4.7)',\
 	org.json;version='[0.0.0,0.0.1)',\
 	specmate-administration;version='[0.0.0,0.0.1)',\
 	specmate-auth;version='[0.0.0,0.0.1)',\
@@ -288,11 +287,12 @@ Bundle-Version: 0.0.0.${tstamp}
 	specmate-persistency-api;version='[0.0.0,0.0.1)',\
 	specmate-persistency-cdo;version='[0.0.0,0.0.1)',\
 	specmate-rest;version='[0.0.0,0.0.1)',\
-	specmate-scheduler;version='[0.0.0,0.0.1)',\
 	specmate-search;version='[0.0.0,0.0.1)',\
 	specmate-testspecification;version='[0.0.0,0.0.1)',\
 	specmate-ui-core;version='[0.0.0,0.0.1)',\
-	specmate-xtext;version='[0.0.0,0.0.1)'
+	specmate-xtext;version='[0.0.0,0.0.1)',\
+	specmate-scheduler;version='[0.0.0,0.0.1)',\
+	org.eclipse.jetty.servlets;version='[9.4.6,9.4.7)'
 
 -runproperties: \
 	jetty.http.port=8088,\

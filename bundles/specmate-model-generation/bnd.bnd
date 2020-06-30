@@ -25,3 +25,7 @@
 Private-Package: \
 	com.specmate.modelgeneration,\
 	com.specmate.modelgeneration.legacy
+-privatepackage: \
+	com.specmate.modelgeneration.stages,\
+	com.specmate.modelgeneration.stages.processors,\
+	com.specmate.modelgeneration.stages.graph

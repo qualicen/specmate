@@ -1,6 +1,7 @@
 package com.specmate.nlp.util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +14,9 @@ import org.apache.commons.lang3.tuple.Triple;
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.tcas.Annotation;
+
+import com.specmate.nlp.api.ELanguage;
+import com.specmate.nlp.api.INLPService;
 
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.chunk.Chunk;
@@ -41,6 +45,10 @@ public class GermanSentenceUnfolder extends SentenceUnfolderBase {
 	private static final String DEPENDENCY_TYPE_CJ = "CJ";
 
 	private static final Pattern CONJ_PATTERN = Pattern.compile("(?<!,)(\\s+(und|oder))");
+
+	public GermanSentenceUnfolder(INLPService nlpService) {
+		super(nlpService, ELanguage.DE);
+	}
 
 	/** {@inheritDoc} */
 	@Override
@@ -319,6 +327,18 @@ public class GermanSentenceUnfolder extends SentenceUnfolderBase {
 		}
 
 		return Optional.empty();
+	}
+
+	@Override
+	protected Optional<Annotation> getNearestForwardConnective(JCas jcas, Annotation annotation) {
+		// TODO: implement
+		return Optional.empty();
+	}
+
+	@Override
+	protected List<Annotation> identifyConjunctionsWithoutConnectives(JCas jCas) {
+		// TODO: implement
+		return Collections.emptyList();
 	}
 
 }

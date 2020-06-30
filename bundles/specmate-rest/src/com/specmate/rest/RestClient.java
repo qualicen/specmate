@@ -20,6 +20,8 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.osgi.service.log.LogService;
 
+import com.specmate.common.AssertUtil;
+
 public class RestClient implements AutoCloseable {
 
 	private Client restClient;
@@ -107,7 +109,7 @@ public class RestClient implements AutoCloseable {
 
 	public RestResult<JSONObject> get(String url, Map<String, String> params, Map<String, String> headers) {
 		Response response = rawGet(url, params, headers);
-		return createResult(url, response);
+		return createResult(url, response, JSONObject.class);
 	}
 
 	public RestResult<JSONObject> get(String url, Map<String, String> params) {
@@ -120,12 +122,7 @@ public class RestClient implements AutoCloseable {
 
 	public RestResult<JSONArray> getList(String url, Map<String, String> params, Map<String, String> headers) {
 		Response response = rawGet(url, params, headers);
-		if (response.hasEntity()) {
-			String result = response.readEntity(String.class);
-			return new RestResult<>(response, url, new JSONArray(new JSONTokener(result)));
-		} else {
-			return new RestResult<>(response, url, null);
-		}
+		return createResult(url, response, JSONArray.class);
 	}
 
 	public RestResult<JSONArray> getList(String url, Map<String, String> params) {
@@ -139,7 +136,7 @@ public class RestClient implements AutoCloseable {
 	public RestResult<JSONObject> post(String url, Object object, Map<String, String> params,
 			Map<String, String> headers) {
 		Response response = rawPost(url, object, params, headers);
-		return createResult(url, response);
+		return createResult(url, response, JSONObject.class);
 	}
 
 	public RestResult<JSONObject> post(String url, Object object, Map<String, String> params) {
@@ -148,6 +145,20 @@ public class RestClient implements AutoCloseable {
 
 	public RestResult<JSONObject> post(String url, Object object) {
 		return post(url, object, null, null);
+	}
+
+	public RestResult<JSONArray> postList(String url, Object object, Map<String, String> params,
+			Map<String, String> headers) {
+		Response response = rawPost(url, object, params, headers);
+		return createResult(url, response, JSONArray.class);
+	}
+
+	public RestResult<JSONArray> postList(String url, Object object, Map<String, String> params) {
+		return postList(url, object, params, null);
+	}
+
+	public RestResult<JSONArray> postList(String url, Object object) {
+		return postList(url, object, null, null);
 	}
 
 	public Response rawPost(String url, Object object, Map<String, String> params, Map<String, String> headers) {
@@ -166,7 +177,7 @@ public class RestClient implements AutoCloseable {
 			Map<String, String> headers) {
 		Invocation.Builder invocationBuilder = getInvocationBuilder(url, params, headers);
 		Response response = invocationBuilder.put(Entity.json(objectJson.toString()));
-		return createResult(url, response);
+		return createResult(url, response, JSONObject.class);
 	}
 
 	public RestResult<JSONObject> put(String url, JSONObject objectJson, Map<String, String> params) {
@@ -180,7 +191,7 @@ public class RestClient implements AutoCloseable {
 	public RestResult<JSONObject> delete(String url, Map<String, String> params, Map<String, String> headers) {
 		Invocation.Builder invocationBuilder = getInvocationBuilder(url, params, headers);
 		Response response = invocationBuilder.delete();
-		return createResult(url, response);
+		return createResult(url, response, JSONObject.class);
 	}
 
 	public RestResult<JSONObject> delete(String url, Map<String, String> params) {
@@ -191,11 +202,18 @@ public class RestClient implements AutoCloseable {
 		return delete(url, null, null);
 	}
 
-	private RestResult<JSONObject> createResult(String url, Response response) {
+	private <T> RestResult<T> createResult(String url, Response response, Class<T> clazz) {
+		AssertUtil.assertTrue(clazz.equals(JSONObject.class) || clazz.equals(JSONArray.class));
 		if (response.hasEntity()) {
 			String result = response.readEntity(String.class);
 			try {
-				return new RestResult<>(response, url, new JSONObject(new JSONTokener(result)));
+				T object = null;
+				if (clazz.equals(JSONObject.class)) {
+					object = clazz.cast(new JSONObject(new JSONTokener(result)));
+				} else if (clazz.equals(JSONArray.class)) {
+					object = clazz.cast(new JSONArray(new JSONTokener(result)));
+				}
+				return new RestResult<T>(response, url, object);
 			} catch (JSONException e) {
 				logService.log(LogService.LOG_WARNING, e.getMessage());
 			}

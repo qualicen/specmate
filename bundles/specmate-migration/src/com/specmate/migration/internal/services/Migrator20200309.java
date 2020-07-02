@@ -7,8 +7,8 @@ import org.osgi.service.component.annotations.Component;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.migration.api.IMigrator;
 
-@Component(property = "sourceVersion=20200624", service = IMigrator.class)
-public class Migrator20200624 implements IMigrator {
+@Component(property = "sourceVersion=20200309", service = IMigrator.class)
+public class Migrator20200309 implements IMigrator {
 
 	@Override
 	public String getSourceVersion() {
@@ -22,7 +22,7 @@ public class Migrator20200624 implements IMigrator {
 
 	@Override
 	public void migrate(Connection connection) throws SpecmateException {
-
+		// do nothing
 	}
 
 }

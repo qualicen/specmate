@@ -20,6 +20,7 @@ import com.specmate.rest.RestResult;
 
 @Component(immediate = true, service = IRestService.class)
 public class ListService extends RestServiceBase {
+	private static final String NOTLOADINGANNOTATIONURL = "http://specmate.com/notLoadingOnList";
 
 	private IAuthenticationService authService;
 
@@ -38,7 +39,7 @@ public class ListService extends RestServiceBase {
 			throws SpecmateException {
 		List<EObject> children = SpecmateEcoreUtil.getChildren(target);
 		children = children.stream()
-				.filter(element -> element.eClass().getEAnnotation("http://specmate.com/notLoadingOnList") == null)
+				.filter(element -> element.eClass().getEAnnotation(NOTLOADINGANNOTATIONURL) == null)
 				.collect(Collectors.toList());
 		return new RestResult<>(Response.Status.OK, children);
 	}

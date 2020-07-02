@@ -23,6 +23,7 @@ import com.specmate.nlp.api.ELanguage;
 import com.specmate.nlp.api.INLPService;
 import com.specmate.nlp.util.NLPUtil;
 import com.specmate.rest.RestResult;
+import com.specmate.xtext.XTextException;
 
 /**
  * Service to create automatic a CEGModel from a requirement
@@ -41,8 +42,7 @@ public class GenerateModelFromRequirementService extends RestServiceBase {
 
 	@Activate
 	public void activate() throws SpecmateException {
-		this.modelGenCounter = metricsService.createCounter("model_generation_counter",
-				"Total number of generated models");
+		modelGenCounter = metricsService.createCounter("model_generation_counter", "Total number of generated models");
 	}
 
 	@Override
@@ -60,13 +60,12 @@ public class GenerateModelFromRequirementService extends RestServiceBase {
 		CEGModel model = (CEGModel) parent;
 
 		try {
-			this.logService.log(LogService.LOG_INFO, "Model Generation STARTED");
+			logService.log(LogService.LOG_INFO, "Model Generation STARTED");
 			model = generateModelFromDescription(model);
-			this.logService.log(LogService.LOG_INFO, "Model Generation FINISHED");
-			this.modelGenCounter.inc();
+			logService.log(LogService.LOG_INFO, "Model Generation FINISHED");
+			modelGenCounter.inc();
 		} catch (SpecmateException e) {
-			this.logService.log(LogService.LOG_ERROR,
-					"Model Generation failed with following error:\n" + e.getMessage());
+			logService.log(LogService.LOG_ERROR, "Model Generation failed with following error:\n" + e.getMessage());
 			return new RestResult<>(Response.Status.INTERNAL_SERVER_ERROR);
 		}
 		return new RestResult<>(Response.Status.OK);
@@ -85,22 +84,24 @@ public class GenerateModelFromRequirementService extends RestServiceBase {
 		if (text == null || StringUtils.isEmpty(text)) {
 			return model;
 		}
-		text = new PersonalPronounsReplacer(tagger).replacePronouns(text);
+		// Fixes some issues with the dkpro/spacy backoff.
+		text = text.replaceAll("[^,.!? ](?=[,.!?])", "$0 ").replaceAll("\\s+", " ");
+		// text = new PersonalPronounsReplacer(tagger).replacePronouns(text);
 		ELanguage lang = NLPUtil.detectLanguage(text);
 		ICEGFromRequirementGenerator generator;
 		if (lang == ELanguage.PSEUDO) {
 			generator = new GenerateModelFromPseudoCode();
 		} else {
-			generator = new PatternbasedCEGGenerator(lang, tagger, this.configService);
+			generator = new PatternbasedCEGGenerator(lang, tagger, configService, logService);
 		}
 
 		try {
 			generator.createModel(model, text);
 		} catch (SpecmateException e) {
 			// Generation Backof
-			this.logService.log(LogService.LOG_INFO,
+			logService.log(LogService.LOG_INFO,
 					"NLP model generation failed with the following error: \"" + e.getMessage() + "\"");
-			this.logService.log(LogService.LOG_INFO, "Backing off to rule based generation...");
+			logService.log(LogService.LOG_INFO, "Backing off to rule based generation...");
 			if (lang == ELanguage.DE) {
 				generator = new GermanCEGFromRequirementGenerator(logService, tagger);
 			} else {

@@ -181,13 +181,8 @@
 	org.eclipse.xtext.smap;version='[2.10.0,2.10.1)',\
 	org.eclipse.xtext.util;version='[2.10.0,2.10.1)',\
 	org.eclipse.xtext.xbase.lib;version='[2.10.0,2.10.1)',\
+	jaxb-api;version='[2.3.1,2.3.2)',\
 	org.apache.commons.collections4;version='[4.0.0,4.0.1)',\
-	com.google.guava;version='[26.0.0,26.0.1)',\
-	io.atlassian.fugue;version='[4.7.2,4.7.3)',\
-	io.atlassian.util.concurrent.atlassian-util-concurrent;version='[4.0.1,4.0.2)',\
-	org.apache.commons.logging;version='[1.2.0,1.2.1)',\
-	org.apache.httpcomponents.httpasyncclient;version='[4.1.4,4.1.5)',\
-	org.apache.httpcomponents.httpclient;version='[4.5.5,4.5.6)',\
 	org.json;version='[0.0.0,0.0.1)',\
 	specmate-administration;version='[0.0.0,0.0.1)',\
 	specmate-auth;version='[0.0.0,0.0.1)',\
@@ -224,14 +219,18 @@
 	specmate-persistency-api;version='[0.0.0,0.0.1)',\
 	specmate-persistency-cdo;version='[0.0.0,0.0.1)',\
 	specmate-rest;version='[0.0.0,0.0.1)',\
-	specmate-scheduler;version=snapshot,\
 	specmate-search;version='[0.0.0,0.0.1)',\
 	specmate-testspecification;version='[0.0.0,0.0.1)',\
 	specmate-trello-connector;version='[0.0.0,0.0.1)',\
 	specmate-ui-core;version='[0.0.0,0.0.1)',\
 	specmate-xtext;version='[0.0.0,0.0.1)',\
+	com.google.guava;version='[26.0.0,26.0.1)',\
+	io.atlassian.fugue;version='[4.7.2,4.7.3)',\
+	io.atlassian.util.concurrent.atlassian-util-concurrent;version='[4.0.1,4.0.2)',\
+	org.apache.commons.logging;version='[1.2.0,1.2.1)',\
+	org.apache.httpcomponents.httpasyncclient;version='[4.1.4,4.1.5)',\
+	org.apache.httpcomponents.httpclient;version='[4.5.5,4.5.6)',\
 	com.sun.xml.bind.jaxb-osgi;version='[2.3.3,2.3.4)',\
-	jaxb-api;version='[2.3.0,2.3.1)',\
 	org.eclipse.jetty.servlets;version='[9.4.6,9.4.7)'
 
 -runproperties: \
@@ -249,6 +248,5 @@
 	Local
 -runvm: -Xmx6000m\n\
 	-Djdk.crypto.KeyAgreement.legacyKDF=true
-	 
 
 -runee: JavaSE-11

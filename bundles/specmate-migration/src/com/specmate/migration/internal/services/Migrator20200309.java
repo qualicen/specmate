@@ -38,6 +38,7 @@ public class Migrator20200309 implements IMigrator {
 		// Add attributes
 		IAttributeToSQLMapper aMapper = dbProvider.getAttributeToSQLMapper(packageName, getSourceVersion(),
 				getTargetVersion());
+		aMapper.migrateNewStringAttribute(objectName, "id", "");
 		aMapper.migrateNewStringAttribute(objectName, "name", "");
 		aMapper.migrateNewStringAttribute(objectName, "description", "");
 		aMapper.migrateNewBooleanAttribute(objectName, "recycled", false);

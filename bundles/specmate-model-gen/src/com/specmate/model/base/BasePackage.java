@@ -38,7 +38,7 @@ public interface BasePackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://specmate.com/20200309/model/base";
+	String eNS_URI = "http://specmate.com/20200605/model/base";
 
 	/**
 	 * The package namespace name.
@@ -1135,6 +1135,88 @@ public interface BasePackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link com.specmate.model.base.impl.ModelImageImpl <em>Model Image</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.specmate.model.base.impl.ModelImageImpl
+	 * @see com.specmate.model.base.impl.BasePackageImpl#getModelImage()
+	 * @generated
+	 */
+	int MODEL_IMAGE = 14;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MODEL_IMAGE__ID = ICONTENT_ELEMENT__ID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MODEL_IMAGE__NAME = ICONTENT_ELEMENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MODEL_IMAGE__DESCRIPTION = ICONTENT_ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MODEL_IMAGE__RECYCLED = ICONTENT_ELEMENT__RECYCLED;
+
+	/**
+	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MODEL_IMAGE__HAS_RECYCLED_CHILDREN = ICONTENT_ELEMENT__HAS_RECYCLED_CHILDREN;
+
+	/**
+	 * The feature id for the '<em><b>Image Data</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MODEL_IMAGE__IMAGE_DATA = ICONTENT_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Model Image</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MODEL_IMAGE_FEATURE_COUNT = ICONTENT_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Model Image</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MODEL_IMAGE_OPERATION_COUNT = ICONTENT_ELEMENT_OPERATION_COUNT + 0;
+
+	/**
 	 * Returns the meta object for class '{@link com.specmate.model.base.INamed <em>INamed</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1517,6 +1599,27 @@ public interface BasePackage extends EPackage {
 	EAttribute getIRecycled_HasRecycledChildren();
 
 	/**
+	 * Returns the meta object for class '{@link com.specmate.model.base.ModelImage <em>Model Image</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Model Image</em>'.
+	 * @see com.specmate.model.base.ModelImage
+	 * @generated
+	 */
+	EClass getModelImage();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.specmate.model.base.ModelImage#getImageData <em>Image Data</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Image Data</em>'.
+	 * @see com.specmate.model.base.ModelImage#getImageData()
+	 * @see #getModelImage()
+	 * @generated
+	 */
+	EAttribute getModelImage_ImageData();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1854,6 +1957,24 @@ public interface BasePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute IRECYCLED__HAS_RECYCLED_CHILDREN = eINSTANCE.getIRecycled_HasRecycledChildren();
+
+		/**
+		 * The meta object literal for the '{@link com.specmate.model.base.impl.ModelImageImpl <em>Model Image</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.specmate.model.base.impl.ModelImageImpl
+		 * @see com.specmate.model.base.impl.BasePackageImpl#getModelImage()
+		 * @generated
+		 */
+		EClass MODEL_IMAGE = eINSTANCE.getModelImage();
+
+		/**
+		 * The meta object literal for the '<em><b>Image Data</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MODEL_IMAGE__IMAGE_DATA = eINSTANCE.getModelImage_ImageData();
 
 	}
 

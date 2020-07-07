@@ -29,6 +29,7 @@ export class ServiceInterface {
         return session;
     }
 
+
     public async deauthenticate(): Promise<void> {
         await this.http.get(Url.urlDeauthenticate(), { responseType: 'text' }).toPromise();
     }
@@ -67,8 +68,12 @@ export class ServiceInterface {
         await this.http.delete(Url.urlDelete(url)).toPromise();
     }
 
-    public async performOperation(url: string, serviceSuffix: string, payload: any, token: UserToken): Promise<any> {
+    public async performOperationPOST(url: string, serviceSuffix: string, payload: any, token: UserToken): Promise<any> {
         return await this.http.post(Url.urlCustomService(url, serviceSuffix), payload).toPromise();
+    }
+
+    public async performOperationGET(url: string, serviceSuffix: string, payload: any, token: UserToken): Promise<any> {
+        return await this.http.get(Url.urlCustomService(url, serviceSuffix)).toPromise();
     }
 
     public async performQuery(url: string, serviceSuffix: string, parameters: { [key: string]: string }, token: UserToken): Promise<any> {

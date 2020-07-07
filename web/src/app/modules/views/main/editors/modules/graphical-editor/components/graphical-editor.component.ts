@@ -34,6 +34,8 @@ import { EditorStyle } from './editor-components/editor-style';
 import { ChangeTranslator } from './util/change-translator';
 import { StyleChanger } from './util/style-changer';
 import { GraphicalEditorService } from '../services/graphical-editor.service';
+import { Process } from 'src/app/model/Process';
+import { ModelImage } from 'src/app/model/ModelImage';
 
 declare var require: any;
 
@@ -61,7 +63,7 @@ export class GraphicalEditor {
 
     private isInGraphTransition = false;
 
-    private _model: IContainer;
+    private _model: CEGModel | Process;
     private _contents: IContainer[];
 
     private graphMouseMove: (evt: any) => void;
@@ -146,6 +148,7 @@ export class GraphicalEditor {
         this.isInGraphTransition = false;
         this.updateValidities();
         this.undoManager.clear();
+        this.graphicalEditorService.triggerGraphicalModelInitFinish();
     }
 
     private async createGraph(): Promise<void> {
@@ -520,7 +523,7 @@ export class GraphicalEditor {
     }
 
     /*********************** Editor Options ***********************/
-    public get model(): IContainer {
+    public get model(): CEGModel | Process {
         return this._model;
     }
 
@@ -553,7 +556,7 @@ export class GraphicalEditor {
         return EditorStyle.CAUSE_STYLE_NAME;
     }
 
-    private resetProviders(model: IContainer): void {
+    private resetProviders(model: CEGModel | Process): void {
         this.shapeProvider = new ShapeProvider(model);
         this.nameProvider = new NameProvider(model, this.translate);
         this.editorToolsService.init(model);
@@ -561,7 +564,7 @@ export class GraphicalEditor {
     }
 
     @Input()
-    public set model(model: IContainer) {
+    public set model(model: CEGModel | Process) {
         this.resetProviders(model);
         this._model = model;
         this.dataService.readContents(model.url, true).then((contents) => {

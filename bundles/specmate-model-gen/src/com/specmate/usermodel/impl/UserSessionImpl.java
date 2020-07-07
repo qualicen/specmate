@@ -30,7 +30,6 @@ import org.eclipse.emf.internal.cdo.CDOObjectImpl;
  *   <li>{@link com.specmate.usermodel.impl.UserSessionImpl#getTargetSystem <em>Target System</em>}</li>
  *   <li>{@link com.specmate.usermodel.impl.UserSessionImpl#getLibraryFolders <em>Library Folders</em>}</li>
  *   <li>{@link com.specmate.usermodel.impl.UserSessionImpl#isIsDeleted <em>Is Deleted</em>}</li>
- *   <li>{@link com.specmate.usermodel.impl.UserSessionImpl#getExporters <em>Exporters</em>}</li>
  * </ul>
  *
  * @generated
@@ -291,17 +290,6 @@ public class UserSessionImpl extends CDOObjectImpl implements UserSession {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public EList<String> getExporters() {
-		return (EList<String>)eDynamicGet(UsermodelPackage.USER_SESSION__EXPORTERS, UsermodelPackage.Literals.USER_SESSION__EXPORTERS, true, true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -321,8 +309,6 @@ public class UserSessionImpl extends CDOObjectImpl implements UserSession {
 				return getLibraryFolders();
 			case UsermodelPackage.USER_SESSION__IS_DELETED:
 				return isIsDeleted();
-			case UsermodelPackage.USER_SESSION__EXPORTERS:
-				return getExporters();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -361,10 +347,6 @@ public class UserSessionImpl extends CDOObjectImpl implements UserSession {
 			case UsermodelPackage.USER_SESSION__IS_DELETED:
 				setIsDeleted((Boolean)newValue);
 				return;
-			case UsermodelPackage.USER_SESSION__EXPORTERS:
-				getExporters().clear();
-				getExporters().addAll((Collection<? extends String>)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -401,9 +383,6 @@ public class UserSessionImpl extends CDOObjectImpl implements UserSession {
 			case UsermodelPackage.USER_SESSION__IS_DELETED:
 				setIsDeleted(IS_DELETED_EDEFAULT);
 				return;
-			case UsermodelPackage.USER_SESSION__EXPORTERS:
-				getExporters().clear();
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -432,8 +411,6 @@ public class UserSessionImpl extends CDOObjectImpl implements UserSession {
 				return !getLibraryFolders().isEmpty();
 			case UsermodelPackage.USER_SESSION__IS_DELETED:
 				return isIsDeleted() != IS_DELETED_EDEFAULT;
-			case UsermodelPackage.USER_SESSION__EXPORTERS:
-				return !getExporters().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

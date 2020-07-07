@@ -8,6 +8,7 @@ import { NavigatorService } from '../../../../../../navigation/modules/navigator
 import { ConfirmationModal } from '../../../../../../notification/modules/modals/services/confirmation-modal.service';
 import { SpecmateViewBase } from '../../../base/specmate-view-base';
 import { GraphicalEditor } from '../../graphical-editor/components/graphical-editor.component';
+import { CEGModel } from 'src/app/model/CEGModel';
 
 @Component({
     moduleId: module.id.toString(),
@@ -33,7 +34,7 @@ export class ProcessDetails extends SpecmateViewBase {
         super(dataService, navigator, route, modal, translate);
     }
 
-    protected onElementResolved(element: IContainer): void {
+    protected onElementResolved(element: CEGModel | Process): void {
         this.model = element;
         this.dataService.readContents(this.model.url).then((contents: IContainer[]) => this.contents = contents);
     }

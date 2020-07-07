@@ -5,7 +5,7 @@ import { ElementFactoryBase } from './element-factory-base';
 import { ModelFactoryBase } from './model-factory-base';
 
 export class ProcessFactory extends ModelFactoryBase {
-    protected get simpleModel(): IContainer {
+    protected get simpleModel(): Process {
         return new Process();
     }
 

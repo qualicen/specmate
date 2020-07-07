@@ -226,17 +226,7 @@ public enum ErrorCode implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	NLP(114, "nlp", "nlp"),
-	
-	/**
-	 * The '<em><b>Spacy</b></em>' literal object.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #SPACY_VALUE
-	 * @generated
-	 * @ordered
-	 */
-	SPACY(115, "spacy", "spacy");
+	NLP(114, "nlp", "nlp");
 
 	/**
 	 * The '<em><b>No Such Service</b></em>' literal value.
@@ -470,17 +460,6 @@ public enum ErrorCode implements Enumerator {
 	public static final int NLP_VALUE = 114;
 	
 	/**
-	 * The '<em><b>Spacy</b></em>' literal value.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #SPACY
-	 * @model name="spacy"
-	 * @generated
-	 * @ordered
-	 */
-	public static final int SPACY_VALUE = 115;
-
-	/**
 	 * An array of all the '<em><b>Error Code</b></em>' enumerators.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -509,7 +488,6 @@ public enum ErrorCode implements Enumerator {
 			TESTGENERATION,
 			TRELLO,
 			NLP,
-			SPACY,
 		};
 
 	/**
@@ -587,7 +565,6 @@ public enum ErrorCode implements Enumerator {
 			case TESTGENERATION_VALUE: return TESTGENERATION;
 			case TRELLO_VALUE: return TRELLO;
 			case NLP_VALUE: return NLP;
-			case SPACY_VALUE: return SPACY;
 		}
 		return null;
 	}

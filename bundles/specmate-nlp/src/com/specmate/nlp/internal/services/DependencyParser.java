@@ -152,7 +152,7 @@ public class DependencyParser extends MaltParser {
 		// 1. Quantitative Comparison: Did both approaches create the same amount of
 		// tokens?
 		if (dkProTokens.size() != spacyTokens.length()) {
-			throw new SpecmateInternalException(ErrorCode.SPACY,
+			throw new SpecmateInternalException(ErrorCode.NLP,
 					"DKPro and Spacy generate different set of tokens. Dependency tree can not be created.");
 		}
 
@@ -161,7 +161,7 @@ public class DependencyParser extends MaltParser {
 			String dkToken = dkProTokens.get(i).getCoveredText();
 			String spacyToken = spacyTokens.getJSONObject(i).getString("text");
 			if (!dkToken.equals(spacyToken)) {
-				throw new SpecmateInternalException(ErrorCode.SPACY,
+				throw new SpecmateInternalException(ErrorCode.NLP,
 						"DKPro and Spacy generate different set of tokens. Dependency tree can not be created.");
 			}
 		}
@@ -185,7 +185,7 @@ public class DependencyParser extends MaltParser {
 			return result.getPayload();
 		} else {
 			result.getResponse().close();
-			throw new SpecmateInternalException(ErrorCode.SPACY,
+			throw new SpecmateInternalException(ErrorCode.NLP,
 					"Could not access Spacy API. Dependencies could not be loaded.");
 		}
 	}

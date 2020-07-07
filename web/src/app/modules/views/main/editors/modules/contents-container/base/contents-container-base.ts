@@ -9,7 +9,11 @@ import { NavigatorService } from '../../../../../../navigation/modules/navigator
 import { ConfirmationModal } from '../../../../../../notification/modules/modals/services/confirmation-modal.service';
 import { ClipboardService } from '../../tool-pallette/services/clipboard-service';
 import { GraphTransformer } from '../../tool-pallette/util/graph-transformer';
-import { Url } from 'src/app/util/url';
+import { Type } from 'src/app/util/type';
+import { CEGModel } from 'src/app/model/CEGModel';
+import { Process } from 'src/app/model/Process';
+import { GraphicalEditorService } from '../../graphical-editor/services/graphical-editor.service';
+import { ModelImageService } from '../../graphical-editor/services/model-image.service';
 
 export abstract class ContentContainerBase<T extends IContainer> implements OnInit {
 
@@ -33,7 +37,9 @@ export abstract class ContentContainerBase<T extends IContainer> implements OnIn
         protected navigator: NavigatorService,
         protected translate: TranslateService,
         protected modal: ConfirmationModal,
-        private clipboardService: ClipboardService) {
+        private clipboardService: ClipboardService,
+        protected graphicalEditorService: GraphicalEditorService,
+        protected modelImageService: ModelImageService) {
     }
 
     public async ngOnInit(): Promise<void> {
@@ -44,7 +50,13 @@ export abstract class ContentContainerBase<T extends IContainer> implements OnIn
         if (name && this.validPattern(name)) {
             const element = await this.createElement(name);
             if (element != undefined) {
-                this.navigator.navigate(element);
+                await this.navigator.navigate(element);
+                if (Type.is(element, CEGModel) || Type.is(element, Process)) {
+                    this.graphicalEditorService.initModelFinish.subscribe(async () => {
+                        await this.modelImageService.createModelImage(element);
+                        await this.dataService.commit(this.translate.instant('save'));
+                    });
+                }
             }
         }
     }
@@ -115,7 +127,6 @@ export abstract class ContentContainerBase<T extends IContainer> implements OnIn
     }
 
     public get canPaste(): boolean {
-        let test = this.condition(this.clipboardService.clipboard[0]);
         return this.clipboardService.clipboard.length === 1 && this.condition(this.clipboardService.clipboard[0]);
     }
 

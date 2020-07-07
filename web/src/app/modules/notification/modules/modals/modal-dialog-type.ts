@@ -13,7 +13,7 @@ export class Dialogtype {
     readonly message: string;
 
     public constructor(title: string, message: string, acceptText = 'ok', dismissText = 'cancel',
-                    hasSave = false, hasShowLog = false, hasForeward = false, hasBackward = false) {
+        hasSave = false, hasShowLog = false, hasForeward = false, hasBackward = false) {
         this.title = title ? title : '';
         this.message = message ? message : '';
 
@@ -42,8 +42,8 @@ export class Dialogtype {
         return new Dialogtype(title, message, 'ok', 'cancel');
     }
 
-    public static unsavedChangesDialog(message: string, withCancel: boolean) {
-        return new Dialogtype('ConfirmationRequired', message, 'discard', withCancel ? 'cancel' : '', true);
+    public static unsavedChangesDialog(message: string, withCancel: boolean, withDiscard = true) {
+        return new Dialogtype('ConfirmationRequired', message, withDiscard ? 'discard' : '', withCancel ? 'cancel' : '', true);
     }
 
     public static discardCancelDialog(message: string, withCancel: boolean) {

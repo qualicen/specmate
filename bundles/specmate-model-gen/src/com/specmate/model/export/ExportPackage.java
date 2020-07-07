@@ -39,7 +39,7 @@ public interface ExportPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://specmate.com/20200309/model/export";
+	String eNS_URI = "http://specmate.com/20200605/model/export";
 
 	/**
 	 * The package namespace name.

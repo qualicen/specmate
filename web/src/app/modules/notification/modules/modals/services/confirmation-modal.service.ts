@@ -13,11 +13,11 @@ export class ConfirmationModal {
         private translate: TranslateService,
         private validator: ValidationService) { }
 
-    public async openSave(message: string, withCancel = true): Promise<any> {
+    public async openSave(message: string, withCancel = true, withDiscard = true): Promise<any> {
         const modalRef = this.modalService.open(TypedModalContent);
         await this.validator.validateCurrent();
         if (this.validator.isSavingEnabled()) {
-            modalRef.componentInstance.options = Dialogtype.unsavedChangesDialog(message, withCancel);
+            modalRef.componentInstance.options = Dialogtype.unsavedChangesDialog(message, withCancel, withDiscard);
         } else {
             let displayMessage = this.translate.instant('saveError.discard') + '\n' + this.validator.getValidationResultAsString(true);
             modalRef.componentInstance.options = Dialogtype.discardCancelDialog(displayMessage, withCancel);
@@ -47,7 +47,7 @@ export class ConfirmationModal {
         if (this.dataService.hasCommits) {
             await this.validator.validateCurrent();
             if (this.validator.isSavingEnabled()) {
-                return this.openOkCancel('ConfirmationRequired', message || this.translate.instant('confirmSave'));
+                return this.openSave(message || this.translate.instant('confirmSave'), true, false);
             } else {
                 let displayMessage = this.translate.instant('saveError.continue') + '\n' + this.validator.getValidationResultAsString(true);
                 return this.openOk('saveError.title', displayMessage);

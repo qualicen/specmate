@@ -61,6 +61,7 @@ public class BaseFactoryImpl extends EFactoryImpl implements BaseFactory {
 			case BasePackage.IMODEL_CONNECTION: return (EObject)createIModelConnection();
 			case BasePackage.IMODEL_NODE: return (EObject)createIModelNode();
 			case BasePackage.ITRACING_ELEMENT: return (EObject)createITracingElement();
+			case BasePackage.MODEL_IMAGE: return (EObject)createModelImage();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -119,6 +120,17 @@ public class BaseFactoryImpl extends EFactoryImpl implements BaseFactory {
 	public ITracingElement createITracingElement() {
 		ITracingElementImpl iTracingElement = new ITracingElementImpl();
 		return iTracingElement;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ModelImage createModelImage() {
+		ModelImageImpl modelImage = new ModelImageImpl();
+		return modelImage;
 	}
 
 	/**

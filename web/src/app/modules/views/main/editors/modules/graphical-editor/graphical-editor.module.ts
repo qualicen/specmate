@@ -6,6 +6,7 @@ import { ToolPalletteModule } from '../tool-pallette/tool-pallette.module';
 import { GraphicalEditor } from './components/graphical-editor.component';
 import { EditorGridButtonModule } from '../editor-grid-button/editor-grid-button.module';
 import { GraphicalEditorService } from './services/graphical-editor.service';
+import { ModelImageService } from './services/model-image.service';
 
 @NgModule({
   imports: [
@@ -25,7 +26,8 @@ import { GraphicalEditorService } from './services/graphical-editor.service';
     GraphicalEditor
   ],
   providers: [
-    GraphicalEditorService
+    GraphicalEditorService,
+    ModelImageService
   ],
   bootstrap: [
     // COMPONENTS THAT ARE BOOTSTRAPPED HERE

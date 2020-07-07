@@ -1151,7 +1151,7 @@ public interface BasePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_IMAGE__ID = ICONTAINER__ID;
+	int MODEL_IMAGE__ID = ICONTENT_ELEMENT__ID;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1160,7 +1160,7 @@ public interface BasePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_IMAGE__NAME = ICONTAINER__NAME;
+	int MODEL_IMAGE__NAME = ICONTENT_ELEMENT__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -1169,7 +1169,7 @@ public interface BasePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_IMAGE__DESCRIPTION = ICONTAINER__DESCRIPTION;
+	int MODEL_IMAGE__DESCRIPTION = ICONTENT_ELEMENT__DESCRIPTION;
 
 	/**
 	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
@@ -1178,7 +1178,7 @@ public interface BasePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_IMAGE__RECYCLED = ICONTAINER__RECYCLED;
+	int MODEL_IMAGE__RECYCLED = ICONTENT_ELEMENT__RECYCLED;
 
 	/**
 	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
@@ -1187,16 +1187,7 @@ public interface BasePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_IMAGE__HAS_RECYCLED_CHILDREN = ICONTAINER__HAS_RECYCLED_CHILDREN;
-
-	/**
-	 * The feature id for the '<em><b>Contents</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MODEL_IMAGE__CONTENTS = ICONTAINER__CONTENTS;
+	int MODEL_IMAGE__HAS_RECYCLED_CHILDREN = ICONTENT_ELEMENT__HAS_RECYCLED_CHILDREN;
 
 	/**
 	 * The feature id for the '<em><b>Image Data</b></em>' attribute.
@@ -1205,7 +1196,7 @@ public interface BasePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_IMAGE__IMAGE_DATA = ICONTAINER_FEATURE_COUNT + 0;
+	int MODEL_IMAGE__IMAGE_DATA = ICONTENT_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Model Image</em>' class.
@@ -1214,7 +1205,7 @@ public interface BasePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_IMAGE_FEATURE_COUNT = ICONTAINER_FEATURE_COUNT + 1;
+	int MODEL_IMAGE_FEATURE_COUNT = ICONTENT_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Model Image</em>' class.
@@ -1223,7 +1214,7 @@ public interface BasePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_IMAGE_OPERATION_COUNT = ICONTAINER_OPERATION_COUNT + 0;
+	int MODEL_IMAGE_OPERATION_COUNT = ICONTENT_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
 	 * Returns the meta object for class '{@link com.specmate.model.base.INamed <em>INamed</em>}'.

@@ -19,7 +19,7 @@ package com.specmate.model.base;
  *        annotation="http://specmate.com/notLoadingOnList"
  * @generated
  */
-public interface ModelImage extends IContainer {
+public interface ModelImage extends IContentElement {
 	/**
 	 * Returns the value of the '<em><b>Image Data</b></em>' attribute.
 	 * <!-- begin-user-doc -->

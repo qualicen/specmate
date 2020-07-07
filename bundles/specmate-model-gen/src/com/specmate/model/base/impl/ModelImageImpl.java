@@ -3,19 +3,11 @@
 package com.specmate.model.base.impl;
 
 import com.specmate.model.base.BasePackage;
-import com.specmate.model.base.IContentElement;
 import com.specmate.model.base.IDescribed;
 import com.specmate.model.base.INamed;
 import com.specmate.model.base.IRecycled;
 import com.specmate.model.base.ModelImage;
-
-import java.util.Collection;
-import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
-
-import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.emf.internal.cdo.CDOObjectImpl;
 
 /**
@@ -31,7 +23,6 @@ import org.eclipse.emf.internal.cdo.CDOObjectImpl;
  *   <li>{@link com.specmate.model.base.impl.ModelImageImpl#getDescription <em>Description</em>}</li>
  *   <li>{@link com.specmate.model.base.impl.ModelImageImpl#isRecycled <em>Recycled</em>}</li>
  *   <li>{@link com.specmate.model.base.impl.ModelImageImpl#isHasRecycledChildren <em>Has Recycled Children</em>}</li>
- *   <li>{@link com.specmate.model.base.impl.ModelImageImpl#getContents <em>Contents</em>}</li>
  *   <li>{@link com.specmate.model.base.impl.ModelImageImpl#getImageData <em>Image Data</em>}</li>
  * </ul>
  *
@@ -227,17 +218,6 @@ public class ModelImageImpl extends CDOObjectImpl implements ModelImage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public EList<IContentElement> getContents() {
-		return (EList<IContentElement>)eDynamicGet(BasePackage.MODEL_IMAGE__CONTENTS, BasePackage.Literals.ICONTAINER__CONTENTS, true, true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public String getImageData() {
 		return (String)eDynamicGet(BasePackage.MODEL_IMAGE__IMAGE_DATA, BasePackage.Literals.MODEL_IMAGE__IMAGE_DATA, true, true);
@@ -259,20 +239,6 @@ public class ModelImageImpl extends CDOObjectImpl implements ModelImage {
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case BasePackage.MODEL_IMAGE__CONTENTS:
-				return ((InternalEList<?>)getContents()).basicRemove(otherEnd, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case BasePackage.MODEL_IMAGE__ID:
@@ -285,8 +251,6 @@ public class ModelImageImpl extends CDOObjectImpl implements ModelImage {
 				return isRecycled();
 			case BasePackage.MODEL_IMAGE__HAS_RECYCLED_CHILDREN:
 				return isHasRecycledChildren();
-			case BasePackage.MODEL_IMAGE__CONTENTS:
-				return getContents();
 			case BasePackage.MODEL_IMAGE__IMAGE_DATA:
 				return getImageData();
 		}
@@ -316,10 +280,6 @@ public class ModelImageImpl extends CDOObjectImpl implements ModelImage {
 				return;
 			case BasePackage.MODEL_IMAGE__HAS_RECYCLED_CHILDREN:
 				setHasRecycledChildren((Boolean)newValue);
-				return;
-			case BasePackage.MODEL_IMAGE__CONTENTS:
-				getContents().clear();
-				getContents().addAll((Collection<? extends IContentElement>)newValue);
 				return;
 			case BasePackage.MODEL_IMAGE__IMAGE_DATA:
 				setImageData((String)newValue);
@@ -351,9 +311,6 @@ public class ModelImageImpl extends CDOObjectImpl implements ModelImage {
 			case BasePackage.MODEL_IMAGE__HAS_RECYCLED_CHILDREN:
 				setHasRecycledChildren(HAS_RECYCLED_CHILDREN_EDEFAULT);
 				return;
-			case BasePackage.MODEL_IMAGE__CONTENTS:
-				getContents().clear();
-				return;
 			case BasePackage.MODEL_IMAGE__IMAGE_DATA:
 				setImageData(IMAGE_DATA_EDEFAULT);
 				return;
@@ -379,8 +336,6 @@ public class ModelImageImpl extends CDOObjectImpl implements ModelImage {
 				return isRecycled() != RECYCLED_EDEFAULT;
 			case BasePackage.MODEL_IMAGE__HAS_RECYCLED_CHILDREN:
 				return isHasRecycledChildren() != HAS_RECYCLED_CHILDREN_EDEFAULT;
-			case BasePackage.MODEL_IMAGE__CONTENTS:
-				return !getContents().isEmpty();
 			case BasePackage.MODEL_IMAGE__IMAGE_DATA:
 				return IMAGE_DATA_EDEFAULT == null ? getImageData() != null : !IMAGE_DATA_EDEFAULT.equals(getImageData());
 		}

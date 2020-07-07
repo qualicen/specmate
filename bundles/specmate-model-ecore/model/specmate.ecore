@@ -80,7 +80,7 @@
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="hasRecycledChildren"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="ModelImage" eSuperTypes="#//base/IContainer">
+    <eClassifiers xsi:type="ecore:EClass" name="ModelImage" eSuperTypes="#//base/IContentElement">
       <eAnnotations source="http://specmate.com/form_meta">
         <details key="disabled1" value="name"/>
         <details key="disabled2" value="description"/>

@@ -202,7 +202,6 @@ public class BaseSwitch<T> extends Switch<T> {
 			case BasePackage.MODEL_IMAGE: {
 				ModelImage modelImage = (ModelImage)theEObject;
 				T result = caseModelImage(modelImage);
-				if (result == null) result = caseIContainer(modelImage);
 				if (result == null) result = caseIContentElement(modelImage);
 				if (result == null) result = caseIID(modelImage);
 				if (result == null) result = caseINamed(modelImage);

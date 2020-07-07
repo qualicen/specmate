@@ -759,7 +759,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 		iSpecmatePositionableModelObjectEClass.getESuperTypes().add(this.getISpecmateModelObject());
 		iModelConnectionEClass.getESuperTypes().add(this.getISpecmateModelObject());
 		iModelNodeEClass.getESuperTypes().add(this.getISpecmatePositionableModelObject());
-		modelImageEClass.getESuperTypes().add(this.getIContainer());
+		modelImageEClass.getESuperTypes().add(this.getIContentElement());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(iNamedEClass, INamed.class, "INamed", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

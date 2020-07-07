@@ -17,7 +17,6 @@
 		public imageData: EString;
 
 		// References
-		
 
 		// Containment
 

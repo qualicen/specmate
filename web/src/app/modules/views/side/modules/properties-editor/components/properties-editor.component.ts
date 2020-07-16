@@ -4,6 +4,7 @@ import { ProcessStep } from '../../../../../../model/ProcessStep';
 import { Type } from '../../../../../../util/type';
 import { HiddenFieldsProvider } from '../../../../main/editors/modules/graphical-editor/providers/properties/hidden-fields-provider';
 import { SelectedElementService } from '../../selected-element/services/selected-element.service';
+import { CEGNode } from 'src/app/model/CEGNode';
 
 @Component({
     moduleId: module.id.toString(),
@@ -36,7 +37,15 @@ export class PropertiesEditor {
         return this.hiddenFieldsProvider.hiddenFields;
     }
 
-     public get showTracing(): boolean {
+    public get showTracing(): boolean {
         return Type.is(this.selectedElement, ProcessStep);
+    }
+
+    public get showLinkingButton(): boolean {
+        if (!Type.is(this.selectedElement, CEGNode)) {
+            return false;
+        }
+        const node = this.selectedElement as CEGNode;
+        return node.incomingConnections.length === 0;
     }
 }

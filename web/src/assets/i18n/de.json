@@ -142,6 +142,7 @@
 	"invalidCharacter": "Ungültige Zeichen: , ; |",
 	"layoutErrorCircle": "Das Modell konnte nicht geordnet werden: Der Graph enthält einen Kreis.",
 	"library": "Bibliothek",
+	"linkExistingModel": "Bestehendes Modell verlinken",
 	"loadMore": "Weitere laden",
 	"loading": "Lädt...",
 	"log": {

@@ -1,7 +1,6 @@
 package com.specmate.emfrest.crud;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -13,6 +12,7 @@ import com.specmate.common.exception.SpecmateException;
 import com.specmate.emfrest.api.IRestService;
 import com.specmate.emfrest.api.RestServiceBase;
 import com.specmate.model.base.ModelImage;
+import com.specmate.model.processes.Process;
 import com.specmate.model.requirements.CEGModel;
 import com.specmate.model.support.util.SpecmateEcoreUtil;
 import com.specmate.rest.RestResult;
@@ -34,7 +34,7 @@ public class ModelImageService extends RestServiceBase {
 	public RestResult<?> get(Object target, MultivaluedMap<String, String> queryParams, String token)
 			throws SpecmateException {
 		List<EObject> children = SpecmateEcoreUtil.getChildren(target);
-		List<ModelImage> images = SpecmateEcoreUtil.pickInstancesOf(children, ModelImage.class);		
+		List<ModelImage> images = SpecmateEcoreUtil.pickInstancesOf(children, ModelImage.class);
 		if (images.size() > 0) {
 			return new RestResult<>(Response.Status.OK, images.get(0));
 		}

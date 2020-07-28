@@ -168,6 +168,8 @@ export class MetaInfo {
 	];
 	public static IRecycled: FieldMetaItem[] = [
 	];
+	public static ModelImage: FieldMetaItem[] = [
+	];
 	public static Requirement: FieldMetaItem[] = [
 			{
 			name: "name",

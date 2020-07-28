@@ -6,6 +6,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.specmate.common.exception.SpecmateValidationException;
+import com.specmate.model.base.ModelImage;
 import com.specmate.persistency.event.EChangeKind;
 
 public class TextLengthValidator extends ValidatorBase {
@@ -32,7 +33,7 @@ public class TextLengthValidator extends ValidatorBase {
 	}
 
 	private void checkLength(String featureName, Object o, EObject obj) throws SpecmateValidationException {
-		if (o instanceof String) {
+		if (o instanceof String && !(obj instanceof ModelImage)) {
 			String v = (String) o;
 			if (v.length() >= MAX_LENGTH) {
 				throw new SpecmateValidationException(

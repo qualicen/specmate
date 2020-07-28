@@ -35,7 +35,6 @@ public class CrudUtil {
 		if (toAddObj != null && !isProjectModificationRequestAuthorized(parent, toAddObj, true)) {
 			throw new SpecmateAuthorizationException("User " + userName + " is not authorized to create elements.");
 		}
-
 		EObject toAdd = toAddObj;
 		if (parent instanceof Resource) {
 			((Resource) parent).getContents().add(toAdd);
@@ -100,7 +99,7 @@ public class CrudUtil {
 			ArrayList<EObject> children = Lists.newArrayList(theTarget.eAllContents());
 			for (Iterator<EObject> iterator = children.iterator(); iterator.hasNext();) {
 				EObject child = (EObject) iterator.next();
-				if(child instanceof IRecycled) {
+				if (child instanceof IRecycled) {
 					IRecycled theChild = (IRecycled) child;
 					theChild.setRecycled(false);
 					theChild.setHasRecycledChildren(false);
@@ -211,9 +210,12 @@ public class CrudUtil {
 							}
 						}
 					} else {
-						if (!isProjectModificationRequestAuthorized(resourceObject, (EObject) update.eGet(reference),
-								false)) {
-							return false;
+						Object referenceObject = update.eGet(reference);
+						if (referenceObject != null) {
+							EObject referenceEObject = (EObject) referenceObject;
+							if (!isProjectModificationRequestAuthorized(resourceObject, referenceEObject, false)) {
+								return false;
+							}
 						}
 					}
 				}

@@ -1,0 +1,18 @@
+{
+  "bundleDependencies": false,
+  "contributors": [
+    {
+      "name": "Sharath Holla",
+      "url": "https://github.com/ksholla20/save-svg-as-png-typings"
+    }
+  ],
+  "dependencies": {},
+  "deprecated": false,
+  "description": "TypeScript definitions for save-svg-as-png",
+  "license": "MIT",
+  "main": "",
+  "name": "@types/save-svg-as-png",
+  "scripts": {},
+  "typeScriptVersion": "2.0",
+  "version": "0.0.2"
+}

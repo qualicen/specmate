@@ -77,9 +77,13 @@ public class ModelEditorTest extends TestBase {
 			// Check if tile is hidden (Assert false)
 			assertFalse(cegEditor.negationDisplayed());
 			
-			// Change connection type
+			// Change connection type in sidebar
 			cegEditor.changeTypeToOR(nodeAutofahren);
 			cegEditor.changeTypeToAND(nodeAutofahren);
+			
+			// Change connection type in node
+			cegEditor.changeTypeToORInNode(nodeAutofahren);
+			cegEditor.changeTypeToANDInNode(nodeAutofahren);
 			
 			assertTrue(cegEditor.correctModelCreated(3, 2));
 						

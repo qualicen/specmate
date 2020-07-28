@@ -53,7 +53,9 @@ public class Migrator20200228 implements IMigrator {
 		IAttributeToSQLMapper aMapper = dbProvider.getAttributeToSQLMapper(packageName, getSourceVersion(),
 				getTargetVersion());
 		aMapper.migrateNewBooleanAttribute(objectName, BasePackage.Literals.IRECYCLED__RECYCLED.getName(), false);
-		aMapper.migrateNewBooleanAttribute(objectName, BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName(), false);
+		aMapper.migrateNewBooleanAttribute(objectName, BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName(),
+				false);
+		aMapper.adaptContainingFeatureIndex(objectName, 2);
 	}
 
 	@Reference

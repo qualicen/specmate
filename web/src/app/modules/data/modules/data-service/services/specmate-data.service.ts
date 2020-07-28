@@ -171,7 +171,7 @@ export class SpecmateDataService {
             .then((element: IContainer) => this.readElementComplete(element));
     }
 
-    private readElementComplete(element: IContainer): IContainer {
+    public readElementComplete(element: IContainer): IContainer {
         this.busy = false;
         this.scheduler.initElement(element);
         return element;
@@ -363,17 +363,23 @@ export class SpecmateDataService {
             });
     }
 
-    public performOperations(url: string, operation: string, payload?: any): Promise<any> {
+    public performOperations(url: string, operation: string, payload?: any, httpGET?: boolean): Promise<any> {
         if (!this.auth.isAuthenticatedForUrl(url)) {
             return Promise.resolve(false);
         }
         this.busy = true;
-        return this.serviceInterface.performOperation(url, operation, payload, this.auth.token)
-            .then((result) => {
+        let performFunction;
+        if (httpGET) {
+            performFunction = this.serviceInterface.performOperationGET;
+        } else {
+            performFunction = this.serviceInterface.performOperationPOST;
+        }
+        return performFunction.apply(this.serviceInterface, [url, operation, payload, this.auth.token])
+            .then((result: any) => {
                 this.busy = false;
                 return result;
             })
-            .catch((error) => {
+            .catch((error: any) => {
                 this.busy = false;
                 this.handleError(this.translate.instant('operationCouldNotBePerformed') +
                     ' ' + this.translate.instant('operation') + ': ' + operation + ' ' +
@@ -434,6 +440,9 @@ export class SpecmateDataService {
 
     private handleError(message: string, url: string, error: any): Promise<any> {
         console.error(message);
+        if (error.status === 401) {
+            this.auth.deauthenticate();
+        }
         this.connectionService.handleErrorResponse(error, url);
         return Promise.resolve(undefined);
     }
@@ -455,4 +464,6 @@ export class SpecmateDataService {
             await this.readElement(parent, false);
         }
     }
+
+
 }

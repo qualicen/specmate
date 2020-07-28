@@ -52,19 +52,16 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 			return;
 		}
 
-		// Get the Authorization header from the request
-		String authorizationHeader = AuthorizationHeader.getFrom(requestContext);
-
 		// Validate the Authorization header
-		if (!AuthorizationHeader.isTokenBasedAuthentication(authorizationHeader)) {
-			logService.log(LogService.LOG_INFO, "Invalid authorization header: " + authorizationHeader + " on path "
+		if (!AuthorizationHeader.isAuthenticationSet(requestContext)) {
+			logService.log(LogService.LOG_INFO, "No credentials set: on path "
 					+ requestContext.getUriInfo().getAbsolutePath().toString());
 			abortWithUnauthorized(requestContext);
 			return;
 		}
 
 		// Extract the token from the Authorization header
-		String token = AuthorizationHeader.extractTokenFrom(authorizationHeader);
+		String token = AuthorizationHeader.getToken(requestContext);
 
 		try {
 			String path = requestContext.getUriInfo().getAbsolutePath().getPath();

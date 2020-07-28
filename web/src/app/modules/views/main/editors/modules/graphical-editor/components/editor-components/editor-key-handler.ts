@@ -4,7 +4,7 @@ import { UndoService } from 'src/app/modules/actions/modules/common-controls/ser
 declare var require: any;
 
 const mx: typeof mxgraph = require('mxgraph')({
-  mxBasePath: 'mxgraph'
+    mxBasePath: 'mxgraph'
 });
 
 /**
@@ -16,12 +16,12 @@ export class EditorKeyHandler {
 
         // Support Mac command-key
         keyHandler.getFunction = function (evt) {
-        if (evt != null) {
-            return (mx.mxEvent.isControlDown(evt) || (mx.mxClient.IS_MAC && evt.metaKey))
-            ? this.controlKeys[evt.keyCode]
-            : this.normalKeys[evt.keyCode];
-        }
-        return null;
+            if (evt != null) {
+                return (mx.mxEvent.isControlDown(evt) || (mx.mxClient.IS_MAC && evt.metaKey))
+                    ? this.controlKeys[evt.keyCode]
+                    : this.normalKeys[evt.keyCode];
+            }
+            return null;
         };
 
         // Del
@@ -30,8 +30,12 @@ export class EditorKeyHandler {
             EditorKeyHandler.deleteSelectedCells(graph);
         });
 
-        // Backspace
+        // Ctrl + Backspace
         keyHandler.bindControlKey(8, (evt: KeyboardEvent) => {
+            EditorKeyHandler.deleteSelectedCells(graph);
+        });
+        // Backspace
+        keyHandler.bindKey(8, (evt: KeyboardEvent) => {
             EditorKeyHandler.deleteSelectedCells(graph);
         });
 
@@ -85,6 +89,7 @@ export class EditorKeyHandler {
                 undoService.redo();
             }
         });
+
         return keyHandler;
     }
 
@@ -95,8 +100,8 @@ export class EditorKeyHandler {
 
     private static deleteSelectedCells(graph: mxgraph.mxGraph): void {
         if (graph.isEnabled()) {
-          const selectedCells = EditorKeyHandler.getFilteredSelectedCells(graph);
-          graph.removeCells(selectedCells, true);
+            const selectedCells = EditorKeyHandler.getFilteredSelectedCells(graph);
+            graph.removeCells(selectedCells, true);
         }
     }
 

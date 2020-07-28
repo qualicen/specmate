@@ -7,8 +7,8 @@ import { ElementFactoryBase } from './element-factory-base';
 
 export abstract class ModelFactoryBase extends ElementFactoryBase<CEGModel | Process> {
 
-    public create(parent: IContainer, commit: boolean, compoundId?: string, name?: string): Promise<CEGModel | Process> {
-        let element: IContainer = this.simpleModel;
+    public async create(parent: IContainer, commit: boolean, compoundId?: string, name?: string): Promise<CEGModel | Process> {
+        let element: CEGModel | Process = this.simpleModel;
         element.id = Id.uuid;
         element.url = Url.build([parent.url, element.id]);
         element.name = name || this.name;
@@ -21,7 +21,7 @@ export abstract class ModelFactoryBase extends ElementFactoryBase<CEGModel | Pro
             .then(() => element);
     }
 
-    protected abstract get simpleModel(): IContainer;
+    protected abstract get simpleModel(): CEGModel | Process;
     protected abstract get name(): string;
     protected abstract get description(): string;
 

@@ -1,6 +1,7 @@
 package com.specmate.test.integration;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.apache.uima.jcas.JCas;
 import org.junit.Assert;
@@ -33,21 +34,42 @@ import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.Constituent;
 public class NLPServiceTest {
 
 	@Test
-	public void testOpenNlpService() throws SpecmateException {
+	public void testNlpServiceEnglish() throws SpecmateException {
 		INLPService nlpService = getNLPService();
 		JCas result = nlpService.processText("If the tool detects an error, it shows a warning window.", ELanguage.EN);
-
-		String parseString = NLPUtil.printParse(result);
-		Assert.assertEquals(
-				"( ROOT ( S ( SBAR If ( S ( NP the tool ) ( VP detects ( NP an error ) ) ) ) , ( NP it ) ( VP shows ( NP a warning window ) ) . ) )",
-				parseString);
 
 		String posString = NLPUtil.printPOSTags(result);
 		Assert.assertEquals(
 				"If (IN) the (DT) tool (NN) detects (VBZ) an (DT) error (NN) , (,) it (PRP) shows (VBZ) a (DT) warning (NN) window (NN) . (.)",
 				posString);
 
-		result = nlpService.processText("Wenn das Werkzeug einen Fehler erkennt, zeigt es ein Warnfenster.",
+		String sentText = NLPUtil.printSentences(result);
+		Assert.assertEquals("(If the tool detects an error, it shows a warning window.)", sentText);
+
+		String parseString = NLPUtil.printParse(result);
+		Assert.assertEquals(
+				"( ROOT ( S ( SBAR If ( S ( NP the tool ) ( VP detects ( NP an error ) ) ) ) , ( NP it ) ( VP shows ( NP a warning window ) ) . ) )",
+				parseString);
+
+		String chunkText = NLPUtil.printChunks(result);
+		Assert.assertEquals(
+				"If (SBAR) the tool (NP) detects (VP) an error (NP) it (NP) shows (VP) a warning window (NP)",
+				chunkText);
+
+		String depText = NLPUtil.printDependencies(result);
+		// spacy uses compound, malt uses nn
+		depText = depText.replace("compound", "nn");
+
+		Assert.assertEquals("detects <--mark-- If\n" + "tool <--det-- the\n" + "detects <--nsubj-- tool\n"
+				+ "shows <--advcl-- detects\n" + "error <--det-- an\n" + "detects <--dobj-- error\n"
+				+ "shows <--punct-- ,\n" + "shows <--nsubj-- it\n" + "shows <--ROOT-- shows\n" + "window <--det-- a\n"
+				+ "window <--nn-- warning\n" + "shows <--dobj-- window\n" + "shows <--punct-- .", depText);
+	}
+
+	@Test
+	public void testNLPServiceGerman() throws SpecmateException {
+		INLPService nlpService = getNLPService();
+		JCas result = nlpService.processText("Wenn das Werkzeug einen Fehler erkennt, zeigt es ein Warnfenster.",
 				ELanguage.DE);
 
 		Assert.assertEquals(
@@ -66,51 +88,50 @@ public class NLPServiceTest {
 		Assert.assertEquals(
 				"( ROOT ( S ( S Wenn ( NP das Werkzeug ) ( NP einen Fehler ) ( S erkennt ) ) , zeigt es ( NP ein Warnfenster ) . ) )",
 				NLPUtil.printParse(result));
-
 	}
 
 	@Test
 	public void testSentenceUnfoldingEnglish() throws SpecmateException {
 		INLPService nlpService = getNLPService();
-		EnglishSentenceUnfolder unfolder = new EnglishSentenceUnfolder();
+		EnglishSentenceUnfolder unfolder = new EnglishSentenceUnfolder(nlpService);
 
 		String text = "If the tool has an error or fails, the tool alerts the user and shows a window.";
-		String unfolded = unfolder.unfold(nlpService, text, ELanguage.EN);
-		Assert.assertEquals(
-				"If the tool has an error, or the tool fails, the tool alerts the user, and the tool shows a window.",
-				unfolded);
+		List<String> unfolded = unfolder.unfold(text);
+		Assert.assertTrue(unfolded.stream().anyMatch(u -> u.replace(",", "").equals(
+				"If the tool has an error or the tool fails the tool alerts the user and the tool shows a window.")));
 
 		text = "The magazine contains the nicest hiking tours and trips.";
-		unfolded = unfolder.unfold(nlpService, text, ELanguage.EN);
-		Assert.assertEquals("The magazine contains the nicest hiking tours, and The magazine contains trips.",
-				unfolded);
+		unfolded = unfolder.unfold(text);
+		Assert.assertTrue(unfolded.stream().anyMatch(u -> u.replace(",", "")
+				.equals("The magazine contains the nicest hiking tours and The magazine contains trips.")));
 
-		text = "If the field is empty or contains errors, the button is greyed out.";
-		unfolded = unfolder.unfold(nlpService, text, ELanguage.EN);
-		Assert.assertEquals("If the field is empty, or the field contains errors, the button is greyed out.", unfolded);
+		text = "If the field is empty or contains errors the button is greyed out.";
+		unfolded = unfolder.unfold(text);
+		Assert.assertTrue(unfolded.stream().anyMatch(u -> u.replace(",", "")
+				.equals("If the field is empty or the field contains errors the button is greyed out.")));
 
 		text = "The window and the list contain an entry.";
-		unfolded = unfolder.unfold(nlpService, text, ELanguage.EN);
-		Assert.assertEquals("The window contain an entry, and the list contain an entry.", unfolded);
+		unfolded = unfolder.unfold(text);
+		Assert.assertTrue(unfolded.stream().anyMatch(
+				u -> u.replace(",", "").equals("The window contain an entry and the list contain an entry.")));
 
 		text = "If the user clicks the button, the tool shows a window and saves the changes.";
-		unfolded = unfolder.unfold(nlpService, text, ELanguage.EN);
-		Assert.assertEquals("If the user clicks the button, the tool shows a window, and the tool saves the changes.",
-				unfolded);
+		unfolded = unfolder.unfold(text);
+		Assert.assertTrue(unfolded.stream().anyMatch(u -> u.replace(",", "")
+				.equals("If the user clicks the button the tool shows a window and the tool saves the changes.")));
 
 	}
 
 	@Test
 	public void testSentenceUnfoldingGerman() throws SpecmateException {
 		INLPService nlpService = getNLPService();
-		SentenceUnfolderBase unfolder = new GermanSentenceUnfolder();
+		SentenceUnfolderBase unfolder = new GermanSentenceUnfolder(nlpService);
 
 		// Ensure replace is correct
 		String text = "Wenn das Werkzeug fehlschlägt oder einen Fehler oder ein Problem hat, dann zeigt das Werkzeug ein Warnfenster und einen Fehlermarker an und gibt eine Meldung aus.";
-		String unfolded = unfolder.unfold(nlpService, text, ELanguage.DE);
-		Assert.assertEquals(
-				"Wenn das Werkzeug fehlschlägt, oder wenn das Werkzeug einen Fehler hat, oder wenn das Werkzeug ein Problem hat, dann zeigt das Werkzeug ein Warnfenster, und zeigt das Werkzeug einen Fehlermarker an, und gibt das Werkzeug eine Meldung aus.",
-				unfolded);
+		List<String> unfolded = unfolder.unfold(text);
+		Assert.assertTrue(unfolded.stream().anyMatch(u -> u.replace(",", "").equals(
+				"Wenn das Werkzeug fehlschlägt oder wenn das Werkzeug einen Fehler hat oder wenn das Werkzeug ein Problem hat dann zeigt das Werkzeug ein Warnfenster und zeigt das Werkzeug einen Fehlermarker an und gibt das Werkzeug eine Meldung aus.")));
 
 //		 Ensure nothing changes when applied on the already replace text
 //		text = "Wenn das Werkzeug fehlschlägt, oder wenn das Werkzeug einen Fehler hat, oder wenn das Werkzeug ein Problem hat, dann zeigt das Werkzeug ein Warnfenster, und  zeigt das Werkzeug einen Fehlermarker an, und gibt das Werkzeug eine Meldung aus.";
@@ -120,42 +141,39 @@ public class NLPServiceTest {
 //				unfolded);
 
 		text = "Das Magazin hat die schönsten Wanderungen und Ausflugziele.";
-		unfolded = unfolder.unfold(nlpService, text, ELanguage.DE);
-		Assert.assertEquals("Das Magazin hat die schönsten Wanderungen, und Das Magazin hat Ausflugziele.", unfolded);
+		unfolded = unfolder.unfold(text);
+		Assert.assertTrue(unfolded.stream().anyMatch(u -> u.replace(",", "")
+				.equals("Das Magazin hat die schönsten Wanderungen und Das Magazin hat Ausflugziele.")));
 
 		text = "Felix Lindner legte sein Abitur ab und nahm dann ein Studium der neueren Sprachen auf.";
-		unfolded = unfolder.unfold(nlpService, text, ELanguage.DE);
-		Assert.assertEquals(
-				"Felix Lindner legte sein Abitur ab, und Felix nahm dann ein Studium der neueren Sprachen auf.",
-				unfolded);
+		unfolded = unfolder.unfold(text);
+		Assert.assertTrue(unfolded.stream().anyMatch(u -> u.replace(",", "").equals(
+				"Felix Lindner legte sein Abitur ab und Felix nahm dann ein Studium der neueren Sprachen auf.")));
 
 		text = "Der sowjetische Chirurg Fjodorow reist im Jahr 1982 nach Kabul, um dort Vorlesungen zu halten und um in einem Militärkrankenhaus zu arbeiten.";
-		unfolded = unfolder.unfold(nlpService, text, ELanguage.DE);
-		Assert.assertEquals(
-				"Der sowjetische Chirurg Fjodorow reist im Jahr 1982 nach Kabul, um dort Vorlesungen zu halten, und um in einem Militärkrankenhaus zu arbeiten.",
-				unfolded);
+		unfolded = unfolder.unfold(text);
+		Assert.assertTrue(unfolded.stream().anyMatch(u -> u.replace(",", "").equals(
+				"Der sowjetische Chirurg Fjodorow reist im Jahr 1982 nach Kabul um dort Vorlesungen zu halten und um in einem Militärkrankenhaus zu arbeiten.")));
 
 		text = "Er versorgt Verwundete beider Seiten und befragt sie nach ihren Erfahrungen und persönlichen Lebensumständen.";
-		unfolded = unfolder.unfold(nlpService, text, ELanguage.DE);
-		Assert.assertEquals(
-				"Er versorgt Verwundete beider Seiten, und Er befragt sie nach ihren Erfahrungen, und persönlichen Lebensumständen.",
-				unfolded);
+		unfolded = unfolder.unfold(text);
+		Assert.assertTrue(unfolded.stream().anyMatch(u -> u.replace(",", "").equals(
+				"Er versorgt Verwundete beider Seiten und Er befragt sie nach ihren Erfahrungen und persönlichen Lebensumständen.")));
 
 		text = "Der häufige Blätterpilz wächst im Herbst und fruktifiziert gerne in Hexenringen.";
-		unfolded = unfolder.unfold(nlpService, text, ELanguage.DE);
-		Assert.assertEquals(
-				"Der häufige Blätterpilz wächst im Herbst, und Der häufige Blätterpilz fruktifiziert gerne in Hexenringen.",
-				unfolded);
+		unfolded = unfolder.unfold(text);
+		Assert.assertTrue(unfolded.stream().anyMatch(u -> u.replace(",", "").equals(
+				"Der häufige Blätterpilz wächst im Herbst und Der häufige Blätterpilz fruktifiziert gerne in Hexenringen.")));
 
 		text = "Das Fenster und die Liste enthalten einen Eintrag.";
-		unfolded = unfolder.unfold(nlpService, text, ELanguage.DE);
-		Assert.assertEquals("Das Fenster enthalten einen Eintrag, und die Liste enthalten einen Eintrag.", unfolded);
+		unfolded = unfolder.unfold(text);
+		Assert.assertTrue(unfolded.stream().anyMatch(u -> u.replace(",", "")
+				.equals("Das Fenster enthalten einen Eintrag und die Liste enthalten einen Eintrag.")));
 
 		text = "Wenn das Werkzeug einen Fehler oder ein Problem erkennt oder der Benutzer keine Anmeldung hat, zeigt das Werkzeug ein Warnfenster an und gibt einen Signalton aus.";
-		unfolded = unfolder.unfold(nlpService, text, ELanguage.DE);
-		Assert.assertEquals(
-				"Wenn das Werkzeug einen Fehler erkennt, oder wenn das Werkzeug ein Problem erkennt, oder der Benutzer keine Anmeldung hat, zeigt das Werkzeug ein Warnfenster an, und gibt das Werkzeug einen Signalton aus.",
-				unfolded);
+		unfolded = unfolder.unfold(text);
+		Assert.assertTrue(unfolded.stream().anyMatch(u -> u.replace(",", "").equals(
+				"Wenn das Werkzeug einen Fehler erkennt oder wenn das Werkzeug ein Problem erkennt oder der Benutzer keine Anmeldung hat zeigt das Werkzeug ein Warnfenster an und gibt das Werkzeug einen Signalton aus.")));
 
 	}
 

@@ -82,7 +82,7 @@ export class ViewControllerService {
     private get isTopLibraryFolder(): boolean {
         let selected = this.selectedElementService.selectedElement;
         if (Type.is(selected, Folder)) {
-            return this.auth.token.libraryFolders.indexOf(selected.id) > -1;
+            return this.auth.session.libraryFolders.indexOf(selected.id) > -1;
         }
         return false;
     }

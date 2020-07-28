@@ -8,6 +8,7 @@ import { ConfirmationModal } from '../../../../notification/modules/modals/servi
 import { ElementProvider } from '../../../../views/main/editors/modules/graphical-editor/providers/properties/element-provider';
 import { SelectedElementService } from '../../../../views/side/modules/selected-element/services/selected-element.service';
 import { GraphicalEditorService } from 'src/app/modules/views/main/editors/modules/graphical-editor/services/graphical-editor.service';
+import { ModelImageService } from 'src/app/modules/views/main/editors/modules/graphical-editor/services/model-image.service';
 
 @Component({
     moduleId: module.id.toString(),
@@ -54,7 +55,8 @@ export class CegModelGeneratorButton {
         private modal: ConfirmationModal,
         private translate: TranslateService,
         private selectedElementService: SelectedElementService,
-        private graphicalEditorService: GraphicalEditorService) { }
+        private graphicalEditorService: GraphicalEditorService,
+        private modelImageService: ModelImageService) { }
 
     public async generate(): Promise<void> {
         if (!this.enabled) {
@@ -73,10 +75,14 @@ export class CegModelGeneratorButton {
             await this.dataService.commit(this.translate.instant('save'));
             await this.dataService.performOperations(this.model.url, 'generateModel');
             await this.dataService.deleteCachedContent(this.model.url);
-            await this.dataService.readElement(this.model.url, false);
+            this.model = await this.dataService.readElement(this.model.url, false) as CEGModel;
             let modelContents = await this.dataService.readContents(this.model.url, false);
             this.selectedElementService.select(this.model);
             this.graphicalEditorService.triggerGraphicalModelInit();
+            this.graphicalEditorService.initModelFinish.subscribe(async () => {
+                await this.modelImageService.createModelImage(this.model);
+                await this.dataService.commit(this.translate.instant('save'));
+            });
 
             if (modelContents.length === 0) {
                 this.modal.openOk(this.translate.instant('CEGGenerator.couldNotGenerateTitle'),
@@ -84,8 +90,8 @@ export class CegModelGeneratorButton {
             }
         } catch (e) {
             this.modal.openOk(this.translate.instant('CEGGenerator.couldNotGenerateTitleError'),
-                    this.translate.instant('CEGGenerator.couldNotGenerate'));
-         }
+                this.translate.instant('CEGGenerator.couldNotGenerate'));
+        }
     }
 
     public get enabled(): boolean {

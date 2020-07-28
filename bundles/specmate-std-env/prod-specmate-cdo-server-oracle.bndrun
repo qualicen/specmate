@@ -31,9 +31,6 @@
 -runvm: -Xmx6000m
 -runbundles: \
 	org.eclipse.equinox.log;version='[1.2.300,1.2.301)',\
-	specmate-logging;version=snapshot,\
-	specmate-logging-slf4j;version=snapshot,\
-	specmate-logging-slf4j-julbridge;version=snapshot,\
 	jul.to.slf4j;version='[1.7.12,1.7.13)',\
 	log4j.over.slf4j;version='[1.7.12,1.7.13)',\
 	lpg.runtime.java;version='[2.0.17,2.0.18)',\
@@ -67,21 +64,25 @@
 	org.eclipse.ocl.ecore;version='[3.6.200,3.6.201)',\
 	org.eclipse.osgi.services;version='[3.4.0,3.4.1)',\
 	org.slf4j.api;version='[1.7.2,1.7.3)',\
-	specmate-cdo-server;version=snapshot,\
-	specmate-common;version=snapshot,\
-	specmate-config;version=snapshot,\
-	specmate-dbprovider-api;version=snapshot,\
-	specmate-dbprovider-oracle;version=snapshot,\
-	specmate-migration;version=snapshot,\
-	specmate-model-gen;version=snapshot,\
-	specmate-model-support;version=snapshot,\
-	specmate-persistency-api;version=snapshot,\
-	specmate-config-api;version=snapshot,\
 	org.eclipse.emf.cdo.server.db;version='[4.4.0,4.4.1)',\
 	org.objectweb.asm.all.debug;version='[5.0.2,5.0.3)',\
 	com.google.guava;version='[21.0.0,21.0.1)',\
 	org.apache.commons.lang3;version='[3.5.0,3.5.1)',\
 	slf4j.api;version='[1.7.25,1.7.26)',\
 	org.eclipse.emf.cdo.ecore.retrofit;version='[4.2.300,4.2.301)',\
-	org.h2;version='[1.3.168,1.3.169)'
+	org.h2;version='[1.3.168,1.3.169)',\
+	com.google.guava;version='[18.0.0,18.0.1)',\
+	specmate-cdo-server;version='[0.0.0,0.0.1)',\
+	specmate-common;version='[0.0.0,0.0.1)',\
+	specmate-config;version='[0.0.0,0.0.1)',\
+	specmate-config-api;version='[0.0.0,0.0.1)',\
+	specmate-dbprovider-api;version='[0.0.0,0.0.1)',\
+	specmate-dbprovider-oracle;version='[0.0.0,0.0.1)',\
+	specmate-logging;version='[0.0.0,0.0.1)',\
+	specmate-logging-slf4j;version='[0.0.0,0.0.1)',\
+	specmate-logging-slf4j-julbridge;version='[1.6.0,1.6.1)',\
+	specmate-migration;version='[0.0.0,0.0.1)',\
+	specmate-model-gen;version='[0.0.0,0.0.1)',\
+	specmate-model-support;version='[0.0.0,0.0.1)',\
+	specmate-persistency-api;version='[0.0.0,0.0.1)'
 -resolve: auto

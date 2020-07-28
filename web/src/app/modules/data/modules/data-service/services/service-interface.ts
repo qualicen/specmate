@@ -12,28 +12,26 @@ export class ServiceInterface {
 
     constructor(private http: HttpClient) { }
 
-    public async checkConnection(token?: UserToken): Promise<void> {
-        if (token === undefined || token === UserToken.INVALID) {
-            const error = new HttpErrorResponse({ status: 401 });
-            return Promise.reject(error);
-        }
+    public async checkConnection(project: string): Promise<void> {
 
         let params = new HttpParams();
         params = params.append('heartbeat', 'true');
-        const result = await this.http.get(Url.urlCheckConnectivity(token.project), { headers: this.getAuthHeader(token), params: params })
+
+        const result = await this.http.get(Url.urlCheckConnectivity(project), { params: params })
             .toPromise();
         if (result instanceof HttpErrorResponse) {
             return Promise.reject(result);
         }
     }
 
-    public async authenticate(user: User): Promise<UserToken> {
+    public async authenticate(user: User): Promise<UserSession> {
         const session: UserSession = await this.http.post(Url.urlAuthenticate(), user).toPromise() as UserSession;
-        return new UserToken(session, user.projectName, session.libraryFolders);
+        return session;
     }
 
-    public async deauthenticate(token: UserToken): Promise<void> {
-        await  this.http.get(Url.urlDeauthenticate(), { headers: this.getAuthHeader(token), responseType: 'text' }).toPromise();
+
+    public async deauthenticate(): Promise<void> {
+        await this.http.get(Url.urlDeauthenticate(), { responseType: 'text' }).toPromise();
     }
 
     public async projectnames(): Promise<string[]> {
@@ -42,36 +40,40 @@ export class ServiceInterface {
 
     public async performBatchOperation(batchOperation: BatchOperation, token: UserToken): Promise<void> {
         return this.http
-            .post<void>(Url.batchOperationUrl(token), batchOperation, { headers: this.getAuthHeader(token) })
+            .post<void>(Url.batchOperationUrl(token), batchOperation)
             .toPromise();
     }
 
     public async createElement(element: IContainer, token: UserToken): Promise<void> {
         let payload: any = this.prepareElementPayload(element);
-        await this.http.post(Url.urlCreate(element.url), payload, { headers: this.getAuthHeader(token) }).toPromise();
+        await this.http.post(Url.urlCreate(element.url), payload).toPromise();
     }
 
     public async readElement(url: string, token: UserToken): Promise<IContainer> {
-        const element = await this.http.get<IContainer>(Url.urlElement(url), { headers: this.getAuthHeader(token) }).toPromise();
+        const element = await this.http.get<IContainer>(Url.urlElement(url)).toPromise();
         return element;
     }
 
     public async readContents(url: string, token: UserToken): Promise<IContainer[]> {
-        const contents = this.http.get<IContainer[]>(Url.urlContents(url), { headers: this.getAuthHeader(token) }).toPromise();
+        const contents = this.http.get<IContainer[]>(Url.urlContents(url)).toPromise();
         return contents;
     }
 
     public async updateElement(element: IContainer, token: UserToken): Promise<void> {
         let payload: any = this.prepareElementPayload(element);
-        await this.http.put(Url.urlUpdate(element.url), payload, { headers: this.getAuthHeader(token) }).toPromise();
+        await this.http.put(Url.urlUpdate(element.url), payload).toPromise();
     }
 
     public async deleteElement(url: string, token: UserToken): Promise<void> {
-        await this.http.delete(Url.urlDelete(url), { headers: this.getAuthHeader(token) }).toPromise();
+        await this.http.delete(Url.urlDelete(url)).toPromise();
     }
 
-    public async performOperation(url: string, serviceSuffix: string, payload: any, token: UserToken): Promise<any> {
-        return await this.http.post(Url.urlCustomService(url, serviceSuffix), payload, { headers: this.getAuthHeader(token) }).toPromise();
+    public async performOperationPOST(url: string, serviceSuffix: string, payload: any, token: UserToken): Promise<any> {
+        return await this.http.post(Url.urlCustomService(url, serviceSuffix), payload).toPromise();
+    }
+
+    public async performOperationGET(url: string, serviceSuffix: string, payload: any, token: UserToken): Promise<any> {
+        return await this.http.get(Url.urlCustomService(url, serviceSuffix)).toPromise();
     }
 
     public async performQuery(url: string, serviceSuffix: string, parameters: { [key: string]: string }, token: UserToken): Promise<any> {
@@ -82,7 +84,7 @@ export class ServiceInterface {
             }
         }
         const result = await this.http
-            .get(Url.urlCustomService(url, serviceSuffix), { params: urlParams, headers: this.getAuthHeader(token) }).toPromise();
+            .get(Url.urlCustomService(url, serviceSuffix), { params: urlParams }).toPromise();
         return result;
     }
 
@@ -111,7 +113,7 @@ export class ServiceInterface {
 
         try {
             const response = await this.http
-                .get<IContainer[]>(Url.urlCustomService(token.project, 'search'), { params: urlParams, headers: this.getAuthHeader(token) })
+                .get<IContainer[]>(Url.urlCustomService(token.project, 'search'), { params: urlParams })
                 .toPromise();
             return response;
         } catch (e) {
@@ -132,13 +134,5 @@ export class ServiceInterface {
             payload['___proxy'] = 'true';
         }
         return payload;
-    }
-
-    private getAuthHeader(token: UserToken): HttpHeaders {
-        let headers: HttpHeaders = new HttpHeaders();
-        if (token !== undefined && !UserToken.isInvalid(token)) {
-            headers = headers.append('Authorization', 'Token ' + token.session.id);
-        }
-        return headers;
     }
 }

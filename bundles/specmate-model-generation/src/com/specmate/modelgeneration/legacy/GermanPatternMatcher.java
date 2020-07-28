@@ -124,7 +124,7 @@ public class GermanPatternMatcher implements ICauseEffectPatternMatcher {
 				positionComma = token.getBegin();
 			}
 		}
-		return positionComma;
+		return positionComma - sentence.getBegin();
 	}
 
 	private boolean hasVerbPhraseBeforeAndAfterPosition(JCas jCas, Sentence sentence, int positionComma) {

@@ -458,7 +458,7 @@ public enum ErrorCode implements Enumerator {
 	 * @ordered
 	 */
 	public static final int NLP_VALUE = 114;
-
+	
 	/**
 	 * An array of all the '<em><b>Error Code</b></em>' enumerators.
 	 * <!-- begin-user-doc -->

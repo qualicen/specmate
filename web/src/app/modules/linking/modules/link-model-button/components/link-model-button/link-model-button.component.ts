@@ -33,8 +33,10 @@ export class LinkModelButtonComponent implements OnInit {
           centered: true
       });
 
-      this.modalRef.result.then(() => {
+      this.modalRef.result.then((link) => {
           this.dialogOpen = false;
+          // The resulting Link
+          console.log(link);
       }).catch(() => {
           this.dialogOpen = false;
       });

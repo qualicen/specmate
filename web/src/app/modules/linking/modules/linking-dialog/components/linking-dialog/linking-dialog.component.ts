@@ -20,12 +20,11 @@ export class LinkingDialogComponent implements OnInit {
   }
 
   close(): void {
-    this.activeModal.close();
+    this.activeModal.dismiss();
   }
 
   link(): void {
-    console.log('Link');
-    console.log(this.selectedEffect);
+    this.activeModal.close(this.selectedEffect);
   }
 
   selectedModel: CEGModel = null;
@@ -60,7 +59,5 @@ export class LinkingDialogComponent implements OnInit {
       this.selectedEffect = null;
       this.hasLink.next(false);
     }
-    console.log('Effect');
-    console.log(effect);
   }
 }

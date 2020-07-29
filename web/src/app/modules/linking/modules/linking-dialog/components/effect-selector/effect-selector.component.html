@@ -1,0 +1,4 @@
+<select [disabled]="!hasEffects" [ngModel]="effect" (ngModelChange)="selectEffect($event)">
+    <option disabled>{{'linkingDialog.selectEffect' | translate}}</option>
+    <option  *ngFor="let node of effects" [ngValue]="node">{{getNodeLabel(node)}}</option>
+</select>

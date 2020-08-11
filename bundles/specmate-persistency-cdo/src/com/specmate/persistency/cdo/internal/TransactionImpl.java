@@ -119,16 +119,17 @@ public class TransactionImpl extends ViewImpl implements ITransaction {
 	public <T> T doAndCommit(IChange<T> change) throws SpecmateException {
 		int maxAttempts = 10;
 		boolean success = false;
-		int attempts = 1;
+		int attempts = 0;
 		T result = null;
 
-		while (!success && attempts <= maxAttempts) {
+		while (!success && attempts < maxAttempts) {
 
 			result = change.doChange();
 
 			try {
 				commit(result);
 			} catch (SpecmateInternalException e) {
+				logService.log(LogService.LOG_WARNING, "Exception when comitting:" + e.getMessage(),e);
 				try {
 					Thread.sleep(attempts * 50);
 				} catch (InterruptedException ie) {

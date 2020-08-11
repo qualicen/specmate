@@ -11,6 +11,8 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class ModelImageService {
+    static MAX_IMAGE_SIZE = 4000;
+
     constructor(private dataService: SpecmateDataService) {
     }
 
@@ -30,8 +32,9 @@ export class ModelImageService {
             let factor = 0.0 + 200 / maxWidth / 1.25;
             maxHeight = Math.min(maxWidth, maxHeight);
             let pngAsBase64: string = await saveAsPng.svgAsPngUri(svg, { 'scale': factor, 'height': maxHeight, 'encoderOptions': 1.0 });
-            while (pngAsBase64.length > 32000) {
-                factor = factor / 2;
+            factor = Math.sqrt(ModelImageService.MAX_IMAGE_SIZE / pngAsBase64.length) * factor;
+            while (pngAsBase64.length > ModelImageService.MAX_IMAGE_SIZE) {
+                factor = factor * 0.95;
                 pngAsBase64 = await saveAsPng.svgAsPngUri(svg, { 'scale': factor, 'height': maxHeight, 'encoderOptions': 1.0 });
             }
 

@@ -231,7 +231,7 @@
 	},
 	"successful": "Successful",
 	"testspec": {
-		"errorMessage": "Testspecification cannot be generataed due to the following errors:",
+		"errorMessage": "Testspecification cannot be generated due to the following errors:",
 		"errorTitle": "Generation not possible",
 		"generate": "Generate test specification",
 		"skeleton": "Download test specification skeletons"

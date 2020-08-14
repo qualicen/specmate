@@ -138,6 +138,7 @@
 	"exportTestprocedure": "",
 	"failed": "Fehler",
 	"fieldInvalid": "Feld ungültig",
+	"graphicalEditorErrorTitle": "Fehler im Editor",
 	"hideGrid": "Hilfslinien ausblenden",
 	"inactivityLoggedOut": "Sie wurden automatisch abgemeldet.",
 	"invalidCharacter": "Ungültige Zeichen: , ; |",

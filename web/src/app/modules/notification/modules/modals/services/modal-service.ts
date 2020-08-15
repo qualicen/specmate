@@ -1,5 +1,5 @@
-import { NgbModalOptions, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Injectable } from '@angular/core';
+import { NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Injectable()
 export class ModalService {

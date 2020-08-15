@@ -214,6 +214,7 @@
 		"continue": "Continue not possible due to the following errors:",
 		"discard": "Saving is not possible due to the following errors. Discard changes?",
 		"message": "Saving is not possible due to the following errors:",
+		"retry": "Error while saving. Please try again later.",
 		"title": "Saving is not possible"
 	},
 	"search": "search",

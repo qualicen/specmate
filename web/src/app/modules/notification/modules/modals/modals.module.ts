@@ -2,12 +2,13 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SpecmateSharedModule } from '../../../specmate/specmate.shared.module';
+import { LoadingModalContent } from './components/loading-modal-content.component';
 import { TypedModalContent } from './components/typed-modal-content.component';
 import { ConfirmationModal } from './services/confirmation-modal.service';
 import { ErrorNotificationModalService } from './services/error-notification-modal.service';
 import { LoadingModalService } from './services/loading-model-service';
-import { LoadingModalContent } from './components/loading-modal-content.component';
 import { ModalService } from './services/modal-service';
+import { SimpleModal } from './services/simple-modal.service';
 
 @NgModule({
     imports: [
@@ -29,7 +30,8 @@ import { ModalService } from './services/modal-service';
         ConfirmationModal,
         ErrorNotificationModalService,
         LoadingModalService,
-        ModalService
+        ModalService,
+        SimpleModal
     ],
     bootstrap: [
         // COMPONENTS THAT ARE BOOTSTRAPPED HERE

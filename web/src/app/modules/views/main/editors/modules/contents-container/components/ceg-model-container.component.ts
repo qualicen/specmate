@@ -54,26 +54,29 @@ export class CEGModelContainer extends TestSpecificationContentContainerBase<CEG
 
         if (description.length > 0) {
             element.modelRequirements = description;
-            await this.dataService.updateElement(element, true, Id.uuid);
-            await this.dataService.commit(this.translate.instant('save'));
-            await this.dataService.performOperations(element.url, 'generateModel');
-            await this.dataService.deleteCachedContent(element.url);
-            await this.dataService.readElement(element.url, false);
-            const content = await this.dataService.readContents(element.url, false);
-            if (content.length == 0) {
-                // Nothing was generated --> Delete the empty model
-                await this.dataService.deleteElement(element.url, true, Id.uuid);
+            try {
+                await this.dataService.updateElement(element, true, Id.uuid);
                 await this.dataService.commit(this.translate.instant('save'));
+                await this.dataService.performOperations(element.url, 'generateModel');
                 await this.dataService.deleteCachedContent(element.url);
-                try {
+                await this.dataService.readElement(element.url, false);
+                const content = await this.dataService.readContents(element.url, false);
+                if (content.length == 0) {
+                    // Nothing was generated --> Delete the empty model
+                    await this.dataService.deleteElement(element.url, true, Id.uuid);
+                    await this.dataService.commit(this.translate.instant('save'));
+                    await this.dataService.deleteCachedContent(element.url);
+
                     await this.modal.openOk(this.translate.instant('CEGGenerator.couldNotGenerateTitle'),
                         this.translate.instant('CEGGenerator.couldNotGenerate'));
-                } catch (e) {
-                    this.modal.openOk(this.translate.instant('CEGGenerator.couldNotGenerateTitleError'),
-                        this.translate.instant('CEGGenerator.couldNotGenerate'));
+
+                    return undefined;
                 }
-                return undefined;
+            } catch (e) {
+                this.modal.openOk(this.translate.instant('CEGGenerator.couldNotGenerateTitleError'),
+                    this.translate.instant('CEGGenerator.couldNotGenerate'));
             }
+
         }
         return element;
     }

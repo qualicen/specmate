@@ -65,6 +65,7 @@ export class GraphicalEditor {
 
     private _model: CEGModel | Process;
     private _contents: IContainer[];
+    private zoomFactor = 1.0;
 
     private graphMouseMove: (evt: any) => void;
 
@@ -143,6 +144,7 @@ export class GraphicalEditor {
             this.destroyGraph();
         }
 
+
         await this.createGraph();
 
         this.isInGraphTransition = false;
@@ -183,6 +185,7 @@ export class GraphicalEditor {
         this.graph.setMultigraph(false);
         this.graph.setDropEnabled(false);
         this.graph.setAllowDanglingEdges(false);
+        this.graph.zoomTo(this.zoomFactor, undefined);
         const rubberBand = new mx.mxRubberband(this.graph);
         rubberBand.reset();
 
@@ -587,14 +590,17 @@ export class GraphicalEditor {
 
     public zoomIn(): void {
         this.graph.zoomIn();
+        this.zoomFactor = this.zoomFactor * this.graph.zoomFactor;
     }
 
     public zoomOut(): void {
         this.graph.zoomOut();
+        this.zoomFactor = this.zoomFactor / this.graph.zoomFactor;
     }
 
     public resetZoom(): void {
         this.graph.zoomActual();
+        this.zoomFactor = 1.0;
     }
 
     public get connections(): IContainer[] {

@@ -9,6 +9,7 @@ import { ElementProvider } from '../../../../views/main/editors/modules/graphica
 import { SelectedElementService } from '../../../../views/side/modules/selected-element/services/selected-element.service';
 import { ErrorNotificationModalService } from '../../../../notification/modules/modals/services/error-notification-modal.service';
 import { GraphicalEditorService } from 'src/app/modules/views/main/editors/modules/graphical-editor/services/graphical-editor.service';
+import { ModelImageService } from 'src/app/modules/views/main/editors/modules/graphical-editor/services/model-image.service';
 
 @Component({
     moduleId: module.id.toString(),
@@ -21,9 +22,9 @@ export class CegModelGeneratorButton {
 
     private contents: IContainer[];
 
-    private _model: CEGModel ;
+    private _model: CEGModel;
 
-    private _requirement: Requirement ;
+    private _requirement: Requirement;
 
     public get requirement(): Requirement {
         return this._requirement;
@@ -36,7 +37,7 @@ export class CegModelGeneratorButton {
         }
         this._requirement = requirement;
     }
-    public get model(): CEGModel  {
+    public get model(): CEGModel {
         return this._model;
     }
 
@@ -56,7 +57,8 @@ export class CegModelGeneratorButton {
         private errorModal: ErrorNotificationModalService,
         private translate: TranslateService,
         private selectedElementService: SelectedElementService,
-        private graphicalEditorService: GraphicalEditorService) { }
+        private graphicalEditorService: GraphicalEditorService,
+        private modelImageService: ModelImageService) { }
 
     public async generate(): Promise<void> {
         if (!this.enabled) {
@@ -75,15 +77,19 @@ export class CegModelGeneratorButton {
             await this.dataService.commit(this.translate.instant('save'));
             await this.dataService.performOperations(this.model.url, 'generateModel');
             await this.dataService.deleteCachedContent(this.model.url);
-            await this.dataService.readElement(this.model.url, false);
+            this.model = await this.dataService.readElement(this.model.url, false) as CEGModel;
             let modelContents = await this.dataService.readContents(this.model.url, false);
             this.selectedElementService.select(this.model);
             this.graphicalEditorService.triggerGraphicalModelInit();
+            this.graphicalEditorService.initModelFinish.subscribe(async () => {
+                await this.modelImageService.createModelImage(this.model);
+                await this.dataService.commit(this.translate.instant('save'));
+            });
 
             if (modelContents.length == 0) {
                 this.errorModal.open(this.translate.instant('modelGenerationFailed'));
             }
-        } catch (e) {}
+        } catch (e) { }
     }
 
     public get enabled(): boolean {

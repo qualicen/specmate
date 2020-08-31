@@ -17,7 +17,6 @@ import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.tcas.Annotation;
 
 import com.specmate.nlp.api.ELanguage;
-import com.specmate.nlp.util.NLPUtil.ConstituentType;
 
 import de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
@@ -78,8 +77,8 @@ public class NLPUtil {
 	}
 
 	private static void replaceWithSubChunks(JCas jCas, Chunk npChunk) {
-		List<Dependency> conDep = findCoveredDependencies(jCas, "cc", npChunk);
-		conDep.addAll(findCoveredDependencies(jCas, "KON", npChunk));
+		List<Dependency> conDep = findCoveredDependencies(jCas, npChunk, "cc");
+		conDep.addAll(findCoveredDependencies(jCas, npChunk, "KON"));
 		if (conDep.size() == 0) {
 			return;
 		}
@@ -143,6 +142,14 @@ public class NLPUtil {
 		return joiner.toString();
 	}
 
+	public static String printSentences(JCas jcas) {
+		StringJoiner joiner = new StringJoiner(" ");
+		JCasUtil.select(jcas, Sentence.class).forEach(c -> {
+			joiner.add("(" + c.getCoveredText() + ")");
+		});
+		return joiner.toString();
+	}
+
 	public static String printParse(JCas jcas) {
 		StringJoiner builder = new StringJoiner(" ");
 		Constituent con = JCasUtil.select(jcas, Constituent.class).iterator().next();
@@ -197,60 +204,83 @@ public class NLPUtil {
 		}
 	}
 
-	public static List<Dependency> findCoveredDependencies(JCas jCas, String depType, Annotation annotation) {
+	/** Finds dependencies which are completely covered by the given annotation */
+	public static List<Dependency> findCoveredDependencies(JCas jCas, Annotation annotation, String depType) {
 		Collection<Dependency> dependencies = JCasUtil.selectCovered(jCas, Dependency.class, annotation);
 		return dependencies.stream().filter(dep -> dep.getDependencyType().equals(depType))
 				.collect(Collectors.toList());
 	}
 
+	/**
+	 * Finds any dependency which has a token of the given annotation as start or
+	 * end point
+	 */
 	public static Optional<Dependency> findDependency(JCas jCas, Annotation anno, String depType, boolean isGovernor) {
 		Collection<Dependency> dependencies = JCasUtil.select(jCas, Dependency.class);
 		return findDependency(dependencies, anno, depType, isGovernor);
 	}
 
+	/**
+	 * Finds all dependencies which have a token of the given annotation as start or
+	 * end point
+	 */
+	public static List<Dependency> findDependencies(JCas jCas, Annotation anno, String depType, boolean isGovernor) {
+		Collection<Dependency> dependencies = JCasUtil.select(jCas, Dependency.class);
+		return findDependencies(dependencies, anno, depType, isGovernor);
+	}
+
+	/**
+	 * Finds any dependency from the given collection which have a token of the
+	 * given annotation as start or end point
+	 */
 	public static Optional<Dependency> findDependency(Collection<Dependency> dependencies, Annotation anno,
 			String depType, boolean isGovernor) {
-		List<Token> tokens;
-		if (anno instanceof Token) {
-			tokens = Arrays.asList((Token) anno);
-		} else {
-			tokens = JCasUtil.selectCovered(Token.class, anno);
-		}
-		for (Dependency dep : dependencies) {
-			if (dep.getDependencyType().equals(depType)) {
-				if (tokens.contains(isGovernor ? dep.getGovernor() : dep.getDependent())) {
-					return Optional.of(dep);
-				}
-			}
-		}
-		return Optional.empty();
+		List<Token> tokens = getCoveredTokens(anno);
+		return filterMatchingDependencies(dependencies, depType, isGovernor, tokens).findAny();
 	}
-	
+
+	/**
+	 * Finds all dependencies from the given collection which have a token of the
+	 * given annotation as start or end point
+	 */
 	public static List<Dependency> findDependencies(Collection<Dependency> dependencies, Annotation anno,
 			String depType, boolean isGovernor) {
+		List<Token> tokens = getCoveredTokens(anno);
+		return filterMatchingDependencies(dependencies, depType, isGovernor, tokens).collect(Collectors.toList());
+	}
+
+	/** Retrieves all tokens covered by the given annotation */
+	private static List<Token> getCoveredTokens(Annotation anno) {
 		List<Token> tokens;
 		if (anno instanceof Token) {
 			tokens = Arrays.asList((Token) anno);
 		} else {
 			tokens = JCasUtil.selectCovered(Token.class, anno);
 		}
-		
-		return dependencies.stream()
-					.filter(d -> d.getDependencyType().equals(depType) && tokens.contains(isGovernor ? d.getGovernor() : d.getDependent()))
-					.collect(Collectors.toList());
+		return tokens;
+	}
+
+	/**
+	 * Returns a stream of dependencies from the given collection with one of the
+	 * given tokens as start or end and the given dependency type.
+	 */
+	private static Stream<Dependency> filterMatchingDependencies(Collection<Dependency> dependencies, String depType,
+			boolean isGovernor, List<Token> tokens) {
+		return dependencies.stream().filter(d -> d.getDependencyType().equals(depType)
+				&& tokens.contains(isGovernor ? d.getGovernor() : d.getDependent()));
 	}
 
 	private static String DE_Pattern = "\\b(der|die|das|ein|eine|einen)\\b";
-	
+
 	public static ELanguage detectLanguage(String text) {
-		Pattern pattern= Pattern.compile(".*WENN.*ENDE-WENN.*", Pattern.DOTALL);
-		
+		Pattern pattern = Pattern.compile(".*WENN.*ENDE-WENN.*", Pattern.DOTALL);
+
 		if (pattern.matcher(text).matches()) {
 			return ELanguage.PSEUDO;
-		}		
-		if (text.matches("(?i)(.*)"+DE_Pattern+"(.*)")) {
+		}
+		if (text.matches("(?i)(.*)" + DE_Pattern + "(.*)")) {
 			return ELanguage.DE;
-		}		
+		}
 		return ELanguage.EN;
 	}
 

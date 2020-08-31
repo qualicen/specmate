@@ -66,6 +66,9 @@
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//base/IRecycled/recycled"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//base/IRecycled/hasRecycledChildren"/>
       </genClasses>
+      <genClasses ecoreClass="specmate.ecore#//base/ModelImage">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//base/ModelImage/imageData"/>
+      </genClasses>
     </nestedGenPackages>
     <nestedGenPackages prefix="Requirements" disposableProviderFactory="true" ecorePackage="specmate.ecore#//requirements">
       <genEnums typeSafeEnumCompatible="false" ecoreEnum="specmate.ecore#//requirements/NodeType">

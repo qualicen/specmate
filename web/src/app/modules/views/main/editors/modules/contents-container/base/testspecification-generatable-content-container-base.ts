@@ -7,7 +7,8 @@ import { AdditionalInformationService } from '../../../../../side/modules/links-
 import { ClipboardService } from '../../tool-pallette/services/clipboard-service';
 import { ContentContainerBase } from './contents-container-base';
 import { ContentsContainerService } from '../services/content-container.service';
-import { Id } from '../../../../../../../util/id';
+import { GraphicalEditorService } from '../../graphical-editor/services/graphical-editor.service';
+import { ModelImageService } from '../../graphical-editor/services/model-image.service';
 
 export abstract class TestSpecificationContentContainerBase<T extends IContainer> extends ContentContainerBase<T> {
 
@@ -18,8 +19,10 @@ export abstract class TestSpecificationContentContainerBase<T extends IContainer
         modal: ConfirmationModal,
         clipboardService: ClipboardService,
         private contentService: ContentsContainerService,
-        protected additionalInformationService: AdditionalInformationService) {
-        super(dataService, navigator, translate, modal, clipboardService);
+        protected additionalInformationService: AdditionalInformationService,
+        protected graphicalEditorService: GraphicalEditorService,
+        protected modelImageService: ModelImageService) {
+        super(dataService, navigator, translate, modal, clipboardService, graphicalEditorService, modelImageService);
     }
 
     public get canGenerateTestSpecification(): boolean {

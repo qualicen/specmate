@@ -1,5 +1,8 @@
 package com.specmate.emfrest.crud;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
@@ -17,6 +20,7 @@ import com.specmate.rest.RestResult;
 
 @Component(immediate = true, service = IRestService.class)
 public class ListService extends RestServiceBase {
+	private static final String NOTLOADINGANNOTATIONURL = "http://specmate.com/notLoadingOnList";
 
 	private IAuthenticationService authService;
 
@@ -33,7 +37,11 @@ public class ListService extends RestServiceBase {
 	@Override
 	public RestResult<?> get(Object target, MultivaluedMap<String, String> queryParams, String token)
 			throws SpecmateException {
-		return new RestResult<>(Response.Status.OK, SpecmateEcoreUtil.getChildren(target));
+		List<EObject> children = SpecmateEcoreUtil.getChildren(target);
+		children = children.stream()
+				.filter(element -> element.eClass().getEAnnotation(NOTLOADINGANNOTATIONURL) == null)
+				.collect(Collectors.toList());
+		return new RestResult<>(Response.Status.OK, children);
 	}
 
 	@Override

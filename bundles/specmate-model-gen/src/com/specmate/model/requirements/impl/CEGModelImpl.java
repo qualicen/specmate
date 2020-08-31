@@ -8,7 +8,6 @@ import com.specmate.model.base.IDescribed;
 import com.specmate.model.base.INamed;
 import com.specmate.model.base.IRecycled;
 import com.specmate.model.base.ITracingElement;
-
 import com.specmate.model.requirements.CEGModel;
 import com.specmate.model.requirements.RequirementsPackage;
 

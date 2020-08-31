@@ -5,7 +5,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -48,7 +50,7 @@ public class ConfigService implements IConfigService {
 
 	@Activate
 	public void activate(BundleContext context) throws IOException {
-		this.bundleContext = context;
+		bundleContext = context;
 		processCommandLineArguments();
 		readConfigurationFile();
 	}
@@ -81,13 +83,13 @@ public class ConfigService implements IConfigService {
 				URL configUrl = bundleContext.getBundle().getResource("config/specmate-config.properties");
 				configInputStream = configUrl.openStream();
 			}
-			properties.load(configInputStream);
+			properties.load(new InputStreamReader(configInputStream, Charset.forName("UTF-8")));
 		} catch (FileNotFoundException e) {
-			this.logService.log(LogService.LOG_ERROR, "Configuration file " + configurationFileLocation
+			logService.log(LogService.LOG_ERROR, "Configuration file " + configurationFileLocation
 					+ " does not exist. Using default configuration.");
 			return;
 		} catch (IOException e) {
-			this.logService.log(LogService.LOG_ERROR, "Configuration file " + configurationFileLocation
+			logService.log(LogService.LOG_ERROR, "Configuration file " + configurationFileLocation
 					+ " could not be read. Using default configuration.", e);
 			return;
 		} finally {
@@ -100,20 +102,20 @@ public class ConfigService implements IConfigService {
 			}
 		}
 		properties.putAll(configuration);
-		this.configuration = properties;
+		configuration = properties;
 	}
 
 	/** Retreives all configured properties with a given prefix */
 	@Override
 	public Set<Entry<Object, Object>> getConfigurationProperties(String prefix) {
-		return this.configuration.entrySet().stream().filter(entry -> ((String) entry.getKey()).startsWith(prefix))
+		return configuration.entrySet().stream().filter(entry -> ((String) entry.getKey()).startsWith(prefix))
 				.collect(Collectors.toSet());
 	}
 
 	/** Retreives a configured property. */
 	@Override
 	public String getConfigurationProperty(String key) {
-		return this.configuration.getProperty(key);
+		return configuration.getProperty(key);
 	}
 
 	/**
@@ -122,13 +124,13 @@ public class ConfigService implements IConfigService {
 	 */
 	@Override
 	public String getConfigurationProperty(String key, String defaultValue) {
-		return this.configuration.getProperty(key, defaultValue);
+		return configuration.getProperty(key, defaultValue);
 	}
 
 	/** Retreives a configured property as integer. */
 	@Override
 	public Integer getConfigurationPropertyInt(String key) {
-		String property = this.configuration.getProperty(key);
+		String property = configuration.getProperty(key);
 		if (property != null) {
 			return Integer.parseInt(property);
 		} else {
@@ -153,7 +155,7 @@ public class ConfigService implements IConfigService {
 	/** Retrieves a configured property as a list. */
 	@Override
 	public String[] getConfigurationPropertyArray(String key) {
-		String property = this.configuration.getProperty(key);
+		String property = configuration.getProperty(key);
 		if (property != null) {
 			String[] items = StringUtils.split(property, ",");
 			for (int i = 0; i < items.length; i++) {
@@ -180,7 +182,7 @@ public class ConfigService implements IConfigService {
 			l.addAll(Arrays.asList(args[i].split(" ")));
 		}
 
-		this.commandLineArguments = l.toArray(new String[0]);
+		commandLineArguments = l.toArray(new String[0]);
 	}
 
 	/** Sets the LogService reference. */

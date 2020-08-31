@@ -22,6 +22,7 @@ import com.specmate.model.base.ISpecmateModelObject;
 import com.specmate.model.base.ISpecmatePositionableModelObject;
 import com.specmate.model.base.ITracingElement;
 
+import com.specmate.model.base.ModelImage;
 import com.specmate.model.batch.BatchPackage;
 
 import com.specmate.model.batch.impl.BatchPackageImpl;
@@ -152,6 +153,13 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 	 * @generated
 	 */
 	private EClass iRecycledEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass modelImageEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -606,6 +614,26 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getModelImage() {
+		return modelImageEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getModelImage_ImageData() {
+		return (EAttribute)modelImageEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public BaseFactory getBaseFactory() {
 		return (BaseFactory)getEFactoryInstance();
 	}
@@ -678,6 +706,9 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 		iRecycledEClass = createEClass(IRECYCLED);
 		createEAttribute(iRecycledEClass, IRECYCLED__RECYCLED);
 		createEAttribute(iRecycledEClass, IRECYCLED__HAS_RECYCLED_CHILDREN);
+
+		modelImageEClass = createEClass(MODEL_IMAGE);
+		createEAttribute(modelImageEClass, MODEL_IMAGE__IMAGE_DATA);
 	}
 
 	/**
@@ -719,6 +750,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 		iSpecmatePositionableModelObjectEClass.getESuperTypes().add(this.getISpecmateModelObject());
 		iModelConnectionEClass.getESuperTypes().add(this.getISpecmateModelObject());
 		iModelNodeEClass.getESuperTypes().add(this.getISpecmatePositionableModelObject());
+		modelImageEClass.getESuperTypes().add(this.getIContentElement());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(iNamedEClass, INamed.class, "INamed", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -771,12 +803,17 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 		initEAttribute(getIRecycled_Recycled(), ecorePackage.getEBoolean(), "recycled", null, 0, 1, IRecycled.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getIRecycled_HasRecycledChildren(), ecorePackage.getEBoolean(), "hasRecycledChildren", null, 0, 1, IRecycled.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(modelImageEClass, ModelImage.class, "ModelImage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getModelImage_ImageData(), ecorePackage.getEString(), "imageData", null, 0, 1, ModelImage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		// Create resource
 		createResource(eNS_URI);
 
 		// Create annotations
 		// http://specmate.com/form_meta
 		createForm_metaAnnotations();
+		// http://specmate.com/notLoadingOnList
+		createNotLoadingOnListAnnotations();
 	}
 
 	/**
@@ -808,6 +845,28 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 			   "type", "longText",
 			   "rows", "5",
 			   "position", "100"
+		   });
+		addAnnotation
+		  (modelImageEClass,
+		   source,
+		   new String[] {
+			   "disabled1", "name",
+			   "disabled2", "description"
+		   });
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://specmate.com/notLoadingOnList</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createNotLoadingOnListAnnotations() {
+		String source = "http://specmate.com/notLoadingOnList";
+		addAnnotation
+		  (modelImageEClass,
+		   source,
+		   new String[] {
 		   });
 	}
 

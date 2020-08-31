@@ -309,8 +309,8 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 						+ searchResult.getMaxResults() + " issues from Jira " + url + " project: " + projectName);
 			} catch (RestClientException e) {
 				if (e.getStatusCode().get() == 400) {
-					logService.log(LogService.LOG_WARNING,
-							String.format("Jira Connector (%s): Received 400 status", id));
+					logService.log(LogService.LOG_WARNING, String.format(
+							"Jira Connector (%s): Received 400 status, JQL: %s, Details: %s", id, jql, e.getMessage()));
 					return issues;
 				} else {
 					logService.log(LogService.LOG_ERROR, String.format(

@@ -192,7 +192,9 @@ public class EMFJsonSerializer {
 			return value;
 		} else {
 			String v = value.toString();
+			//return Encode.forJavaScript(v);
 			return Encode.forHtml(v);
+			//return v;
 		}
 	}
 

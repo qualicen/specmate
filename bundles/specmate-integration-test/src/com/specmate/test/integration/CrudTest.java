@@ -81,13 +81,13 @@ public class CrudTest extends EmfRestTest {
 	@Test
 	public void testFilterXSS() {
 		String postUrl = listUrl();
-		JSONObject folder = createTestFolder("TestFolder", "<script>alert(\"XSS\")</script>");
+		JSONObject folder = createTestFolder("TestFolder", "<script>alert('XSS')</script>");
 		logService.log(LogService.LOG_DEBUG, "Posting the object " + folder.toString() + " to url " + postUrl);
 		RestResult<JSONObject> result = restClient.post(postUrl, folder);
 		Assert.assertEquals(result.getResponse().getStatus(), Status.OK.getStatusCode());
 		result.getResponse().close();
 		
-		folder.put(BasePackage.Literals.INAMED__NAME.getName(), "&lt;script&gt;alert(&#34;XSS&#34;)&lt;/script&gt;");
+		folder.put(BasePackage.Literals.INAMED__NAME.getName(), "<script>alert(\\x27XSS\\x27)<\\/script>");
 		
 		String retrieveUrl = detailUrl(getId(folder));
 		RestResult<JSONObject> getResult = restClient.get(retrieveUrl);

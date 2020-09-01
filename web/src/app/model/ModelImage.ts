@@ -4,7 +4,7 @@
 
 	export class ModelImage  {
 
-		___nsuri: string = "http://specmate.com/20200605/model/base";
+		___nsuri: string = "http://specmate.com/20200624/model/base";
 		public url: string;
 		public className: string = "ModelImage";
 		public static className: string = "ModelImage";

@@ -12,6 +12,6 @@ export class CEGmxModelNode {
     constructor(public _variable: string, public _condition: string, public _type: string) {
         this.variable = xssEncode(_variable);
         this.condition = xssEncode(_condition);
-        this.type = xssEncode(_type);
+        this.type = _type;
     }
 }

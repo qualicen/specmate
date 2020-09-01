@@ -35,7 +35,7 @@ import { ChangeTranslator } from './util/change-translator';
 import { StyleChanger } from './util/style-changer';
 import { GraphicalEditorService } from '../services/graphical-editor.service';
 import { Process } from 'src/app/model/Process';
-import { ModelImage } from 'src/app/model/ModelImage';
+import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
 
 declare var require: any;
 
@@ -77,6 +77,7 @@ export class GraphicalEditor {
         private validationService: ValidationService,
         private translate: TranslateService,
         private undoService: UndoService,
+        private modal: ConfirmationModal,
         private graphicalEditorService: GraphicalEditorService) {
 
         this.navigator.navigationStart.subscribe(() => {
@@ -161,6 +162,9 @@ export class GraphicalEditor {
         mx.mxGraph.prototype.centerZoom = false;
         mx.mxGraph.prototype.allowNegativeCoordinates = false;
         mx.mxGraph.prototype.border = 25;
+        mx.mxGraph.prototype.validationAlert = (message: string) => {
+            this.modal.openOk(this.translate.instant('graphicalEditorErrorTitle'), message);
+        };
 
         mx.mxEvent.disableContextMenu(this.graphContainerElement.nativeElement);
 

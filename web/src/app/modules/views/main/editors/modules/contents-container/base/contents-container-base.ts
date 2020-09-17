@@ -51,12 +51,6 @@ export abstract class ContentContainerBase<T extends IContainer> implements OnIn
             const element = await this.createElement(name);
             if (element != undefined) {
                 await this.navigator.navigate(element);
-                if (Type.is(element, CEGModel) || Type.is(element, Process)) {
-                    this.graphicalEditorService.initModelFinish.subscribe(async () => {
-                        await this.modelImageService.createModelImage(element);
-                        await this.dataService.commit(this.translate.instant('save'));
-                    });
-                }
             }
         }
     }

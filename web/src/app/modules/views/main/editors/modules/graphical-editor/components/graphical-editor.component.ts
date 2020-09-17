@@ -35,7 +35,7 @@ import { ChangeTranslator } from './util/change-translator';
 import { StyleChanger } from './util/style-changer';
 import { GraphicalEditorService } from '../services/graphical-editor.service';
 import { Process } from 'src/app/model/Process';
-import { ModelImage } from 'src/app/model/ModelImage';
+import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
 
 declare var require: any;
 
@@ -65,6 +65,7 @@ export class GraphicalEditor {
 
     private _model: CEGModel | Process;
     private _contents: IContainer[];
+    private zoomFactor = 1.0;
 
     private graphMouseMove: (evt: any) => void;
 
@@ -76,6 +77,7 @@ export class GraphicalEditor {
         private validationService: ValidationService,
         private translate: TranslateService,
         private undoService: UndoService,
+        private modal: ConfirmationModal,
         private graphicalEditorService: GraphicalEditorService) {
 
         this.navigator.navigationStart.subscribe(() => {
@@ -143,6 +145,7 @@ export class GraphicalEditor {
             this.destroyGraph();
         }
 
+
         await this.createGraph();
 
         this.isInGraphTransition = false;
@@ -159,6 +162,9 @@ export class GraphicalEditor {
         mx.mxGraph.prototype.centerZoom = false;
         mx.mxGraph.prototype.allowNegativeCoordinates = false;
         mx.mxGraph.prototype.border = 25;
+        mx.mxGraph.prototype.validationAlert = (message: string) => {
+            this.modal.openOk(this.translate.instant('graphicalEditorErrorTitle'), message);
+        };
 
         mx.mxEvent.disableContextMenu(this.graphContainerElement.nativeElement);
 
@@ -183,6 +189,7 @@ export class GraphicalEditor {
         this.graph.setMultigraph(false);
         this.graph.setDropEnabled(false);
         this.graph.setAllowDanglingEdges(false);
+        this.graph.zoomTo(this.zoomFactor, undefined);
         const rubberBand = new mx.mxRubberband(this.graph);
         rubberBand.reset();
 
@@ -587,14 +594,17 @@ export class GraphicalEditor {
 
     public zoomIn(): void {
         this.graph.zoomIn();
+        this.zoomFactor = this.zoomFactor * this.graph.zoomFactor;
     }
 
     public zoomOut(): void {
         this.graph.zoomOut();
+        this.zoomFactor = this.zoomFactor / this.graph.zoomFactor;
     }
 
     public resetZoom(): void {
         this.graph.zoomActual();
+        this.zoomFactor = 1.0;
     }
 
     public get connections(): IContainer[] {

@@ -7,7 +7,6 @@ import { SpecmateDataService } from '../../../../data/modules/data-service/servi
 import { ConfirmationModal } from '../../../../notification/modules/modals/services/confirmation-modal.service';
 import { ElementProvider } from '../../../../views/main/editors/modules/graphical-editor/providers/properties/element-provider';
 import { SelectedElementService } from '../../../../views/side/modules/selected-element/services/selected-element.service';
-import { ErrorNotificationModalService } from '../../../../notification/modules/modals/services/error-notification-modal.service';
 import { GraphicalEditorService } from 'src/app/modules/views/main/editors/modules/graphical-editor/services/graphical-editor.service';
 import { ModelImageService } from 'src/app/modules/views/main/editors/modules/graphical-editor/services/model-image.service';
 
@@ -54,7 +53,6 @@ export class CegModelGeneratorButton {
 
     constructor(private dataService: SpecmateDataService,
         private modal: ConfirmationModal,
-        private errorModal: ErrorNotificationModalService,
         private translate: TranslateService,
         private selectedElementService: SelectedElementService,
         private graphicalEditorService: GraphicalEditorService,
@@ -86,10 +84,14 @@ export class CegModelGeneratorButton {
                 await this.dataService.commit(this.translate.instant('save'));
             });
 
-            if (modelContents.length == 0) {
-                this.errorModal.open(this.translate.instant('modelGenerationFailed'));
+            if (modelContents.length === 0) {
+                this.modal.openOk(this.translate.instant('CEGGenerator.couldNotGenerateTitle'),
+                    this.translate.instant('CEGGenerator.couldNotGenerate'));
             }
-        } catch (e) { }
+        } catch (e) {
+            this.modal.openOk(this.translate.instant('CEGGenerator.couldNotGenerateTitleError'),
+                this.translate.instant('CEGGenerator.couldNotGenerate'));
+        }
     }
 
     public get enabled(): boolean {

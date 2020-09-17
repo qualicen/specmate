@@ -47,6 +47,8 @@ public class MetricsServiceImpl implements IMetricsService {
 
 	@Activate
 	public void activate() throws SpecmateException {
+		CollectorRegistry.defaultRegistry.clear();
+		collectors.clear();
 		// Default JVM metrics (memory, threads, etc.)
 		DefaultExports.initialize();
 	}
@@ -78,7 +80,6 @@ public class MetricsServiceImpl implements IMetricsService {
 						"A metric with name " + name + " is already registered, but has a different type.");
 			}
 		}
-		CollectorRegistry bla = CollectorRegistry.defaultRegistry;
 		return null;
 	}
 
@@ -88,7 +89,7 @@ public class MetricsServiceImpl implements IMetricsService {
 	}
 
 	@Override
-	public IGauge createGauge(String name, String description) throws SpecmateException {
+	public synchronized IGauge createGauge(String name, String description) throws SpecmateException {
 		String theName = getMetricName(name);
 		IGauge gauge = checkIfCreated(IGauge.class, theName, description);
 		if (gauge == null) {
@@ -99,7 +100,7 @@ public class MetricsServiceImpl implements IMetricsService {
 	}
 
 	@Override
-	public IHistogram createHistogram(String name, String description) throws SpecmateException {
+	public synchronized IHistogram createHistogram(String name, String description) throws SpecmateException {
 		String theName = getMetricName(name);
 		IHistogram histogram = checkIfCreated(IHistogram.class, theName, description);
 		if (histogram == null) {
@@ -110,7 +111,7 @@ public class MetricsServiceImpl implements IMetricsService {
 	}
 
 	@Override
-	public ICounter createCounter(String name, String description) throws SpecmateException {
+	public synchronized ICounter createCounter(String name, String description) throws SpecmateException {
 		String theName = getMetricName(name);
 		ICounter counter = checkIfCreated(ICounter.class, theName, description);
 		if (counter == null) {

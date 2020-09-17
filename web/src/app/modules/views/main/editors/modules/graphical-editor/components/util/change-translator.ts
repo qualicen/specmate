@@ -245,6 +245,7 @@ export class ChangeTranslator {
             for (const key in elementValues) {
                 node[key] = elementValues[key];
             }
+            node.name = node['variable'] + ' ' + node['condition'];
         } else {
             node.name = change.child.value;
         }
@@ -368,16 +369,16 @@ export class ChangeTranslator {
     }
 
     private async translateEdgeLabelPositionChange(change: mxgraph.mxGeometryChange, connection: IModelConnection): Promise<void> {
-      if (Type.is(connection, ProcessConnection)) {
-        let con = (connection as ProcessConnection);
-        let labelX = change.geometry.x;
-        let labelY = change.geometry.y;
-        con.labelX = labelX;
-        con.labelY = labelY;
-        const changeId = Id.uuid;
-        this.dataService.updateElement(con, true, changeId);
-      }
-  }
+        if (Type.is(connection, ProcessConnection)) {
+            let con = (connection as ProcessConnection);
+            let labelX = change.geometry.x;
+            let labelY = change.geometry.y;
+            con.labelX = labelX;
+            con.labelY = labelY;
+            const changeId = Id.uuid;
+            this.dataService.updateElement(con, true, changeId);
+        }
+    }
 
     private async translateEdgeEndsChange(change: mxgraph.mxTerminalChange, connection: IModelConnection): Promise<void> {
         if (change.cell.target === undefined

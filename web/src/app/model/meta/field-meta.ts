@@ -263,6 +263,8 @@ export class MetaInfo {
 			type: 'checkbox',
 			position: '1'		
 		}	];
+	public static CEGLinkedNode: FieldMetaItem[] = [
+	];
 	public static TestSpecification: FieldMetaItem[] = [
 			{
 			name: "name",

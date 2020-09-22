@@ -4,11 +4,17 @@ package com.specmate.model.requirements.impl;
 
 import com.specmate.model.base.impl.IModelNodeImpl;
 
+import com.specmate.model.requirements.CEGLinkedNode;
 import com.specmate.model.requirements.CEGNode;
 import com.specmate.model.requirements.NodeType;
 import com.specmate.model.requirements.RequirementsPackage;
 
+import java.util.Collection;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -21,6 +27,7 @@ import org.eclipse.emf.ecore.EClass;
  *   <li>{@link com.specmate.model.requirements.impl.CEGNodeImpl#getType <em>Type</em>}</li>
  *   <li>{@link com.specmate.model.requirements.impl.CEGNodeImpl#getVariable <em>Variable</em>}</li>
  *   <li>{@link com.specmate.model.requirements.impl.CEGNodeImpl#getCondition <em>Condition</em>}</li>
+ *   <li>{@link com.specmate.model.requirements.impl.CEGNodeImpl#getLinksFrom <em>Links From</em>}</li>
  * </ul>
  *
  * @generated
@@ -140,6 +147,46 @@ public class CEGNodeImpl extends IModelNodeImpl implements CEGNode {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<CEGLinkedNode> getLinksFrom() {
+		return (EList<CEGLinkedNode>)eDynamicGet(RequirementsPackage.CEG_NODE__LINKS_FROM, RequirementsPackage.Literals.CEG_NODE__LINKS_FROM, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case RequirementsPackage.CEG_NODE__LINKS_FROM:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getLinksFrom()).basicAdd(otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case RequirementsPackage.CEG_NODE__LINKS_FROM:
+				return ((InternalEList<?>)getLinksFrom()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -149,6 +196,8 @@ public class CEGNodeImpl extends IModelNodeImpl implements CEGNode {
 				return getVariable();
 			case RequirementsPackage.CEG_NODE__CONDITION:
 				return getCondition();
+			case RequirementsPackage.CEG_NODE__LINKS_FROM:
+				return getLinksFrom();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -158,6 +207,7 @@ public class CEGNodeImpl extends IModelNodeImpl implements CEGNode {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -169,6 +219,10 @@ public class CEGNodeImpl extends IModelNodeImpl implements CEGNode {
 				return;
 			case RequirementsPackage.CEG_NODE__CONDITION:
 				setCondition((String)newValue);
+				return;
+			case RequirementsPackage.CEG_NODE__LINKS_FROM:
+				getLinksFrom().clear();
+				getLinksFrom().addAll((Collection<? extends CEGLinkedNode>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -191,6 +245,9 @@ public class CEGNodeImpl extends IModelNodeImpl implements CEGNode {
 			case RequirementsPackage.CEG_NODE__CONDITION:
 				setCondition(CONDITION_EDEFAULT);
 				return;
+			case RequirementsPackage.CEG_NODE__LINKS_FROM:
+				getLinksFrom().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -209,6 +266,8 @@ public class CEGNodeImpl extends IModelNodeImpl implements CEGNode {
 				return VARIABLE_EDEFAULT == null ? getVariable() != null : !VARIABLE_EDEFAULT.equals(getVariable());
 			case RequirementsPackage.CEG_NODE__CONDITION:
 				return CONDITION_EDEFAULT == null ? getCondition() != null : !CONDITION_EDEFAULT.equals(getCondition());
+			case RequirementsPackage.CEG_NODE__LINKS_FROM:
+				return !getLinksFrom().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

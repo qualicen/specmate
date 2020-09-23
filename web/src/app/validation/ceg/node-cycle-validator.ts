@@ -1,3 +1,4 @@
+import { CEGLinkedNode } from 'src/app/model/CEGLinkedNode';
 import { CEGConnection } from '../../model/CEGConnection';
 import { CEGModel } from '../../model/CEGModel';
 import { CEGNode } from '../../model/CEGNode';
@@ -14,9 +15,9 @@ type Circle = CEGConnection[];
 @Validator(CEGModel)
 export class NodeCycleValidator extends ElementValidatorBase<CEGModel> {
     // List of all CEGNodes of the model
-    private nodes: CEGNode[];
+    private nodes: (CEGNode|CEGLinkedNode)[];
     // Maps the URL of a node to the node object.
-    private nodeMap: {[nodeURL: string]: CEGNode};
+    private nodeMap: {[nodeURL: string]: CEGNode | CEGLinkedNode};
     // Maps the URL of an Node to all its outgoing connections.
     private outgoingConnections: CEGConnection[][];
     // Set of already explored Nodes
@@ -29,10 +30,10 @@ export class NodeCycleValidator extends ElementValidatorBase<CEGModel> {
         this.initValidation(contents);
         let circles: Circle[] = [];
         for (const startNode of this.nodes) {
-            if (this.closedSet.has(startNode)) {
+            if (this.closedSet.has(startNode as CEGNode)) {
                 continue; // Node has already been seen
             }
-            let newCircles = this.depthFirstSearch(startNode);
+            let newCircles = this.depthFirstSearch(startNode as CEGNode);
             circles = circles.concat(newCircles);
         }
         if (circles.length > 0) {
@@ -61,6 +62,11 @@ export class NodeCycleValidator extends ElementValidatorBase<CEGModel> {
 
             if (Type.is(elem, CEGNode)) {
                 let node = elem as CEGNode;
+                this.nodeMap[node.url] = node;
+                this.nodes.push(node);
+            }
+            if (Type.is(elem, CEGLinkedNode)) {
+                let node = elem as CEGLinkedNode;
                 this.nodeMap[node.url] = node;
                 this.nodes.push(node);
             }
@@ -95,7 +101,7 @@ export class NodeCycleValidator extends ElementValidatorBase<CEGModel> {
             if (currentNode.hasNext()) {
                 let edge = currentNode.getNextEdge();
                 let toNode = this.nodeMap[edge.target.url];
-                if (this.closedSet.has(toNode)) {
+                if (this.closedSet.has(toNode as CEGNode)) {
                     continue; // We don't enter a part of the graph we have already seen
                 }
                 // Check if we have already seen this node
@@ -107,7 +113,7 @@ export class NodeCycleValidator extends ElementValidatorBase<CEGModel> {
                     circles.push(circle);
                 } else {
                     // This is an unkown node -> Explore it.
-                    traceStack.push(new TraceNode(toNode, this.outgoingConnections[toNode.url]));
+                    traceStack.push(new TraceNode(toNode as CEGNode, this.outgoingConnections[toNode.url]));
                 }
             } else {
                 // We have explored all children of this node.

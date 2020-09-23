@@ -2,6 +2,7 @@ import { CEGConnection } from 'src/app/model/CEGConnection';
 import { Type } from 'src/app/util/type';
 import { Config } from '../../../../../../../../config/config';
 import { CEGNode } from '../../../../../../../../model/CEGNode';
+import { CEGLinkedNode } from '../../../../../../../../model/CEGLinkedNode';
 import { ProcessDecision } from '../../../../../../../../model/ProcessDecision';
 import { ProcessEnd } from '../../../../../../../../model/ProcessEnd';
 import { ProcessStart } from '../../../../../../../../model/ProcessStart';
@@ -27,6 +28,18 @@ export class ShapeProvider extends ProviderBase {
 
         this.shapeMap[CEGNode.className] = {
             style: EditorStyle.BASE_CEG_NODE_STYLE,
+            size: {
+                width: Config.CEG_NODE_WIDTH,
+                height: Config.CEG_NODE_HEIGHT
+            },
+            text: new NodeNameConverterProvider(type).nodeNameConverter.convertTo({
+                variable: Config.CEG_NODE_NEW_VARIABLE,
+                condition: Config.CEG_NODE_NEW_CONDITION
+            })
+        };
+
+        this.shapeMap[CEGLinkedNode.className] = {
+            style: EditorStyle.BASE_CEG_LINKED_NODE_STYLE,
             size: {
                 width: Config.CEG_NODE_WIDTH,
                 height: Config.CEG_NODE_HEIGHT

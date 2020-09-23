@@ -53,6 +53,9 @@ export class EditorStyle {
     public static readonly BASE_CEG_NODE_STYLE = 'BASE_CEG_NODE';
     private static readonly BASE_CEG_NODE_STYLE_STR = 'shape=rectangle;rounded=1;arcSize=10;align=center;perimeter=rectanglePerimeter;dashed=0';
     private static readonly BASE_CEG_NODE_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.BASE_CEG_NODE_STYLE_STR);
+    public static readonly BASE_CEG_LINKED_NODE_STYLE = 'BASE_CEG_LINKED_NODE';
+    private static readonly BASE_CEG_LINKED_NODE_STYLE_STR = 'shape=rectangle;rounded=1;arcSize=10;align=center;perimeter=rectanglePerimeter;dashed=1;dashPattern=1 1;opacity=75';
+    private static readonly BASE_CEG_LINKED_NODE_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.BASE_CEG_LINKED_NODE_STYLE_STR);
     public static readonly BASE_PROCESS_START_STYLE = 'BASE_PROCESS_START_STYLE';
     private static readonly BASE_PROCESS_START_STYLE_STR = 'shape=ellipse;whiteSpace=wrap;html=1;aspect=fixed;align=center;perimeter=ellipsePerimeter;editable=0;dashed=0;fontColor=#000000';
     private static readonly BASE_PROCESS_START_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.BASE_PROCESS_START_STYLE_STR);
@@ -102,6 +105,7 @@ export class EditorStyle {
         stylesheet.putCellStyle(EditorStyle.VARIABLE_NAME_STYLE, EditorStyle.VARIABLE_NAME_STYLE_OBJ);
 
         stylesheet.putCellStyle(EditorStyle.BASE_CEG_NODE_STYLE, EditorStyle.BASE_CEG_NODE_STYLE_OBJ);
+        stylesheet.putCellStyle(EditorStyle.BASE_CEG_LINKED_NODE_STYLE, EditorStyle.BASE_CEG_LINKED_NODE_STYLE_OBJ);
         stylesheet.putCellStyle(EditorStyle.BASE_PROCESS_START_STYLE, EditorStyle.BASE_PROCESS_START_STYLE_OBJ);
         stylesheet.putCellStyle(EditorStyle.BASE_PROCESS_END_STYLE, EditorStyle.BASE_PROCESS_END_STYLE_OBJ);
         stylesheet.putCellStyle(EditorStyle.BASE_PROCESS_STEP_STYLE, EditorStyle.BASE_PROCESS_STEP_STYLE_OBJ);

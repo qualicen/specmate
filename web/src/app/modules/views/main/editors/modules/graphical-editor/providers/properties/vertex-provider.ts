@@ -1,6 +1,7 @@
 import * as he from 'he';
 import { mxgraph } from 'mxgraph'; // Typings only - no code!
 import { CEGNode } from '../../../../../../../../model/CEGNode';
+import { CEGLinkedNode } from '../../../../../../../../model/CEGLinkedNode';
 import { IContainer } from '../../../../../../../../model/IContainer';
 import { IModelNode } from '../../../../../../../../model/IModelNode';
 import { Type } from '../../../../../../../../util/type';
@@ -52,6 +53,22 @@ export class VertexProvider extends ProviderBase {
         l1.isConnectable = () => false;
         l2.isConnectable = () => false;
         l3.isConnectable = () => false;
+        this.graph.getModel().endUpdate();
+        return vertex;
+    }
+
+    public provideLinkedCEGNode(url: string, x: number, y: number, width: number, height: number, data: CEGmxModelNode): mxgraph.mxCell {
+        const value: string = null;
+        const style = this.shapeProvider.getStyle(new CEGLinkedNode());
+        const parent = this.graph.getDefaultParent();
+        this.graph.getModel().beginUpdate();
+        const vertex = this.graph.insertVertex(parent, url, value, x, y, width, height, style);
+        const l1 = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_VARIABLE, data.variable,
+            VertexProvider.INITIAL_CHILD_NODE_X, 0.15, 0, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.VARIABLE_NAME_STYLE, true);
+
+        VertexProvider.adjustChildCellSize(l1, width);
+
+        l1.isConnectable = () => false;
         this.graph.getModel().endUpdate();
         return vertex;
     }

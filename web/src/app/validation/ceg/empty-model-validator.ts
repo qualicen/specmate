@@ -1,3 +1,4 @@
+import { CEGLinkedNode } from 'src/app/model/CEGLinkedNode';
 import { CEGModel } from '../../model/CEGModel';
 import { CEGNode } from '../../model/CEGNode';
 import { IContainer } from '../../model/IContainer';
@@ -10,7 +11,7 @@ import { Validator } from '../validator-decorator';
 @Validator(CEGModel)
 export class EmptyModelValidator extends ElementValidatorBase<CEGModel> {
     public validate(element: CEGModel, contents: IContainer[]): ValidationResult {
-        const valid: boolean = contents.some((element: IContainer) => Type.is(element, CEGNode));
+        const valid: boolean = contents.some((element: IContainer) => Type.is(element, CEGNode) || Type.is(element, CEGLinkedNode));
         if (valid) {
             return ValidationResult.VALID;
         }

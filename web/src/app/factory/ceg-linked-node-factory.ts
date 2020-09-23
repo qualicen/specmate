@@ -1,17 +1,15 @@
 import { Config } from '../config/config';
 import { CEGLinkedNode } from '../model/CEGLinkedNode';
-import { CEGNode } from '../model/CEGNode';
 import { IContainer } from '../model/IContainer';
 import { Id } from '../util/id';
 import { Url } from '../util/url';
 import { ElementFactoryBase } from './element-factory-base';
 import { PositionableElementFactoryBase } from './positionable-element-factory-base';
-import { Proxy } from '../model/support/proxy';
 
 export class CEGLinkedNodeFactory extends PositionableElementFactoryBase<CEGLinkedNode> {
 
     public create(parent: IContainer, commit: boolean, compoundId?: string, name?:
-         string, linkedNode?: IContainer): Promise<CEGLinkedNode> {
+         string): Promise<CEGLinkedNode> {
 
         compoundId = compoundId || Id.uuid;
 
@@ -30,9 +28,7 @@ export class CEGLinkedNodeFactory extends PositionableElementFactoryBase<CEGLink
         node.tracesTo = [];
         node.incomingConnections = [];
         node.outgoingConnections = [];
-        let proxy: Proxy = new Proxy();
-        proxy.url = linkedNode.url;
-        node.linkTo = proxy;
+        node.linkTo = undefined;
 
         return this.dataService.createElement(node, true, compoundId).then(() => node);
     }

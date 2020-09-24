@@ -15,9 +15,9 @@ type Circle = CEGConnection[];
 @Validator(CEGModel)
 export class NodeCycleValidator extends ElementValidatorBase<CEGModel> {
     // List of all CEGNodes of the model
-    private nodes: (CEGNode|CEGLinkedNode)[];
+    private nodes: (CEGNode | CEGLinkedNode)[];
     // Maps the URL of a node to the node object.
-    private nodeMap: {[nodeURL: string]: CEGNode | CEGLinkedNode};
+    private nodeMap: { [nodeURL: string]: CEGNode | CEGLinkedNode };
     // Maps the URL of an Node to all its outgoing connections.
     private outgoingConnections: CEGConnection[][];
     // Set of already explored Nodes
@@ -105,11 +105,11 @@ export class NodeCycleValidator extends ElementValidatorBase<CEGModel> {
                     continue; // We don't enter a part of the graph we have already seen
                 }
                 // Check if we have already seen this node
-                let toNodeIndex = traceStack.findIndex( val => val.node == toNode);
+                let toNodeIndex = traceStack.findIndex(val => val.node == toNode);
                 if (toNodeIndex >= 0) {
                     // Backedge: We are at a node we have seen in our trace -> We have a cycle
                     let circleTrace = traceStack.slice(toNodeIndex);
-                    let circle = circleTrace.map( node => node.getLastExploredEdge());
+                    let circle = circleTrace.map(node => node.getLastExploredEdge());
                     circles.push(circle);
                 } else {
                     // This is an unkown node -> Explore it.

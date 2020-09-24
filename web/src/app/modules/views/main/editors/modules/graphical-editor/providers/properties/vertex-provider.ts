@@ -59,16 +59,16 @@ export class VertexProvider extends ProviderBase {
 
     public provideLinkedCEGNode(url: string, x: number, y: number, width: number, height: number, data: CEGmxModelNode): mxgraph.mxCell {
         const value: string = null;
-        const style = this.shapeProvider.getStyle(new CEGLinkedNode());
+        const style = this.shapeProvider.getStyle(CEGLinkedNode);
         const parent = this.graph.getDefaultParent();
         this.graph.getModel().beginUpdate();
         const vertex = this.graph.insertVertex(parent, url, value, x, y, width, height, style);
-        const l1 = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_VARIABLE, data.variable,
+        const nameVertex = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_VARIABLE, data.variable,
             VertexProvider.INITIAL_CHILD_NODE_X, 0.15, 0, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.VARIABLE_NAME_STYLE, true);
 
-        VertexProvider.adjustChildCellSize(l1, width);
+        VertexProvider.adjustChildCellSize(nameVertex, width);
 
-        l1.isConnectable = () => false;
+        nameVertex.isConnectable = () => false;
         this.graph.getModel().endUpdate();
         return vertex;
     }

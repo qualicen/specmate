@@ -1,3 +1,4 @@
+import { CEGLinkedNode } from 'src/app/model/CEGLinkedNode';
 import { CEGModel } from '../../model/CEGModel';
 import { CEGNode } from '../../model/CEGNode';
 import { IContainer } from '../../model/IContainer';
@@ -12,7 +13,7 @@ export class SingleNodesValidator extends ElementValidatorBase<CEGModel> {
 
     public validate(element: CEGModel, contents: IContainer[]): ValidationResult {
         let invalidNodes: IContainer[] = contents.filter((element: IContainer) => {
-            if (!Type.is(element, CEGNode)) {
+            if (!Type.is(element, CEGNode) && !Type.is(element, CEGLinkedNode)) {
                 return false;
             }
             let node: CEGNode = element as CEGNode;

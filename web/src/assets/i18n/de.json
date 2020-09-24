@@ -239,6 +239,7 @@
 	"toggleLog": "Log ein/ausblenden",
 	"tools": {
 		"addCegConnection": "Verbindung",
+		"addCegLinkedNode": "Verknüpfter Knoten",
 		"addCegNode": "Knoten",
 		"addDecision": "Entscheidung",
 		"addEnd": "Ende",

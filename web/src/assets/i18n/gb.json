@@ -239,6 +239,7 @@
 	"toggleLog": "Toggle log",
 	"tools": {
 		"addCegConnection": "Connection",
+		"addCegLinkedNode": "Linked Node",
 		"addCegNode": "Node",
 		"addDecision": "Decision",
 		"addEnd": "End",

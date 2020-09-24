@@ -366,8 +366,11 @@ export class GraphicalEditor {
             const vertexUrl = Url.build([this.model.url, Id.uuid]);
             this.graph.startEditing(evt);
             try {
-                if (Type.is(this.model, CEGModel)) {
+                if (initialData.style === EditorStyle.BASE_CEG_NODE_STYLE) {
                     this.vertexProvider.provideCEGNode(vertexUrl, coords.x, coords.y,
+                        initialData.size.width, initialData.size.height, initialData.text as CEGmxModelNode);
+                } else if (initialData.style === EditorStyle.BASE_CEG_LINKED_NODE_STYLE) {
+                    this.vertexProvider.provideLinkedCEGNode(vertexUrl, coords.x, coords.y,
                         initialData.size.width, initialData.size.height, initialData.text as CEGmxModelNode);
                 } else {
                     this.graph.insertVertex(

@@ -3,6 +3,7 @@ import { SpecmateDataService } from '../../../../../../../data/modules/data-serv
 import { SelectedElementService } from '../../../../../../side/modules/selected-element/services/selected-element.service';
 import { CEGLayoutTool } from '../../../tool-pallette/tools/ceg/ceg-layout-tool';
 import { CEGNodeTool } from '../../../tool-pallette/tools/ceg/ceg-node-tool';
+import { CEGLinkedNodeTool } from '../../../tool-pallette/tools/ceg/ceg-linked-node-tool';
 import { DecisionTool } from '../../../tool-pallette/tools/process/decision-tool';
 import { EndTool } from '../../../tool-pallette/tools/process/end-tool';
 import { ProcessConnectionTool } from '../../../tool-pallette/tools/process/process-connection-tool';
@@ -57,6 +58,7 @@ export class ToolProvider extends ProviderBase {
     private createToolsForCEGModel(): void {
         this._tools = [
             new CEGNodeTool(this.dataService, this.selectedElementService, this.model),
+            new CEGLinkedNodeTool(this.dataService, this.selectedElementService, this.model),
             new CEGLayoutTool(this.dataService, this.selectedElementService, this.model, this.modal, this.translate),
             new CEGConnectionTool(this.dataService, this.selectedElementService, this.model),
             new CEGDeleteTool(this.model, this.dataService, this.selectedElementService)

@@ -1,0 +1,7 @@
+<input id="typeahead-prevent-manual-entry"  type="text" class="form-control"
+       [(ngModel)]="model"
+       [ngbTypeahead]="search"
+       [inputFormatter]="formatter"
+       [resultFormatter]="formatter"
+       [editable]='false' 
+       placeholder="{{'linkingDialog.enterModelName' | translate}}"/>

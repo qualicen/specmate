@@ -144,7 +144,7 @@
 	"invalidCharacter": "Invalid Characters: , ; |",
 	"layoutErrorCircle": "Could not layout the model: There is a circle in the graph.",
 	"library": "Library",
-	"linkExistingModel": "Link Existing Model",
+	"linkExistingModel": "Change linked node",
 	"linkingDialog": {
 		"confirm": "Link Nodes",
 		"enterModelName": "Enter Name of Model",

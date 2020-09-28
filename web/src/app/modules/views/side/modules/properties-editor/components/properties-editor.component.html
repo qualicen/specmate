@@ -7,7 +7,7 @@
     </h5>
     <generic-form [ngbCollapse]="isCollapsed" [element]="selectedElement" [hiddenFields]="hiddenFields"></generic-form>
     <li class="list-group-item" *ngIf="showLinkingButton">
-        <link-model-button></link-model-button>
+        <link-model-button [element]="selectedElement"></link-model-button>
     </li>
 </div>
 <div *ngIf="!selectedElement" class="card">

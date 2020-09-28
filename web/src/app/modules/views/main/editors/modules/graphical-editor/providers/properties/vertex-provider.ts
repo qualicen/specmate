@@ -10,6 +10,7 @@ import { ConverterBase } from '../../converters/converter-base';
 import { CEGmxModelNode } from './ceg-mx-model-node';
 import { ProviderBase } from './provider-base';
 import { ShapeProvider } from './shape-provider';
+import { SpecmateDataService } from 'src/app/modules/data/modules/data-service/services/specmate-data.service';
 
 declare var require: any;
 
@@ -29,8 +30,11 @@ export class VertexProvider extends ProviderBase {
     private static INITIAL_CHILD_NODE_X = 0.5;
     private static EMPTY_CHILD_NODE_WIDTH = 50;
 
-    constructor(element: IContainer, private graph: mxgraph.mxGraph,
-        private shapeProvider: ShapeProvider, private nodeNameConverter: ConverterBase<any, CEGmxModelNode | string>) {
+    constructor(element: IContainer,
+        private graph: mxgraph.mxGraph,
+        private shapeProvider: ShapeProvider,
+        private nodeNameConverter: ConverterBase<any, CEGmxModelNode | string>,
+        private dataService: SpecmateDataService) {
         super(element);
     }
 
@@ -63,12 +67,17 @@ export class VertexProvider extends ProviderBase {
         const parent = this.graph.getDefaultParent();
         this.graph.getModel().beginUpdate();
         const vertex = this.graph.insertVertex(parent, url, value, x, y, width, height, style);
-        const nameVertex = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_VARIABLE, data.variable,
+        const vertexVariable = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_VARIABLE, data.variable,
             VertexProvider.INITIAL_CHILD_NODE_X, 0.15, 0, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.VARIABLE_NAME_STYLE, true);
+        const vertexCondition = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_CONDITION, data.condition,
+            VertexProvider.INITIAL_CHILD_NODE_X, 0.4, 0, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.TEXT_INPUT_STYLE, true);
 
-        VertexProvider.adjustChildCellSize(nameVertex, width);
+            VertexProvider.adjustChildCellSize(vertexVariable, width);
+            VertexProvider.adjustChildCellSize(vertexCondition, width);
 
-        nameVertex.isConnectable = () => false;
+            vertexVariable.isConnectable = () => false;
+            vertexCondition.isConnectable = () => false;
+
         this.graph.getModel().endUpdate();
         return vertex;
     }
@@ -85,7 +94,7 @@ export class VertexProvider extends ProviderBase {
         cell.getGeometry().setRect(x, g.y, w, g.height);
     }
 
-    public provideVertex(node: IModelNode, x?: number, y?: number): mxgraph.mxCell {
+    public async provideVertex(node: IModelNode, x?: number, y?: number): Promise<mxgraph.mxCell> {
         const width = node.width > 0 ? node.width : this.shapeProvider.getInitialSize(node).width;
         const height = node.height > 0 ? node.height : this.shapeProvider.getInitialSize(node).height;
 
@@ -93,6 +102,12 @@ export class VertexProvider extends ProviderBase {
             let n = node as CEGNode;
             const data = new CEGmxModelNode(n.variable, n.condition, n.type);
             return this.provideCEGNode(node.url, x || node.x, y || node.y, width, height, data);
+        }
+        if (Type.is(node, CEGLinkedNode)) {
+            let n = node as CEGLinkedNode;
+            let linkedNode = await this.dataService.readElement(n.linkTo.url) as CEGNode;
+            const data = new CEGmxModelNode(linkedNode.variable, linkedNode.condition, linkedNode.type);
+            return this.provideLinkedCEGNode(node.url, x || node.x, y || node.y, width, height, data);
         }
 
         const value: string = (this.nodeNameConverter ? this.nodeNameConverter.convertTo(node) : node.name) as string;

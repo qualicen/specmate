@@ -325,7 +325,7 @@ export class GraphicalEditor {
             const cells = this.graph.getModel().getChildCells(this.graph.getDefaultParent());
             const cell = cells.find(vertex => vertex.id === url);
             const modelElement = this.contents.find(node => node.url === url);
-            if (cell === undefined || modelElement === undefined) {
+            if (cell === undefined) {
                 return;
             }
             this.changeTranslator.retranslate(modelElement, this.graph, cell);
@@ -420,7 +420,7 @@ export class GraphicalEditor {
         this._contents = await this.dataService.readContents(this.model.url, true);
         this.elementProvider = new ElementProvider(this.model, this._contents);
         this.nodeNameConverter = new NodeNameConverterProvider(this.model).nodeNameConverter;
-        this.vertexProvider = new VertexProvider(this.model, this.graph, this.shapeProvider, this.nodeNameConverter);
+        this.vertexProvider = new VertexProvider(this.model, this.graph, this.shapeProvider, this.nodeNameConverter, this.dataService);
         const parent = this.graph.getDefaultParent();
         this.changeTranslator.preventDataUpdates = true;
 
@@ -432,7 +432,7 @@ export class GraphicalEditor {
         try {
             const vertexCache: { [url: string]: mxgraph.mxCell } = {};
             for (const node of this.elementProvider.nodes) {
-                const vertex = this.vertexProvider.provideVertex(node as IModelNode);
+                const vertex = await this.vertexProvider.provideVertex(node as IModelNode);
                 vertexCache[node.url] = vertex;
             }
             for (const connection of this.elementProvider.connections.map(element => element as IModelConnection)) {

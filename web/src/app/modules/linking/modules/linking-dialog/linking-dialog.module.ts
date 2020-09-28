@@ -6,17 +6,24 @@ import { ModelSearchBarComponent } from './components/model-search-bar/model-sea
 import { EffectSelectorComponent } from './components/effect-selector/effect-selector.component';
 import { NgbTypeaheadModule, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
+import { BrowserModule } from '@angular/platform-browser';
 
 
 
 @NgModule({
-  declarations: [LinkingDialogComponent, ModelSearchBarComponent, EffectSelectorComponent],
-  imports: [
-    CommonModule,
-    SpecmateSharedModule,
-    NgbTypeaheadModule,
-    NgbDropdownModule,
-    FormsModule
-  ]
+    declarations: [
+        LinkingDialogComponent,
+        ModelSearchBarComponent,
+        EffectSelectorComponent],
+    imports: [
+        BrowserModule,
+        CommonModule,
+        SpecmateSharedModule,
+        NgbTypeaheadModule,
+        NgbDropdownModule,
+        FormsModule,
+        TranslateModule
+    ]
 })
 export class LinkingDialogModule { }

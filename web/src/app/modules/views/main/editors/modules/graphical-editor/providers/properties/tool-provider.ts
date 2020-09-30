@@ -18,6 +18,7 @@ import { CEGDeleteTool } from '../../../tool-pallette/tools/ceg/ceg-delete-tool'
 import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ProcessLayoutTool } from '../../../tool-pallette/tools/process/process-layout-tool';
+import { ModalService } from 'src/app/modules/notification/modules/modals/services/modal-service';
 
 const mx: typeof mxgraph = require('mxgraph')({
     mxBasePath: 'mxgraph'
@@ -32,7 +33,8 @@ export class ToolProvider extends ProviderBase {
         private dataService: SpecmateDataService,
         private selectedElementService: SelectedElementService,
         private modal: ConfirmationModal,
-        private translate: TranslateService) {
+        private translate: TranslateService,
+        private modalService: ModalService) {
         super(model);
     }
 
@@ -58,7 +60,7 @@ export class ToolProvider extends ProviderBase {
     private createToolsForCEGModel(): void {
         this._tools = [
             new CEGNodeTool(this.dataService, this.selectedElementService, this.model),
-            new CEGLinkedNodeTool(this.dataService, this.selectedElementService, this.model),
+            new CEGLinkedNodeTool(this.dataService, this.selectedElementService, this.model, this.modalService),
             new CEGLayoutTool(this.dataService, this.selectedElementService, this.model, this.modal, this.translate),
             new CEGConnectionTool(this.dataService, this.selectedElementService, this.model),
             new CEGDeleteTool(this.model, this.dataService, this.selectedElementService)

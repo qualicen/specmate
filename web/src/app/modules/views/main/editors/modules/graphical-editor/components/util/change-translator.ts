@@ -24,6 +24,7 @@ import { VertexProvider } from '../../providers/properties/vertex-provider';
 import { EditorStyle } from '../editor-components/editor-style';
 import { StyleChanger } from './style-changer';
 import { CEGConnectionTool } from '../../../tool-pallette/tools/ceg/ceg-connection-tool';
+import { CEGLinkedNode } from 'src/app/model/CEGLinkedNode';
 
 
 declare var require: any;
@@ -237,7 +238,8 @@ export class ChangeTranslator {
     private async translateNodeAdd(change: mxgraph.mxChildChange, graph: mxgraph.mxGraph): Promise<IModelNode> {
         const tool = this.determineTool(change) as CreateNodeToolBase<IModelNode>;
         tool.coords = { x: change.child.geometry.x, y: change.child.geometry.y };
-        const node = await tool.perform();
+        let node = await tool.perform();
+
         if (Type.is(node, CEGNode)) {
             const value =
                 new CEGmxModelNode(change.child.children[0].value, change.child.children[1].value, change.child.children[2].value || 'AND');
@@ -261,33 +263,35 @@ export class ChangeTranslator {
         delete cells[oldId];
         cells[newId] = cell;
 
-        if (Type.is(node, CEGNode)) {
+        if (Type.is(node, CEGNode) || Type.is(node, CEGLinkedNode)) {
             let variable = cell.children[0];
             let condition = cell.children[1];
-            let type = cell.children[2];
 
             let oldIdVariable = variable.id;
             let oldIdCondition = condition.id;
-            let oldIdType = type.id;
 
             variable.setId(newId + VertexProvider.ID_SUFFIX_VARIABLE);
             condition.setId(newId + VertexProvider.ID_SUFFIX_CONDITION);
-            type.setId(newId + VertexProvider.ID_SUFFIX_TYPE);
 
             delete cells[oldIdVariable];
             delete cells[oldIdCondition];
-            delete cells[oldIdType];
 
             cells[variable.id] = variable;
             cells[condition.id] = condition;
-            cells[type.id] = type;
 
             this.parentComponents[variable.id] = node;
             this.parentComponents[condition.id] = node;
-            this.parentComponents[type.id] = node;
 
             delete this.parentComponents[oldIdVariable];
             delete this.parentComponents[oldIdCondition];
+        }
+        if (Type.is(node, CEGNode)) {
+            let type = cell.children[2];
+            let oldIdType = type.id;
+            type.setId(newId + VertexProvider.ID_SUFFIX_TYPE);
+            delete cells[oldIdType];
+            cells[type.id] = type;
+            this.parentComponents[type.id] = node;
             delete this.parentComponents[oldIdType];
         }
         return node;
@@ -312,31 +316,39 @@ export class ChangeTranslator {
 
     private async translateNodeChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange, element: IModelNode): Promise<void> {
         let cell = change.cell as mxgraph.mxCell;
-        if (this.isTextInputChange(change)) {
-            VertexProvider.adjustChildCellSize(cell, element.width);
+        if (change['value'] !== undefined && change['value'] !== null) {
+            if (this.isTextInputChange(change)) {
+                VertexProvider.adjustChildCellSize(cell, element.width);
+            }
+            if (this.nodeNameConverter) {
+                if (this.parentComponents[cell.getId()] !== undefined) {
+                    // The changed node is a sublabel / child
+                    cell = cell.getParent();
+                }
+                if (!Type.is(element, CEGLinkedNode)) {
+                    let value = cell.value;
+                    if (Type.is(element, CEGNode)) {
+                        value = new CEGmxModelNode(cell.children[0].value, cell.children[1].value, cell.children[2].value);
+                    }
+
+                    const elementValues = this.nodeNameConverter.convertFrom(value, element);
+                    for (const key in elementValues) {
+                        element[key] = elementValues[key];
+                    }
+                    await this.dataService.updateElement(element, true, Id.uuid);
+                }
+            } else {
+                // Keep change.cell to avoid having a parent a child value
+                element['variable'] = change.cell.value;
+                await this.dataService.updateElement(element, true, Id.uuid);
+            }
+        } else if (change['geometry'] !== undefined && change['geometry'] !== null) {
+            element['x'] = Math.max(0, cell.geometry.x);
+            element['y'] = Math.max(0, cell.geometry.y);
+            element['width'] = cell.geometry.width;
+            element['height'] = cell.geometry.height;
+            await this.dataService.updateElement(element, true, Id.uuid);
         }
-        if (this.nodeNameConverter) {
-            if (this.parentComponents[cell.getId()] !== undefined) {
-                // The changed node is a sublabel / child
-                cell = cell.getParent();
-            }
-            let value = cell.value;
-            if (Type.is(element, CEGNode)) {
-                value = new CEGmxModelNode(cell.children[0].value, cell.children[1].value, cell.children[2].value);
-            }
-            const elementValues = this.nodeNameConverter.convertFrom(value, element);
-            for (const key in elementValues) {
-                element[key] = elementValues[key];
-            }
-        } else {
-            // Keep change.cell to avoid having a parent a child value
-            element['variable'] = change.cell.value;
-        }
-        element['x'] = Math.max(0, cell.geometry.x);
-        element['y'] = Math.max(0, cell.geometry.y);
-        element['width'] = cell.geometry.width;
-        element['height'] = cell.geometry.height;
-        await this.dataService.updateElement(element, true, Id.uuid);
     }
 
     private async translateEdgeChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange | mxgraph.mxGeometryChange,
@@ -459,10 +471,28 @@ export class ChangeTranslator {
     }
 
 
-    public retranslate(changedElement: IContainer, graph: mxgraph.mxGraph, cell: mxgraph.mxCell) {
+    public async retranslate(changedElement: IContainer, graph: mxgraph.mxGraph, cell: mxgraph.mxCell) {
         this.preventDataUpdates = true;
+        // The element was deleted
+        if (changedElement === undefined) {
+            graph.getModel().remove(cell);
+            this.preventDataUpdates = false;
+            return;
+        }
         let value = this.nodeNameConverter ? this.nodeNameConverter.convertTo(changedElement) : changedElement.name;
-        if (value instanceof CEGmxModelNode) {
+        if (Type.is(changedElement, CEGLinkedNode)) {
+            let node = changedElement as CEGLinkedNode;
+            if (node.linkTo) {
+                let linkedNode = (await this.dataService.readElement(node.linkTo.url)) as CEGNode;
+                graph.getModel().beginUpdate();
+                try {
+                    graph.model.setValue(cell.children[0], linkedNode.variable);
+                    graph.model.setValue(cell.children[1], linkedNode.condition);
+                } finally {
+                    graph.getModel().endUpdate();
+                }
+            }
+        } else if (value instanceof CEGmxModelNode) {
             for (const key in value) {
                 if (value.hasOwnProperty(key)) {
                     const val = value[key];
@@ -472,8 +502,7 @@ export class ChangeTranslator {
                             graph.getModel().beginUpdate();
                             try {
                                 graph.model.setValue(child, val);
-                            }
-                            finally {
+                            } finally {
                                 graph.getModel().endUpdate();
                             }
                         }

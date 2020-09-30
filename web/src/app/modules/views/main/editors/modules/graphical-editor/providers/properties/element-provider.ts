@@ -1,3 +1,4 @@
+import { CEGLinkedNode } from 'src/app/model/CEGLinkedNode';
 import { CEGConnection } from '../../../../../../../../model/CEGConnection';
 import { CEGNode } from '../../../../../../../../model/CEGNode';
 import { IContainer } from '../../../../../../../../model/IContainer';
@@ -33,7 +34,7 @@ export class ElementProvider extends ProviderBase {
 
     private get nodeTypes(): {className: string}[] {
         if (this.isCEGModel) {
-            return [CEGNode];
+            return [CEGNode, CEGLinkedNode];
         } else if (this.isProcessModel) {
             return [ProcessStep, ProcessDecision, ProcessStart, ProcessEnd];
         }

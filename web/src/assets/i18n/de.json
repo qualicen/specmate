@@ -144,6 +144,15 @@
 	"invalidCharacter": "Ungültige Zeichen: , ; |",
 	"layoutErrorCircle": "Das Modell konnte nicht geordnet werden: Der Graph enthält einen Kreis.",
 	"library": "Bibliothek",
+	"linkExistingModel": "Verlinkten Knoten ändern",
+	"linkingDialog": {
+		"confirm": "Knoten verlinken",
+		"enterModelName": "Geben Sie den Modelnamen ein",
+		"selectEffect": "Wählen Sie einen Effekt",
+		"stepOne": "Schritt 1:",
+		"stepTwo": "Schritt 2:",
+		"title": "Bestehendes Modell verlinken"
+	},
 	"loadMore": "Weitere laden",
 	"loading": "Lädt...",
 	"log": {

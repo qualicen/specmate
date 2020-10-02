@@ -6,6 +6,7 @@ export class ValidationMessage {
     public static ERROR_DUPLICATE_IO_VARIABLE = 'errorDublicateIOVariable';
     public static ERROR_DUPLICATE_NODE = 'errorDublicateNode';
     public static ERROR_EMPTY_MODEL = 'errorEmptyModel';
+    public static ERROR_EMPTY_CEG_LINKED_NODE = 'errorEmptyCEGLinkedNode';
     public static ERROR_CONTRADICTORY_CAUSES = 'errorContradictoryModel';
     public static ERROR_CIRCULAR_CAUSES = 'errorCircularCauses';
     public static ERROR_NOT_ONE_START_NODE = 'errorNotOneStartNode';

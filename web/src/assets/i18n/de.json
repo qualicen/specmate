@@ -275,6 +275,7 @@
 		"errorContradictoryModel": "Wirkung hat wiedersprüchliche Ursachen.",
 		"errorDublicateIOVariable": "Variable ist gleichzeitig Ursache und Wirkung.",
 		"errorDublicateNode": "Doppelter Knoten.",
+		"errorEmptyCEGLinkedNode": "Verknüpfter Knoten hat kein Ziel.",
 		"errorEmptyModel": "Das Modell ist leer.",
 		"errorInvalidName": "Unerlaubtes Zeichen im Namen.",
 		"errorInvalidVariable": "Ungültiger Variablenname: ungültige Zeichen: , ; |",

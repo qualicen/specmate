@@ -275,6 +275,7 @@
 		"errorContradictoryModel": "Effect has contradictory causes.",
 		"errorDublicateIOVariable": "Variable appears as cause and effect.",
 		"errorDublicateNode": "Duplicate node.",
+		"errorEmptyCEGLinkedNode": "Linked node without target.",
 		"errorEmptyModel": "Model empty.",
 		"errorInvalidName": "Invalid character in name.",
 		"errorInvalidVariable": "Invalid variable name: invalid characters: , ; |",

@@ -52,16 +52,21 @@ export class LinkModelButtonComponent implements OnInit {
 
             this.modalRef.result.then(async (link) => {
                 this.dialogOpen = false;
-                let oldLinkedNodeUrl = this._element.linkTo.url;
-                let oldLinkedNode: CEGNode = await this.dataService.readElement(oldLinkedNodeUrl) as CEGNode;
-                oldLinkedNode.linksFrom = oldLinkedNode.linksFrom.filter(element => element.url !== this._element.url);
+
+                if (this._element.linkTo !== undefined) {
+                    let oldLinkedNodeUrl = this._element.linkTo.url;
+                    let oldLinkedNode: CEGNode = await this.dataService.readElement(oldLinkedNodeUrl) as CEGNode;
+                    oldLinkedNode.linksFrom = oldLinkedNode.linksFrom.filter(element => element.url !== this._element.url);
+                    this.dataService.updateElement(oldLinkedNode, true, Id.uuid);
+                }
+
                 this._element.linkTo = new Proxy();
                 this._element.linkTo.url = link.url;
                 let proxy = new Proxy();
                 proxy.url = this._element.url;
                 link.linksFrom.push(proxy);
                 this._element.name = link.variable + ' ' + link.condition;
-                this.dataService.updateElement(oldLinkedNode, true, Id.uuid);
+
                 this.dataService.updateElement(link, true, Id.uuid);
                 this.dataService.updateElement(this._element, true, Id.uuid);
             }).catch(() => {

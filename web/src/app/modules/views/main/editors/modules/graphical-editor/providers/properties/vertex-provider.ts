@@ -72,11 +72,11 @@ export class VertexProvider extends ProviderBase {
         const vertexCondition = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_CONDITION, data.condition,
             VertexProvider.INITIAL_CHILD_NODE_X, 0.4, 0, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.TEXT_INPUT_STYLE, true);
 
-            VertexProvider.adjustChildCellSize(vertexVariable, width);
-            VertexProvider.adjustChildCellSize(vertexCondition, width);
+        VertexProvider.adjustChildCellSize(vertexVariable, width);
+        VertexProvider.adjustChildCellSize(vertexCondition, width);
 
-            vertexVariable.isConnectable = () => false;
-            vertexCondition.isConnectable = () => false;
+        vertexVariable.isConnectable = () => false;
+        vertexCondition.isConnectable = () => false;
 
         this.graph.getModel().endUpdate();
         return vertex;
@@ -105,8 +105,19 @@ export class VertexProvider extends ProviderBase {
         }
         if (Type.is(node, CEGLinkedNode)) {
             let n = node as CEGLinkedNode;
-            let linkedNode = await this.dataService.readElement(n.linkTo.url) as CEGNode;
-            const data = new CEGmxModelNode(linkedNode.variable, linkedNode.condition, linkedNode.type);
+            let linkedNode = undefined;
+            let variable = '';
+            let condition = '';
+            let type = '';
+            if (n.linkTo !== undefined) {
+                linkedNode = await this.dataService.readElement(n.linkTo.url) as CEGNode;
+                if (linkedNode !== undefined) {
+                    variable = linkedNode.variable;
+                    condition = linkedNode.condition;
+                    type = linkedNode.type;
+                }
+            }
+            const data = new CEGmxModelNode(variable, condition, type);
             return this.provideLinkedCEGNode(node.url, x || node.x, y || node.y, width, height, data);
         }
 

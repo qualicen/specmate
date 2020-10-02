@@ -224,6 +224,7 @@
 		"continue": "Continue not possible due to the following errors:",
 		"discard": "Saving is not possible due to the following errors. Discard changes?",
 		"message": "Saving is not possible due to the following errors:",
+		"retry": "Error while saving. Please try again later.",
 		"title": "Saving is not possible"
 	},
 	"search": "search",
@@ -275,6 +276,7 @@
 		"errorContradictoryModel": "Effect has contradictory causes.",
 		"errorDublicateIOVariable": "Variable appears as cause and effect.",
 		"errorDublicateNode": "Duplicate node.",
+		"errorEmptyCEGLinkedNode": "Linked node without target.",
 		"errorEmptyModel": "Model empty.",
 		"errorInvalidName": "Invalid character in name.",
 		"errorInvalidVariable": "Invalid variable name: invalid characters: , ; |",

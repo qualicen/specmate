@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { SimpleModal } from 'src/app/modules/notification/modules/modals/services/simple-modal.service';
 import { CEGConnection } from '../../../../../model/CEGConnection';
 import { IContainer } from '../../../../../model/IContainer';
 import { IModelConnection } from '../../../../../model/IModelConnection';
@@ -65,6 +66,7 @@ export class SpecmateDataService {
         private auth: AuthenticationService,
         private logger: LoggingService,
         private translate: TranslateService,
+        private simpleModal: SimpleModal,
         private connectionService: ServerConnectionService) {
 
         this.serviceInterface = new ServiceInterface(http);
@@ -231,14 +233,19 @@ export class SpecmateDataService {
     }
 
     public async commit(taskName: string): Promise<void> {
-        this.busy = true;
-        this.currentTaskName = taskName;
-        const batchOperation = this.scheduler.toBatchOperation();
-        await this.serviceInterface.performBatchOperation(batchOperation, this.auth.token);
-        this.scheduler.resolveBatchOperation(batchOperation);
-        this.scheduler.clearCommits();
-        this.busy = false;
-        this.committed.emit();
+        try {
+            this.busy = true;
+            this.currentTaskName = taskName;
+            const batchOperation = this.scheduler.toBatchOperation();
+            await this.serviceInterface.performBatchOperation(batchOperation, this.auth.token);
+            this.scheduler.resolveBatchOperation(batchOperation);
+            this.scheduler.clearCommits();
+            this.busy = false;
+            this.committed.emit();
+        } catch (error) {
+            this.simpleModal.openOk(this.translate.instant('saveError.title'), this.translate.instant('saveError.retry'));
+        }
+
     }
 
     public undo(): void {

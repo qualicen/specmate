@@ -224,6 +224,7 @@
 		"continue": "Fortfahren nicht möglich, da die folgende Fehler existieren:",
 		"discard": "Das Speichern ist nicht möglich, da die folgenden Fehler existieren. Änderungen verwerfen?",
 		"message": "Das Speichern ist nicht möglich, da die folgenden Fehler existieren:",
+		"retry": "Fehler beim Speichern. Bitte versuchen Sie es später erneut.",
 		"title": "Speichern nicht möglich"
 	},
 	"search": "suchen",
@@ -275,6 +276,7 @@
 		"errorContradictoryModel": "Wirkung hat wiedersprüchliche Ursachen.",
 		"errorDublicateIOVariable": "Variable ist gleichzeitig Ursache und Wirkung.",
 		"errorDublicateNode": "Doppelter Knoten.",
+		"errorEmptyCEGLinkedNode": "Verknüpfter Knoten hat kein Ziel.",
 		"errorEmptyModel": "Das Modell ist leer.",
 		"errorInvalidName": "Unerlaubtes Zeichen im Namen.",
 		"errorInvalidVariable": "Ungültiger Variablenname: ungültige Zeichen: , ; |",

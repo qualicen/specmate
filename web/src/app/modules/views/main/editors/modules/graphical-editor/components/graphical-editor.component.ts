@@ -432,6 +432,7 @@ export class GraphicalEditor {
         try {
             const vertexCache: { [url: string]: mxgraph.mxCell } = {};
             for (const node of this.elementProvider.nodes) {
+                console.log(node);
                 const vertex = await this.vertexProvider.provideVertex(node as IModelNode);
                 vertexCache[node.url] = vertex;
             }

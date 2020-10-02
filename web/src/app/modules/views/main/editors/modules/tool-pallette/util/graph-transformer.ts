@@ -1,3 +1,7 @@
+import { CEGLinkedNode } from 'src/app/model/CEGLinkedNode';
+import { CEGNode } from 'src/app/model/CEGNode';
+import { Id } from 'src/app/util/id';
+import { Type } from 'src/app/util/type';
 import { Coords, GraphElementFactorySelector } from '../../../../../../../factory/util/graph-element-factory-selector';
 import { IContainer } from '../../../../../../../model/IContainer';
 import { IModelConnection } from '../../../../../../../model/IModelConnection';
@@ -64,10 +68,23 @@ export class GraphTransformer {
             .filter((element: IContainer) => this.elementProvider.isConnection(element))
             .map((element: IContainer) => element as IModelConnection)
             .filter((connection: IModelConnection) => connection.source.url === node.url || connection.target.url === node.url);
-        for (let i = 0 ; i < connections.length; i++) {
+        for (let i = 0; i < connections.length; i++) {
             await this.deleteConnection(connections[i], compoundId);
         }
         await this.dataService.deleteElement(node.url, true, compoundId);
+        if (Type.is(node, CEGNode)) {
+            let n = node as CEGNode;
+            for (let linkingNodeProxy of n.linksFrom) {
+                await this.dataService.readElement(linkingNodeProxy.url, false);
+            }
+        }
+        if (Type.is(node, CEGLinkedNode)) {
+            let n = node as CEGLinkedNode;
+            if (n.linkTo !== undefined) {
+                await this.dataService.readElement(n.linkTo.url, false);
+            }
+        }
+
     }
 
     private async deleteConnection(connection: IModelConnection, compoundId: string): Promise<void> {
@@ -111,13 +128,13 @@ export class GraphTransformer {
      * This is used when you only want to clone the data for later work.
      */
     public async cloneSubgraph(templates: IContainer[], compoundId: string, changeGraph: boolean, offset = 100): Promise<IContainer[]> {
-        let urlMap: {[old: string]: IModelNode} = {};
+        let urlMap: { [old: string]: IModelNode } = {};
         let out: IContainer[] = [];
         // Old URL -> New Node map
         for (const template of templates) {
             if (this.elementProvider.isNode(template)) {
-                let temp = <IModelNode> template;
-                let newCoord = { x: temp.x, y: temp.y + offset};
+                let temp = <IModelNode>template;
+                let newCoord = { x: temp.x, y: temp.y + offset };
                 let node = <IModelNode>await this.cloneNode(temp, newCoord, compoundId, changeGraph);
                 urlMap[template.url] = node;
                 node.incomingConnections = [];
@@ -133,7 +150,7 @@ export class GraphTransformer {
         // Filter Connections that are within the subgraph
         for (const template of templates) {
             if (this.elementProvider.isConnection(template)) {
-                let temp = <IModelConnection> template;
+                let temp = <IModelConnection>template;
                 if ((temp.target.url in urlMap) && (temp.source.url in urlMap)) {
                     let source = urlMap[temp.source.url];
                     let target = urlMap[temp.target.url];
@@ -176,7 +193,7 @@ export class GraphTransformer {
     }
 
     private transferData(from: IContainer, to: IContainer) {
-        let fields: string[] = MetaInfo[from.className].map( (item: FieldMetaItem) => item.name);
+        let fields: string[] = MetaInfo[from.className].map((item: FieldMetaItem) => item.name);
         for (const field of fields) {
             if (from.hasOwnProperty(field)) {
                 to[field] = from[field];

@@ -98,26 +98,23 @@ export class Command {
 
     private toOperation(): Operation {
         const operation = new Operation();
+
+        operation.type = this.operationType;
+        operation.target = new Proxy();
         switch (this.operationType) {
             case EOperation.CREATE:
-                operation.type = 'CREATE';
-                operation.target = new Proxy();
                 operation.target.url = Url.parent(this.url);
                 operation.value = this.newValue;
                 delete operation.value.url;
-            break;
+                break;
             case EOperation.UPDATE:
-                operation.type = 'UPDATE';
-                operation.target = new Proxy();
                 operation.target.url = this.url;
                 operation.value = this.newValue;
                 delete operation.value.url;
-            break;
+                break;
             case EOperation.DELETE:
-                operation.type = 'DELETE';
-                operation.target = new Proxy();
                 operation.target.url = this.url;
-            break;
+                break;
         }
         return operation;
     }

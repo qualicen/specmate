@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { ContradictoryCondidionValidator } from './ceg/contradictory-condition-validator';
 import { DuplicateIOVariableValidator } from './ceg/duplicate-io-variable-validator';
+import { DublicateLinkedNodeValidator } from './ceg/duplicate-linked-node';
 import { DuplicateNodeValidator } from './ceg/duplicate-node-validator';
 import { EmptyLinkedNodeValidator } from './ceg/empty-linked-node-validator';
 import { EmptyModelValidator } from './ceg/empty-model-validator';
@@ -20,39 +21,40 @@ import { StartNodeNoIncomingConnectionValidator } from './process/start-node-no-
 import { StartNodeValidator } from './process/start-node-validator';
 
 @NgModule({
-  imports: [
-    // MODULE IMPORTS
-  ],
-  declarations: [
-    // COMPONENTS IN THIS MODULE
-  ],
-  exports: [
-    // THE COMPONENTS VISIBLE TO THE OUTSIDE
-  ],
-  providers: [
-    // SERVICES (IN THIS CASE: VALIDATORS)
-    DuplicateNodeValidator,
-    ContradictoryCondidionValidator,
-    NodeCycleValidator,
-    DuplicateIOVariableValidator,
-    EmptyModelValidator,
-    EmptyLinkedNodeValidator,
-    SingleNodesValidator,
-    EndNodeValidator,
-    EndNodeNoOutgoingConnectionValidator,
-    HasStepsValidator,
-    NodeSingleOutgoingConnectionValidator,
-    MissingConditionValidator,
-    NodeNoIncomingValidator,
-    NodeNoOutgoingValidator,
-    StartNodeValidator,
-    StartNodeNoIncomingConnectionValidator,
-    DecisionMultipleOutgoingConnectionsValidator,
-    InvalidNodeVariableValidator,
-    InvalidConditionTextValidator
-  ],
-  bootstrap: [
-    // COMPONENTS THAT ARE BOOTSTRAPPED HERE
-  ]
+    imports: [
+        // MODULE IMPORTS
+    ],
+    declarations: [
+        // COMPONENTS IN THIS MODULE
+    ],
+    exports: [
+        // THE COMPONENTS VISIBLE TO THE OUTSIDE
+    ],
+    providers: [
+        // SERVICES (IN THIS CASE: VALIDATORS)
+        DuplicateNodeValidator,
+        ContradictoryCondidionValidator,
+        NodeCycleValidator,
+        DuplicateIOVariableValidator,
+        EmptyModelValidator,
+        EmptyLinkedNodeValidator,
+        SingleNodesValidator,
+        EndNodeValidator,
+        EndNodeNoOutgoingConnectionValidator,
+        HasStepsValidator,
+        NodeSingleOutgoingConnectionValidator,
+        MissingConditionValidator,
+        NodeNoIncomingValidator,
+        NodeNoOutgoingValidator,
+        StartNodeValidator,
+        StartNodeNoIncomingConnectionValidator,
+        DecisionMultipleOutgoingConnectionsValidator,
+        InvalidNodeVariableValidator,
+        InvalidConditionTextValidator,
+        DublicateLinkedNodeValidator
+    ],
+    bootstrap: [
+        // COMPONENTS THAT ARE BOOTSTRAPPED HERE
+    ]
 })
 export class ValidationModule { }

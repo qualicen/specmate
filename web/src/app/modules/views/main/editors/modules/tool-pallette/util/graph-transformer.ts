@@ -1,7 +1,3 @@
-import { CEGLinkedNode } from 'src/app/model/CEGLinkedNode';
-import { CEGNode } from 'src/app/model/CEGNode';
-import { Id } from 'src/app/util/id';
-import { Type } from 'src/app/util/type';
 import { Coords, GraphElementFactorySelector } from '../../../../../../../factory/util/graph-element-factory-selector';
 import { IContainer } from '../../../../../../../model/IContainer';
 import { IModelConnection } from '../../../../../../../model/IModelConnection';
@@ -72,19 +68,6 @@ export class GraphTransformer {
             await this.deleteConnection(connections[i], compoundId);
         }
         await this.dataService.deleteElement(node.url, true, compoundId);
-        if (Type.is(node, CEGNode)) {
-            let n = node as CEGNode;
-            for (let linkingNodeProxy of n.linksFrom) {
-                await this.dataService.readElement(linkingNodeProxy.url, false);
-            }
-        }
-        if (Type.is(node, CEGLinkedNode)) {
-            let n = node as CEGLinkedNode;
-            if (n.linkTo !== undefined) {
-                await this.dataService.readElement(n.linkTo.url, false);
-            }
-        }
-
     }
 
     private async deleteConnection(connection: IModelConnection, compoundId: string): Promise<void> {

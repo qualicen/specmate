@@ -237,13 +237,17 @@ export class SpecmateDataService {
             this.busy = true;
             this.currentTaskName = taskName;
             const batchOperation = this.scheduler.toBatchOperation();
+            let elementsToRead = this.scheduler.getElementsToReload();
             await this.serviceInterface.performBatchOperation(batchOperation, this.auth.token);
             this.scheduler.resolveBatchOperation(batchOperation);
             this.scheduler.clearCommits();
+            await this.reloadElemensAfterCommit(elementsToRead);
+            this.scheduler.clearElementsToReload();
             this.busy = false;
             this.committed.emit();
         } catch (error) {
             this.simpleModal.openOk(this.translate.instant('saveError.title'), this.translate.instant('saveError.retry'));
+            console.error(error);
         }
 
     }
@@ -472,5 +476,10 @@ export class SpecmateDataService {
         }
     }
 
-
+    private async reloadElemensAfterCommit(elementUrls: string[]) {
+        for (const url of elementUrls) {
+            this.cache.deleteElement(url);
+            await this.readElement(url, false);
+        }
+    }
 }

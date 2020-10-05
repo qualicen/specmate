@@ -1,4 +1,8 @@
 import { TranslateService } from '@ngx-translate/core';
+import { CEGLinkedNode } from 'src/app/model/CEGLinkedNode';
+import { CEGNode } from 'src/app/model/CEGNode';
+import { Type } from 'src/app/util/type';
+import { Url } from 'src/app/util/url';
 import { BatchOperation } from '../../../../../model/BatchOperation';
 import { IContainer } from '../../../../../model/IContainer';
 import { Id } from '../../../../../util/id';
@@ -10,6 +14,7 @@ import { SpecmateDataService } from './specmate-data.service';
 export class Scheduler {
 
     private commands: Command[] = [];
+    public elementsToReload: string[] = [];
 
     constructor(private dataService: SpecmateDataService, private logger: LoggingService, private translate: TranslateService) { }
 
@@ -24,6 +29,9 @@ export class Scheduler {
             const command = this.commands.find(command => command.operation === operation);
             command.resolve();
         });
+    }
+    public getElementsToReload(): string[] {
+        return this.elementsToReload;
     }
 
     public get unresolvedCommands(): Command[] {
@@ -101,6 +109,17 @@ export class Scheduler {
                 break;
             case EOperation.DELETE:
                 this.dataService.undoDelete(originalValue);
+                if (Type.is(originalValue, CEGNode)) {
+                    let n = originalValue as CEGNode;
+                    for (let linkingNodeProxy of n.linksFrom) {
+                        this.elementsToReload.splice(this.elementsToReload.indexOf(linkingNodeProxy.url), 1);
+                    }
+                }
+                if (Type.is(originalValue, CEGLinkedNode)) {
+                    if (((originalValue as CEGLinkedNode).linkTo)) {
+                        this.elementsToReload.splice(this.elementsToReload.indexOf((originalValue as CEGLinkedNode).linkTo.url), 1);
+                    }
+                }
                 break;
             default:
                 break;
@@ -109,6 +128,9 @@ export class Scheduler {
 
     public clearCommits(): void {
         this.commands = this.commands.filter((command: Command) => command.operationType === EOperation.INIT || command.isResolved);
+    }
+    public clearElementsToReload(): void {
+        this.elementsToReload = [];
     }
 
     public get hasCommits(): boolean {
@@ -220,6 +242,18 @@ export class Scheduler {
             return;
         }
         this.commands.push(command);
+        if (Type.is(command.originalValue, CEGNode)) {
+            let n = command.originalValue as CEGNode;
+            for (let linkingNodeProxy of n.linksFrom) {
+                this.elementsToReload.push(linkingNodeProxy.url);
+            }
+
+        }
+        if (Type.is(command.originalValue, CEGLinkedNode)) {
+            if (((command.originalValue as CEGLinkedNode).linkTo)) {
+                this.elementsToReload.push((command.originalValue as CEGLinkedNode).linkTo.url);
+            }
+        }
     }
 
     private currentlyExists(url: string): boolean {

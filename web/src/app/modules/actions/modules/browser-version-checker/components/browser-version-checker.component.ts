@@ -23,9 +23,10 @@ export class BrowserVersionChecker {
 
         let supportedBrowsers = Config.SUPPORTED_BROWSERS;
         for (let i = 0; i < supportedBrowsers.length; i++) {
-            const element = supportedBrowsers[i];
-            if (currentBrowser.name === element.browser) {
-                if (parseInt(currentBrowser.version.split('.')[0]) >= element.minVersion) {
+            const browserInfo = supportedBrowsers[i];
+            if (currentBrowser.name === browserInfo.browser) {
+                let browserMajorVersionNumber = parseInt(currentBrowser.version.split('.')[0]);
+                if (browserMajorVersionNumber >= browserInfo.minVersion) {
                     return false;
                 }
             }
@@ -37,6 +38,7 @@ export class BrowserVersionChecker {
         let supportedBrowsers = Config.SUPPORTED_BROWSERS;
         let chrome = 'Google Chrome ' + supportedBrowsers.find(element => element.browser === 'chrome').minVersion + '+';
         let firefox = 'Mozilla Firefox ' + supportedBrowsers.find(element => element.browser === 'firefox').minVersion + '+';
-        return chrome + ' or ' + firefox;
+        let edge = 'Microsoft Edge ' + supportedBrowsers.find(element => element.browser === 'edge-chromium').minVersion + '+';
+        return chrome + ', ' + firefox + ' ' + this.translate.instant('or') + ' ' + edge;
     }
 }

@@ -17,8 +17,8 @@ export class Config {
     // - have a <lang>.json file in assets/i18n
     // - update it with the translation extractor in package.json (run 'npm run extract')
     public static LANGUAGES = [
-        {code: 'de', name: 'Deutsch'},
-        {code: 'gb', name: 'English'}
+        { code: 'de', name: 'Deutsch' },
+        { code: 'gb', name: 'English' }
     ];
     public static DEFAULT_LANGUAGE = Config.LANGUAGES[0];
     public static LANGUAGE_CHOOSER_ENABLED = true;
@@ -56,7 +56,7 @@ export class Config {
     public static CEG_NODE_HEIGHT = 60;
     public static CEG_NODE_ARC_DIST: number = 17 +
         Math.sqrt((Config.CEG_NODE_WIDTH / 2.0) * (Config.CEG_NODE_WIDTH / 2.0) +
-        (Config.CEG_NODE_HEIGHT / 2.0) * (Config.CEG_NODE_HEIGHT / 2.0));
+            (Config.CEG_NODE_HEIGHT / 2.0) * (Config.CEG_NODE_HEIGHT / 2.0));
 
     public static CEG_NEW_MODEL_NAME = 'New Model';
     public static CEG_NEW_MODEL_DESCRIPTION = '';
@@ -131,13 +131,13 @@ export class Config {
     public static readonly CEG_LAYOUT_CLEARANCE_Y = 45;
 
     public static readonly SUPPORTED_BROWSERS = [
-      { browser: 'ie', minVersion: 12 },
-      { browser: 'chrome', minVersion: 48 },
-      { browser: 'firefox', minVersion: 45 },
-      { browser: 'edge', minVersion: 15 },
-      { browser: 'edge-chromium', minVersion: 80 },
-      { browser: 'safari', minVersion: 10 },
-      { browser: 'opera', minVersion: 30 }];
+        { browser: 'ie', minVersion: 12 },
+        { browser: 'chrome', minVersion: 48 },
+        { browser: 'firefox', minVersion: 45 },
+        { browser: 'edge', minVersion: 15 },
+        { browser: 'edge-chromium', minVersion: 79 },
+        { browser: 'safari', minVersion: 10 },
+        { browser: 'opera', minVersion: 30 }];
 
 }
 

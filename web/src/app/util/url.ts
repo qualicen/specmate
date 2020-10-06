@@ -89,7 +89,11 @@ export class Url {
     }
 
     public static isParent(parentUrl: string, childUrl: string): boolean {
-        return Strings.contains(childUrl, parentUrl) && childUrl !== parentUrl;
+        let parentUrlSuffix = '';
+        if (!parentUrl.endsWith('/')) {
+            parentUrlSuffix = '/';
+        }
+        return Strings.contains(childUrl, parentUrl + parentUrlSuffix) && childUrl !== parentUrl;
     }
 
     public static build(parts: string[], preventCache?: boolean): string {

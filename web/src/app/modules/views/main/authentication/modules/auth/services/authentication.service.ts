@@ -13,9 +13,17 @@ export class AuthenticationService {
 
 
     private static SPECMATE_AUTH_COOKIE_BASE = 'specmate-auth-';
-    private static SPECMATE_AUTH_TOKEN_COOKIE_NAME = AuthenticationService.SPECMATE_AUTH_COOKIE_BASE + 'token';
-    private static SPECMATE_AUTH_PROJECT_COOKIE_NAME = AuthenticationService.SPECMATE_AUTH_COOKIE_BASE + 'project';
-    private static SPECMATE_AUTH_SESSION_COOKIE_NAME = AuthenticationService.SPECMATE_AUTH_COOKIE_BASE + 'session';
+
+    private tokenCookieName = AuthenticationService.SPECMATE_AUTH_COOKIE_BASE + 'token' + '-' + window.location.hostname;
+    private projectCookieName = AuthenticationService.SPECMATE_AUTH_COOKIE_BASE + 'project' + '-' + window.location.hostname;
+    private sessionCookieName = AuthenticationService.SPECMATE_AUTH_COOKIE_BASE + 'session' + '-' + window.location.hostname;
+
+    private isAuthenticatedState = this.determineIsAuthenticated();
+
+    private serviceInterface: ServiceInterface;
+
+    private _authChanged: EventEmitter<boolean>;
+
 
     public get token(): UserToken {
         const token = this.cookie.get(this.tokenCookieName);
@@ -35,26 +43,6 @@ export class AuthenticationService {
 
     public get session(): UserSession {
         return this.cookie.getObject(this.sessionCookieName) as UserSession;
-    }
-
-    private serviceInterface: ServiceInterface;
-
-    private _authChanged: EventEmitter<boolean>;
-
-    private get tokenCookieName(): string {
-        return this.getCookieName(AuthenticationService.SPECMATE_AUTH_TOKEN_COOKIE_NAME);
-    }
-
-    private get projectCookieName(): string {
-        return this.getCookieName(AuthenticationService.SPECMATE_AUTH_PROJECT_COOKIE_NAME);
-    }
-
-    private get sessionCookieName(): string {
-        return this.getCookieName(AuthenticationService.SPECMATE_AUTH_SESSION_COOKIE_NAME);
-    }
-
-    private getCookieName(prefix: String): string {
-        return prefix + '-' + window.location.hostname;
     }
 
     private get isAllCookiesSet(): boolean {
@@ -91,6 +79,7 @@ export class AuthenticationService {
 
     constructor(http: HttpClient, private cookie: CookieService) {
         this.serviceInterface = new ServiceInterface(http);
+        this.isAuthenticatedState = this.determineIsAuthenticated();
     }
 
     public get authChanged(): EventEmitter<boolean> {
@@ -104,9 +93,11 @@ export class AuthenticationService {
         try {
             const wasAuthenticated: boolean = this.isAuthenticated;
             this.session = await this.serviceInterface.authenticate(user);
+            this.isAuthenticatedState = this.determineIsAuthenticated();
             if (this.isAuthenticated) {
                 if (wasAuthenticated !== this.isAuthenticated) {
-                    this.authChanged.emit(true);
+                    this.isAuthenticatedState = true;
+                    this.authChanged.emit(this.isAuthenticatedState);
                 }
                 this.authFailed = false;
                 this.inactivityLoggedOut = false;
@@ -119,6 +110,10 @@ export class AuthenticationService {
     }
 
     public get isAuthenticated(): boolean {
+        return this.isAuthenticatedState;
+    }
+
+    private determineIsAuthenticated(): boolean {
         return this.isAllCookiesSet && !UserToken.isInvalid(this.token);
     }
 
@@ -163,8 +158,9 @@ export class AuthenticationService {
             }
         }
         this.clearToken();
+        this.isAuthenticatedState = this.determineIsAuthenticated(); 
         if (wasAuthenticated !== this.isAuthenticated) {
-            this.authChanged.emit(this.isAuthenticated);
+            this.authChanged.emit(this.isAuthenticatedState);
         }
     }
 

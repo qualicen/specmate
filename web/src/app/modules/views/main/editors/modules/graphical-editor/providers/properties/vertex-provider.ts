@@ -68,15 +68,20 @@ export class VertexProvider extends ProviderBase {
         this.graph.getModel().beginUpdate();
         const vertex = this.graph.insertVertex(parent, url, value, x, y, width, height, style);
         const vertexVariable = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_VARIABLE, data.variable,
-            VertexProvider.INITIAL_CHILD_NODE_X, 0.15, 0, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.VARIABLE_NAME_STYLE, true);
+            // tslint:disable-next-line: max-line-length
+            VertexProvider.INITIAL_CHILD_NODE_X, 0.15, 0, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.VARIABLE_NAME_DISABLED_STYLE, true);
         const vertexCondition = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_CONDITION, data.condition,
-            VertexProvider.INITIAL_CHILD_NODE_X, 0.4, 0, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.TEXT_INPUT_STYLE, true);
+            VertexProvider.INITIAL_CHILD_NODE_X, 0.4, 0, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.TEXT_INPUT_DISABLED_STYLE, true);
+        const vertexSymbol = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_CONDITION, '🔗',
+            8, 8, 0, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.ICON_STYLE, false);
 
         VertexProvider.adjustChildCellSize(vertexVariable, width);
         VertexProvider.adjustChildCellSize(vertexCondition, width);
+        VertexProvider.adjustChildCellSize(vertexSymbol, width);
 
         vertexVariable.isConnectable = () => false;
         vertexCondition.isConnectable = () => false;
+        vertexSymbol.isConnectable = () => false;
 
         this.graph.getModel().endUpdate();
         return vertex;

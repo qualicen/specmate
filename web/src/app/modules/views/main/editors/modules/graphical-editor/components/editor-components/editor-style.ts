@@ -49,6 +49,15 @@ export class EditorStyle {
     public static readonly VARIABLE_NAME_STYLE = 'VARIABLE_NAME_STYLE';
     private static readonly VARIABLE_NAME_STYLE_STR = 'shape=rectangle;rounded=0;align=center;strokeColor=#666666;fontColor=#000000;fontStyle=' + mx.mxConstants.FONT_BOLD;
     private static readonly VARIABLE_NAME_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.VARIABLE_NAME_STYLE_STR);
+    public static readonly TEXT_INPUT_DISABLED_STYLE = 'BASE_TEXT_DISABLED_INPUT';
+    private static readonly TEXT_INPUT_DISABLED_STYLE_STR = 'shape=rectangle;rounded=0;align=center;strokeColor=#666666;fillColor=none;fontColor=#666666;' + mx.mxConstants.STYLE_EDITABLE + '=false';
+    private static readonly TEXT_INPUT_DISABLED_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.TEXT_INPUT_DISABLED_STYLE_STR);
+    public static readonly VARIABLE_NAME_DISABLED_STYLE = 'VARIABLE_NAME_DISABLED_STYLE';
+    private static readonly VARIABLE_NAME_DISABLED_STYLE_STR = 'shape=rectangle;rounded=0;align=center;strokeColor=#666666;fontColor=#666666;fontStyle=' + mx.mxConstants.FONT_BOLD + ';' + mx.mxConstants.STYLE_EDITABLE + '=false';
+    private static readonly VARIABLE_NAME_DISABLED_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.VARIABLE_NAME_DISABLED_STYLE_STR);
+    public static readonly ICON_STYLE = 'ICON_INPUT';
+    private static readonly ICON_STYLE_STR = 'shape=rectangle;rounded=0;align=left;strokeColor=#666666;fillColor=none;fontColor=#000000';
+    private static readonly ICON_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.ICON_STYLE_STR);
 
     public static readonly BASE_CEG_NODE_STYLE = 'BASE_CEG_NODE';
     private static readonly BASE_CEG_NODE_STYLE_STR = 'shape=rectangle;rounded=1;arcSize=10;align=center;perimeter=rectanglePerimeter;dashed=0';
@@ -103,6 +112,9 @@ export class EditorStyle {
 
         stylesheet.putCellStyle(EditorStyle.TEXT_INPUT_STYLE, EditorStyle.TEXT_INPUT_STYLE_OBJ);
         stylesheet.putCellStyle(EditorStyle.VARIABLE_NAME_STYLE, EditorStyle.VARIABLE_NAME_STYLE_OBJ);
+        stylesheet.putCellStyle(EditorStyle.TEXT_INPUT_DISABLED_STYLE, EditorStyle.TEXT_INPUT_DISABLED_STYLE_OBJ);
+        stylesheet.putCellStyle(EditorStyle.VARIABLE_NAME_DISABLED_STYLE, EditorStyle.VARIABLE_NAME_DISABLED_STYLE_OBJ);
+        stylesheet.putCellStyle(EditorStyle.ICON_STYLE, EditorStyle.ICON_STYLE_OBJ);
 
         stylesheet.putCellStyle(EditorStyle.BASE_CEG_NODE_STYLE, EditorStyle.BASE_CEG_NODE_STYLE_OBJ);
         stylesheet.putCellStyle(EditorStyle.BASE_CEG_LINKED_NODE_STYLE, EditorStyle.BASE_CEG_LINKED_NODE_STYLE_OBJ);

@@ -18,8 +18,12 @@ export class DublicateLinkedNodeValidator extends ElementValidatorBase<CEGModel>
             .filter(element => Type.is(element, CEGLinkedNode))
             .map(element => element as CEGLinkedNode);
         for (const node of linkedNodes) {
-            if (linkedNodes.filter(element => element.linkTo.url === node.linkTo.url).length > 1) {
-                invalidNodes.push(node);
+            if (node.linkTo !== undefined) {
+                if (linkedNodes.filter(element => element.linkTo !== undefined
+                    && element !== node
+                    && element.linkTo.url === node.linkTo.url).length > 0) {
+                    invalidNodes.push(node);
+                }
             }
         }
         if (invalidNodes.length > 0) {

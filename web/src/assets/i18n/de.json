@@ -275,6 +275,7 @@
 		"errorCircularCauses": "Zyklische Ursachenabhängigkeit.",
 		"errorContradictoryModel": "Wirkung hat wiedersprüchliche Ursachen.",
 		"errorDublicateIOVariable": "Variable ist gleichzeitig Ursache und Wirkung.",
+		"errorDublicateLinkedNode": "Doppelt verlinkter Knoten mit gleichem Ursprung.",
 		"errorDublicateNode": "Doppelter Knoten.",
 		"errorEmptyCEGLinkedNode": "Verknüpfter Knoten hat kein Ziel.",
 		"errorEmptyModel": "Das Modell ist leer.",

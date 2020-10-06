@@ -275,6 +275,7 @@
 		"errorCircularCauses": "Circular cause dependency.",
 		"errorContradictoryModel": "Effect has contradictory causes.",
 		"errorDublicateIOVariable": "Variable appears as cause and effect.",
+		"errorDublicateLinkedNode": "Double linked node with same origin.",
 		"errorDublicateNode": "Duplicate node.",
 		"errorEmptyCEGLinkedNode": "Linked node without target.",
 		"errorEmptyModel": "Model empty.",

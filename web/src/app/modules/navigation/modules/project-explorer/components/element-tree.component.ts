@@ -86,6 +86,9 @@ export class ElementTree implements OnInit {
 
     @Input()
     public set element(element: IContainer) {
+        if (this._element !== undefined && this._element.url === element.url) {
+            return;
+        }
         this._element = element;
         if (this.isMustOpen) {
             this.initContents();
@@ -151,10 +154,10 @@ export class ElementTree implements OnInit {
         this.expanded = false;
     }
 
-    private initContents(): void {
-        this.dataService.readContents(this.baseUrl, false).then((contents: IContainer[]) => {
-            this._contents = contents;
-        });
+    private async initContents(): Promise<void> {
+        if (this._contents === undefined || this._contents.length === 0) {
+            this._contents = await this.dataService.readContents(this.baseUrl, false);
+        }
     }
 
     public get isRequirementNode(): boolean {

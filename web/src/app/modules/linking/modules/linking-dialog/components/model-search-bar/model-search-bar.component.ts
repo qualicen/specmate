@@ -4,6 +4,7 @@ import { CEGModel } from 'src/app/model/CEGModel';
 import { Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, mergeMap, filter } from 'rxjs/operators';
 import { Search } from 'src/app/util/search';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'model-search-bar',
@@ -29,7 +30,13 @@ export class ModelSearchBarComponent implements OnInit {
     @Output()
     private selectedModel = new EventEmitter<CEGModel>();
 
-    formatter = (m: CEGModel) => m.name;
+    formatter = (m: CEGModel) => {
+        if (m !== null) {
+            return m.name;
+        } else {
+            return this.translate.instant('noResultsFound');
+        }
+    }
 
     search = (text$: Observable<string>) => text$.pipe(
         debounceTime(200),
@@ -38,11 +45,18 @@ export class ModelSearchBarComponent implements OnInit {
         map(term => Search.processSearchQuery(term)),
         mergeMap(term => {
             return this.dataService.search(term, ModelSearchBarComponent.SEARCH_FILTER)
-                .then(v => v as CEGModel[]);
+                .then(v => {
+                    if (v.length > 0) {
+                        return v as CEGModel[];
+                    } else {
+                        return [null];
+                    }
+                });
         })
     )
 
-    constructor(private dataService: SpecmateDataService) {
+    constructor(private dataService: SpecmateDataService,
+        private translate: TranslateService) {
     }
 
     ngOnInit(): void {

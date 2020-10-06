@@ -2,7 +2,6 @@ import { LowerCasePipe } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { saveAs } from 'file-saver';
-import { TestSpecification } from '../../../../../model/TestSpecification';
 import { Export } from '../../../../../model/Export';
 import { SpecmateDataService } from '../../../../data/modules/data-service/services/specmate-data.service';
 import { IContainer } from '../../../../../model/IContainer';

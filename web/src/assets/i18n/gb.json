@@ -150,7 +150,7 @@
 		"enterModelName": "Enter Name of Model",
 		"selectEffect": "Select Effect",
 		"stepOne": "Step 1: Please enter the name of the model that contains the node which you would like to link.",
-		"stepTwo": "Step 2: Select the node that should be linked. You can only selecto one node from the list.",
+		"stepTwo": "Step 2: Select the node that should be linked. You can only select one node from the list.",
 		"title": "Link Existing Model"
 	},
 	"loadMore": "Load more",
@@ -187,6 +187,7 @@
 	"noOrMultipleElementSelected": "No / multiple elements selected",
 	"noProcessesFound": "No processes found",
 	"noRelatedRequirements": "No related requirements",
+	"noResultsFound": "No results found",
 	"noSuitableCommandFound": "No suitable command found",
 	"noTestSpecifications": "No test specifications",
 	"noTestSpecificationsFound": "No test specifications found",

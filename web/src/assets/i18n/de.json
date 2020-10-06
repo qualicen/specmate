@@ -149,8 +149,8 @@
 		"confirm": "Knoten verlinken",
 		"enterModelName": "Geben Sie den Modelnamen ein",
 		"selectEffect": "Wählen Sie einen Effekt",
-		"stepOne": "Schritt 1:",
-		"stepTwo": "Schritt 2:",
+		"stepOne": "Schritt 1: Bitte geben Sie den Namen des Modells ein, das den Knoten enthält, den Sie verknüpfen möchten.",
+		"stepTwo": "Schritt 2: Wählen Sie den Knoten aus, der verknüpft werden soll. Sie können nur einen Knoten aus der Liste auswählen.",
 		"title": "Bestehendes Modell verlinken"
 	},
 	"loadMore": "Weitere laden",
@@ -187,6 +187,7 @@
 	"noOrMultipleElementSelected": "Keine / mehrere Elemente ausgewählt",
 	"noProcessesFound": "Keine Prozessmodelle gefunden",
 	"noRelatedRequirements": "Keine zugehörigen Anforderungen",
+	"noResultsFound": "Keine Treffer",
 	"noSuitableCommandFound": "Kein passender Befehl gefunden",
 	"noTestSpecifications": "Keine Testspezifikationen",
 	"noTestSpecificationsFound": "Keine Testspezifikation gefunden",

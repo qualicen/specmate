@@ -50,7 +50,7 @@ export class DataCache {
         return this.elementStore[url];
     }
 
-    public readContents(url: string, omit?: IContainer[]): IContainer[] {
+    public readContents(url: string): IContainer[] {
         if (!this.contentsStore[url]) {
             return undefined;
         }

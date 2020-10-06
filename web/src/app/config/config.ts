@@ -135,6 +135,7 @@ export class Config {
       { browser: 'chrome', minVersion: 48 },
       { browser: 'firefox', minVersion: 45 },
       { browser: 'edge', minVersion: 15 },
+      { browser: 'edge-chromium', minVersion: 80 },
       { browser: 'safari', minVersion: 10 },
       { browser: 'opera', minVersion: 30 }];
 

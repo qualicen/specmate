@@ -497,6 +497,16 @@ export class GraphicalEditor {
             let geo = this.model.getGeometry(cell);
             return geo == null || !geo.relative;
         };
+
+        const originalTooltip = this.graph.getTooltipForCell;
+
+        this.graph.getTooltipForCell = function(cell) {
+            let c = cell as mxgraph.mxCell;
+            if (c.getId().endsWith(VertexProvider.ID_SUFFIX_LINK_ICON)) {
+                return null;
+            }
+            return originalTooltip(cell);
+        };
     }
 
     private updateValidities(): void {

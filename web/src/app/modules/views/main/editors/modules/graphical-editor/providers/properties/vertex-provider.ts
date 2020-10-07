@@ -26,6 +26,7 @@ export class VertexProvider extends ProviderBase {
     public static ID_SUFFIX_VARIABLE = '/variable';
     public static ID_SUFFIX_CONDITION = '/condition';
     public static ID_SUFFIX_TYPE = '/type';
+    public static ID_SUFFIX_LINK_ICON = '/link-icon';
 
     private static INITIAL_CHILD_NODE_X = 0.5;
     private static EMPTY_CHILD_NODE_WIDTH = 50;
@@ -72,7 +73,7 @@ export class VertexProvider extends ProviderBase {
             VertexProvider.INITIAL_CHILD_NODE_X, 0.15, 0, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.VARIABLE_NAME_DISABLED_STYLE, true);
         const vertexCondition = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_CONDITION, data.condition,
             VertexProvider.INITIAL_CHILD_NODE_X, 0.4, 0, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.TEXT_INPUT_DISABLED_STYLE, true);
-        const vertexSymbol = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_CONDITION, '🔗',
+        const vertexSymbol = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_LINK_ICON, '🔗',
             8, 8, 0, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.ICON_STYLE, false);
 
         VertexProvider.adjustChildCellSize(vertexVariable, width);

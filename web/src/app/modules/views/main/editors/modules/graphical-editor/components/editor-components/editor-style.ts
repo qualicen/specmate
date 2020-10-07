@@ -50,13 +50,13 @@ export class EditorStyle {
     private static readonly VARIABLE_NAME_STYLE_STR = 'shape=rectangle;rounded=0;align=center;strokeColor=#666666;fontColor=#000000;fontStyle=' + mx.mxConstants.FONT_BOLD;
     private static readonly VARIABLE_NAME_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.VARIABLE_NAME_STYLE_STR);
     public static readonly TEXT_INPUT_DISABLED_STYLE = 'BASE_TEXT_DISABLED_INPUT';
-    private static readonly TEXT_INPUT_DISABLED_STYLE_STR = 'shape=rectangle;rounded=0;align=center;strokeColor=#666666;fillColor=none;fontColor=#666666;' + mx.mxConstants.STYLE_EDITABLE + '=false';
+    private static readonly TEXT_INPUT_DISABLED_STYLE_STR = 'shape=rectangle;rounded=0;align=center;strokeColor=#666666;fillColor=none;editable=0;fontColor=#666666';
     private static readonly TEXT_INPUT_DISABLED_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.TEXT_INPUT_DISABLED_STYLE_STR);
     public static readonly VARIABLE_NAME_DISABLED_STYLE = 'VARIABLE_NAME_DISABLED_STYLE';
-    private static readonly VARIABLE_NAME_DISABLED_STYLE_STR = 'shape=rectangle;rounded=0;align=center;strokeColor=#666666;fontColor=#666666;fontStyle=' + mx.mxConstants.FONT_BOLD + ';' + mx.mxConstants.STYLE_EDITABLE + '=false';
+    private static readonly VARIABLE_NAME_DISABLED_STYLE_STR = 'shape=rectangle;rounded=0;align=center;strokeColor=#666666;fontColor=#666666;editable=0;fontStyle=' + mx.mxConstants.FONT_BOLD;
     private static readonly VARIABLE_NAME_DISABLED_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.VARIABLE_NAME_DISABLED_STYLE_STR);
     public static readonly ICON_STYLE = 'ICON_INPUT';
-    private static readonly ICON_STYLE_STR = 'shape=rectangle;rounded=0;align=left;strokeColor=#666666;fillColor=none;fontColor=#000000';
+    private static readonly ICON_STYLE_STR = 'shape=rectangle;rounded=0;align=left;strokeColor=none;fillColor=none;fontColor=#000000;resizable=0;movable=0;editable=0;connectable=0;recursiveResize=0;rotatable=0;cloneable=0;deletable=0;';
     private static readonly ICON_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.ICON_STYLE_STR);
 
     public static readonly BASE_CEG_NODE_STYLE = 'BASE_CEG_NODE';

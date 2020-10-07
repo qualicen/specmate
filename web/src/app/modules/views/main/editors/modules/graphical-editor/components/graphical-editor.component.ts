@@ -464,12 +464,19 @@ export class GraphicalEditor {
     private async initCEGModel(): Promise<void> {
         this.graph.setHtmlLabels(true);
 
+        const graph = this.graph;
+
         this.graph.isCellEditable = function (cell) {
             let c = cell as mxgraph.mxCell;
             if (c.edge) {
                 return false;
             }
             if (c.children !== undefined && c.children !== null && c.children.length > 0) {
+                return false;
+            }
+
+            const cellStyle = graph.getStylesheet().getCellStyle(c.getStyle(), undefined);
+            if (cellStyle !== undefined && (cellStyle['editable'] === '0' || cellStyle['editable'] === 'false')) {
                 return false;
             }
             return true;
@@ -482,6 +489,11 @@ export class GraphicalEditor {
         };
 
         this.graph.isCellResizable = function (cell) {
+            let c = cell as mxgraph.mxCell;
+            const cellStyle = graph.getStylesheet().getCellStyle(c.getStyle(), undefined);
+            if (cellStyle !== undefined && (cellStyle['resizable'] === '0' || cellStyle['resizable'] === 'false')) {
+                return false;
+            }
             let geo = this.model.getGeometry(cell);
             return geo == null || !geo.relative;
         };

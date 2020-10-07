@@ -78,7 +78,6 @@ export class VertexProvider extends ProviderBase {
 
         VertexProvider.adjustChildCellSize(vertexVariable, width);
         VertexProvider.adjustChildCellSize(vertexCondition, width);
-        VertexProvider.adjustChildCellSize(vertexSymbol, width);
 
         vertexVariable.isConnectable = () => false;
         vertexCondition.isConnectable = () => false;

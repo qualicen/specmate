@@ -316,6 +316,9 @@ export class ChangeTranslator {
 
     private async translateNodeChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange, element: IModelNode): Promise<void> {
         let cell = change.cell as mxgraph.mxCell;
+        if (this.ignoreChanges(cell)) {
+            return;
+        }
         if (change['value'] !== undefined && change['value'] !== null) {
             if (this.isTextInputChange(change)) {
                 VertexProvider.adjustChildCellSize(cell, element.width);
@@ -349,6 +352,10 @@ export class ChangeTranslator {
             element['height'] = cell.geometry.height;
             await this.dataService.updateElement(element, true, Id.uuid);
         }
+    }
+
+    private ignoreChanges(cell: mxgraph.mxCell) {
+        return cell.getId().endsWith(VertexProvider.ID_SUFFIX_LINK_ICON);
     }
 
     private async translateEdgeChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange | mxgraph.mxGeometryChange,

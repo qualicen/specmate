@@ -9,6 +9,7 @@ import com.specmate.model.requirements.Requirement;
 public interface IRequirementsSource {
 
 	Collection<Requirement> getRequirements() throws SpecmateException;
+	Requirement getRequirementById(String id) throws SpecmateException;
 
 	String getId();
 

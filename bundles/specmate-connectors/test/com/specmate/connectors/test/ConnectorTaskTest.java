@@ -23,6 +23,7 @@ import org.osgi.service.log.LogService;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.connectors.api.IRequirementsSource;
 import com.specmate.connectors.internal.ConnectorTask;
+import com.specmate.connectors.internal.ConnectorUtil;
 import com.specmate.model.base.BaseFactory;
 import com.specmate.model.base.Folder;
 import com.specmate.model.base.IContainer;
@@ -49,9 +50,9 @@ public class ConnectorTaskTest {
 	public void testRequirementsNumbers() throws SpecmateException {
 		checkRequirementsNumber(0);
 		checkRequirementsNumber(1);
-		checkRequirementsNumber(ConnectorTask.BATCH_SIZE - 1);
-		checkRequirementsNumber(ConnectorTask.BATCH_SIZE);
-		checkRequirementsNumber(ConnectorTask.BATCH_SIZE + 1);
+		checkRequirementsNumber(ConnectorUtil.BATCH_SIZE - 1);
+		checkRequirementsNumber(ConnectorUtil.BATCH_SIZE);
+		checkRequirementsNumber(ConnectorUtil.BATCH_SIZE + 1);
 		checkRequirementsNumber(10000);
 	}
 
@@ -234,6 +235,11 @@ public class ConnectorTaskTest {
 			}
 			return requirements;
 		}
+
+		@Override
+		public Requirement getRequirementById(String id) throws SpecmateException {
+			return null;
+		}
 	}
 
 	private class TestRequirementSource_NoFolder extends TestRequirementSourceBase {
@@ -253,6 +259,10 @@ public class ConnectorTaskTest {
 			return null;
 		}
 
+		@Override
+		public Requirement getRequirementById(String id) throws SpecmateException {
+			return null;
+		}
 	}
 
 	private class TestRequirementSource_NameChange extends TestRequirementSourceBase {
@@ -268,6 +278,11 @@ public class ConnectorTaskTest {
 			req.setExtId("id1");
 			requestCounter++;
 			return Arrays.asList(req);
+		}
+
+		@Override
+		public Requirement getRequirementById(String id) throws SpecmateException {
+			return null;
 		}
 	}
 
@@ -294,6 +309,11 @@ public class ConnectorTaskTest {
 			requestCounter++;
 			return folder;
 		}
+
+		@Override
+		public Requirement getRequirementById(String id) throws SpecmateException {
+			return null;
+		}
 	}
 
 	private class TestRequirementSource_InvalidRequirements extends TestRequirementSourceBase {
@@ -319,6 +339,9 @@ public class ConnectorTaskTest {
 			return Arrays.asList(req1, req2, req3);
 		}
 
+		@Override
+		public Requirement getRequirementById(String id) throws SpecmateException {
+			return null;
+		}
 	}
-
 }

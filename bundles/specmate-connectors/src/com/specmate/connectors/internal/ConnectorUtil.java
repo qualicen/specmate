@@ -28,7 +28,9 @@ import com.specmate.persistency.IChange;
 import com.specmate.persistency.ITransaction;
 
 public class ConnectorUtil {
-	public static Lock lock = new ReentrantLock();
+
+	/** Lock, thus only one sync runs at the same time */
+	private final static Lock lock = new ReentrantLock();
 
 	/** How many retrieved requirements to process in one transaction */
 	public static final int BATCH_SIZE = 100;

@@ -22,7 +22,6 @@ Test-Cases: \
 	org.eclipse.emf.ecore,\
 	org.eclipse.emf.common,\
 	specmate-emfrest;version=latest,\
-	org.eclipse.osgi,\
 	org.eclipse.osgi.services,\
 	org.json;version=latest,\
 	org.eclipse.emf.cdo,\
@@ -61,7 +60,8 @@ Test-Cases: \
 	specmate-xtext,\
 	specmate-connectors-api;version=latest,\
 	specmate-connectors;version=latest,\
-	specmate-export-api
+	specmate-export-api,\
+	osgi.core;version=6.0
 
 -runee: JavaSE-11
 -runfw: org.eclipse.osgi;version='[3.13.300.v20190218-1622,3.13.300.v20190218-1622]'
@@ -74,7 +74,6 @@ Bundle-Version: 0.0.0.${tstamp}
 	osgi.identity;filter:='(osgi.identity=org.apache.felix.gogo.command)',\
 	osgi.identity;filter:='(osgi.identity=org.apache.felix.gogo.shell)',\
 	osgi.identity;filter:='(osgi.identity=org.glassfish.hk2.locator)',\
-	osgi.identity;filter:='(osgi.identity=org.eclipse.equinox.log)',\
 	osgi.identity;filter:='(osgi.identity=jul.to.slf4j)',\
 	osgi.identity;filter:='(osgi.identity=specmate-common)',\
 	osgi.identity;filter:='(osgi.identity=specmate-emfjson)',\
@@ -127,23 +126,11 @@ Bundle-Version: 0.0.0.${tstamp}
 	javax.validation.api;version='[1.1.0,1.1.1)',\
 	javax.ws.rs-api;version='[2.0.1,2.0.2)',\
 	jul.to.slf4j;version='[1.7.12,1.7.13)',\
-	org.apache.felix.gogo.command;version='[0.10.0,0.10.1)',\
-	org.apache.felix.gogo.runtime;version='[0.10.0,0.10.1)',\
-	org.apache.felix.gogo.shell;version='[0.10.0,0.10.1)',\
 	org.eclipse.core.contenttype;version='[3.4.200,3.4.201)',\
 	org.eclipse.core.jobs;version='[3.6.1,3.6.2)',\
 	org.eclipse.core.runtime;version='[3.10.0,3.10.1)',\
 	org.eclipse.emf.ecore.change;version='[2.11.0,2.11.1)',\
-	org.eclipse.equinox.app;version='[1.3.200,1.3.201)',\
-	org.eclipse.equinox.cm;version='[1.1.0,1.1.1)',\
-	org.eclipse.equinox.common;version='[3.6.200,3.6.201)',\
-	org.eclipse.equinox.event;version='[1.3.100,1.3.101)',\
-	org.eclipse.equinox.log;version='[1.2.300,1.2.301)',\
-	org.eclipse.equinox.metatype;version='[1.4.0,1.4.1)',\
-	org.eclipse.equinox.preferences;version='[3.5.200,3.5.201)',\
-	org.eclipse.equinox.registry;version='[3.5.400,3.5.401)',\
 	org.eclipse.net4j.db.jdbc;version='[4.3.100,4.3.101)',\
-	org.eclipse.osgi.services;version='[3.4.0,3.4.1)',\
 	org.glassfish.hk2.api;version='[2.4.0,2.4.1)',\
 	org.glassfish.hk2.external.aopalliance-repackaged;version='[2.4.0,2.4.1)',\
 	org.glassfish.hk2.external.javax.inject;version='[2.4.0,2.4.1)',\
@@ -171,33 +158,10 @@ Bundle-Version: 0.0.0.${tstamp}
 	org.eclipse.net4j.db.h2;version='[4.2.300,4.2.301)',\
 	org.eclipse.net4j.tcp;version='[4.1.400,4.1.401)',\
 	org.eclipse.net4j.util;version='[3.6.0,3.6.1)',\
-	com.google.guava;version='[21.0.0,21.0.1)',\
-	org.apache.felix.scr;version='[2.0.8,2.0.9)',\
 	org.apache.commons.fileupload;version='[1.3.1,1.3.2)',\
 	org.apache.commons.io;version='[2.4.0,2.4.1)',\
 	org.apache.felix.webconsole;version='[4.3.0,4.3.1)',\
-	org.eclipse.equinox.http.servlet;version='[1.1.500,1.1.501)',\
-	org.eclipse.jetty.deploy;version='[9.4.6,9.4.7)',\
-	org.eclipse.jetty.http;version='[9.4.6,9.4.7)',\
-	org.eclipse.jetty.io;version='[9.4.6,9.4.7)',\
 	org.eclipse.jetty.osgi-servlet-api;version='[3.1.0,3.1.1)',\
-	org.eclipse.jetty.osgi.boot;version='[9.4.6,9.4.7)',\
-	org.eclipse.jetty.osgi.httpservice;version='[9.4.6,9.4.7)',\
-	org.eclipse.jetty.rewrite;version='[9.4.6,9.4.7)',\
-	org.eclipse.jetty.security;version='[9.4.6,9.4.7)',\
-	org.eclipse.jetty.server;version='[9.4.6,9.4.7)',\
-	org.eclipse.jetty.servlet;version='[9.4.6,9.4.7)',\
-	org.eclipse.jetty.util;version='[9.4.6,9.4.7)',\
-	org.eclipse.jetty.webapp;version='[9.4.6,9.4.7)',\
-	org.eclipse.jetty.xml;version='[9.4.6,9.4.7)',\
-	org.eclipse.equinox.http.jetty;version='[3.0.200,3.0.201)',\
-	org.eclipse.jetty.continuation;version='[8.1.16,8.1.17)',\
-	org.eclipse.jetty.http;version='[8.1.16,8.1.17)',\
-	org.eclipse.jetty.io;version='[8.1.16,8.1.17)',\
-	org.eclipse.jetty.security;version='[8.1.16,8.1.17)',\
-	org.eclipse.jetty.server;version='[8.1.16,8.1.17)',\
-	org.eclipse.jetty.servlet;version='[8.1.16,8.1.17)',\
-	org.eclipse.jetty.util;version='[8.1.16,8.1.17)',\
 	lpg.runtime.java;version='[2.0.17,2.0.18)',\
 	org.eclipse.emf.cdo.server.ocl;version='[4.2.100,4.2.101)',\
 	org.eclipse.ocl;version='[3.6.200,3.6.201)',\
@@ -248,7 +212,6 @@ Bundle-Version: 0.0.0.${tstamp}
 	org.eclipse.xtext.util;version='[2.10.0,2.10.1)',\
 	org.eclipse.xtext.xbase.lib;version='[2.10.0,2.10.1)',\
 	com.sun.activation.javax.activation;version='[1.2.0,1.2.1)',\
-	jaxb-api;version='[2.3.1,2.3.2)',\
 	org.eclipse.emf.cdo.ecore.retrofit;version='[4.2.300,4.2.301)',\
 	org.apache.commons.collections4;version='[4.0.0,4.0.1)',\
 	org.json;version='[0.0.0,0.0.1)',\
@@ -291,8 +254,36 @@ Bundle-Version: 0.0.0.${tstamp}
 	specmate-testspecification;version='[0.0.0,0.0.1)',\
 	specmate-ui-core;version='[0.0.0,0.0.1)',\
 	specmate-xtext;version='[0.0.0,0.0.1)',\
-	specmate-scheduler;version='[0.0.0,0.0.1)',\
-	org.eclipse.jetty.servlets;version='[9.4.6,9.4.7)'
+	com.google.guava;version='[26.0.0,26.0.1)',\
+	jaxb-api;version='[2.3.0,2.3.1)',\
+	org.apache.felix.gogo.command;version='[1.0.2,1.0.3)',\
+	org.apache.felix.gogo.runtime;version='[1.1.0,1.1.1)',\
+	org.apache.felix.gogo.shell;version='[1.1.0,1.1.1)',\
+	org.apache.felix.scr;version='[2.1.16,2.1.17)',\
+	org.eclipse.equinox.app;version='[1.5.0,1.5.1)',\
+	org.eclipse.equinox.cm;version='[1.4.400,1.4.401)',\
+	org.eclipse.equinox.common;version='[3.13.0,3.13.1)',\
+	org.eclipse.equinox.event;version='[1.5.500,1.5.501)',\
+	org.eclipse.equinox.http.jetty;version='[3.7.400,3.7.401)',\
+	org.eclipse.equinox.http.servlet;version='[1.6.600,1.6.601)',\
+	org.eclipse.equinox.metatype;version='[1.5.300,1.5.301)',\
+	org.eclipse.equinox.preferences;version='[3.8.0,3.8.1)',\
+	org.eclipse.equinox.registry;version='[3.9.0,3.9.1)',\
+	org.eclipse.jetty.deploy;version='[9.4.32,9.4.33)',\
+	org.eclipse.jetty.http;version='[9.4.32,9.4.33)',\
+	org.eclipse.jetty.io;version='[9.4.32,9.4.33)',\
+	org.eclipse.jetty.osgi.boot;version='[9.4.32,9.4.33)',\
+	org.eclipse.jetty.osgi.httpservice;version='[9.4.32,9.4.33)',\
+	org.eclipse.jetty.rewrite;version='[9.4.32,9.4.33)',\
+	org.eclipse.jetty.security;version='[9.4.32,9.4.33)',\
+	org.eclipse.jetty.server;version='[9.4.32,9.4.33)',\
+	org.eclipse.jetty.servlet;version='[9.4.32,9.4.33)',\
+	org.eclipse.jetty.servlets;version='[9.4.32,9.4.33)',\
+	org.eclipse.jetty.util;version='[9.4.32,9.4.33)',\
+	org.eclipse.jetty.webapp;version='[9.4.32,9.4.33)',\
+	org.eclipse.jetty.xml;version='[9.4.32,9.4.33)',\
+	org.eclipse.osgi.services;version='[3.9.0,3.9.1)',\
+	org.eclipse.osgi.util;version='[3.5.300,3.5.301)'
 
 -runproperties: \
 	jetty.http.port=8088,\

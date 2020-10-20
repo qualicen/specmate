@@ -27,14 +27,14 @@
                     [attr.aria-controls]="currentActiveTab === ActiveTab.library ? 'ngb-tab-1-panel' : null">{{'library'
                     | translate}}</button>
             </li>
-            <li class="nav-item">
+           <!--  <li class="nav-item">
                 <button [ngClass]="{'active' : currentActiveTab === ActiveTab.recycleBin}" role="tab"
                     (click)="switchToRecycleBin()" class="nav-link" id="ngb-tab-1" aria-disabled="false"
                     [attr.aria-expanded]="currentActiveTab === ActiveTab.recycleBin ? 'true' : 'false'"
                     [attr.aria-controls]="currentActiveTab === ActiveTab.recycleBin ? 'ngb-tab-1-panel' : null">
                     <i class="fa fa-trash" aria-hidden="true"></i>
                 </button>
-            </li>
+            </li> -->
         </ul>
         <table class="table" *ngIf="searchBox.value">
             <thead>

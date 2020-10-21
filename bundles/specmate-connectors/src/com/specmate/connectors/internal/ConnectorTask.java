@@ -9,17 +9,20 @@ import com.specmate.persistency.ITransaction;
 import com.specmate.scheduler.SchedulerTask;
 
 public class ConnectorTask extends SchedulerTask {
-
-	ConnectorUtil connectorUtil;
+	List<IRequirementsSource> requirementsSources;
+	ITransaction transaction;
+	LogService logService;
 
 	public ConnectorTask(List<IRequirementsSource> requirementsSources, ITransaction transaction,
 			LogService logService) {
 		super();
-		connectorUtil = new ConnectorUtil(requirementsSources, transaction, logService);
+		this.requirementsSources = requirementsSources;
+		this.transaction = transaction;
+		this.logService = logService;
 	}
 
 	@Override
 	public void run() {
-		connectorUtil.syncRequirementsFromSources();
+		ConnectorUtil.syncRequirementsFromSources(requirementsSources, transaction, logService);
 	}
 }

@@ -1,22 +1,21 @@
 package com.specmate.connectors.internal;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
+import org.eclipse.emf.ecore.EObject;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicy;
 import org.osgi.service.log.LogService;
 
 import com.specmate.common.exception.SpecmateException;
+import com.specmate.connectors.api.IProject;
+import com.specmate.connectors.api.IProjectService;
 import com.specmate.connectors.api.IRequirementsSource;
 import com.specmate.emfrest.api.IRestService;
 import com.specmate.emfrest.api.RestServiceBase;
 import com.specmate.model.base.Folder;
+import com.specmate.model.support.util.SpecmateEcoreUtil;
 import com.specmate.persistency.IPersistencyService;
 import com.specmate.persistency.ITransaction;
 import com.specmate.persistency.validation.TopLevelValidator;
@@ -34,8 +33,8 @@ public class SyncSingleRequirementService extends RestServiceBase {
 	/** The transaction */
 	private ITransaction transaction;
 
-	/** All project sources */
-	List<IRequirementsSource> requirementsSources = new ArrayList<>();
+	/** The project service */
+	private IProjectService projectService;
 
 	@Override
 	public String getServiceName() {
@@ -54,16 +53,21 @@ public class SyncSingleRequirementService extends RestServiceBase {
 			String id = queryParams.get("id").get(0);
 			this.transaction = this.persistencyService.openTransaction();
 			this.transaction.removeValidator(TopLevelValidator.class.getName());
+			
+			String projectId = SpecmateEcoreUtil.getProjectId((EObject) object);
+			IProject project = projectService.getProject(projectId);
+			IRequirementsSource source = project.getConnector();
 
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
-					ConnectorUtil connectorUtil = new ConnectorUtil(requirementsSources, transaction, logService);
-					connectorUtil.syncRequirementById(id);
+					ConnectorUtil.syncRequirementById(id, source, transaction, logService);
+					transaction.close();
 				}
 			}, "sync-single-requirement-service-task").start();
 
-			return new RestResult<>(Response.Status.OK);
+			return new RestResult<>(Response.Status.OK,
+					"This function is executed asynchronously. The OK does not indicate whether the sync was successful or not.");
 		}
 		return new RestResult<>(Response.Status.BAD_REQUEST);
 	}
@@ -79,12 +83,8 @@ public class SyncSingleRequirementService extends RestServiceBase {
 		this.persistencyService = persistencyService;
 	}
 
-	@Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
-	public void addRequirementsConnector(IRequirementsSource source) {
-		this.requirementsSources.add(source);
-	}
-
-	public void removeRequirementsConnector(IRequirementsSource source) {
-		this.requirementsSources.remove(source);
+	@Reference
+	public void setProjectService(IProjectService projectService) {
+		this.projectService = projectService;
 	}
 }

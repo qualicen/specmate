@@ -117,7 +117,6 @@ public class ConnectorUtil {
 									e);
 							transaction.rollback();
 						}
-
 					} else {
 						List<Requirement> tosync = new LinkedList<Requirement>();
 						tosync.add(requirement);

@@ -11,10 +11,12 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.osgi.service.log.LogService;
+import com.google.common.collect.Iterators;
 
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.connectors.api.IRequirementsSource;
@@ -98,12 +100,18 @@ public class ConnectorUtil {
 				if (requirement != null) {
 
 					IContainer localRootContainer = getOrCreateLocalRootContainer(resource, source.getId());
-					HashMap<String, EObject> localRequirementsMap = buildLocalRequirementsMap(localRootContainer);
-					List<Requirement> tosync = new LinkedList<Requirement>();
-					tosync.add(requirement);
+					TreeIterator<EObject> children = localRootContainer.eAllContents();
+					boolean alreadyImported = Iterators.tryFind(children,
+							child -> (child instanceof Requirement && ((Requirement) child).getExtId().equals(id)))
+							.isPresent();
+					if (!alreadyImported) {
+						HashMap<String, EObject> localRequirementsMap = buildLocalRequirementsMap(localRootContainer);
+						List<Requirement> tosync = new LinkedList<Requirement>();
+						tosync.add(requirement);
 
-					doAndCommitTransaction(transaction, localRootContainer, localRequirementsMap, tosync, source,
-							logService);
+						doAndCommitTransaction(transaction, localRootContainer, localRequirementsMap, tosync, source,
+								logService);
+					}
 				}
 			} catch (Exception e) {
 				logService.log(LogService.LOG_ERROR, "An error occured synching requirement. Reason: " + e.getMessage(),

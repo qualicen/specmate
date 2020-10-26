@@ -53,7 +53,7 @@ public class SyncSingleRequirementService extends RestServiceBase {
 			String id = queryParams.get("id").get(0);
 			this.transaction = this.persistencyService.openTransaction();
 			this.transaction.removeValidator(TopLevelValidator.class.getName());
-			
+
 			String projectId = SpecmateEcoreUtil.getProjectId((EObject) object);
 			IProject project = projectService.getProject(projectId);
 			IRequirementsSource source = project.getConnector();
@@ -61,8 +61,11 @@ public class SyncSingleRequirementService extends RestServiceBase {
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
-					ConnectorUtil.syncRequirementById(id, source, transaction, logService);
-					transaction.close();
+					try {
+						ConnectorUtil.syncRequirementById(id, source, transaction, logService);
+					} finally {
+						transaction.close();
+					}
 				}
 			}, "sync-single-requirement-service-task").start();
 

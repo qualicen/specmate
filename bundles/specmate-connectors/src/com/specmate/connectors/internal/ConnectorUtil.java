@@ -100,12 +100,25 @@ public class ConnectorUtil {
 				if (requirement != null) {
 
 					IContainer localRootContainer = getOrCreateLocalRootContainer(resource, source.getId());
-					TreeIterator<EObject> children = localRootContainer.eAllContents();
-					boolean alreadyImported = Iterators.tryFind(children,
-							child -> (child instanceof Requirement && ((Requirement) child).getExtId().equals(id)))
-							.isPresent();
-					if (!alreadyImported) {
-						HashMap<String, EObject> localRequirementsMap = buildLocalRequirementsMap(localRootContainer);
+					HashMap<String, EObject> localRequirementsMap = buildLocalRequirementsMap(localRootContainer);
+					boolean alreadyImported = localRequirementsMap.containsKey(id);
+					if (alreadyImported) {
+						try {
+							transaction.doAndCommit(new IChange<Object>() {
+								@Override
+								public Object doChange() throws SpecmateException {
+									SpecmateEcoreUtil.copyAttributeValues(requirement, localRequirementsMap.get(id));
+									return null;
+								}
+							});
+						} catch (Exception e) {
+							logService.log(LogService.LOG_ERROR,
+									"An error occured while committing synced requirement. Reason:" + e.getMessage(),
+									e);
+							transaction.rollback();
+						}
+
+					} else {
 						List<Requirement> tosync = new LinkedList<Requirement>();
 						tosync.add(requirement);
 

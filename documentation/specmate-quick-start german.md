@@ -35,11 +35,11 @@ Nach dem Aufruf von Specmate wird Ihnen die Anmeldeseite angezeigt. Bitte geben 
 
 Specmate unterstützt Sie im Design Ihrer Tests aus den Anforderungen. Specmate importiert Ihre Anforderungen aus verschiedenen Quellen (z.B. Atlassian JIRA oder HP PPM). Sind die Anforderungen importiert, können Sie in einem ersten Schritt die Anforderungen in einem leichtgewichtigen Modell beschreiben. Specmate unterstützt Ursache-Wirkungs-Diagramme (engl. Cause-Effect-Graphs, CEGs) und Prozessdiagramme (ähnlich einem Aktivitätsdiagramm).
 
-![](Images/specmate-overview.png "Specmate Overview")
+![](images/specmate-overview.png "Specmate Overview")
 
 CEGs eignen sich besonders zur Beschreibung für Anforderungen in der Form "Wenn ... Dann ..." und somit z.B. zur Beschreibung von  Geschäftsregeln. Prozessdiagramme eignen sich besonders zur Beschreibung von Geschäftsprozessen und sind daher vor allem für End-to-End-Tests geeignet.
 
-![](Images/testtypesneu.png "Types of Tests")
+![](images/testtypesneu.png "Types of Tests")
 
 Specmate ist vielfach einsetzbar und richtet sich an unterschiedliche Zielgruppen: Sie können Specmate sowohl in einem klassichen, sequenziellen als auch in einem agilen Entwicklungsprozess nutzen. Außerdem können Sie mit Specmate Test-Designs für verschiedene Test-Stufen durchführen.
 
@@ -52,7 +52,7 @@ Specmate ist vielfach einsetzbar und richtet sich an unterschiedliche Zielgruppe
 
 Nach dem Anmelden bei Specmate sehen Sie folgende Ansicht
 
-![](Images/Willkommen_neu.png "Willkommen_neu")
+![](images/Willkommen_neu.png "Willkommen_neu")
 
 - Auf der linken Seite sehen Sie den *Projekt-Explorer*.
 Er zeigt die importierten Anforderungen in einer Baumstruktur an. Sie können durch den Baum navigieren (d.h. die Ordner öffnen) und eine Anforderung auswählen.
@@ -66,13 +66,13 @@ Nach der Eingabe eines Suchwortes (aus dem Titel der Anforderung oder der User S
 
 Wenn eine Anforderung in der *Projektansicht* ausgewählt ist, wird Ihnen die folgende Ansicht gezeigt.
 
-![](Images/Project_Explorer.png "Project Explorer")
+![](images/Project_Explorer.png "Project Explorer")
 
 In dieser Ansicht können Sie alle Informationen über die Anforderungen einsehen, sowie zugehörige Modelle bzw. Testspezifikationen erstellen oder bereits erstellte Modelle bzw. Testspezifikationen einsehen.
 
 Wenn ein Ordner in der *Bibliotheks*ansicht ausgewählt ist, wird Ihnen die folgende Ansicht angezeigt
 
-![](Images/Folder_Overview.png "Folder Overview")
+![](images/Folder_Overview.png "Folder Overview")
 
 - Im ersten Block können Sie Details über den ausgewählten Ordner abrufen.
 - Das Ändern der Struktur der Bibliothek (z.B. Hinzufügen/Entfernen von Ordnern) kann in diesem ersten Block Unterordner vorgenommen werden.
@@ -110,7 +110,7 @@ können Sie die entsprechende Modellierungstechnik auswählen. Bei der Modellier
 
 Wenn Sie sich in der Projektansicht dazu entschieden haben, Ihre Anforderungen in einem CEG-Modell umzusetzen, gelangen Sie in den CEG-Editor. Hier stellt Specmate Ihnen verschiedene Werkzeuge zur Verfügung, um Ihre CEGs zu modellieren.
 
-![](Images/CEG-Editor-Werkzeug.png "CEG-Editor Werkzeug")
+![](images/CEG-Editor-Werkzeug.png "CEG-Editor Werkzeug")
 
 Auf dieser Abbildung sehen Sie die Schaltflächen, die Sie verwenden müssen, um
 
@@ -123,7 +123,7 @@ Auf dieser Abbildung sehen Sie die Schaltflächen, die Sie verwenden müssen, um
 
 Klicken Sie auf den Text "Knoten", wie im Bild gezeigt, und ziehen Sie den Text "Knoten" in das mit Hilfslinien versehene Editor-Feld. Der so gesetzte Knoten (respektive die Variable) erscheint hier jetzt als Rechteck im Modellierungsbereich.
 
-![](Images/Knoten-setzen.png "Knoten setzen")
+![](images/Knoten-setzen.png "Knoten setzen")
 
 Außerdem können Sie hier
 
@@ -137,7 +137,7 @@ Außerdem können Sie hier
 
 Durch das Anklicken des kleinen Strukturbaums können Sie ihre Knoten bündig horizontal oder vertikal von Specmate anordnen lassen, wie auf dem folgenden Bild zu erkennen ist:
 
-![](Images/Layoutvorhernachher.png "Layoutvorhernachher")
+![](images/Layoutvorhernachher.png "Layoutvorhernachher")
 
 Sie können das Auto-Layout durch das Anklicken des "Rückgängig-Buttons" (oben links) auch widerrufen.
 
@@ -154,15 +154,15 @@ Wenn Sie den Modellierungsbereich maximieren wollen, klicken Sie auf die Schaltf
 Bewegen Sie Ihren Cursor auf den von Ihnen bereits erstellten Knoten: Es erscheint ein grau umrandeter Pfeil innerhalb Ihres Knotens. Nun können Sie den Knoten mit einem anderen Knoten verbinden, indem Sie mit gedrückter Maustaste die Verbindung vom ersten zum zweiten Knoten ziehen.
 
 1.) Bewegen Sie Ihren Cursor über einen Knoten: Es erscheint ein grau umrandeter Pfeil in der Knotenmitte; Klicken Sie auf diesen Pfeil und halten Sie die Maustaste gedrückt, während Sie die Verbindung zu einem anderen Knoten ziehen.
-![](Images/Verbindung1.png "Verbindung1")
+![](images/Verbindung1.png "Verbindung1")
 
 
 2.) Während Sie eine Verbindung ziehen, ist jene als grün gestrichelte Linie visualisiert; fertige Verbindungen sind als schwarze Pfeile dargestellt. Der Ausgangsknoten erscheint während des Verbindens auch in grün-schwarz gestrichelter Umrandung.
-![](Images/Verbindung2.png "Verbindung2")
+![](images/Verbindung2.png "Verbindung2")
 
 3.) Durch klicken auf die grünen Kästchen auf der Umrandung des Knotens, können Sie jenen vergrößern oder verkleinern. Durch das Anklicken des Knotens, können Sie, wenn Ihr Cursor als Handsymbol erscheint, Knoten verschieben. Der Zielort und die Zielgröße werden ebenfalls grün gestrichelt angezeigt.
 
-![](Images/Verbindung3.png "Verbindung3")
+![](images/Verbindung3.png "Verbindung3")
 
 #### 6. Markieren
 Wenn Sie mehrere Verbindungen und/oder Knoten auswählen wollen, weil Sie z.B. einen Teil Ihres Modells kopieren oder in der Bibliothek abpeichern wollen, halten Sie die Strg-Taste (Windows) oder die Command-Taste (OS) gedrückt, während Sie auf die gewünschten Elemente klicken.
@@ -184,7 +184,7 @@ Wenn Sie auf der Tastatur die übliche Tastenkombination STR/CMD + Z drücken, m
 Auf der rechten Seite des Editors können Sie die *Eigenschaften*,
 wie zum Beispiel Namen oder Beschreibungen des Modells und einzelner Knoten und Verbindungen, einsehen und ändern.
 
-![](Images/Eigenschaften.png "Eigenschaftenbereich")
+![](images/Eigenschaften.png "Eigenschaftenbereich")
 
 ### Links & Actions
 
@@ -203,7 +203,7 @@ Wenn es Fehler im erstellten Modell gibt, zeigt Specmate diese im Abschnitt *Feh
 
 Der Prozessmodell-Editor funktioniert ähnlich wie der CEG-Editor: Anstatt, dass man oben links "Knoten" auswählen und in den Modellierungsbereich ziehen kann, gibt es noch differenziertere Möglichkeiten bei den Werkzeugen: Im Prozessmodell muss ein Anfangspukt (+START) und ein Endpunkt (+ENDE) gewählt werden. Die Knoten dazwischen werden hier als Schritte bezeichnet und können über das Werkzeug +SCHRITT in den Modellierungsbereich gezogen werden. Außerdem gibt es noch das Werkzeug +ENTSCHEIDUNG, das eine Aufspaltung im Prozess visualisiert. Die Auto-Layout-Funktion kann auch im Prozess-Editor durch Anklicken des kleinen Strukturbaums verwendet werden.
 
-![](Images/Prozessmodell-Pfannkuchen.png "Prozessmodell-Pfannkuchen")
+![](images/Prozessmodell-Pfannkuchen.png "Prozessmodell-Pfannkuchen")
 
 Das Erstellen von Verbindungen erfolgt wie im CEG-Editor dadurch, dass der Cursor über den jeweiligen Knoten (dies gilt auch für den Start- End- und Entscheidungsknoten) bewegt wird; es erscheint ein grau umrandeter Pfeil im Knoten, der durch Klicken der Maustaste als Verbindung zu einem beliebigen Knoten gezogen werden kann. Lediglich die Verbindungen, die von einem Entscheidungsknoten ausgehen, unterscheiden sich dahingehend, dass ihnen eine Bedingung in der rechten Eigenschaftsspalte zugeordnet werden muss. Im Gegensatz zum CEG-Editor können die Knoten nur in der Eigenschaftsspalte und nicht direkt durch das Anklicken eines Knotens benannt werden.
 
@@ -217,7 +217,7 @@ Die Spalte *Traces* zeigt alle Anforderungen, die mit dem ausgewählten Schritt 
 
 Sie haben in allen Editoren die Möglichkeit, das Modell oder Teile davon zu kopieren und in andere Modelle einzufügen. Ziehen Sie hierfür ein Rechteck um den gewünschten Bereich, der kopiert werden soll. Wie zum Beispiel hier:
 
-![](Images/Auswählen-Kopieren.png "Auswählen-Kopieren")
+![](images/Auswählen-Kopieren.png "Auswählen-Kopieren")
 
 Mit `Strg + C` kopieren Sie den Bereich. Das kopierte Modell kann im gleichen oder in anderen Editoren mit `Strg + V` wieder eingefügt und weiter bearbeitet werden.
 
@@ -225,16 +225,16 @@ Mit `Strg + C` kopieren Sie den Bereich. Das kopierte Modell kann im gleichen od
 
 Sie können auch ganze Modelle kopieren, indem Sie, z.B. in der [Bibliotheksansicht](#bibliothek),
 auf den *Kopieren*-Knopf des gewünschten Modells klicken.
-![](Images/Copy-Modell.png "Copy-Modell")
+![](images/Copy-Modell.png "Copy-Modell")
 Jetzt können Sie in der Bibliotheks- oder in der Projektansicht eine Kopie des Modells erstellen.
-![](Images/Paste-Modell.png "Paste-Modell")
+![](images/Paste-Modell.png "Paste-Modell")
 Standardmäßig heißt das neue Modell "*Kopie von [Name des ursprünglichen Modells]*".
 Diesen Namen können Sie im Eingabefeld ändern: Indem Sie den *Einfügen*-Knopf anklicken, fügen Sie die Kopie des Modells zum Projekt hinzu.
 
 
 ## Ursache-Wirkungs-Diagramme (Cause-Effect-Graphs CEGs)
 
-![](Images/CEG-Ansicht.png "CEG-Ansicht")
+![](images/CEG-Ansicht.png "CEG-Ansicht")
 
 Nach dem Öffnen des Ursache-Wirkungs-Editors wird Ihnen ein Modellierungsbereich in der Mitte präsentiert, in dem Sie Ihr CEG erstellen können. Um ein CEG zu modellieren, können Sie ein Werkzeug oberhalb des Modellierungsbereichs auswählen. Indem Sie auf *Knoten* klicken und die Maustaste gedrückt halten, können Sie den Knoten in den Modellierungsbereich ziehen, um einen neuen Knoten anzulegen. Standardmäßig ist der Name des Knotens *variable* und die Bedingung ist auf *is present* gesetzt. Was mit diesen Begriffen gemeint ist, lesen Sie in den folgenden Abschnitten. Sie können die Attribute des ausgewählten Knotens auf der rechten Seite im Abschnitt [*Eigenschaften*](#eigenschaften) ändern.
 
@@ -294,7 +294,7 @@ damit der Knoten erfüllt wird.
 
 Beispiel für eine UND-Beziehung:
 
-![](Images/AND-Bedingung.PNG "ExampleAnd")
+![](images/AND-Bedingung.PNG "ExampleAnd")
 
 
 Ist der Typ des Knotens allerdings auf
@@ -303,7 +303,7 @@ damit der Knoten erfüllt wird. Dieses OR ist ein *inklusives Oder*, das heißt 
 
 Beispiel für eine ODER-Beziehung:
 
-![](Images/OR-Bedingung.PNG "ExampleOr")
+![](images/OR-Bedingung.PNG "ExampleOr")
 
 ##### Exkurs: Exklusives Oder
 
@@ -311,7 +311,7 @@ Ein *Exklusives Oder*, oder *XOR*, sagt aus, dass *genau eine* Ursache wahr sein
 
 In Specmate kann das Exklusive Oder leicht konstruiert werden: Hat man zum Beispiel die Aussage "Entweder A, oder B, dann C" können Sie diese Aussage mithilfe von zwei Hilfsvariablen D und E und durch [Negation](#Negieren) modellieren:
 
-![](Images/ExclusiveOR.PNG "ExklusivesOder")
+![](images/ExclusiveOR.PNG "ExklusivesOder")
 
 Die Aussage wird also umgeschrieben zu "Wenn A und nicht B, oder B und nicht A, dann C".
 
@@ -333,7 +333,7 @@ wenn die Ursache nicht vorhanden ist, und die Wirkung bleibt aus, wenn die Ursac
 Zu jeder Verbindung zwischen zwei Knoten können Sie eine *Beschreibung* hinzufügen. Dies kann zum eigenen Verständnis oder dem  einer Kollegin oder eines Kollegen beitragen. Außerdem können Sie – wie bereits oben erläutert – den Typ des Knotens in der Spalte Eigenschaften ändern.
 
 
-![](Images/Knoteneigenschaften.png "Knoteneigenschaften")
+![](images/Knoteneigenschaften.png "Knoteneigenschaften")
 
 Achten Sie darauf, dass der Knoten oder die Verbindung, deren Eigenschaften Sie bearbeiten wollen, vorher angeklickt wurde. Ob dies der Fall ist, erkennen Sie auch an der grüngestrichelten Umrandung, wie die vorausgegangene Abbildung illustriert. Ist keine einzelne Komponente (Knoten oder Verbindung) im Modell angeklickt, werden in der Eigenschaftsspalte die Eigenschaften des gesamten Modells beschrieben.
 
@@ -341,12 +341,12 @@ Achten Sie darauf, dass der Knoten oder die Verbindung, deren Eigenschaften Sie 
 
 Wenn Sie ein CEG-Modell oder Prozessmodell anlegen oder angelegt haben, können Sie oben links im Bildschirm neben dem Specmate-Logo eine weitere Schaltfläche erkennen: den *Validieren*-Button. Wenn Sie auf diese Schaltfläche klicken, wird die Prüfung Ihres Modells aktualisiert. Ist ihr Modell korrekt, wird Ihnen in dem Reiter *Eigenschaften* unter der Überschrift *Fehler und Warnungen* in grüner Schrift "Keine Warnungen." angezeigt. Ist Ihr Modell fehlerhaft, werden hier die Fehler aufgeführt. In diesem Fall müssen Sie den Fehler beheben und erneut auf den *Validieren*-Button klicken. Das Anklicken des *Validieren*-Buttons ist außerdem nötig, um eine spätere Testgenerierung überhaupt möglich zu machen.
 
-![](Images/Validieren-eines-gültigen-CEGs.png "Validieren-eines-gültigen-CEGs") {width=500px}
+![](images/Validieren-eines-gültigen-CEGs.png "Validieren-eines-gültigen-CEGs") {width=500px}
 
 Specmate stellt die Knoten optisch unterschiedlich dar, jenachdem, welche Position sie im CEG-Modell einnehmen, wie in der folgenden Abbildung ersichtlich ist:
 
 
-![](Images/Knotentypen.png "Knotentypen")
+![](images/Knotentypen.png "Knotentypen")
 
 
 
@@ -376,7 +376,7 @@ Und für die Ausgabevariable *Rutschen*:
 
 Das dazugehörige CEG-Modell würde dann so aussehen:
 
-![](Images/RutschenErlaubt.png "Rutschen erlaubt")
+![](images/RutschenErlaubt.png "Rutschen erlaubt")
 
 Im Allgemeinen gilt:
 
@@ -404,7 +404,7 @@ Die Ausgabevariable *Rutschen* bleibt gleich.
 
 Es empfiehlt sich hier eine Zusatzvariable *Übergangszeit* einzuführen, die eintritt, wenn das Kind kleiner als 1.40m, aber nicht kleiner als 1.20m ist. Das zugehörige CEG-Modell sieht dann wie folgt aus:
 
-![](Images/Beispiel2Rutschen.PNG "Beispiel2Rutschen")
+![](images/Beispiel2Rutschen.PNG "Beispiel2Rutschen")
 
 
 ## Prozessdiagramm
@@ -420,7 +420,7 @@ Um zwei Elemente zu verbinden, müssen Sie das Werkzeug [*Verbindung*](#verbindu
 Die folgende Abbildung zeigt den Prozess eines Geldautomaten,
 der mit dem Prozessmodell-Editor modelliert wurde:
 
-![](Images/Geldautomat.png "Geldautomat")
+![](images/Geldautomat.png "Geldautomat")
 
 ### Start/Ende
 
@@ -486,13 +486,13 @@ Trifft eines oder mehrere dieser Szenarien für Ihr Prozessmodell zu, beheben Si
 
 Sie haben die Möglichkeit eine Testfall-Spezifikation manuell zu erstellen oder automatisch aus einem Modell zu generieren. Anhand des Symbols der Spezifikation im Projekt-Explorer können Sie sehen, ob sie automatisch oder manuell generiert wird.
 
-Automatisch generiert: ![](Images/Automatic.png "Automatic")
+Automatisch generiert: ![](images/Automatic.png "Automatic")
 
-Manuell erstellt: ![](Images/Manually.png "Manually")
+Manuell erstellt: ![](images/Manually.png "Manually")
 
 Nutzen Sie im Modell-Editor die Option "Testspezifikation generieren" auf der rechten Seite im Reiter "Links & Actions", um eine Testspezifikation aus einem Modell zu erzeugen. Alternativ finden Sie die Option "Testspezifikation generieren" auch in der Anforderungsübersicht in der Liste der Modelle hinter den Modellnamen. Achten Sie darauf, dass Sie vorher den *Validieren*-Button gedrückt haben, um eine Fehlermeldung zu verhindern.
 
-![](Images/Testcases.png "Testcases")
+![](images/Testcases.png "Testcases")
 --> BILD TESTCASES MUSS NOCH ENTSPRECHEND GEBAUT WERDEN!
 
 Der Name der Testfall-Spezifikation basiert auf dem Datum und der Uhrzeit, zu der die Spezifikation angelegt wurde. Sie haben die Möglichkeit, den Namen der Spezifikation zu ändern und eine Beschreibung hinzuzufügen.
@@ -509,7 +509,7 @@ Beispiel:
 Knoten 1: Währung = EUR
 Knoten 2: Währung = DOLLAR
 
-![](Images/Inkonsistent-Test.PNG "Inkonsistent-Test")
+![](images/Inkonsistent-Test.PNG "Inkonsistent-Test")
 
 Die Knoten, die sich in der Spalte *Eingabe* befinden, sind Variablen, die die Ursachen aus dem Modell darstellen. Das sind alle Knoten, die keine eingehenden Verbindungen haben.
 Unterhalb der Spalte *Ausgabe* finden Sie die Variablen, die die Wirkungen darstellen.Das sind alle Knoten, die keine ausgehenden Verbindungen haben. Sie können auch manuell weitere Ein- und Ausgabevariablen hinzufügen oder bestehende löschen.
@@ -532,7 +532,7 @@ Für die Erstellung der Spezifikation werden Regeln verwendet, um ein optimales 
 
 Aus jedem Testfall können Sie eine Testprozedur anlegen. Hier können Sie alle notwendigen Schritte für den jeweiligen Testfall definieren. Bei der Modellierung eines CEG muss die Testprozedur manuell hinzugefügt werden. Das Erzeugen einer Testfall-Spezifikation aus einem Prozessdiagramm führt zu automatisch erstellten Testprozeduren. Namen und Beschreibungen können nach ALM exportiert werden. Sie können einen weiteren Schritt hinzufügen, indem Sie die Schaltfläche *Testschritt anlegen* drücken. In jedem Schritt des Testverfahrens können Sie auf Parameter aus dem erstellten Modell verweisen. Die Parameter aus dem Modell können in der Parameterzuordnung auf einen bestimmten Wert eingestellt werden. Wenn die Erstellung einer Testprozedur abgeschlossen ist, können Sie sie mit der Schaltfläche *Testprozedur exportieren* auf der rechten Seite z.B. nach Jira XRay Cloud exportieren und sie dort weiter bearbeiten. Bevor Sie eine Testprozedur exportieren, ist es essentiell, dass Sie diese vorher speichern. Speichern Sie die Testprozedur nicht selbstständig, fragt Specmate vor dem Export, ob Sie die Testprozedur speichern möchten – stimmen Sie zu, können Sie den Export fortsetzen, stimmen Sie nicht zu, wird der Export abgebrochen. Sie können auch eine bereits erstellte Testprozedur öffnen und bearbeiten, indem Sie sie im [Projekt-Explorer](#bedienoberfläche) oder in der [Anforderungsübersicht](#traces) anklicken.
 
-![](Images/Test-procedure.png "Test-procedure")
+![](images/Test-procedure.png "Test-procedure")
 
 # Export von Testspezifikationen und -prozeduren
 
@@ -546,19 +546,19 @@ Testspezifikationen können in Specmate in drei Formaten exportiert werden:
 - Als Java-Testhüllen
 - Als JavaScript-Testhüllen
 
-![](Images/Testspezifikationen.png "testspezifikationen")
+![](images/Testspezifikationen.png "testspezifikationen")
 
 Sollten Sie sich für einen **Export als CSV** entscheiden, dann sieht die exportierte Testspezifikation folgendermaßen aus:
 
-![](Images/CSV.png "CSV")
+![](images/CSV.png "CSV")
 
 Sollten Sie sich für einen **Export als JAVA** entscheiden, dann sieht die exportierte Testspezifikation folgendermaßen aus:
 
-![](Images/JAVA.png "JAVA")
+![](images/JAVA.png "JAVA")
 
 Sollten Sie sich für einen **Export als JavaScript** entscheiden, dann sieht die exportierte Testspezifikation folgendermaßen aus:
 
-![](Images/JavaScript.png "JavaScript")
+![](images/JavaScript.png "JavaScript")
 
 Um eine Testspezifikation zu exportieren, navigieren Sie bitte zu der betreffenden Testspezifikation in Specmate (z.B. über die [Anforderungsübersicht](#traces)). Auf der rechten Seite im Abschnitt [Links & Actions](#links-actions) finden Sie den Unterabschnitt für den Export. Klicken Sie auf den Link für das gewünschte Export-Format und speichern Sie die angebotene Datei auf Ihrem Rechner.
 
@@ -575,7 +575,7 @@ oder einem der direkten Plattform-Unterordner zu finden.
 
 Die Bibliothek ist Ihr "Baukasten" für Modelle. Hier können Sie Modelle oder Teile von Modellen, welche Sie häufig verwenden, speichern. Durch [Copy and Paste](#copy-and-paste) können Sie diese Bausteine kopieren und in anderen Modellen einfügen.
 
-![](Images/BibliothekOrdnung.png "BibliothekOrdnung")
+![](images/BibliothekOrdnung.png "BibliothekOrdnung")
 
 Sie können beliebig viele Ordner, Unterordner, Unterunterordner usw. in der Bibliotheksansicht anlegen und auch wieder löschen. Klicken Sie hierzu auf die von der obigen Abbildung gezeigten Schaltflächen. Genau so können Sie CEGs, Prozessmodelle und Testspezifikationen hier
 

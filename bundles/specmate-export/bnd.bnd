@@ -21,7 +21,10 @@
 	org.apache.commons.collections4,\
 	org.eclipse.net4j.util,\
 	org.eclipse.equinox.common,\
-	org.mockito.mockito-core
+	net.bytebuddy.byte-buddy;version=1.10,\
+	net.bytebuddy.byte-buddy-agent;version=1.10,\
+	org.mockito.mockito-core;version=3.6,\
+	org.objenesis;version=3.1
 
 -privatepackage: \
 	com.specmate.export.internal.exporters,\

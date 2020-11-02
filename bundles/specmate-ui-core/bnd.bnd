@@ -1,10 +1,10 @@
 Bundle-Version: 0.0.0.${tstamp}
 Private-Package: com.specmate.ui.core
 -buildpath: \
-	org.eclipse.osgi,\
-	org.eclipse.osgi.services,\
-	javax.servlet-api,\
-	specmate-emfrest-api;version=latest
+	specmate-emfrest-api;version=latest,\
+	osgi.cmpn,\
+	osgi.core,\
+	org.eclipse.jetty.osgi-servlet-api
 Include-Resource: webcontent=webcontent
 -dsannotations:  \
 	*

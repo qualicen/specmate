@@ -25,11 +25,6 @@
 	org.eclipse.emf.common,\
 	org.eclipse.equinox.common,\
 	org.apache.commons.lang3;version=3.5,\
-	com.atlassian.fugue;version=2.7,\
-	jackson-core-asl;version=1.9,\
-	jackson-jaxrs;version=1.9,\
-	jackson-mapper-asl;version=1.9,\
-	jackson-xc;version=1.9,\
 	org.codehaus.jettison.jettison;version=1.1,\
 	joda-time;version=2.9,\
 	com.atlassian.sal.api;version=3.0,\

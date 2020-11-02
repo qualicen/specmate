@@ -1,7 +1,6 @@
 -runfw: org.eclipse.osgi;version='[3.13.300.v20190218-1622,3.13.300.v20190218-1622]'
 -runee: JavaSE-11
 -runrequires: \
-	osgi.identity;filter:='(osgi.identity=org.eclipse.equinox.log)',\
 	osgi.identity;filter:='(osgi.identity=jul.to.slf4j)',\
 	osgi.identity;filter:='(osgi.identity=log4j.over.slf4j)',\
 	osgi.identity;filter:='(osgi.identity=specmate-common)',\
@@ -27,14 +26,6 @@
 	org.eclipse.core.jobs;version='[3.6.1,3.6.2)',\
 	org.eclipse.core.runtime;version='[3.10.0,3.10.1)',\
 	org.eclipse.emf.ecore.change;version='[2.11.0,2.11.1)',\
-	org.eclipse.equinox.app;version='[1.3.200,1.3.201)',\
-	org.eclipse.equinox.cm;version='[1.1.0,1.1.1)',\
-	org.eclipse.equinox.common;version='[3.6.200,3.6.201)',\
-	org.eclipse.equinox.log;version='[1.2.300,1.2.301)',\
-	org.eclipse.equinox.metatype;version='[1.4.0,1.4.1)',\
-	org.eclipse.equinox.preferences;version='[3.5.200,3.5.201)',\
-	org.eclipse.equinox.registry;version='[3.5.400,3.5.401)',\
-	org.eclipse.osgi.services;version='[3.4.0,3.4.1)',\
 	org.slf4j.api;version='[1.7.2,1.7.3)',\
 	org.eclipse.emf.cdo;version='[4.5.0,4.5.1)',\
 	org.eclipse.emf.cdo.common;version='[4.5.0,4.5.1)',\
@@ -46,7 +37,6 @@
 	org.eclipse.net4j;version='[4.5.0,4.5.1)',\
 	org.eclipse.net4j.tcp;version='[4.1.400,4.1.401)',\
 	org.eclipse.net4j.util;version='[3.6.0,3.6.1)',\
-	org.apache.felix.scr;version='[2.0.8,2.0.9)',\
 	lpg.runtime.java;version='[2.0.17,2.0.18)',\
 	org.eclipse.emf.cdo.server.ocl;version='[4.2.100,4.2.101)',\
 	org.eclipse.ocl;version='[3.6.200,3.6.201)',\
@@ -57,11 +47,9 @@
 	org.eclipse.net4j.db.h2;version='[4.2.300,4.2.301)',\
 	org.eclipse.net4j.db.jdbc;version='[4.3.100,4.3.101)',\
 	org.eclipse.emf.cdo.server.db;version='[4.4.0,4.4.1)',\
-	com.google.guava;version='[21.0.0,21.0.1)',\
 	org.apache.commons.lang3;version='[3.5.0,3.5.1)',\
 	slf4j.api;version='[1.7.25,1.7.26)',\
 	org.eclipse.emf.cdo.ecore.retrofit;version='[4.2.300,4.2.301)',\
-	com.google.guava;version='[18.0.0,18.0.1)',\
 	specmate-cdo-server;version='[0.0.0,0.0.1)',\
 	specmate-common;version='[0.0.0,0.0.1)',\
 	specmate-config;version='[0.0.0,0.0.1)',\
@@ -74,7 +62,17 @@
 	specmate-migration;version='[0.0.0,0.0.1)',\
 	specmate-model-gen;version='[0.0.0,0.0.1)',\
 	specmate-model-support;version='[0.0.0,0.0.1)',\
-	specmate-persistency-api;version='[0.0.0,0.0.1)'
+	specmate-persistency-api;version='[0.0.0,0.0.1)',\
+	com.google.guava;version='[26.0.0,26.0.1)',\
+	org.apache.felix.scr;version='[2.1.16,2.1.17)',\
+	org.eclipse.equinox.app;version='[1.5.0,1.5.1)',\
+	org.eclipse.equinox.cm;version='[1.4.400,1.4.401)',\
+	org.eclipse.equinox.common;version='[3.13.0,3.13.1)',\
+	org.eclipse.equinox.metatype;version='[1.5.300,1.5.301)',\
+	org.eclipse.equinox.preferences;version='[3.8.0,3.8.1)',\
+	org.eclipse.equinox.registry;version='[3.9.0,3.9.1)',\
+	org.eclipse.osgi.services;version='[3.9.0,3.9.1)',\
+	org.eclipse.osgi.util;version='[3.5.300,3.5.301)'
 
 -runproperties: \
 	osgi.console=,\

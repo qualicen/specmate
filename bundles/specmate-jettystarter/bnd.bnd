@@ -1,12 +1,12 @@
 Bundle-Version: 0.0.0.${tstamp}
 -buildpath: \
-	org.eclipse.osgi,\
-	org.eclipse.equinox.http.jetty,\
 	osgi.cmpn,\
-	org.eclipse.equinox.http.servlet,\
 	specmate-common;version=latest,\
-	javax.servlet-api,\
-	org.eclipse.jetty.servlets
+	org.eclipse.jetty.servlets,\
+	org.eclipse.equinox.http.jetty;version=3.7,\
+	org.eclipse.equinox.http.servlet;version=1.6,\
+	org.eclipse.jetty.osgi-servlet-api,\
+	osgi.core
 -includeresource: jettyhome=jettyhome
 
 Private-Package: com.specmate.jettystarter.internal

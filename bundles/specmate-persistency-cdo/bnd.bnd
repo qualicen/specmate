@@ -6,16 +6,13 @@ Bundle-Version: 0.0.0.${tstamp}
 	org.eclipse.emf.cdo,\
 	org.eclipse.net4j,\
 	org.eclipse.net4j.util,\
-	org.eclipse.net4j.jvm,\
 	org.eclipse.net4j.tcp,\
 	org.eclipse.osgi.services,\
 	org.eclipse.emf.common,\
 	org.eclipse.emf.ecore,\
-	org.eclipse.emf.edit,\
 	org.eclipse.emf.cdo.server.net4j,\
 	org.eclipse.emf.cdo.common,\
 	org.eclipse.equinox.common,\
-	org.eclipse.osgi,\
 	specmate-persistency-api;version=latest,\
 	specmate-model-gen;version=latest,\
 	specmate-model-support;version=latest,\
@@ -28,7 +25,8 @@ Bundle-Version: 0.0.0.${tstamp}
 	specmate-dbprovider-api;version=latest,\
 	specmate-metrics;version=latest,\
 	org.eclipse.core.runtime,\
-	specmate-rest;version=latest
+	specmate-rest;version=latest,\
+	osgi.core
 
 
 

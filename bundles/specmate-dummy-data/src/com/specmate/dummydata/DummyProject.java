@@ -53,6 +53,11 @@ public class DummyProject implements IProject {
 			public boolean authenticate(String username, String password) throws SpecmateException {
 				return true;
 			}
+
+			@Override
+			public Requirement getRequirementById(String id) throws SpecmateException {
+				return null;
+			}
 		};
 	}
 

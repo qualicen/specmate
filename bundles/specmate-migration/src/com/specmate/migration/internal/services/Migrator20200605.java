@@ -10,7 +10,6 @@ import com.specmate.dbprovider.api.IDBProvider;
 import com.specmate.dbprovider.api.migration.IAttributeToSQLMapper;
 import com.specmate.dbprovider.api.migration.IObjectToSQLMapper;
 import com.specmate.migration.api.IMigrator;
-import com.specmate.model.base.BasePackage;
 
 @Component(property = "sourceVersion=20200605", service = IMigrator.class)
 public class Migrator20200605 implements IMigrator {
@@ -30,9 +29,6 @@ public class Migrator20200605 implements IMigrator {
 	public void migrate(Connection connection) throws SpecmateException {
 		addCEGLinkedNode();
 		addCEGNodeAttributes();
-		// 1. Add LINKSFROM to CEGNODE
-		// CEGNODE_LINKSFROM_LIST
-		// CEGLINKEDNODE
 	}
 
 	public void addCEGLinkedNode() throws SpecmateException {
@@ -60,7 +56,7 @@ public class Migrator20200605 implements IMigrator {
 		aMapper.migrateNewDoubleAttribute(objectName, "height", 0.0);
 		aMapper.migrateNewObjectReference(objectName, "outgoingConnections");
 		aMapper.migrateNewObjectReference(objectName, "incomingConnections");
-		aMapper.migrateNewObjectReference(objectName, "linkTo");
+		aMapper.migrateNewObjectReferenceOneToN(objectName, "linkTo");
 	}
 
 	public void addCEGNodeAttributes() throws SpecmateException {

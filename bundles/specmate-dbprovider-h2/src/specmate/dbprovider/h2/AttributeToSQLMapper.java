@@ -105,9 +105,10 @@ public class AttributeToSQLMapper extends SQLMapper implements IAttributeToSQLMa
 
 	@Override
 	public void migrateNewObjectReferenceOneToN(String objectName, String attributeName) throws SpecmateException {
-		String failmsg = "Migration: Could not add column " + attributeName + " to table " + objectName + ".";
+		String failmsg = "Migration: Could not add column " + attributeName + " to table " + objectName
+				+ " for '1 to N' reference.";
 		List<String> queries = new ArrayList<>();
-		queries.add("ALTER TABLE " + objectName + " ADD COLUMN " + attributeName + " INTEGER");
+		queries.add("ALTER TABLE " + objectName + " ADD COLUMN " + attributeName + " BIGINT");
 
 		SQLUtil.executeStatements(queries, connection, failmsg);
 	}

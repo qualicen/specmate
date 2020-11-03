@@ -129,7 +129,7 @@ public class TransactionImpl extends ViewImpl implements ITransaction {
 			try {
 				commit(result);
 			} catch (SpecmateInternalException e) {
-				logService.log(LogService.LOG_WARNING, "Exception when comitting:" + e.getMessage(),e);
+				logService.log(LogService.LOG_WARNING, "Exception when comitting:" + e.getMessage(), e);
 				try {
 					Thread.sleep(attempts * 50);
 				} catch (InterruptedException ie) {

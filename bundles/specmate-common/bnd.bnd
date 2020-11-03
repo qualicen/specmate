@@ -10,13 +10,12 @@ Export-Package: \
 	org.eclipse.emf.ecore,\
 	org.eclipse.emf.edit,\
 	org.eclipse.emf.cdo,\
-	org.eclipse.emf.cdo.ui,\
 	specmate-model-gen;version=latest,\
 	org.eclipse.emf.cdo.common,\
 	org.eclipse.net4j.util,\
 	org.apache.commons.lang3,\
 	org.json;version=latest,\
 	specmate-config-api;version=latest,\
-	com.google.guava;version=21.0,\
-	org.apache.servicemix.bundles.junit;version=4.12
+	org.apache.servicemix.bundles.junit;version=4.12,\
+	com.google.guava;version=26.0
 Private-Package: com.specmate.common.cache.internal

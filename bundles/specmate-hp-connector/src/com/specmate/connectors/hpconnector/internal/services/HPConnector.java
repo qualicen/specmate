@@ -176,4 +176,8 @@ public class HPConnector extends DetailsService implements IRequirementsSource, 
 		return this.hpConnection.authenticateRead(username, password, this.hpProjectName);
 	}
 
+	@Override
+	public Requirement getRequirementById(String id) throws SpecmateException {
+		return null;
+	}
 }

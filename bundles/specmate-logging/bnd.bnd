@@ -1,11 +1,10 @@
 Bundle-Version: 0.0.0.${tstamp}
 -buildpath: \
-	org.eclipse.osgi,\
 	org.eclipse.osgi.services,\
 	specmate-common;version=latest,\
 	specmate-config-api;version=latest,\
-	org.eclipse.equinox.log.stream,\
-	osgi.cmpn
+	osgi.cmpn,\
+	osgi.core
 -dsannotations:  \
 	*
 -includeresource: logging.properties

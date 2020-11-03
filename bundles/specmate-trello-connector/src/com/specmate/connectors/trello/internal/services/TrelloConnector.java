@@ -147,4 +147,8 @@ public class TrelloConnector implements IRequirementsSource {
 		return true;
 	}
 
+	@Override
+	public Requirement getRequirementById(String id) throws SpecmateException {
+		return null;
+	}
 }

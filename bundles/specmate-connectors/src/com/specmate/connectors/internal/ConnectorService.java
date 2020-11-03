@@ -34,7 +34,7 @@ public class ConnectorService {
 	private LogService logService;
 	private IPersistencyService persistencyService;
 	private IModelSearchService modelSearchService;
-	private ITransaction transaction;
+	private ITransaction transaction;	
 
 	@Activate
 	public void activate(Map<String, Object> properties) throws SpecmateException {
@@ -76,7 +76,6 @@ public class ConnectorService {
 				}
 			}
 		}, "connector-service-initializer").start();
-
 	}
 
 	private void validateConfig(Map<String, Object> properties) throws SpecmateException {

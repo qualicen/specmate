@@ -1,5 +1,6 @@
 
 -buildpath: \
+	com.google.guava,\
 	specmate-common;version=latest,\
 	specmate-model-gen;version=latest,\
 	org.eclipse.osgi.services,\

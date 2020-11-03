@@ -445,4 +445,14 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 		return projectName;
 	}
 
+	@Override
+	public Requirement getRequirementById(String id) throws SpecmateException {
+		try {
+			Issue issue = getStory(id);
+			Requirement requirement = createRequirement(issue);
+			return requirement;
+		} catch (Exception e) {
+			return null;
+		}
+	}
 }

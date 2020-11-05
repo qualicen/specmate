@@ -70,7 +70,7 @@ export class LanguageChooser implements OnInit {
     }
 
     private storeInCookie(language: string): void {
-        this.cookie.put(LanguageChooser.LANGUAGE_KEY, language);
+        this.cookie.put(LanguageChooser.LANGUAGE_KEY, language,  { sameSite: 'lax' } );
     }
 
     private setLangAttr(language: string): void {

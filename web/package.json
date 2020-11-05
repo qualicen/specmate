@@ -13,7 +13,8 @@
     "license-check": "license-checker --summary --production",
     "update-check": "ncu",
     "check": "npm run lint && npm run license-check && npm run update-check",
-    "update-dependencies": "ncu -u && npm run init"
+    "update-dependencies": "ncu -u && npm run init",
+    "postinstall": "ngcc"
   },
   "keywords": [],
   "author": "Qualicen GmbH",
@@ -45,7 +46,7 @@
     "jquery": "3.5.0",
     "mxgraph": "github:jgraph/mxgraph#12621211eed3495188c95bbc4b3020a1db451df5",
     "ng2-dragula": "2.1.1",
-    "ngx-cookie": "4.1.2",
+    "ngx-cookie": "5.0.0",
     "ngx-translate-core": "11.0.3",
     "popper.js": "1.16.1",
     "reflect-metadata": "0.1.13",

@@ -38,7 +38,7 @@ export class AuthenticationService {
     }
 
     public set session(session: UserSession) {
-        this.cookie.putObject(this.sessionCookieName, session);
+        this.cookie.putObject(this.sessionCookieName, session, { sameSite: 'lax' } );
     }
 
     public get session(): UserSession {

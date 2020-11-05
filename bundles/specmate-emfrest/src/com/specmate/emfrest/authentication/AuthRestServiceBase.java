@@ -36,8 +36,66 @@ public abstract class AuthRestServiceBase extends RestServiceBase implements IRe
 
 		ResponseBuilder responseBuilder = Response.fromResponse(alteredResult.getResponse());
 
-		Arrays.stream(cookies).filter(Objects::nonNull).forEach(cookie -> responseBuilder.cookie(cookie));
+		Arrays.stream(cookies).filter(Objects::nonNull).forEach(cookie -> setCookieWithSameSite(responseBuilder, cookie, "Lax"));
 		return responseBuilder.build();
+	}
+	
+	/**
+	 * Adds a cookie header to the response including sameSite attribute.
+	 */
+	private static void setCookieWithSameSite(ResponseBuilder responseBuilder, NewCookie cookie, String sameSite) {
+		
+		StringBuilder cookieString = new StringBuilder();
+		
+		cookieString.append(cookie.getName());
+		cookieString.append("=");
+		cookieString.append(cookie.getValue());
+		
+		if (cookie.getExpiry() != null) {
+			cookieString.append(";Expires=");
+			cookieString.append(cookie.getExpiry());
+		}
+		
+		if (cookie.getMaxAge() > 0) {
+			cookieString.append(";Max-Age=");
+			cookieString.append(cookie.getMaxAge());
+		}
+		
+		if (cookie.getDomain() != null) {
+			cookieString.append(";Domain=");
+			cookieString.append(cookie.getDomain());
+		}
+		
+		if (cookie.getPath() != null) {
+			cookieString.append(";Path=");
+			cookieString.append(cookie.getPath());
+		}
+		
+		if (cookie.getComment() != null) {
+			cookieString.append(";Comment=\"");
+			cookieString.append(cookie.getComment().replace("\"", "\\\""));
+			cookieString.append("\"");
+		}
+		
+		if (cookie.getVersion() > 0) {
+			cookieString.append(";Version=");
+			cookieString.append(cookie.getVersion());
+		}
+		
+		if (cookie.isSecure()) {
+			cookieString.append(";Secure");
+		}	
+		
+		if (cookie.isHttpOnly()) {
+			cookieString.append(";HttpOnly");
+		}	
+		
+		if (sameSite != null ) {
+			cookieString.append(";SameSite=");
+			cookieString.append(sameSite);
+		}	
+		
+		responseBuilder.header("Set-Cookie", cookieString.toString());
 	}
 
 	/**

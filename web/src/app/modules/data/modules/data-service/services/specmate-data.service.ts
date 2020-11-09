@@ -465,10 +465,11 @@ export class SpecmateDataService {
     }
 
     public async readAllParentsServer(url: string) {
+        await (new Promise( resolve => setTimeout(resolve, 500) ));
         let parents = Url.allParents(url);
         for (let i = 0; i < parents.length; i++) {
             let parent = parents[i];
-            await this.readElement(parent, false);
+            console.log(await this.readElement(parent, false));
         }
     }
 

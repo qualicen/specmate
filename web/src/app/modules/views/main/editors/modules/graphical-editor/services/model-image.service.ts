@@ -8,17 +8,20 @@ import { ModelImageFactory } from 'src/app/factory/model-image-factory';
 import { Id } from 'src/app/util/id';
 import * as saveAsPng from 'save-svg-as-png';
 import { Injectable } from '@angular/core';
+import { Monitorable } from 'src/app/modules/notification/modules/operation-monitor/base/monitorable';
 
 @Injectable()
-export class ModelImageService {
+export class ModelImageService extends Monitorable {
     static MAX_IMAGE_SIZE = 4000;
 
     constructor(private dataService: SpecmateDataService) {
+        super();
     }
 
     // Create a png out of the dom, which draws the graph
     public async createModelImage(element: IContainer) {
         if (Type.is(element, CEGModel) || Type.is(element, Process)) {
+            this.start();
             let model = element as CEGModel | Process;
             let svg: SVGSVGElement = document.getElementById('mxGraphContainer').getElementsByTagName('svg')[0];
             let minWidth = svg.style.minWidth;
@@ -44,9 +47,10 @@ export class ModelImageService {
             if (modelImage === null || modelImage === undefined) {
                 modelImage = await new ModelImageFactory(this.dataService).create(model, false);
             }
-            this.dataService.readElementComplete(modelImage);
+            this.dataService.readElementComplete(modelImage, model.url);
             modelImage.imageData = pngAsBase64;
             await this.dataService.updateElement(modelImage, true, Id.uuid);
+            this.end();
         }
     }
 

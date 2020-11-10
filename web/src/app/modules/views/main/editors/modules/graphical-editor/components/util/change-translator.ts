@@ -73,12 +73,12 @@ export class ChangeTranslator {
 
 
     public async translate(change: (mxgraph.mxTerminalChange | mxgraph.mxChildChange | mxgraph.mxStyleChange),
-        graph: mxgraph.mxGraph): Promise<void> {
+        graph: mxgraph.mxGraph, contents?: IContainer[]): Promise<void> {
         if (this.preventDataUpdates) {
             return;
         }
+        this.contents = contents ?? await this.dataService.readContents(this.model.url, true);
 
-        this.contents = await this.dataService.readContents(this.model.url, true);
         if (change['cell'] === undefined && change['child'] !== undefined) {
             const childChange = change as mxgraph.mxChildChange;
             if (childChange.parent !== undefined && childChange.parent !== null) {

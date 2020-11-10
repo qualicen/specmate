@@ -155,20 +155,24 @@ export class SpecmateDataService extends Monitorable {
         return element;
     }
 
-    public updateElement(element: IContainer, virtual: boolean, compoundId: string): Promise<void> {
+    public async updateElement(element: IContainer, virtual: boolean, compoundId: string): Promise<void> {
+        this.start('updateElement-' + element.url);
         this.elementChanged.emit(element.url);
         if (virtual) {
             return Promise.resolve(this.updateElementVirtual(element, compoundId));
         }
-        return this.updateElementServer(element);
+        await this.updateElementServer(element);
+        this.end('updateElement-' + element.url);
     }
 
-    public deleteElement(url: string, virtual: boolean, compoundId: string): Promise<void> {
+    public async deleteElement(url: string, virtual: boolean, compoundId: string): Promise<void> {
+        this.start('deleteElement-' + url);
         this.elementChanged.emit(url);
         if (virtual || this.scheduler.isVirtualElement(url)) {
             return Promise.resolve(this.deleteElementVirtual(url, compoundId));
         }
-        return this.deleteElementServer(url);
+        await this.deleteElementServer(url);
+        this.end('deleteElement-' + url);
     }
 
     public async clearModel(nodes: IContainer[], connections: IContainer[], compoundId = Id.uuid): Promise<void> {

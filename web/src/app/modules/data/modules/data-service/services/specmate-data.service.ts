@@ -159,9 +159,10 @@ export class SpecmateDataService extends Monitorable {
         this.start('updateElement-' + element.url);
         this.elementChanged.emit(element.url);
         if (virtual) {
-            return Promise.resolve(this.updateElementVirtual(element, compoundId));
+            this.updateElementVirtual(element, compoundId);
+        } else {
+            await this.updateElementServer(element);
         }
-        await this.updateElementServer(element);
         this.end('updateElement-' + element.url);
     }
 
@@ -169,9 +170,10 @@ export class SpecmateDataService extends Monitorable {
         this.start('deleteElement-' + url);
         this.elementChanged.emit(url);
         if (virtual || this.scheduler.isVirtualElement(url)) {
-            return Promise.resolve(this.deleteElementVirtual(url, compoundId));
+            this.deleteElementVirtual(url, compoundId);
+        } else {
+            await this.deleteElementServer(url);
         }
-        await this.deleteElementServer(url);
         this.end('deleteElement-' + url);
     }
 

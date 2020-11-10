@@ -160,7 +160,7 @@ public class HPConnector extends DetailsService implements IRequirementsSource, 
 		}
 
 		Requirement retrievedRequirement = this.hpConnection.getRequirementsDetails(localRequirement.getExtId());
-		SpecmateEcoreUtil.copyAttributeValues(retrievedRequirement, localRequirement);
+		SpecmateEcoreUtil.copyAttributeValues(retrievedRequirement, localRequirement, false);
 
 		return new RestResult<>(Response.Status.OK, localRequirement);
 	}

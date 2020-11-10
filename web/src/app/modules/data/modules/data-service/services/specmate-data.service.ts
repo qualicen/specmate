@@ -456,9 +456,6 @@ export class SpecmateDataService {
 
     public async recycleElement(url: string): Promise<void> {
         await this.performOperations(url, 'recycle');
-        await this.readElement(url, false);
-        debugger;
-        await this.readAllParentsServer(url);
         await this.readAllParentsServer(url);
     }
 
@@ -468,13 +465,10 @@ export class SpecmateDataService {
     }
 
     public async readAllParentsServer(url: string) {
-        // await (new Promise( resolve => setTimeout(resolve, 500) ));
         let parents = Url.allParents(url);
         for (let i = 0; i < parents.length; i++) {
             let parent = parents[i];
-            debugger;
-            console.log(JSON.parse(JSON.stringify(await this.readElement(parent, false))));
-            console.log(JSON.parse(JSON.stringify(await this.readContents(parent, false))));
+            await this.readElement(parent, false);
         }
     }
 

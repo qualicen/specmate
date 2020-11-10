@@ -431,7 +431,7 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 		}
 
 		Requirement retrievedRequirement = createRequirement(issue);
-		SpecmateEcoreUtil.copyAttributeValues(retrievedRequirement, localRequirement);
+		SpecmateEcoreUtil.copyAttributeValues(retrievedRequirement, localRequirement, false);
 
 		return new RestResult<>(Response.Status.OK, localRequirement);
 	}

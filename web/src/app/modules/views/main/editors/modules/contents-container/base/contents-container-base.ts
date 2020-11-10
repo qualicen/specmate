@@ -67,9 +67,7 @@ export abstract class ContentContainerBase<T extends IContainer> implements OnIn
         message: string = this.translate.instant('doYouReallyWantToDelete', { name: element.name })): Promise<void> {
         try {
             await this.modal.openOkCancel('ConfirmationRequired', message);
-            // debugger;
             await this.dataService.recycleElement(element.url);
-            // debugger;
             await this.readContents();
         } catch (e) { }
     }

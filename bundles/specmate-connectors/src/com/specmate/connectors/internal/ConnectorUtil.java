@@ -107,7 +107,7 @@ public class ConnectorUtil {
 							transaction.doAndCommit(new IChange<Object>() {
 								@Override
 								public Object doChange() throws SpecmateException {
-									SpecmateEcoreUtil.copyAttributeValues(requirement, localRequirementsMap.get(id));
+									SpecmateEcoreUtil.copyAttributeValues(requirement, localRequirementsMap.get(id), false);
 									return null;
 								}
 							});
@@ -173,7 +173,7 @@ public class ConnectorUtil {
 			if (localRequirement != null) {
 				// Requirement exists
 				// --> update attributes
-				SpecmateEcoreUtil.copyAttributeValues(requirementToAdd, localRequirement);
+				SpecmateEcoreUtil.copyAttributeValues(requirementToAdd, localRequirement, false);
 				// --> if requirement has moved, move to new folder
 				foundContainer.getContents().add(localRequirement);
 				continue;
@@ -219,7 +219,7 @@ public class ConnectorUtil {
 			if (foundContainer == null) {
 				logService.log(LogService.LOG_DEBUG, "Creating new folder " + reqContainer.getName());
 				foundContainer = BaseFactory.eINSTANCE.createFolder();
-				SpecmateEcoreUtil.copyAttributeValues(reqContainer, foundContainer);
+				SpecmateEcoreUtil.copyAttributeValues(reqContainer, foundContainer, true);
 				boolean valid = ensureValid(foundContainer);
 				if (!valid) {
 					logService.log(LogService.LOG_WARNING, "Found invalid folder with id " + foundContainer.getId());

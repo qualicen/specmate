@@ -42,11 +42,14 @@ import com.specmate.model.testspecification.TestProcedure;
 import com.specmate.model.testspecification.TestStep;
 
 public class SpecmateEcoreUtil {
+	private static final String INTERNALATTRIBUTEANNOTATIONURL = "http://specmate.com/internalAttribute";
 
-	public static void copyAttributeValues(EObject source, EObject target) {
+	public static void copyAttributeValues(EObject source, EObject target, boolean includeInternalAttributes) {
 		AssertUtil.preTrue(target.getClass().isAssignableFrom(source.getClass()));
 		for (EAttribute attribute : target.eClass().getEAllAttributes()) {
-			target.eSet(attribute, source.eGet(attribute));
+			if (attribute.getEAnnotation(INTERNALATTRIBUTEANNOTATIONURL) == null || includeInternalAttributes) {
+				target.eSet(attribute, source.eGet(attribute));
+			}
 		}
 	}
 

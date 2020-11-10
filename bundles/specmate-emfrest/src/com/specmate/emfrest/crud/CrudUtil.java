@@ -56,7 +56,7 @@ public class CrudUtil {
 		}
 		EObject theTarget = (EObject) target;
 		EObject theObj = update;
-		SpecmateEcoreUtil.copyAttributeValues(theObj, theTarget);
+		SpecmateEcoreUtil.copyAttributeValues(theObj, theTarget, true);
 		SpecmateEcoreUtil.copyReferences(theObj, theTarget);
 		SpecmateEcoreUtil.unsetAllReferences(theObj);
 		return new RestResult<>(Response.Status.OK, target, userName);
@@ -76,23 +76,14 @@ public class CrudUtil {
 					theChild.setHasRecycledChildren(true);
 				}
 			}
+			
 			EObject parent = SpecmateEcoreUtil.getParent(theTarget);
-
 			while (parent != null && !SpecmateEcoreUtil.isProject(parent)) {
-				// System.out.println(((IContentElement)parent).getName());
 				if (parent instanceof IRecycled) {
-					// System.out.println(((IContentElement)parent).getName());
 					((IRecycled) parent).setHasRecycledChildren(true);
-					// System.out.println(((IContentElement)parent).isHasRecycledChildren());
 				}
 				parent = SpecmateEcoreUtil.getParent(parent);
-				// System.out.println(((IContentElement)parent).getName());
-
 			}
-			// System.out.println(((IContentElement)
-			// SpecmateEcoreUtil.getParent(theTarget)).getName());
-			// System.out.println(((IRecycled)
-			// SpecmateEcoreUtil.getParent(theTarget)).isHasRecycledChildren());
 			return new RestResult<>(Response.Status.OK, theTarget, userName);
 		}
 		return new RestResult<>(Response.Status.UNSUPPORTED_MEDIA_TYPE, target, userName);

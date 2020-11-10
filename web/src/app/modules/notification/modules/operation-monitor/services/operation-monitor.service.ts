@@ -12,10 +12,7 @@ export class OperationMonitorService {
 
     public stateChanged = new EventEmitter<boolean>();
 
-    /**
-     * Reset to private
-     */
-    public activeOperations: Map<Monitorable, string[]> = new Map<Monitorable, string[]>();
+    private activeOperations: Map<Monitorable, string[]> = new Map<Monitorable, string[]>();
 
     constructor(dataService: SpecmateDataService, validationService: ValidationService, modelIageService: ModelImageService) {
         this.subjects.push(dataService);

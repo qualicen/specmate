@@ -14,7 +14,6 @@ export class ValidateButton {
 
   @Input()
   public textEnabled = true;
-  private commitCounter = 0;
 
   constructor(
     private validationService: ValidationService,
@@ -23,7 +22,6 @@ export class ValidateButton {
   }
 
   public validate(): Promise<void> {
-    this.commitCounter = this.dataService.countCommits;
     return this.validationService.validateCurrent();
   }
 

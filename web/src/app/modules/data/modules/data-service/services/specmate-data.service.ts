@@ -35,6 +35,15 @@ import { ServiceInterface } from './service-interface';
 @Injectable()
 export class SpecmateDataService extends Monitorable {
 
+    public static OP_READ_ELEMENT = 'readElement';
+    public static OP_READ_CONTENTS = 'readContents';
+    public static OP_SEARCH = 'search';
+    public static OP_UPDATE = 'update';
+    public static OP_DELETE = 'delete';
+    public static OP_COMMIT = 'commit';
+    public static OP_PERFORM_OPERATION = 'performOperation';
+    public static OP_PERFORM_QUERY = 'performQuery';
+
     public committed = new EventEmitter<void>();
     public elementChanged = new EventEmitter<string>(true);
     private cache: DataCache = new DataCache();
@@ -75,7 +84,7 @@ export class SpecmateDataService extends Monitorable {
     }
 
     public readContents(url: string, virtual?: boolean): Promise<IContainer[]> {
-        this.start('readContents-' + url);
+        this.start(SpecmateDataService.OP_READ_CONTENTS + '-' + url);
         let getFromCache = this.cache.isCachedContents(url);
         if (this.scheduler.isVirtualElement(url)) {
             getFromCache = true;
@@ -116,7 +125,7 @@ export class SpecmateDataService extends Monitorable {
     }
 
     private readContentsComplete(contents: IContainer[], url: string): IContainer[] {
-        this.end('readContents-' + url);
+        this.end(SpecmateDataService.OP_READ_CONTENTS + '-' + url);
         return contents;
     }
 
@@ -125,7 +134,7 @@ export class SpecmateDataService extends Monitorable {
     }
 
     public async readElement(url: string, virtual?: boolean): Promise<IContainer> {
-        this.start('readElement-' + url);
+        this.start(SpecmateDataService.OP_READ_ELEMENT + '-' + url);
         let readElementTask: Promise<IContainer> = undefined;
         if (virtual === undefined && (this.scheduler.isVirtualElement(url) || this.cache.isCachedElement(url)) || virtual) {
             let element: IContainer = this.readElementVirtual(url);
@@ -150,31 +159,31 @@ export class SpecmateDataService extends Monitorable {
     }
 
     public readElementComplete(element: IContainer, url: string): IContainer {
-        this.end('readElement-' + url);
+        this.end(SpecmateDataService.OP_READ_ELEMENT + '-' + url);
         this.scheduler.initElement(element);
         return element;
     }
 
     public async updateElement(element: IContainer, virtual: boolean, compoundId: string): Promise<void> {
-        this.start('updateElement-' + element.url);
+        this.start(SpecmateDataService.OP_UPDATE + '-' + element.url);
         this.elementChanged.emit(element.url);
         if (virtual) {
             this.updateElementVirtual(element, compoundId);
         } else {
             await this.updateElementServer(element);
         }
-        this.end('updateElement-' + element.url);
+        this.end(SpecmateDataService.OP_UPDATE + '-' + element.url);
     }
 
     public async deleteElement(url: string, virtual: boolean, compoundId: string): Promise<void> {
-        this.start('deleteElement-' + url);
+        this.start(SpecmateDataService.OP_DELETE + '-' + url);
         this.elementChanged.emit(url);
         if (virtual || this.scheduler.isVirtualElement(url)) {
             this.deleteElementVirtual(url, compoundId);
         } else {
             await this.deleteElementServer(url);
         }
-        this.end('deleteElement-' + url);
+        this.end(SpecmateDataService.OP_DELETE + '-' + url);
     }
 
     public async clearModel(nodes: IContainer[], connections: IContainer[], compoundId = Id.uuid): Promise<void> {
@@ -216,12 +225,12 @@ export class SpecmateDataService extends Monitorable {
 
     public async commit(taskName: string): Promise<void> {
         try {
-            this.start('commit');
+            this.start(SpecmateDataService.OP_COMMIT);
             const batchOperation = this.scheduler.toBatchOperation();
             await this.serviceInterface.performBatchOperation(batchOperation, this.auth.token);
             this.scheduler.resolveBatchOperation(batchOperation);
             this.scheduler.clearCommits();
-            this.end('commit');
+            this.end(SpecmateDataService.OP_COMMIT);
             this.committed.emit();
         } catch (error) {
             this.simpleModal.openOk(this.translate.instant('saveError.title'), this.translate.instant('saveError.retry'));
@@ -355,7 +364,7 @@ export class SpecmateDataService extends Monitorable {
         if (!this.auth.isAuthenticatedForUrl(url)) {
             return Promise.resolve(false);
         }
-        this.start('performOperation-' + url);
+        this.start(SpecmateDataService.OP_PERFORM_OPERATION + '-' + url);
         let performFunction;
         if (httpGET) {
             performFunction = this.serviceInterface.performOperationGET;
@@ -364,11 +373,11 @@ export class SpecmateDataService extends Monitorable {
         }
         return performFunction.apply(this.serviceInterface, [url, operation, payload, this.auth.token])
             .then((result: any) => {
-                this.end('performOperation-' + url);
+                this.end(SpecmateDataService.OP_PERFORM_OPERATION + '-' + url);
                 return result;
             })
             .catch((error: any) => {
-                this.end('performOperation-' + url);
+                this.end(SpecmateDataService.OP_PERFORM_OPERATION + '-' + url);
                 this.handleError(this.translate.instant('operationCouldNotBePerformed') +
                     ' ' + this.translate.instant('operation') + ': ' + operation + ' ' +
                     this.translate.instant('payload') + ': ' + JSON.stringify(payload), url, error);
@@ -381,16 +390,16 @@ export class SpecmateDataService extends Monitorable {
         if (!this.auth.isAuthenticatedForUrl(url)) {
             return Promise.resolve();
         }
-        this.start('performQuery-' + url + '-' + operation);
+        this.start(SpecmateDataService.OP_PERFORM_QUERY + '-' + url + '-' + operation);
         this.logStart(this.translate.instant('log.queryOperation') + ': ' + operation, url);
         return this.serviceInterface.performQuery(url, operation, parameters, this.auth.token)
             .then((result: any) => {
-                this.end('performQuery-' + url + '-' + operation);
+                this.end(SpecmateDataService.OP_PERFORM_QUERY + '-' + url + '-' + operation);
                 this.logFinished(this.translate.instant('log.queryOperation') + ': ' + operation, url);
                 return result;
             })
             .catch((error) => {
-                this.end('performQuery-' + url + '-' + operation);
+                this.end(SpecmateDataService.OP_PERFORM_QUERY + '-' + url + '-' + operation);
                 this.handleError(this.translate.instant('queryCouldNotBePerformed') + ' ' + this.translate.instant('operation') + ': ' +
                     operation + ' ' + this.translate.instant('parameters') + ': ' + JSON.stringify(parameters), url, error);
                 return Promise.reject();
@@ -401,16 +410,16 @@ export class SpecmateDataService extends Monitorable {
         if (!this.auth.isAuthenticated) {
             return Promise.resolve([]);
         }
-        this.start('search');
+        this.start(SpecmateDataService.OP_SEARCH);
         this.logStart(this.translate.instant('log.search') + ': ' + query, '');
         return this.serviceInterface.search(query, this.auth.token, filter)
             .then((result: IContainer[]) => {
-                this.end('search');
+                this.end(SpecmateDataService.OP_SEARCH);
                 this.logFinished(this.translate.instant('log.search') + ': ' + query, '');
                 return result;
             })
             .catch((error) => {
-                this.end('search');
+                this.end(SpecmateDataService.OP_SEARCH);
                 return this.handleError(this.translate.instant('queryCouldNotBePerformed') + ' ' +
                     this.translate.instant('operation') + ' : search ' + query, '', error);
             });

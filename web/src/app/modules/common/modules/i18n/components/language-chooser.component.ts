@@ -14,7 +14,7 @@ export class LanguageChooser implements OnInit {
 
     private static LANGUAGE_KEY = 'specmate-display-language';
 
-    private selectionIndex = 0;
+    protected selectionIndex = 0;
 
     @ViewChild('dropdownRef', { static: false })
     set dropdownRef(ref: NgbDropdown) {
@@ -70,7 +70,7 @@ export class LanguageChooser implements OnInit {
     }
 
     private storeInCookie(language: string): void {
-        this.cookie.put(LanguageChooser.LANGUAGE_KEY, language,  { sameSite: 'lax' } );
+        this.cookie.put(LanguageChooser.LANGUAGE_KEY, language, { sameSite: 'lax' });
     }
 
     private setLangAttr(language: string): void {

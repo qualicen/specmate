@@ -32,10 +32,10 @@ export class TracingLink implements OnInit {
 
     ngOnInit() {
         this.dataService.readElement(this._traceProxy.url, true).then(trace => {
-        this.trace = trace;
-        if (Type.is(this.trace, Requirement)) {
-          this.extId = (trace as Requirement).extId;
-        }
-      });
+            this.trace = trace;
+            if (Type.is(this.trace, Requirement)) {
+                this.extId = (trace as Requirement).extId;
+            }
+        });
     }
 }

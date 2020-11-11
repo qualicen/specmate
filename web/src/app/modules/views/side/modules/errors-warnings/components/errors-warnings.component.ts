@@ -1,19 +1,13 @@
 import { Component } from '@angular/core';
 import { IContainer } from '../../../../../../model/IContainer';
-import { Arrays } from '../../../../../../util/arrays';
-import { ValidationResult } from '../../../../../../validation/validation-result';
 import { ValidationService } from '../../../../../forms/modules/validation/services/validation.service';
 import { AdditionalInformationService } from '../../links-actions/services/additional-information.service';
-import { TranslateService } from '@ngx-translate/core';
 import { Type } from '../../../../../../util/type';
 import { CEGConnection } from '../../../../../../model/CEGConnection';
 import { ProcessConnection } from '../../../../../../model/ProcessConnection';
 import { CEGNode } from '../../../../../../model/CEGNode';
 import { ProcessStart } from '../../../../../../model/ProcessStart';
 import { ProcessEnd } from '../../../../../../model/ProcessEnd';
-import { ProcessStep } from '../../../../../../model/ProcessStep';
-import { ProcessDecision } from '../../../../../../model/ProcessDecision';
-import { Process } from '../../../../../../model/Process';
 
 @Component({
     moduleId: module.id.toString(),
@@ -41,8 +35,7 @@ export class ErrorsWarings {
 
     public visible = true;
     constructor(private validationService: ValidationService,
-        private additionalInformationService: AdditionalInformationService,
-        private translate: TranslateService) { }
+        private additionalInformationService: AdditionalInformationService) { }
 
     public get validationResults(): { name: string, message: string }[] {
         const validationResults = this.validationService

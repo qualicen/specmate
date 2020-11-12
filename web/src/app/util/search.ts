@@ -1,5 +1,5 @@
 export class Search {
-    public static processSearchQuery(query: string): string {
-        return  query.replace(/([^\(\):\s-+]+(-[^\(\):\s-+]+)*)\b(?!\:)/g, '$&*');
+    public static processSearchQuery(query: string): string {        // Escape all lucene query special characters.
+        return query.replace(/[+\-\&\(\)\[\]\{\}\|!^~"*]/g, '\\$&');
     }
 }

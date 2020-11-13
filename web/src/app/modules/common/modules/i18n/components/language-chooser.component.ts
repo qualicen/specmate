@@ -3,6 +3,7 @@ import { NgbDropdown, NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { CookieService } from 'ngx-cookie';
 import { Config } from '../../../../../config/config';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'language-chooser',
@@ -24,7 +25,7 @@ export class LanguageChooser implements OnInit {
 
     constructor(private translate: TranslateService,
         private cookie: CookieService,
-        config: NgbDropdownConfig) {
+        config: NgbDropdownConfig, private router: Router) {
         config.autoClose = true;
         config.placement = 'bottom-right';
     }
@@ -70,7 +71,19 @@ export class LanguageChooser implements OnInit {
     }
 
     private storeInCookie(language: string): void {
-        this.cookie.put(LanguageChooser.LANGUAGE_KEY, language,  { sameSite: 'lax' } );
+        this.setCookie(LanguageChooser.LANGUAGE_KEY, language);
+    }
+
+    private setCookie(cookieName: string, cookieValue: any) {
+        let cookieOptions = {};
+
+        if (this.router.url.startsWith('https') ) {
+            cookieOptions = { sameSite: 'none', secure: true };
+        } else {
+            cookieOptions = { sameSite: 'lax'};
+        }
+
+        this.cookie.putObject(cookieName, cookieValue, cookieOptions );
     }
 
     private setLangAttr(language: string): void {

@@ -7,6 +7,7 @@ import { Url } from '../../../../../../../util/url';
 import { ServiceInterface } from '../../../../../../data/modules/data-service/services/service-interface';
 import { UserToken } from '../../../base/user-token';
 import { UserSession } from 'src/app/model/UserSession';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class AuthenticationService {
@@ -24,7 +25,6 @@ export class AuthenticationService {
 
     private _authChanged: EventEmitter<boolean>;
 
-
     public get token(): UserToken {
         const token = this.cookie.get(this.tokenCookieName);
         const project = this.cookie.get(this.projectCookieName);
@@ -38,7 +38,19 @@ export class AuthenticationService {
     }
 
     public set session(session: UserSession) {
-        this.cookie.putObject(this.sessionCookieName, session, { sameSite: 'lax' } );
+        this.setCookie(this.sessionCookieName, session);
+    }
+
+    private setCookie(cookieName: string, cookieValue: any) {
+        let cookieOptions = {};
+
+        if (this.router.url.startsWith('https') ) {
+            cookieOptions = { sameSite: 'none', secure: true };
+        } else {
+            cookieOptions = { sameSite: 'lax'};
+        }
+
+        this.cookie.putObject(cookieName, cookieValue, cookieOptions );
     }
 
     public get session(): UserSession {
@@ -77,7 +89,7 @@ export class AuthenticationService {
         this._errorLoggedOut = errorLoggedOut;
     }
 
-    constructor(http: HttpClient, private cookie: CookieService) {
+    constructor(http: HttpClient, private cookie: CookieService, private router: Router) {
         this.serviceInterface = new ServiceInterface(http);
         this.isAuthenticatedState = this.determineIsAuthenticated();
     }
@@ -158,7 +170,7 @@ export class AuthenticationService {
             }
         }
         this.clearToken();
-        this.isAuthenticatedState = this.determineIsAuthenticated(); 
+        this.isAuthenticatedState = this.determineIsAuthenticated();
         if (wasAuthenticated !== this.isAuthenticated) {
             this.authChanged.emit(this.isAuthenticatedState);
         }

@@ -74,7 +74,7 @@ export class ValidationService {
             this.validationCache.clear();
         }
         let elementResults: ValidationResult[] = this.getValidationResultsFor(element, contents);
-        if (Type.is(element, CEGModel) || Type.is(element, Process)) {
+        if (SpecmateType.isModel(element)) {
             let childElements = contents.filter(c => !Type.is(c, TestSpecification));
             for (let child of childElements) {
                 elementResults = elementResults.concat(this.getValidationResultsFor(child, []));
@@ -184,7 +184,7 @@ export class ValidationService {
         return this.currentSeverities.find(severity => severity === ValidationErrorSeverity.SAVE_DISABLED) === undefined;
     }
 
-    public getValidationResultAsString(saveDisabled: boolean): String {
+    public getValidationResultAsString(saveDisabled: boolean): string {
         let validation;
         if (saveDisabled) {
             validation = this.getValidationResults(this.navigator.currentElement)

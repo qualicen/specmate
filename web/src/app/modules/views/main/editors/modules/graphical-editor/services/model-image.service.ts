@@ -18,15 +18,17 @@ export class ModelImageService {
 
     // Create a png out of the dom, which draws the graph
     public async createModelImage(element: IContainer) {
-        if (Type.is(element, CEGModel) || Type.is(element, Process)) {
+        if (SpecmateType.isModel(element)) {
             let model = element as CEGModel | Process;
+            let contents = await this.dataService.readContents(model.url);
+            if (this.modelHasElements(contents)) {
             let svg: SVGSVGElement = document.getElementById('mxGraphContainer').getElementsByTagName('svg')[0];
             let minWidth = svg.style.minWidth;
             let minHeight = svg.style.minHeight;
             svg.style.width = '0px';
             svg.style.height = '0px';
 
-            // Scales the model to 200 x 200 px (or smaller), because the space in the db is limited to 32.000 characters
+                // Scales the model to 200 x 200 px (or smaller), because the space in the db is limited to 4.000 characters
             let maxWidth = parseInt(minWidth.substring(0, minWidth.length - 2));
             let maxHeight = parseInt(minHeight.substring(0, minHeight.length - 2));
             let factor = 0.0 + 200 / maxWidth / 1.25;
@@ -44,10 +46,27 @@ export class ModelImageService {
             if (modelImage === null || modelImage === undefined) {
                 modelImage = await new ModelImageFactory(this.dataService).create(model, false);
             }
-            this.dataService.readElementComplete(modelImage);
+                this.dataService.readElementComplete(modelImage, model.url);
             modelImage.imageData = pngAsBase64;
             await this.dataService.updateElement(modelImage, true, Id.uuid);
+            } else {
+                // Model is empty -> delete modelImage
+                let modelImage: ModelImage;
+                modelImage = await this.dataService.performOperations(model.url, 'listModelImage', undefined, true);
+                if (modelImage !== null && modelImage !== undefined) {
+                    await this.dataService.deleteElement(modelImage.url, true, Id.uuid);
+                }
+            }
         }
     }
 
+    private modelHasElements(contents: IContainer[]): boolean {
+        for (let i = 0; i < contents.length; i++) {
+            const element = contents[i];
+            if (SpecmateType.isModelElement(element)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

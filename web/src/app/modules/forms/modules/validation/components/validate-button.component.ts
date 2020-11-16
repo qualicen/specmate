@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { SpecmateType } from 'src/app/util/specmateType';
 import { NavigatorService } from '../../../../navigation/modules/navigator/services/navigator.service';
 import { ValidationService } from '../services/validation.service';
 
@@ -28,13 +29,8 @@ export class ValidateButton {
         event.stopPropagation();
     }
 
-
     public get isValidationButtonVisible(): boolean {
-        if (this.navigator.currentElement &&
-            (this.navigator.currentElement.className === 'CEGModel' || this.navigator.currentElement.className === 'Process')) {
-            return true;
-        }
-        return false;
+        return this.navigator.currentElement && (SpecmateType.isModel(this.navigator.currentElement));
     }
 
     public get busy(): boolean {

@@ -6,10 +6,8 @@ import { NavigatorService } from '../../../../navigation/modules/navigator/servi
 import { ViewControllerService } from '../../../../views/controller/modules/view-controller/services/view-controller.service';
 import { ModalBase } from '../base/modal-base';
 import { Dialogtype } from '../modal-dialog-type';
-import { CEGModel } from 'src/app/model/CEGModel';
-import { Type } from 'src/app/util/type';
-import { Process } from 'src/app/model/Process';
 import { ModelImageService } from 'src/app/modules/views/main/editors/modules/graphical-editor/services/model-image.service';
+import { SpecmateType } from 'src/app/util/specmateType';
 
 @Component({
     moduleId: module.id.toString(),
@@ -40,7 +38,7 @@ export class TypedModalContent extends ModalBase {
     public async save() {
         if (this.isSaveShown) {
             let element = this.navigator.currentElement;
-            if (Type.is(element, CEGModel) || Type.is(element, Process)) {
+            if (SpecmateType.isModel(element)) {
                 await this.modelImageService.createModelImage(element);
             }
             this.dataService.commit(this.translate.instant('save'))

@@ -9,7 +9,6 @@ import { Type } from '../../../../../../../util/type';
 import { Url } from '../../../../../../../util/url';
 import { SpecmateDataService } from '../../../../../../data/modules/data-service/services/specmate-data.service';
 import { SimpleInputFormBase } from '../../../../../../forms/modules/generic-form/base/simple-input-form-base';
-import { TestSpecificationEditor } from '../../test-specification-editor/components/test-specification-editor.component';
 
 @Component({
     moduleId: module.id.toString(),
@@ -58,7 +57,7 @@ export class TestStepRow extends SimpleInputFormBase {
         if (!this.testSpecificationContents) {
             return undefined;
         }
-        return  this.testSpecificationContents
+        return this.testSpecificationContents
             .filter((element: IContainer) => Type.is(element, TestParameter))
             .map((element: IContainer) => element as TestParameter);
     }

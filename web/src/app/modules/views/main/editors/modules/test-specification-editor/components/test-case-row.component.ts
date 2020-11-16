@@ -111,7 +111,7 @@ export class TestCaseRow {
             .map((element: IContainer) => element as ParameterAssignment);
     }
 
-    private getAssignment(testParameter: TestParameter): ParameterAssignment {
+    protected getAssignment(testParameter: TestParameter): ParameterAssignment {
         if (!this.assignments) {
             return undefined;
         }

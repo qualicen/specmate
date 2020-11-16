@@ -6,7 +6,13 @@ import { SpecmateDataService } from '../../../../data/modules/data-service/servi
 export abstract class SimpleInputFormBase {
 
     private _modelElement: IContainer;
-    protected fields: string[];
+    private _fields: string[];
+    protected get fields(): string[] {
+        return this._fields;
+    }
+    protected set fields(value: string[]) {
+        this._fields = value;
+    }
     public formGroup: FormGroup;
     protected dataService: SpecmateDataService;
 

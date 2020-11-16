@@ -50,7 +50,7 @@ export class IconSelector implements OnInit {
     }
 
     get isManualTestSpecification(): boolean {
-         return this.isTestSpecification && !this.isElementChildOfModel();
+        return this.isTestSpecification && !this.isElementChildOfModel();
     }
 
     get isGeneratedTestSpecification(): boolean {
@@ -66,7 +66,7 @@ export class IconSelector implements OnInit {
     }
 
     private isElementChildOfModel(): boolean {
-         return this.parent && (Type.is(this.parent, CEGModel) || Type.is(this.parent, Process));
+        return this.parent && (Type.is(this.parent, CEGModel) || Type.is(this.parent, Process));
     }
 
     constructor(private dataService: SpecmateDataService) { }

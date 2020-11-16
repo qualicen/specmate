@@ -158,7 +158,7 @@ export class AuthenticationService {
             }
         }
         this.clearToken();
-        this.isAuthenticatedState = this.determineIsAuthenticated(); 
+        this.isAuthenticatedState = this.determineIsAuthenticated();
         if (wasAuthenticated !== this.isAuthenticated) {
             this.authChanged.emit(this.isAuthenticatedState);
         }

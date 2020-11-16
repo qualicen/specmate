@@ -31,7 +31,7 @@ export class RelatedRequirementsContainer extends ContentContainerBase<Requireme
         protected modelImageService: ModelImageService) {
         super(dataService, navigator, translate, modal, clipboardService, graphicalEditorService, modelImageService);
         contentService.onModelDeleted.subscribe(
-            () => {this.readContents(); });
+            () => { this.readContents(); });
     }
 
     protected condition = (element: IContainer) => true;
@@ -41,7 +41,7 @@ export class RelatedRequirementsContainer extends ContentContainerBase<Requireme
     }
 
     public async readContents(): Promise<void> {
-        const contents = await this.dataService.performQuery(this.parent.url, 'related', { });
+        const contents = await this.dataService.performQuery(this.parent.url, 'related', {});
         this.contents = Sort.sortArray(contents);
     }
 

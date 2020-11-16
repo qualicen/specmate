@@ -472,6 +472,11 @@ export class ChangeTranslator {
                             graph.getModel().beginUpdate();
                             try {
                                 graph.model.setValue(child, val);
+                                let width = child.geometry.width;
+                                if (width <= 0) {
+                                    width = this.shapeProvider.getInitialSize(changedElement).width;
+                                }
+                                VertexProvider.adjustChildCellSize(child, width);
                             }
                             finally {
                                 graph.getModel().endUpdate();

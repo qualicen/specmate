@@ -3,14 +3,14 @@
         <div class="pull-right">
             <!-- ZOOM -->
             <button id="editor-zoomout-button" (click)="zoomOut(); editorGridButton.zoomOut()"
-                class="btn btn-sm btn-secondary pull-left" [class.disabled]="!canZoomOut"
-                title="{{'zoomOut' | translate}}"><i class="fa fa-search-minus" aria-hidden="true"></i></button>
+                class="btn btn-sm btn-secondary pull-left" title="{{'zoomOut' | translate}}"><i
+                    class="fa fa-search-minus" aria-hidden="true"></i></button>
             <button (click)="resetZoom(); editorGridButton.resetZoom()"
                 class="btn btn-sm btn-secondary pull-left zoom-indicator"
                 title="{{'restoreZoom' | translate}}">{{editorGridButton.zoomFactor * 100 | number: '1.0-0'}}%</button>
             <button id="editor-zoomin-button" (click)="zoomIn(); editorGridButton.zoomIn()"
-                class="btn btn-sm btn-secondary pull-left" [class.disabled]="!canZoomIn"
-                title="{{'zoomIn' | translate}}"><i class="fa fa-search-plus" aria-hidden="true"></i></button>
+                class="btn btn-sm btn-secondary pull-left" title="{{'zoomIn' | translate}}"><i class="fa fa-search-plus"
+                    aria-hidden="true"></i></button>
             <!-- GRID -->
             <editor-grid-button #editorGridButton></editor-grid-button>
             <maximize-button></maximize-button>

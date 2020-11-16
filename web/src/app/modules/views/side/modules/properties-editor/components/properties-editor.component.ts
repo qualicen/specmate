@@ -36,7 +36,7 @@ export class PropertiesEditor {
         return this.hiddenFieldsProvider.hiddenFields;
     }
 
-     public get showTracing(): boolean {
+    public get showTracing(): boolean {
         return Type.is(this.selectedElement, ProcessStep);
     }
 }

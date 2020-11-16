@@ -56,10 +56,10 @@ export class TracingLinks {
             .debounceTime(300)
             .distinctUntilChanged()
             .map(term => term.trim())
-            .filter( term => term.length >= 3)
+            .filter(term => term.length >= 3)
             .map(term => Search.processSearchQuery(term))
             .switchMap(term =>
-                this.dataService.search(term, {'type' : 'Requirement'})
+                this.dataService.search(term, { 'type': 'Requirement' })
                     .catch(() => {
                         return of([]);
                     }))

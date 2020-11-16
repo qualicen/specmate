@@ -114,7 +114,7 @@ export class CommonControls {
     public get isEnabled(): boolean {
         return true;
     }
-    private isModel(): boolean {
+    protected isModel(): boolean {
         return Type.is(this.navigator.currentElement, CEGModel) || Type.is(this.navigator.currentElement, Process);
     }
 }

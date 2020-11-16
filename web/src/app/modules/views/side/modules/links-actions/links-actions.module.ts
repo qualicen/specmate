@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { CegModelGeneratorButtonModule } from '../../../../actions/modules/ceg-model-generator-button/ceg-model-generator-button.module';
+// tslint:disable-next-line: max-line-length
 import { ExportTestprocedureButtonModule } from '../../../../actions/modules/export-testprocedure-button/export-testprocedure-button.module';
 import { TestExportButtonModule } from '../../../../actions/modules/test-export-button/test-export-button.module';
 import { TestSpecificationGeneratorButtonModule } from '../../../../actions/modules/test-specification-generator-button/test-specification-generator-button.module';

@@ -168,6 +168,9 @@ public class EditorElements {
 		relatedRequirementField.clear();
 		relatedRequirementField.sendKeys(name);
 		WebDriverWait wait = new WebDriverWait(driver, 30);
+		
+		String suggestionItemString = relatedRequirementField.getAttribute("aria-activedescendant");
+		suggestionItem = By.id(suggestionItemString);
 
 		wait.until(ExpectedConditions.visibilityOfElementLocated(suggestionItem));
 		driver.findElement(suggestionItem).click();

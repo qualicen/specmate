@@ -8,7 +8,7 @@ import { Id } from 'src/app/util/id';
 import * as saveAsPng from 'save-svg-as-png';
 import { Injectable } from '@angular/core';
 import { Monitorable } from 'src/app/modules/notification/modules/operation-monitor/base/monitorable';
-import { SpecmateType } from 'src/app/util/specmateType';
+import { SpecmateType } from 'src/app/util/specmate-type';
 
 @Injectable()
 export class ModelImageService extends Monitorable {

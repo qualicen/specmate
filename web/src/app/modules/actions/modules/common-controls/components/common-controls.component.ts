@@ -8,7 +8,7 @@ import { NavigatorService } from '../../../../navigation/modules/navigator/servi
 import { UndoService } from '../services/undo.service';
 import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
 import { ModelImageService } from 'src/app/modules/views/main/editors/modules/graphical-editor/services/model-image.service';
-import { SpecmateType } from 'src/app/util/specmateType';
+import { SpecmateType } from 'src/app/util/specmate-type';
 
 @Component({
     moduleId: module.id.toString(),

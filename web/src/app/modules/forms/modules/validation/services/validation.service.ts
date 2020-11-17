@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { TestProcedure } from 'src/app/model/TestProcedure';
 import { Monitorable } from 'src/app/modules/notification/modules/operation-monitor/base/monitorable';
-import { SpecmateType } from 'src/app/util/specmateType';
+import { SpecmateType } from 'src/app/util/specmate-type';
 import { IContainer } from '../../../../../model/IContainer';
 import { FieldMetaItem, MetaInfo } from '../../../../../model/meta/field-meta';
 import { TestSpecification } from '../../../../../model/TestSpecification';

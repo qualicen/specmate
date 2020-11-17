@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { SpecmateType } from 'src/app/util/specmateType';
+import { SpecmateType } from 'src/app/util/specmate-type';
 import { CEGModel } from '../../../../../model/CEGModel';
 import { Folder } from '../../../../../model/Folder';
 import { IContainer } from '../../../../../model/IContainer';

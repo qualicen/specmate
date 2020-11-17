@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { SpecmateType } from 'src/app/util/specmateType';
+import { SpecmateType } from 'src/app/util/specmate-type';
 import { NavigatorService } from '../../../../navigation/modules/navigator/services/navigator.service';
 import { ValidationService } from '../services/validation.service';
 

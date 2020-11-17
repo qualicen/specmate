@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
 import { of } from 'rxjs/observable/of';
+import { OperationMonitorService } from 'src/app/modules/notification/modules/operation-monitor/services/operation-monitor.service';
 import { IContainer } from '../../../../../../model/IContainer';
 import { ISpecmateModelObject } from '../../../../../../model/ISpecmateModelObject';
 import { Proxy } from '../../../../../../model/support/proxy';
@@ -28,7 +29,9 @@ export class TracingLinks {
     public isCollapsed = false;
 
     /** constructor */
-    public constructor(private dataService: SpecmateDataService, private selectedElementService: SelectedElementService) { }
+    public constructor(private dataService: SpecmateDataService,
+        private selectedElementService: SelectedElementService,
+        private operationMonitor: OperationMonitorService) { }
 
     /** getter */
     get model(): ISpecmateModelObject {
@@ -58,11 +61,17 @@ export class TracingLinks {
             .map(term => term.trim())
             .filter(term => term.length >= 3)
             .map(term => Search.processSearchQuery(term))
-            .switchMap(term =>
-                this.dataService.search(term, { 'type': 'Requirement' })
-                    .catch(() => {
-                        return of([]);
-                    }))
+            .switchMap(async term => {
+                try {
+                    this.operationMonitor.forceModalClosed = true;
+                    const result = await this.dataService.search(term, { 'type': 'Requirement' });
+                    this.operationMonitor.forceModalClosed = false;
+                    return result;
+                } catch {
+                    this.operationMonitor.forceModalClosed = false;
+                    return of([]);
+                }
+            })
             .map((searchResult: IContainer[]) => searchResult.filter((result: IContainer) => {
                 let existing: Proxy = this.model.tracesTo.find((t: Proxy) => t.url === result.url);
                 return existing == undefined;

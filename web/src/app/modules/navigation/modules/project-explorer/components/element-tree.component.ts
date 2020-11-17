@@ -17,7 +17,7 @@ import { Id } from 'src/app/util/id';
 import { TranslateService } from '@ngx-translate/core';
 import { ContentsContainerService } from 'src/app/modules/views/main/editors/modules/contents-container/services/content-container.service';
 import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
-import { SpecmateType } from 'src/app/util/specmateType';
+import { SpecmateType } from 'src/app/util/specmate-type';
 
 @Component({
     moduleId: module.id.toString(),

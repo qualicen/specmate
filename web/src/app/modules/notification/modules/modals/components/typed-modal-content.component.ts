@@ -7,7 +7,7 @@ import { ViewControllerService } from '../../../../views/controller/modules/view
 import { ModalBase } from '../base/modal-base';
 import { Dialogtype } from '../modal-dialog-type';
 import { ModelImageService } from 'src/app/modules/views/main/editors/modules/graphical-editor/services/model-image.service';
-import { SpecmateType } from 'src/app/util/specmateType';
+import { SpecmateType } from 'src/app/util/specmate-type';
 
 @Component({
     moduleId: module.id.toString(),

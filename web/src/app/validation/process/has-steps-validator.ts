@@ -1,4 +1,4 @@
-import { SpecmateType } from 'src/app/util/specmateType';
+import { SpecmateType } from 'src/app/util/specmate-type';
 import { IContainer } from '../../model/IContainer';
 import { IModelNode } from '../../model/IModelNode';
 import { Process } from '../../model/Process';

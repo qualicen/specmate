@@ -7,7 +7,7 @@ import { ModelImage } from 'src/app/model/ModelImage';
 import { Process } from 'src/app/model/Process';
 import { SpecmateDataService } from 'src/app/modules/data/modules/data-service/services/specmate-data.service';
 import { Id } from 'src/app/util/id';
-import { SpecmateType } from 'src/app/util/specmateType';
+import { SpecmateType } from 'src/app/util/specmate-type';
 
 @Injectable()
 export class ModelImageService {

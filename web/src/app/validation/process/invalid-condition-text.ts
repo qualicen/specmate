@@ -10,7 +10,7 @@ import { ProcessConnection } from 'src/app/model/ProcessConnection';
 import { ValidationMessage } from '../validation-message';
 import { ValidationUtil } from '../validation-util';
 import { ValidationErrorSeverity } from '../validation-error-severity';
-import { SpecmateType } from 'src/app/util/specmateType';
+import { SpecmateType } from 'src/app/util/specmate-type';
 
 @Validator(Process)
 export class InvalidConditionTextValidator extends ElementValidatorBase<Process> {

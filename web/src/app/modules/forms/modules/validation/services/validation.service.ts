@@ -1,6 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { TestProcedure } from 'src/app/model/TestProcedure';
+import { SpecmateType } from 'src/app/util/specmate-type';
 import { IContainer } from '../../../../../model/IContainer';
 import { FieldMetaItem, MetaInfo } from '../../../../../model/meta/field-meta';
 import { TestSpecification } from '../../../../../model/TestSpecification';
@@ -13,7 +14,6 @@ import { ValidationErrorSeverity } from '../../../../../validation/validation-er
 import { ValidationResult } from '../../../../../validation/validation-result';
 import { NavigatorService } from '../../../../navigation/modules/navigator/services/navigator.service';
 import { ValidationCache, ValidationPair } from '../util/validation-cache';
-import { SpecmateType } from 'src/app/util/specmateType';
 
 
 @Injectable()

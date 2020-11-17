@@ -3,9 +3,12 @@
         <li *ngFor="let item of this.meta" class="list-group-item">
             <ng-container [ngSwitch]="item.type">
                 <div form-text-input *ngSwitchCase="'text'" [meta]="item" [form]="formGroup" style="width:100%;"> </div>
-                <div form-long-text-input *ngSwitchCase="'longText'" [meta]="item" [form]="formGroup" style="width:100%;"> </div>
-                <div form-checkbox-input *ngSwitchCase="'checkbox'" [meta]="item" [form]="formGroup" style="width:100%;"> </div>
-                <div form-single-selection-input *ngSwitchCase="'singleSelection'" [meta]="item" [form]="formGroup" style="width:100%;"> </div>
+                <div form-long-text-input *ngSwitchCase="'longText'" [meta]="item" [form]="formGroup"
+                    style="width:100%;"> </div>
+                <div form-checkbox-input *ngSwitchCase="'checkbox'" [meta]="item" [form]="formGroup"
+                    style="width:100%;"> </div>
+                <div form-single-selection-input *ngSwitchCase="'singleSelection'" [meta]="item" [form]="formGroup"
+                    style="width:100%;"> </div>
             </ng-container>
         </li>
     </ul>

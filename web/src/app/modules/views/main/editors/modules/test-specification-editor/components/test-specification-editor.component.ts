@@ -7,8 +7,6 @@ import { TestInputParameterFactory } from '../../../../../../../factory/test-inp
 import { TestOutputParameterFactory } from '../../../../../../../factory/test-output-parameter-factory';
 import { TestParameterFactory } from '../../../../../../../factory/test-parameter-factory';
 import { IContainer } from '../../../../../../../model/IContainer';
-import { IContentElement } from '../../../../../../../model/IContentElement';
-import { IPositionable } from '../../../../../../../model/IPositionable';
 import { TestCase } from '../../../../../../../model/TestCase';
 import { TestParameter } from '../../../../../../../model/TestParameter';
 import { TestSpecification } from '../../../../../../../model/TestSpecification';
@@ -31,7 +29,7 @@ export class TestSpecificationEditor extends DraggableSupportingViewBase {
     /** The test specification to be shown */
     public testSpecification: TestSpecification;
 
-    protected relevantElements: (IContentElement & IPositionable)[];
+    protected relevantElements: TestCase[];
 
     /** Constructor */
     constructor(
@@ -46,7 +44,7 @@ export class TestSpecificationEditor extends DraggableSupportingViewBase {
         super(dataService, navigator, route, modal, dragulaService, translate);
         this.undoService.undoPressed.subscribe(() => {
             this.updateContents();
-          });
+        });
 
     }
 

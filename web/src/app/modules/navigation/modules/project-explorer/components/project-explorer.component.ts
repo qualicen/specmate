@@ -37,7 +37,8 @@ export class ProjectExplorer implements OnInit {
 
     private numProjectFoldersDisplayed = Config.ELEMENT_CHUNK_SIZE;
     private numLibraryFoldersDisplayed = Config.ELEMENT_CHUNK_SIZE;
-    private numRecycleBinFoldersDisplayed = Config.ELEMENT_CHUNK_SIZE;
+    private numRecycleBinProjectFoldersDisplayed = Config.ELEMENT_CHUNK_SIZE;
+    private numRecycleBinLibraryFoldersDisplayed = Config.ELEMENT_CHUNK_SIZE;
 
     public get currentElement(): IContainer {
         return this.navigator.currentElement;
@@ -61,14 +62,16 @@ export class ProjectExplorer implements OnInit {
         if (this._rootRecycleBinProject === undefined || this._rootRecycleBinProject === null) {
             return [];
         }
-        return this._rootRecycleBinProject.slice(0, Math.min(this.numRecycleBinFoldersDisplayed, this._rootRecycleBinProject.length));
+        return this._rootRecycleBinProject.slice(0,
+            Math.min(this.numRecycleBinProjectFoldersDisplayed, this._rootRecycleBinProject.length));
     }
 
     public get rootRecycleBinLibrary(): IContainer[] {
         if (this._rootRecycleBinLibrary === undefined || this._rootRecycleBinLibrary === null) {
             return [];
         }
-        return this._rootRecycleBinLibrary.slice(0, Math.min(this.numRecycleBinFoldersDisplayed, this._rootRecycleBinLibrary.length));
+        return this._rootRecycleBinLibrary.slice(0,
+            Math.min(this.numRecycleBinLibraryFoldersDisplayed, this._rootRecycleBinLibrary.length));
     }
 
     constructor(private translate: TranslateService, private dataService: SpecmateDataService,
@@ -99,14 +102,14 @@ export class ProjectExplorer implements OnInit {
         if (this._rootRecycleBinProject === undefined || this._rootRecycleBinProject === null) {
             return false;
         }
-        return this._rootRecycleBinProject.length > this.numRecycleBinFoldersDisplayed;
+        return this._rootRecycleBinProject.length > this.numRecycleBinProjectFoldersDisplayed;
     }
 
     public get canLoadMoreRecycleBinFoldersLibrary(): boolean {
         if (this._rootRecycleBinLibrary === undefined || this._rootRecycleBinLibrary === null) {
             return false;
         }
-        return this._rootRecycleBinLibrary.length > this.numRecycleBinFoldersDisplayed;
+        return this._rootRecycleBinLibrary.length > this.numRecycleBinLibraryFoldersDisplayed;
     }
 
     public search(query: string): void {
@@ -170,8 +173,11 @@ export class ProjectExplorer implements OnInit {
         this.numLibraryFoldersDisplayed += Config.ELEMENT_CHUNK_SIZE;
     }
 
-    public loadMoreRecycleBinFolders(): void {
-        this.numRecycleBinFoldersDisplayed += Config.ELEMENT_CHUNK_SIZE;
+    public loadMoreRecycleBinProjectFolders(): void {
+        this.numRecycleBinProjectFoldersDisplayed += Config.ELEMENT_CHUNK_SIZE;
+    }
+    public loadMoreRecycleBinLibraryFolders(): void {
+        this.numRecycleBinLibraryFoldersDisplayed += Config.ELEMENT_CHUNK_SIZE;
     }
 
     public switchToProject(): void {
@@ -198,7 +204,7 @@ export class ProjectExplorer implements OnInit {
         return this.auth.token.project;
     }
 
-    private isRecycled(element: IContainer) {
+    public isRecycled(element: IContainer) {
         return element.recycled;
     }
 }

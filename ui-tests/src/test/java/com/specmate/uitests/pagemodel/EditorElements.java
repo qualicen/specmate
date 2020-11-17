@@ -169,7 +169,7 @@ public class EditorElements {
 		relatedRequirementField.sendKeys(name);
 		WebDriverWait wait = new WebDriverWait(driver, 30);
 		
-		wait.until(ExpectedConditions.attributeContains(relatedRequirement, "aria-activedescendant", "ngb-typeahead"));
+		wait.until(ExpectedConditions.attributeToBeNotEmpty(relatedRequirementField, "aria-activedescendant"));
 		
 		String suggestionItemString = relatedRequirementField.getAttribute("aria-activedescendant");
 		suggestionItem = By.id(suggestionItemString);

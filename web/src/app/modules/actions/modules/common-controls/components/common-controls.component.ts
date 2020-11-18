@@ -7,10 +7,8 @@ import { ValidationService } from '../../../../forms/modules/validation/services
 import { NavigatorService } from '../../../../navigation/modules/navigator/services/navigator.service';
 import { UndoService } from '../services/undo.service';
 import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
-import { CEGModel } from 'src/app/model/CEGModel';
-import { Process } from 'src/app/model/Process';
-import { Type } from 'src/app/util/type';
 import { ModelImageService } from 'src/app/modules/views/main/editors/modules/graphical-editor/services/model-image.service';
+import { SpecmateType } from 'src/app/util/specmate-type';
 
 @Component({
     moduleId: module.id.toString(),
@@ -115,6 +113,6 @@ export class CommonControls {
         return true;
     }
     protected isModel(): boolean {
-        return Type.is(this.navigator.currentElement, CEGModel) || Type.is(this.navigator.currentElement, Process);
+        return SpecmateType.isModel(this.navigator.currentElement);
     }
 }

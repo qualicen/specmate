@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { NgbDropdown, NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
-import { CookieService } from 'ngx-cookie';
 import { Config } from '../../../../../config/config';
+import { CookiesService } from 'src/app/modules/common/modules/cookies/services/cookies-service';
 
 @Component({
     selector: 'language-chooser',
@@ -23,7 +23,7 @@ export class LanguageChooser implements OnInit {
     private _dropdownRef: NgbDropdown;
 
     constructor(private translate: TranslateService,
-        private cookie: CookieService,
+        private cookiesService: CookiesService,
         config: NgbDropdownConfig) {
         config.autoClose = true;
         config.placement = 'bottom-right';
@@ -70,7 +70,7 @@ export class LanguageChooser implements OnInit {
     }
 
     private storeInCookie(language: string): void {
-        this.cookie.put(LanguageChooser.LANGUAGE_KEY, language, { sameSite: 'lax' });
+        this.cookiesService.setCookie(LanguageChooser.LANGUAGE_KEY, language);
     }
 
     private setLangAttr(language: string): void {
@@ -78,7 +78,7 @@ export class LanguageChooser implements OnInit {
     }
 
     private retrieveFromCookie(): string {
-        return this.cookie.get(LanguageChooser.LANGUAGE_KEY);
+        return this.cookiesService.getCookie(LanguageChooser.LANGUAGE_KEY);
     }
 
     public setSelectionIndex(newIndex: number) {

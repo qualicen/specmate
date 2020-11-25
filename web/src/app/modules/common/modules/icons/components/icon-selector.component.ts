@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { SpecmateType } from 'src/app/util/specmate-type';
 import { CEGModel } from '../../../../../model/CEGModel';
 import { Folder } from '../../../../../model/Folder';
 import { IContainer } from '../../../../../model/IContainer';
@@ -66,7 +67,7 @@ export class IconSelector implements OnInit {
     }
 
     private isElementChildOfModel(): boolean {
-        return this.parent && (Type.is(this.parent, CEGModel) || Type.is(this.parent, Process));
+        return this.parent && (SpecmateType.isModel(this.parent));
     }
 
     constructor(private dataService: SpecmateDataService) { }

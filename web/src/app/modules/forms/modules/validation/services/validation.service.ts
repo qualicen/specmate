@@ -2,10 +2,9 @@ import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { TestProcedure } from 'src/app/model/TestProcedure';
 import { Monitorable } from 'src/app/modules/notification/modules/operation-monitor/base/monitorable';
-import { CEGModel } from '../../../../../model/CEGModel';
+import { SpecmateType } from 'src/app/util/specmate-type';
 import { IContainer } from '../../../../../model/IContainer';
 import { FieldMetaItem, MetaInfo } from '../../../../../model/meta/field-meta';
-import { Process } from '../../../../../model/Process';
 import { TestSpecification } from '../../../../../model/TestSpecification';
 import { Type } from '../../../../../util/type';
 import { ElementValidatorBase } from '../../../../../validation/element-validator-base';
@@ -73,7 +72,7 @@ export class ValidationService extends Monitorable {
                 this.validationCache.clear();
             }
             let elementResults: ValidationResult[] = this.getValidationResultsFor(element, contents);
-            if (Type.is(element, CEGModel) || Type.is(element, Process)) {
+            if (SpecmateType.isModel(element)) {
                 let childElements = contents.filter(c => !Type.is(c, TestSpecification));
                 for (let child of childElements) {
                     elementResults = elementResults.concat(this.getValidationResultsFor(child, []));

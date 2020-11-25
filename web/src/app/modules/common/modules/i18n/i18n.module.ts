@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { SpecmateSharedModule } from '../../../specmate/specmate.shared.module';
+import { CookiesModule } from '../cookies/cookies.module';
 import { LanguageChooser } from './components/language-chooser.component';
 
 // AoT requires an exported function for factories
@@ -16,6 +17,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     // MODULE IMPORTS
     BrowserModule,
     SpecmateSharedModule,
+    CookiesModule,
     NgbModule
   ],
   declarations: [

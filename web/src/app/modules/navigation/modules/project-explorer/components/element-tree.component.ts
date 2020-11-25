@@ -17,6 +17,7 @@ import { Id } from 'src/app/util/id';
 import { TranslateService } from '@ngx-translate/core';
 import { ContentsContainerService } from 'src/app/modules/views/main/editors/modules/contents-container/services/content-container.service';
 import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
+import { SpecmateType } from 'src/app/util/specmate-type';
 
 @Component({
     moduleId: module.id.toString(),
@@ -33,10 +34,10 @@ export class ElementTree implements OnInit {
     public parent: IContainer;
 
     @Input()
-    private library = false;
+    protected library = false;
 
     @Input()
-    private recycleBin = false;
+    protected recycleBin = false;
 
     public numChildrenDisplayed = Config.ELEMENT_CHUNK_SIZE;
 
@@ -177,7 +178,7 @@ export class ElementTree implements OnInit {
     }
 
     public get isGeneratedTestSpecificationNode(): boolean {
-        return this.isTestSpecificationNode && this.parent && (Type.is(this.parent, CEGModel) || Type.is(this.parent, Process));
+        return this.isTestSpecificationNode && this.parent && (SpecmateType.isModel(this.parent));
     }
 
     public get isProcessNode(): boolean {

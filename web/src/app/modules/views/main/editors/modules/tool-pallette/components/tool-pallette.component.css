@@ -3,9 +3,9 @@
 }
 
 .drag-tool {
-  cursor: move;
+    cursor: move;
 }
 
 .click-tool {
-  cursor: pointer;
+    cursor: pointer;
 }

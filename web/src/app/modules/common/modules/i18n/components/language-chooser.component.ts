@@ -14,7 +14,7 @@ export class LanguageChooser implements OnInit {
 
     private static LANGUAGE_KEY = 'specmate-display-language';
 
-    private selectionIndex = 0;
+    protected selectionIndex = 0;
 
     @ViewChild('dropdownRef', { static: false })
     set dropdownRef(ref: NgbDropdown) {

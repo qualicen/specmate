@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
-import { CookieService } from 'ngx-cookie';
 import { Config } from '../../../../../../../config/config';
 import { User } from '../../../../../../../model/User';
 import { Url } from '../../../../../../../util/url';
 import { ServiceInterface } from '../../../../../../data/modules/data-service/services/service-interface';
 import { UserToken } from '../../../base/user-token';
 import { UserSession } from 'src/app/model/UserSession';
+import { CookiesService } from 'src/app/modules/common/modules/cookies/services/cookies-service';
 
 @Injectable()
 export class AuthenticationService {
@@ -24,10 +24,9 @@ export class AuthenticationService {
 
     private _authChanged: EventEmitter<boolean>;
 
-
     public get token(): UserToken {
-        const token = this.cookie.get(this.tokenCookieName);
-        const project = this.cookie.get(this.projectCookieName);
+        const token = this.cookiesService.getCookie(this.tokenCookieName);
+        const project = this.cookiesService.getCookie(this.projectCookieName);
 
         if (token !== undefined && project !== undefined) {
             const userToken = new UserToken(token, project, this.session);
@@ -38,17 +37,17 @@ export class AuthenticationService {
     }
 
     public set session(session: UserSession) {
-        this.cookie.putObject(this.sessionCookieName, session, { sameSite: 'lax' } );
+        this.cookiesService.setCookie(this.sessionCookieName, session);
     }
 
     public get session(): UserSession {
-        return this.cookie.getObject(this.sessionCookieName) as UserSession;
+        return this.cookiesService.getCookieObject(this.sessionCookieName) as UserSession;
     }
 
     private get isAllCookiesSet(): boolean {
-        const hasTokenCookie = this.cookie.get(this.tokenCookieName) !== undefined;
-        const hasProjectCookie = this.cookie.get(this.projectCookieName) !== undefined;
-        const hasSessionCookie = this.cookie.get(this.sessionCookieName) !== undefined;
+        const hasTokenCookie = this.cookiesService.getCookie(this.tokenCookieName) !== undefined;
+        const hasProjectCookie = this.cookiesService.getCookie(this.projectCookieName) !== undefined;
+        const hasSessionCookie = this.cookiesService.getCookie(this.sessionCookieName) !== undefined;
 
         return hasTokenCookie && hasProjectCookie && hasSessionCookie;
     }
@@ -77,7 +76,7 @@ export class AuthenticationService {
         this._errorLoggedOut = errorLoggedOut;
     }
 
-    constructor(http: HttpClient, private cookie: CookieService) {
+    constructor(http: HttpClient, private cookiesService: CookiesService) {
         this.serviceInterface = new ServiceInterface(http);
         this.isAuthenticatedState = this.determineIsAuthenticated();
     }
@@ -135,9 +134,9 @@ export class AuthenticationService {
     }
 
     private clearToken(): void {
-        this.cookie.remove(this.tokenCookieName);
-        this.cookie.remove(this.projectCookieName);
-        this.cookie.remove(this.sessionCookieName);
+        this.cookiesService.removeCookie(this.tokenCookieName);
+        this.cookiesService.removeCookie(this.projectCookieName);
+        this.cookiesService.removeCookie(this.sessionCookieName);
     }
 
     public async deauthenticate(omitServer?: boolean): Promise<void> {

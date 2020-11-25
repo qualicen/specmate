@@ -9,7 +9,7 @@ export class CookiesService {
   public setCookie(cookieName: string, cookieValue: any) {
     let cookieOptions = {};
 
-    if ( document.location.protocol == 'https:' ) {
+    if (document.location.protocol == 'https:') {
         cookieOptions = { sameSite: 'none', secure: true };
     } else {
         cookieOptions = { sameSite: 'lax'};

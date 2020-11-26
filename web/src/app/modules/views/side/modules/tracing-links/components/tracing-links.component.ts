@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
 import { of } from 'rxjs/observable/of';
+import { Config } from 'src/app/config/config';
 import { IContainer } from '../../../../../../model/IContainer';
 import { ISpecmateModelObject } from '../../../../../../model/ISpecmateModelObject';
 import { Proxy } from '../../../../../../model/support/proxy';
@@ -56,7 +57,7 @@ export class TracingLinks {
             .debounceTime(300)
             .distinctUntilChanged()
             .map(term => term.trim())
-            .filter( term => term.length >= 3)
+            .filter(term => term.length >= Config.SEARCH_MINIMUM_LENGTH)
             .map(term => Search.processSearchQuery(term))
             .switchMap(term =>
                 this.dataService.search(term, {'type' : 'Requirement'})

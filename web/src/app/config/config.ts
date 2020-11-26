@@ -43,6 +43,8 @@ export class Config {
     public static MERGE_CONFLICT = 'Tried to merge commands with conflicting operations.';
     public static TRIED_TO_ADD_EXISTING_ELEMENT = 'Tried to add an existing element to parent! ';
 
+    public static SEARCH_MINIMUM_LENGTH = 2;
+
     // Editor settings
     public static GRAPHICAL_EDITOR_WIDTH = 1000;
     public static GRAPHICAL_EDITOR_HEIGHT: number = (isNaN(window.innerHeight) ? window['clientHeight'] : window.innerHeight) * 0.75;

@@ -47,15 +47,15 @@ public class Migrator20200605 implements IMigrator {
 		aMapper.migrateNewStringAttribute(objectName, "description", "");
 		aMapper.migrateNewBooleanAttribute(objectName, "recycled", false);
 		aMapper.migrateNewBooleanAttribute(objectName, "hasRecycledChildren", false);
-		aMapper.migrateNewObjectReference(objectName, "contents");
-		aMapper.migrateNewObjectReference(objectName, "tracesTo");
-		aMapper.migrateNewObjectReference(objectName, "tracesFrom");
+		aMapper.migrateNewObjectReferenceNtoM(objectName, "contents");
+		aMapper.migrateNewObjectReferenceNtoM(objectName, "tracesTo");
+		aMapper.migrateNewObjectReferenceNtoM(objectName, "tracesFrom");
 		aMapper.migrateNewDoubleAttribute(objectName, "x", 0.0);
 		aMapper.migrateNewDoubleAttribute(objectName, "y", 0.0);
 		aMapper.migrateNewDoubleAttribute(objectName, "width", 0.0);
 		aMapper.migrateNewDoubleAttribute(objectName, "height", 0.0);
-		aMapper.migrateNewObjectReference(objectName, "outgoingConnections");
-		aMapper.migrateNewObjectReference(objectName, "incomingConnections");
+		aMapper.migrateNewObjectReferenceNtoM(objectName, "outgoingConnections");
+		aMapper.migrateNewObjectReferenceNtoM(objectName, "incomingConnections");
 		aMapper.migrateNewObjectReferenceOneToN(objectName, "linkTo");
 	}
 
@@ -66,7 +66,7 @@ public class Migrator20200605 implements IMigrator {
 		// Add attributes
 		IAttributeToSQLMapper aMapper = dbProvider.getAttributeToSQLMapper(packageName, getSourceVersion(),
 				getTargetVersion());
-		aMapper.migrateNewObjectReference(objectName, "linksFrom");
+		aMapper.migrateNewObjectReferenceNtoM(objectName, "linksFrom");
 	}
 
 	@Reference

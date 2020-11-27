@@ -99,7 +99,7 @@ public class AttributeToSQLMapper extends SQLMapper implements IAttributeToSQLMa
 	}
 
 	@Override
-	public void migrateNewObjectReference(String objectName, String attributeName) throws SpecmateException {
+	public void migrateNewObjectReferenceNtoM(String objectName, String attributeName) throws SpecmateException {
 		migrateNewReference(objectName, attributeName, "BIGINT");
 	}
 

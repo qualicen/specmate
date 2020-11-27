@@ -88,7 +88,7 @@ public interface IAttributeToSQLMapper {
 	 * @param attributeName the name of the reference attribute that is added
 	 * @throws SpecmateException
 	 */
-	void migrateNewObjectReference(String objectName, String attributeName) throws SpecmateException;
+	void migrateNewObjectReferenceNtoM(String objectName, String attributeName) throws SpecmateException;
 	
 	/**
 	 * Creates an attribute that represents a reference to another object. It is a 1 to n reference, thus no extra table is created. 

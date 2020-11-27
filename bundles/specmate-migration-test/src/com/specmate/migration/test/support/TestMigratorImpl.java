@@ -157,7 +157,7 @@ public class TestMigratorImpl implements IMigrator {
 		aAdded.migrateNewBooleanAttribute(document, tested, false);
 		aAdded.migrateNewLongAttribute(document, length, null);
 		aAdded.migrateNewStringAttribute(document, owner, null);
-		aAdded.migrateNewObjectReference(document, contents);
+		aAdded.migrateNewObjectReferenceNtoM(document, contents);
 	}
 
 	private void migrateAttributeRenamed(Connection connection) throws SpecmateException {

@@ -92,7 +92,7 @@ export class GraphicalEditor {
             }
         });
 
-        this.validationService.validationFinished.subscribe(async () => {
+        this.validationService.onEnd(async () => {
             if (!this.isInGraphTransition && this.graph !== undefined && this.graph['destroyed'] !== true) {
                 this.updateValidities();
             }
@@ -213,20 +213,20 @@ export class GraphicalEditor {
             try {
                 if (!isAddEdit) {
                     for (const change of edit.changes.filter(filteredChange => filteredChange.child && !filteredChange.child.vertex)) {
-                        await this.changeTranslator.translate(change, this.graph);
+                        await this.changeTranslator.translate(change, this.graph, this.contents);
                         done.push(change);
                     }
                     for (const change of edit.changes.filter(filteredChange => filteredChange.child && filteredChange.child.vertex)) {
-                        await this.changeTranslator.translate(change, this.graph);
+                        await this.changeTranslator.translate(change, this.graph, this.contents);
                         done.push(change);
                     }
                 } else {
                     for (const change of edit.changes.filter(filteredChange => filteredChange.child && filteredChange.child.vertex)) {
-                        await this.changeTranslator.translate(change, this.graph);
+                        await this.changeTranslator.translate(change, this.graph, this.contents);
                         done.push(change);
                     }
                     for (const change of edit.changes.filter(filteredChange => filteredChange.child && !filteredChange.child.vertex)) {
-                        await this.changeTranslator.translate(change, this.graph);
+                        await this.changeTranslator.translate(change, this.graph, this.contents);
                         done.push(change);
                     }
                 }
@@ -239,10 +239,10 @@ export class GraphicalEditor {
                         done.push(styleChange);
                     });
                 for (const cellId in styleChangeMap) {
-                    await this.changeTranslator.translate(styleChangeMap[cellId], this.graph);
+                    await this.changeTranslator.translate(styleChangeMap[cellId], this.graph, this.contents);
                 }
                 for (const change of edit.changes.filter(filteredChange => done.indexOf(filteredChange) < 0)) {
-                    await this.changeTranslator.translate(change, this.graph);
+                    await this.changeTranslator.translate(change, this.graph, this.contents);
                 }
             } catch (e) {
                 // This is actually for debug purposes; However, mxgraph or the change translation fails silently without this.

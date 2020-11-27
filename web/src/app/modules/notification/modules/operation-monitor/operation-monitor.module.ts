@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { SpecmateSharedModule } from '../../../specmate/specmate.shared.module';
 import { OperationMonitor } from './components/operation-monitor.component';
 import { ModalsModule } from '../modals/modals.module';
+import { OperationMonitorService } from './services/operation-monitor.service';
 
 @NgModule({
   imports: [
@@ -21,6 +22,7 @@ import { ModalsModule } from '../modals/modals.module';
   ],
   providers: [
     // SERVICES
+    OperationMonitorService
   ],
   bootstrap: [
     // COMPONENTS THAT ARE BOOTSTRAPPED HERE

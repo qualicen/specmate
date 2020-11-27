@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { SimpleModal } from 'src/app/modules/notification/modules/modals/services/simple-modal.service';
+import { Monitorable } from 'src/app/modules/notification/modules/operation-monitor/base/monitorable';
 import { CEGConnection } from '../../../../../model/CEGConnection';
 import { IContainer } from '../../../../../model/IContainer';
 import { IModelConnection } from '../../../../../model/IModelConnection';
@@ -32,48 +33,32 @@ import { ServiceInterface } from './service-interface';
  * Whenever the user discards local changes, clearCommits() needs to be called to prevent commits from other views are done.
  */
 @Injectable()
-export class SpecmateDataService {
+export class SpecmateDataService extends Monitorable {
 
-    public currentTaskName = '';
+    public static OP_READ_ELEMENT = 'readElement';
+    public static OP_READ_CONTENTS = 'readContents';
+    public static OP_SEARCH = 'search';
+    public static OP_UPDATE = 'update';
+    public static OP_DELETE = 'delete';
+    public static OP_COMMIT = 'commit';
+    public static OP_PERFORM_OPERATION = 'performOperation';
+    public static OP_PERFORM_QUERY = 'performQuery';
 
-    private _busy = false;
-    private _busyCount = 0;
-
-    private set busy(busy: boolean) {
-        // We track the number how often busy has been set to true, compared to how often it has been
-        // set to false und keep the difference. The service is busy when the busy count is greater then zero.
-        if (busy) {
-            this._busyCount++;
-        } else {
-            this._busyCount--;
-        }
-        this._busy = this._busyCount > 0;
-        this.stateChanged.emit(this._busy);
-    }
-
-    public get isLoading(): boolean {
-        return this._busy;
-    }
-
-    public stateChanged: EventEmitter<boolean>;
-    public committed: EventEmitter<void>;
-    public elementChanged: EventEmitter<string>;
+    public committed = new EventEmitter<void>();
+    public elementChanged = new EventEmitter<string>(true);
     private cache: DataCache = new DataCache();
     private serviceInterface: ServiceInterface;
     private scheduler: Scheduler;
 
-    constructor(private http: HttpClient,
+    constructor(http: HttpClient,
         private auth: AuthenticationService,
         private logger: LoggingService,
         private translate: TranslateService,
         private simpleModal: SimpleModal,
         private connectionService: ServerConnectionService) {
-
+        super();
         this.serviceInterface = new ServiceInterface(http);
         this.scheduler = new Scheduler(this, this.logger, this.translate);
-        this.stateChanged = new EventEmitter<boolean>();
-        this.committed = new EventEmitter();
-        this.elementChanged = new EventEmitter<string>(true);
         this.auth.authChanged.subscribe(() => {
             if (!this.auth.isAuthenticated) {
                 this.clear();
@@ -99,8 +84,7 @@ export class SpecmateDataService {
     }
 
     public readContents(url: string, virtual?: boolean): Promise<IContainer[]> {
-        this.busy = true;
-
+        this.start(SpecmateDataService.OP_READ_CONTENTS + '-' + url);
         let getFromCache = this.cache.isCachedContents(url);
         if (this.scheduler.isVirtualElement(url)) {
             getFromCache = true;
@@ -111,17 +95,18 @@ export class SpecmateDataService {
         if (getFromCache) {
             let contents: IContainer[] = this.readContentsVirtual(url);
             if (contents) {
-                return Promise.resolve(contents).then((loadedContents: IContainer[]) => this.readContentsComplete(loadedContents));
+                return Promise.resolve(contents).then((loadedContents: IContainer[]) => this.readContentsComplete(loadedContents, url));
             } else if (this.scheduler.isVirtualElement(url)) {
                 this.logger.info(this.translate.instant('triedToReadContensForVirtualElement'), url);
                 this.cache.updateContents([], url);
                 let virtualContents: IContainer[] = this.readContentsVirtual(url);
-                return Promise.resolve(virtualContents).then((loadedContents: IContainer[]) => this.readContentsComplete(loadedContents));
+                return Promise.resolve(virtualContents)
+                    .then((loadedContents: IContainer[]) => this.readContentsComplete(loadedContents, url));
             } else {
                 this.logger.warn(this.translate.instant('triedToReadContensVirtuallyButCouldNotFindThemFallingBackToServer'), url);
             }
         }
-        return this.readContentsServer(url).then((contents: IContainer[]) => this.readContentsComplete(contents));
+        return this.readContentsServer(url).then((contents: IContainer[]) => this.readContentsComplete(contents, url));
     }
 
     public readContentsRecursiveVirtually(url: string): IContainer[] {
@@ -139,8 +124,8 @@ export class SpecmateDataService {
         return contents;
     }
 
-    private readContentsComplete(contents: IContainer[]): IContainer[] {
-        this.busy = false;
+    private readContentsComplete(contents: IContainer[], url: string): IContainer[] {
+        this.end(SpecmateDataService.OP_READ_CONTENTS + '-' + url);
         return contents;
     }
 
@@ -149,7 +134,7 @@ export class SpecmateDataService {
     }
 
     public async readElement(url: string, virtual?: boolean): Promise<IContainer> {
-        this.busy = true;
+        this.start(SpecmateDataService.OP_READ_ELEMENT + '-' + url);
         let readElementTask: Promise<IContainer> = undefined;
         if (virtual === undefined && (this.scheduler.isVirtualElement(url) || this.cache.isCachedElement(url)) || virtual) {
             let element: IContainer = this.readElementVirtual(url);
@@ -166,33 +151,39 @@ export class SpecmateDataService {
         }
         const parentUrl = Url.parent(url);
         if (parentUrl === undefined) {
-            return readElementTask.then(element => this.readElementComplete(element));
+            return readElementTask.then(element => this.readElementComplete(element, url));
         }
         return this.readContents(parentUrl)
             .then(() => readElementTask)
-            .then((element: IContainer) => this.readElementComplete(element));
+            .then((element: IContainer) => this.readElementComplete(element, url));
     }
 
-    public readElementComplete(element: IContainer): IContainer {
-        this.busy = false;
+    public readElementComplete(element: IContainer, url: string): IContainer {
+        this.end(SpecmateDataService.OP_READ_ELEMENT + '-' + url);
         this.scheduler.initElement(element);
         return element;
     }
 
-    public updateElement(element: IContainer, virtual: boolean, compoundId: string): Promise<void> {
+    public async updateElement(element: IContainer, virtual: boolean, compoundId: string): Promise<void> {
+        this.start(SpecmateDataService.OP_UPDATE + '-' + element.url);
         this.elementChanged.emit(element.url);
         if (virtual) {
-            return Promise.resolve(this.updateElementVirtual(element, compoundId));
+            this.updateElementVirtual(element, compoundId);
+        } else {
+            await this.updateElementServer(element);
         }
-        return this.updateElementServer(element);
+        this.end(SpecmateDataService.OP_UPDATE + '-' + element.url);
     }
 
-    public deleteElement(url: string, virtual: boolean, compoundId: string): Promise<void> {
+    public async deleteElement(url: string, virtual: boolean, compoundId: string): Promise<void> {
+        this.start(SpecmateDataService.OP_DELETE + '-' + url);
         this.elementChanged.emit(url);
         if (virtual || this.scheduler.isVirtualElement(url)) {
-            return Promise.resolve(this.deleteElementVirtual(url, compoundId));
+            this.deleteElementVirtual(url, compoundId);
+        } else {
+            await this.deleteElementServer(url);
         }
-        return this.deleteElementServer(url);
+        this.end(SpecmateDataService.OP_DELETE + '-' + url);
     }
 
     public async clearModel(nodes: IContainer[], connections: IContainer[], compoundId = Id.uuid): Promise<void> {
@@ -234,13 +225,12 @@ export class SpecmateDataService {
 
     public async commit(taskName: string): Promise<void> {
         try {
-            this.busy = true;
-            this.currentTaskName = taskName;
+            this.start(SpecmateDataService.OP_COMMIT);
             const batchOperation = this.scheduler.toBatchOperation();
             await this.serviceInterface.performBatchOperation(batchOperation, this.auth.token);
             this.scheduler.resolveBatchOperation(batchOperation);
             this.scheduler.clearCommits();
-            this.busy = false;
+            this.end(SpecmateDataService.OP_COMMIT);
             this.committed.emit();
         } catch (error) {
             this.simpleModal.openOk(this.translate.instant('saveError.title'), this.translate.instant('saveError.retry'));
@@ -374,7 +364,7 @@ export class SpecmateDataService {
         if (!this.auth.isAuthenticatedForUrl(url)) {
             return Promise.resolve(false);
         }
-        this.busy = true;
+        this.start(SpecmateDataService.OP_PERFORM_OPERATION + '-' + url);
         let performFunction;
         if (httpGET) {
             performFunction = this.serviceInterface.performOperationGET;
@@ -383,11 +373,11 @@ export class SpecmateDataService {
         }
         return performFunction.apply(this.serviceInterface, [url, operation, payload, this.auth.token])
             .then((result: any) => {
-                this.busy = false;
+                this.end(SpecmateDataService.OP_PERFORM_OPERATION + '-' + url);
                 return result;
             })
             .catch((error: any) => {
-                this.busy = false;
+                this.end(SpecmateDataService.OP_PERFORM_OPERATION + '-' + url);
                 this.handleError(this.translate.instant('operationCouldNotBePerformed') +
                     ' ' + this.translate.instant('operation') + ': ' + operation + ' ' +
                     this.translate.instant('payload') + ': ' + JSON.stringify(payload), url, error);
@@ -400,16 +390,16 @@ export class SpecmateDataService {
         if (!this.auth.isAuthenticatedForUrl(url)) {
             return Promise.resolve();
         }
-        this.busy = true;
+        this.start(SpecmateDataService.OP_PERFORM_QUERY + '-' + url + '-' + operation);
         this.logStart(this.translate.instant('log.queryOperation') + ': ' + operation, url);
         return this.serviceInterface.performQuery(url, operation, parameters, this.auth.token)
             .then((result: any) => {
-                this.busy = false;
+                this.end(SpecmateDataService.OP_PERFORM_QUERY + '-' + url + '-' + operation);
                 this.logFinished(this.translate.instant('log.queryOperation') + ': ' + operation, url);
                 return result;
             })
             .catch((error) => {
-                this.busy = false;
+                this.end(SpecmateDataService.OP_PERFORM_QUERY + '-' + url + '-' + operation);
                 this.handleError(this.translate.instant('queryCouldNotBePerformed') + ' ' + this.translate.instant('operation') + ': ' +
                     operation + ' ' + this.translate.instant('parameters') + ': ' + JSON.stringify(parameters), url, error);
                 return Promise.reject();
@@ -420,16 +410,16 @@ export class SpecmateDataService {
         if (!this.auth.isAuthenticated) {
             return Promise.resolve([]);
         }
-        this.busy = true;
+        this.start(SpecmateDataService.OP_SEARCH);
         this.logStart(this.translate.instant('log.search') + ': ' + query, '');
         return this.serviceInterface.search(query, this.auth.token, filter)
             .then((result: IContainer[]) => {
-                this.busy = false;
+                this.end(SpecmateDataService.OP_SEARCH);
                 this.logFinished(this.translate.instant('log.search') + ': ' + query, '');
                 return result;
             })
             .catch((error) => {
-                this.busy = false;
+                this.end(SpecmateDataService.OP_SEARCH);
                 return this.handleError(this.translate.instant('queryCouldNotBePerformed') + ' ' +
                     this.translate.instant('operation') + ' : search ' + query, '', error);
             });

@@ -7,31 +7,31 @@ import { Component } from '@angular/core';
     styleUrls: ['editor-grid-button.component.css']
 })
 export class EditorGridButtonComponent {
-  public isGridShown = true;
-  public zoomFactor = 1.0;
+    public isGridShown = true;
+    public zoomFactor = 1.0;
 
-  public showGrid(): void {
-    this.isGridShown = true;
-  }
+    public showGrid(): void {
+        this.isGridShown = true;
+    }
 
-  public hideGrid(): void {
-    this.isGridShown = false;
-  }
+    public hideGrid(): void {
+        this.isGridShown = false;
+    }
 
-  public zoomIn(): void {
-    this.zoomFactor = this.zoomFactor * 1.1;
-  }
+    public zoomIn(): void {
+        this.zoomFactor = this.zoomFactor * 1.1;
+    }
 
-  public zoomOut(): void {
-    this.zoomFactor = this.zoomFactor / 1.1;
-  }
+    public zoomOut(): void {
+        this.zoomFactor = this.zoomFactor / 1.1;
+    }
 
-  public resetZoom(): void {
-    this.zoomFactor = 1.0;
-  }
+    public resetZoom(): void {
+        this.zoomFactor = 1.0;
+    }
 
-  public getBackgroundSize(): string {
-    return (150 * this.zoomFactor) + 'px';
-  }
+    public getBackgroundSize(): string {
+        return (150 * this.zoomFactor) + 'px';
+    }
 
 }

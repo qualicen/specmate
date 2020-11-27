@@ -31,6 +31,9 @@ export class Config {
 
     public static ACTIVATE_DEFAUTL_TOOL_ON_SUCCESS = false;
 
+    public static LOADING_MODAL_DELAY = 300;
+    public static LOADING_DEBOUNCE_DELAY = 1;
+
     public static LOG_START_MESSAGE = 'Specmate Started';
     public static LOG_LENGTH = 100;
     public static LOG_DEFAULT_COLOR = 'muted';
@@ -39,6 +42,8 @@ export class Config {
 
     public static MERGE_CONFLICT = 'Tried to merge commands with conflicting operations.';
     public static TRIED_TO_ADD_EXISTING_ELEMENT = 'Tried to add an existing element to parent! ';
+
+    public static SEARCH_MINIMUM_LENGTH = 2;
 
     // Editor settings
     public static GRAPHICAL_EDITOR_WIDTH = 1000;

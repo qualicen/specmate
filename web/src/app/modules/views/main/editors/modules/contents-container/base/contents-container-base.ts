@@ -9,9 +9,6 @@ import { NavigatorService } from '../../../../../../navigation/modules/navigator
 import { ConfirmationModal } from '../../../../../../notification/modules/modals/services/confirmation-modal.service';
 import { ClipboardService } from '../../tool-pallette/services/clipboard-service';
 import { GraphTransformer } from '../../tool-pallette/util/graph-transformer';
-import { Type } from 'src/app/util/type';
-import { CEGModel } from 'src/app/model/CEGModel';
-import { Process } from 'src/app/model/Process';
 import { GraphicalEditorService } from '../../graphical-editor/services/graphical-editor.service';
 import { ModelImageService } from '../../graphical-editor/services/model-image.service';
 

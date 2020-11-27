@@ -18,7 +18,7 @@ export class Login implements OnInit {
     public isAuthenticating = false;
 
     constructor(private auth: AuthenticationService, private navigator: NavigatorService) {
-      auth.getProjectNames().then(res => this.projectnames = res);
+        auth.getProjectNames().then(res => this.projectnames = res);
     }
 
     public get project(): string {
@@ -60,7 +60,7 @@ export class Login implements OnInit {
     }
 
     private isFilled(str: string): boolean {
-        return str !== undefined && str !== null && str.length > 0 &&  str !== '';
+        return str !== undefined && str !== null && str.length > 0 && str !== '';
     }
 
     public get isLoginFailed(): boolean {

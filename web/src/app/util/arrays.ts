@@ -1,5 +1,8 @@
 
 export class Arrays {
+    /**
+     * Removes the first occurrence of element in array.
+     */
     public static remove(array: any[], element: any): void {
         if (!array) {
             return;

@@ -58,7 +58,7 @@ export class TestProcedureEditor extends DraggableSupportingViewBase {
         modal: ConfirmationModal,
         dragulaService: DragulaService,
         translate: TranslateService) {
-            super(dataService, navigator, route, modal, dragulaService, translate);
+        super(dataService, navigator, route, modal, dragulaService, translate);
     }
 
     public onElementResolved(element: IContainer): Promise<void> {

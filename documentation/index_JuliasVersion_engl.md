@@ -573,7 +573,7 @@ and there in the subfolder *Subject* -> *Sandbox* -> *Specmate*, or one of the d
 
 The library is your "construction kit" for models. Here you can save models or parts of models that you use frequently. By [Copy and Paste](#copy-and-paste) you can copy these blocks and insert them into other models.
 
-![](Images/LibraryOrder.png "LibraryOrder")
+![](Images/foldernewfolderdelete.png "foldernewfolderdelete")
 
 You can create as many folders, subfolders, sub-subfolders, etc. as you like in the library view and also delete them again. To do this, click on the buttons shown in the illustration above. In the same way you can create CEGs, process models and test specifications here
 

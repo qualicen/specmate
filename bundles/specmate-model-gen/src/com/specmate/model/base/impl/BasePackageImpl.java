@@ -821,6 +821,8 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 		// Create annotations
 		// http://specmate.com/form_meta
 		createForm_metaAnnotations();
+		// http://specmate.com/internalAttribute
+		createInternalAttributeAnnotations();
 		// http://specmate.com/notLoadingOnList
 		createNotLoadingOnListAnnotations();
 	}
@@ -861,6 +863,26 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 		   new String[] {
 			   "disabled1", "name",
 			   "disabled2", "description"
+		   });
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://specmate.com/internalAttribute</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createInternalAttributeAnnotations() {
+		String source = "http://specmate.com/internalAttribute";
+		addAnnotation
+		  (getIRecycled_Recycled(),
+		   source,
+		   new String[] {
+		   });
+		addAnnotation
+		  (getIRecycled_HasRecycledChildren(),
+		   source,
+		   new String[] {
 		   });
 	}
 

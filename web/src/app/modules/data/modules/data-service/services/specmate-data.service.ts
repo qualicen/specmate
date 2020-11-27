@@ -446,7 +446,7 @@ export class SpecmateDataService extends Monitorable {
 
     public async recycleElement(url: string): Promise<void> {
         await this.performOperations(url, 'recycle');
-        this.readAllParentsServer(url);
+        await this.readAllParentsServer(url);
     }
 
     public async restoreElement(url: string): Promise<void> {

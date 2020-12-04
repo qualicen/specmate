@@ -567,7 +567,7 @@ If you choose to **export as JAVA**, the exported test definition will look like
 
 If you decide to use **Export as JavaScript**, the exported test specification will look like this:
 
-![](Bilderenglisch/Javascript-english.png "JavaScript")
+![](Bilderenglisch/Javascript-English.png "JavaScript")
 
 
 To export a test definition, please navigate to the test definition in Specmate (e.g. via the [Requirement Overview](#traces)). On the right hand side in the section [Links & Actions](#links-actions) you will find the subsection for export. Click on the link for the desired export format and save the offered file on your computer.

@@ -561,7 +561,7 @@ If you choose to **export as CSV**, the exported test definition will look like 
 
 If you choose to **export as JAVA**, the exported test definition will look like this:
 
-![](Bilderenglisch/Java-English.png "JAVA")
+![](Bilderenglisch/java-English.png "JAVA")
 
 
 

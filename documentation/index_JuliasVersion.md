@@ -508,6 +508,7 @@ Knoten 1: Währung = EUR
 Knoten 2: Währung = DOLLAR
 
 ![](Images/Inkonsistent-Test.PNG "Inkonsistent-Test")
+--> BILD ANPASSEN!!! SO NICHT SINNVOL!
 
 Die Knoten, die sich in der Spalte *Eingabe* befinden, sind Variablen, die die Ursachen aus dem Modell darstellen. Das sind alle Knoten, die keine eingehenden Verbindungen haben.
 Unterhalb der Spalte *Ausgabe* finden Sie die Variablen, die die Wirkungen darstellen.Das sind alle Knoten, die keine ausgehenden Verbindungen haben. Sie können auch manuell weitere Ein- und Ausgabevariablen hinzufügen oder bestehende löschen.
@@ -531,7 +532,7 @@ Für die Erstellung der Spezifikation werden Regeln verwendet, um ein optimales 
 Aus jedem Testfall können Sie eine Testprozedur anlegen. Hier können Sie alle notwendigen Schritte für den jeweiligen Testfall definieren. Bei der Modellierung eines CEG muss die Testprozedur manuell hinzugefügt werden. Das Erzeugen einer Testfall-Spezifikation aus einem Prozessdiagramm führt zu automatisch erstellten Testprozeduren. Namen und Beschreibungen können nach ALM exportiert werden. Dabei entspricht der Name des Prozedurschritts dem Namen des Testschritts und die Beschreibung des Prozessschritts der Aktion des Testschritts. das "expected Outcome" beziehungsweise der "Check" sollte dabei korrekt in die entsprechende Spalte in ALM übertragen werden.
 Sie können einen weiteren Schritt hinzufügen, indem Sie die Schaltfläche *Testschritt anlegen* drücken. In jedem Schritt des Testverfahrens können Sie auf Parameter aus dem erstellten Modell verweisen. Die Parameter aus dem Modell können in der Parameterzuordnung auf einen bestimmten Wert eingestellt werden. Wenn die Erstellung einer Testprozedur abgeschlossen ist, können Sie sie mit der Schaltfläche *Testprozedur exportieren* auf der rechten Seite z.B. nach Jira XRay Cloud exportieren und sie dort weiter bearbeiten. Bevor Sie eine Testprozedur exportieren, ist es essentiell, dass Sie diese vorher speichern. Speichern Sie die Testprozedur nicht selbstständig, fragt Specmate vor dem Export, ob Sie die Testprozedur speichern möchten – stimmen Sie zu, können Sie den Export fortsetzen, stimmen Sie nicht zu, wird der Export abgebrochen. Sie können auch eine bereits erstellte Testprozedur öffnen und bearbeiten, indem Sie sie im [Projekt-Explorer](#bedienoberfläche) oder in der [Anforderungsübersicht](#traces) anklicken.
 
-![](Images/Test-procedure.png "Test-procedure")
+![](Bilderenglisch/testprocedure.png "testprocedure")
 
 # Export von Testspezifikationen und -prozeduren
 
@@ -545,7 +546,7 @@ Testspezifikationen können in Specmate in drei Formaten exportiert werden:
 - Als Java-Testhüllen
 - Als JavaScript-Testhüllen
 
-![](Images/Testspezifikationen.png "testspezifikationen")
+![](Images/Test Specifications.png "test specifications")
 
 Sollten Sie sich für einen **Export als CSV** entscheiden, dann sieht die exportierte Testspezifikation folgendermaßen aus:
 

@@ -491,7 +491,7 @@ Manually created: ![](Bilderenglisch/Manually.png "Manually")
 
 In the model editor, use the "Generate Test specification" option on the right side of the "Links & Actions" tab to generate a test definition from a model. Alternatively, you can also find the "Generate Test specification" option in the requirement overview in the list of models after the model name. Make sure that you have pressed the *Validate* button before, to avoid an error message.
 
-![](Images/Testcases.png "Test Cases")
+![](Bilderenglisch/testcase-English.png "Test Cases")
 
 The name of the test case specification is based on the date and time when the specification was created. You can change the name of the specification and add a description.
 
@@ -507,7 +507,8 @@ Example:
 Node 1: Currency = EUR
 Node 2: Currency = DOLLAR
 
-![](Images/Inkonsistent-Test.PNG "Inconsistency Test")
+![](Bilderenglisch/inconsistanttestcase.PNG "Inconsistency Test")
+
 
 The nodes located in the *Input* column are variables that represent the causes from the model. These are all nodes that have no incoming connections.
 Below the *Output* column are the variables representing the effects, i.e. all nodes that have no outgoing connections. You can also manually add further input and output variables or delete existing ones.
@@ -532,7 +533,7 @@ You can create a test procedure from each test case. Here you can define all nec
 
 Specmate only generates test cases from procedures that contain consistent conditions. Consistent means: If an edge with Condition A is selected once in a test case, the edges with Condition A are preferred later on. For graphs, which require inconsistent paths to cover edges (e.g. graphs with cycles), the system first searches for consistent paths.
 
-![](Images/Test-procedure.png "Test-procedure")
+![](Bilderenglisch/Testprocedure.png "Test-procedure")
 
 # Export of test definitions and procedures
 
@@ -546,19 +547,28 @@ Test specifications can be exported to Specmate in three formats:
 - As Java test envelopes
 - As JavaScript test envelopes
 
-![](Images/Test Specifications.png "test specifications")
+
+![](Bilderenglisch/testspecifications.png "testspecifications")
+
+
+
 
 If you choose to **export as CSV**, the exported test definition will look like this:
 
-![](Images/CSV.png "CSV")
+![](Bilderenglisch/CSV-English.png "CSV")
+
+
 
 If you choose to **export as JAVA**, the exported test definition will look like this:
 
-![](Images/JAVA.png "JAVA")
+![](Bilderenglisch/Java-English.png "JAVA")
+
+
 
 If you decide to use **Export as JavaScript**, the exported test specification will look like this:
 
-![](Images/JavaScript.png "JavaScript")
+![](Bilderenglisch/Javascript-english.png "JavaScript")
+
 
 To export a test definition, please navigate to the test definition in Specmate (e.g. via the [Requirement Overview](#traces)). On the right hand side in the section [Links & Actions](#links-actions) you will find the subsection for export. Click on the link for the desired export format and save the offered file on your computer.
 

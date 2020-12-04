@@ -85,6 +85,7 @@ export class LanguageChooser implements OnInit {
     private retrieveFromCookie(): string {
         const language = this.cookiesService.getCookie(LanguageChooser.LANGUAGE_KEY);
         if (language !== undefined) {
+            // Removing trailing and leading quotation marks, because they are accidentially set in the ngx-cookie service.
             return language.replace(/(^")/, '').replace(/"$/, '');
         }
         return language;

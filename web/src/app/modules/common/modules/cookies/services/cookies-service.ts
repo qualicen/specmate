@@ -10,23 +10,23 @@ export class CookiesService {
     let cookieOptions = {};
 
     if (document.location.protocol == 'https:') {
-        cookieOptions = { sameSite: 'none', secure: true };
+      cookieOptions = { sameSite: 'none', secure: true };
     } else {
-        cookieOptions = { sameSite: 'lax'};
+      cookieOptions = { sameSite: 'lax' };
     }
 
-    this.ngxcookie.putObject(cookieName, cookieValue, cookieOptions );
+    this.ngxcookie.putObject(cookieName, cookieValue, cookieOptions);
   }
 
   public getCookie(cookieName: string): string {
     return this.ngxcookie.get(cookieName);
   }
 
-  public getCookieObject (cookieName: string): object {
-      return this.ngxcookie.getObject(cookieName);
+  public getCookieObject(cookieName: string): object {
+    return this.ngxcookie.getObject(cookieName);
   }
 
   public removeCookie(cookieName: string): void {
-      this.ngxcookie.remove(cookieName);
+    this.ngxcookie.remove(cookieName);
   }
 }

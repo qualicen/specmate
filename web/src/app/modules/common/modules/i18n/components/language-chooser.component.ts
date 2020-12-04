@@ -32,7 +32,7 @@ export class LanguageChooser implements OnInit {
     public ngOnInit(): void {
         this.translate.addLangs(Config.LANGUAGES.map(languageObject => languageObject.code));
         const cookieLang = this.retrieveFromCookie();
-        if (cookieLang !== undefined && cookieLang !== null && cookieLang.length > 0) {
+        if (this.isValidLanguage(cookieLang)) {
             this.translate.setDefaultLang(cookieLang);
             this.language = cookieLang;
             return;
@@ -69,6 +69,11 @@ export class LanguageChooser implements OnInit {
         return Config.LANGUAGE_CHOOSER_ENABLED;
     }
 
+    private isValidLanguage(language: string) {
+        const validLanguages = this.translate.getLangs();
+        return language !== undefined && language !== null && language.length > 0 && validLanguages.indexOf(language) >= 0;
+    }
+
     private storeInCookie(language: string): void {
         this.cookiesService.setCookie(LanguageChooser.LANGUAGE_KEY, language);
     }
@@ -78,7 +83,12 @@ export class LanguageChooser implements OnInit {
     }
 
     private retrieveFromCookie(): string {
-        return this.cookiesService.getCookie(LanguageChooser.LANGUAGE_KEY);
+        const language = this.cookiesService.getCookie(LanguageChooser.LANGUAGE_KEY);
+        if (language !== undefined) {
+            // Removing trailing and leading quotation marks, because they are accidentially set in the ngx-cookie service.
+            return language.replace(/(^")/, '').replace(/"$/, '');
+        }
+        return language;
     }
 
     public setSelectionIndex(newIndex: number) {

@@ -1,9 +1,8 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { CEGModel } from '../../../../../model/CEGModel';
+import { TestProcedure } from 'src/app/model/TestProcedure';
 import { IContainer } from '../../../../../model/IContainer';
 import { FieldMetaItem, MetaInfo } from '../../../../../model/meta/field-meta';
-import { Process } from '../../../../../model/Process';
 import { TestSpecification } from '../../../../../model/TestSpecification';
 import { Type } from '../../../../../util/type';
 import { ElementValidatorBase } from '../../../../../validation/element-validator-base';
@@ -14,8 +13,7 @@ import { ValidationErrorSeverity } from '../../../../../validation/validation-er
 import { ValidationResult } from '../../../../../validation/validation-result';
 import { NavigatorService } from '../../../../navigation/modules/navigator/services/navigator.service';
 import { ValidationCache, ValidationPair } from '../util/validation-cache';
-import { TestCase } from 'src/app/model/TestCase';
-import { TestProcedure } from 'src/app/model/TestProcedure';
+import { SpecmateType } from 'src/app/util/specmateType';
 
 
 @Injectable()

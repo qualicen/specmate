@@ -1,13 +1,13 @@
-import { Type } from 'src/app/util/type';
+import { Injectable } from '@angular/core';
+import * as saveAsPng from 'save-svg-as-png';
+import { ModelImageFactory } from 'src/app/factory/model-image-factory';
 import { CEGModel } from 'src/app/model/CEGModel';
 import { IContainer } from 'src/app/model/IContainer';
+import { ModelImage } from 'src/app/model/ModelImage';
 import { Process } from 'src/app/model/Process';
 import { SpecmateDataService } from 'src/app/modules/data/modules/data-service/services/specmate-data.service';
-import { ModelImage } from 'src/app/model/ModelImage';
-import { ModelImageFactory } from 'src/app/factory/model-image-factory';
 import { Id } from 'src/app/util/id';
-import * as saveAsPng from 'save-svg-as-png';
-import { Injectable } from '@angular/core';
+import { SpecmateType } from 'src/app/util/specmateType';
 
 @Injectable()
 export class ModelImageService {
@@ -46,7 +46,7 @@ export class ModelImageService {
             if (modelImage === null || modelImage === undefined) {
                 modelImage = await new ModelImageFactory(this.dataService).create(model, false);
             }
-                this.dataService.readElementComplete(modelImage, model.url);
+                this.dataService.readElementComplete(modelImage);
             modelImage.imageData = pngAsBase64;
             await this.dataService.updateElement(modelImage, true, Id.uuid);
             } else {

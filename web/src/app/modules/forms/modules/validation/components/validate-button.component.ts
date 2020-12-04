@@ -14,16 +14,13 @@ export class ValidateButton {
 
   @Input()
   public textEnabled = true;
-  private commitCounter = 0;
 
   constructor(
     private validationService: ValidationService,
-    private dataService: SpecmateDataService,
     private navigator: NavigatorService) {
   }
 
   public validate(): Promise<void> {
-    this.commitCounter = this.dataService.countCommits;
     return this.validationService.validateCurrent();
   }
 

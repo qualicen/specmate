@@ -93,10 +93,10 @@ export class TestSpecificationGeneratorButton {
         if (contents.length != 0) {
             this.navigator.navigate(testSpec);
         } else {
-            this.logger.warn('Model did not yield any test cases' , testSpec.url);
+            this.logger.warn('Model did not yield any test cases', testSpec.url);
             this.dataService.deleteElement(testSpec.url, true, Id.uuid)
                 .then(() => this.dataService.commit(this.translate.instant('delete')))
-                .catch(() => {});
+                .catch(() => { });
         }
     }
 

@@ -36,8 +36,80 @@ public abstract class AuthRestServiceBase extends RestServiceBase implements IRe
 
 		ResponseBuilder responseBuilder = Response.fromResponse(alteredResult.getResponse());
 
-		Arrays.stream(cookies).filter(Objects::nonNull).forEach(cookie -> responseBuilder.cookie(cookie));
+		Arrays.stream(cookies).filter(Objects::nonNull).forEach(cookie -> setCookie(request, responseBuilder, cookie));
 		return responseBuilder.build();
+	}
+
+	/**
+	 * Adds a cookie header to the response. The attributes `sameSite` is set
+	 * automatically depending on the request schema (http|https). If `sameSite`
+	 * will be set to `none`, `Secure` will be set too.
+	 */
+	private static void setCookie(HttpServletRequest request, ResponseBuilder responseBuilder, NewCookie cookie) {
+
+		String sameSite;
+		boolean secure;
+
+		String origin = request.getHeader("origin");
+		if (origin != null && origin.startsWith("https")) {
+			sameSite = "none";
+			secure = true;
+		} else {
+			sameSite = "lax";
+			secure = cookie.isSecure();
+		}
+
+		StringBuilder cookieString = new StringBuilder();
+
+		cookieString.append(cookie.getName());
+		cookieString.append("=");
+		cookieString.append(cookie.getValue());
+
+		if (cookie.getExpiry() != null) {
+			cookieString.append(";Expires=");
+			cookieString.append(cookie.getExpiry());
+		}
+
+		if (cookie.getMaxAge() > 0) {
+			cookieString.append(";Max-Age=");
+			cookieString.append(cookie.getMaxAge());
+		}
+
+		if (cookie.getDomain() != null) {
+			cookieString.append(";Domain=");
+			cookieString.append(cookie.getDomain());
+		}
+
+		if (cookie.getPath() != null) {
+			cookieString.append(";Path=");
+			cookieString.append(cookie.getPath());
+		}
+
+		if (cookie.getComment() != null) {
+			cookieString.append(";Comment=\"");
+			cookieString.append(cookie.getComment().replace("\"", "\\\""));
+			cookieString.append("\"");
+		}
+
+		if (cookie.getVersion() > 0) {
+			cookieString.append(";Version=");
+			cookieString.append(cookie.getVersion());
+		}
+
+		if (cookie.isHttpOnly()) {
+			cookieString.append(";HttpOnly");
+		}
+
+		if (sameSite != null) {
+			cookieString.append(";SameSite=");
+			cookieString.append(sameSite);
+		}
+
+		if (secure) {
+			cookieString.append(";Secure");
+		}
+
+		responseBuilder.header("Set-Cookie", cookieString.toString());
 	}
 
 	/**

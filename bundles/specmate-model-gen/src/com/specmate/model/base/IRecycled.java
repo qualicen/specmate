@@ -30,7 +30,7 @@ public interface IRecycled extends CDOObject {
 	 * @return the value of the '<em>Recycled</em>' attribute.
 	 * @see #setRecycled(boolean)
 	 * @see com.specmate.model.base.BasePackage#getIRecycled_Recycled()
-	 * @model
+	 * @model annotation="http://specmate.com/internalAttribute"
 	 * @generated
 	 */
 	boolean isRecycled();
@@ -52,7 +52,7 @@ public interface IRecycled extends CDOObject {
 	 * @return the value of the '<em>Has Recycled Children</em>' attribute.
 	 * @see #setHasRecycledChildren(boolean)
 	 * @see com.specmate.model.base.BasePackage#getIRecycled_HasRecycledChildren()
-	 * @model
+	 * @model annotation="http://specmate.com/internalAttribute"
 	 * @generated
 	 */
 	boolean isHasRecycledChildren();

@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { NgbDropdown, NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
-import { CookieService } from 'ngx-cookie';
 import { Config } from '../../../../../config/config';
+import { CookiesService } from 'src/app/modules/common/modules/cookies/services/cookies-service';
 
 @Component({
     selector: 'language-chooser',
@@ -14,7 +14,7 @@ export class LanguageChooser implements OnInit {
 
     private static LANGUAGE_KEY = 'specmate-display-language';
 
-    private selectionIndex = 0;
+    protected selectionIndex = 0;
 
     @ViewChild('dropdownRef', { static: false })
     set dropdownRef(ref: NgbDropdown) {
@@ -23,7 +23,7 @@ export class LanguageChooser implements OnInit {
     private _dropdownRef: NgbDropdown;
 
     constructor(private translate: TranslateService,
-        private cookie: CookieService,
+        private cookiesService: CookiesService,
         config: NgbDropdownConfig) {
         config.autoClose = true;
         config.placement = 'bottom-right';
@@ -32,7 +32,7 @@ export class LanguageChooser implements OnInit {
     public ngOnInit(): void {
         this.translate.addLangs(Config.LANGUAGES.map(languageObject => languageObject.code));
         const cookieLang = this.retrieveFromCookie();
-        if (cookieLang !== undefined && cookieLang !== null && cookieLang.length > 0) {
+        if (this.isValidLanguage(cookieLang)) {
             this.translate.setDefaultLang(cookieLang);
             this.language = cookieLang;
             return;
@@ -69,8 +69,13 @@ export class LanguageChooser implements OnInit {
         return Config.LANGUAGE_CHOOSER_ENABLED;
     }
 
+    private isValidLanguage(language: string) {
+        const validLanguages = this.translate.getLangs();
+        return language !== undefined && language !== null && language.length > 0 && validLanguages.indexOf(language) >= 0;
+    }
+
     private storeInCookie(language: string): void {
-        this.cookie.put(LanguageChooser.LANGUAGE_KEY, language);
+        this.cookiesService.setCookie(LanguageChooser.LANGUAGE_KEY, language);
     }
 
     private setLangAttr(language: string): void {
@@ -78,7 +83,12 @@ export class LanguageChooser implements OnInit {
     }
 
     private retrieveFromCookie(): string {
-        return this.cookie.get(LanguageChooser.LANGUAGE_KEY);
+        const language = this.cookiesService.getCookie(LanguageChooser.LANGUAGE_KEY);
+        if (language !== undefined) {
+            // Removing trailing and leading quotation marks, because they are accidentially set in the ngx-cookie service.
+            return language.replace(/(^")/, '').replace(/"$/, '');
+        }
+        return language;
     }
 
     public setSelectionIndex(newIndex: number) {

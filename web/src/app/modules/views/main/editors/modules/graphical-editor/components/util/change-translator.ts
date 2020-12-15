@@ -74,12 +74,12 @@ export class ChangeTranslator {
 
 
     public async translate(change: (mxgraph.mxTerminalChange | mxgraph.mxChildChange | mxgraph.mxStyleChange),
-        graph: mxgraph.mxGraph): Promise<void> {
+        graph: mxgraph.mxGraph, contents?: IContainer[]): Promise<void> {
         if (this.preventDataUpdates) {
             return;
         }
+        this.contents = contents ?? await this.dataService.readContents(this.model.url, true);
 
-        this.contents = await this.dataService.readContents(this.model.url, true);
         if (change['cell'] === undefined && change['child'] !== undefined) {
             const childChange = change as mxgraph.mxChildChange;
             if (childChange.parent !== undefined && childChange.parent !== null) {
@@ -510,6 +510,11 @@ export class ChangeTranslator {
                             try {
                                 graph.model.setValue(child, val);
                             } finally {
+                                let width = child.geometry.width;
+                                if (width <= 0) {
+                                    width = this.shapeProvider.getInitialSize(changedElement).width;
+                                }
+                                VertexProvider.adjustChildCellSize(child, width);
                                 graph.getModel().endUpdate();
                             }
                         }

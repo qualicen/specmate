@@ -1,1 +1,3 @@
-<a *ngIf="trace" [navigationTarget]="trace"><icon-selector [model]="trace"></icon-selector>&nbsp;<span *ngIf="extId">{{extId}}:&nbsp;</span>{{trace.name}}</a>
+<a *ngIf="trace" [navigationTarget]="trace">
+    <icon-selector [model]="trace"></icon-selector>&nbsp;<span *ngIf="extId">{{extId}}:&nbsp;</span>{{trace.name}}
+</a>

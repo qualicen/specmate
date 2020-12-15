@@ -38,10 +38,10 @@ export class ExportTestprocedureButton implements OnInit {
         if (!this.canExport) {
             return;
         }
-        this.modal.confirmSave().then( () =>
-            this.dataService.commit(this.translate.instant('saveBeforeTestprocedureExport')).then( () =>
+        this.modal.confirmSave().then(() =>
+            this.dataService.commit(this.translate.instant('saveBeforeTestprocedureExport')).then(() =>
                 this.dataService.performOperations(this.testProcedure.url, 'syncalm')
-                .then((result) => {
+                    .then((result) => {
                         if (result) {
                             this.modal
                                 .openOk(this.translate.instant('successful'), this.translate.instant('procedureExportedSuccessfully'));
@@ -49,7 +49,7 @@ export class ExportTestprocedureButton implements OnInit {
                             this.modal.openOk(this.translate.instant('failed'), this.translate.instant('procedureExportFailed'));
                         }
                     }
-                )
+                    )
             )
         );
     }

@@ -127,7 +127,7 @@ export class Scheduler {
     }
 
     public clearCommits(): void {
-        this.commands = this.commands.filter((command: Command) => command.operationType === EOperation.INIT || command.isResolved);
+        this.commands = this.commands.filter((command: Command) => command.operationType === EOperation.INIT || !command.isResolved);
     }
     public clearElementsToReload(): void {
         this.elementsToReload = [];

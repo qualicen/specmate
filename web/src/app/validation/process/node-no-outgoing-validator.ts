@@ -1,10 +1,8 @@
+import { SpecmateType } from 'src/app/util/specmate-type';
 import { IContainer } from '../../model/IContainer';
 import { IModelNode } from '../../model/IModelNode';
 import { Process } from '../../model/Process';
-import { ProcessDecision } from '../../model/ProcessDecision';
 import { ProcessEnd } from '../../model/ProcessEnd';
-import { ProcessStart } from '../../model/ProcessStart';
-import { ProcessStep } from '../../model/ProcessStep';
 import { Type } from '../../util/type';
 import { ElementValidatorBase } from '../element-validator-base';
 import { ValidationMessage } from '../validation-message';
@@ -15,11 +13,7 @@ import { Validator } from '../validator-decorator';
 export class NodeNoOutgoingValidator extends ElementValidatorBase<Process> {
     public validate(element: Process, contents: IContainer[]): ValidationResult {
         let processNodes: IModelNode[] =
-            contents.filter((element: IContainer) =>
-                Type.is(element, ProcessEnd) ||
-                Type.is(element, ProcessStart) ||
-                Type.is(element, ProcessDecision) ||
-                Type.is(element, ProcessStep)) as IModelNode[];
+            contents.filter((element: IContainer) => SpecmateType.isNodeOfProcess(element)) as IModelNode[];
         let nodesWithoutOutgoing: IContainer[] =
             processNodes.filter((element: IModelNode) =>
                 (!element.outgoingConnections ||

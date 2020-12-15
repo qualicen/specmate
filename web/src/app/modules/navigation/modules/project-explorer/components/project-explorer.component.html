@@ -27,14 +27,14 @@
                     [attr.aria-controls]="currentActiveTab === ActiveTab.library ? 'ngb-tab-1-panel' : null">{{'library'
                     | translate}}</button>
             </li>
-           <!--  <li class="nav-item">
+            <li class="nav-item">
                 <button [ngClass]="{'active' : currentActiveTab === ActiveTab.recycleBin}" role="tab"
                     (click)="switchToRecycleBin()" class="nav-link" id="ngb-tab-1" aria-disabled="false"
                     [attr.aria-expanded]="currentActiveTab === ActiveTab.recycleBin ? 'true' : 'false'"
                     [attr.aria-controls]="currentActiveTab === ActiveTab.recycleBin ? 'ngb-tab-1-panel' : null">
                     <i class="fa fa-trash" aria-hidden="true"></i>
                 </button>
-            </li> -->
+            </li>
         </ul>
         <table class="table" *ngIf="searchBox.value">
             <thead>
@@ -67,7 +67,7 @@
             <element-tree *ngFor="let element of rootRecycleBinProject;" [baseUrl]="element.url"
                 [currentElement]="currentElement" [withExpand]="true" [recycleBin]="true"></element-tree>
             <li *ngIf="canLoadMoreRecycleBinFoldersProject">
-                <button (click)="loadMoreReycleBinFoldersProject()" class="btn btn-sm btn-outline-primary btn-sm">
+                <button (click)="loadMoreRecycleBinProjectFolders()" class="btn btn-sm btn-outline-primary btn-sm">
                     <i class="fa fa-ellipsis-v"></i>&nbsp;{{'loadMore' | translate}}
                 </button>
             </li>
@@ -77,7 +77,7 @@
                 [currentElement]="currentElement" [withExpand]="true" [library]="true" [recycleBin]="true">
             </element-tree>
             <li *ngIf="canLoadMoreRecycleBinFoldersLibrary">
-                <button (click)="loadMoreReycleBinFoldersLibrary()" class="btn btn-sm btn-outline-primary btn-sm">
+                <button (click)="loadMoreRecycleBinLibraryFolders()" class="btn btn-sm btn-outline-primary btn-sm">
                     <i class="fa fa-ellipsis-v"></i>&nbsp;{{'loadMore' | translate}}
                 </button>
             </li>

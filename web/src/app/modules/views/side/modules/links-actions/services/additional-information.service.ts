@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CEGModel } from '../../../../../../model/CEGModel';
 import { IContainer } from '../../../../../../model/IContainer';
-import { Process } from '../../../../../../model/Process';
 import { Requirement } from '../../../../../../model/Requirement';
 import { TestProcedure } from '../../../../../../model/TestProcedure';
 import { TestSpecification } from '../../../../../../model/TestSpecification';
@@ -13,6 +12,7 @@ import { NavigatorService } from '../../../../../navigation/modules/navigator/se
 import { AuthenticationService } from '../../../../main/authentication/modules/auth/services/authentication.service';
 import { Folder } from '../../../../../../model/Folder';
 import { ContentsContainerService } from 'src/app/modules/views/main/editors/modules/contents-container/services/content-container.service';
+import { SpecmateType } from 'src/app/util/specmate-type';
 
 @Injectable()
 export class AdditionalInformationService {
@@ -52,7 +52,7 @@ export class AdditionalInformationService {
         if (!this.canHaveTestSpecifications) {
             return;
         }
-        if (this.isModel(this.element)) {
+        if (SpecmateType.isModel(this.element)) {
             const testSpecifications =
                 await this.dataService.performQuery(this.element.url, 'listRecursive', { class: TestSpecification.className });
             this._testSpecifications = Sort.sortArray(testSpecifications).filter(testSpec => testSpec.recycled === false);
@@ -92,7 +92,7 @@ export class AdditionalInformationService {
         if (!this.parents) {
             return undefined;
         }
-        return this.parents.find((element: IContainer) => this.isModel(element));
+        return this.parents.find((element: IContainer) => SpecmateType.isModel(element));
     }
 
     public get requirement(): Requirement {
@@ -118,11 +118,11 @@ export class AdditionalInformationService {
     }
 
     public get canHaveTestSpecifications(): boolean {
-        return Type.is(this.element, Requirement) || this.isModel(this.element) || Type.is(this.element, Folder);
+        return Type.is(this.element, Requirement) || SpecmateType.isModel(this.element) || Type.is(this.element, Folder);
     }
 
     public get canGenerateTestSpecifications(): boolean {
-        return this.element && (this.isModel(this.element) || Type.is(this.element, Requirement) || Type.is(this.element, Folder));
+        return this.element && (SpecmateType.isModel(this.element) || Type.is(this.element, Requirement) || Type.is(this.element, Folder));
     }
 
     public get canAddTestSpecifications(): boolean {
@@ -131,9 +131,5 @@ export class AdditionalInformationService {
 
     public get canGenerateCEGModel(): boolean {
         return Type.is(this.element, CEGModel);
-    }
-
-    private isModel(element: IContainer): boolean {
-        return Type.is(element, CEGModel) || Type.is(element, Process);
     }
 }

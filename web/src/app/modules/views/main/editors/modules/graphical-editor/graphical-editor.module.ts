@@ -5,6 +5,7 @@ import { EditorGridButtonModule } from '../editor-grid-button/editor-grid-button
 import { MaximizeButtonModule } from '../maximize-button/maximize-button.module';
 import { ToolPalletteModule } from '../tool-pallette/tool-pallette.module';
 import { GraphicalEditor } from './components/graphical-editor.component';
+import { ChangeGuardService } from './services/change-guard.service';
 import { GraphicalEditorService } from './services/graphical-editor.service';
 import { ModelImageService } from './services/model-image.service';
 

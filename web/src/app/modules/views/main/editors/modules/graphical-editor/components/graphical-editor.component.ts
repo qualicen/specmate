@@ -305,6 +305,12 @@ export class GraphicalEditor {
                 } else {
                     this.selectedElementService.deselect();
                 }
+
+                const selectedElements = await Promise.all(selections.map(cell => this.dataService.readElement(cell.getId(), true)));
+                const guardResult = await this.changeGuard.guardSelectedElements(selectedElements);
+                if (!guardResult) {
+                    this.selectedElementService.select(this.model);
+                }
             } else {
                 this.selectedElementService.select(this.model);
             }
@@ -502,7 +508,7 @@ export class GraphicalEditor {
 
         const originalTooltip = this.graph.getTooltipForCell;
 
-        this.graph.getTooltipForCell = function(cell) {
+        this.graph.getTooltipForCell = function (cell) {
             let c = cell as mxgraph.mxCell;
             if (c.getId().endsWith(VertexProvider.ID_SUFFIX_LINK_ICON)) {
                 return null;

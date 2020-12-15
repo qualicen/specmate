@@ -36,6 +36,7 @@ import { StyleChanger } from './util/style-changer';
 import { GraphicalEditorService } from '../services/graphical-editor.service';
 import { Process } from 'src/app/model/Process';
 import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
+import { ChangeGuardService } from '../services/change-guard.service';
 
 declare var require: any;
 
@@ -78,6 +79,7 @@ export class GraphicalEditor {
         private translate: TranslateService,
         private undoService: UndoService,
         private modal: ConfirmationModal,
+        private changeGuard: ChangeGuardService,
         private graphicalEditorService: GraphicalEditorService) {
 
         this.navigator.navigationStart.subscribe(() => {

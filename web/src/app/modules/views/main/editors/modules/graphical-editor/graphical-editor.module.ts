@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { SpecmateSharedModule } from '../../../../../specmate/specmate.shared.module';
+import { EditorGridButtonModule } from '../editor-grid-button/editor-grid-button.module';
 import { MaximizeButtonModule } from '../maximize-button/maximize-button.module';
 import { ToolPalletteModule } from '../tool-pallette/tool-pallette.module';
 import { GraphicalEditor } from './components/graphical-editor.component';
-import { EditorGridButtonModule } from '../editor-grid-button/editor-grid-button.module';
 import { GraphicalEditorService } from './services/graphical-editor.service';
 import { ModelImageService } from './services/model-image.service';
 
@@ -27,7 +27,8 @@ import { ModelImageService } from './services/model-image.service';
   ],
   providers: [
     GraphicalEditorService,
-    ModelImageService
+    ModelImageService,
+    ChangeGuardService
   ],
   bootstrap: [
     // COMPONENTS THAT ARE BOOTSTRAPPED HERE

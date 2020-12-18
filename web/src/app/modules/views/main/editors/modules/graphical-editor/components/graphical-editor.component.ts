@@ -3,6 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { mxgraph } from 'mxgraph'; // Typings only - no code!
 import { CEGModel } from 'src/app/model/CEGModel';
 import { CEGNode } from 'src/app/model/CEGNode';
+import { Process } from 'src/app/model/Process';
 import { ProcessConnection } from 'src/app/model/ProcessConnection';
 import { ProcessDecision } from 'src/app/model/ProcessDecision';
 import { ProcessEnd } from 'src/app/model/ProcessEnd';
@@ -10,6 +11,7 @@ import { ProcessStart } from 'src/app/model/ProcessStart';
 import { ProcessStep } from 'src/app/model/ProcessStep';
 import { UndoService } from 'src/app/modules/actions/modules/common-controls/services/undo.service';
 import { NavigatorService } from 'src/app/modules/navigation/modules/navigator/services/navigator.service';
+import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
 import { IContainer } from '../../../../../../../model/IContainer';
 import { IModelConnection } from '../../../../../../../model/IModelConnection';
 import { IModelNode } from '../../../../../../../model/IModelNode';
@@ -28,15 +30,13 @@ import { ElementProvider } from '../providers/properties/element-provider';
 import { NameProvider } from '../providers/properties/name-provider';
 import { ShapeData, ShapeProvider } from '../providers/properties/shape-provider';
 import { VertexProvider } from '../providers/properties/vertex-provider';
+import { ChangeGuardService } from '../services/change-guard.service';
+import { GraphicalEditorService } from '../services/graphical-editor.service';
 import { EditorKeyHandler } from './editor-components/editor-key-handler';
 import { EditorPopup } from './editor-components/editor-popup';
 import { EditorStyle } from './editor-components/editor-style';
 import { ChangeTranslator } from './util/change-translator';
 import { StyleChanger } from './util/style-changer';
-import { GraphicalEditorService } from '../services/graphical-editor.service';
-import { Process } from 'src/app/model/Process';
-import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
-import { ChangeGuardService } from '../services/change-guard.service';
 
 declare var require: any;
 
@@ -307,9 +307,21 @@ export class GraphicalEditor {
                 }
 
                 const selectedElements = await Promise.all(selections.map(cell => this.dataService.readElement(cell.getId(), true)));
+
+                let cell = undefined;
+                let geo = undefined;
+                if (selectedElements.length === 1) {
+                    cell = selections[0];
+                    geo = this.graph.getCellGeometry(cell).clone();
+                }
                 const guardResult = await this.changeGuard.guardSelectedElements(selectedElements);
                 if (!guardResult) {
+                    this.graph.getSelectionModel().clear();
                     this.selectedElementService.select(this.model);
+                    if (cell !== undefined && geo !== undefined) {
+                        this.graph.getModel().setGeometry(cell, geo);
+                        this.graph.refresh(cell);
+                    }
                 }
             } else {
                 this.selectedElementService.select(this.model);
@@ -317,7 +329,6 @@ export class GraphicalEditor {
             this.graph.getModel().endUpdate();
         });
 
-        VertexProvider.initRenderer(this.graph);
         EditorStyle.initEditorStyles(this.graph);
         EditorKeyHandler.initKeyHandler(this.graph, this.undoService);
         this.initUndoManager();
@@ -428,7 +439,8 @@ export class GraphicalEditor {
         this._contents = await this.dataService.readContents(this.model.url, true);
         this.elementProvider = new ElementProvider(this.model, this._contents);
         this.nodeNameConverter = new NodeNameConverterProvider(this.model).nodeNameConverter;
-        this.vertexProvider = new VertexProvider(this.model, this.graph, this.shapeProvider, this.nodeNameConverter, this.dataService);
+        this.vertexProvider = new VertexProvider(this.model, this.graph, this.shapeProvider, this.nodeNameConverter, this.dataService, this.changeGuard);
+        this.vertexProvider.initRenderer(this.graph);
         const parent = this.graph.getDefaultParent();
         this.changeTranslator.preventDataUpdates = true;
 

@@ -163,11 +163,12 @@ export class VertexProvider extends ProviderBase {
                     optionElements.push(optionElem);
                 }
 
-                mx.mxEvent.addListener(dropdown, 'click', async (evt: mxgraph.mxEventObject) => {
+                mx.mxEvent.addListener(dropdown, 'click', async (evt: MouseEvent) => {
                     const element = await this.dataService.readElement(parent.id, true);
                     const guardResult = await this.changeGuard.guardSelectedElements([element]);
                     if (!guardResult) {
-                        evt.consume();
+                        evt.stopPropagation();
+                        evt.preventDefault();
                     }
                 });
 

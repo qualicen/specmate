@@ -28,6 +28,7 @@
 		"generate": "Modell generieren (experimentell)"
 	},
 	"Cause-EffectModels": "Ursache-Wirkungs-Modelle",
+	"ChangeLinkedNode": "Wollen Sie den verknüpften Knoten verändern? Das hat Auswirkungen auf die Modelle, in denen der Knoten referenziert ist.",
 	"Changed": "Verändert",
 	"ChangedTo": "geändert nach",
 	"Changes": "Änderungsverlauf",

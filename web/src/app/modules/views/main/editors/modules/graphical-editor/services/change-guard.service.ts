@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { CEGNode } from 'src/app/model/CEGNode';
 import { IContainer } from 'src/app/model/IContainer';
 import { NavigatorService } from 'src/app/modules/navigation/modules/navigator/services/navigator.service';
@@ -10,7 +11,7 @@ export class ChangeGuardService {
 
     private clearedElementUrls: string[] = [];
 
-    constructor(private modal: ConfirmationModal, private navigator: NavigatorService) {
+    constructor(private modal: ConfirmationModal, private translate: TranslateService, navigator: NavigatorService) {
         navigator.navigationStart.subscribe(() => this.reset());
     }
 
@@ -31,7 +32,7 @@ export class ChangeGuardService {
     private async guardElement(element: IContainer): Promise<boolean> {
         if (!this.isCleared(element)) {
             try {
-                await this.modal.confirmChange('Change', 'JKAHDFKJHDAF');
+                await this.modal.confirmChange('ConfirmationRequired', this.translate.instant('ChangeLinkedNode'));
                 this.clear(element);
                 return true;
             } catch {

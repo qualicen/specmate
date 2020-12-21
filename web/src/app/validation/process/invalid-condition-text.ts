@@ -5,24 +5,19 @@ import { IContainer } from 'src/app/model/IContainer';
 import { ValidationResult } from '../validation-result';
 import { IModelNode } from 'src/app/model/IModelNode';
 import { Type } from '../../util/type';
-import { ProcessEnd } from 'src/app/model/ProcessEnd';
-import { ProcessStart } from 'src/app/model/ProcessStart';
 import { ProcessDecision } from 'src/app/model/ProcessDecision';
-import { ProcessStep } from 'src/app/model/ProcessStep';
 import { ProcessConnection } from 'src/app/model/ProcessConnection';
 import { ValidationMessage } from '../validation-message';
 import { ValidationUtil } from '../validation-util';
 import { ValidationErrorSeverity } from '../validation-error-severity';
+import { SpecmateType } from 'src/app/util/specmate-type';
 
 @Validator(Process)
 export class InvalidConditionTextValidator extends ElementValidatorBase<Process> {
     public validate(element: Process, contents: IContainer[]): ValidationResult {
         let processNodes: IModelNode[] =
             contents.filter((element: IContainer) =>
-                Type.is(element, ProcessEnd) ||
-                Type.is(element, ProcessStart) ||
-                Type.is(element, ProcessDecision) ||
-                Type.is(element, ProcessStep)) as IModelNode[];
+            SpecmateType.isNodeOfProcess(element)) as IModelNode[];
 
         let processConnections: ProcessConnection[] =
             contents.filter((element: IContainer) => Type.is(element, ProcessConnection)) as ProcessConnection[];

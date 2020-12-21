@@ -1,9 +1,10 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { CEGModel } from '../../../../../model/CEGModel';
+import { TestProcedure } from 'src/app/model/TestProcedure';
+import { Monitorable } from 'src/app/modules/notification/modules/operation-monitor/base/monitorable';
+import { SpecmateType } from 'src/app/util/specmate-type';
 import { IContainer } from '../../../../../model/IContainer';
 import { FieldMetaItem, MetaInfo } from '../../../../../model/meta/field-meta';
-import { Process } from '../../../../../model/Process';
 import { TestSpecification } from '../../../../../model/TestSpecification';
 import { Type } from '../../../../../util/type';
 import { ElementValidatorBase } from '../../../../../validation/element-validator-base';
@@ -14,23 +15,19 @@ import { ValidationErrorSeverity } from '../../../../../validation/validation-er
 import { ValidationResult } from '../../../../../validation/validation-result';
 import { NavigatorService } from '../../../../navigation/modules/navigator/services/navigator.service';
 import { ValidationCache, ValidationPair } from '../util/validation-cache';
-import { TestCase } from 'src/app/model/TestCase';
-import { TestProcedure } from 'src/app/model/TestProcedure';
 
 
 @Injectable()
-export class ValidationService {
+export class ValidationService extends Monitorable {
 
     private validationCache: ValidationCache;
     private validNameValidator: ValidNameValidator = new ValidNameValidator();
     private textLengthValidator: TextLengthValidator = new TextLengthValidator();
 
-    public validationFinished: EventEmitter<void> = new EventEmitter<void>();
-
     public isValidating = false;
-    public stateChanged: EventEmitter<void> = new EventEmitter<void>();
 
     constructor(private navigator: NavigatorService, translate: TranslateService) {
+        super();
         this.validationCache = new ValidationCache(translate);
         navigator.hasNavigated.subscribe(() => this.validateCurrent());
     }
@@ -49,7 +46,7 @@ export class ValidationService {
 
     public async validateCurrent(): Promise<void> {
         const element = this.navigator.currentElement;
-        const contents = await this.navigator.currentContents;
+        const contents = this.navigator.currentContents;
         this.refreshValidation(element, contents);
     }
 
@@ -67,39 +64,35 @@ export class ValidationService {
     }
 
     public async refreshValidation(element: IContainer, contents: IContainer[] = [], clear = true): Promise<void> {
-        this.isValidating = true;
-        this.stateChanged.emit();
-
-        if (clear) {
-            this.validationCache.clear();
-        }
-        let elementResults: ValidationResult[] = this.getValidationResultsFor(element, contents);
-        if (Type.is(element, CEGModel) || Type.is(element, Process)) {
-            let childElements = contents.filter(c => !Type.is(c, TestSpecification));
-            for (let child of childElements) {
-                elementResults = elementResults.concat(this.getValidationResultsFor(child, []));
-            }
-        }
-        if (Type.is(element, TestSpecification)) {
-            let childElements = contents.filter(c => !Type.is(c, TestProcedure));
-            for (let child of childElements) {
-                elementResults = elementResults.concat(this.getValidationResultsFor(child, []));
-            }
-        }
-        if (Type.is(element, TestProcedure)) {
-            for (let child of contents) {
-                elementResults = elementResults.concat(this.getValidationResultsFor(child, []));
-            }
-        }
-        this.validationCache.addValidationResultsToCache(elementResults);
-
-        // Run this asynchronously to prevent the loading modal to remain closed.
         setTimeout(() => {
-            this.isValidating = false;
-            this.validationFinished.emit();
-            this.stateChanged.emit();
-        }, 1);
+            this.start();
+            this.isValidating = true;
 
+            if (clear) {
+                this.validationCache.clear();
+            }
+            let elementResults: ValidationResult[] = this.getValidationResultsFor(element, contents);
+            if (SpecmateType.isModel(element)) {
+                let childElements = contents.filter(c => !Type.is(c, TestSpecification));
+                for (let child of childElements) {
+                    elementResults = elementResults.concat(this.getValidationResultsFor(child, []));
+                }
+            }
+            if (Type.is(element, TestSpecification)) {
+                let childElements = contents.filter(c => !Type.is(c, TestProcedure));
+                for (let child of childElements) {
+                    elementResults = elementResults.concat(this.getValidationResultsFor(child, []));
+                }
+            }
+            if (Type.is(element, TestProcedure)) {
+                for (let child of contents) {
+                    elementResults = elementResults.concat(this.getValidationResultsFor(child, []));
+                }
+            }
+            this.validationCache.addValidationResultsToCache(elementResults);
+            this.isValidating = false;
+            this.end();
+        }, 1);
     }
 
     private getValidationResultsFor(element: IContainer, contents: IContainer[]): ValidationResult[] {
@@ -184,7 +177,7 @@ export class ValidationService {
         return this.currentSeverities.find(severity => severity === ValidationErrorSeverity.SAVE_DISABLED) === undefined;
     }
 
-    public getValidationResultAsString(saveDisabled: boolean): String {
+    public getValidationResultAsString(saveDisabled: boolean): string {
         let validation;
         if (saveDisabled) {
             validation = this.getValidationResults(this.navigator.currentElement)

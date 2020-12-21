@@ -46,7 +46,7 @@ export class Warning implements OnInit {
         if (this.affectedElements.length == 0) {
             return 'Model';
         }
-        return this.affectedElements.map( e => {
+        return this.affectedElements.map(e => {
             if (Type.is(e, CEGNode)) {
                 let node = e as CEGNode;
                 let varN = node.variable ? node.variable : 'Unnamed Variable';

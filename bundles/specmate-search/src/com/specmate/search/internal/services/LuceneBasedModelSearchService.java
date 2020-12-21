@@ -218,6 +218,7 @@ public class LuceneBasedModelSearchService extends RestServiceBase implements Ev
 		// QueryParser not thread-safe, hence create new for each search
 		String projectPrefix = "(" + FieldConstants.FIELD_PROJECT + ":" + project + ") ";
 		QueryParser queryParser = new MultiFieldQueryParser(FieldConstants.SEARCH_FIELDS, analyzer);
+		queryParser.setAllowLeadingWildcard(true);
 		queryParser.setDefaultOperator(Operator.AND);
 		Query query;
 		try {

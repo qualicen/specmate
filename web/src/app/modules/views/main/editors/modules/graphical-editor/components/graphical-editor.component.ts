@@ -312,16 +312,26 @@ export class GraphicalEditor {
                 // list of data elements.
                 const selectedElements = await Promise.all(selections.map(c => this.dataService.readElement(c.getId(), true)));
 
+                // We memorize the geomentry of a cell to be abeto reset it if the user cancels the operation, but modified the
+                // cell in the background. Such a modification is however, only possible if only one cell is seleted.
                 let cell = undefined;
                 let geo = undefined;
                 if (selectedElements.length === 1) {
                     cell = selections[0];
                     geo = this.graph.getCellGeometry(cell).clone();
                 }
+
+                // Evaluate all guards
                 const guardResult = await this.changeGuard.guardSelectedElements(selectedElements);
+
+                // Reset if the guard is false - the user clicked on cancel or there is another reason for cancelling the operation.
                 if (!guardResult) {
+
+                    // Deselect all elements
                     this.graph.getSelectionModel().clear();
                     this.selectedElementService.select(this.model);
+
+                    // Reset the geometry of a possibly moved cell.
                     if (cell !== undefined && geo !== undefined) {
                         this.graph.getModel().setGeometry(cell, geo);
                         this.graph.refresh(cell);

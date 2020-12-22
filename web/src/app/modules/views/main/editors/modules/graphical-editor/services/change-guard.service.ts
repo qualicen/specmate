@@ -19,7 +19,7 @@ export class ChangeGuardService {
         for (const element of elements.filter(e => this.isGuarded(e))) {
             try {
                 const result = await this.guardElement(element);
-                if (result === false) {
+                if (!result) {
                     return false;
                 }
             } catch {

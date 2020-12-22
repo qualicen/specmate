@@ -306,7 +306,11 @@ export class GraphicalEditor {
                     this.selectedElementService.deselect();
                 }
 
-                const selectedElements = await Promise.all(selections.map(cell => this.dataService.readElement(cell.getId(), true)));
+                // Retrieve all elements that are currently selected: `selections` contains all selected cells, and the cells carry
+                // the id of the actual data elements. With this id, we retrieve the actual data elements from the data service.
+                // As the readElement method in the data service is async we need to wait for all of the promises to get the actual
+                // list of data elements.
+                const selectedElements = await Promise.all(selections.map(c => this.dataService.readElement(c.getId(), true)));
 
                 let cell = undefined;
                 let geo = undefined;

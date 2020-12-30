@@ -33,7 +33,8 @@ export class ShapeProvider extends ProviderBase {
             },
             text: new NodeNameConverterProvider(type).nodeNameConverter.convertTo({
                 variable: Config.CEG_NODE_NEW_VARIABLE,
-                condition: Config.CEG_NODE_NEW_CONDITION
+                condition: Config.CEG_NODE_NEW_CONDITION,
+                type: Config.CEG_NODE_NEW_TYPE
             })
         };
 

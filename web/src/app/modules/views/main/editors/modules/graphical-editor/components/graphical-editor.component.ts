@@ -36,6 +36,7 @@ import { StyleChanger } from './util/style-changer';
 import { GraphicalEditorService } from '../services/graphical-editor.service';
 import { Process } from 'src/app/model/Process';
 import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
+import { Subscription } from 'rxjs';
 
 declare var require: any;
 
@@ -67,6 +68,8 @@ export class GraphicalEditor {
     private _contents: IContainer[];
     private zoomFactor = 1.0;
 
+    private subscriptions: Subscription[] = [];
+
     private graphMouseMove: (evt: any) => void;
 
     constructor(
@@ -79,7 +82,6 @@ export class GraphicalEditor {
         private undoService: UndoService,
         private modal: ConfirmationModal,
         private graphicalEditorService: GraphicalEditorService) {
-
         this.navigator.navigationStart.subscribe(() => {
             this.isInGraphTransition = true;
         });
@@ -97,12 +99,14 @@ export class GraphicalEditor {
                 this.updateValidities();
             }
         });
-        this.undoService.undoPressed.subscribe(() => {
+        let undoSubscription = this.undoService.undoPressed.subscribe(() => {
             this.undo();
         });
-        this.undoService.redoPressed.subscribe(() => {
+        this.subscriptions.push(undoSubscription);
+        let redoSubscription = this.undoService.redoPressed.subscribe(() => {
             this.redo();
         });
+        this.subscriptions.push(redoSubscription);
 
         this.graphicalEditorService.initModel.subscribe(async () => {
             await this.init();
@@ -133,6 +137,13 @@ export class GraphicalEditor {
         this.init();
     }
 
+    ngOnDestroy(): void {
+        console.log('onDestroy');
+        this.subscriptions.forEach(subscription => {
+            subscription.unsubscribe();
+        });
+    }
+
     /*
      * Initialize the MXGraph
      */
@@ -144,7 +155,6 @@ export class GraphicalEditor {
         if (this.graph !== undefined) {
             this.destroyGraph();
         }
-
 
         await this.createGraph();
 

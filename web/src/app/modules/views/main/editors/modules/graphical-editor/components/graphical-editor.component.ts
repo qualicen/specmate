@@ -138,7 +138,6 @@ export class GraphicalEditor {
     }
 
     ngOnDestroy(): void {
-        console.log('onDestroy');
         this.subscriptions.forEach(subscription => {
             subscription.unsubscribe();
         });

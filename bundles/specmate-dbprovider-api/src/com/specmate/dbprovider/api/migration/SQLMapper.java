@@ -46,6 +46,11 @@ public abstract class SQLMapper {
 				+ now.getTime() + ")";
 	}
 
+	protected int getExternalRefId(String objectUrl, String attributeName) throws SpecmateException {
+		String uri = SPECMATE_URL + "/" + sourceVersion + packageName + "#//" + objectUrl + "/" + attributeName;
+		return SQLUtil.getFirstIntResult("SELECT id FROM CDO_EXTERNAL_REFS WHERE URI='" + uri + "'", 1, connection);
+	}
+
 	protected int getLatestId() throws SpecmateException {
 		return SQLUtil.getFirstIntResult("SELECT id FROM CDO_EXTERNAL_REFS ORDER BY id ASC", 1, connection);
 	}
@@ -58,16 +63,19 @@ public abstract class SQLMapper {
 		return defaultValue != null ? true : false;
 	}
 
-	protected void executeChange(String alterString, String objectName, String attributeName, boolean setDefault) throws SpecmateException {
+	protected void executeChange(String alterString, String objectName, String attributeName, boolean setDefault,
+			boolean isDerived) throws SpecmateException {
 		String failmsg = "Migration: Could not add column " + attributeName + " to table " + objectName + ".";
 		List<String> queries = new ArrayList<>();
 		queries.add(alterString);
-	
+
 		if (setDefault) {
 			queries.add("UPDATE " + objectName + " SET " + attributeName + " = DEFAULT");
 		}
-	
-		queries.add(insertExternalAttributeReference(objectName, attributeName));
+
+		if (!isDerived) {
+			queries.add(insertExternalAttributeReference(objectName, attributeName));
+		}
 		SQLUtil.executeStatements(queries, connection, failmsg);
 	}
 }

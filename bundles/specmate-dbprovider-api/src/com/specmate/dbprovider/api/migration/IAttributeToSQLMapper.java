@@ -18,10 +18,16 @@ public interface IAttributeToSQLMapper {
 	 * @param attributeName the name of the attribute that is added
 	 * @param defaultValue  the value that is stored in the database if the value in
 	 *                      the object is not defined
+	 * @param isDerived     true if the attribute is a derived attribute
 	 * @throws SpecmateException
 	 */
-	void migrateNewStringAttribute(String objectName, String attributeName, String defaultValue)
+	void migrateNewStringAttribute(String objectName, String attributeName, String defaultValue, boolean isDerived)
 			throws SpecmateException;
+
+	default void migrateNewStringAttribute(String objectName, String attributeName, String defaultValue)
+			throws SpecmateException {
+		migrateNewStringAttribute(objectName, attributeName, defaultValue, false);
+	}
 
 	/**
 	 * Creates a new Boolean attribute.
@@ -30,10 +36,16 @@ public interface IAttributeToSQLMapper {
 	 * @param attributeName the name of the attribute that is added
 	 * @param defaultValue  the value that is stored in the database if the value in
 	 *                      the object is not defined
+	 * @param isDerived     true if the attribute is a derived attribute
 	 * @throws SpecmateException
 	 */
-	void migrateNewBooleanAttribute(String objectName, String attributeName, Boolean defaultValue)
+	void migrateNewBooleanAttribute(String objectName, String attributeName, Boolean defaultValue, boolean isDerived)
 			throws SpecmateException;
+
+	default void migrateNewBooleanAttribute(String objectName, String attributeName, Boolean defaultValue)
+			throws SpecmateException {
+		migrateNewBooleanAttribute(objectName, attributeName, defaultValue, false);
+	}
 
 	/**
 	 * Creates a new Integer attribute.
@@ -42,10 +54,16 @@ public interface IAttributeToSQLMapper {
 	 * @param attributeName the name of the attribute that is added
 	 * @param defaultValue  the value that is stored in the database if the value in
 	 *                      the object is not defined
+	 * @param isDerived     true if the attribute is a derived attribute
 	 * @throws SpecmateException
 	 */
-	void migrateNewIntegerAttribute(String objectName, String attributeName, Integer defaultValue)
+	void migrateNewIntegerAttribute(String objectName, String attributeName, Integer defaultValue, boolean isDerived)
 			throws SpecmateException;
+
+	default void migrateNewIntegerAttribute(String objectName, String attributeName, Integer defaultValue)
+			throws SpecmateException {
+		migrateNewIntegerAttribute(objectName, attributeName, defaultValue, false);
+	}
 
 	/**
 	 * Creates a new Double attribute.
@@ -54,10 +72,16 @@ public interface IAttributeToSQLMapper {
 	 * @param attributeName the name of the attribute that is added
 	 * @param defaultValue  the value that is stored in the database if the value in
 	 *                      the object is not defined
+	 * @param isDerivced    true if the attribute is a derived attribute
 	 * @throws SpecmateException
 	 */
-	void migrateNewDoubleAttribute(String objectName, String attributeName, Double defaultValue)
+	void migrateNewDoubleAttribute(String objectName, String attributeName, Double defaultValue, boolean isDerivced)
 			throws SpecmateException;
+
+	default void migrateNewDoubleAttribute(String objectName, String attributeName, Double defaultValue)
+			throws SpecmateException {
+		migrateNewDoubleAttribute(objectName, attributeName, defaultValue, false);
+	}
 
 	/**
 	 * Creates a new Long attribute.
@@ -66,9 +90,16 @@ public interface IAttributeToSQLMapper {
 	 * @param attributeName the name of the attribute that is added
 	 * @param defaultValue  the value that is stored in the database if the value in
 	 *                      the object is not defined
+	 * @param isDerived     true, if the attribute is a derived attribute
 	 * @throws SpecmateException
 	 */
-	void migrateNewLongAttribute(String objectName, String attributeName, Long defaultValue) throws SpecmateException;
+	void migrateNewLongAttribute(String objectName, String attributeName, Long defaultValue, boolean isDerived)
+			throws SpecmateException;
+
+	default void migrateNewLongAttribute(String objectName, String attributeName, Long defaultValue)
+			throws SpecmateException {
+		migrateNewLongAttribute(objectName, attributeName, defaultValue, false);
+	}
 
 	/**
 	 * Creates a new Date attribute.
@@ -77,36 +108,62 @@ public interface IAttributeToSQLMapper {
 	 * @param attributeName the name of the attribute that is added
 	 * @param defaultValue  the value that is stored in the database if the value in
 	 *                      the object is not defined
+	 * @param isDerived     true, if the attribute is a derived attribute
 	 * @throws SpecmateException
 	 */
-	void migrateNewDateAttribute(String objectName, String attributeName, Date defaultValue) throws SpecmateException;
+	void migrateNewDateAttribute(String objectName, String attributeName, Date defaultValue, boolean isDerived)
+			throws SpecmateException;
+
+	default void migrateNewDateAttribute(String objectName, String attributeName, Date defaultValue)
+			throws SpecmateException {
+		migrateNewDateAttribute(objectName, attributeName, defaultValue, false);
+	}
 
 	/**
 	 * Creates an attribute that represents a reference to another object.
 	 *
 	 * @param objectName    the name of the object where the reference is added
 	 * @param attributeName the name of the reference attribute that is added
+	 * @param isDerived     true if the attribute is a derived attribute
 	 * @throws SpecmateException
 	 */
-	void migrateNewObjectReferenceNtoM(String objectName, String attributeName) throws SpecmateException;
-	
+	void migrateNewObjectReferenceNtoM(String objectName, String attributeName, boolean isDerived, String derivedFrom)
+			throws SpecmateException;
+
+	default void migrateNewObjectReferenceNtoM(String objectName, String attributeName) throws SpecmateException {
+		migrateNewObjectReferenceNtoM(objectName, attributeName, false, null);
+	}
+
 	/**
-	 * Creates an attribute that represents a reference to another object. It is a 1 to n reference, thus no extra table is created. 
+	 * Creates an attribute that represents a reference to another object. It is a 1
+	 * to n reference, thus no extra table is created.
 	 *
 	 * @param objectName    the name of the object where the reference is added
 	 * @param attributeName the name of the reference attribute that is added
+	 * @param isDerived     true if the attribute is a derived attribute
 	 * @throws SpecmateException
 	 */
-	void migrateNewObjectReferenceOneToN(String objectName, String attributeName) throws SpecmateException;
+	void migrateNewObjectReferenceOneToN(String objectName, String attributeName, boolean isDerived)
+			throws SpecmateException;
+
+	default void migrateNewObjectReferenceOneToN(String objectName, String attributeName) throws SpecmateException {
+		migrateNewObjectReferenceOneToN(objectName, attributeName, false);
+	}
 
 	/**
 	 * Creates an attribute that represents a reference to a string list.
 	 *
 	 * @param objectName    the name of the object where the reference is added
 	 * @param attributeName the name of the reference attribute that is added
+	 * @param isDerived     true, if the attribute is a derived attribute
 	 * @throws SpecmateException
 	 */
-	void migrateNewStringReference(String objectName, String attributeName) throws SpecmateException;
+	void migrateNewStringReference(String objectName, String attributeName, boolean isDerived, String derivedFrom)
+			throws SpecmateException;
+
+	default void migrateNewStringReference(String objectName, String attributeName) throws SpecmateException {
+		migrateNewStringReference(objectName, attributeName, false, null);
+	}
 
 	/**
 	 * Renames an attribute.

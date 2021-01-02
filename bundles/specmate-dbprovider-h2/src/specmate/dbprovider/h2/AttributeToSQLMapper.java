@@ -26,55 +26,55 @@ public class AttributeToSQLMapper extends SQLMapper implements IAttributeToSQLMa
 	}
 
 	@Override
-	public void migrateNewStringAttribute(String objectName, String attributeName, String defaultValue)
-			throws SpecmateException {
+	public void migrateNewStringAttribute(String objectName, String attributeName, String defaultValue,
+			boolean isDerived) throws SpecmateException {
 		String alterString = "ALTER TABLE " + objectName + " ADD COLUMN " + attributeName + " VARCHAR(32672)";
 
 		if (hasDefault(defaultValue)) {
 			alterString += " DEFAULT '" + defaultValue + "'";
 		}
 
-		executeChange(alterString, objectName, attributeName, hasDefault(defaultValue));
+		executeChange(alterString, objectName, attributeName, hasDefault(defaultValue), isDerived);
 	}
 
 	@Override
-	public void migrateNewBooleanAttribute(String objectName, String attributeName, Boolean defaultValue)
-			throws SpecmateException {
+	public void migrateNewBooleanAttribute(String objectName, String attributeName, Boolean defaultValue,
+			boolean isDerived) throws SpecmateException {
 		String alterString = "ALTER TABLE " + objectName + " ADD COLUMN " + attributeName + " BOOLEAN";
 
 		if (hasDefault(defaultValue)) {
 			alterString += " DEFAULT " + defaultValue;
 		}
 
-		executeChange(alterString, objectName, attributeName, hasDefault(defaultValue));
+		executeChange(alterString, objectName, attributeName, hasDefault(defaultValue), isDerived);
 	}
 
 	@Override
-	public void migrateNewIntegerAttribute(String objectName, String attributeName, Integer defaultValue)
-			throws SpecmateException {
+	public void migrateNewIntegerAttribute(String objectName, String attributeName, Integer defaultValue,
+			boolean isDerived) throws SpecmateException {
 		String alterString = "ALTER TABLE " + objectName + " ADD COLUMN " + attributeName + " INTEGER";
 
 		if (hasDefault(defaultValue)) {
 			alterString += " DEFAULT " + defaultValue.intValue();
 		}
 
-		executeChange(alterString, objectName, attributeName, hasDefault(defaultValue));
+		executeChange(alterString, objectName, attributeName, hasDefault(defaultValue), isDerived);
 	}
 
 	@Override
-	public void migrateNewDoubleAttribute(String objectName, String attributeName, Double defaultValue)
-			throws SpecmateException {
+	public void migrateNewDoubleAttribute(String objectName, String attributeName, Double defaultValue,
+			boolean isDerived) throws SpecmateException {
 		String alterString = "ALTER TABLE " + objectName + " ADD COLUMN " + attributeName + " DOUBLE";
 
 		if (hasDefault(defaultValue)) {
 			alterString += " DEFAULT " + defaultValue;
 		}
 
-		executeChange(alterString, objectName, attributeName, hasDefault(defaultValue));
+		executeChange(alterString, objectName, attributeName, hasDefault(defaultValue), isDerived);
 	}
 
 	@Override
-	public void migrateNewLongAttribute(String objectName, String attributeName, Long defaultValue)
+	public void migrateNewLongAttribute(String objectName, String attributeName, Long defaultValue, boolean isDerived)
 			throws SpecmateException {
 		String alterString = "ALTER TABLE " + objectName + " ADD COLUMN " + attributeName + " BIGINT";
 
@@ -82,11 +82,11 @@ public class AttributeToSQLMapper extends SQLMapper implements IAttributeToSQLMa
 			alterString += " DEFAULT " + defaultValue;
 		}
 
-		executeChange(alterString, objectName, attributeName, hasDefault(defaultValue));
+		executeChange(alterString, objectName, attributeName, hasDefault(defaultValue), isDerived);
 	}
 
 	@Override
-	public void migrateNewDateAttribute(String objectName, String attributeName, Date defaultValue)
+	public void migrateNewDateAttribute(String objectName, String attributeName, Date defaultValue, boolean isDerived)
 			throws SpecmateException {
 		String alterString = "ALTER TABLE " + objectName + " ADD COLUMN " + attributeName + " DATE";
 
@@ -95,30 +95,38 @@ public class AttributeToSQLMapper extends SQLMapper implements IAttributeToSQLMa
 			alterString += " DEFAULT '" + df.format(defaultValue) + "'";
 		}
 
-		executeChange(alterString, objectName, attributeName, hasDefault(defaultValue));
+		executeChange(alterString, objectName, attributeName, hasDefault(defaultValue), isDerived);
 	}
 
 	@Override
-	public void migrateNewObjectReferenceNtoM(String objectName, String attributeName) throws SpecmateException {
-		migrateNewReference(objectName, attributeName, "BIGINT");
+	public void migrateNewObjectReferenceNtoM(String objectName, String attributeName, boolean isDerived,
+			String derivedFrom) throws SpecmateException {
+		migrateNewReference(objectName, attributeName, "BIGINT", isDerived);
 	}
 
 	@Override
-	public void migrateNewObjectReferenceOneToN(String objectName, String attributeName) throws SpecmateException {
+	public void migrateNewObjectReferenceOneToN(String objectName, String attributeName, boolean isDerived)
+			throws SpecmateException {
 		String failmsg = "Migration: Could not add column " + attributeName + " to table " + objectName
 				+ " for '1 to N' reference.";
 		List<String> queries = new ArrayList<>();
 		queries.add("ALTER TABLE " + objectName + " ADD COLUMN " + attributeName + " BIGINT");
 
+		if (!isDerived) {
+			queries.add(insertExternalAttributeReference(objectName, attributeName));
+		}
+
 		SQLUtil.executeStatements(queries, connection, failmsg);
 	}
 
 	@Override
-	public void migrateNewStringReference(String objectName, String attributeName) throws SpecmateException {
-		migrateNewReference(objectName, attributeName, "VARCHAR(32672)");
+	public void migrateNewStringReference(String objectName, String attributeName, boolean isDerived,
+			String derivedFrom) throws SpecmateException {
+		migrateNewReference(objectName, attributeName, "VARCHAR(32672)", isDerived);
 	}
 
-	private void migrateNewReference(String objectName, String attributeName, String type) throws SpecmateException {
+	private void migrateNewReference(String objectName, String attributeName, String type, boolean isDerived)
+			throws SpecmateException {
 		String failmsg = "Migration: Could not add column " + attributeName + " to table " + objectName + ".";
 		String tableNameList = objectName + "_" + attributeName + "_LIST";
 		List<String> queries = new ArrayList<>();
@@ -133,6 +141,10 @@ public class AttributeToSQLMapper extends SQLMapper implements IAttributeToSQLMa
 		queries.add("ALTER TABLE " + tableNameList + " ADD CONSTRAINT "
 				+ SQLUtil.createTimebasedIdentifier("C", H2ProviderConfig.MAX_ID_LENGTH)
 				+ " PRIMARY KEY (CDO_SOURCE, CDO_VERSION, CDO_IDX)");
+
+		if (!isDerived) {
+			queries.add(insertExternalAttributeReference(objectName, attributeName));
+		}
 
 		SQLUtil.executeStatements(queries, connection, failmsg);
 	}

@@ -42,21 +42,21 @@ public class Migrator20200605 implements IMigrator {
 		// Add attributes
 		IAttributeToSQLMapper aMapper = dbProvider.getAttributeToSQLMapper(packageName, getSourceVersion(),
 				getTargetVersion());
-		aMapper.migrateNewStringAttribute(objectName, "id", "");
-		aMapper.migrateNewStringAttribute(objectName, "name", "");
-		aMapper.migrateNewStringAttribute(objectName, "description", "");
-		aMapper.migrateNewBooleanAttribute(objectName, "recycled", false);
-		aMapper.migrateNewBooleanAttribute(objectName, "hasRecycledChildren", false);
-		aMapper.migrateNewObjectReferenceNtoM(objectName, "contents");
-		aMapper.migrateNewObjectReferenceNtoM(objectName, "tracesTo");
-		aMapper.migrateNewObjectReferenceNtoM(objectName, "tracesFrom");
-		aMapper.migrateNewDoubleAttribute(objectName, "x", 0.0);
-		aMapper.migrateNewDoubleAttribute(objectName, "y", 0.0);
-		aMapper.migrateNewDoubleAttribute(objectName, "width", 0.0);
-		aMapper.migrateNewDoubleAttribute(objectName, "height", 0.0);
-		aMapper.migrateNewObjectReferenceNtoM(objectName, "outgoingConnections");
-		aMapper.migrateNewObjectReferenceNtoM(objectName, "incomingConnections");
-		aMapper.migrateNewObjectReferenceOneToN(objectName, "linkTo");
+		aMapper.migrateNewStringAttribute(objectName, "id", "", true);
+		aMapper.migrateNewStringAttribute(objectName, "name", "", true);
+		aMapper.migrateNewStringAttribute(objectName, "description", "", true);
+		aMapper.migrateNewBooleanAttribute(objectName, "recycled", false, true);
+		aMapper.migrateNewBooleanAttribute(objectName, "hasRecycledChildren", false, true);
+		aMapper.migrateNewObjectReferenceNtoM(objectName, "contents", true, "model/base/IContainer");
+		aMapper.migrateNewObjectReferenceNtoM(objectName, "tracesTo", true, "model/base/ITracingElement");
+		aMapper.migrateNewObjectReferenceNtoM(objectName, "tracesFrom", true, "model/base/ITracingElement");
+		aMapper.migrateNewDoubleAttribute(objectName, "x", 0.0, true);
+		aMapper.migrateNewDoubleAttribute(objectName, "y", 0.0, true);
+		aMapper.migrateNewDoubleAttribute(objectName, "width", 0.0, true);
+		aMapper.migrateNewDoubleAttribute(objectName, "height", 0.0, true);
+		aMapper.migrateNewObjectReferenceNtoM(objectName, "outgoingConnections", true, "model/base/IModelNode");
+		aMapper.migrateNewObjectReferenceNtoM(objectName, "incomingConnections", true, "model/base/IModelNode");
+		aMapper.migrateNewObjectReferenceOneToN(objectName, "linkTo", false);
 	}
 
 	public void addCEGNodeAttributes() throws SpecmateException {

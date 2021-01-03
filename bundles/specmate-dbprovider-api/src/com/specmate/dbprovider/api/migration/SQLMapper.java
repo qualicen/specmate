@@ -50,7 +50,7 @@ public abstract class SQLMapper {
 		int splitIndex = derivedFromUrl.lastIndexOf("/");
 		String derivedFromPackge = derivedFromUrl.substring(0, splitIndex);
 		String derivedFromClass = derivedFromUrl.substring(splitIndex + 1);
-		String uri = SPECMATE_URL + "/" + sourceVersion + "/" + derivedFromPackge + "#//" + derivedFromClass + "/"
+		String uri = SPECMATE_URL + sourceVersion + "/" + derivedFromPackge + "#//" + derivedFromClass + "/"
 				+ attributeName;
 		return SQLUtil.getFirstIntResult("SELECT id FROM CDO_EXTERNAL_REFS WHERE URI='" + uri + "'", 1, connection);
 	}

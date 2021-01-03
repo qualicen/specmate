@@ -90,12 +90,18 @@ public class TestMigratorImpl implements IMigrator {
 				.getName();
 		String notes = com.specmate.migration.test.attributeadded.testmodel.artefact.ArtefactPackage.Literals.DIAGRAM__NOTES
 				.getName();
+		String linkFrom = com.specmate.migration.test.attributeadded.testmodel.artefact.ArtefactPackage.Literals.DIAGRAM__LINKFROM
+				.getName();
+		String linkedDiagram = com.specmate.migration.test.attributeadded.testmodel.artefact.ArtefactPackage.Literals.SKETCH__LINKED_DIAGRAM
+				.getName();
 
 		aAdded.migrateNewStringAttribute(folder, name, "");
 		aAdded.migrateNewStringAttribute(diagram, name, null);
 		aAdded.migrateNewStringAttribute(sketch, name, null);
 		aAdded.migrateNewDateAttribute(diagram, created, DEFAULT_DATE);
 		aAdded.migrateNewStringReference(diagram, notes);
+		aAdded.migrateNewObjectReferenceOneToN(diagram, linkFrom);
+		aAdded.migrateNewObjectReferenceNtoM(sketch, linkedDiagram);
 	}
 
 	private void migrateSeveralAttributesAdded(Connection connection) throws SpecmateException {

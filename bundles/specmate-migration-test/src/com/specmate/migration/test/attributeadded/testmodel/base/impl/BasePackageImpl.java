@@ -106,7 +106,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-	 * 
+	 *
 	 * <p>This method is used to initialize {@link BasePackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
@@ -120,12 +120,14 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 		if (isInited) return (BasePackage)EPackage.Registry.INSTANCE.getEPackage(BasePackage.eNS_URI);
 
 		// Obtain or create and register package
-		BasePackageImpl theBasePackage = (BasePackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof BasePackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new BasePackageImpl());
+		Object registeredBasePackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		BasePackageImpl theBasePackage = registeredBasePackage instanceof BasePackageImpl ? (BasePackageImpl)registeredBasePackage : new BasePackageImpl();
 
 		isInited = true;
 
 		// Obtain or create and register interdependencies
-		ArtefactPackageImpl theArtefactPackage = (ArtefactPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(ArtefactPackage.eNS_URI) instanceof ArtefactPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(ArtefactPackage.eNS_URI) : ArtefactPackage.eINSTANCE);
+		Object registeredPackage = EPackage.Registry.INSTANCE.getEPackage(ArtefactPackage.eNS_URI);
+		ArtefactPackageImpl theArtefactPackage = (ArtefactPackageImpl)(registeredPackage instanceof ArtefactPackageImpl ? registeredPackage : ArtefactPackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theBasePackage.createPackageContents();
@@ -138,7 +140,6 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 		// Mark meta-data to indicate it can't be changed
 		theBasePackage.freeze();
 
-  
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(BasePackage.eNS_URI, theBasePackage);
 		return theBasePackage;
@@ -149,6 +150,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getIID() {
 		return iidEClass;
 	}
@@ -158,6 +160,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getIID_Id() {
 		return (EAttribute)iidEClass.getEStructuralFeatures().get(0);
 	}
@@ -167,6 +170,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getINamed() {
 		return iNamedEClass;
 	}
@@ -176,6 +180,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getINamed_Name() {
 		return (EAttribute)iNamedEClass.getEStructuralFeatures().get(0);
 	}
@@ -185,6 +190,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getIContentElement() {
 		return iContentElementEClass;
 	}
@@ -194,6 +200,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getIContainer() {
 		return iContainerEClass;
 	}
@@ -203,6 +210,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getIContainer_Contents() {
 		return (EReference)iContainerEClass.getEStructuralFeatures().get(0);
 	}
@@ -212,6 +220,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getFolder() {
 		return folderEClass;
 	}
@@ -221,6 +230,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getITestable() {
 		return iTestableEClass;
 	}
@@ -230,6 +240,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getITestable_Tested() {
 		return (EAttribute)iTestableEClass.getEStructuralFeatures().get(0);
 	}
@@ -239,6 +250,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getIModifiable() {
 		return iModifiableEClass;
 	}
@@ -248,6 +260,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BaseFactory getBaseFactory() {
 		return (BaseFactory)getEFactoryInstance();
 	}

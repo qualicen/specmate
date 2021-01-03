@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 /**
@@ -66,7 +67,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-	 * 
+	 *
 	 * <p>This method is used to initialize {@link ArtefactPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
@@ -80,12 +81,14 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 		if (isInited) return (ArtefactPackage)EPackage.Registry.INSTANCE.getEPackage(ArtefactPackage.eNS_URI);
 
 		// Obtain or create and register package
-		ArtefactPackageImpl theArtefactPackage = (ArtefactPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof ArtefactPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new ArtefactPackageImpl());
+		Object registeredArtefactPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		ArtefactPackageImpl theArtefactPackage = registeredArtefactPackage instanceof ArtefactPackageImpl ? (ArtefactPackageImpl)registeredArtefactPackage : new ArtefactPackageImpl();
 
 		isInited = true;
 
 		// Obtain or create and register interdependencies
-		BasePackageImpl theBasePackage = (BasePackageImpl)(EPackage.Registry.INSTANCE.getEPackage(BasePackage.eNS_URI) instanceof BasePackageImpl ? EPackage.Registry.INSTANCE.getEPackage(BasePackage.eNS_URI) : BasePackage.eINSTANCE);
+		Object registeredPackage = EPackage.Registry.INSTANCE.getEPackage(BasePackage.eNS_URI);
+		BasePackageImpl theBasePackage = (BasePackageImpl)(registeredPackage instanceof BasePackageImpl ? registeredPackage : BasePackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theArtefactPackage.createPackageContents();
@@ -98,7 +101,6 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 		// Mark meta-data to indicate it can't be changed
 		theArtefactPackage.freeze();
 
-  
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(ArtefactPackage.eNS_URI, theArtefactPackage);
 		return theArtefactPackage;
@@ -109,6 +111,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getDiagram() {
 		return diagramEClass;
 	}
@@ -118,6 +121,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getDiagram_Created() {
 		return (EAttribute)diagramEClass.getEStructuralFeatures().get(0);
 	}
@@ -127,6 +131,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getDiagram_Notes() {
 		return (EAttribute)diagramEClass.getEStructuralFeatures().get(1);
 	}
@@ -136,6 +141,17 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public EReference getDiagram_Linkfrom() {
+		return (EReference)diagramEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getSketch() {
 		return sketchEClass;
 	}
@@ -145,6 +161,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_ByteVar1() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(0);
 	}
@@ -154,6 +171,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_ByteVar2() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(1);
 	}
@@ -163,6 +181,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_ByteVar3() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(2);
 	}
@@ -172,6 +191,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_ByteVar4() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(3);
 	}
@@ -181,6 +201,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_ByteVar5() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(4);
 	}
@@ -190,6 +211,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_ShortVar1() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(5);
 	}
@@ -199,6 +221,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_ShortVar2() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(6);
 	}
@@ -208,6 +231,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_ShortVar3() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(7);
 	}
@@ -217,6 +241,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_ShortVar4() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(8);
 	}
@@ -226,6 +251,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_ShortVar5() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(9);
 	}
@@ -235,6 +261,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_IntVar1() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(10);
 	}
@@ -244,6 +271,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_IntVar2() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(11);
 	}
@@ -253,6 +281,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_IntVar3() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(12);
 	}
@@ -262,6 +291,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_IntVar4() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(13);
 	}
@@ -271,6 +301,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_IntVar5() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(14);
 	}
@@ -280,6 +311,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_CharVar1() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(15);
 	}
@@ -289,6 +321,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_CharVar2() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(16);
 	}
@@ -298,6 +331,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_CharVar3() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(17);
 	}
@@ -307,6 +341,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_CharVar4() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(18);
 	}
@@ -316,6 +351,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_CharVar5() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(19);
 	}
@@ -325,6 +361,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_LongVar1() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(20);
 	}
@@ -334,6 +371,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_LongVar2() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(21);
 	}
@@ -343,6 +381,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_LongVar3() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(22);
 	}
@@ -352,6 +391,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_LongVar4() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(23);
 	}
@@ -361,6 +401,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_LongVar5() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(24);
 	}
@@ -370,6 +411,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_FloatVar1() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(25);
 	}
@@ -379,6 +421,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_FloatVar2() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(26);
 	}
@@ -388,6 +431,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_FloatVar3() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(27);
 	}
@@ -397,6 +441,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_FloatVar4() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(28);
 	}
@@ -406,6 +451,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_FloatVar5() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(29);
 	}
@@ -415,6 +461,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_DoubleVar1() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(30);
 	}
@@ -424,6 +471,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_DoubleVar2() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(31);
 	}
@@ -433,6 +481,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_DoubleVar3() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(32);
 	}
@@ -442,6 +491,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_DoubleVar4() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(33);
 	}
@@ -451,6 +501,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_DoubleVar5() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(34);
 	}
@@ -460,6 +511,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_BooleanVar1() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(35);
 	}
@@ -469,6 +521,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_BooleanVar2() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(36);
 	}
@@ -478,6 +531,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_BooleanVar3() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(37);
 	}
@@ -487,6 +541,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_BooleanVar4() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(38);
 	}
@@ -496,6 +551,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_BooleanVar5() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(39);
 	}
@@ -505,6 +561,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_StringVar1() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(40);
 	}
@@ -514,6 +571,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_StringVar2() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(41);
 	}
@@ -523,6 +581,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_StringVar3() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(42);
 	}
@@ -532,6 +591,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_StringVar4() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(43);
 	}
@@ -541,6 +601,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSketch_StringVar5() {
 		return (EAttribute)sketchEClass.getEStructuralFeatures().get(44);
 	}
@@ -550,6 +611,17 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public EReference getSketch_LinkedDiagram() {
+		return (EReference)sketchEClass.getEStructuralFeatures().get(45);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public ArtefactFactory getArtefactFactory() {
 		return (ArtefactFactory)getEFactoryInstance();
 	}
@@ -576,6 +648,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 		diagramEClass = createEClass(DIAGRAM);
 		createEAttribute(diagramEClass, DIAGRAM__CREATED);
 		createEAttribute(diagramEClass, DIAGRAM__NOTES);
+		createEReference(diagramEClass, DIAGRAM__LINKFROM);
 
 		sketchEClass = createEClass(SKETCH);
 		createEAttribute(sketchEClass, SKETCH__BYTE_VAR1);
@@ -623,6 +696,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 		createEAttribute(sketchEClass, SKETCH__STRING_VAR3);
 		createEAttribute(sketchEClass, SKETCH__STRING_VAR4);
 		createEAttribute(sketchEClass, SKETCH__STRING_VAR5);
+		createEReference(sketchEClass, SKETCH__LINKED_DIAGRAM);
 	}
 
 	/**
@@ -665,6 +739,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 		initEClass(diagramEClass, Diagram.class, "Diagram", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getDiagram_Created(), ecorePackage.getEDate(), "created", null, 0, 1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDiagram_Notes(), ecorePackage.getEString(), "notes", null, 0, -1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getDiagram_Linkfrom(), this.getSketch(), this.getSketch_LinkedDiagram(), "linkfrom", null, 0, -1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(sketchEClass, Sketch.class, "Sketch", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSketch_ByteVar1(), ecorePackage.getEByte(), "byteVar1", null, 0, 1, Sketch.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -712,6 +787,7 @@ public class ArtefactPackageImpl extends EPackageImpl implements ArtefactPackage
 		initEAttribute(getSketch_StringVar3(), ecorePackage.getEString(), "stringVar3", null, 0, 1, Sketch.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSketch_StringVar4(), ecorePackage.getEString(), "stringVar4", null, 0, 1, Sketch.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSketch_StringVar5(), ecorePackage.getEString(), "stringVar5", null, 0, 1, Sketch.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSketch_LinkedDiagram(), this.getDiagram(), this.getDiagram_Linkfrom(), "linkedDiagram", null, 0, 1, Sketch.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

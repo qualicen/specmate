@@ -65,6 +65,7 @@ public class AddAttributeTest extends MigrationTestBase {
 			@Override
 			public Object doChange() throws SpecmateException {
 				rootFolder.getContents().add(d1);
+				rootFolder.getContents().add(s1);
 				return null;
 			}
 		});

@@ -100,8 +100,8 @@ public class TestMigratorImpl implements IMigrator {
 		aAdded.migrateNewStringAttribute(sketch, name, null);
 		aAdded.migrateNewDateAttribute(diagram, created, DEFAULT_DATE);
 		aAdded.migrateNewStringReference(diagram, notes);
-		aAdded.migrateNewObjectReferenceOneToN(diagram, linkFrom);
-		aAdded.migrateNewObjectReferenceNtoM(sketch, linkedDiagram);
+		aAdded.migrateNewObjectReferenceNtoM(diagram, linkFrom);
+		aAdded.migrateNewObjectReferenceOneToN(sketch, linkedDiagram);
 	}
 
 	private void migrateSeveralAttributesAdded(Connection connection) throws SpecmateException {

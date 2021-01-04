@@ -16,23 +16,24 @@ export class ChangeGuardService {
     }
 
     public async guardSelectedElements(elements: IContainer[]): Promise<boolean> {
+        let overallResult = true;
         for (const element of elements.filter(e => this.isGuarded(e))) {
             try {
                 const result = await this.guardElement(element);
                 if (!result) {
-                    return false;
+                    overallResult = false;
                 }
             } catch {
-                return false;
+                overallResult = false;
             }
         }
-        return true;
+        return overallResult;
     }
 
     private async guardElement(element: IContainer): Promise<boolean> {
         if (!this.isCleared(element)) {
             try {
-                await this.modal.confirmChange('ConfirmationRequired', this.translate.instant('ChangeLinkedNode'));
+                await this.modal.confirmChange('ConfirmationRequired', this.getGuardMessage(element));
                 this.clear(element);
                 return true;
             } catch {
@@ -61,5 +62,14 @@ export class ChangeGuardService {
 
     private reset(): void {
         this.clearedElementUrls = [];
+    }
+
+    private getGuardMessage(element: IContainer): string {
+        let name = element.name;
+        if (Type.is(element, CEGNode)) {
+            const node = element as CEGNode;
+            name = node.variable + ' ' + node.condition;
+        }
+        return this.translate.instant('Node') + ': ' + name + '\n\n' + this.translate.instant('ChangeLinkedNode');
     }
 }

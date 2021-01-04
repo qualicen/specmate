@@ -16,25 +16,22 @@ export class ChangeGuardService {
     }
 
     public async guardSelectedElements(elements: IContainer[]): Promise<boolean> {
-        let overallResult = true;
-        for (const element of elements.filter(e => this.isGuarded(e))) {
-            try {
-                const result = await this.guardElement(element);
-                if (!result) {
-                    overallResult = false;
-                }
-            } catch {
-                overallResult = false;
-            }
+        let result = true;
+        try {
+            const guardedElements = elements.filter(e => this.isGuarded(e));
+            result = await this.guardElements(guardedElements);
+        } catch {
+            result = false;
         }
-        return overallResult;
+        return result;
     }
 
-    private async guardElement(element: IContainer): Promise<boolean> {
-        if (!this.isCleared(element)) {
+    private async guardElements(elements: IContainer[]): Promise<boolean> {
+        const unclearedElements = elements.filter(element => !this.isCleared(element));
+        if (unclearedElements.length > 0) {
             try {
-                await this.modal.confirmChange('ConfirmationRequired', this.getGuardMessage(element));
-                this.clear(element);
+                await this.modal.confirmChange('ConfirmationRequired', this.getGuardMessage(unclearedElements));
+                this.clear(elements);
                 return true;
             } catch {
                 return false;
@@ -47,9 +44,11 @@ export class ChangeGuardService {
         return this.clearedElementUrls.find(clearedElementUrl => clearedElementUrl === element.url) !== undefined;
     }
 
-    private clear(element: IContainer) {
-        if (!this.isCleared(element)) {
-            this.clearedElementUrls.push(element.url);
+    private clear(elements: IContainer[]) {
+        for (const element of elements) {
+            if (!this.isCleared(element)) {
+                this.clearedElementUrls.push(element.url);
+            }
         }
     }
 
@@ -64,12 +63,16 @@ export class ChangeGuardService {
         this.clearedElementUrls = [];
     }
 
-    private getGuardMessage(element: IContainer): string {
-        let name = element.name;
+    private getGuardMessage(elements: IContainer[]): string {
+        let names = elements.map(element => this.getName(element)).join('\n');
+        return this.translate.instant('Node') + ':\n' + names + '\n\n' + this.translate.instant('ChangeLinkedNode');
+    }
+
+    private getName(element: IContainer): string {
         if (Type.is(element, CEGNode)) {
             const node = element as CEGNode;
-            name = node.variable + ' ' + node.condition;
+            return node.variable + ' ' + node.condition;
         }
-        return this.translate.instant('Node') + ': ' + name + '\n\n' + this.translate.instant('ChangeLinkedNode');
+        return element.name;
     }
 }

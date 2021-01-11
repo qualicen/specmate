@@ -28,6 +28,7 @@
 		"generate": "Generate Model (experimental)"
 	},
 	"Cause-EffectModels": "Cause-Effect Models",
+	"ChangeLinkedNode": "Do you really want to change the linked node? This also changes the models where the node is referenced.",
 	"Changed": "Changed",
 	"ChangedTo": "changed to",
 	"Changes": "Change History",
@@ -52,6 +53,7 @@
 	"Name": "Name",
 	"Negation of this connection": "Negation of this connection",
 	"NoWarnings": "No Warnings",
+	"Node": "Node",
 	"NumberOfTestCases": "Number of Test Cases",
 	"Output": "Output",
 	"OutputParameter": "Output Parameters",

@@ -1,16 +1,17 @@
 import * as he from 'he';
 import { mxgraph } from 'mxgraph'; // Typings only - no code!
-import { CEGNode } from '../../../../../../../../model/CEGNode';
+import { SpecmateDataService } from 'src/app/modules/data/modules/data-service/services/specmate-data.service';
 import { CEGLinkedNode } from '../../../../../../../../model/CEGLinkedNode';
+import { CEGNode } from '../../../../../../../../model/CEGNode';
 import { IContainer } from '../../../../../../../../model/IContainer';
 import { IModelNode } from '../../../../../../../../model/IModelNode';
 import { Type } from '../../../../../../../../util/type';
 import { EditorStyle } from '../../components/editor-components/editor-style';
 import { ConverterBase } from '../../converters/converter-base';
+import { ChangeGuardService } from '../../services/change-guard.service';
 import { CEGmxModelNode } from './ceg-mx-model-node';
 import { ProviderBase } from './provider-base';
 import { ShapeProvider } from './shape-provider';
-import { SpecmateDataService } from 'src/app/modules/data/modules/data-service/services/specmate-data.service';
 
 declare var require: any;
 
@@ -35,7 +36,8 @@ export class VertexProvider extends ProviderBase {
         private graph: mxgraph.mxGraph,
         private shapeProvider: ShapeProvider,
         private nodeNameConverter: ConverterBase<any, CEGmxModelNode | string>,
-        private dataService: SpecmateDataService) {
+        private dataService: SpecmateDataService,
+        private changeGuard: ChangeGuardService) {
         super(element);
     }
 
@@ -133,8 +135,8 @@ export class VertexProvider extends ProviderBase {
         return vertex;
     }
 
-    public static initRenderer(graph: mxgraph.mxGraph) {
-        graph.convertValueToString = function (cell: mxgraph.mxCell) {
+    public initRenderer(graph: mxgraph.mxGraph) {
+        graph.convertValueToString = (cell: mxgraph.mxCell) => {
             if (cell.getId().endsWith(VertexProvider.ID_SUFFIX_TYPE)) {
                 let parent = cell.getParent();
                 let edges = parent.edges;
@@ -160,7 +162,17 @@ export class VertexProvider extends ProviderBase {
                     dropdown.appendChild(optionElem);
                     optionElements.push(optionElem);
                 }
-                mx.mxEvent.addListener(dropdown, 'change', (evt: mxgraph.mxEventObject) => {
+
+                mx.mxEvent.addListener(dropdown, 'click', async (evt: MouseEvent) => {
+                    const element = await this.dataService.readElement(parent.id, true);
+                    const guardResult = await this.changeGuard.guardSelectedElements([element]);
+                    if (!guardResult) {
+                        evt.stopPropagation();
+                        evt.preventDefault();
+                    }
+                });
+
+                mx.mxEvent.addListener(dropdown, 'change', async (evt: mxgraph.mxEventObject) => {
                     graph.model.setValue(cell, dropdown.value);
                 });
 

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { mxgraph } from 'mxgraph'; // Typings only - no code!
 import { CEGModel } from 'src/app/model/CEGModel';
@@ -31,12 +31,13 @@ import { NameProvider } from '../providers/properties/name-provider';
 import { ShapeData, ShapeProvider } from '../providers/properties/shape-provider';
 import { VertexProvider } from '../providers/properties/vertex-provider';
 import { ChangeGuardService } from '../services/change-guard.service';
-import { GraphicalEditorService } from '../services/graphical-editor.service';
 import { EditorKeyHandler } from './editor-components/editor-key-handler';
 import { EditorPopup } from './editor-components/editor-popup';
 import { EditorStyle } from './editor-components/editor-style';
 import { ChangeTranslator } from './util/change-translator';
 import { StyleChanger } from './util/style-changer';
+import { GraphicalEditorService } from '../services/graphical-editor.service';
+import { Subscription } from 'rxjs';
 
 declare var require: any;
 
@@ -51,7 +52,7 @@ const mx: typeof mxgraph = require('mxgraph')({
     styleUrls: ['graphical-editor.component.css'],
     changeDetection: ChangeDetectionStrategy.Default
 })
-export class GraphicalEditor {
+export class GraphicalEditor implements OnDestroy {
 
     private graphContainerElement: ElementRef;
 
@@ -68,6 +69,8 @@ export class GraphicalEditor {
     private _contents: IContainer[];
     private zoomFactor = 1.0;
 
+    private subscriptions: Subscription[] = [];
+
     private graphMouseMove: (evt: any) => void;
 
     constructor(
@@ -81,30 +84,34 @@ export class GraphicalEditor {
         private modal: ConfirmationModal,
         private changeGuard: ChangeGuardService,
         private graphicalEditorService: GraphicalEditorService) {
-
-        this.navigator.navigationStart.subscribe(() => {
+        const navigationStartSubscription = this.navigator.navigationStart.subscribe(() => {
             this.isInGraphTransition = true;
         });
-        this.navigator.navigationCancel.subscribe(() => {
+        this.subscriptions.push(navigationStartSubscription);
+        const navigationCancelSubscription = this.navigator.navigationCancel.subscribe(() => {
             this.isInGraphTransition = false;
         });
-        this.navigator.hasNavigated.subscribe(() => {
+        this.subscriptions.push(navigationCancelSubscription);
+        const hasNavigatedSubscription = this.navigator.hasNavigated.subscribe(() => {
             if (this.graph !== undefined) {
                 this.graph.popupMenuHandler.destroy();
             }
         });
+        this.subscriptions.push(hasNavigatedSubscription);
 
         this.validationService.onEnd(async () => {
             if (!this.isInGraphTransition && this.graph !== undefined && this.graph['destroyed'] !== true) {
                 this.updateValidities();
             }
         });
-        this.undoService.undoPressed.subscribe(() => {
+        let undoSubscription = this.undoService.undoPressed.subscribe(() => {
             this.undo();
         });
-        this.undoService.redoPressed.subscribe(() => {
+        this.subscriptions.push(undoSubscription);
+        let redoSubscription = this.undoService.redoPressed.subscribe(() => {
             this.redo();
         });
+        this.subscriptions.push(redoSubscription);
 
         this.graphicalEditorService.initModel.subscribe(async () => {
             await this.init();
@@ -135,6 +142,12 @@ export class GraphicalEditor {
         this.init();
     }
 
+    ngOnDestroy(): void {
+        this.subscriptions.forEach(subscription => {
+            subscription.unsubscribe();
+        });
+    }
+
     /*
      * Initialize the MXGraph
      */
@@ -146,7 +159,6 @@ export class GraphicalEditor {
         if (this.graph !== undefined) {
             this.destroyGraph();
         }
-
 
         await this.createGraph();
 
@@ -453,7 +465,8 @@ export class GraphicalEditor {
         this._contents = await this.dataService.readContents(this.model.url, true);
         this.elementProvider = new ElementProvider(this.model, this._contents);
         this.nodeNameConverter = new NodeNameConverterProvider(this.model).nodeNameConverter;
-        this.vertexProvider = new VertexProvider(this.model, this.graph, this.shapeProvider, this.nodeNameConverter, this.dataService, this.changeGuard);
+        this.vertexProvider
+            = new VertexProvider(this.model, this.graph, this.shapeProvider, this.nodeNameConverter, this.dataService, this.changeGuard);
         this.vertexProvider.initRenderer(this.graph);
         const parent = this.graph.getDefaultParent();
         this.changeTranslator.preventDataUpdates = true;

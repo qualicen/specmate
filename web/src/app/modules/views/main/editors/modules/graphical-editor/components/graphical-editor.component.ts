@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { mxgraph } from 'mxgraph'; // Typings only - no code!
 import { CEGModel } from 'src/app/model/CEGModel';
@@ -36,6 +36,7 @@ import { StyleChanger } from './util/style-changer';
 import { GraphicalEditorService } from '../services/graphical-editor.service';
 import { Process } from 'src/app/model/Process';
 import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
+import { Subscription } from 'rxjs';
 
 declare var require: any;
 
@@ -50,7 +51,7 @@ const mx: typeof mxgraph = require('mxgraph')({
     styleUrls: ['graphical-editor.component.css'],
     changeDetection: ChangeDetectionStrategy.Default
 })
-export class GraphicalEditor {
+export class GraphicalEditor implements OnDestroy {
 
     private graphContainerElement: ElementRef;
 
@@ -67,6 +68,8 @@ export class GraphicalEditor {
     private _contents: IContainer[];
     private zoomFactor = 1.0;
 
+    private subscriptions: Subscription[] = [];
+
     private graphMouseMove: (evt: any) => void;
 
     constructor(
@@ -79,30 +82,34 @@ export class GraphicalEditor {
         private undoService: UndoService,
         private modal: ConfirmationModal,
         private graphicalEditorService: GraphicalEditorService) {
-
-        this.navigator.navigationStart.subscribe(() => {
+            const navigationStartSubscription = this.navigator.navigationStart.subscribe(() => {
             this.isInGraphTransition = true;
         });
-        this.navigator.navigationCancel.subscribe(() => {
+        this.subscriptions.push(navigationStartSubscription);
+        const navigationCancelSubscription = this.navigator.navigationCancel.subscribe(() => {
             this.isInGraphTransition = false;
         });
-        this.navigator.hasNavigated.subscribe(() => {
+        this.subscriptions.push(navigationCancelSubscription);
+        const hasNavigatedSubscription = this.navigator.hasNavigated.subscribe(() => {
             if (this.graph !== undefined) {
                 this.graph.popupMenuHandler.destroy();
             }
         });
+        this.subscriptions.push(hasNavigatedSubscription);
 
         this.validationService.validationFinished.subscribe(async () => {
             if (!this.isInGraphTransition && this.graph !== undefined && this.graph['destroyed'] !== true) {
                 this.updateValidities();
             }
         });
-        this.undoService.undoPressed.subscribe(() => {
+        let undoSubscription = this.undoService.undoPressed.subscribe(() => {
             this.undo();
         });
-        this.undoService.redoPressed.subscribe(() => {
+        this.subscriptions.push(undoSubscription);
+        let redoSubscription = this.undoService.redoPressed.subscribe(() => {
             this.redo();
         });
+        this.subscriptions.push(redoSubscription);
 
         this.graphicalEditorService.initModel.subscribe(async () => {
             await this.init();
@@ -133,6 +140,12 @@ export class GraphicalEditor {
         this.init();
     }
 
+    ngOnDestroy(): void {
+        this.subscriptions.forEach(subscription => {
+            subscription.unsubscribe();
+        });
+    }
+
     /*
      * Initialize the MXGraph
      */
@@ -144,7 +157,6 @@ export class GraphicalEditor {
         if (this.graph !== undefined) {
             this.destroyGraph();
         }
-
 
         await this.createGraph();
 

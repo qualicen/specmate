@@ -28,29 +28,38 @@ export class PropertiesEditor {
 
     constructor(selectedElementService: SelectedElementService, private dataService: SpecmateDataService) {
         selectedElementService.selectionChanged.subscribe(async (elements: IContainer[]) => {
-            this.hiddenFieldsProvider = new HiddenFieldsProvider(elements[0]);
-            this._selectedElement = elements[0];
-
-            this._linkedNode = undefined;
-            this._linkingModels = [];
-            if (Type.is(this.selectedElement, CEGLinkedNode)) {
-                const node = this.selectedElement as CEGLinkedNode;
-                if (node.linkTo !== undefined) {
-                    this._linkedNode = await this.dataService.readElement(node.linkTo.url, true) as CEGNode;
-                    this._linkedModel = await this.dataService.readElement(Url.parent(this._linkedNode.url), true) as CEGModel;
-                }
-            }
-            if (Type.is(this.selectedElement, CEGNode)) {
-                const node = this.selectedElement as CEGNode;
-                for (const linkingNodeProxy of node.linksFrom) {
-                    const parentUrl = Url.parent(linkingNodeProxy.url);
-                    const linkingModel = await this.dataService.readElement(parentUrl, true) as CEGModel;
-                    if (linkingModel !== undefined && this._linkingModels.find(model => model.url === linkingModel.url) === undefined) {
-                        this._linkingModels.push(linkingModel);
-                    }
-                }
-            }
+            this.onSelectionOrElementChange(elements);
         });
+
+        dataService.elementChanged.subscribe(async (url: string) => {
+            const element = await dataService.readElement(url, true);
+            this.onSelectionOrElementChange([element]);
+        });
+    }
+
+    private async onSelectionOrElementChange(elements: IContainer[]) {
+        this.hiddenFieldsProvider = new HiddenFieldsProvider(elements[0]);
+        this._selectedElement = elements[0];
+
+        this._linkedNode = undefined;
+        this._linkingModels = [];
+        if (Type.is(this.selectedElement, CEGLinkedNode)) {
+            const node = this.selectedElement as CEGLinkedNode;
+            if (node.linkTo !== undefined) {
+                this._linkedNode = await this.dataService.readElement(node.linkTo.url, true) as CEGNode;
+                this._linkedModel = await this.dataService.readElement(Url.parent(this._linkedNode.url), true) as CEGModel;
+            }
+        }
+        if (Type.is(this.selectedElement, CEGNode)) {
+            const node = this.selectedElement as CEGNode;
+            for (const linkingNodeProxy of node.linksFrom) {
+                const parentUrl = Url.parent(linkingNodeProxy.url);
+                const linkingModel = await this.dataService.readElement(parentUrl, true) as CEGModel;
+                if (linkingModel !== undefined && this._linkingModels.find(model => model.url === linkingModel.url) === undefined) {
+                    this._linkingModels.push(linkingModel);
+                }
+            }
+        }
     }
 
     public get selectedElement(): IContainer {

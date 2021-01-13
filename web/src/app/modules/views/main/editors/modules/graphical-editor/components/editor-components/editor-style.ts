@@ -63,7 +63,7 @@ export class EditorStyle {
     private static readonly BASE_CEG_NODE_STYLE_STR = 'shape=rectangle;rounded=1;arcSize=10;align=center;perimeter=rectanglePerimeter;dashed=0';
     private static readonly BASE_CEG_NODE_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.BASE_CEG_NODE_STYLE_STR);
     public static readonly BASE_CEG_LINKED_NODE_STYLE = 'BASE_CEG_LINKED_NODE';
-    private static readonly BASE_CEG_LINKED_NODE_STYLE_STR = 'shape=rectangle;rounded=1;arcSize=10;align=center;perimeter=rectanglePerimeter;dashed=1;dashPattern=1 1;opacity=75';
+    private static readonly BASE_CEG_LINKED_NODE_STYLE_STR = 'shape=rectangle;rounded=1;arcSize=10;align=center;perimeter=rectanglePerimeter;dashed=1;dashPattern=1 1;opacity=75;editable=0;textOpacity=0';
     private static readonly BASE_CEG_LINKED_NODE_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.BASE_CEG_LINKED_NODE_STYLE_STR);
     public static readonly BASE_PROCESS_START_STYLE = 'BASE_PROCESS_START_STYLE';
     private static readonly BASE_PROCESS_START_STYLE_STR = 'shape=ellipse;whiteSpace=wrap;html=1;aspect=fixed;align=center;perimeter=ellipsePerimeter;editable=0;dashed=0;fontColor=#000000';

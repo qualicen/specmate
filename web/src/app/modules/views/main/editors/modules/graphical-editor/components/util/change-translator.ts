@@ -263,6 +263,11 @@ export class ChangeTranslator {
         delete cells[oldId];
         cells[newId] = cell;
 
+        if (Type.is(node, CEGLinkedNode)) {
+            cell.setValue(node);
+        }
+
+
         if (Type.is(node, CEGNode) || Type.is(node, CEGLinkedNode)) {
             let variable = cell.children[0];
             let condition = cell.children[1];

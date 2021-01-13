@@ -64,8 +64,10 @@ export class VertexProvider extends ProviderBase {
         return vertex;
     }
 
-    public provideLinkedCEGNode(url: string, x: number, y: number, width: number, height: number, data: CEGmxModelNode): mxgraph.mxCell {
-        const value: string = null;
+    public provideLinkedCEGNode(url: string, x: number, y: number, width: number, height: number,
+        data: CEGmxModelNode, node: CEGLinkedNode): mxgraph.mxCell {
+
+        const value = node;
         const style = this.shapeProvider.getStyle(CEGLinkedNode);
         const parent = this.graph.getDefaultParent();
         this.graph.getModel().beginUpdate();

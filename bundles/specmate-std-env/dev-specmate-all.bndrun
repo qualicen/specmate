@@ -49,7 +49,8 @@
 	osgi.identity;filter:='(osgi.identity=log4j)',\
 	osgi.identity;filter:='(osgi.identity=specmate-objectif)',\
 	osgi.identity;filter:='(osgi.identity=specmate-export)',\
-	osgi.identity;filter:='(&(osgi.identity=com.sun.xml.bind.jaxb-osgi)(version>=2.3.3))'
+	osgi.identity;filter:='(&(osgi.identity=com.sun.xml.bind.jaxb-osgi)(version>=2.3.3))',\
+	bnd.identity;version='latest';id='specmate-dbprovider-mariadb'
 -runbundles: \
 	javassist;version='[3.18.1,3.18.2)',\
 	javax.annotation-api;version='[1.2.0,1.2.1)',\
@@ -222,7 +223,10 @@
 	org.apache.felix.gogo.runtime;version='[1.1.0,1.1.1)',\
 	org.apache.felix.gogo.shell;version='[1.1.0,1.1.1)',\
 	org.apache.felix.scr;version='[2.1.16,2.1.17)',\
-	org.eclipse.osgi.util;version='[3.5.300,3.5.301)'
+	org.eclipse.osgi.util;version='[3.5.300,3.5.301)',\
+	org.eclipse.net4j.db.mysql;version='[4.2.300,4.2.301)',\
+	specmate-dbprovider-mariadb;version='[0.0.0,0.0.1)',\
+	com.mysql.jdbc;version='[5.1.48,5.1.49)'
 
 -runproperties: \
 	jetty.http.port=8080,\

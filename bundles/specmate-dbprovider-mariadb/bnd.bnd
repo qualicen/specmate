@@ -1,0 +1,13 @@
+-buildpath: \
+	specmate-dbprovider-api;version=latest,\
+	osgi.cmpn;version=6.0,\
+	osgi.core;version=6.0,\
+	specmate-common;version=latest,\
+	specmate-model-gen;version=latest,\
+	org.eclipse.net4j.db,\
+	org.eclipse.emf.cdo.server,\
+	org.eclipse.emf.cdo.server.db,\
+	org.eclipse.net4j.db.mysql,\
+	org.apache.commons.lang3,\
+	specmate-config-api;version=latest,\
+	com.mysql.jdbc;version=5.1

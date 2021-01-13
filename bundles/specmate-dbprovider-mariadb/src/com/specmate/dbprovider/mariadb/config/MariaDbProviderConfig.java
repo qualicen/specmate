@@ -1,4 +1,4 @@
-package specmate.dbprovider.h2.config;
+package com.specmate.dbprovider.mariadb.config;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -14,10 +14,10 @@ import com.specmate.common.exception.SpecmateException;
 import com.specmate.config.api.IConfigService;
 
 @Component
-public class H2ProviderConfig {
+public class MariaDbProviderConfig {
 
-	public static final String PID = "com.specmate.dbprovider.h2.H2ProviderConfig";
-	public static final String KEY_JDBC_CONNECTION = "h2.jdbcConnection";
+	public static final String PID = "com.specmate.dbprovider.mariadb.MariaDbProviderConfig";
+	public static final String KEY_JDBC_CONNECTION = "mariadb.jdbcConnection";
 	public static final int MAX_ID_LENGTH = 100;
 	private ConfigurationAdmin configurationAdmin;
 	private IConfigService configService;
@@ -31,13 +31,11 @@ public class H2ProviderConfig {
 
 		if (specmateJDBCConnection != null) {
 			properties.put(KEY_JDBC_CONNECTION, specmateJDBCConnection);
-
 			logService.log(LogService.LOG_DEBUG,
 					"Configuring CDO with:\n" + OSGiUtil.configDictionaryToString(properties));
 
 			OSGiUtil.configureService(configurationAdmin, PID, properties);
 		}
-
 	}
 
 	/** Service reference for config admin */

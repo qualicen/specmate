@@ -1,3 +1,4 @@
+import { mxgraph } from 'mxgraph';
 import { CEGConnection } from 'src/app/model/CEGConnection';
 import { Type } from 'src/app/util/type';
 import { Config } from '../../../../../../../../config/config';
@@ -16,6 +17,10 @@ export type ShapeData = {
     size: { width: number, height: number },
     text: string | CEGmxModelNode
 };
+
+const mx: typeof mxgraph = require('mxgraph')({
+    mxBasePath: 'mxgraph'
+});
 
 export class ShapeProvider extends ProviderBase {
 
@@ -82,6 +87,7 @@ export class ShapeProvider extends ProviderBase {
             })
         };
 
+
         this.styles.push((element: { className: string }) => this.shapeMap[element.className]);
 
         this.styles.push((element: { className: string }) => {
@@ -93,6 +99,24 @@ export class ShapeProvider extends ProviderBase {
                 };
             }
         });
+
+        this.shapeMap['VariableName'] = {
+            style: EditorStyle.VARIABLE_NAME_STYLE,
+            size: {
+                width: 50,
+                height: mx.mxConstants.DEFAULT_FONTSIZE
+            },
+            text: undefined
+        };
+
+        this.shapeMap['BaseTextInput'] = {
+            style: EditorStyle.TEXT_INPUT_STYLE,
+            size: {
+                width: 50,
+                height: mx.mxConstants.DEFAULT_FONTSIZE
+            },
+            text: undefined
+        };
     }
 
     private getShapeData(element: { className: string }): ShapeData[] {

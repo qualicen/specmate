@@ -1,3 +1,4 @@
+import { NodeWithI18n } from '@angular/compiler';
 import * as he from 'he';
 import { mxgraph } from 'mxgraph'; // Typings only - no code!
 import { CEGNode } from '../../../../../../../../model/CEGNode';
@@ -45,27 +46,43 @@ export class VertexProvider extends ProviderBase {
             VertexProvider.INITIAL_CHILD_NODE_X, 0.4, 0, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.TEXT_INPUT_STYLE, true);
         const l3 = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_TYPE, data.type,
             VertexProvider.INITIAL_CHILD_NODE_X, 0.65, 0, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.TEXT_INPUT_STYLE, true);
+        this.graph.updateCellSize(l1, true);
+        this.graph.updateCellSize(l2, true);
 
-        VertexProvider.adjustChildCellSize(l1, width);
-        VertexProvider.adjustChildCellSize(l2, width);
+        // VertexProvider.adjustChildCellSize(l1, width);
+        // VertexProvider.adjustChildCellSize(l2, width);
+
+        // this.graph.updateCellSize(l1, false);
+        // this.graph.updateCellSize(l2, false);
 
         l1.isConnectable = () => false;
         l2.isConnectable = () => false;
         l3.isConnectable = () => false;
+        // this.graph.updateCellSize(vertex, true);
+        VertexProvider.adjustChildrenPositions(vertex);
         this.graph.getModel().endUpdate();
         return vertex;
     }
 
+    public static adjustChildrenPositions(cell: mxgraph.mxCell) {
+        const g = cell.getGeometry();
+        let parentWidth = g.width;
+        if (cell.children !== undefined && cell.children !== null) {
+            for (const child of cell.children) {
+                const childGeometry = child.getGeometry();
+                let x = (parentWidth - childGeometry.width) / 2 / parentWidth;
+                child.getGeometry().setRect(x, childGeometry.y, childGeometry.width, childGeometry.height);
+            }
+        }
+    }
+
     public static adjustChildCellSize(cell: mxgraph.mxCell, nodeWidth: number) {
         const g = cell.getGeometry();
-        let x = VertexProvider.INITIAL_CHILD_NODE_X;
-        let w = 0;
-        const minWidth = VertexProvider.EMPTY_CHILD_NODE_WIDTH;
-        if (g.width < minWidth && (cell.value === '' || cell.value === null || cell.value === undefined)) {
-            x = x - (minWidth / nodeWidth) / 2;
-            w = minWidth;
-        }
-        cell.getGeometry().setRect(x, g.y, w, g.height);
+        let x = 0;
+        x = (nodeWidth - g.width) / 2 / nodeWidth;
+        // x = x - (g.width / nodeWidth) / 2;
+
+        cell.getGeometry().setRect(x, g.y, g.width, g.height);
     }
 
     public provideVertex(node: IModelNode, x?: number, y?: number): mxgraph.mxCell {
@@ -123,7 +140,7 @@ export class VertexProvider extends ProviderBase {
                     }
                     return mx.mxCell.prototype.valueChanged.bind(cell)(newValue);
                 };
-                return dropdown;
+                return dropdown.outerHTML;
             }
             return mx.mxGraph.prototype.convertValueToString.bind(graph)(cell);
         };

@@ -1,6 +1,7 @@
 /* tslint:disable:max-line-length */
 
 import { mxgraph } from 'mxgraph'; // Typings only - no code!
+import { Config } from 'src/app/config/config';
 
 declare var require: any;
 
@@ -44,14 +45,14 @@ export class EditorStyle {
     public static readonly EFFECT_STYLE: Style = {};
 
     public static readonly TEXT_INPUT_STYLE = 'BASE_TEXT_INPUT';
-    private static readonly TEXT_INPUT_STYLE_STR = 'shape=rectangle;rounded=0;align=center;strokeColor=#666666;fillColor=none;fontColor=#000000';
+    private static readonly TEXT_INPUT_STYLE_STR = 'shape=rectangle;rounded=0;align=center;strokeColor=#666666;fillColor=none;fontColor=#000000;autosize=1';
     private static readonly TEXT_INPUT_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.TEXT_INPUT_STYLE_STR);
     public static readonly VARIABLE_NAME_STYLE = 'VARIABLE_NAME_STYLE';
-    private static readonly VARIABLE_NAME_STYLE_STR = 'shape=rectangle;rounded=0;align=center;strokeColor=#666666;fontColor=#000000;fontStyle=' + mx.mxConstants.FONT_BOLD;
+    private static readonly VARIABLE_NAME_STYLE_STR = 'shape=rectangle;rounded=0;align=center;strokeColor=#666666;fontColor=#000000;autosize=1;fontStyle=' + mx.mxConstants.FONT_BOLD;
     private static readonly VARIABLE_NAME_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.VARIABLE_NAME_STYLE_STR);
 
     public static readonly BASE_CEG_NODE_STYLE = 'BASE_CEG_NODE';
-    private static readonly BASE_CEG_NODE_STYLE_STR = 'shape=rectangle;rounded=1;arcSize=10;align=center;perimeter=rectanglePerimeter;dashed=0';
+    private static readonly BASE_CEG_NODE_STYLE_STR = 'shape=rectangle;rounded=1;arcSize=10;align=center;perimeter=rectanglePerimeter;dashed=0;autosize=1';
     private static readonly BASE_CEG_NODE_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.BASE_CEG_NODE_STYLE_STR);
     public static readonly BASE_PROCESS_START_STYLE = 'BASE_PROCESS_START_STYLE';
     private static readonly BASE_PROCESS_START_STYLE_STR = 'shape=ellipse;whiteSpace=wrap;html=1;aspect=fixed;align=center;perimeter=ellipsePerimeter;editable=0;dashed=0;fontColor=#000000';
@@ -60,7 +61,7 @@ export class EditorStyle {
     private static readonly BASE_PROCESS_END_STYLE_STR = 'shape=doubleEllipse;whiteSpace=wrap;html=1;aspect=fixed;align=center;perimeter=ellipsePerimeter;editable=0;dashed=0;fontColor=#000000';
     private static readonly BASE_PROCESS_END_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.BASE_PROCESS_END_STYLE_STR);
     public static readonly BASE_PROCESS_STEP_STYLE = 'BASE_PROCESS_STEP_STYLE';
-    private static readonly BASE_PROCESS_STEP_STYLE_STR = 'shape=rectangle;rounded=1;arcSize=10;perimeter=rectanglePerimeter;dashed=0;fontColor=#000000';
+    private static readonly BASE_PROCESS_STEP_STYLE_STR = 'shape=rectangle;rounded=1;arcSize=10;perimeter=rectanglePerimeter;dashed=0;fontColor=#000000;autosize=1';
     private static readonly BASE_PROCESS_STEP_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.BASE_PROCESS_STEP_STYLE_STR);
     public static readonly BASE_PROCESS_DECISION_STYLE = 'BASE_PROCESS_DECISION_STYLE';
     private static readonly BASE_PROCESS_DECISION_STYLE_STR = 'shape=rhombus;align=center;perimeter=rhombusPerimeter;dashed=0;fontColor=#000000';
@@ -114,6 +115,8 @@ export class EditorStyle {
         stylesheet.putCellStyle(EditorStyle.CAUSE_STYLE_NAME, EditorStyle.CAUSE_STYLE);
         stylesheet.putCellStyle(EditorStyle.EFFECT_STYLE_NAME, EditorStyle.EFFECT_STYLE);
         stylesheet.putCellStyle(EditorStyle.INNER_STYLE_NAME, EditorStyle.INNER_STYLE);
+
+
 
         const vertexStyle = graph.getStylesheet().getDefaultVertexStyle();
         vertexStyle[mx.mxConstants.STYLE_STROKECOLOR] = '#000000';

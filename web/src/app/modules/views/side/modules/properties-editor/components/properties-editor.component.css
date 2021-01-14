@@ -1,0 +1,10 @@
+ul.linking-model-list {
+    padding: 0;
+}
+
+li.linking-model-item {
+    list-style-type: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

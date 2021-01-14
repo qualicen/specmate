@@ -7,8 +7,10 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -30,7 +32,9 @@ import com.specmate.common.cache.ICacheLoader;
 import com.specmate.common.cache.ICacheService;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
+import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.api.IProjectConfigService;
+import com.specmate.connectors.api.IProjectService;
 import com.specmate.connectors.api.IRequirementsSource;
 import com.specmate.connectors.jira.config.JiraConfigConstants;
 import com.specmate.emfrest.api.IRestService;
@@ -341,8 +345,36 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 	}
 
 	@Override
-	public boolean authenticate(String username, String password) throws SpecmateException {
-		return JiraUtil.authenticate(url, projectName, username, password);
+	public Set<IProject> authenticate(String username, String password, IProject logonProject, IProjectService projectService) throws SpecmateException {		
+		
+		List<String> accessibleJiraProjectNames = JiraUtil.getProjects(url, username, password);
+		Set<IProject> accessibleSpecmateProjectNames = new HashSet<>();
+		
+		if (! (logonProject.getConnector() instanceof JiraConnector)) {
+			// this is not a Jira project anyways. How dare you to ask this!!!
+			return null;
+		}
+		
+		JiraConnector logonConnector = (JiraConnector)logonProject.getConnector();
+		String jiraServerUrl = logonConnector.getUrl();		
+		
+		
+		for (String specmateProjectName : projectService.getProjectNames()) {
+				
+			IProject specmateProject = projectService.getProject(specmateProjectName);
+			IRequirementsSource connector = specmateProject.getConnector();
+
+			if (connector instanceof JiraConnector) {
+				JiraConnector jiraConnector = (JiraConnector)connector;
+				
+				if ( accessibleJiraProjectNames.contains( jiraConnector.getProjectName() ) && jiraConnector.getUrl().equals(jiraServerUrl)) {
+					accessibleSpecmateProjectNames.add(specmateProject);
+				}
+				
+			}			
+		}
+		
+		return accessibleSpecmateProjectNames;
 	}
 
 	private static Requirement createRequirement(Issue story) {
@@ -443,6 +475,10 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 
 	public String getProjectName() {
 		return projectName;
+	}
+	
+	public String getUrl() {
+		return url;
 	}
 
 	@Override

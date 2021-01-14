@@ -1,7 +1,10 @@
 package com.specmate.connectors.hpconnector.internal.services;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -16,7 +19,9 @@ import org.osgi.service.log.LogService;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.connectors.api.ConnectorUtil;
+import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.api.IProjectConfigService;
+import com.specmate.connectors.api.IProjectService;
 import com.specmate.connectors.api.IRequirementsSource;
 import com.specmate.connectors.hpconnector.internal.config.HPServerProxyConfig;
 import com.specmate.connectors.hpconnector.internal.util.HPProxyConnection;
@@ -172,8 +177,13 @@ public class HPConnector extends DetailsService implements IRequirementsSource, 
 	}
 
 	@Override
-	public boolean authenticate(String username, String password) throws SpecmateException {
-		return this.hpConnection.authenticateRead(username, password, this.hpProjectName);
+	public Set<IProject> authenticate(String username, String password, IProject logonProject, IProjectService projectService) throws SpecmateException {		
+		
+		if (this.hpConnection.authenticateRead(username, password, this.hpProjectName)) {
+			return new HashSet<IProject>(Arrays.asList(logonProject));
+		} else {
+			return null;
+		}
 	}
 
 	@Override

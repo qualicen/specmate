@@ -8,7 +8,9 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.ecore.EObject;
@@ -21,6 +23,8 @@ import org.mockito.stubbing.Answer;
 import org.osgi.service.log.LogService;
 
 import com.specmate.common.exception.SpecmateException;
+import com.specmate.connectors.api.IProject;
+import com.specmate.connectors.api.IProjectService;
 import com.specmate.connectors.api.IRequirementsSource;
 import com.specmate.connectors.internal.ConnectorUtil;
 import com.specmate.model.base.BaseFactory;
@@ -247,8 +251,9 @@ public class ConnectorUtilTest {
 		}
 
 		@Override
-		public boolean authenticate(String username, String password) throws SpecmateException {
-			return true;
+		public Set<IProject> authenticate(String username, String password, IProject logonProject,
+				IProjectService projectService) throws SpecmateException {
+			return new HashSet<IProject>(Arrays.asList(logonProject));
 		}
 	}
 

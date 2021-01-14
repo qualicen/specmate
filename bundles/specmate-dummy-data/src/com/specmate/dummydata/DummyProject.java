@@ -1,13 +1,17 @@
 package com.specmate.dummydata;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.osgi.service.component.annotations.Component;
 
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.connectors.api.IProject;
+import com.specmate.connectors.api.IProjectService;
 import com.specmate.connectors.api.IRequirementsSource;
 import com.specmate.export.api.ExporterBase;
 import com.specmate.model.base.IContainer;
@@ -50,14 +54,15 @@ public class DummyProject implements IProject {
 			}
 
 			@Override
-			public boolean authenticate(String username, String password) throws SpecmateException {
-				return true;
+			public Set<IProject> authenticate(String username, String password, IProject project, IProjectService projectService) throws SpecmateException {
+				return new HashSet<IProject>(Arrays.asList(project));
 			}
 
 			@Override
 			public Requirement getRequirementById(String id) throws SpecmateException {
 				return null;
 			}
+
 		};
 	}
 

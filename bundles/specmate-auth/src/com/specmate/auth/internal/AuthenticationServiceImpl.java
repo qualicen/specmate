@@ -1,5 +1,10 @@
 package com.specmate.auth.internal;
 
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -22,27 +27,47 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 	private ISessionService sessionService;
 	private IProjectService projectService;
 
+	
 	@Override
 	public UserSession authenticate(String username, String password, String projectname) throws SpecmateException {
 		IProject project = projectService.getProject(projectname);
 		if (project == null) {
 			throw new SpecmateAuthorizationException("Project " + projectname + " does not exist.");
 		}
-		boolean authenticated = project.getConnector().authenticate(username, password);
-		if (!authenticated) {
+		Set<IProject> authenticatedProjects = project.getConnector().authenticate(username, password, project, projectService);
+		
+		if ( authenticatedProjects == null || !authenticatedProjects.contains(project) ) {
 			throw new SpecmateAuthorizationException("User " + username + " not authenticated.");
 		}
 
+		// TODO Access rights (source an target) are not handled yet!!!!
 		AccessRights targetRights = retrieveTargetAccessRights(project, username, password);
 
 		try {
-			return sessionService.create(AccessRights.ALL, targetRights, username, password, projectname);
+			return sessionService.create(AccessRights.ALL, targetRights, username, password, getProjectNames(authenticatedProjects));
 		} catch (SpecmateException e) {
 			// Something went wrong when creating the session. We act as if the
 			// Authorization failed
 			throw new SpecmateAuthorizationException("Could not create a user session. Reason: " + e.getMessage(), e);
 		}
 	}
+	
+	private Set<String> getProjectNames(Set<IProject> projects) {
+
+		Set<String> projectNames = new HashSet<>();
+		
+		for (IProject project : projects) {
+			Optional<String> key = projectService.getProjects().entrySet().stream().filter(entry -> entry.getValue().equals(project))
+					.map(Map.Entry::getKey).findFirst();
+			
+			if (key.isPresent()) {
+				projectNames.add(key.get());
+			}
+		}
+		
+		return projectNames;
+	}
+	
 
 	/**
 	 * Use this method only in tests to create a session that authorizes requests to

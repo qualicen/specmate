@@ -226,7 +226,7 @@
 
 -runproperties: \
 	jetty.http.port=8080,\
-	#jetty.ssl.port=8443,\
+	#jetty.ssl.port=8080,\
 	#jetty.etc.config.urls='etc/jetty.xml,etc/jetty-ssl-context.xml,etc/jetty-http.xml,etc/jetty-ssl.xml,etc/jetty-https.xml,etc/jetty-deployer.xml,etc/jetty-rewrite.xml',\
 	jetty.etc.config.urls='etc/jetty.xml,etc/jetty-http.xml,etc/jetty-deployer.xml,etc/jetty-rewrite.xml',\
 	osgi.console=,\

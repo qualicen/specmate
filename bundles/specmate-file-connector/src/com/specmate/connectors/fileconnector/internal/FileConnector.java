@@ -7,10 +7,13 @@ import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.osgi.service.component.annotations.Activate;
@@ -23,7 +26,9 @@ import com.google.common.io.PatternFilenameFilter;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.connectors.api.ConnectorUtil;
+import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.api.IProjectConfigService;
+import com.specmate.connectors.api.IProjectService;
 import com.specmate.connectors.api.IRequirementsSource;
 import com.specmate.connectors.fileconnector.internal.config.FileConnectorConfig;
 import com.specmate.model.administration.ErrorCode;
@@ -171,11 +176,11 @@ public class FileConnector implements IRequirementsSource {
 	}
 
 	@Override
-	public boolean authenticate(String username, String password) {
-		if (user == null) {
-			return false;
+	public Set<IProject> authenticate(String username, String password, IProject logonProject, IProjectService projectService) {
+		if (username.equals(user) && password.equals(this.password)) {
+			return new HashSet<IProject>(Arrays.asList(logonProject));
 		} else {
-			return username.equals(user) && password.equals(this.password);
+			return null;
 		}
 	}
 

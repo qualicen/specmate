@@ -172,6 +172,7 @@ export class SpecmateDataService extends Monitorable {
         } else {
             await this.updateElementServer(element);
         }
+        this.elementChanged.emit(element.url);
         this.end(SpecmateDataService.OP_UPDATE + '-' + element.url);
     }
 

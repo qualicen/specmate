@@ -41,6 +41,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 		}
 
 		// TODO Access rights (source an target) are not handled yet!!!!
+		// This will be removed in future anyways.
 		AccessRights targetRights = retrieveTargetAccessRights(project, username, password);
 
 		try {

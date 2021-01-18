@@ -180,7 +180,7 @@ public class HPConnector extends DetailsService implements IConnector, IRestServ
 		if (hpConnection.authenticateRead(username, password, hpProjectName)) {
 			return new HashSet<IProject>(Arrays.asList(getProject()));
 		} else {
-			return null;
+			return new HashSet<IProject>();
 		}
 	}
 

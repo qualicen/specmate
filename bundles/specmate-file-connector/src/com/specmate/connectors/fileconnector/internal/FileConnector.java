@@ -181,7 +181,7 @@ public class FileConnector extends ConnectorBase {
 		if (username.equals(user) && password.equals(this.password)) {
 			return new HashSet<IProject>(Arrays.asList(getProject()));
 		} else {
-			return null;
+			return new HashSet<IProject>();
 		}
 	}
 

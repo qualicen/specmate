@@ -19,19 +19,24 @@ import com.specmate.model.testspecification.TestStep;
 
 public class JiraUtil {
 
-	public static JiraRestClient createJiraRESTClient(String url, String username, String password)
-			throws URISyntaxException {
+	private static JiraUtil instance = new JiraUtil();
+
+	public static JiraUtil getInstance() {
+		return instance;
+	}
+
+	public JiraRestClient createJiraRESTClient(String url, String username, String password) throws URISyntaxException {
 		return new AsynchronousJiraRestClientFactory().createWithAuthenticationHandler(new URI(url),
 				new BasicAuthHandler(username, password));
 	}
 
-	public static boolean authenticate(String url, String project, String username, String password)
-			throws SpecmateException {
+	public boolean authenticate(String url, String project, String username, String password) throws SpecmateException {
+
 		JiraRestClient client = null;
 		try {
-			client = JiraUtil.createJiraRESTClient(url, username, password);
+			client = createJiraRESTClient(url, username, password);
 			client.getProjectClient().getProject(project).claim();
-			
+
 		} catch (URISyntaxException e) {
 			throw new SpecmateAuthorizationException("Jira authentication failed.", e);
 		} catch (RestClientException e) {
@@ -45,33 +50,41 @@ public class JiraUtil {
 				try {
 					client.close();
 				} catch (IOException e) {
-					// an error occured - better return false
+					// an error occurred - better return false
 					return false;
 				}
 			}
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Gets a list of all project-keys a given pair of credentials has access to.
 	 */
-	public static List<String> getProjects(String serverUrl, String username, String password)
-			throws SpecmateException {
+	public List<String> getProjects(String serverUrl, String username, String password) throws SpecmateException {
+
 		JiraRestClient client = null;
 		try {
 
 			List<String> projectKeys = new ArrayList<>();
-			
-			client = JiraUtil.createJiraRESTClient(serverUrl, username, password);			
+
+			client = createJiraRESTClient(serverUrl, username, password);
 			for (BasicProject project : client.getProjectClient().getAllProjects().claim()) {
-				projectKeys.add( project.getKey() );
+				projectKeys.add(project.getKey());
 			}
-			
-			return projectKeys;						
-			
-		} catch (Exception e) {
+
+			return projectKeys;
+
+		} catch (URISyntaxException e) {
 			throw new SpecmateAuthorizationException("Jira authentication failed.", e);
+		} finally {
+			if (client != null) {
+				try {
+					client.close();
+				} catch (IOException e) {
+					// this may not affect the result of this method.
+				}
+			}
 		}
 	}
 

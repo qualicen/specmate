@@ -49,14 +49,67 @@ public class InMemorySessionServiceTest {
 	}
 
 	@Test
-	public void testIsAuthorized() throws SpecmateException {
-		String projectName = "testIsAuthorized";
+	public void testIsNotAuthorized() throws SpecmateException {
+		String projectName1 = "project1";
+
 		UserSession session = sessionService.create(AccessRights.ALL, AccessRights.ALL, userName, password,
-				new HashSet<String>(Arrays.asList(projectName)));
-		assertTrue(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName + "/resource1"));
-		assertTrue(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName + "/resource1/resource2"));
-		assertTrue(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName + "/"));
-		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName));
+				new HashSet<String>());
+
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName1 + "/resource1"));
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName1 + "/resource1/resource2"));
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName1 + "/"));
+
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName1));
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL));
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL.substring(0, baseURL.length() - 1)));
+	}
+
+	@Test
+	public void testIsAuthorizedOneProject() throws SpecmateException {
+		String projectName1 = "project1";
+		String projectName2 = "project2";
+
+		UserSession session = sessionService.create(AccessRights.ALL, AccessRights.ALL, userName, password,
+				new HashSet<String>(Arrays.asList(projectName1)));
+
+		assertTrue(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName1 + "/resource1"));
+		assertTrue(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName1 + "/resource1/resource2"));
+		assertTrue(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName1 + "/"));
+
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName2 + "/resource1"));
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName2 + "/resource1/resource2"));
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName2 + "/"));
+
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName1));
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName2));
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL));
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL.substring(0, baseURL.length() - 1)));
+	}
+
+	@Test
+	public void testIsAuthorizedMultipleProjects() throws SpecmateException {
+		String projectName1 = "project1";
+		String projectName2 = "project2";
+		String projectName3 = "project3";
+
+		UserSession session = sessionService.create(AccessRights.ALL, AccessRights.ALL, userName, password,
+				new HashSet<String>(Arrays.asList(projectName1, projectName2)));
+
+		assertTrue(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName1 + "/resource1"));
+		assertTrue(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName1 + "/resource1/resource2"));
+		assertTrue(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName1 + "/"));
+
+		assertTrue(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName2 + "/resource1"));
+		assertTrue(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName2 + "/resource1/resource2"));
+		assertTrue(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName2 + "/"));
+
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName3 + "/resource1"));
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName3 + "/resource1/resource2"));
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName3 + "/"));
+
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName1));
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName2));
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName3));
 		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL));
 		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL.substring(0, baseURL.length() - 1)));
 	}

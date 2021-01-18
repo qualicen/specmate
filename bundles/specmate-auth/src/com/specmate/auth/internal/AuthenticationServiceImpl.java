@@ -34,8 +34,8 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 			throw new SpecmateAuthorizationException("Project " + projectname + " does not exist.");
 		}
 		Set<IProject> authenticatedProjects = project.getConnector().authenticate(username, password, projectService);
-
-		if (authenticatedProjects == null || !authenticatedProjects.contains(project)) {
+		
+		if (!authenticatedProjects.contains(project)) {
 			throw new SpecmateAuthorizationException("User " + username + " not authenticated.");
 		}
 
@@ -61,7 +61,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 			Optional<String> key = projectService.getProjects().entrySet().stream()
 					.filter(entry -> entry.getValue().equals(project)).map(Map.Entry::getKey).findFirst();
 
-			if (key.isPresent()) {
+			if (key.isPresent()) { 
 				projectNames.add(key.get());
 			}
 		}

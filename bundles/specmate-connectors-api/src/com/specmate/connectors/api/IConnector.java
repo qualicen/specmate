@@ -65,11 +65,13 @@ public interface IConnector {
 	 *
 	 * @param projectService The project service (helpful to retrieve other
 	 *                       projects).
-	 * @return Returns a set of projects the credentials can access. If succesfull,
+	 * @return Returns a set of projects the credentials can access. If successful,
 	 *         this set must contain at least the current project which the user
 	 *         tries to login. Furthermore, this set may contain other projects, the
 	 *         user can also access. E.g., a user log on to a jira-project and is
-	 *         logged in also to other jira-projects his account can also access.
+	 *         logged in also to other jira-projects his account can also access. If
+	 *         credentials do not match (for any project) an empty set must be
+	 *         returned.
 	 */
 	Set<IProject> authenticate(String username, String password, IProjectService projectService)
 			throws SpecmateException;

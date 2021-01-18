@@ -174,11 +174,11 @@ public class HPConnector extends DetailsService implements IConnector, IRestServ
 	}
 
 	@Override
-	public Set<IProject> authenticate(String username, String password, IProject logonProject,
-			IProjectService projectService) throws SpecmateException {
+	public Set<IProject> authenticate(String username, String password, IProjectService projectService)
+			throws SpecmateException {
 
 		if (hpConnection.authenticateRead(username, password, hpProjectName)) {
-			return new HashSet<IProject>(Arrays.asList(logonProject));
+			return new HashSet<IProject>(Arrays.asList(getProject()));
 		} else {
 			return null;
 		}

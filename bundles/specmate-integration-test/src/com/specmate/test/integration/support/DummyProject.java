@@ -49,9 +49,9 @@ public class DummyProject implements IProject {
 			}
 
 			@Override
-			public Set<IProject> authenticate(String username, String password, IProject project,
-					IProjectService projectService) throws SpecmateException {
-				return new HashSet<IProject>(Arrays.asList(project));
+			public Set<IProject> authenticate(String username, String password, IProjectService projectService)
+					throws SpecmateException {
+				return new HashSet<IProject>(Arrays.asList(getProject()));
 			}
 
 			@Override

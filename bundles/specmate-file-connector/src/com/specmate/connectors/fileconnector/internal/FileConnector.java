@@ -177,10 +177,9 @@ public class FileConnector extends ConnectorBase {
 	}
 
 	@Override
-	public Set<IProject> authenticate(String username, String password, IProject logonProject,
-			IProjectService projectService) {
+	public Set<IProject> authenticate(String username, String password, IProjectService projectService) {
 		if (username.equals(user) && password.equals(this.password)) {
-			return new HashSet<IProject>(Arrays.asList(logonProject));
+			return new HashSet<IProject>(Arrays.asList(getProject()));
 		} else {
 			return null;
 		}

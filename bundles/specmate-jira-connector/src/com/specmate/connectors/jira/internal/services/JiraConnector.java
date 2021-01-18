@@ -348,19 +348,11 @@ public class JiraConnector extends DetailsService implements IConnector, IRestSe
 	}
 
 	@Override
-	public Set<IProject> authenticate(String username, String password, IProject logonProject,
-			IProjectService projectService) throws SpecmateException {
+	public Set<IProject> authenticate(String username, String password, IProjectService projectService)
+			throws SpecmateException {
 
 		List<String> accessibleJiraProjectNames = JiraUtil.getProjects(url, username, password);
 		Set<IProject> accessibleSpecmateProjectNames = new HashSet<>();
-
-		if (!(logonProject.getConnector() instanceof JiraConnector)) {
-			// this is not a Jira project anyways. How dare you to ask this!!!
-			return null;
-		}
-
-		JiraConnector logonConnector = (JiraConnector) logonProject.getConnector();
-		String jiraServerUrl = logonConnector.getUrl();
 
 		for (String specmateProjectName : projectService.getProjectNames()) {
 
@@ -371,7 +363,7 @@ public class JiraConnector extends DetailsService implements IConnector, IRestSe
 				JiraConnector jiraConnector = (JiraConnector) connector;
 
 				if (accessibleJiraProjectNames.contains(jiraConnector.getProjectName())
-						&& jiraConnector.getUrl().equals(jiraServerUrl)) {
+						&& jiraConnector.getUrl().equals(getUrl())) {
 					accessibleSpecmateProjectNames.add(specmateProject);
 				}
 

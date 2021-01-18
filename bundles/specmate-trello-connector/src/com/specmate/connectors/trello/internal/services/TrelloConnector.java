@@ -149,9 +149,9 @@ public class TrelloConnector extends ConnectorBase {
 	}
 
 	@Override
-	public Set<IProject> authenticate(String username, String password, IProject logonProject,
-			IProjectService projectService) throws SpecmateException {
-		return new HashSet<IProject>(Arrays.asList(logonProject));
+	public Set<IProject> authenticate(String username, String password, IProjectService projectService)
+			throws SpecmateException {
+		return new HashSet<IProject>(Arrays.asList(getProject()));
 	}
 
 	@Override

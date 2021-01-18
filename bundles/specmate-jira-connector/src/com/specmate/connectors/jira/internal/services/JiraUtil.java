@@ -19,18 +19,14 @@ import com.specmate.model.testspecification.TestStep;
 
 public class JiraUtil {
 
-	private static JiraUtil instance = new JiraUtil();
-
-	public static JiraUtil getInstance() {
-		return instance;
-	}
-
-	public JiraRestClient createJiraRESTClient(String url, String username, String password) throws URISyntaxException {
+	public static JiraRestClient createJiraRESTClient(String url, String username, String password)
+			throws URISyntaxException {
 		return new AsynchronousJiraRestClientFactory().createWithAuthenticationHandler(new URI(url),
 				new BasicAuthHandler(username, password));
 	}
 
-	public boolean authenticate(String url, String project, String username, String password) throws SpecmateException {
+	public static boolean authenticate(String url, String project, String username, String password)
+			throws SpecmateException {
 
 		JiraRestClient client = null;
 		try {
@@ -61,7 +57,8 @@ public class JiraUtil {
 	/**
 	 * Gets a list of all project-keys a given pair of credentials has access to.
 	 */
-	public List<String> getProjects(String serverUrl, String username, String password) throws SpecmateException {
+	public static List<String> getProjects(String serverUrl, String username, String password)
+			throws SpecmateException {
 
 		JiraRestClient client = null;
 		try {

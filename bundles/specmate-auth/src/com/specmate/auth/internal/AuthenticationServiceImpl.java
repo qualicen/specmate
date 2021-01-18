@@ -1,8 +1,5 @@
 package com.specmate.auth.internal;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -34,13 +31,13 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 		if (project == null) {
 			throw new SpecmateAuthorizationException("Project " + projectname + " does not exist.");
 		}
-		Set<IProject> authenticatedProjects = project.getConnector().authenticate(username, password, projectService);
+		Set<IProject> authenticatedProjects = project.getConnector().authenticate(username, password);
 
 		if (!authenticatedProjects.contains(project)) {
 			throw new SpecmateAuthorizationException("User " + username + " not authenticated.");
 		}
 
-		// TODO Access rights (source an target) are not handled yet!!!!
+		// TODO Access rights (source and target) are not handled yet!!!!
 		// This will be removed in future anyways.
 		AccessRights targetRights = retrieveTargetAccessRights(project, username, password);
 

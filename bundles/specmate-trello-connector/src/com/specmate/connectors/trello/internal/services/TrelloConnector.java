@@ -26,7 +26,6 @@ import com.specmate.connectors.api.ConnectorBase;
 import com.specmate.connectors.api.IConnector;
 import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.api.IProjectConfigService;
-import com.specmate.connectors.api.IProjectService;
 import com.specmate.connectors.trello.config.TrelloConnectorConfig;
 import com.specmate.model.administration.ErrorCode;
 import com.specmate.model.base.BaseFactory;
@@ -149,8 +148,7 @@ public class TrelloConnector extends ConnectorBase {
 	}
 
 	@Override
-	public Set<IProject> authenticate(String username, String password, IProjectService projectService)
-			throws SpecmateException {
+	public Set<IProject> authenticate(String username, String password) throws SpecmateException {
 		return new HashSet<IProject>(Arrays.asList(getProject()));
 	}
 

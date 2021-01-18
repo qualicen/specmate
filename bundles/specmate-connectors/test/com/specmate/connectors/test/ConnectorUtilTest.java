@@ -26,7 +26,6 @@ import com.specmate.common.exception.SpecmateException;
 import com.specmate.connectors.api.ConnectorBase;
 import com.specmate.connectors.api.IConnector;
 import com.specmate.connectors.api.IProject;
-import com.specmate.connectors.api.IProjectService;
 import com.specmate.connectors.internal.ConnectorUtil;
 import com.specmate.model.base.BaseFactory;
 import com.specmate.model.base.Folder;
@@ -251,8 +250,7 @@ public class ConnectorUtilTest {
 		}
 
 		@Override
-		public Set<IProject> authenticate(String username, String password, IProjectService projectService)
-				throws SpecmateException {
+		public Set<IProject> authenticate(String username, String password) throws SpecmateException {
 			return new HashSet<IProject>(Arrays.asList(getProject()));
 		}
 	}

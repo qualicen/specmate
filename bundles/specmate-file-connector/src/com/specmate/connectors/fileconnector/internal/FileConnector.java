@@ -30,7 +30,6 @@ import com.specmate.connectors.api.ConnectorUtil;
 import com.specmate.connectors.api.IConnector;
 import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.api.IProjectConfigService;
-import com.specmate.connectors.api.IProjectService;
 import com.specmate.connectors.fileconnector.internal.config.FileConnectorConfig;
 import com.specmate.model.administration.ErrorCode;
 import com.specmate.model.base.BaseFactory;
@@ -177,7 +176,7 @@ public class FileConnector extends ConnectorBase {
 	}
 
 	@Override
-	public Set<IProject> authenticate(String username, String password, IProjectService projectService) {
+	public Set<IProject> authenticate(String username, String password) {
 		if (username.equals(user) && password.equals(this.password)) {
 			return new HashSet<IProject>(Arrays.asList(getProject()));
 		} else {

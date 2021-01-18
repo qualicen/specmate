@@ -22,7 +22,6 @@ import com.specmate.connectors.api.ConnectorUtil;
 import com.specmate.connectors.api.IConnector;
 import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.api.IProjectConfigService;
-import com.specmate.connectors.api.IProjectService;
 import com.specmate.connectors.hpconnector.internal.config.HPServerProxyConfig;
 import com.specmate.connectors.hpconnector.internal.util.HPProxyConnection;
 import com.specmate.emfrest.api.IRestService;
@@ -174,8 +173,7 @@ public class HPConnector extends DetailsService implements IConnector, IRestServ
 	}
 
 	@Override
-	public Set<IProject> authenticate(String username, String password, IProjectService projectService)
-			throws SpecmateException {
+	public Set<IProject> authenticate(String username, String password) throws SpecmateException {
 
 		if (hpConnection.authenticateRead(username, password, hpProjectName)) {
 			return new HashSet<IProject>(Arrays.asList(getProject()));

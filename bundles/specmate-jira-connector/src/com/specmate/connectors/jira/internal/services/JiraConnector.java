@@ -146,6 +146,9 @@ public class JiraConnector extends DetailsService implements IConnector, IRestSe
 	/** The rest client to access jira */
 	private JiraRestClient jiraClient;
 
+	/** The project service to access other projects **/
+	private IProjectService projectService;
+
 	public JiraRestClient getJiraClient() {
 		return jiraClient;
 	}
@@ -236,6 +239,11 @@ public class JiraConnector extends DetailsService implements IConnector, IRestSe
 	@Reference
 	public void setLogService(LogService logService) {
 		this.logService = logService;
+	}
+
+	@Reference
+	public void setProjectService(IProjectService projectService) {
+		this.projectService = projectService;
 	}
 
 	@Override
@@ -348,8 +356,7 @@ public class JiraConnector extends DetailsService implements IConnector, IRestSe
 	}
 
 	@Override
-	public Set<IProject> authenticate(String username, String password, IProjectService projectService)
-			throws SpecmateException {
+	public Set<IProject> authenticate(String username, String password) throws SpecmateException {
 
 		List<String> accessibleJiraProjectNames = JiraUtil.getProjects(url, username, password);
 		Set<IProject> accessibleSpecmateProjectNames = new HashSet<>();

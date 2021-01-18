@@ -60,11 +60,9 @@ public interface IConnector {
 	IContainer getContainerForRequirement(Requirement requirement) throws SpecmateException;
 
 	/**
-	 * Returns a set of projects given credentials have access to. Returns null if
+	 * Returns a set of projects given credentials have access to. Returns an empty set if
 	 * credentials are invalid.
 	 *
-	 * @param projectService The project service (helpful to retrieve other
-	 *                       projects).
 	 * @return Returns a set of projects the credentials can access. If successful,
 	 *         this set must contain at least the current project which the user
 	 *         tries to login. Furthermore, this set may contain other projects, the
@@ -73,7 +71,7 @@ public interface IConnector {
 	 *         credentials do not match (for any project) an empty set must be
 	 *         returned.
 	 */
-	Set<IProject> authenticate(String username, String password, IProjectService projectService)
+	Set<IProject> authenticate(String username, String password)
 			throws SpecmateException;
 
 }

@@ -37,7 +37,6 @@ public class JiraUtil {
 		try {
 			client = JiraUtil.createJiraRESTClient(url, username, password);
 			client.getProjectClient().getProject(project).claim();
-
 		} catch (URISyntaxException e) {
 			throw new SpecmateAuthorizationException("Jira authentication failed.", e);
 		} catch (RestClientException e) {

@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -34,7 +35,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 			throw new SpecmateAuthorizationException("Project " + projectname + " does not exist.");
 		}
 		Set<IProject> authenticatedProjects = project.getConnector().authenticate(username, password, projectService);
-		
+
 		if (!authenticatedProjects.contains(project)) {
 			throw new SpecmateAuthorizationException("User " + username + " not authenticated.");
 		}
@@ -44,29 +45,16 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 		AccessRights targetRights = retrieveTargetAccessRights(project, username, password);
 
 		try {
-			return sessionService.create(AccessRights.ALL, targetRights, username, password,
-					getProjectNames(authenticatedProjects));
+
+			Set<String> authenticatedProjectNames = authenticatedProjects.stream().map(p -> p.getID())
+					.collect(Collectors.toSet());
+			return sessionService.create(AccessRights.ALL, targetRights, username, password, authenticatedProjectNames);
+
 		} catch (SpecmateException e) {
 			// Something went wrong when creating the session. We act as if the
 			// Authorization failed
 			throw new SpecmateAuthorizationException("Could not create a user session. Reason: " + e.getMessage(), e);
 		}
-	}
-
-	private Set<String> getProjectNames(Set<IProject> projects) {
-
-		Set<String> projectNames = new HashSet<>();
-
-		for (IProject project : projects) {
-			Optional<String> key = projectService.getProjects().entrySet().stream()
-					.filter(entry -> entry.getValue().equals(project)).map(Map.Entry::getKey).findFirst();
-
-			if (key.isPresent()) { 
-				projectNames.add(key.get());
-			}
-		}
-
-		return projectNames;
 	}
 
 	/**

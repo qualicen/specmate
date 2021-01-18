@@ -22,10 +22,11 @@ import org.osgi.service.log.LogService;
 
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
+import com.specmate.connectors.api.ConnectorBase;
+import com.specmate.connectors.api.IConnector;
 import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.api.IProjectConfigService;
 import com.specmate.connectors.api.IProjectService;
-import com.specmate.connectors.api.IRequirementsSource;
 import com.specmate.connectors.trello.config.TrelloConnectorConfig;
 import com.specmate.model.administration.ErrorCode;
 import com.specmate.model.base.BaseFactory;
@@ -36,8 +37,8 @@ import com.specmate.model.requirements.RequirementsFactory;
 import com.specmate.rest.RestClient;
 import com.specmate.rest.RestResult;
 
-@Component(immediate = true, service = IRequirementsSource.class, configurationPid = TrelloConnectorConfig.PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
-public class TrelloConnector implements IRequirementsSource {
+@Component(immediate = true, service = IConnector.class, configurationPid = TrelloConnectorConfig.PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
+public class TrelloConnector extends ConnectorBase {
 
 	private static final String TRELLO_API_BASE_URL = "https://api.trello.com";
 	private static final int TIMEOUT = 5000;

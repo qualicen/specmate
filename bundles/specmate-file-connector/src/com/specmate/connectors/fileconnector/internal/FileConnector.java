@@ -25,11 +25,12 @@ import org.osgi.service.log.LogService;
 import com.google.common.io.PatternFilenameFilter;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
+import com.specmate.connectors.api.ConnectorBase;
 import com.specmate.connectors.api.ConnectorUtil;
+import com.specmate.connectors.api.IConnector;
 import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.api.IProjectConfigService;
 import com.specmate.connectors.api.IProjectService;
-import com.specmate.connectors.api.IRequirementsSource;
 import com.specmate.connectors.fileconnector.internal.config.FileConnectorConfig;
 import com.specmate.model.administration.ErrorCode;
 import com.specmate.model.base.BaseFactory;
@@ -39,8 +40,8 @@ import com.specmate.model.requirements.Requirement;
 import com.specmate.model.requirements.RequirementsFactory;
 
 /** Connector to the HP Proxy server. */
-@Component(service = IRequirementsSource.class, immediate = true, configurationPid = FileConnectorConfig.PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
-public class FileConnector implements IRequirementsSource {
+@Component(service = IConnector.class, immediate = true, configurationPid = FileConnectorConfig.PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
+public class FileConnector extends ConnectorBase {
 
 	/** The log service */
 	private LogService logService;
@@ -176,7 +177,8 @@ public class FileConnector implements IRequirementsSource {
 	}
 
 	@Override
-	public Set<IProject> authenticate(String username, String password, IProject logonProject, IProjectService projectService) {
+	public Set<IProject> authenticate(String username, String password, IProject logonProject,
+			IProjectService projectService) {
 		if (username.equals(user) && password.equals(this.password)) {
 			return new HashSet<IProject>(Arrays.asList(logonProject));
 		} else {

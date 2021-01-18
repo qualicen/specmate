@@ -19,10 +19,10 @@ import org.osgi.service.log.LogService;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.connectors.api.ConnectorUtil;
+import com.specmate.connectors.api.IConnector;
 import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.api.IProjectConfigService;
 import com.specmate.connectors.api.IProjectService;
-import com.specmate.connectors.api.IRequirementsSource;
 import com.specmate.connectors.hpconnector.internal.config.HPServerProxyConfig;
 import com.specmate.connectors.hpconnector.internal.util.HPProxyConnection;
 import com.specmate.emfrest.api.IRestService;
@@ -36,9 +36,12 @@ import com.specmate.model.support.util.SpecmateEcoreUtil;
 import com.specmate.rest.RestResult;
 
 /** Connector to the HP Proxy server. */
-@Component(service = { IRequirementsSource.class,
+@Component(service = { IConnector.class,
 		IRestService.class }, configurationPid = HPServerProxyConfig.CONNECTOR_PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
-public class HPConnector extends DetailsService implements IRequirementsSource, IRestService {
+public class HPConnector extends DetailsService implements IConnector, IRestService {
+
+	/** The associated project */
+	private IProject project;
 
 	/** Logging service */
 	private LogService logService;
@@ -75,22 +78,22 @@ public class HPConnector extends DetailsService implements IRequirementsSource, 
 		}
 		int timeout = Integer.parseInt(timeoutString);
 
-		this.hpProjectName = (String) properties.get(HPServerProxyConfig.KEY_HP_PROJECT_NAME);
+		hpProjectName = (String) properties.get(HPServerProxyConfig.KEY_HP_PROJECT_NAME);
 		if (StringUtils.isEmpty(timeoutString)) {
 			throw new SpecmateInternalException(ErrorCode.CONFIGURATION, "HP Connector: project name is empty");
 		}
-		this.id = (String) properties.get(IProjectConfigService.KEY_CONNECTOR_ID);
+		id = (String) properties.get(IProjectConfigService.KEY_CONNECTOR_ID);
 		if (StringUtils.isEmpty(timeoutString)) {
 			throw new SpecmateInternalException(ErrorCode.CONFIGURATION, "HP Connector: connector id is empty");
 		}
 
-		this.hpConnection = new HPProxyConnection(host, port, timeout, this.logService);
+		hpConnection = new HPProxyConnection(host, port, timeout, logService);
 	}
 
 	/** Returns the list of requirements. */
 	@Override
 	public Collection<Requirement> getRequirements() throws SpecmateException {
-		return this.hpConnection.getRequirements(this.hpProjectName);
+		return hpConnection.getRequirements(hpProjectName);
 	}
 
 	/** Returns a folder with the name of the release of the requirement. */
@@ -98,9 +101,9 @@ public class HPConnector extends DetailsService implements IRequirementsSource, 
 	public IContainer getContainerForRequirement(Requirement localRequirement) throws SpecmateException {
 		Folder folder = BaseFactory.eINSTANCE.createFolder();
 		String extId = localRequirement.getExtId();
-		this.logService.log(LogService.LOG_DEBUG, "Retrieving requirements details for " + extId + ".");
+		logService.log(LogService.LOG_DEBUG, "Retrieving requirements details for " + extId + ".");
 
-		Requirement retrievedRequirement = this.hpConnection.getRequirementsDetails(localRequirement.getExtId());
+		Requirement retrievedRequirement = hpConnection.getRequirementsDetails(localRequirement.getExtId());
 
 		if (retrievedRequirement.getPlannedRelease() != null && !retrievedRequirement.getPlannedRelease().isEmpty()) {
 			folder.setId(ConnectorUtil.toId(retrievedRequirement.getPlannedRelease()));
@@ -115,7 +118,7 @@ public class HPConnector extends DetailsService implements IRequirementsSource, 
 	/** The id for this connector. */
 	@Override
 	public String getId() {
-		return this.id;
+		return id;
 	}
 
 	@Override
@@ -128,7 +131,7 @@ public class HPConnector extends DetailsService implements IRequirementsSource, 
 		if (target instanceof Requirement) {
 			Requirement req = (Requirement) target;
 			return req.getSource() != null && req.getSource().equals(HPProxyConnection.HPPROXY_SOURCE_ID)
-					&& (SpecmateEcoreUtil.getProjectId(req).equals(this.id));
+					&& (SpecmateEcoreUtil.getProjectId(req).equals(id));
 		}
 		return false;
 	}
@@ -149,8 +152,8 @@ public class HPConnector extends DetailsService implements IRequirementsSource, 
 	}
 
 	/**
-	 * Behavior for GET requests. For requirements the current data is fetched
-	 * from the HP server.
+	 * Behavior for GET requests. For requirements the current data is fetched from
+	 * the HP server.
 	 */
 	@Override
 	public RestResult<?> get(Object target, MultivaluedMap<String, String> queryParams, String token)
@@ -164,22 +167,17 @@ public class HPConnector extends DetailsService implements IRequirementsSource, 
 			return new RestResult<>(Response.Status.OK, localRequirement);
 		}
 
-		Requirement retrievedRequirement = this.hpConnection.getRequirementsDetails(localRequirement.getExtId());
+		Requirement retrievedRequirement = hpConnection.getRequirementsDetails(localRequirement.getExtId());
 		SpecmateEcoreUtil.copyAttributeValues(retrievedRequirement, localRequirement, false);
 
 		return new RestResult<>(Response.Status.OK, localRequirement);
 	}
 
-	/** Service reference */
-	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
-	}
-
 	@Override
-	public Set<IProject> authenticate(String username, String password, IProject logonProject, IProjectService projectService) throws SpecmateException {		
-		
-		if (this.hpConnection.authenticateRead(username, password, this.hpProjectName)) {
+	public Set<IProject> authenticate(String username, String password, IProject logonProject,
+			IProjectService projectService) throws SpecmateException {
+
+		if (hpConnection.authenticateRead(username, password, hpProjectName)) {
 			return new HashSet<IProject>(Arrays.asList(logonProject));
 		} else {
 			return null;
@@ -189,5 +187,21 @@ public class HPConnector extends DetailsService implements IRequirementsSource, 
 	@Override
 	public Requirement getRequirementById(String id) throws SpecmateException {
 		return null;
+	}
+
+	@Override
+	public IProject getProject() {
+		return project;
+	}
+
+	@Override
+	public void setProject(IProject project) {
+		this.project = project;
+	}
+
+	/** Service reference */
+	@Reference
+	public void setLogService(LogService logService) {
+		this.logService = logService;
 	}
 }

@@ -23,9 +23,10 @@ import org.mockito.stubbing.Answer;
 import org.osgi.service.log.LogService;
 
 import com.specmate.common.exception.SpecmateException;
+import com.specmate.connectors.api.ConnectorBase;
+import com.specmate.connectors.api.IConnector;
 import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.api.IProjectService;
-import com.specmate.connectors.api.IRequirementsSource;
 import com.specmate.connectors.internal.ConnectorUtil;
 import com.specmate.model.base.BaseFactory;
 import com.specmate.model.base.Folder;
@@ -60,7 +61,7 @@ public class ConnectorUtilTest {
 	}
 
 	private void checkRequirementsNumber(int count) throws SpecmateException {
-		IRequirementsSource reqSource = new TestRequirementSource_VariableNumbers(count);
+		IConnector reqSource = new TestRequirementSource_VariableNumbers(count);
 		runConnectorUtilWithSourceFullSync(reqSource);
 
 		Folder folder = (Folder) contentList.get(0);
@@ -85,7 +86,7 @@ public class ConnectorUtilTest {
 
 	@Test
 	public void testWithoutFolder() throws SpecmateException {
-		IRequirementsSource reqSource = new TestRequirementSource_NoFolder();
+		IConnector reqSource = new TestRequirementSource_NoFolder();
 		runConnectorUtilWithSourceFullSync(reqSource);
 
 		// Project Folder exists
@@ -103,7 +104,7 @@ public class ConnectorUtilTest {
 
 	@Test
 	public void testSingleSync() throws SpecmateException {
-		IRequirementsSource reqSource = new TestRequirementSource_SingleRequirement();
+		IConnector reqSource = new TestRequirementSource_SingleRequirement();
 		String id = "singleId";
 		runConnectorUtilWithSourceSingleSync(id, reqSource);
 
@@ -125,7 +126,7 @@ public class ConnectorUtilTest {
 
 	@Test
 	public void testNameChange() throws SpecmateException {
-		IRequirementsSource reqSource = new TestRequirementSource_NameChange();
+		IConnector reqSource = new TestRequirementSource_NameChange();
 		runConnectorUtilWithSourceFullSync(reqSource);
 
 		Folder folder = (Folder) contentList.get(0);
@@ -144,7 +145,7 @@ public class ConnectorUtilTest {
 
 	@Test
 	public void testParentChange() throws SpecmateException {
-		IRequirementsSource reqSource = new TestRequirementSource_ParentChange();
+		IConnector reqSource = new TestRequirementSource_ParentChange();
 		runConnectorUtilWithSourceFullSync(reqSource);
 
 		Folder folder = (Folder) contentList.get(0);
@@ -167,7 +168,7 @@ public class ConnectorUtilTest {
 	@Test
 	public void testConnectorService() throws SpecmateException {
 
-		IRequirementsSource reqSource = new TestRequirementSource_InvalidRequirements();
+		IConnector reqSource = new TestRequirementSource_InvalidRequirements();
 		runConnectorUtilWithSourceFullSync(reqSource);
 
 		Folder folder = (Folder) contentList.get(0);
@@ -193,7 +194,7 @@ public class ConnectorUtilTest {
 		assertEquals(req.getId(), req.getName());
 	}
 
-	private void runConnectorUtilWithSourceFullSync(IRequirementsSource reqSource) throws SpecmateException {
+	private void runConnectorUtilWithSourceFullSync(IConnector reqSource) throws SpecmateException {
 		ITransaction transaction = mock(ITransaction.class);
 		Resource resource = mock(Resource.class);
 		when(resource.getContents()).thenReturn(contentList);
@@ -211,8 +212,7 @@ public class ConnectorUtilTest {
 		ConnectorUtil.syncRequirementsFromSources(Arrays.asList(reqSource), transaction, mock(LogService.class));
 	}
 
-	private void runConnectorUtilWithSourceSingleSync(String id, IRequirementsSource reqSource)
-			throws SpecmateException {
+	private void runConnectorUtilWithSourceSingleSync(String id, IConnector reqSource) throws SpecmateException {
 		ITransaction transaction = mock(ITransaction.class);
 		Resource resource = mock(Resource.class);
 		when(resource.getContents()).thenReturn(contentList);
@@ -230,7 +230,7 @@ public class ConnectorUtilTest {
 		ConnectorUtil.syncRequirementById(id, reqSource, transaction, mock(LogService.class));
 	}
 
-	private abstract class TestRequirementSourceBase implements IRequirementsSource {
+	private abstract class TestRequirementSourceBase extends ConnectorBase {
 		public static final String REQ_NAME = "req";
 		public static final String FOLDER_NAME = "folder";
 		private Folder folder;

@@ -7,18 +7,52 @@ import com.specmate.common.exception.SpecmateException;
 import com.specmate.model.base.IContainer;
 import com.specmate.model.requirements.Requirement;
 
-public interface IRequirementsSource {
+/**
+ * A connector is a source for requirements and a means for project
+ * authentification
+ * 
+ * @author junkerm
+ *
+ */
+public interface IConnector {
 
+	/**
+	 * Returns the id of the connector
+	 *
+	 * @return
+	 */
+	String getId();
+
+	/**
+	 * Returns the project the connector is associated with
+	 * 
+	 * @return
+	 */
+	IProject getProject();
+
+	/**
+	 * Associcates the connector with a project
+	 */
+	void setProject(IProject project);
+
+	/**
+	 * Returns the requirements to import
+	 *
+	 * @throws SpecmateException
+	 */
 	Collection<Requirement> getRequirements() throws SpecmateException;
 
+	/**
+	 * Returns a requirement with a given id
+	 *
+	 * @throws SpecmateException
+	 */
 	Requirement getRequirementById(String id) throws SpecmateException;
-
-	String getId();
 
 	/**
 	 * Returns the parent folder for a requirement, or null if the requirement has
 	 * no parent folder
-	 * 
+	 *
 	 * @param requirement
 	 * @return
 	 * @throws SpecmateException
@@ -28,7 +62,7 @@ public interface IRequirementsSource {
 	/**
 	 * Returns a set of projects given credentials have access to. Returns null if
 	 * credentials are invalid.
-	 * 
+	 *
 	 * @param project        The project the user wants to login
 	 * @param projectService The project service (helpful to retrieve other
 	 *                       projects).

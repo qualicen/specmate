@@ -4,16 +4,16 @@ import java.util.List;
 
 import org.osgi.service.log.LogService;
 
-import com.specmate.connectors.api.IRequirementsSource;
+import com.specmate.connectors.api.IConnector;
 import com.specmate.persistency.ITransaction;
 import com.specmate.scheduler.SchedulerTask;
 
 public class ConnectorTask extends SchedulerTask {
-	List<IRequirementsSource> requirementsSources;
+	List<IConnector> requirementsSources;
 	ITransaction transaction;
 	LogService logService;
 
-	public ConnectorTask(List<IRequirementsSource> requirementsSources, ITransaction transaction,
+	public ConnectorTask(List<IConnector> requirementsSources, ITransaction transaction,
 			LogService logService) {
 		super();
 		this.requirementsSources = requirementsSources;

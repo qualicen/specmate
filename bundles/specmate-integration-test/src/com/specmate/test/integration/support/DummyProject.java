@@ -8,13 +8,14 @@ import java.util.Optional;
 import java.util.Set;
 
 import com.specmate.common.exception.SpecmateException;
+import com.specmate.connectors.api.ConnectorBase;
+import com.specmate.connectors.api.IConnector;
 import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.api.IProjectService;
-import com.specmate.connectors.api.IRequirementsSource;
 import com.specmate.export.api.ExporterBase;
 import com.specmate.model.base.IContainer;
-import com.specmate.model.requirements.Requirement;
 import com.specmate.model.export.Export;
+import com.specmate.model.requirements.Requirement;
 
 public class DummyProject implements IProject {
 	private String projectId;
@@ -29,8 +30,8 @@ public class DummyProject implements IProject {
 	}
 
 	@Override
-	public IRequirementsSource getConnector() {
-		return new IRequirementsSource() {
+	public IConnector getConnector() {
+		return new ConnectorBase() {
 
 			@Override
 			public Collection<Requirement> getRequirements() throws SpecmateException {
@@ -48,7 +49,8 @@ public class DummyProject implements IProject {
 			}
 
 			@Override
-			public Set<IProject> authenticate(String username, String password, IProject project, IProjectService projectService) throws SpecmateException {
+			public Set<IProject> authenticate(String username, String password, IProject project,
+					IProjectService projectService) throws SpecmateException {
 				return new HashSet<IProject>(Arrays.asList(project));
 			}
 

@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { TestProcedure } from 'src/app/model/TestProcedure';
+import { SpecmateDataService } from 'src/app/modules/data/modules/data-service/services/specmate-data.service';
 import { Monitorable } from 'src/app/modules/notification/modules/operation-monitor/base/monitorable';
 import { SpecmateType } from 'src/app/util/specmate-type';
+import { Url } from 'src/app/util/url';
 import { IContainer } from '../../../../../model/IContainer';
 import { FieldMetaItem, MetaInfo } from '../../../../../model/meta/field-meta';
 import { TestSpecification } from '../../../../../model/TestSpecification';
@@ -26,7 +28,7 @@ export class ValidationService extends Monitorable {
 
     public isValidating = false;
 
-    constructor(private navigator: NavigatorService, translate: TranslateService) {
+    constructor(private navigator: NavigatorService, private dataService: SpecmateDataService, translate: TranslateService) {
         super();
         this.validationCache = new ValidationCache(translate);
         navigator.hasNavigated.subscribe(() => this.validateCurrent());
@@ -47,6 +49,7 @@ export class ValidationService extends Monitorable {
     public async validateCurrent(): Promise<void> {
         const element = this.navigator.currentElement;
         const contents = this.navigator.currentContents;
+        // const contents = await this.dataService.readContents(element.url, true);
         this.refreshValidation(element, contents);
     }
 

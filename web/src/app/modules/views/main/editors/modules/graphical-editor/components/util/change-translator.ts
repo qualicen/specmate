@@ -508,6 +508,15 @@ export class ChangeTranslator {
                 } finally {
                     graph.getModel().endUpdate();
                 }
+            } else {
+                graph.getModel().beginUpdate();
+                try {
+                    graph.model.setValue(cell.children[0], undefined);
+                    graph.model.setValue(cell.children[1], undefined);
+                    changedElement.name = 'unlinked CEG linked node';
+                } finally {
+                    graph.getModel().endUpdate();
+                }
             }
         } else if (value instanceof CEGmxModelNode) {
             for (const key in value) {

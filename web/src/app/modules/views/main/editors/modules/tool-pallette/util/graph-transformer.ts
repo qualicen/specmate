@@ -71,7 +71,15 @@ export class GraphTransformer {
             await this.deleteConnection(connections[i], compoundId);
         }
 
-        if (Type.is(node, CEGLinkedNode)) {
+        if (Type.is(node, CEGNode) && (node as CEGNode).linksFrom?.length > 0) {
+            for (const linkingNodeProxy of (node as CEGNode).linksFrom) {
+                const linkingNode = await this.dataService.readElement(linkingNodeProxy.url, true) as CEGLinkedNode;
+                delete linkingNode.linkTo;
+                await this.dataService.updateElement(linkingNode, true, compoundId);
+            }
+        }
+
+        if (Type.is(node, CEGLinkedNode) && (node as CEGLinkedNode).linkTo !== undefined) {
             const linkingNode = node as CEGLinkedNode;
             const linkedNode = await this.dataService.readElement(linkingNode.linkTo.url, true) as CEGNode;
             const index = linkedNode.linksFrom.findIndex(proxy => proxy.url === node.url);

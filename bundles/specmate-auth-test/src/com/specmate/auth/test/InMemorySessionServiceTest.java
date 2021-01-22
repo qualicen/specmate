@@ -63,6 +63,24 @@ public class InMemorySessionServiceTest {
 		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL));
 		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL.substring(0, baseURL.length() - 1)));
 	}
+	
+	@Test
+	public void testIsNotAuthorizedWrongProject() throws SpecmateException {
+		String projectName1 = "project1";
+		String projectName2 = "project2";
+
+		UserSession session = sessionService.create(AccessRights.ALL, AccessRights.ALL, userName, password,
+				new HashSet<String>(Arrays.asList(projectName2)));
+
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName1 + "/resource1"));
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName1 + "/resource1/resource2"));
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName1 + "/"));
+
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL + projectName1));
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL));
+		assertFalse(sessionService.isAuthorizedPath(session.getId(), baseURL.substring(0, baseURL.length() - 1)));
+	}
+
 
 	@Test
 	public void testIsAuthorizedOneProject() throws SpecmateException {

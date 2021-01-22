@@ -186,6 +186,7 @@
 	"negate": "",
 	"negated": "Negated",
 	"noCommandsLeft": "No commands left",
+	"noEffectsFound": "No effect nodes found",
 	"noFoldersFound": "No sub-folders found",
 	"noModelsFound": "No models found",
 	"noOrMultipleElementSelected": "No / multiple elements selected",

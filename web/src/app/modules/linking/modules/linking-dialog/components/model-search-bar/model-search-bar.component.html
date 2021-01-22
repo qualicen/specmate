@@ -4,4 +4,5 @@
        [inputFormatter]="formatter"
        [resultFormatter]="formatter"
        [editable]='false'
+       [ngClass]="{'no-selection': !hasModel}"
        placeholder="{{'linkingDialog.enterModelName' | translate}}"/>

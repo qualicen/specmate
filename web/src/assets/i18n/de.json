@@ -186,6 +186,7 @@
 	"negate": "",
 	"negated": "Negiert",
 	"noCommandsLeft": "Keine Befehle übrig",
+	"noEffectsFound": "Keine Effekt-Knoten gefunden",
 	"noFoldersFound": "Keine Unterordner gefunden",
 	"noModelsFound": "Keine CEG-Modelle gefunden",
 	"noOrMultipleElementSelected": "Keine / mehrere Elemente ausgewählt",

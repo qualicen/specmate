@@ -30,7 +30,7 @@ public class DummyProject implements IProject {
 
 	@Override
 	public IConnector getConnector() {
-		return new ConnectorBase() {
+		return new ConnectorBase(this) {
 
 			@Override
 			public Collection<Requirement> getRequirements() throws SpecmateException {

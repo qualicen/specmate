@@ -12,18 +12,26 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 
 import com.specmate.common.exception.SpecmateInternalException;
+import com.specmate.connectors.api.IConnector;
 import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.api.IProjectConfigService;
-import com.specmate.connectors.api.IRequirementsSource;
 import com.specmate.connectors.config.ProjectConfigService;
 import com.specmate.export.api.IExporter;
 import com.specmate.model.administration.ErrorCode;
 
 @Component(service = IProject.class, configurationPid = ProjectConfigService.PROJECT_CONFIG_FACTORY_PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
 public class ProjectImpl implements IProject {
+
+	/** The project id */
 	private String id = null;
-	private IRequirementsSource connector = null;
+
+	/** The connector of the project */
+	private IConnector connector = null;
+
+	/** The exporter for the project */
 	private IExporter exporter = null;
+
+	/** Configured library folders */
 	private List<String> libraryFolders = null;
 
 	@Activate
@@ -58,12 +66,13 @@ public class ProjectImpl implements IProject {
 	}
 
 	@Reference(name = "connector")
-	public void setConnector(IRequirementsSource connector) {
+	public void setConnector(IConnector connector) {
+		connector.setProject(this);
 		this.connector = connector;
 	}
 
 	@Override
-	public IRequirementsSource getConnector() {
+	public IConnector getConnector() {
 		return connector;
 	}
 

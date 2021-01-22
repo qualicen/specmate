@@ -4,7 +4,13 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
@@ -27,12 +33,10 @@ public class JiraUtil {
 
 	public static boolean authenticate(String url, String project, String username, String password)
 			throws SpecmateException {
-
 		JiraRestClient client = null;
 		try {
-			client = createJiraRESTClient(url, username, password);
+			client = JiraUtil.createJiraRESTClient(url, username, password);
 			client.getProjectClient().getProject(project).claim();
-
 		} catch (URISyntaxException e) {
 			throw new SpecmateAuthorizationException("Jira authentication failed.", e);
 		} catch (RestClientException e) {
@@ -46,7 +50,7 @@ public class JiraUtil {
 				try {
 					client.close();
 				} catch (IOException e) {
-					// an error occurred - better return false
+					// an error occured - better return false
 					return false;
 				}
 			}
@@ -57,15 +61,13 @@ public class JiraUtil {
 	/**
 	 * Gets a list of all project-keys a given pair of credentials has access to.
 	 */
-	public static List<String> getProjects(String serverUrl, String username, String password)
-			throws SpecmateException {
-
+	public static List<String> getProjects(String serverUrl, String username, String password) throws SpecmateException {
 		JiraRestClient client = null;
 		try {
 
 			List<String> projectKeys = new ArrayList<>();
 
-			client = createJiraRESTClient(serverUrl, username, password);
+			client = JiraUtil.createJiraRESTClient(serverUrl, username, password);
 			for (BasicProject project : client.getProjectClient().getAllProjects().claim()) {
 				projectKeys.add(project.getKey());
 			}
@@ -74,12 +76,19 @@ public class JiraUtil {
 
 		} catch (URISyntaxException e) {
 			throw new SpecmateAuthorizationException("Jira authentication failed.", e);
+		} catch (RestClientException e) {
+			Integer status = e.getStatusCode().get();
+			if (status == 401) {
+				return null;
+			}
+			return null;
 		} finally {
 			if (client != null) {
 				try {
 					client.close();
 				} catch (IOException e) {
-					// this may not affect the result of this method.
+					// an error occured - better return false
+					return null;
 				}
 			}
 		}

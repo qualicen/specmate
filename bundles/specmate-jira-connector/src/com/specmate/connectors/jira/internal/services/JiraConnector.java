@@ -7,8 +7,10 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -30,8 +32,10 @@ import com.specmate.common.cache.ICacheLoader;
 import com.specmate.common.cache.ICacheService;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
+import com.specmate.connectors.api.IConnector;
+import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.api.IProjectConfigService;
-import com.specmate.connectors.api.IRequirementsSource;
+import com.specmate.connectors.api.IProjectService;
 import com.specmate.connectors.jira.config.JiraConfigConstants;
 import com.specmate.emfrest.api.IRestService;
 import com.specmate.emfrest.crud.DetailsService;
@@ -51,8 +55,8 @@ import com.specmate.rest.RestResult;
  *
  */
 @Component(immediate = true, service = { IRestService.class,
-		IRequirementsSource.class }, configurationPid = JiraConfigConstants.CONNECTOR_PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
-public class JiraConnector extends DetailsService implements IRequirementsSource, IRestService {
+		IConnector.class }, configurationPid = JiraConfigConstants.CONNECTOR_PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
+public class JiraConnector extends DetailsService implements IConnector, IRestService {
 
 	/** Placeholder for the id of the parent element in a JQL query */
 	private static final String PARENT_ID_PLACEHOLDER = "%parentId%";
@@ -68,6 +72,9 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 
 	/** Source id of this connector */
 	private static final String JIRA_SOURCE_ID = "jira";
+
+	/** The associated project */
+	private IProject project;
 
 	/**
 	 * Default jql query for fetching children (e.g. stories) of parent items (e.g.
@@ -138,6 +145,9 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 
 	/** The rest client to access jira */
 	private JiraRestClient jiraClient;
+
+	/** The project service to access other projects **/
+	private IProjectService projectService;
 
 	public JiraRestClient getJiraClient() {
 		return jiraClient;
@@ -229,6 +239,11 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 	@Reference
 	public void setLogService(LogService logService) {
 		this.logService = logService;
+	}
+
+	@Reference
+	public void setProjectService(IProjectService projectService) {
+		this.projectService = projectService;
 	}
 
 	@Override
@@ -341,8 +356,28 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 	}
 
 	@Override
-	public boolean authenticate(String username, String password) throws SpecmateException {
-		return JiraUtil.authenticate(url, projectName, username, password);
+	public Set<IProject> authenticate(String username, String password) throws SpecmateException {
+
+		List<String> accessibleJiraProjectNames = JiraUtil.getProjects(url, username, password);
+		Set<IProject> accessibleSpecmateProjectNames = new HashSet<>();
+
+		for (String specmateProjectName : projectService.getProjectNames()) {
+
+			IProject specmateProject = projectService.getProject(specmateProjectName);
+			IConnector connector = specmateProject.getConnector();
+
+			if (connector instanceof JiraConnector) {
+				JiraConnector jiraConnector = (JiraConnector) connector;
+
+				if (accessibleJiraProjectNames.contains(jiraConnector.getProjectName())
+						&& jiraConnector.getUrl().equals(getUrl())) {
+					accessibleSpecmateProjectNames.add(specmateProject);
+				}
+
+			}
+		}
+
+		return accessibleSpecmateProjectNames;
 	}
 
 	private static Requirement createRequirement(Issue story) {
@@ -445,6 +480,10 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 		return projectName;
 	}
 
+	public String getUrl() {
+		return url;
+	}
+
 	@Override
 	public Requirement getRequirementById(String id) throws SpecmateException {
 		try {
@@ -454,5 +493,15 @@ public class JiraConnector extends DetailsService implements IRequirementsSource
 		} catch (Exception e) {
 			return null;
 		}
+	}
+
+	@Override
+	public IProject getProject() {
+		return project;
+	}
+
+	@Override
+	public void setProject(IProject project) {
+		this.project = project;
 	}
 }

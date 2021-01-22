@@ -1,5 +1,8 @@
 package com.specmate.auth.internal;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -28,15 +31,22 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 		if (project == null) {
 			throw new SpecmateAuthorizationException("Project " + projectname + " does not exist.");
 		}
-		boolean authenticated = project.getConnector().authenticate(username, password);
-		if (!authenticated) {
+		Set<IProject> authenticatedProjects = project.getConnector().authenticate(username, password);
+
+		if (!authenticatedProjects.contains(project)) {
 			throw new SpecmateAuthorizationException("User " + username + " not authenticated.");
 		}
 
+		// TODO Access rights (source and target) are not handled yet!!!!
+		// This will be removed in future anyways.
 		AccessRights targetRights = retrieveTargetAccessRights(project, username, password);
 
 		try {
-			return sessionService.create(AccessRights.ALL, targetRights, username, password, projectname);
+
+			Set<String> authenticatedProjectNames = authenticatedProjects.stream().map(p -> p.getID())
+					.collect(Collectors.toSet());
+			return sessionService.create(AccessRights.ALL, targetRights, username, password, authenticatedProjectNames);
+
 		} catch (SpecmateException e) {
 			// Something went wrong when creating the session. We act as if the
 			// Authorization failed

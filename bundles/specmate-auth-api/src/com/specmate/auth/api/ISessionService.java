@@ -1,5 +1,7 @@
 package com.specmate.auth.api;
 
+import java.util.Set;
+
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.usermodel.AccessRights;
@@ -10,7 +12,7 @@ public interface ISessionService {
 
 	/** Create a new user session */
 	public UserSession create(AccessRights exportRights, AccessRights readingRights, String userName, String password,
-			String projectName) throws SpecmateException;
+			Set<String> projectNames) throws SpecmateException;
 
 	/** Create empty session - only for testing */
 	public UserSession create();

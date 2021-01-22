@@ -28,7 +28,7 @@ export class ValidationService extends Monitorable {
 
     public isValidating = false;
 
-    constructor(private navigator: NavigatorService, private dataService: SpecmateDataService, translate: TranslateService) {
+    constructor(private navigator: NavigatorService, translate: TranslateService) {
         super();
         this.validationCache = new ValidationCache(translate);
         navigator.hasNavigated.subscribe(() => this.validateCurrent());

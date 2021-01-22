@@ -49,7 +49,6 @@ export class ValidationService extends Monitorable {
     public async validateCurrent(): Promise<void> {
         const element = this.navigator.currentElement;
         const contents = this.navigator.currentContents;
-        // const contents = await this.dataService.readContents(element.url, true);
         this.refreshValidation(element, contents);
     }
 

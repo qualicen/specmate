@@ -230,6 +230,11 @@ public class ConnectorUtilTest {
 	}
 
 	private abstract class TestRequirementSourceBase extends ConnectorBase {
+
+		public TestRequirementSourceBase(IProject project) {
+			super(project);
+		}
+
 		public static final String REQ_NAME = "req";
 		public static final String FOLDER_NAME = "folder";
 		private Folder folder;
@@ -260,7 +265,7 @@ public class ConnectorUtilTest {
 		private int count;
 
 		public TestRequirementSource_VariableNumbers(int count) {
-			super();
+			super(null);
 			this.count = count;
 		}
 
@@ -285,6 +290,10 @@ public class ConnectorUtilTest {
 
 	private class TestRequirementSource_NoFolder extends TestRequirementSourceBase {
 
+		public TestRequirementSource_NoFolder() {
+			super(null);
+		}
+
 		@Override
 		public Collection<Requirement> getRequirements() throws SpecmateException {
 
@@ -308,6 +317,10 @@ public class ConnectorUtilTest {
 
 	private class TestRequirementSource_NameChange extends TestRequirementSourceBase {
 
+		public TestRequirementSource_NameChange() {
+			super(null);
+		}
+
 		int requestCounter = 1;
 
 		@Override
@@ -328,6 +341,10 @@ public class ConnectorUtilTest {
 	}
 
 	private class TestRequirementSource_ParentChange extends TestRequirementSourceBase {
+
+		public TestRequirementSource_ParentChange() {
+			super(null);
+		}
 
 		int requestCounter = 1;
 
@@ -358,6 +375,10 @@ public class ConnectorUtilTest {
 	}
 
 	private class TestRequirementSource_InvalidRequirements extends TestRequirementSourceBase {
+		public TestRequirementSource_InvalidRequirements() {
+			super(null);
+		}
+
 		private static final String BAD_CHARS = ",|;";
 
 		@Override
@@ -387,6 +408,10 @@ public class ConnectorUtilTest {
 	}
 
 	private class TestRequirementSource_SingleRequirement extends TestRequirementSourceBase {
+
+		public TestRequirementSource_SingleRequirement() {
+			super(null);
+		}
 
 		@Override
 		public Collection<Requirement> getRequirements() throws SpecmateException {

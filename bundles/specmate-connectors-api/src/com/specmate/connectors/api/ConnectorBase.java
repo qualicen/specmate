@@ -10,6 +10,10 @@ public abstract class ConnectorBase implements IConnector {
 
 	private IProject project;
 
+	public ConnectorBase(IProject project) {
+		this.project = project;
+	}
+
 	@Override
 	public IProject getProject() {
 		return project;

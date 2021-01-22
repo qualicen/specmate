@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { TestProcedure } from 'src/app/model/TestProcedure';
-import { SpecmateDataService } from 'src/app/modules/data/modules/data-service/services/specmate-data.service';
 import { Monitorable } from 'src/app/modules/notification/modules/operation-monitor/base/monitorable';
 import { SpecmateType } from 'src/app/util/specmate-type';
-import { Url } from 'src/app/util/url';
 import { IContainer } from '../../../../../model/IContainer';
 import { FieldMetaItem, MetaInfo } from '../../../../../model/meta/field-meta';
 import { TestSpecification } from '../../../../../model/TestSpecification';

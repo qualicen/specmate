@@ -6,7 +6,7 @@ title: SpecmateDoc
 
 ## Installation
 
-* Stellen Sie sicher, dass Java 11 installiert ist. Wenn nicht, besorgen Sie es sich z.B. von [hier](https://adoptopenjdk.net/). Um herauszufinden, welche Java-Version Sie gerade verwenden, geben Sie `java -version` in Ihre Konsole ein.
+* Stellen Sie sicher, dass Java 11 installiert ist. Wenn nicht, besorgen Sie es sich z.B. von [hier](https://www.oracle.com/de/java/technologies/javase-downloads.html). Um herauszufinden, welche Java-Version Sie gerade verwenden, geben Sie `java -version` in Ihre Konsole ein.
 * Besorgen Sie sich die neueste Version von Specmate auf der Download-Seite. Wo und wie Sie die Datei herunterladen, lesen Sie im nächsten Abschnitt *Konfiguration*.
 * Wir empfehlen Ihnen, für Specmate den Browser "Google Chrome" zu verwenden, da Specmate mit Chrome am besten funktioniert und die Wahrscheinlichkeit von Darstellungsfehlern so minimiert wird. [Hier](https://www.google.com/intl/de_de/chrome/) können Sie Chrome downloaden. Sollten Sie eine zu alte Browserversion verwenden, zeigt Ihnen Specmate eine Warnung an.
 
@@ -26,7 +26,7 @@ Wenn Sie Specmate für Ihr Jira-Projekt verwenden wollen, loggen Sie sich bei Ji
 
 ![](Images_ger/Jira-Projektseite.png "Jira-Projektseite")
 
-Melden Sie sich bei Specmate mit Ihren Zugangsdaten für Jira an und wählen Sie beim Dropdown-Menü "Projekt" Jira aus.
+Melden Sie sich bei Specmate mit Ihren Zugangsdaten für Jira an und wählen Sie beim Dropdown-Menü "Projekt" ihr Jira-Projekt aus, für das Specmate verwendet wird.
 
 Wenn Sie Specmate von Jira aus verwenden, können Sie nicht nur Specmate nutzen, um Ihr Projekt zu verbessern, sondern auch Ihre Anforderungen direkt aus Jira importieren. Nachdem Sie sich bei Specmate über Jira angemeldet haben, sehen Sie auf der linken Seite Ihre Anforderungen aus Ihrem Jira-Projekt.
 
@@ -88,6 +88,7 @@ Wenn ein Ordner in der *Bibliotheks*ansicht ausgewählt ist, wird Ihnen die folg
 - Specmate zeigt erst dann passende Suchergebnisse, wenn Sie mindestens zwei Zeichen in das Suchfeld eingegeben haben.
 - Es werden nur Suchergebnisse aus dem Projekt angezeigt, in das Sie eingeloggt sind.
 - Anforderungen oder Testprozeduren werden angezeigt, wenn der Suchbegriff als Präfix im Namen, in der Beschreibung oder der ID der Anforderung oder Testprozedur vorkommt.
+- Specmate zeigt Ihnen auch Ergebnisse aus den Beschreibungen eines Modells an (ab zwei Zeichen).
 - Sie können auch nach Modellen suchen.
 - Specmate unterstützt auch *Wildcard-Suchen*, nämlich
 	- die Wildcard-Suche mit "\*": dabei findet die Suche alle Begriffe die durch das Ersetzen von "\*" mit keinem oder mehreren Zeichen entstehen. Der Suchbegriff "B\*äche" findet also Begriffe wie "Bäche" oder "Bedienoberfläche".
@@ -177,7 +178,7 @@ Bewegen Sie Ihren Cursor auf den von Ihnen bereits erstellten Knoten: Es erschei
 4.) Sie können Verbindungen außerdem negieren, wenn Sie genaueres dazu wissen wollen, lesen Sie [hier](###Verbindungen negieren) weiter.
 
 #### 6. Markieren
-Wenn Sie mehrere Verbindungen und/oder Knoten auswählen wollen, weil Sie z.B. einen Teil Ihres Modells kopieren und/oder in der Bibliothek abspeichern wollen, halten Sie die Strg-Taste (Windows) oder die Command-Taste (OS) gedrückt, während Sie auf die gewünschten Elemente klicken.
+Wenn Sie mehrere Verbindungen und/oder Knoten auswählen wollen, weil Sie z.B. einen Teil Ihres Modells kopieren und/oder in der Bibliothek abspeichern wollen, halten Sie die Strg-Taste (Windows) oder die Command-Taste (Mac) gedrückt, während Sie auf die gewünschten Elemente klicken.
 
 #### 7. Fehlermeldungen und Warnungen
 
@@ -509,7 +510,7 @@ Der Name der Testfall-Spezifikation basiert auf dem Datum und der Uhrzeit, zu de
 
 Die Spezifikation besteht aus mehreren Testfällen, wobei jeder Testfall eine bestimmte Konfiguration hat. Ein Testfall weist jeder Variable einen Wert zu. In bestimmten Testfällen lässt Specmate den Wert einer Variable frei. Ist dies der Fall, ist die Variable nicht auf einen bestimmten Wert beschränkt. Für die Erstellung der Spezifikation werden Regeln verwendet, um ein optimales Verhältnis zwischen Testabdeckung und Anzahl der Testfälle sicherzustellen. Dadurch wird verhindert, dass die Anzahl der Testfälle bei einem Zuwachs der Ursachen exponentiell wächst.
 
-Es kann vorkommen, dass inkonsistente Tests erzeugt werden, die gegen Regeln verstoßen. Oder, dass das Modell auf eine andere Art widersprüchlich ist. Zum Beispiel, da sich die Bedingungen der Variablen wegen des
+Es kann vorkommen, dass inkonsistente Tests erzeugt werden, bei denen Specmate nicht alle Testerzeugungsregeln erfüllen konnte. Oder, dass das Modell auf eine andere Art widersprüchlich ist. Zum Beispiel, da sich die Bedingungen der Variablen wegen des
 [*=-Operators*](#bedingung) widersprechen. Specmate zeigt inkonsistente Tests an, indem es diese Tests rot hinterlegt. Überprüfen Sie in diesem Fall Ihr Modell oder passen Sie Ihre Testfälle an.
 - Haben zwei oder mehr CEG-Knoten die selbe Variable und beginnt die Bedingung mit Zeichen "=", dann erzeugt Specmate die Testfälle so, dass bei jeden Testfall genau *einer* der Knoten wahr ist.
 
@@ -549,7 +550,7 @@ Klicken Sie bei einem CEG auf dieses Kästchen, können Sie hier Ihre Testprozed
 
 Testprozeduren können (wie auch Testspezifikationen) exportiert werden.
 In jedem Schritt des Testverfahrens können Sie auf Parameter aus dem erstellten Modell verweisen. Die Parameter aus dem Modell können in der Parameterzuordnung auf einen bestimmten Wert eingestellt werden.
-Wenn die Erstellung einer Testprozedur abgeschlossen ist, können Sie sie mit der Schaltfläche *Testprozedur exportieren* auf der rechten Seite z.B. nach Jira XRay Cloud exportieren und sie dort weiter bearbeiten. Bevor Sie eine Testprozedur exportieren, ist es essentiell, dass Sie diese vorher speichern. Speichern Sie die Testprozedur nicht selbstständig, fragt Specmate vor dem Export, ob Sie die Testprozedur speichern möchten – stimmen Sie zu, können Sie den Export fortsetzen, stimmen Sie nicht zu, wird der Export abgebrochen. Sie können auch eine bereits erstellte Testprozedur öffnen und bearbeiten, indem Sie sie im [Projekt-Explorer](#bedienoberfläche) oder in der [Anforderungsübersicht](#traces) anklicken.
+Wenn die Erstellung einer Testprozedur abgeschlossen ist, können Sie sie mit der Schaltfläche *Testprozedur exportieren* auf der rechten Seite z.B. nach Jira XRay Cloud exportieren und sie dort weiter bearbeiten. Bevor Sie eine Testprozedur exportieren, ist es essentiell, dass Sie diese vorher speichern. Sie können auch eine bereits erstellte Testprozedur öffnen und bearbeiten, indem Sie sie im [Projekt-Explorer](#bedienoberfläche) oder in der [Anforderungsübersicht](#traces) anklicken.
 
 ![](Images_ger/Test-procedure.png "testprocedure")
 

@@ -19,6 +19,7 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link com.specmate.migration.test.attributeadded.testmodel.artefact.Diagram#getCreated <em>Created</em>}</li>
  *   <li>{@link com.specmate.migration.test.attributeadded.testmodel.artefact.Diagram#getNotes <em>Notes</em>}</li>
+ *   <li>{@link com.specmate.migration.test.attributeadded.testmodel.artefact.Diagram#getLinkfrom <em>Linkfrom</em>}</li>
  * </ul>
  *
  * @see com.specmate.migration.test.attributeadded.testmodel.artefact.ArtefactPackage#getDiagram()
@@ -67,5 +68,19 @@ public interface Diagram extends IModifiable, IContainer {
 	 * @generated
 	 */
 	EList<String> getNotes();
+
+	/**
+	 * Returns the value of the '<em><b>Linkfrom</b></em>' reference list.
+	 * The list contents are of type {@link com.specmate.migration.test.attributeadded.testmodel.artefact.Sketch}.
+	 * It is bidirectional and its opposite is '{@link com.specmate.migration.test.attributeadded.testmodel.artefact.Sketch#getLinkedDiagram <em>Linked Diagram</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Linkfrom</em>' reference list.
+	 * @see com.specmate.migration.test.attributeadded.testmodel.artefact.ArtefactPackage#getDiagram_Linkfrom()
+	 * @see com.specmate.migration.test.attributeadded.testmodel.artefact.Sketch#getLinkedDiagram
+	 * @model opposite="linkedDiagram"
+	 * @generated
+	 */
+	EList<Sketch> getLinkfrom();
 
 } // Diagram

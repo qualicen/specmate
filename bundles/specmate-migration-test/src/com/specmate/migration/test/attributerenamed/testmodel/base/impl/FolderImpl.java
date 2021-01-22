@@ -78,6 +78,7 @@ public class FolderImpl extends MinimalEObjectImpl.Container implements Folder {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getId() {
 		return (String)eDynamicGet(BasePackage.FOLDER__ID, BasePackage.Literals.IID__ID, true, true);
 	}
@@ -87,6 +88,7 @@ public class FolderImpl extends MinimalEObjectImpl.Container implements Folder {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setId(String newId) {
 		eDynamicSet(BasePackage.FOLDER__ID, BasePackage.Literals.IID__ID, newId);
 	}
@@ -97,6 +99,7 @@ public class FolderImpl extends MinimalEObjectImpl.Container implements Folder {
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public EList<IContentElement> getContents() {
 		return (EList<IContentElement>)eDynamicGet(BasePackage.FOLDER__CONTENTS, BasePackage.Literals.ICONTAINER__CONTENTS, true, true);
 	}

@@ -416,7 +416,7 @@ export class GraphicalEditor implements OnDestroy {
                         initialData.size.width, initialData.size.height, initialData.text as CEGmxModelNode);
                 } else if (initialData.style === EditorStyle.BASE_CEG_LINKED_NODE_STYLE) {
                     this.vertexProvider.provideLinkedCEGNode(vertexUrl, coords.x, coords.y,
-                        initialData.size.width, initialData.size.height, initialData.text as CEGmxModelNode);
+                        initialData.size.width, initialData.size.height, initialData.text as CEGmxModelNode, undefined);
                 } else {
                     this.graph.insertVertex(
                         this.graph.getDefaultParent(),

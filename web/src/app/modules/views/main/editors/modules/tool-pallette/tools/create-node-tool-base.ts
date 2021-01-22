@@ -1,3 +1,6 @@
+import { CEGLinkedNode } from 'src/app/model/CEGLinkedNode';
+import { CEGNode } from 'src/app/model/CEGNode';
+import { IContainer } from 'src/app/model/IContainer';
 import { ElementFactoryBase } from '../../../../../../../factory/element-factory-base';
 import { IModelNode } from '../../../../../../../model/IModelNode';
 import { CreateToolBase } from './create-tool-base';
@@ -10,6 +13,9 @@ export abstract class CreateNodeToolBase<T extends IModelNode> extends CreateToo
 
     public coords: { x: number, y: number };
     public name: string;
+    public value: CEGLinkedNode;
+
+    protected compoundId: string;
 
     public async perform(): Promise<T> {
         if (this.coords === undefined) {
@@ -23,7 +29,7 @@ export abstract class CreateNodeToolBase<T extends IModelNode> extends CreateToo
             throw new Error('Necessary data undefined.');
         }
         const factory = this.getElementFactory(this.coords);
-        const node = await factory.create(this.parent, false, undefined, this.name);
+        const node = await factory.create(this.parent, false, this.compoundId, this.name);
         this.selectedElementService.select(node);
         return node;
     }

@@ -238,6 +238,7 @@ export class ChangeTranslator {
     private async translateNodeAdd(change: mxgraph.mxChildChange, graph: mxgraph.mxGraph): Promise<IModelNode> {
         const tool = this.determineTool(change) as CreateNodeToolBase<IModelNode>;
         tool.coords = { x: change.child.geometry.x, y: change.child.geometry.y };
+        tool.value = change.child.getValue();
         let node = await tool.perform();
 
         if (Type.is(node, CEGNode)) {
@@ -248,6 +249,10 @@ export class ChangeTranslator {
                 node[key] = elementValues[key];
             }
             node.name = node['variable'] + ' ' + node['condition'];
+        } else if (Type.is(node, CEGLinkedNode)) {
+            const linkingNode = node as CEGLinkedNode;
+            const linkedNode = await this.dataService.readElement(linkingNode.linkTo.url, true) as CEGNode;
+            node.name = linkedNode.variable + ' ' + linkedNode.condition;
         } else {
             node.name = change.child.value;
         }
@@ -262,6 +267,11 @@ export class ChangeTranslator {
         cell.setId(newId);
         delete cells[oldId];
         cells[newId] = cell;
+
+        if (Type.is(node, CEGLinkedNode)) {
+            cell.setValue(node);
+        }
+
 
         if (Type.is(node, CEGNode) || Type.is(node, CEGLinkedNode)) {
             let variable = cell.children[0];
@@ -495,6 +505,15 @@ export class ChangeTranslator {
                 try {
                     graph.model.setValue(cell.children[0], linkedNode.variable);
                     graph.model.setValue(cell.children[1], linkedNode.condition);
+                } finally {
+                    graph.getModel().endUpdate();
+                }
+            } else {
+                graph.getModel().beginUpdate();
+                try {
+                    graph.model.setValue(cell.children[0], undefined);
+                    graph.model.setValue(cell.children[1], undefined);
+                    changedElement.name = 'unlinked CEG linked node';
                 } finally {
                     graph.getModel().endUpdate();
                 }

@@ -36,7 +36,34 @@ export class CEGLinkedNodeTool extends CreateNodeToolBase<CEGLinkedNode> impleme
     }
 
     public async perform(): Promise<CEGLinkedNode> {
+        this.compoundId = Id.uuid;
         let node = await super.perform();
+        let linkedNode: CEGNode = undefined;
+        if (this.value !== undefined) {
+            linkedNode = await this.dataService.readElement(this.value.linkTo.url, true) as CEGNode;
+        } else {
+            linkedNode = await this.getLinkedNodeWithDialog(node);
+        }
+
+        node.linkTo = new Proxy();
+        node.linkTo.url = linkedNode.url;
+        let proxy = new Proxy();
+        proxy.url = node.url;
+        if (linkedNode.linksFrom === undefined) {
+            linkedNode.linksFrom = [];
+        }
+        linkedNode.linksFrom.push(proxy);
+        node.name = linkedNode.variable + ' ' + linkedNode.condition;
+        this.dataService.updateElement(linkedNode, true, this.compoundId);
+        this.dataService.updateElement(node, true, this.compoundId);
+        return node;
+    }
+
+    protected getElementFactory(coords: { x: number; y: number; }): ElementFactoryBase<CEGLinkedNode> {
+        return new CEGLinkedNodeFactory(coords, this.dataService);
+    }
+
+    private async getLinkedNodeWithDialog(node: IContainer): Promise<CEGNode> {
         if (!this.dialogOpen) {
             this.dialogOpen = true;
             this.modalRef = this.modalService.open(LinkingDialogComponent, {
@@ -50,28 +77,13 @@ export class CEGLinkedNodeTool extends CreateNodeToolBase<CEGLinkedNode> impleme
                 centered: true
             });
 
-            this.modalRef.result.then((link: CEGNode) => {
-                // the resulting link
+            try {
                 this.dialogOpen = false;
-                node.linkTo = new Proxy();
-                node.linkTo.url = link.url;
-                let proxy = new Proxy();
-                proxy.url = node.url;
-                link.linksFrom.push(proxy);
-                node.name = link.variable + ' ' + link.condition;
-                this.dataService.updateElement(link, true, Id.uuid);
-                this.dataService.updateElement(node, true, Id.uuid);
-            }).catch(async () => {
+                return await this.modalRef.result;
+            } catch {
                 this.dialogOpen = false;
                 await this.dataService.deleteElement(node.url, true, Id.uuid);
-            });
+            }
         }
-        return node;
     }
-
-    protected getElementFactory(coords: { x: number; y: number; }): ElementFactoryBase<CEGLinkedNode> {
-        return new CEGLinkedNodeFactory(coords, this.dataService);
-    }
-
-
 }

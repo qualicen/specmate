@@ -28,19 +28,17 @@
                 </ul>
             </li>
         </ng-container>
-        <ng-container *ngIf="hasLinkedNode">
-            <li>
-                <h6 class="card-header">
-                    {{'LinkedNodeInModel' | translate}}
-                </h6>
-            </li>
-            <li class="list-group-item">
-                <a [navigationTarget]="linkedModel"><icon-selector [model]="linkedModel"></icon-selector>&nbsp;{{linkedModel.name}}</a>
-            </li>
-            <li class="list-group-item" *ngIf="showLinkingButton">
-                <link-model-button [element]="selectedElement"></link-model-button>
-            </li>
-        </ng-container>
+        <li *ngIf="showLinkingButton || hasLinkedNode">
+            <h6 class="card-header">
+                {{'LinkedNodeInModel' | translate}}
+            </h6>
+        </li>
+        <li class="list-group-item" *ngIf="hasLinkedNode">
+            <a [navigationTarget]="linkedModel"><icon-selector [model]="linkedModel"></icon-selector>&nbsp;{{linkedModel.name}}</a>
+        </li>
+        <li class="list-group-item" *ngIf="showLinkingButton">
+            <link-model-button [element]="selectedElement"></link-model-button>
+        </li>
     </ul>
 </div>
 <div *ngIf="!selectedElement" class="card">

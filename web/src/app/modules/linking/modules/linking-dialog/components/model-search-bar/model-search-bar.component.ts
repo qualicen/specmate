@@ -1,4 +1,4 @@
-import { Component, OnInit, Query, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Query, EventEmitter, Output, Input } from '@angular/core';
 import { SpecmateDataService } from 'src/app/modules/data/modules/data-service/services/specmate-data.service';
 import { CEGModel } from 'src/app/model/CEGModel';
 import { Observable } from 'rxjs';
@@ -15,6 +15,9 @@ export class ModelSearchBarComponent implements OnInit {
     private static readonly SEARCH_FILTER = {
         'type': 'CEGModel'
     };
+
+    @Input()
+    public parentModel: CEGModel;
 
     private _model: CEGModel;
 
@@ -50,8 +53,9 @@ export class ModelSearchBarComponent implements OnInit {
         mergeMap(term => {
             return this.dataService.search(term, ModelSearchBarComponent.SEARCH_FILTER)
                 .then(v => {
-                    if (v.length > 0) {
-                        return v as CEGModel[];
+                    const result = this.parentModel !== undefined ? v.filter(model => model.url !== this.parentModel.url) : v;
+                    if (result.length > 0) {
+                        return result as CEGModel[];
                     } else {
                         return [null];
                     }

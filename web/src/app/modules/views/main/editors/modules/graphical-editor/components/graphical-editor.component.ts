@@ -205,41 +205,50 @@ export class GraphicalEditor implements OnDestroy {
         this.graph.zoomTo(this.zoomFactor, undefined);
         const rubberBand = new mx.mxRubberband(this.graph);
         rubberBand.reset();
+        this.graph.setHtmlLabels(true);
 
         this.graph.setTooltips(true);
         this.graph.zoomFactor = 1.1;
 
         let graphGetPreferredSizeForCell = this.graph.getPreferredSizeForCell;
         let that = this;
-        this.graph.getPreferredSizeForCell = function (cell) {
-            // console.log(cell);
-            // let state = this.view.getState(cell) || this.view.createState(cell);
-            // if (that.graph.cellRenderer.getLabelValue(state)) {
-            //    console.log(that.graph.cellRenderer.getLabelValue(state).constructor.name);
-            // }
-            let result = graphGetPreferredSizeForCell.apply(this, arguments);
-            let width = result.width;
-            if (cell.children !== undefined && cell.children !== null) {
-                for (const child of cell.children) {
-                    // let childResized = that.graph.updateCellSize(child, true);
-                    // width = Math.max(width, childResized.geometry.width);
-
-                    let resultChild = that.graph.getPreferredSizeForCell(child);
-                    width = Math.max(width, resultChild.width);
-                }
+        this.graph.getPreferredSizeForCell = function (cell: mxgraph.mxCell) {
+            console.log('getPreferredSizeForCell');
+            console.log(cell);
+            if (cell.getId().endsWith(VertexProvider.ID_SUFFIX_TYPE)) {
+                return undefined;
             }
-            if (cell.style !== undefined) {
-                let shapeData = that.shapeProvider.getInitialData(cell.style.split(';')[0]);
-                if (shapeData !== undefined) {
-                    let minWidth = shapeData.size.width;
-                    let originalHeight = cell.getGeometry().height;
-                    result.width = Math.max(minWidth, width + 20);
-                    result.height = originalHeight;
+            let result = graphGetPreferredSizeForCell.apply(this, arguments);
+            if (result !== null) {
+                let width = result.width;
+                if (cell.children !== undefined && cell.children !== null) {
+                    for (const child of cell.children) {
+                        let resultChild = that.graph.getPreferredSizeForCell(child);
+                        if (resultChild !== undefined) {
+                            width = Math.max(width, resultChild.width);
+                        }
+                    }
                 }
+                if (cell.style !== undefined) {
+                    let shapeData = that.shapeProvider.getInitialData(cell.style.split(';')[0]);
+                    if (shapeData !== undefined) {
+                        let minWidth = shapeData.size.width;
+                        let originalHeight = cell.getGeometry().height;
+                        result.width = Math.max(minWidth, width + shapeData.size.margin);
+                        result.height = originalHeight;
+                    }
 
+                }
             }
             return result;
         };
+
+        this.graph.addListener(mx.mxEvent.RESIZE_CELLS, function (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) {
+            let cells = evt.getProperty('cells');
+            for (let i = 0; i < cells.length; i++) {
+                this.view.removeState(cells[i]);
+            }
+        });
 
         this.graph.addListener(mx.mxEvent.DOUBLE_CLICK, (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) => {
             const cell = evt.properties.cell as mxgraph.mxCell;

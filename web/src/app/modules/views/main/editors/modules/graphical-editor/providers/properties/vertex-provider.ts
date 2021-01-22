@@ -45,21 +45,16 @@ export class VertexProvider extends ProviderBase {
         const l2 = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_CONDITION, data.condition,
             VertexProvider.INITIAL_CHILD_NODE_X, 0.4, 0, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.TEXT_INPUT_STYLE, true);
         const l3 = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_TYPE, data.type,
-            VertexProvider.INITIAL_CHILD_NODE_X, 0.65, 0, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.TEXT_INPUT_STYLE, true);
-        this.graph.updateCellSize(l1, true);
-        this.graph.updateCellSize(l2, true);
-
-        // VertexProvider.adjustChildCellSize(l1, width);
-        // VertexProvider.adjustChildCellSize(l2, width);
-
-        // this.graph.updateCellSize(l1, false);
-        // this.graph.updateCellSize(l2, false);
+            VertexProvider.INITIAL_CHILD_NODE_X, 0.65, 0, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.TYPE_NAME_STYLE, true);
 
         l1.isConnectable = () => false;
         l2.isConnectable = () => false;
         l3.isConnectable = () => false;
-        // this.graph.updateCellSize(vertex, true);
+
+        this.graph.updateCellSize(l1, true);
+        this.graph.updateCellSize(l2, true);
         VertexProvider.adjustChildrenPositions(vertex);
+
         this.graph.getModel().endUpdate();
         return vertex;
     }
@@ -76,13 +71,21 @@ export class VertexProvider extends ProviderBase {
         }
     }
 
-    public static adjustChildCellSize(cell: mxgraph.mxCell, nodeWidth: number) {
+    public static adjustChildrenCellSizes(cell: mxgraph.mxCell, shapeProvider: ShapeProvider, graph: mxgraph.mxGraph) {
         const g = cell.getGeometry();
-        let x = 0;
-        x = (nodeWidth - g.width) / 2 / nodeWidth;
-        // x = x - (g.width / nodeWidth) / 2;
-
-        cell.getGeometry().setRect(x, g.y, g.width, g.height);
+        let parentWidth = g.width;
+        if (cell.children !== undefined && cell.children !== null) {
+            for (const child of cell.children) {
+                const childGeometry = child.getGeometry();
+                let shapedata = shapeProvider.getInitialData(cell.style.split(';')[0]);
+                let width = parentWidth - shapedata.size.margin;
+                // graph.resizeCell(child, new mx.mxRectangle(childGeometry.x, childGeometry.y, width, childGeometry.height));
+                child.getGeometry().setRect(childGeometry.x, childGeometry.y, width, childGeometry.height);
+                console.log(graph.getView().getState(child));
+            }
+        }
+        VertexProvider.adjustChildrenPositions(cell);
+        // graph.getView().revalidate();
     }
 
     public provideVertex(node: IModelNode, x?: number, y?: number): mxgraph.mxCell {
@@ -114,9 +117,9 @@ export class VertexProvider extends ProviderBase {
                 if (inDegree < 2) {
                     return '';
                 }
-
                 let dropdown = document.createElement('select');
                 let options = ['AND', 'OR'];
+                let dropdowns: HTMLSelectElement[] = [];
                 let optionElements: HTMLOptionElement[] = [];
                 for (const option of options) {
                     let optionElem = document.createElement('option');
@@ -129,6 +132,7 @@ export class VertexProvider extends ProviderBase {
                     dropdown.appendChild(optionElem);
                     optionElements.push(optionElem);
                 }
+                dropdowns.push(dropdown);
                 mx.mxEvent.addListener(dropdown, 'change', (evt: mxgraph.mxEventObject) => {
                     graph.model.setValue(cell, dropdown.value);
                 });
@@ -140,7 +144,7 @@ export class VertexProvider extends ProviderBase {
                     }
                     return mx.mxCell.prototype.valueChanged.bind(cell)(newValue);
                 };
-                return dropdown.outerHTML;
+                return dropdown;
             }
             return mx.mxGraph.prototype.convertValueToString.bind(graph)(cell);
         };

@@ -45,14 +45,18 @@ export class EditorStyle {
     public static readonly EFFECT_STYLE: Style = {};
 
     public static readonly TEXT_INPUT_STYLE = 'BASE_TEXT_INPUT';
-    private static readonly TEXT_INPUT_STYLE_STR = 'shape=rectangle;rounded=0;align=center;strokeColor=#666666;fillColor=none;fontColor=#000000;autosize=1';
+    private static readonly TEXT_INPUT_STYLE_STR = 'shape=rectangle;rounded=0;align=center;strokeColor=#666666;fillColor=none;fontColor=#000000;autosize=1;whiteSpace=wrap';
     private static readonly TEXT_INPUT_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.TEXT_INPUT_STYLE_STR);
     public static readonly VARIABLE_NAME_STYLE = 'VARIABLE_NAME_STYLE';
-    private static readonly VARIABLE_NAME_STYLE_STR = 'shape=rectangle;rounded=0;align=center;strokeColor=#666666;fontColor=#000000;autosize=1;fontStyle=' + mx.mxConstants.FONT_BOLD;
+    // private static readonly VARIABLE_NAME_STYLE_STR = 'shape=rectangle;rounded=0;align=center;strokeColor=#666666;fontColor=#000000;autosize=1;whiteSpace=wrap;fontStyle=' + mx.mxConstants.FONT_BOLD;
+    private static readonly VARIABLE_NAME_STYLE_STR = 'shape=rectangle;rounded=0;strokeColor=#666666;fontColor=#000000;autosize=1;whiteSpace=wrap;fontStyle=' + mx.mxConstants.FONT_BOLD;
     private static readonly VARIABLE_NAME_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.VARIABLE_NAME_STYLE_STR);
+    public static readonly TYPE_NAME_STYLE = 'TYPE_NAME_STYLE';
+    private static readonly TYPE_NAME_STYLE_STR = 'shape=rectangle;autosize=0';
+    private static readonly TYPE_NAME_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.TYPE_NAME_STYLE_STR);
 
     public static readonly BASE_CEG_NODE_STYLE = 'BASE_CEG_NODE';
-    private static readonly BASE_CEG_NODE_STYLE_STR = 'shape=rectangle;rounded=1;arcSize=10;align=center;perimeter=rectanglePerimeter;dashed=0;autosize=1';
+    private static readonly BASE_CEG_NODE_STYLE_STR = 'shape=rectangle;rounded=1;arcSize=10;align=center;perimeter=rectanglePerimeter;dashed=0;autosize=1;whiteSpace=wrap';
     private static readonly BASE_CEG_NODE_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.BASE_CEG_NODE_STYLE_STR);
     public static readonly BASE_PROCESS_START_STYLE = 'BASE_PROCESS_START_STYLE';
     private static readonly BASE_PROCESS_START_STYLE_STR = 'shape=ellipse;whiteSpace=wrap;html=1;aspect=fixed;align=center;perimeter=ellipsePerimeter;editable=0;dashed=0;fontColor=#000000';
@@ -61,10 +65,10 @@ export class EditorStyle {
     private static readonly BASE_PROCESS_END_STYLE_STR = 'shape=doubleEllipse;whiteSpace=wrap;html=1;aspect=fixed;align=center;perimeter=ellipsePerimeter;editable=0;dashed=0;fontColor=#000000';
     private static readonly BASE_PROCESS_END_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.BASE_PROCESS_END_STYLE_STR);
     public static readonly BASE_PROCESS_STEP_STYLE = 'BASE_PROCESS_STEP_STYLE';
-    private static readonly BASE_PROCESS_STEP_STYLE_STR = 'shape=rectangle;rounded=1;arcSize=10;perimeter=rectanglePerimeter;dashed=0;fontColor=#000000;autosize=1';
+    private static readonly BASE_PROCESS_STEP_STYLE_STR = 'shape=rectangle;rounded=1;arcSize=10;perimeter=rectanglePerimeter;dashed=0;fontColor=#000000;autosize=1;whiteSpace=wrap';
     private static readonly BASE_PROCESS_STEP_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.BASE_PROCESS_STEP_STYLE_STR);
     public static readonly BASE_PROCESS_DECISION_STYLE = 'BASE_PROCESS_DECISION_STYLE';
-    private static readonly BASE_PROCESS_DECISION_STYLE_STR = 'shape=rhombus;align=center;perimeter=rhombusPerimeter;dashed=0;fontColor=#000000';
+    private static readonly BASE_PROCESS_DECISION_STYLE_STR = 'shape=rhombus;align=center;perimeter=rhombusPerimeter;dashed=0;fontColor=#000000;autosize=1;whiteSpace=wrap';
     private static readonly BASE_PROCESS_DECISION_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.BASE_PROCESS_DECISION_STYLE_STR);
 
     public static readonly ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE = 'ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE';
@@ -101,6 +105,7 @@ export class EditorStyle {
 
         stylesheet.putCellStyle(EditorStyle.TEXT_INPUT_STYLE, EditorStyle.TEXT_INPUT_STYLE_OBJ);
         stylesheet.putCellStyle(EditorStyle.VARIABLE_NAME_STYLE, EditorStyle.VARIABLE_NAME_STYLE_OBJ);
+        stylesheet.putCellStyle(EditorStyle.TYPE_NAME_STYLE, EditorStyle.TYPE_NAME_STYLE_OBJ);
 
         stylesheet.putCellStyle(EditorStyle.BASE_CEG_NODE_STYLE, EditorStyle.BASE_CEG_NODE_STYLE_OBJ);
         stylesheet.putCellStyle(EditorStyle.BASE_PROCESS_START_STYLE, EditorStyle.BASE_PROCESS_START_STYLE_OBJ);

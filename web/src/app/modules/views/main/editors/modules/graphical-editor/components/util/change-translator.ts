@@ -312,15 +312,19 @@ export class ChangeTranslator {
 
     private async translateNodeChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange, element: IModelNode,
         graph: mxgraph.mxGraph): Promise<void> {
+        console.log(change);
         let cell = change.cell as mxgraph.mxCell;
         if (this.isTextInputChange(change)) {
-            graph.updateCellSize(cell, true);
+            // graph.updateCellSize(cell, true);
             graph.updateCellSize(cell.parent, true);
         }
+        let isLabelCell = false;
         if (this.nodeNameConverter) {
             if (this.parentComponents[cell.getId()] !== undefined) {
                 // The changed node is a sublabel / child
+                isLabelCell = true;
                 cell = cell.getParent();
+                console.log('Parent:');
             }
             let value = cell.value;
             if (Type.is(element, CEGNode)) {
@@ -334,11 +338,16 @@ export class ChangeTranslator {
             // Keep change.cell to avoid having a parent a child value
             element['variable'] = change.cell.value;
         }
-        element['x'] = Math.max(0, cell.geometry.x);
-        element['y'] = Math.max(0, cell.geometry.y);
-        element['width'] = cell.geometry.width;
-        element['height'] = cell.geometry.height;
-        VertexProvider.adjustChildrenPositions(cell);
+        if (!isLabelCell) {
+            element['x'] = Math.max(0, cell.geometry.x);
+            element['y'] = Math.max(0, cell.geometry.y);
+            element['width'] = cell.geometry.width;
+            element['height'] = cell.geometry.height;
+            VertexProvider.adjustChildrenCellSizes(cell, this.shapeProvider, graph);
+            // VertexProvider.adjustChildrenPositions(cell);
+        }
+        // VertexProvider.adjustChildrenCellSizes(cell, this.shapeProvider);
+        // VertexProvider.adjustChildrenPositions(cell);
         await this.dataService.updateElement(element, true, Id.uuid);
     }
 

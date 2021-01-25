@@ -1,7 +1,6 @@
 /* tslint:disable:max-line-length */
 
 import { mxgraph } from 'mxgraph'; // Typings only - no code!
-import { Config } from 'src/app/config/config';
 
 declare var require: any;
 
@@ -32,6 +31,10 @@ export class EditorStyle {
     public static readonly VALID_STYLE: Style = {};
     public static readonly INVALID_STYLE: Style = {};
 
+    public static readonly EMPTY_TEXT_NAME = 'EMPTY_TEXT';
+    public static readonly EMPTY_TEXT_STYLE: Style = {};
+
+
     public static readonly EDGE_HIGHLIGHT_STYLE_NAME = 'EDGE_HIGHLIGHT';
     public static readonly EDGE_DIM_STYLE_NAME = 'EDGE_DIM';
     public static readonly EDGE_HIGHLIGHT_STYLE: Style = {};
@@ -45,14 +48,13 @@ export class EditorStyle {
     public static readonly EFFECT_STYLE: Style = {};
 
     public static readonly TEXT_INPUT_STYLE = 'BASE_TEXT_INPUT';
-    private static readonly TEXT_INPUT_STYLE_STR = 'shape=rectangle;rounded=0;align=center;strokeColor=#666666;fillColor=none;fontColor=#000000;autosize=1;whiteSpace=wrap';
+    private static readonly TEXT_INPUT_STYLE_STR = 'shape=rectangle;rounded=0;strokeColor=none;align=center;fillColor=none;fontColor=#000000;autosize=1;whiteSpace=wrap';
     private static readonly TEXT_INPUT_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.TEXT_INPUT_STYLE_STR);
-    public static readonly VARIABLE_NAME_STYLE = 'VARIABLE_NAME_STYLE';
-    // private static readonly VARIABLE_NAME_STYLE_STR = 'shape=rectangle;rounded=0;align=center;strokeColor=#666666;fontColor=#000000;autosize=1;whiteSpace=wrap;fontStyle=' + mx.mxConstants.FONT_BOLD;
-    private static readonly VARIABLE_NAME_STYLE_STR = 'shape=rectangle;rounded=0;strokeColor=#666666;fontColor=#000000;autosize=1;whiteSpace=wrap;fontStyle=' + mx.mxConstants.FONT_BOLD;
+    public static readonly VARIABLE_NAME_STYLE = 'BASE_VARIABLE_NAME_STYLE';
+    private static readonly VARIABLE_NAME_STYLE_STR = 'shape=rectangle;rounded=0;strokeColor=none;fillColor=none;fontColor=#000000;autosize=1;whiteSpace=wrap;fontStyle=' + mx.mxConstants.FONT_BOLD;
     private static readonly VARIABLE_NAME_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.VARIABLE_NAME_STYLE_STR);
     public static readonly TYPE_NAME_STYLE = 'TYPE_NAME_STYLE';
-    private static readonly TYPE_NAME_STYLE_STR = 'shape=rectangle;autosize=0';
+    private static readonly TYPE_NAME_STYLE_STR = 'shape=rectangle;autosize=0;strokeColor=none;fillColor=none';
     private static readonly TYPE_NAME_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.TYPE_NAME_STYLE_STR);
 
     public static readonly BASE_CEG_NODE_STYLE = 'BASE_CEG_NODE';
@@ -96,6 +98,8 @@ export class EditorStyle {
 
         EditorStyle.EDGE_DIM_STYLE[mx.mxConstants.STYLE_STROKECOLOR] = '#858585';
         EditorStyle.EDGE_DIM_STYLE[mx.mxConstants.STYLE_STROKEWIDTH] = '2';
+
+        EditorStyle.EMPTY_TEXT_STYLE[mx.mxConstants.STYLE_STROKECOLOR] = '#666666';
     }
 
     public static initEditorStyles(graph: mxgraph.mxGraph) {
@@ -120,7 +124,9 @@ export class EditorStyle {
         stylesheet.putCellStyle(EditorStyle.CAUSE_STYLE_NAME, EditorStyle.CAUSE_STYLE);
         stylesheet.putCellStyle(EditorStyle.EFFECT_STYLE_NAME, EditorStyle.EFFECT_STYLE);
         stylesheet.putCellStyle(EditorStyle.INNER_STYLE_NAME, EditorStyle.INNER_STYLE);
+        stylesheet.putCellStyle(EditorStyle.INNER_STYLE_NAME, EditorStyle.INNER_STYLE);
 
+        stylesheet.putCellStyle(EditorStyle.EMPTY_TEXT_NAME, EditorStyle.EMPTY_TEXT_STYLE);
 
 
         const vertexStyle = graph.getStylesheet().getDefaultVertexStyle();

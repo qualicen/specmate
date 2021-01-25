@@ -312,11 +312,16 @@ export class ChangeTranslator {
 
     private async translateNodeChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange, element: IModelNode,
         graph: mxgraph.mxGraph): Promise<void> {
-        console.log(change);
         let cell = change.cell as mxgraph.mxCell;
         if (this.isTextInputChange(change)) {
-            // graph.updateCellSize(cell, true);
+            if (cell.value === '' || cell.value === undefined || cell.value === null) {
+                StyleChanger.addStyle(cell, graph, EditorStyle.EMPTY_TEXT_NAME);
+            } else {
+                StyleChanger.removeStyle(cell, graph, EditorStyle.EMPTY_TEXT_NAME);
+            }
+            graph.getView().validate(cell);
             graph.updateCellSize(cell.parent, true);
+            VertexProvider.adjustChildrenCellSizes(cell.parent, this.shapeProvider, graph);
         }
         let isLabelCell = false;
         if (this.nodeNameConverter) {
@@ -324,11 +329,11 @@ export class ChangeTranslator {
                 // The changed node is a sublabel / child
                 isLabelCell = true;
                 cell = cell.getParent();
-                console.log('Parent:');
             }
             let value = cell.value;
             if (Type.is(element, CEGNode)) {
                 value = new CEGmxModelNode(cell.children[0].value, cell.children[1].value, cell.children[2].value);
+
             }
             const elementValues = this.nodeNameConverter.convertFrom(value, element);
             for (const key in elementValues) {
@@ -344,10 +349,7 @@ export class ChangeTranslator {
             element['width'] = cell.geometry.width;
             element['height'] = cell.geometry.height;
             VertexProvider.adjustChildrenCellSizes(cell, this.shapeProvider, graph);
-            // VertexProvider.adjustChildrenPositions(cell);
         }
-        // VertexProvider.adjustChildrenCellSizes(cell, this.shapeProvider);
-        // VertexProvider.adjustChildrenPositions(cell);
         await this.dataService.updateElement(element, true, Id.uuid);
     }
 

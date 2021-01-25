@@ -35,7 +35,7 @@ export class ShapeProvider extends ProviderBase {
             size: {
                 width: Config.CEG_NODE_WIDTH,
                 height: Config.CEG_NODE_HEIGHT,
-                margin: 20
+                margin: 15
             },
             text: new NodeNameConverterProvider(type).nodeNameConverter.convertTo({
                 variable: Config.CEG_NODE_NEW_VARIABLE,
@@ -110,7 +110,7 @@ export class ShapeProvider extends ProviderBase {
             size: {
                 width: 50,
                 height: mx.mxConstants.DEFAULT_FONTSIZE,
-                margin: 20
+                margin: 30
             },
             text: undefined
         };
@@ -120,7 +120,7 @@ export class ShapeProvider extends ProviderBase {
             size: {
                 width: 50,
                 height: mx.mxConstants.DEFAULT_FONTSIZE,
-                margin: 20
+                margin: 30
             },
             text: undefined
         };

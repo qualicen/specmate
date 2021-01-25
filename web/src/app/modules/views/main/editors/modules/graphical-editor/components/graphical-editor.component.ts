@@ -210,38 +210,7 @@ export class GraphicalEditor implements OnDestroy {
         this.graph.setTooltips(true);
         this.graph.zoomFactor = 1.1;
 
-        let graphGetPreferredSizeForCell = this.graph.getPreferredSizeForCell;
-        let that = this;
-        this.graph.getPreferredSizeForCell = function (cell: mxgraph.mxCell) {
-            console.log('getPreferredSizeForCell');
-            console.log(cell);
-            if (cell.getId().endsWith(VertexProvider.ID_SUFFIX_TYPE)) {
-                return undefined;
-            }
-            let result = graphGetPreferredSizeForCell.apply(this, arguments);
-            if (result !== null) {
-                let width = result.width;
-                if (cell.children !== undefined && cell.children !== null) {
-                    for (const child of cell.children) {
-                        let resultChild = that.graph.getPreferredSizeForCell(child);
-                        if (resultChild !== undefined) {
-                            width = Math.max(width, resultChild.width);
-                        }
-                    }
-                }
-                if (cell.style !== undefined) {
-                    let shapeData = that.shapeProvider.getInitialData(cell.style.split(';')[0]);
-                    if (shapeData !== undefined) {
-                        let minWidth = shapeData.size.width;
-                        let originalHeight = cell.getGeometry().height;
-                        result.width = Math.max(minWidth, width + shapeData.size.margin);
-                        result.height = originalHeight;
-                    }
-
-                }
-            }
-            return result;
-        };
+        this.setFuctionGetPreferredSizeForCell(this.graph, this.shapeProvider);
 
         this.graph.addListener(mx.mxEvent.RESIZE_CELLS, function (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) {
             let cells = evt.getProperty('cells');
@@ -513,8 +482,6 @@ export class GraphicalEditor implements OnDestroy {
     }
 
     private async initCEGModel(): Promise<void> {
-        this.graph.setHtmlLabels(true);
-
         this.graph.isCellEditable = function (cell) {
             let c = cell as mxgraph.mxCell;
             if (c.edge) {
@@ -527,10 +494,6 @@ export class GraphicalEditor implements OnDestroy {
         };
 
         this.graph.graphHandler.setRemoveCellsFromParent(false);
-
-        this.graph.isWrapping = function (cell) {
-            return this.model.isCollapsed(cell);
-        };
 
         this.graph.isCellResizable = function (cell) {
             let geo = this.model.getGeometry(cell);
@@ -581,6 +544,37 @@ export class GraphicalEditor implements OnDestroy {
                 StyleChanger.addStyle(vertex, this.graph, this.getNodeType(vertex));
             }
         }
+    }
+
+    private setFuctionGetPreferredSizeForCell(graph: mxgraph.mxGraph, shapeProvider: ShapeProvider) {
+        let graphGetPreferredSizeForCell = graph.getPreferredSizeForCell;
+        graph.getPreferredSizeForCell = function (cell: mxgraph.mxCell) {
+            if (cell.getId().endsWith(VertexProvider.ID_SUFFIX_TYPE)) {
+                return undefined;
+            }
+            let result = graphGetPreferredSizeForCell.apply(this, arguments);
+            if (result !== null) {
+                let width = result.width;
+                if (cell.children !== undefined && cell.children !== null) {
+                    for (const child of cell.children) {
+                        let resultChild = graph.getPreferredSizeForCell(child);
+                        if (resultChild !== undefined) {
+                            width = Math.max(width, resultChild.width);
+                        }
+                    }
+                }
+                if (cell.style !== undefined) {
+                    let shapeData = shapeProvider.getInitialData(cell.style.split(';')[0]);
+                    if (shapeData !== undefined) {
+                        let minWidth = shapeData.size.width;
+                        let originalHeight = cell.getGeometry().height;
+                        result.width = Math.max(minWidth, width + shapeData.size.margin);
+                        result.height = originalHeight;
+                    }
+                }
+            }
+            return result;
+        };
     }
 
     /*********************** Editor Options ***********************/

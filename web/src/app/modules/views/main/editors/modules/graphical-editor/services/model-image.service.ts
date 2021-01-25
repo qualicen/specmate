@@ -49,7 +49,6 @@ export class ModelImageService extends Monitorable {
                     factor = factor * 0.95;
                     pngAsBase64 = await saveAsPng.svgAsPngUri(svg, { 'scale': factor, 'height': maxHeight, 'encoderOptions': 1.0 });
                 }
-                console.log(pngAsBase64);
 
                 // Remove the artificial svg node.
                 svg.remove();

@@ -5,6 +5,7 @@ import { IContainer } from '../../../../../../../../model/IContainer';
 import { IModelNode } from '../../../../../../../../model/IModelNode';
 import { Type } from '../../../../../../../../util/type';
 import { EditorStyle } from '../../components/editor-components/editor-style';
+import { StyleChanger } from '../../components/util/style-changer';
 import { ConverterBase } from '../../converters/converter-base';
 import { CEGmxModelNode } from './ceg-mx-model-node';
 import { ProviderBase } from './provider-base';
@@ -39,16 +40,23 @@ export class VertexProvider extends ProviderBase {
         this.graph.getModel().beginUpdate();
         const vertex = this.graph.insertVertex(parent, url, value, x, y, width, height, style);
 
-        const l1 = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_VARIABLE, data.variable,
+        const labelVariable = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_VARIABLE, data.variable,
             VertexProvider.INITIAL_CHILD_NODE_X, 0.15, 0, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.VARIABLE_NAME_STYLE, true);
-        const l2 = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_CONDITION, data.condition,
+        const labelCondition = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_CONDITION, data.condition,
             VertexProvider.INITIAL_CHILD_NODE_X, 0.45, 0, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.TEXT_INPUT_STYLE, true);
-        const l3 = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_TYPE, data.type,
+        const labelType = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_TYPE, data.type,
             VertexProvider.INITIAL_CHILD_NODE_X, 0.70, 0, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.TYPE_NAME_STYLE, true);
 
-        l1.isConnectable = () => false;
-        l2.isConnectable = () => false;
-        l3.isConnectable = () => false;
+        if (data.variable === '' || data.variable === undefined || data.variable === null) {
+            StyleChanger.addStyle(labelVariable, this.graph, EditorStyle.EMPTY_TEXT_NAME);
+        }
+        if (data.condition === '' || data.condition === undefined || data.condition === null) {
+            StyleChanger.addStyle(labelCondition, this.graph, EditorStyle.EMPTY_TEXT_NAME);
+        }
+
+        labelVariable.isConnectable = () => false;
+        labelCondition.isConnectable = () => false;
+        labelType.isConnectable = () => false;
 
         VertexProvider.adjustChildrenCellSizes(vertex, this.shapeProvider, this.graph);
         this.graph.getModel().endUpdate();

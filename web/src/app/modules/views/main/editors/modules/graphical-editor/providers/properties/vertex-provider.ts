@@ -117,7 +117,6 @@ export class VertexProvider extends ProviderBase {
                 }
                 let dropdown = document.createElement('select');
                 let options = ['AND', 'OR'];
-                let dropdowns: HTMLSelectElement[] = [];
                 let optionElements: HTMLOptionElement[] = [];
                 for (const option of options) {
                     let optionElem = document.createElement('option');
@@ -130,7 +129,6 @@ export class VertexProvider extends ProviderBase {
                     dropdown.appendChild(optionElem);
                     optionElements.push(optionElem);
                 }
-                dropdowns.push(dropdown);
                 mx.mxEvent.addListener(dropdown, 'change', (evt: mxgraph.mxEventObject) => {
                     graph.model.setValue(cell, dropdown.value);
                 });

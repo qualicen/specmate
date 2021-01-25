@@ -487,9 +487,7 @@ export class ChangeTranslator {
                             try {
                                 graph.model.setValue(child, val);
                                 graph.updateCellSize(child, true);
-                                // VertexProvider.adjustChildCellSize(child, cell.geometry.width);
                                 graph.updateCellSize(cell, true);
-                                // VertexProvider.adjustChildCellSize(child, cell.geometry.width);
                                 VertexProvider.adjustChildrenPositions(cell);
                             }
                             finally {

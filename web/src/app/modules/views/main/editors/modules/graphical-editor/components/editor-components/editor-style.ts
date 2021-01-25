@@ -34,7 +34,6 @@ export class EditorStyle {
     public static readonly EMPTY_TEXT_NAME = 'EMPTY_TEXT';
     public static readonly EMPTY_TEXT_STYLE: Style = {};
 
-
     public static readonly EDGE_HIGHLIGHT_STYLE_NAME = 'EDGE_HIGHLIGHT';
     public static readonly EDGE_DIM_STYLE_NAME = 'EDGE_DIM';
     public static readonly EDGE_HIGHLIGHT_STYLE: Style = {};
@@ -76,7 +75,6 @@ export class EditorStyle {
     public static readonly ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE = 'ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE';
     private static readonly ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE_STR = 'dashed=1';
     private static readonly ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE_OBJ: Style = EditorStyle.createStyle(EditorStyle.ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE_STR);
-
 
 
     private static initStyles() {
@@ -127,7 +125,6 @@ export class EditorStyle {
         stylesheet.putCellStyle(EditorStyle.INNER_STYLE_NAME, EditorStyle.INNER_STYLE);
 
         stylesheet.putCellStyle(EditorStyle.EMPTY_TEXT_NAME, EditorStyle.EMPTY_TEXT_STYLE);
-
 
         const vertexStyle = graph.getStylesheet().getDefaultVertexStyle();
         vertexStyle[mx.mxConstants.STYLE_STROKECOLOR] = '#000000';

@@ -212,13 +212,6 @@ export class GraphicalEditor implements OnDestroy {
 
         this.setFuctionGetPreferredSizeForCell(this.graph, this.shapeProvider);
 
-        this.graph.addListener(mx.mxEvent.RESIZE_CELLS, function (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) {
-            let cells = evt.getProperty('cells');
-            for (let i = 0; i < cells.length; i++) {
-                this.view.removeState(cells[i]);
-            }
-        });
-
         this.graph.addListener(mx.mxEvent.DOUBLE_CLICK, (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) => {
             const cell = evt.properties.cell as mxgraph.mxCell;
             if (cell !== undefined && cell.id.endsWith(VertexProvider.ID_SUFFIX_TYPE)) {

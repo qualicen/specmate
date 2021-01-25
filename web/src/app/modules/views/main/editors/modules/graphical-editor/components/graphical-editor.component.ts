@@ -210,7 +210,7 @@ export class GraphicalEditor implements OnDestroy {
         this.graph.setTooltips(true);
         this.graph.zoomFactor = 1.1;
 
-        this.setFuctionGetPreferredSizeForCell(this.graph, this.shapeProvider);
+        this.setFunctionGetPreferredSizeForCell(this.graph, this.shapeProvider);
 
         this.graph.addListener(mx.mxEvent.DOUBLE_CLICK, (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) => {
             const cell = evt.properties.cell as mxgraph.mxCell;
@@ -539,7 +539,7 @@ export class GraphicalEditor implements OnDestroy {
         }
     }
 
-    private setFuctionGetPreferredSizeForCell(graph: mxgraph.mxGraph, shapeProvider: ShapeProvider) {
+    private setFunctionGetPreferredSizeForCell(graph: mxgraph.mxGraph, shapeProvider: ShapeProvider) {
         let graphGetPreferredSizeForCell = graph.getPreferredSizeForCell;
         graph.getPreferredSizeForCell = function (cell: mxgraph.mxCell) {
             if (cell.getId().endsWith(VertexProvider.ID_SUFFIX_TYPE)) {

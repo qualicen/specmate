@@ -52,3 +52,8 @@ button {
     position: relative;
     overflow: auto;
 }
+
+#renderingContainer {
+    position: absolute;
+    top: 0px;
+}

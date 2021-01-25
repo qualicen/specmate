@@ -32,7 +32,7 @@ export class ModelImageService extends Monitorable {
                 // Replace <br>-Tags with text ellipses.
                 svg.innerHTML = svg.innerHTML.replace(/<br ?\/?>[^<]*/g, '…');
                 // We also need to really add the node for save-svg-to-png to render it
-                document.body.appendChild(svg);
+                document.getElementById('renderingContainer').append(svg);
                 let minWidth = svg.style.minWidth;
                 let minHeight = svg.style.minHeight;
                 svg.style.width = '0px';
@@ -49,6 +49,7 @@ export class ModelImageService extends Monitorable {
                     factor = factor * 0.95;
                     pngAsBase64 = await saveAsPng.svgAsPngUri(svg, { 'scale': factor, 'height': maxHeight, 'encoderOptions': 1.0 });
                 }
+                console.log(pngAsBase64);
 
                 // Remove the artificial svg node.
                 svg.remove();

@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Subject } from 'rxjs';
 import { CEGModel } from 'src/app/model/CEGModel';
 import { CEGNode } from 'src/app/model/CEGNode';
-import { Subject } from 'rxjs';
 import { SpecmateDataService } from 'src/app/modules/data/modules/data-service/services/specmate-data.service';
+import { NavigatorService } from 'src/app/modules/navigation/modules/navigator/services/navigator.service';
 import { ElementProvider } from 'src/app/modules/views/main/editors/modules/graphical-editor/providers/properties/element-provider';
-import { TranslateService } from '@ngx-translate/core';
 import { Type } from 'src/app/util/type';
 
 @Component({
@@ -16,7 +16,8 @@ import { Type } from 'src/app/util/type';
 export class LinkingDialogComponent implements OnInit {
 
     constructor(protected activeModal: NgbActiveModal,
-        private dataService: SpecmateDataService) { }
+        private dataService: SpecmateDataService,
+        private navigator: NavigatorService) { }
 
     ngOnInit(): void {
         this.hasLink.next(false);
@@ -34,6 +35,14 @@ export class LinkingDialogComponent implements OnInit {
     effects: Subject<CEGNode[]> = new Subject();
     selectedEffect: CEGNode = null;
     hasLink: Subject<boolean> = new Subject();
+
+    public get parentModel(): CEGModel {
+        const currentElement = this.navigator.currentElement;
+        if (Type.is(currentElement, CEGModel)) {
+            return currentElement as CEGModel;
+        }
+        return undefined;
+    }
 
     updateModel(model: CEGModel) {
         this.selectedModel = null;

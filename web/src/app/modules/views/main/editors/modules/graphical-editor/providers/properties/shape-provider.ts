@@ -108,7 +108,7 @@ export class ShapeProvider extends ProviderBase {
         this.shapeMap['VariableName'] = {
             style: EditorStyle.VARIABLE_NAME_STYLE,
             size: {
-                width: 50,
+                width: 75,
                 height: mx.mxConstants.DEFAULT_FONTSIZE,
                 margin: 30
             },
@@ -118,7 +118,7 @@ export class ShapeProvider extends ProviderBase {
         this.shapeMap['BaseTextInput'] = {
             style: EditorStyle.TEXT_INPUT_STYLE,
             size: {
-                width: 50,
+                width: 75,
                 height: mx.mxConstants.DEFAULT_FONTSIZE,
                 margin: 30
             },

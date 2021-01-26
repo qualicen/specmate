@@ -179,6 +179,12 @@ export class GraphicalEditor implements OnDestroy {
             this.modal.openOk(this.translate.instant('graphicalEditorErrorTitle'), message);
         };
 
+        const cellEditorInit = mx.mxCellEditor.prototype.init;
+        mx.mxCellEditor.prototype.init = function () {
+            cellEditorInit.apply(this, arguments);
+            this.textarea.style.resize = '';
+        };
+
         mx.mxEvent.disableContextMenu(this.graphContainerElement.nativeElement);
 
         if (this.graphMouseMove === undefined) {
@@ -211,6 +217,17 @@ export class GraphicalEditor implements OnDestroy {
         this.graph.zoomFactor = 1.1;
 
         this.setFunctionGetPreferredSizeForCell(this.graph, this.shapeProvider);
+
+        this.graph.addListener(mx.mxEvent.EDITING_STARTED, (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) => {
+            const cell = evt.properties.cell as mxgraph.mxCell;
+            if (cell !== undefined &&
+                (cell.id.endsWith(VertexProvider.ID_SUFFIX_VARIABLE) || cell.id.endsWith(VertexProvider.ID_SUFFIX_CONDITION))) {
+                let parentWidth = cell.parent.geometry.width;
+                cell.getGeometry().setRect(0, cell.geometry.y, parentWidth, cell.geometry.height);
+                this.graph.getView().invalidate(cell);
+                this.graph.getView().validate(cell);
+            }
+        });
 
         this.graph.addListener(mx.mxEvent.DOUBLE_CLICK, (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) => {
             const cell = evt.properties.cell as mxgraph.mxCell;

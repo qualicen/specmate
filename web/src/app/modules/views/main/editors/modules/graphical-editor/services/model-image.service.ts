@@ -25,7 +25,14 @@ export class ModelImageService extends Monitorable {
             let model = element as CEGModel | Process;
             let contents = await this.dataService.readContents(model.url);
             if (this.modelHasElements(contents)) {
-                let svg: SVGSVGElement = document.getElementById('mxGraphContainer').getElementsByTagName('svg')[0];
+
+                // To replace line breaks, we need to clone the node, not to confuse mxGraph.
+                let svg: SVGSVGElement = document.getElementById('mxGraphContainer').getElementsByTagName('svg')[0]
+                    .cloneNode(true) as SVGSVGElement;
+                // Replace <br>-Tags with text ellipses.
+                svg.innerHTML = svg.innerHTML.replace(/<br ?\/?>[^<]*/g, '…');
+                // We also need to really add the node for save-svg-to-png to render it
+                document.getElementById('renderingContainer').append(svg);
                 let minWidth = svg.style.minWidth;
                 let minHeight = svg.style.minHeight;
                 svg.style.width = '0px';
@@ -43,6 +50,8 @@ export class ModelImageService extends Monitorable {
                     pngAsBase64 = await saveAsPng.svgAsPngUri(svg, { 'scale': factor, 'height': maxHeight, 'encoderOptions': 1.0 });
                 }
 
+                // Remove the artificial svg node.
+                svg.remove();
                 // Load the existing modelImage or create a new one
                 let modelImage: ModelImage;
                 modelImage = await this.dataService.performOperations(model.url, 'listModelImage', undefined, true);

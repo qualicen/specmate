@@ -27,6 +27,10 @@ export class ModelSearchBarComponent implements OnInit {
         this.selectedModel.emit(model);
     }
 
+    get hasModel(): boolean {
+        return this.model !== undefined;
+    }
+
     @Output()
     private selectedModel = new EventEmitter<CEGModel>();
 
@@ -34,7 +38,7 @@ export class ModelSearchBarComponent implements OnInit {
         if (m !== null) {
             return m.name;
         } else {
-            return this.translate.instant('noResultsFound');
+            return '❌ ' + this.translate.instant('noResultsFound');
         }
     }
 

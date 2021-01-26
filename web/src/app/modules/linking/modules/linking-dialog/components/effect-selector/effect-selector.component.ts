@@ -47,6 +47,10 @@ export class EffectSelectorComponent implements OnInit {
         return this.effects !== null && this.effects.length > 0;
     }
 
+    get hasSelectedEffect(): boolean {
+        return this.effect !== undefined && this.effect !== null;
+    }
+
     getNodeLabel(node: CEGNode): string {
         const condition = this.translate.instant('Condition');
         const variable = this.translate.instant('Variable');

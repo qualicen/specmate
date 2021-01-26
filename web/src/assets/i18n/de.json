@@ -153,7 +153,7 @@
 		"confirm": "Knoten verlinken",
 		"enterModelName": "Geben Sie den Modelnamen ein",
 		"selectEffect": "Wählen Sie einen Effekt",
-		"stepOne": "Schritt 1: Bitte geben Sie den Namen des Modells ein, das den Knoten enthält, den Sie verknüpfen möchten.",
+		"stepOne": "Schritt 1: Suchen Sie das Modell, das den Knoten enthält, den Sie verknüpfen möchten.",
 		"stepTwo": "Schritt 2: Wählen Sie den Knoten aus, der verknüpft werden soll. Sie können nur einen Knoten aus der Liste auswählen.",
 		"title": "Bestehendes Modell verlinken"
 	},
@@ -186,6 +186,7 @@
 	"negate": "",
 	"negated": "Negiert",
 	"noCommandsLeft": "Keine Befehle übrig",
+	"noEffectsFound": "Keine Effekt-Knoten gefunden",
 	"noFoldersFound": "Keine Unterordner gefunden",
 	"noModelsFound": "Keine CEG-Modelle gefunden",
 	"noOrMultipleElementSelected": "Keine / mehrere Elemente ausgewählt",

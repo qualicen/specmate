@@ -1,3 +1,7 @@
 input {
     width: 75%;
 }
+
+input.no-selection {
+    border: 2px dotted #f00 !important;
+}

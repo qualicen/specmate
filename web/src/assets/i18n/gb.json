@@ -153,7 +153,7 @@
 		"confirm": "Link Nodes",
 		"enterModelName": "Enter Name of Model",
 		"selectEffect": "Select Effect",
-		"stepOne": "Step 1: Please enter the name of the model that contains the node which you would like to link.",
+		"stepOne": "Step 1: Search for the model that contains the node which you would like to link.",
 		"stepTwo": "Step 2: Select the node that should be linked. You can only select one node from the list.",
 		"title": "Link Existing Model"
 	},
@@ -186,6 +186,7 @@
 	"negate": "",
 	"negated": "Negated",
 	"noCommandsLeft": "No commands left",
+	"noEffectsFound": "No effect nodes found",
 	"noFoldersFound": "No sub-folders found",
 	"noModelsFound": "No models found",
 	"noOrMultipleElementSelected": "No / multiple elements selected",

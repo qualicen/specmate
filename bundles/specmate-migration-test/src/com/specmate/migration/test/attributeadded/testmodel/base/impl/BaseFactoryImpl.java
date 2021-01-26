@@ -67,6 +67,7 @@ public class BaseFactoryImpl extends EFactoryImpl implements BaseFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Folder createFolder() {
 		FolderImpl folder = new FolderImpl();
 		return folder;
@@ -77,6 +78,7 @@ public class BaseFactoryImpl extends EFactoryImpl implements BaseFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public BasePackage getBasePackage() {
 		return (BasePackage)getEPackage();
 	}

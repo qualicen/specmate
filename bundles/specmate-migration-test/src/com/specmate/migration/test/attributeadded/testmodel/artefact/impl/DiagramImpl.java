@@ -4,7 +4,7 @@ package com.specmate.migration.test.attributeadded.testmodel.artefact.impl;
 
 import com.specmate.migration.test.attributeadded.testmodel.artefact.ArtefactPackage;
 import com.specmate.migration.test.attributeadded.testmodel.artefact.Diagram;
-
+import com.specmate.migration.test.attributeadded.testmodel.artefact.Sketch;
 import com.specmate.migration.test.attributeadded.testmodel.base.BasePackage;
 import com.specmate.migration.test.attributeadded.testmodel.base.IContainer;
 import com.specmate.migration.test.attributeadded.testmodel.base.IContentElement;
@@ -39,6 +39,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.specmate.migration.test.attributeadded.testmodel.artefact.impl.DiagramImpl#getContents <em>Contents</em>}</li>
  *   <li>{@link com.specmate.migration.test.attributeadded.testmodel.artefact.impl.DiagramImpl#getCreated <em>Created</em>}</li>
  *   <li>{@link com.specmate.migration.test.attributeadded.testmodel.artefact.impl.DiagramImpl#getNotes <em>Notes</em>}</li>
+ *   <li>{@link com.specmate.migration.test.attributeadded.testmodel.artefact.impl.DiagramImpl#getLinkfrom <em>Linkfrom</em>}</li>
  * </ul>
  *
  * @generated
@@ -118,6 +119,7 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isTested() {
 		return (Boolean)eDynamicGet(ArtefactPackage.DIAGRAM__TESTED, BasePackage.Literals.ITESTABLE__TESTED, true, true);
 	}
@@ -127,6 +129,7 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTested(boolean newTested) {
 		eDynamicSet(ArtefactPackage.DIAGRAM__TESTED, BasePackage.Literals.ITESTABLE__TESTED, newTested);
 	}
@@ -136,6 +139,7 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return (String)eDynamicGet(ArtefactPackage.DIAGRAM__NAME, BasePackage.Literals.INAMED__NAME, true, true);
 	}
@@ -145,6 +149,7 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		eDynamicSet(ArtefactPackage.DIAGRAM__NAME, BasePackage.Literals.INAMED__NAME, newName);
 	}
@@ -154,6 +159,7 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getId() {
 		return (String)eDynamicGet(ArtefactPackage.DIAGRAM__ID, BasePackage.Literals.IID__ID, true, true);
 	}
@@ -163,6 +169,7 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setId(String newId) {
 		eDynamicSet(ArtefactPackage.DIAGRAM__ID, BasePackage.Literals.IID__ID, newId);
 	}
@@ -173,6 +180,7 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public EList<IContentElement> getContents() {
 		return (EList<IContentElement>)eDynamicGet(ArtefactPackage.DIAGRAM__CONTENTS, BasePackage.Literals.ICONTAINER__CONTENTS, true, true);
 	}
@@ -182,6 +190,7 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Date getCreated() {
 		return (Date)eDynamicGet(ArtefactPackage.DIAGRAM__CREATED, ArtefactPackage.Literals.DIAGRAM__CREATED, true, true);
 	}
@@ -191,6 +200,7 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCreated(Date newCreated) {
 		eDynamicSet(ArtefactPackage.DIAGRAM__CREATED, ArtefactPackage.Literals.DIAGRAM__CREATED, newCreated);
 	}
@@ -201,8 +211,35 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public EList<String> getNotes() {
 		return (EList<String>)eDynamicGet(ArtefactPackage.DIAGRAM__NOTES, ArtefactPackage.Literals.DIAGRAM__NOTES, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<Sketch> getLinkfrom() {
+		return (EList<Sketch>)eDynamicGet(ArtefactPackage.DIAGRAM__LINKFROM, ArtefactPackage.Literals.DIAGRAM__LINKFROM, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case ArtefactPackage.DIAGRAM__LINKFROM:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getLinkfrom()).basicAdd(otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -215,6 +252,8 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 		switch (featureID) {
 			case ArtefactPackage.DIAGRAM__CONTENTS:
 				return ((InternalEList<?>)getContents()).basicRemove(otherEnd, msgs);
+			case ArtefactPackage.DIAGRAM__LINKFROM:
+				return ((InternalEList<?>)getLinkfrom()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -239,6 +278,8 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 				return getCreated();
 			case ArtefactPackage.DIAGRAM__NOTES:
 				return getNotes();
+			case ArtefactPackage.DIAGRAM__LINKFROM:
+				return getLinkfrom();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -272,6 +313,10 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 				getNotes().clear();
 				getNotes().addAll((Collection<? extends String>)newValue);
 				return;
+			case ArtefactPackage.DIAGRAM__LINKFROM:
+				getLinkfrom().clear();
+				getLinkfrom().addAll((Collection<? extends Sketch>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -302,6 +347,9 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 			case ArtefactPackage.DIAGRAM__NOTES:
 				getNotes().clear();
 				return;
+			case ArtefactPackage.DIAGRAM__LINKFROM:
+				getLinkfrom().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -326,6 +374,8 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 				return CREATED_EDEFAULT == null ? getCreated() != null : !CREATED_EDEFAULT.equals(getCreated());
 			case ArtefactPackage.DIAGRAM__NOTES:
 				return !getNotes().isEmpty();
+			case ArtefactPackage.DIAGRAM__LINKFROM:
+				return !getLinkfrom().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

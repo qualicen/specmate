@@ -64,8 +64,10 @@ export class VertexProvider extends ProviderBase {
         return vertex;
     }
 
-    public provideLinkedCEGNode(url: string, x: number, y: number, width: number, height: number, data: CEGmxModelNode): mxgraph.mxCell {
-        const value: string = null;
+    public provideLinkedCEGNode(url: string, x: number, y: number, width: number, height: number,
+        data: CEGmxModelNode, node: CEGLinkedNode): mxgraph.mxCell {
+
+        const value = node;
         const style = this.shapeProvider.getStyle(CEGLinkedNode);
         const parent = this.graph.getDefaultParent();
         this.graph.getModel().beginUpdate();
@@ -125,7 +127,7 @@ export class VertexProvider extends ProviderBase {
                 }
             }
             const data = new CEGmxModelNode(variable, condition, type);
-            return this.provideLinkedCEGNode(node.url, x || node.x, y || node.y, width, height, data);
+            return this.provideLinkedCEGNode(node.url, x || node.x, y || node.y, width, height, data, node as CEGLinkedNode);
         }
 
         const value: string = (this.nodeNameConverter ? this.nodeNameConverter.convertTo(node) : node.name) as string;
@@ -202,7 +204,7 @@ export class VertexProvider extends ProviderBase {
                 return '';
 
             }
-            return he.encode(cell.value);
+            return he.encode(cell.value + '').replace('[object Object]', '');
         };
     }
 

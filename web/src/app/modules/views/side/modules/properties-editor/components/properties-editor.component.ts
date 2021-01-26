@@ -32,6 +32,9 @@ export class PropertiesEditor {
         });
 
         dataService.elementChanged.subscribe(async (url: string) => {
+            if (!this.dataService.hasElement(url) || this._selectedElement.url !== url) {
+                return;
+            }
             const element = await dataService.readElement(url, true);
             this.onSelectionOrElementChange([element]);
         });

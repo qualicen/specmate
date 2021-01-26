@@ -1,3 +1,6 @@
+import { CEGLinkedNode } from 'src/app/model/CEGLinkedNode';
+import { CEGNode } from 'src/app/model/CEGNode';
+import { Type } from 'src/app/util/type';
 import { Coords, GraphElementFactorySelector } from '../../../../../../../factory/util/graph-element-factory-selector';
 import { IContainer } from '../../../../../../../model/IContainer';
 import { IModelConnection } from '../../../../../../../model/IModelConnection';
@@ -20,7 +23,7 @@ export class GraphTransformer {
 
     // Delete
     public async deleteAll(elements: IContainer[], compoundId: string): Promise<void> {
-        await this.selectionService.deselectElements(elements);
+        this.selectionService.deselectElements(elements);
         // We have to delete connections first to avoid updating already deleted nodes.
         for (const element of elements) {
             if (this.elementProvider.isConnection(element)) {
@@ -67,6 +70,25 @@ export class GraphTransformer {
         for (let i = 0; i < connections.length; i++) {
             await this.deleteConnection(connections[i], compoundId);
         }
+
+        if (Type.is(node, CEGNode) && (node as CEGNode).linksFrom?.length > 0) {
+            for (const linkingNodeProxy of (node as CEGNode).linksFrom) {
+                const linkingNode = await this.dataService.readElement(linkingNodeProxy.url, true) as CEGLinkedNode;
+                delete linkingNode.linkTo;
+                await this.dataService.updateElement(linkingNode, true, compoundId);
+            }
+        }
+
+        if (Type.is(node, CEGLinkedNode) && (node as CEGLinkedNode).linkTo !== undefined) {
+            const linkingNode = node as CEGLinkedNode;
+            const linkedNode = await this.dataService.readElement(linkingNode.linkTo.url, true) as CEGNode;
+            const index = linkedNode.linksFrom.findIndex(proxy => proxy.url === node.url);
+            if (index > -1) {
+                linkedNode.linksFrom.splice(index, 1);
+            }
+            await this.dataService.updateElement(linkedNode, true, compoundId);
+        }
+
         await this.dataService.deleteElement(node.url, true, compoundId);
     }
 

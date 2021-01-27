@@ -19,7 +19,7 @@ import org.osgi.service.log.LogService;
 import com.google.common.collect.Iterators;
 
 import com.specmate.common.exception.SpecmateException;
-import com.specmate.connectors.api.IRequirementsSource;
+import com.specmate.connectors.api.IConnector;
 import com.specmate.model.base.BaseFactory;
 import com.specmate.model.base.Folder;
 import com.specmate.model.base.IContainer;
@@ -44,13 +44,13 @@ public class ConnectorUtil {
 	 * Retrieves requirements from all sources and processes them in batches of
 	 * BATCH_SIZE
 	 */
-	public static void syncRequirementsFromSources(List<IRequirementsSource> requirementsSources,
+	public static void syncRequirementsFromSources(List<IConnector> requirementsSources,
 			ITransaction transaction, LogService logService) {
 		lock.lock();
 		try {
 			logService.log(LogService.LOG_INFO, "Synchronizing requirements");
 			Resource resource = transaction.getResource();
-			for (IRequirementsSource source : requirementsSources) {
+			for (IConnector source : requirementsSources) {
 				logService.log(LogService.LOG_INFO, "Retrieving requirements from " + source.getId());
 				try {
 					Collection<Requirement> requirements = source.getRequirements();
@@ -88,7 +88,7 @@ public class ConnectorUtil {
 	/**
 	 * Retrieves a single requirement with a given id
 	 */
-	public static void syncRequirementById(String id, IRequirementsSource source, ITransaction transaction,
+	public static void syncRequirementById(String id, IConnector source, ITransaction transaction,
 			LogService logService) {
 		lock.lock();
 		try {
@@ -139,7 +139,7 @@ public class ConnectorUtil {
 	 * Syncs remote requirements with locally available requirements.
 	 */
 	private static void syncContainers(IContainer localRootContainer, HashMap<String, EObject> localRequirementsMap,
-			Collection<Requirement> requirements, IRequirementsSource source, LogService logService) {
+			Collection<Requirement> requirements, IConnector source, LogService logService) {
 		// Build hashset (extid -> requirement) for remote requirements
 		HashMap<String, EObject> remoteRequirementsMap = new HashMap<>();
 		buildExtIdMap(requirements.iterator(), remoteRequirementsMap);
@@ -289,7 +289,7 @@ public class ConnectorUtil {
 	}
 
 	private static void doAndCommitTransaction(ITransaction transaction, IContainer localRootContainer,
-			HashMap<String, EObject> localRequirementsMap, List<Requirement> tosync, IRequirementsSource source,
+			HashMap<String, EObject> localRequirementsMap, List<Requirement> tosync, IConnector source,
 			LogService logService) {
 		try {
 			transaction.doAndCommit(new IChange<Object>() {

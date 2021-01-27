@@ -8,7 +8,9 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.ecore.EObject;
@@ -21,7 +23,9 @@ import org.mockito.stubbing.Answer;
 import org.osgi.service.log.LogService;
 
 import com.specmate.common.exception.SpecmateException;
-import com.specmate.connectors.api.IRequirementsSource;
+import com.specmate.connectors.api.ConnectorBase;
+import com.specmate.connectors.api.IConnector;
+import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.internal.ConnectorUtil;
 import com.specmate.model.base.BaseFactory;
 import com.specmate.model.base.Folder;
@@ -56,7 +60,7 @@ public class ConnectorUtilTest {
 	}
 
 	private void checkRequirementsNumber(int count) throws SpecmateException {
-		IRequirementsSource reqSource = new TestRequirementSource_VariableNumbers(count);
+		IConnector reqSource = new TestRequirementSource_VariableNumbers(count);
 		runConnectorUtilWithSourceFullSync(reqSource);
 
 		Folder folder = (Folder) contentList.get(0);
@@ -81,7 +85,7 @@ public class ConnectorUtilTest {
 
 	@Test
 	public void testWithoutFolder() throws SpecmateException {
-		IRequirementsSource reqSource = new TestRequirementSource_NoFolder();
+		IConnector reqSource = new TestRequirementSource_NoFolder();
 		runConnectorUtilWithSourceFullSync(reqSource);
 
 		// Project Folder exists
@@ -99,7 +103,7 @@ public class ConnectorUtilTest {
 
 	@Test
 	public void testSingleSync() throws SpecmateException {
-		IRequirementsSource reqSource = new TestRequirementSource_SingleRequirement();
+		IConnector reqSource = new TestRequirementSource_SingleRequirement();
 		String id = "singleId";
 		runConnectorUtilWithSourceSingleSync(id, reqSource);
 
@@ -121,7 +125,7 @@ public class ConnectorUtilTest {
 
 	@Test
 	public void testNameChange() throws SpecmateException {
-		IRequirementsSource reqSource = new TestRequirementSource_NameChange();
+		IConnector reqSource = new TestRequirementSource_NameChange();
 		runConnectorUtilWithSourceFullSync(reqSource);
 
 		Folder folder = (Folder) contentList.get(0);
@@ -140,7 +144,7 @@ public class ConnectorUtilTest {
 
 	@Test
 	public void testParentChange() throws SpecmateException {
-		IRequirementsSource reqSource = new TestRequirementSource_ParentChange();
+		IConnector reqSource = new TestRequirementSource_ParentChange();
 		runConnectorUtilWithSourceFullSync(reqSource);
 
 		Folder folder = (Folder) contentList.get(0);
@@ -163,7 +167,7 @@ public class ConnectorUtilTest {
 	@Test
 	public void testConnectorService() throws SpecmateException {
 
-		IRequirementsSource reqSource = new TestRequirementSource_InvalidRequirements();
+		IConnector reqSource = new TestRequirementSource_InvalidRequirements();
 		runConnectorUtilWithSourceFullSync(reqSource);
 
 		Folder folder = (Folder) contentList.get(0);
@@ -189,7 +193,7 @@ public class ConnectorUtilTest {
 		assertEquals(req.getId(), req.getName());
 	}
 
-	private void runConnectorUtilWithSourceFullSync(IRequirementsSource reqSource) throws SpecmateException {
+	private void runConnectorUtilWithSourceFullSync(IConnector reqSource) throws SpecmateException {
 		ITransaction transaction = mock(ITransaction.class);
 		Resource resource = mock(Resource.class);
 		when(resource.getContents()).thenReturn(contentList);
@@ -207,8 +211,7 @@ public class ConnectorUtilTest {
 		ConnectorUtil.syncRequirementsFromSources(Arrays.asList(reqSource), transaction, mock(LogService.class));
 	}
 
-	private void runConnectorUtilWithSourceSingleSync(String id, IRequirementsSource reqSource)
-			throws SpecmateException {
+	private void runConnectorUtilWithSourceSingleSync(String id, IConnector reqSource) throws SpecmateException {
 		ITransaction transaction = mock(ITransaction.class);
 		Resource resource = mock(Resource.class);
 		when(resource.getContents()).thenReturn(contentList);
@@ -226,7 +229,12 @@ public class ConnectorUtilTest {
 		ConnectorUtil.syncRequirementById(id, reqSource, transaction, mock(LogService.class));
 	}
 
-	private abstract class TestRequirementSourceBase implements IRequirementsSource {
+	private abstract class TestRequirementSourceBase extends ConnectorBase {
+
+		public TestRequirementSourceBase(IProject project) {
+			super(project);
+		}
+
 		public static final String REQ_NAME = "req";
 		public static final String FOLDER_NAME = "folder";
 		private Folder folder;
@@ -247,8 +255,8 @@ public class ConnectorUtilTest {
 		}
 
 		@Override
-		public boolean authenticate(String username, String password) throws SpecmateException {
-			return true;
+		public Set<IProject> authenticate(String username, String password) throws SpecmateException {
+			return new HashSet<IProject>(Arrays.asList(getProject()));
 		}
 	}
 
@@ -257,7 +265,7 @@ public class ConnectorUtilTest {
 		private int count;
 
 		public TestRequirementSource_VariableNumbers(int count) {
-			super();
+			super(null);
 			this.count = count;
 		}
 
@@ -282,6 +290,10 @@ public class ConnectorUtilTest {
 
 	private class TestRequirementSource_NoFolder extends TestRequirementSourceBase {
 
+		public TestRequirementSource_NoFolder() {
+			super(null);
+		}
+
 		@Override
 		public Collection<Requirement> getRequirements() throws SpecmateException {
 
@@ -305,6 +317,10 @@ public class ConnectorUtilTest {
 
 	private class TestRequirementSource_NameChange extends TestRequirementSourceBase {
 
+		public TestRequirementSource_NameChange() {
+			super(null);
+		}
+
 		int requestCounter = 1;
 
 		@Override
@@ -325,6 +341,10 @@ public class ConnectorUtilTest {
 	}
 
 	private class TestRequirementSource_ParentChange extends TestRequirementSourceBase {
+
+		public TestRequirementSource_ParentChange() {
+			super(null);
+		}
 
 		int requestCounter = 1;
 
@@ -355,6 +375,10 @@ public class ConnectorUtilTest {
 	}
 
 	private class TestRequirementSource_InvalidRequirements extends TestRequirementSourceBase {
+		public TestRequirementSource_InvalidRequirements() {
+			super(null);
+		}
+
 		private static final String BAD_CHARS = ",|;";
 
 		@Override
@@ -384,6 +408,10 @@ public class ConnectorUtilTest {
 	}
 
 	private class TestRequirementSource_SingleRequirement extends TestRequirementSourceBase {
+
+		public TestRequirementSource_SingleRequirement() {
+			super(null);
+		}
 
 		@Override
 		public Collection<Requirement> getRequirements() throws SpecmateException {

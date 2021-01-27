@@ -17,7 +17,7 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 import org.osgi.service.log.LogService;
 
 import com.specmate.common.exception.SpecmateException;
-import com.specmate.connectors.api.IRequirementsSource;
+import com.specmate.connectors.api.IConnector;
 import com.specmate.connectors.internal.config.ConnectorServiceConfig;
 import com.specmate.persistency.IPersistencyService;
 import com.specmate.persistency.ITransaction;
@@ -30,7 +30,7 @@ import com.specmate.search.api.IModelSearchService;
 @Component(immediate = true, configurationPid = ConnectorServiceConfig.PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
 public class ConnectorService {
 	CDOWithID id;
-	List<IRequirementsSource> requirementsSources = new ArrayList<>();
+	List<IConnector> requirementsSources = new ArrayList<>();
 	private LogService logService;
 	private IPersistencyService persistencyService;
 	private IModelSearchService modelSearchService;
@@ -89,11 +89,11 @@ public class ConnectorService {
 	}
 
 	@Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
-	public void addRequirementsConnector(IRequirementsSource source) {
+	public void addRequirementsConnector(IConnector source) {
 		this.requirementsSources.add(source);
 	}
 
-	public void removeRequirementsConnector(IRequirementsSource source) {
+	public void removeRequirementsConnector(IConnector source) {
 		this.requirementsSources.remove(source);
 	}
 

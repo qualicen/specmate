@@ -37,4 +37,8 @@ public class ProjectServiceImpl implements IProjectService {
 		this.projects.remove(project.getID());
 	}
 
+	@Override
+	public Map<String, IProject> getProjects() {
+		return Collections.unmodifiableMap(projects);
+	}
 }

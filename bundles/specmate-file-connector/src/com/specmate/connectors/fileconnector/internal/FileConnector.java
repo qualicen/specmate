@@ -7,10 +7,13 @@ import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.osgi.service.component.annotations.Activate;
@@ -22,9 +25,11 @@ import org.osgi.service.log.LogService;
 import com.google.common.io.PatternFilenameFilter;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
+import com.specmate.connectors.api.ConnectorBase;
 import com.specmate.connectors.api.ConnectorUtil;
+import com.specmate.connectors.api.IConnector;
+import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.api.IProjectConfigService;
-import com.specmate.connectors.api.IRequirementsSource;
 import com.specmate.connectors.fileconnector.internal.config.FileConnectorConfig;
 import com.specmate.model.administration.ErrorCode;
 import com.specmate.model.base.BaseFactory;
@@ -34,8 +39,8 @@ import com.specmate.model.requirements.Requirement;
 import com.specmate.model.requirements.RequirementsFactory;
 
 /** Connector to the HP Proxy server. */
-@Component(service = IRequirementsSource.class, immediate = true, configurationPid = FileConnectorConfig.PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
-public class FileConnector implements IRequirementsSource {
+@Component(service = IConnector.class, immediate = true, configurationPid = FileConnectorConfig.PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
+public class FileConnector extends ConnectorBase {
 
 	/** The log service */
 	private LogService logService;
@@ -54,6 +59,10 @@ public class FileConnector implements IRequirementsSource {
 
 	/** id of the project folder */
 	private String id;
+
+	public FileConnector(IProject project) {
+		super(project);
+	}
 
 	@Activate
 	public void activate(Map<String, Object> properties) throws SpecmateException {
@@ -171,11 +180,11 @@ public class FileConnector implements IRequirementsSource {
 	}
 
 	@Override
-	public boolean authenticate(String username, String password) {
-		if (user == null) {
-			return false;
+	public Set<IProject> authenticate(String username, String password) {
+		if (username.equals(user) && password.equals(this.password)) {
+			return new HashSet<IProject>(Arrays.asList(getProject()));
 		} else {
-			return username.equals(user) && password.equals(this.password);
+			return new HashSet<IProject>();
 		}
 	}
 

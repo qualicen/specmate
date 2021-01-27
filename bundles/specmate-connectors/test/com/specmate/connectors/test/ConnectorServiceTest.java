@@ -18,6 +18,7 @@ import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateValidationException;
 import com.specmate.config.api.IConfigService;
 import com.specmate.connectors.internal.config.ConnectorServiceConfig;
+import com.specmate.connectors.internal.config.PollKeys;
 
 public class ConnectorServiceTest {
 
@@ -28,7 +29,7 @@ public class ConnectorServiceTest {
 		connectorConfig.setLogService(mock(LogService.class));
 
 		IConfigService configServiceMock = mock(IConfigService.class);
-		when(configServiceMock.getConfigurationProperty(ConnectorServiceConfig.KEY_POLL_SCHEDULE, ConnectorServiceConfig.DISABLED_STRING)).thenReturn(ConnectorServiceConfig.DISABLED_STRING);
+		when(configServiceMock.getConfigurationProperty(PollKeys.KEY_POLL_SCHEDULE, PollKeys.DISABLED_STRING)).thenReturn(PollKeys.DISABLED_STRING);
 		connectorConfig.setConfigurationService(configServiceMock);
 
 		ConfigurationAdmin configAdminMock = mock(ConfigurationAdmin.class);
@@ -47,7 +48,7 @@ public class ConnectorServiceTest {
 		connectorConfig.setLogService(mock(LogService.class));
 
 		IConfigService configServiceMock = mock(IConfigService.class);
-		when(configServiceMock.getConfigurationProperty(ConnectorServiceConfig.KEY_POLL_SCHEDULE, ConnectorServiceConfig.DISABLED_STRING)).thenReturn("* * * * *");
+		when(configServiceMock.getConfigurationProperty(PollKeys.KEY_POLL_SCHEDULE, PollKeys.DISABLED_STRING)).thenReturn("* * * * *");
 		connectorConfig.setConfigurationService(configServiceMock);
 
 		ConfigurationAdmin configAdminMock = mock(ConfigurationAdmin.class);

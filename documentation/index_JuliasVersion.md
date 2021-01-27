@@ -34,6 +34,7 @@ Nachdem Sie ein Modell in Specmate erstellt haben (Genaueres dazu erfahren Sie i
 
 ![](Images_ger/Jira-Anzeige-Minimodel-und-Testspezifikation.png "Jira-Anzeige-Minimodel-und-Testspezifikation")
 
+Mittels der zwei grauen Buttons, können Sie direkt von Jira aus ein neues CEG- oder Prozessmodell anlegen.
 
 # Überblick Verwendung und Methodik
 
@@ -61,10 +62,9 @@ Nach dem Anmelden bei Specmate (direkt oder über Jira) sehen Sie folgende Ansic
 - Auf der linken Seite sehen Sie den *Projekt-Explorer*.
 Er zeigt die importierten Anforderungen in einer Baumstruktur an. Sie können durch den Baum navigieren (d.h. die Ordner öffnen) und eine Anforderung auswählen.
 - Im Projekt-Explorer können Sie zwischen der *Projekt*ansicht mit den importierten Anforderungen und der *Bibliotheks*ansicht wechseln. In der Projektansicht ist die Ordnerstruktur durch den Anforderungs-Import vorgegeben, es können an dieser Stelle keine neuen Ordner hinzugefügt werden.
-- In der Bibliothek können Sie Ordner und Modelle frei hinzufügen.
-Sowohl in der Projektansicht als auch in der Bibliotheksansicht können Modelle erstellt werden.
+- In der Bibliothek können Sie Ordner und Modelle frei hinzufügen.Sowohl in der Projektansicht als auch in der Bibliotheksansicht können Modelle erstellt werden.
 - Über dem Projekt-Explorer befindet sich ein *Suchfeld*.
-Nach der Eingabe eines Suchwortes (aus dem Titel der Anforderung oder der User Story) oder der entsprechenden Jira-ID zeigt der Projekt-Explorer Anforderungen und Modelle an, die dem Suchwort entsprechen. Beachten Sie bitte, dass die Bibliothek derzeit nicht in die Suche miteinbezogen ist. Mehr zur Suchfunktion erfahren Sie im Abschnitt [Suche](###Suche).
+Nach der Eingabe eines Suchwortes (aus dem Titel der Anforderung oder der User Story oder der entsprechenden Jira-ID) zeigt der Projekt-Explorer Anforderungen und Modelle an, die dem Suchwort entsprechen. Beachten Sie bitte, dass die Bibliothek derzeit nicht in die Suche miteinbezogen ist. Mehr zur Suchfunktion erfahren Sie im Abschnitt [Suche](###Suche).
 - Im oberen Teil des Bildschirms direkt neben dem Specmate-Logo finden Sie Schaltflächen zum Speichern des aktuell geöffneten Elements, zur Navigation und zum Zurücksetzen der letzten Aktion in einem Modell-Editor. Sobald Sie sich im Modell-Editor befinden, erscheint als fünfte Schaltfläche an dieser Stelle ein Validieren-Button. Durch Anklicken des Validieren-Buttons werden alle Änderungen aktualisiert und mögliche Fehlermeldungen unter "Fehler & Warnungen" rechts in der Eigenschaftsspalte angezeigt oder aufgehoben. Dauert der Prozess des Speicherns oder des Validierens einen Moment, zeigt Specmate Ihnen einen kreisförmigen Ladebalken an.
 - Im oberen Teil des Bildschirms auf der rechten Seite sehen Sie die aktuelle Specmate-Version. Daneben können Sie durch Klicken auf den Haken-Button das Ereignissprotokoll im unteren Teil des Bildschirms ein- und ausblenden außerdem können Sie die Sprache wählen, mit der Sie arbeiten möchten, und sich abmelden.
 
@@ -105,7 +105,7 @@ und zugehörige Modelle erstellen oder bereits erstellte Modelle einsehen.
 ## Wie entscheiden Sie, welches Modell zu erstellen ist?
 
 Für das Modellieren von Anforderungen haben Sie die Wahl zwischen
-[Ursache-Wirkungs-Diagrammen (CEG)](#Ursache-wirkungs-diagramme-cause-effect-graphs-ceg) und [Prozessmodellen](#prozessdiagramm). Je nachdem, ob die Art der Anforderung
+[Ursache-Wirkungs-Diagrammen (CEG)](###Editor-Funktionen-im-CEG-Editor) und [Prozessmodellen](###Editor-Funktionen-im-Prozessmodell-Editor). Je nachdem, ob die Art der Anforderung
 
 - regelbasiert ("Wenn dies und das, dann das Folgende... mit Ausnahme von ... dann...") oder
 - prozessbasiert ("Zuerst gibt der Benutzer A ein.  Aufgrund der Eingabe gibt das System entweder B oder C ein. Danach fragt das System den Benutzer nach D, danach...") ist,
@@ -115,7 +115,7 @@ können Sie die entsprechende Modellierungstechnik auswählen. Bei der Modellier
 ## Grundlegende Editorfunktionen für CEGs und Prozessmodelle
 
 In diesem Abschnitt lernen Sie die grundlegenden Editorfunktionen sowohl für CEG- als auch für Prozessmodelle kennen.
-Wenn Ihnen die jeweilige Erklärung nicht ausreicht oder Sie einen erweiterten Anwendungsbereich kennenlernen wollen, lesen Sie bitte die ausführlicheren Erläuterungen im Abschnitt [Erweiterte Funktionen und Erläuterungen zum Ursache-Wirkungs-Diagramm](##Erweiterte Funktionen und Erläuterungen zum Ursache-Wirkungs-Diagramm) oder im Abschnitt [Erweiterte Funktionen und Erläuterungen zum Prozessdiagramm](##Erweiterte Funktionen und Erläuterungen zum Prozessdiagramm)nach.
+Wenn Ihnen die jeweilige Erklärung nicht ausreicht oder Sie einen erweiterten Anwendungsbereich kennenlernen wollen, lesen Sie bitte die ausführlicheren Erläuterungen im Abschnitt [Erweiterte Funktionen und Erläuterungen zum Ursache-Wirkungs-Diagramm](##Erweiterte-Funktionen-und-Erläuterungen-zum-Ursache-Wirkungs-Diagramm) oder im Abschnitt [Erweiterte Funktionen und Erläuterungen zum Prozessdiagramm](##Erweiterte-Funktionen-und-Erläuterungen-zum-Prozessdiagramm) nach.
 Falls Sie nur einzelne Aspekte genauer nachlesen wollen, klicken Sie einfach auf die verlinkten Begriffe und springen Sie so zu der erweiterten Erläuterung weiter unten in dieser Anleitung.
 
 ### Editor-Funktionen im CEG-Editor
@@ -144,7 +144,7 @@ Außerdem können Sie hier
 - Knoten in ihrer Größe verändern: Wählen Sie einen Knoten per Mausklick aus. An den Rändern des Knotens erscheinen kleine grüne Quadrate. Wenn Sie den Mauszeiger über eines dieser Quadrate bewegen, wird der Cursor zu einem Doppelpfeil und Sie können nun die Größe des Knotens beliebig variieren,
 -  eine freie Stelle im Editor anklicken und so die Eigenschaften des gesamten Modells bearbeiten.
 
-Wenn Sie noch mehr zu den verschiedenen Knotenarten und ihren Bedingungen erfahren wollen, lesen Sie [hier](###Knoten: Arten und Bedingungen) weiter.
+Wenn Sie noch mehr zu den verschiedenen Knotenarten und ihren Bedingungen erfahren wollen, lesen Sie [hier](###Knoten:-Arten-und-Bedingungen) weiter.
 
 
 #### 2. Auto-Layout
@@ -177,7 +177,7 @@ Bewegen Sie Ihren Cursor auf den von Ihnen bereits erstellten Knoten: Es erschei
 
 ![](Images_ger/Verbindung3.png "Verbindung3")
 
-4.) Sie können Verbindungen außerdem negieren, wenn Sie genaueres dazu wissen wollen, lesen Sie [hier](###Verbindungen negieren) weiter.
+4.) Sie können Verbindungen außerdem negieren, wenn Sie genaueres dazu wissen wollen, lesen Sie [hier](###Verbindungen-negieren) weiter.
 
 #### 6. Markieren
 Wenn Sie mehrere Verbindungen und/oder Knoten auswählen wollen, weil Sie z.B. einen Teil Ihres Modells kopieren und/oder in der Bibliothek abspeichern wollen, halten Sie die Strg-Taste (Windows) oder die Command-Taste (Mac) gedrückt, während Sie auf die gewünschten Elemente klicken.
@@ -193,7 +193,7 @@ Löschen können Sie Verbindungen und Knoten über die Entfernen-Taste (Windows)
 
 #### 9. Rückgängig machen
 
-Wenn Sie auf der Tastatur die übliche Tastenkombination STR/CMD + Z drücken, macht Specmate die letzte durchgeführte Aktion wieder rückgängig. Oder klicken Sie auf den Rückgängig-Button oben links.
+Wenn Sie auf der Tastatur die übliche Tastenkombination Strg/CMD + Z drücken, macht Specmate die letzte durchgeführte Aktion wieder rückgängig. Oder klicken Sie auf den Rückgängig-Button oben links.
 
 ### Eigenschaften
 
@@ -212,7 +212,7 @@ Der Prozessmodell-Editor funktioniert ähnlich wie der CEG-Editor: Anstatt dass 
 
 ![](Images_ger/Prozessmodell-Pfannkuchen.png "Prozessmodell-Pfannkuchen")
 
-Das Erstellen von Verbindungen erfolgt wie im CEG-Editor dadurch, dass der Cursor über den jeweiligen Knoten (dies gilt auch für den Start- End- und Entscheidungsknoten) bewegt wird; es erscheint ein grau umrandeter Pfeil im Knoten, der durch Klicken der Maustaste als Verbindung zu einem beliebigen Knoten gezogen werden kann. Lediglich die Verbindungen, die von einem Entscheidungsknoten ausgehen, unterscheiden sich dahingehend, dass ihnen eine Bedingung in der rechten Eigenschaftsspalte zugeordnet werden muss. Im Gegensatz zum CEG-Editor können die Knoten nur in der Eigenschaftsspalte und nicht direkt durch das Anklicken eines Knotens benannt werden. Weitere Erläuterungen finden Sie im Abschnitt [Verbindungen im Prozessmodell](#verbindungen-im-prozessmodell).
+Das Erstellen von Verbindungen erfolgt wie im CEG-Editor dadurch, dass der Cursor über den jeweiligen Knoten (dies gilt auch für den Start- End- und Entscheidungsknoten) bewegt wird; es erscheint ein grau umrandeter Pfeil im Knoten, der durch Klicken der Maustaste als Verbindung zu einem beliebigen Knoten gezogen werden kann. Lediglich die Verbindungen, die von einem Entscheidungsknoten ausgehen, unterscheiden sich dahingehend, dass ihnen eine Bedingung in der rechten Eigenschaftsspalte zugeordnet werden muss. Im Gegensatz zum CEG-Editor können die Knoten nur in der Eigenschaftsspalte und nicht direkt durch das Anklicken eines Knotens benannt werden. Weitere Erläuterungen finden Sie im Abschnitt [Verbindungen im Prozessmodell](###Verbindungen-im-Prozessmodell).
 
 ### Traces
 
@@ -242,7 +242,6 @@ Jetzt können Sie in der Bibliotheks- oder in der Projektansicht eine Kopie des 
 Standardmäßig heißt das neue Modell "*Kopie von [Name des ursprünglichen Modells]*".
 Diesen Namen können Sie im Eingabefeld ändern: Indem Sie den *Einfügen*-Knopf anklicken, fügen Sie die Kopie des Modells zum Projekt hinzu.
 
-
 ## Erweiterte Funktionen und Erläuterungen zum Ursache-Wirkungs-Diagramm
 
 ![](Images_ger/CEG-Ansicht.png "CEG-Ansicht")
@@ -260,15 +259,16 @@ Wenn eine Verbindung erstellt und ausgewählt wird, haben Sie außerdem die Mög
 
 Wenn Sie überprüfen wollen, ob Ihr CEG-Modell korrekt ist, klicken Sie oben links auf den Validieren-Button und schauen Sie, ob in der Spalte *Eigenschaften* unter der Überschrift *Fehler & Warnungen* etwas angezeigt wird. Ein unbenannter Knoten wird beispielsweise als Fehler angezeigt. Näheres zum Thema Validieren erfahren Sie weiter unten oder [hier](####Validieren).
 
-
 ### Knoten: Arten und Bedingungen
 
 Ein Knoten beschreibt eine Ursache oder eine Wirkung, dabei kann ein Knoten auch jeweils Ursache und Wirkung von einem oder mehreren anderen Knoten sein. Es gibt zwei grundlegende Arten von Knoten:
 
-- Knoten, die nur zwei Ausprägungen/Bedingungen haben können. Also alle Bedingungen,
-die man mit ja/nein beantworten kann. Beispiel:
+- Knoten, die nur zwei Ausprägungen/Bedingungen haben können. Also alle Bedingungen, die man mit ja/nein beantworten kann.
+
+Beispiel:
 	- Variable: *Führerschein vorhanden*
 	- Bedingung: *ja* oder *nein*
+
 - Knoten, die mehr als zwei Ausprägungen/Bedingungen haben können. Beispiel:
 	- Variable: *Region*
 	- Bedingung: *Europa*, *Afrika*, *Asien*, *Amerika*, ...
@@ -301,7 +301,6 @@ Variablennamen haben und bei denen die Bedingung mit = gesetzt ist, jeweils imme
 Eine bewährte Vorgehensweise ist, die Variablen immer als positive Aussagen zu deklarieren
 (z.B. *Türen zugesperrt: wahr* statt *Türen nicht zugesperrt: nicht wahr*).
 
-
 #### Typ (And/Or)
 
 Wenn ein Knoten mehrere eingehende Verbindungen hat, können Sie den *Typ* des Knotens ändern. Wählen Sie dazu den entsprechenden Knoten aus und ändern Sie auf der rechten Seite unter *Eigenschaften* den *Typ* des Knotens. Abhängig vom Typ des Knotens können eingehende Verbindungen als ODER-Verknüpfungen oder UND-Verknüpfungen definiert werden. Wenn der Typ des Knotens auf AND gesetzt ist, müssen alle Vorgängerknoten
@@ -311,7 +310,6 @@ damit der Knoten erfüllt wird.
 Beispiel für eine UND-Beziehung:
 
 ![](Images_ger/AND-Bedingung.PNG "ExampleAnd")
-
 
 Ist der Typ des Knotens allerdings auf OR gesetzt, muss nur ein einziger direkter Vorgänger erfüllt werden,
 damit der Knoten erfüllt wird. Dieses OR ist ein *inklusives Oder*, das heißt es können auch beide Ursachen wahr sein, damit der Knoten erfüllt ist. Nicht zu verwechseln mit einem [exklusiven Oder](#Exklusives-Oder), bei dem *genau eine* Ursache wahr sein muss, damit der Knoten erfüllt ist.
@@ -332,10 +330,9 @@ Die Aussage wird also umgeschrieben zu "Wenn A und nicht B, oder B und nicht A, 
 
 ### Verbindungen
 
-Eine Verbindung beschreibt einen Zusammenhang zwischen den beiden Knoten, die sie verbindet.
-Der Startknoten kann als Ursache und der Endknoten als Wirkung aufgefasst werden.
-Haben Sie im Editor eine Verbindung ausgewählt, dann haben Sie auf der rechten Seite
-die Möglichkeit, die *Eigenschaften* der Verbindung zu ändern.
+Eine Verbindung beschreibt einen Zusammenhang zwischen den beiden Knoten, die sie verbindet. Der Startknoten kann als Ursache und der Endknoten als Wirkung aufgefasst werden.
+Haben Sie im Editor eine Verbindung ausgewählt, dann haben Sie auf der rechten Seite die Möglichkeit, die *Eigenschaften* der Verbindung zu ändern.
+
 Die folgenden Eigenschaften können bearbeitet werden:
 
 #### Negieren
@@ -345,8 +342,7 @@ wenn die Ursache nicht vorhanden ist, und die Wirkung bleibt aus, wenn die Ursac
 
 #### Beschreibung
 
-Zu jeder Verbindung zwischen zwei Knoten können Sie eine *Beschreibung* hinzufügen. Dies kann zum eigenen Verständnis oder dem  einer Kollegin oder eines Kollegen beitragen. Außerdem können Sie – wie bereits oben erläutert – den Typ des Knotens in der Spalte Eigenschaften ändern.
-
+Zu jeder Verbindung zwischen zwei Knoten können Sie eine *Beschreibung* hinzufügen. Dies kann zum eigenen Verständnis oder dem  einer Kollegin oder eines Kollegen beitragen. Außerdem können Sie – wie bereits oben erläutert – den Typ des Knotens in der Spalte *Eigenschaften* ändern.
 
 ![](Images_ger/Knoteneigenschaften.png "Knoteneigenschaften")
 
@@ -362,13 +358,11 @@ Specmate stellt die Knoten optisch unterschiedlich dar abhängig davon, welche P
 
 ![](Images_ger/Knotentypen.png "Knotentypen")
 
-
-
 ## Äquivalenzklassenanalyse
 
 ### Motivation und Ziel
 
-Oft ist es ein Problem, aus einer großen Menge an möglichen Werteklassen von Variablen (z.B. Alter einer Person), eine Auswahl geeigneter Werteklassen zu ermitteln. Durch die Auswahl einiger weniger Werteklassen entscheidet sich der Tester, viele Situationen nicht zu testen. Deshalb ist es wichtig, dass diese Auswahl sehr sorgfältig geschieht. Die Auswahl an Werteklassen sollte im Idealfall möglichst viele Situationen abdecken. Dabei hilft die Äquivalenzklassenanalyse.
+Oft ist es ein Problem, aus einer großen Menge an möglichen Werteklassen von Variablen (z.B. Alter einer Person), eine Auswahl geeigneter Werteklassen zu ermitteln. Durch die Auswahl einiger weniger Werteklassen entscheidet sich der Tester, viele Situationen nicht zu testen. Deshalb ist es wichtig, dass diese Auswahl sehr sorgfältig geschieht. Die Auswahl an Werteklassen sollte im Idealfall möglichst viele Situationen abdecken. Dabei hilft die *Äquivalenzklassenanalyse*.
 
 Ziel der Bildung von Äquivalenzklassen ist es, eine hohe Fehlerentdeckungsrate mit einer möglichst geringen Anzahl von Testfällen zu erreichen. Die Äquivalenzklassen sind also bezüglich der Ein- und Ausgabedaten ähnliche Klassen bzw. Objekte, bei denen erwartet wird, dass sie sich gleichartig verhalten. Jeder Wert einer Äquivalenzklasse ist folglich ein geeigneter repräsentativer Stellvertreter für alle Werte der Äquivalenzklasse.
 
@@ -420,8 +414,6 @@ Es empfiehlt sich hier eine Zusatzvariable *Übergangszeit* einzuführen, die ei
 
 ![](Images_ger/Beispiel2Rutschen.PNG "Beispiel2Rutschen")
 
-
-
 ## Erweiterte Funktionen und Erläuterungen zum Prozessdiagramm
 
 Um Prozessmodelle zu modellieren, öffnen Sie zunächst den zugehörigen Editor. Mit dem [*Schritt*](#schritt)-Werkzeug können Sie dem Modell eine Aktion hinzufügen.
@@ -443,7 +435,7 @@ der mit dem Prozessmodell-Editor modelliert wurde:
 
 ### Schritt
 
-Ein *Schritt* beschreibt eine Aktion, die ausgeführt werden soll. Ist ein Schrittknoten ausgewählt, haben Sie die Möglichkeit den *Namen* des Schritts, also die Aktion, die durchgeführt werden soll, zu ändern, eine *Beschreibung* hinzuzufügen und das zu erwartende Ergebnis (*Expected Outcome*) des Schritts anzugeben.
+Ein *Schritt* beschreibt eine Aktion, die ausgeführt werden soll. Ist ein Schrittknoten ausgewählt, haben Sie die Möglichkeit den *Namen* des Schritts, also die Aktion, die durchgeführt werden soll, zu ändern, eine *Beschreibung* hinzuzufügen und das zu erwartende Ergebnis des Schritts anzugeben.
 
 ### Entscheidung
 
@@ -480,7 +472,6 @@ Wird Ihnen im Prozessmodell-Editor eine Fehlermeldung angezeigt, überprüfen Si
 - Ein Entscheidungsknoten besitzt nur eine ausgehende Verbindung.
 - Es gibt einen Knoten mit leeren Variablennamen.
 
-
 Trifft eines oder mehrere dieser Szenarien für Ihr Prozessmodell zu, beheben Sie die Fehlerquelle und drücken Sie auf den Validieren-Button.
 
 ### 2. CEG-Modelle
@@ -493,7 +484,6 @@ Wird Ihnen im CEG-Modell-Editor eine Fehlermeldung angezeigt, überprüfen Sie, 
 - Das Modell ist leer und besitzt keine Knoten.
 - Es gibt identische Variablennamen für Wirkungs- und Ursache-Knoten.
 - Es gibt einen Knoten mit leeren Variablennamen.
-
 
 Trifft eines oder mehrere dieser Szenarien für Ihr CEG-Modell zu, beheben Sie die Fehlerquelle und klicken Sie erneut auf den Validieren-Button.
 
@@ -532,7 +522,6 @@ Sie können einen Testfall auch löschen, wenn Sie auf das Papierkorbsymbol des 
 - Ist der Wirkungsknoten *falsch* und der Typ der Eingabeknoten AND, werden nur Kombinationen getestet, bei denen genau ein Eingabeknoten *falsch* ist und alle anderen *wahr*.
 - Ist der Wirkungsknoten *wahr* und der Typ der Eingabeknoten OR, werden nur Kombinationen getestet, bei denen genau ein Eingabeknoten *wahr* ist und alle anderen *falsch*.
 - Ist der Wirkungsknoten *falsch* und der Typ der Eingabeknoten OR, gibt es nur eine Kombination von Eingabeknoten. Nämlich: alle Eingabeknoten sind *falsch*.
-- Wenn ein nötiger Testfall (z.B. aufgrund der Beschränkungen durch den "="-Operator) nicht möglich ist, wird er rot dargestellt
 
 ## Testspezifikation aus Prozessmodellen
 

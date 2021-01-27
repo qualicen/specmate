@@ -89,7 +89,7 @@ export class ChangeTranslator {
         } else if (change['style'] !== undefined) {
             await this.translateStyleChange(change as mxgraph.mxStyleChange);
         } else if (change['cell'] !== undefined) {
-            await this.translateTerminalChange(change as mxgraph.mxTerminalChange);
+            await this.translateTerminalChange(change as mxgraph.mxTerminalChange, graph);
         }
     }
 
@@ -293,7 +293,7 @@ export class ChangeTranslator {
         return node;
     }
 
-    private async translateTerminalChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange): Promise<void> {
+    private async translateTerminalChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange, graph: mxgraph.mxGraph): Promise<void> {
         const element = await this.getElement(change.cell.id);
         if (element === undefined) {
             return;
@@ -301,7 +301,7 @@ export class ChangeTranslator {
         if (change.cell.edge) {
             await this.translateEdgeChange(change, element as IModelConnection);
         } else {
-            await this.translateNodeChange(change, element as IModelNode);
+            await this.translateNodeChange(change, element as IModelNode, graph);
         }
     }
 
@@ -310,19 +310,30 @@ export class ChangeTranslator {
         return (cell.id.endsWith(VertexProvider.ID_SUFFIX_VARIABLE) || cell.id.endsWith(VertexProvider.ID_SUFFIX_CONDITION));
     }
 
-    private async translateNodeChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange, element: IModelNode): Promise<void> {
+    private async translateNodeChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange, element: IModelNode,
+        graph: mxgraph.mxGraph): Promise<void> {
         let cell = change.cell as mxgraph.mxCell;
         if (this.isTextInputChange(change)) {
-            VertexProvider.adjustChildCellSize(cell, element.width);
+            if (cell.value === '' || cell.value === undefined || cell.value === null) {
+                StyleChanger.addStyle(cell, graph, EditorStyle.EMPTY_TEXT_NAME);
+            } else {
+                StyleChanger.removeStyle(cell, graph, EditorStyle.EMPTY_TEXT_NAME);
+            }
+            graph.getView().validate(cell);
+            graph.updateCellSize(cell.parent, true);
+            VertexProvider.adjustChildrenCellSizes(cell.parent, this.shapeProvider, graph);
         }
+        let isLabelCell = false;
         if (this.nodeNameConverter) {
             if (this.parentComponents[cell.getId()] !== undefined) {
                 // The changed node is a sublabel / child
+                isLabelCell = true;
                 cell = cell.getParent();
             }
             let value = cell.value;
             if (Type.is(element, CEGNode)) {
                 value = new CEGmxModelNode(cell.children[0].value, cell.children[1].value, cell.children[2].value);
+
             }
             const elementValues = this.nodeNameConverter.convertFrom(value, element);
             for (const key in elementValues) {
@@ -332,10 +343,13 @@ export class ChangeTranslator {
             // Keep change.cell to avoid having a parent a child value
             element['variable'] = change.cell.value;
         }
-        element['x'] = Math.max(0, cell.geometry.x);
-        element['y'] = Math.max(0, cell.geometry.y);
-        element['width'] = cell.geometry.width;
-        element['height'] = cell.geometry.height;
+        if (!isLabelCell) {
+            element['x'] = Math.max(0, cell.geometry.x);
+            element['y'] = Math.max(0, cell.geometry.y);
+            element['width'] = cell.geometry.width;
+            element['height'] = cell.geometry.height;
+            VertexProvider.adjustChildrenCellSizes(cell, this.shapeProvider, graph);
+        }
         await this.dataService.updateElement(element, true, Id.uuid);
     }
 
@@ -472,11 +486,9 @@ export class ChangeTranslator {
                             graph.getModel().beginUpdate();
                             try {
                                 graph.model.setValue(child, val);
-                                let width = child.geometry.width;
-                                if (width <= 0) {
-                                    width = this.shapeProvider.getInitialSize(changedElement).width;
-                                }
-                                VertexProvider.adjustChildCellSize(child, width);
+                                graph.updateCellSize(child, true);
+                                graph.updateCellSize(cell, true);
+                                VertexProvider.adjustChildrenPositions(cell);
                             }
                             finally {
                                 graph.getModel().endUpdate();
@@ -490,6 +502,7 @@ export class ChangeTranslator {
             try {
                 if (value !== cell.value) {
                     graph.model.setValue(cell, value);
+                    graph.updateCellSize(cell, false);
                 }
                 StyleChanger.setStyle(cell, graph, this.shapeProvider.getStyle(changedElement));
             }

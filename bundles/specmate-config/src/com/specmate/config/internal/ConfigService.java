@@ -190,4 +190,14 @@ public class ConfigService implements IConfigService {
 	public void setLogService(LogService logService) {
 		this.logService = logService;
 	}
+
+	@Override
+	public void addUpdateConfigurationProperties(Map<String, String> entries) {
+		configuration.putAll(entries);
+	}
+
+	@Override
+	public void addUpdateConfigurationProperty(String key, String value) {
+		configuration.put(key, value);
+	}
 }

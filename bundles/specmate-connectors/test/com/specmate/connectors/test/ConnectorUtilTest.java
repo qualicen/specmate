@@ -208,7 +208,7 @@ public class ConnectorUtilTest {
 			}
 
 		});
-		ConnectorUtil.syncRequirementsFromSources(Arrays.asList(reqSource), transaction, mock(LogService.class));
+		ConnectorUtil.syncConnectors(Arrays.asList(reqSource), transaction, mock(LogService.class));
 	}
 
 	private void runConnectorUtilWithSourceSingleSync(String id, IConnector reqSource) throws SpecmateException {

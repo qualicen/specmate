@@ -33,6 +33,6 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x bundles/gradlew
     - name: Build Backend
-      run: cd bundles && ./gradlew jar
+      run: cd bundles && ./gradlew --no-daemon jar
     - name: Run Tests
-      run: ./gradlew check
+      run: ./gradlew --no-daemon check

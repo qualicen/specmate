@@ -31,6 +31,6 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x bundles/gradlew
     - name: Build Backend
-      run: (cd bundles && ./gradlew --no-daemon jar)
+      run: (cd bundles && ./gradlew --no-daemon jar -x :specmate-dbprovider-oracle:build)
     - name: Run Tests
-      run: (cd bundles && ./gradlew --no-daemon check)
+      run: (cd bundles && ./gradlew --no-daemon check -x :specmate-dbprovider-oracle:check)

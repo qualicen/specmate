@@ -15,5 +15,10 @@ public class JiraConfigConstants {
 	public static final String KEY_JIRA_CHILDREN_SQL = "jira.childrenJQL";
 	public static final String KEY_JIRA_WITH_FOLDERS = "jira.withFolders";
 	public static final Object KEY_JIRA_CACHE_TIME = "jira.cacheTime";
+	
+	// TODO this must be a property of the project (not a property of the connector)
+	// e.g., 'multiproject.localJira.projectsprefix'
 	public static final String KEY_JIRA_MULTIPROJECT_PREFIX = "jira.projectprefix";
+	
+	public static final String KEY_JIRA_MULTIPROJECT_TEMPLATE_PREFIX = "jira.template.";
 }

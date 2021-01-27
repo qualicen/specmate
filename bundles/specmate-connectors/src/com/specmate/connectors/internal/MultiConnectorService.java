@@ -90,13 +90,7 @@ public class MultiConnectorService {
 						String projectId = configEntry.getKey();
 
 						if (!configuredProjects.contains(projectId)) {
-							Map<String, String> projectConfig = configEntry.getValue();
-							
-							System.err.println("GENERATED PROJECT: " + projectId + " -> " + projectConfig);
-							
-							// add project properties to config
-							configService.addUpdateConfigurationProperties(projectConfig);
-							
+							configService.addUpdateConfigurationProperties(configEntry.getValue());							
 							newProjects.add(projectId);
 						}
 

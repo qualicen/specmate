@@ -2,6 +2,7 @@ package com.specmate.connectors.internal;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +17,7 @@ import org.osgi.service.log.LogService;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.config.api.IConfigService;
 import com.specmate.connectors.api.IMultiConnector;
+import com.specmate.connectors.api.IMultiProject;
 import com.specmate.connectors.api.IProjectConfigService;
 import com.specmate.connectors.internal.config.MultiConnectorServiceConfig;
 import com.specmate.connectors.internal.config.PollKeys;
@@ -82,16 +84,23 @@ public class MultiConnectorService {
 			for (IMultiConnector multiConnector : multiConnectorService.getMultiConnectors()) {
 
 				logService.log(LogService.LOG_INFO, "Syncing multi connector " + multiConnector.getId());
-				
+
 				try {
-					for (Map.Entry<String, Map<String, String>> configEntry : multiConnector.getProjectConfigs()
+					for (Map.Entry<String, Map<String, String>> connectorConfigEntry : multiConnector.getProjectConfigs()
 							.entrySet()) {
 
-						String projectId = configEntry.getKey();
+						String technicalProjectId = connectorConfigEntry.getKey();
 
-						if (!configuredProjects.contains(projectId)) {
-							configService.addUpdateConfigurationProperties(configEntry.getValue());							
-							newProjects.add(projectId);
+						// get specmate name for project
+						String specmateProjectId = multiConnector.getMultiProject()
+								.createSpecmateProjectName(technicalProjectId);
+
+						// add prefix to config entries
+						Map<String, String> projectConfigEntries = addPrefixToConfig(specmateProjectId, connectorConfigEntry.getValue());
+
+						if (!configuredProjects.contains(specmateProjectId)) {
+							configService.addUpdateConfigurationProperties(projectConfigEntries);
+							newProjects.add(specmateProjectId);
 						}
 
 					}
@@ -103,14 +112,15 @@ public class MultiConnectorService {
 
 			if (newProjects.size() > 0) {
 				try {
-					
+
 					List<String> allProjects = new ArrayList<>();
 					allProjects.addAll(configuredProjects);
 					allProjects.addAll(newProjects);
-					configService.addUpdateConfigurationProperty(IProjectConfigService.KEY_PROJECT_IDS, String.join(",", allProjects ) );
-										
+					configService.addUpdateConfigurationProperty(IProjectConfigService.KEY_PROJECT_IDS,
+							String.join(",", allProjects));
+
 					projectConfigService.configureProjects(newProjects.toArray(new String[0]));
-					
+
 				} catch (SpecmateException e) {
 					logService.log(LogService.LOG_ERROR, "Error adding generated projects ", e);
 				}
@@ -118,6 +128,19 @@ public class MultiConnectorService {
 
 		}
 
+	}
+
+	private Map<String, String> addPrefixToConfig(String specmateProjectId, Map<String, String> orignalConfig) {
+
+		String prefix = IProjectConfigService.PROJECT_PREFIX + specmateProjectId + ".connector.";
+		
+		Map<String, String> newConfig = new HashMap<String, String>();
+
+		for (Map.Entry<String, String> entry : orignalConfig.entrySet()) {
+			newConfig.put(prefix + entry.getKey(), entry.getValue());
+		}
+
+		return newConfig;
 	}
 
 	@Reference

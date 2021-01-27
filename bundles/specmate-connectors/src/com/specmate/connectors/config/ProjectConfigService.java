@@ -186,6 +186,12 @@ public class ProjectConfigService implements IProjectConfigService {
 		// Set the target of the 'connector' reference in the Project.
 		// This ensures that the right connector will be bound to the project.
 		multiProjectConfig.put("connector.target", multiConnectorFilter);
+		
+		// multiproject.<projectname>.projectnamepattern
+		String projectNamePattern = configService.getConfigurationProperty(IProjectConfigService.MULTIPROJECT_PREFIX + multiProjectID + "." + IProjectConfigService.KEY_MULTIPROJECT_PROJECTNAMEPATTERN);
+		if (projectNamePattern != null) {
+			multiProjectConfig.put(IProjectConfigService.KEY_MULTIPROJECT_PROJECTNAMEPATTERN, projectNamePattern);
+		}
 
 		OSGiUtil.configureFactory(configAdmin, MULTIPROJECT_CONFIG_FACTORY_PID, multiProjectConfig);
 	}

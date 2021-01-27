@@ -41,9 +41,6 @@ public class JiraMultiConnector implements IMultiConnector {
 	/** The password for jira server */
 	private String password;
 
-	/** The configured project prefix for generated projects */
-	private String projectPrefix;
-
 	private Map<String, String> templateProperties;
 
 	/** The associated multiproject */
@@ -57,7 +54,6 @@ public class JiraMultiConnector implements IMultiConnector {
 		url = (String) properties.get(JiraConfigConstants.KEY_JIRA_URL);
 		username = (String) properties.get(JiraConfigConstants.KEY_JIRA_USERNAME);
 		password = (String) properties.get(JiraConfigConstants.KEY_JIRA_PASSWORD);
-		projectPrefix = (String) properties.getOrDefault(JiraConfigConstants.KEY_JIRA_MULTIPROJECT_PREFIX, id);
 		templateProperties = getTemplateProperties(properties);
 
 		logService.log(LogService.LOG_DEBUG, "Initialized Jira Multi Connector with " + properties.toString() + ".");
@@ -117,32 +113,26 @@ public class JiraMultiConnector implements IMultiConnector {
 		HashMap<String, Map<String, String>> projectConfigs = new HashMap<>();
 
 		for (String jiraProjectId : JiraUtil.getProjects(url, username, password)) {
-
-			// TODO
-			String specmateProjectId = projectPrefix + "_" + jiraProjectId;
-
-			projectConfigs.put(specmateProjectId, getProjectConfig(specmateProjectId, jiraProjectId));
+			projectConfigs.put(jiraProjectId, getProjectConfig(jiraProjectId));
 		}
 
 		return projectConfigs;
 	}
 
-	private Map<String, String> getProjectConfig(String specmateProjectId, String jiraProjectId) {
+	private Map<String, String> getProjectConfig(String jiraProjectId) {
 
 		HashMap<String, String> projectConfig = new HashMap<>();
-		String connectorPrefix = IProjectConfigService.PROJECT_PREFIX + specmateProjectId + ".connector.";
 
 		// generated properties
-		projectConfig.put(connectorPrefix + "pid", JiraConfigConstants.CONNECTOR_PID);
-		projectConfig.put(connectorPrefix + JiraConfigConstants.KEY_JIRA_URL, url);
-		projectConfig.put(connectorPrefix + JiraConfigConstants.KEY_JIRA_PROJECT, jiraProjectId);
-		projectConfig.put(connectorPrefix + JiraConfigConstants.KEY_JIRA_USERNAME, username);
-		projectConfig.put(connectorPrefix + JiraConfigConstants.KEY_JIRA_PASSWORD, password);
+		projectConfig.put("pid", JiraConfigConstants.CONNECTOR_PID);
+		projectConfig.put(JiraConfigConstants.KEY_JIRA_URL, url);
+		projectConfig.put(JiraConfigConstants.KEY_JIRA_PROJECT, jiraProjectId);
+		projectConfig.put(JiraConfigConstants.KEY_JIRA_USERNAME, username);
+		projectConfig.put(JiraConfigConstants.KEY_JIRA_PASSWORD, password);
 
 		// template properties
 		for (Map.Entry<String, String> templatePropertyEntry : templateProperties.entrySet()) {
-			projectConfig.put(connectorPrefix + "jira." + templatePropertyEntry.getKey(),
-					templatePropertyEntry.getValue());
+			projectConfig.put("jira." + templatePropertyEntry.getKey(), templatePropertyEntry.getValue());
 		}
 
 		return projectConfig;

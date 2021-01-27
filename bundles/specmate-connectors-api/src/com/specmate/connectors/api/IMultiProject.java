@@ -11,4 +11,10 @@ public interface IMultiProject {
 	 * @return the defined multi connector for the project, or <code>null</code>.
 	 */
 	IMultiConnector getConnector();
+	
+	/**
+	 * Creates the name of a specmate project given the technical name of the project.
+	 * @param technicalProjectName the technical name of the project (e.g., the name of the corresponding jira project)
+	 */
+	String createSpecmateProjectName(String technicalProjectName);
 }

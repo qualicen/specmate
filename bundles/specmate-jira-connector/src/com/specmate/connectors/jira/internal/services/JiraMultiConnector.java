@@ -131,7 +131,7 @@ public class JiraMultiConnector implements IMultiConnector {
 
 		HashMap<String, String> projectConfig = new HashMap<>();
 		String connectorPrefix = IProjectConfigService.PROJECT_PREFIX + specmateProjectId + ".connector.";
-		
+
 		// generated properties
 		projectConfig.put(connectorPrefix + "pid", JiraConfigConstants.CONNECTOR_PID);
 		projectConfig.put(connectorPrefix + JiraConfigConstants.KEY_JIRA_URL, url);
@@ -141,7 +141,8 @@ public class JiraMultiConnector implements IMultiConnector {
 
 		// template properties
 		for (Map.Entry<String, String> templatePropertyEntry : templateProperties.entrySet()) {
-			projectConfig.put(connectorPrefix + templatePropertyEntry.getKey(), templatePropertyEntry.getValue());
+			projectConfig.put(connectorPrefix + "jira." + templatePropertyEntry.getKey(),
+					templatePropertyEntry.getValue());
 		}
 
 		return projectConfig;

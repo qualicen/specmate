@@ -27,12 +27,10 @@ jobs:
     - name: Start Spacy 
       run: docker run -p "127.0.0.1:80:80" qualicen/spacyapi:en_v2_lg &
     - name: Build Frontend
-      run: |
-        cd web && npm run init && npm run build-prod
-        cd ..
+      run: (cd web && npm run init && npm run build-prod)
     - name: Grant execute permission for gradlew
       run: chmod +x bundles/gradlew
     - name: Build Backend
-      run: cd bundles && ./gradlew --no-daemon jar
+      run: (cd bundles && ./gradlew --no-daemon jar)
     - name: Run Tests
-      run: ./gradlew --no-daemon check
+      run: (cd bundles && ./gradlew --no-daemon check)

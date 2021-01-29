@@ -13,6 +13,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+      SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -43,6 +46,6 @@ jobs:
     - name: UI-Tests 
       run: |
         (cd bundles && ./gradlew --no-daemon export -x check)
-        (export SAUCE_USERNAME=${{ secrets.SAUCE_USERNAME }} && export SAUCE_ACCESS_KEY=${{ secrets.SAUCE_ACCESS_KEY }} && cd bundles/specmate-std-env/generated/distributions/executable/ && java -Xmx6000m -Djdk.crypto.KeyAgreement.legacyKDF=true -jar dev-specmate-all.jar &)    
+        (cd bundles/specmate-std-env/generated/distributions/executable/ && java -Xmx6000m -Djdk.crypto.KeyAgreement.legacyKDF=true -jar dev-specmate-all.jar &)    
         sleep 10    
         (cd ui-tests/ && mvn clean test)

@@ -88,7 +88,7 @@ public class TestBase implements SauceOnDemandSessionIdProvider {
         capabilities.setCapability("deviceName", deviceName);
         capabilities.setCapability("device-orientation", deviceOrientation);
         capabilities.setCapability("platform", os);
-        capabilities.setCapability("tunnel-identifier", tunnelidentifier); 
+        capabilities.setCapability("tunnel-identifier", "github-action-tunnel"); 
 
         String methodName = name.getMethodName();
         capabilities.setCapability("name", methodName);

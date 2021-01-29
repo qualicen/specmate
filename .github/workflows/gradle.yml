@@ -34,7 +34,7 @@ jobs:
       run: (cd bundles && ./gradlew --no-daemon jar -x :specmate-dbprovider-oracle:jar)
     - name: Run Tests
       run: (cd bundles && ./gradlew --no-daemon check -x :specmate-dbprovider-oracle:check)
-    - uses: saucelabs/sauce-connect-action@v1
+    - uses: saucelabs/sauce-connect-action@v1.1.2
       with:
         username: ${{ secrets.SAUCELABS_USERNAME }}
         accessKey: ${{ secrets.SAUCELABS_ACCESS_KEY }}

@@ -36,15 +36,12 @@ jobs:
       run: (cd bundles && ./gradlew --no-daemon check -x :specmate-dbprovider-oracle:check)
     - uses: saucelabs/sauce-connect-action@v1.1.2
       with:
-        username: ${{ secrets.SAUCELABS_USERNAME }}
-        accessKey: ${{ secrets.SAUCELABS_ACCESS_KEY }}
+        username: ${{ secrets.SAUCELABS_USER }}
+        accessKey: ${{ secrets.SAUCELABS_ACCESSKEY }}
         tunnelIdentifier: github-action-tunnel
         scVersion: 4.6.2
     - name: UI-Tests 
       run: |
-        (cd web && npm run build-prod)
-        (cd bundles && ./gradlew --no-daemon build --continue -x check)
-        (cd bundles && ./gradlew --no-daemon check)
         (cd bundles && ./gradlew --no-daemon export -x check)
         (cd bundles/specmate-std-env/generated/distributions/executable/ && java -Xmx6000m -Djdk.crypto.KeyAgreement.legacyKDF=true -jar dev-specmate-all.jar &)    
         sleep 10    

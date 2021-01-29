@@ -20,7 +20,7 @@ public class LoginPageTest extends TestBase {
 	  */
 	 @Test
 	 public void verifyLoginTest() throws InvalidElementStateException {
-		driver.get("http://specmate.local:8080/");
+		driver.get("http://localhost:8080/");
 			
 		LoginElements login = new LoginElements(driver);
 			

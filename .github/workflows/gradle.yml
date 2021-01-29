@@ -45,7 +45,6 @@ jobs:
         scVersion: 4.6.2
     - name: UI-Tests 
       run: |
-        echo "127.0.0.1     specmate.local" >> /etc/hosts
         (cd bundles && ./gradlew --no-daemon export -x check)
         (cd bundles/specmate-std-env/generated/distributions/executable/ && java -Xmx6000m -Djdk.crypto.KeyAgreement.legacyKDF=true -jar dev-specmate-all.jar &)    
         sleep 10    

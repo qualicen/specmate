@@ -35,7 +35,7 @@ public class ProcessModelTest extends TestBase {
 		LoginElements login = new LoginElements(driver);
 		ProcessEditorElements processEditor = new ProcessEditorElements(driver, builder);
 		
-		driver.get("http://specmate.local:8080/");
+		driver.get("http://localhost:8080/");
 		
 		if(!login.isLoggedIn()) {
 			performLogin(login); 

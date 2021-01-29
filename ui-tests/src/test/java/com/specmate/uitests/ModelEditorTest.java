@@ -35,7 +35,7 @@ public class ModelEditorTest extends TestBase {
 			CommonControlElements commonControl = new CommonControlElements(driver);
 			LoginElements login = new LoginElements(driver);
 			
-			driver.get("http://localhost:8080/");
+			driver.get("http://specmate.local:8080/");
 			
 			if(!login.isLoggedIn()) {
 				performLogin(login); 

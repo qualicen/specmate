@@ -71,12 +71,12 @@ public class LoginElements {
 	public boolean isLoggedIn() {
 		try {
 		WebDriverWait wait = new WebDriverWait(driver, 15);
-		wait.until(ExpectedConditions.urlToBe("http://localhost:8080/-/welcome"));
+		wait.until(ExpectedConditions.urlToBe("http://specmate.local:8080/-/welcome"));
 		} catch (TimeoutException e) {
 			return false;
 		}
 		String URL = driver.getCurrentUrl();
-		String expectedURL = "http://localhost:8080/-/welcome";
+		String expectedURL = "http://specmate.local:8080/-/welcome";
 		return Objects.equals(URL, expectedURL);
 	}
 }

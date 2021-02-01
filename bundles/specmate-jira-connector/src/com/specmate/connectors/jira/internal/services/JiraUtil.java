@@ -87,7 +87,7 @@ public class JiraUtil {
 			}
 		}
 	}
-	
+
 	public static JSONObject stepToJson(TestStep step, boolean isCloud) {
 		JSONObject stepObj = new JSONObject();
 		String action = step.getDescription();

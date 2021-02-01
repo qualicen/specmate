@@ -1,8 +1,10 @@
 import { ChangeDetectionStrategy, Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { mxgraph } from 'mxgraph'; // Typings only - no code!
+import { Subscription } from 'rxjs';
 import { CEGModel } from 'src/app/model/CEGModel';
 import { CEGNode } from 'src/app/model/CEGNode';
+import { Process } from 'src/app/model/Process';
 import { ProcessConnection } from 'src/app/model/ProcessConnection';
 import { ProcessDecision } from 'src/app/model/ProcessDecision';
 import { ProcessEnd } from 'src/app/model/ProcessEnd';
@@ -10,6 +12,7 @@ import { ProcessStart } from 'src/app/model/ProcessStart';
 import { ProcessStep } from 'src/app/model/ProcessStep';
 import { UndoService } from 'src/app/modules/actions/modules/common-controls/services/undo.service';
 import { NavigatorService } from 'src/app/modules/navigation/modules/navigator/services/navigator.service';
+import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
 import { IContainer } from '../../../../../../../model/IContainer';
 import { IModelConnection } from '../../../../../../../model/IModelConnection';
 import { IModelNode } from '../../../../../../../model/IModelNode';
@@ -28,15 +31,12 @@ import { ElementProvider } from '../providers/properties/element-provider';
 import { NameProvider } from '../providers/properties/name-provider';
 import { ShapeData, ShapeProvider } from '../providers/properties/shape-provider';
 import { VertexProvider } from '../providers/properties/vertex-provider';
+import { GraphicalEditorService } from '../services/graphical-editor.service';
 import { EditorKeyHandler } from './editor-components/editor-key-handler';
 import { EditorPopup } from './editor-components/editor-popup';
 import { EditorStyle } from './editor-components/editor-style';
 import { ChangeTranslator } from './util/change-translator';
 import { StyleChanger } from './util/style-changer';
-import { GraphicalEditorService } from '../services/graphical-editor.service';
-import { Process } from 'src/app/model/Process';
-import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
-import { Subscription } from 'rxjs';
 
 declare var require: any;
 
@@ -82,7 +82,7 @@ export class GraphicalEditor implements OnDestroy {
         private undoService: UndoService,
         private modal: ConfirmationModal,
         private graphicalEditorService: GraphicalEditorService) {
-            const navigationStartSubscription = this.navigator.navigationStart.subscribe(() => {
+        const navigationStartSubscription = this.navigator.navigationStart.subscribe(() => {
             this.isInGraphTransition = true;
         });
         this.subscriptions.push(navigationStartSubscription);
@@ -174,8 +174,15 @@ export class GraphicalEditor implements OnDestroy {
         mx.mxGraph.prototype.centerZoom = false;
         mx.mxGraph.prototype.allowNegativeCoordinates = false;
         mx.mxGraph.prototype.border = 25;
+        mx.mxGraph.prototype.extendParents = true;
         mx.mxGraph.prototype.validationAlert = (message: string) => {
             this.modal.openOk(this.translate.instant('graphicalEditorErrorTitle'), message);
+        };
+
+        const cellEditorInit = mx.mxCellEditor.prototype.init;
+        mx.mxCellEditor.prototype.init = function () {
+            cellEditorInit.apply(this, arguments);
+            this.textarea.style.resize = '';
         };
 
         mx.mxEvent.disableContextMenu(this.graphContainerElement.nativeElement);
@@ -204,9 +211,23 @@ export class GraphicalEditor implements OnDestroy {
         this.graph.zoomTo(this.zoomFactor, undefined);
         const rubberBand = new mx.mxRubberband(this.graph);
         rubberBand.reset();
+        this.graph.setHtmlLabels(true);
 
         this.graph.setTooltips(true);
         this.graph.zoomFactor = 1.1;
+
+        this.setFunctionGetPreferredSizeForCell(this.graph, this.shapeProvider);
+
+        this.graph.addListener(mx.mxEvent.EDITING_STARTED, (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) => {
+            const cell = evt.properties.cell as mxgraph.mxCell;
+            if (cell !== undefined &&
+                (cell.id.endsWith(VertexProvider.ID_SUFFIX_VARIABLE) || cell.id.endsWith(VertexProvider.ID_SUFFIX_CONDITION))) {
+                let parentWidth = cell.parent.geometry.width;
+                cell.getGeometry().setRect(0, cell.geometry.y, parentWidth, cell.geometry.height);
+                this.graph.getView().invalidate(cell);
+                this.graph.getView().validate(cell);
+            }
+        });
 
         this.graph.addListener(mx.mxEvent.DOUBLE_CLICK, (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) => {
             const cell = evt.properties.cell as mxgraph.mxCell;
@@ -471,8 +492,6 @@ export class GraphicalEditor implements OnDestroy {
     }
 
     private async initCEGModel(): Promise<void> {
-        this.graph.setHtmlLabels(true);
-
         this.graph.isCellEditable = function (cell) {
             let c = cell as mxgraph.mxCell;
             if (c.edge) {
@@ -485,10 +504,6 @@ export class GraphicalEditor implements OnDestroy {
         };
 
         this.graph.graphHandler.setRemoveCellsFromParent(false);
-
-        this.graph.isWrapping = function (cell) {
-            return this.model.isCollapsed(cell);
-        };
 
         this.graph.isCellResizable = function (cell) {
             let geo = this.model.getGeometry(cell);
@@ -539,6 +554,37 @@ export class GraphicalEditor implements OnDestroy {
                 StyleChanger.addStyle(vertex, this.graph, this.getNodeType(vertex));
             }
         }
+    }
+
+    private setFunctionGetPreferredSizeForCell(graph: mxgraph.mxGraph, shapeProvider: ShapeProvider) {
+        let graphGetPreferredSizeForCell = graph.getPreferredSizeForCell;
+        graph.getPreferredSizeForCell = function (cell: mxgraph.mxCell) {
+            if (cell.getId().endsWith(VertexProvider.ID_SUFFIX_TYPE)) {
+                return undefined;
+            }
+            let result = graphGetPreferredSizeForCell.apply(this, arguments);
+            if (result !== null) {
+                let width = result.width;
+                if (cell.children !== undefined && cell.children !== null) {
+                    for (const child of cell.children) {
+                        let resultChild = graph.getPreferredSizeForCell(child);
+                        if (resultChild !== undefined) {
+                            width = Math.max(width, resultChild.width);
+                        }
+                    }
+                }
+                if (cell.style !== undefined) {
+                    let shapeData = shapeProvider.getInitialData(cell.style.split(';')[0]);
+                    if (shapeData !== undefined) {
+                        let minWidth = shapeData.size.width;
+                        let originalHeight = cell.getGeometry().height;
+                        result.width = Math.max(minWidth, width + shapeData.size.margin);
+                        result.height = originalHeight;
+                    }
+                }
+            }
+            return result;
+        };
     }
 
     /*********************** Editor Options ***********************/

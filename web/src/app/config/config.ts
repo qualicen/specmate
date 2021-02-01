@@ -132,7 +132,7 @@ export class Config {
     public static ELEMENT_CHUNK_SIZE = 100;
 
 
-    public static readonly CEG_LAYOUT_CLEARANCE_X = 90;
+    public static readonly CEG_LAYOUT_CLEARANCE_X = 45;
     public static readonly CEG_LAYOUT_CLEARANCE_Y = 45;
 
     public static readonly SUPPORTED_BROWSERS = [

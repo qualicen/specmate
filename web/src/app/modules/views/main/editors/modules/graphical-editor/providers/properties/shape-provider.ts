@@ -1,3 +1,4 @@
+import { mxgraph } from 'mxgraph';
 import { CEGConnection } from 'src/app/model/CEGConnection';
 import { Type } from 'src/app/util/type';
 import { Config } from '../../../../../../../../config/config';
@@ -13,9 +14,13 @@ import { ProviderBase } from './provider-base';
 
 export type ShapeData = {
     style: string,
-    size: { width: number, height: number },
+    size: { width: number, height: number, margin: number },
     text: string | CEGmxModelNode
 };
+
+const mx: typeof mxgraph = require('mxgraph')({
+    mxBasePath: 'mxgraph'
+});
 
 export class ShapeProvider extends ProviderBase {
 
@@ -29,7 +34,8 @@ export class ShapeProvider extends ProviderBase {
             style: EditorStyle.BASE_CEG_NODE_STYLE,
             size: {
                 width: Config.CEG_NODE_WIDTH,
-                height: Config.CEG_NODE_HEIGHT
+                height: Config.CEG_NODE_HEIGHT,
+                margin: 15
             },
             text: new NodeNameConverterProvider(type).nodeNameConverter.convertTo({
                 variable: Config.CEG_NODE_NEW_VARIABLE,
@@ -42,7 +48,8 @@ export class ShapeProvider extends ProviderBase {
             style: EditorStyle.BASE_PROCESS_START_STYLE,
             size: {
                 width: Config.PROCESS_START_END_NODE_RADIUS * 2,
-                height: Config.PROCESS_START_END_NODE_RADIUS * 2
+                height: Config.PROCESS_START_END_NODE_RADIUS * 2,
+                margin: 0
             },
             text: new NodeNameConverterProvider(type).nodeNameConverter.convertTo({
                 name: 'Start'
@@ -53,7 +60,8 @@ export class ShapeProvider extends ProviderBase {
             style: EditorStyle.BASE_PROCESS_END_STYLE,
             size: {
                 width: Config.PROCESS_START_END_NODE_RADIUS * 2,
-                height: Config.PROCESS_START_END_NODE_RADIUS * 2
+                height: Config.PROCESS_START_END_NODE_RADIUS * 2,
+                margin: 0
             },
             text: new NodeNameConverterProvider(type).nodeNameConverter.convertTo({
                 name: 'End'
@@ -64,7 +72,8 @@ export class ShapeProvider extends ProviderBase {
             style: EditorStyle.BASE_PROCESS_STEP_STYLE,
             size: {
                 width: Config.CEG_NODE_WIDTH,
-                height: Config.CEG_NODE_HEIGHT
+                height: Config.CEG_NODE_HEIGHT,
+                margin: 15
             },
             text: new NodeNameConverterProvider(type).nodeNameConverter.convertTo({
                 name: Config.PROCESS_NEW_STEP_NAME
@@ -75,12 +84,14 @@ export class ShapeProvider extends ProviderBase {
             style: EditorStyle.BASE_PROCESS_DECISION_STYLE,
             size: {
                 width: Config.PROCESS_DECISION_NODE_DIM,
-                height: Config.PROCESS_DECISION_NODE_DIM
+                height: Config.PROCESS_DECISION_NODE_DIM,
+                margin: 40
             },
             text: new NodeNameConverterProvider(type).nodeNameConverter.convertTo({
                 name: Config.PROCESS_NEW_DECISION_NAME
             })
         };
+
 
         this.styles.push((element: { className: string }) => this.shapeMap[element.className]);
 
@@ -93,6 +104,26 @@ export class ShapeProvider extends ProviderBase {
                 };
             }
         });
+
+        this.shapeMap['VariableName'] = {
+            style: EditorStyle.VARIABLE_NAME_STYLE,
+            size: {
+                width: 75,
+                height: mx.mxConstants.DEFAULT_FONTSIZE,
+                margin: 30
+            },
+            text: undefined
+        };
+
+        this.shapeMap['BaseTextInput'] = {
+            style: EditorStyle.TEXT_INPUT_STYLE,
+            size: {
+                width: 75,
+                height: mx.mxConstants.DEFAULT_FONTSIZE,
+                margin: 30
+            },
+            text: undefined
+        };
     }
 
     private getShapeData(element: { className: string }): ShapeData[] {

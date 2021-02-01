@@ -5,6 +5,7 @@ import { IContainer } from '../../../../../../../../model/IContainer';
 import { IModelNode } from '../../../../../../../../model/IModelNode';
 import { Type } from '../../../../../../../../util/type';
 import { EditorStyle } from '../../components/editor-components/editor-style';
+import { StyleChanger } from '../../components/util/style-changer';
 import { ConverterBase } from '../../converters/converter-base';
 import { CEGmxModelNode } from './ceg-mx-model-node';
 import { ProviderBase } from './provider-base';
@@ -26,7 +27,6 @@ export class VertexProvider extends ProviderBase {
     public static ID_SUFFIX_TYPE = '/type';
 
     private static INITIAL_CHILD_NODE_X = 0.5;
-    private static EMPTY_CHILD_NODE_WIDTH = 50;
 
     constructor(element: IContainer, private graph: mxgraph.mxGraph,
         private shapeProvider: ShapeProvider, private nodeNameConverter: ConverterBase<any, CEGmxModelNode | string>) {
@@ -39,33 +39,59 @@ export class VertexProvider extends ProviderBase {
         const parent = this.graph.getDefaultParent();
         this.graph.getModel().beginUpdate();
         const vertex = this.graph.insertVertex(parent, url, value, x, y, width, height, style);
-        const l1 = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_VARIABLE, data.variable,
+
+        const labelVariable = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_VARIABLE, data.variable,
             VertexProvider.INITIAL_CHILD_NODE_X, 0.15, 0, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.VARIABLE_NAME_STYLE, true);
-        const l2 = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_CONDITION, data.condition,
-            VertexProvider.INITIAL_CHILD_NODE_X, 0.4, 0, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.TEXT_INPUT_STYLE, true);
-        const l3 = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_TYPE, data.type,
-            VertexProvider.INITIAL_CHILD_NODE_X, 0.65, 0, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.TEXT_INPUT_STYLE, true);
+        const labelCondition = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_CONDITION, data.condition,
+            VertexProvider.INITIAL_CHILD_NODE_X, 0.45, 0, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.TEXT_INPUT_STYLE, true);
+        const labelType = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_TYPE, data.type,
+            VertexProvider.INITIAL_CHILD_NODE_X, 0.70, 0, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.TYPE_NAME_STYLE, true);
 
-        VertexProvider.adjustChildCellSize(l1, width);
-        VertexProvider.adjustChildCellSize(l2, width);
+        if (data.variable === '' || data.variable === undefined || data.variable === null) {
+            StyleChanger.addStyle(labelVariable, this.graph, EditorStyle.EMPTY_TEXT_NAME);
+        }
+        if (data.condition === '' || data.condition === undefined || data.condition === null) {
+            StyleChanger.addStyle(labelCondition, this.graph, EditorStyle.EMPTY_TEXT_NAME);
+        }
 
-        l1.isConnectable = () => false;
-        l2.isConnectable = () => false;
-        l3.isConnectable = () => false;
+        labelVariable.isConnectable = () => false;
+        labelCondition.isConnectable = () => false;
+        labelType.isConnectable = () => false;
+
+        VertexProvider.adjustChildrenCellSizes(vertex, this.shapeProvider, this.graph);
         this.graph.getModel().endUpdate();
         return vertex;
     }
 
-    public static adjustChildCellSize(cell: mxgraph.mxCell, nodeWidth: number) {
+    public static adjustChildrenPositions(cell: mxgraph.mxCell) {
         const g = cell.getGeometry();
-        let x = VertexProvider.INITIAL_CHILD_NODE_X;
-        let w = 0;
-        const minWidth = VertexProvider.EMPTY_CHILD_NODE_WIDTH;
-        if (g.width < minWidth && (cell.value === '' || cell.value === null || cell.value === undefined)) {
-            x = x - (minWidth / nodeWidth) / 2;
-            w = minWidth;
+        let parentWidth = g.width;
+        if (cell.children !== undefined && cell.children !== null) {
+            for (const child of cell.children) {
+                const childGeometry = child.getGeometry();
+                let x = (parentWidth - childGeometry.width) / 2 / parentWidth;
+                child.getGeometry().setRect(x, childGeometry.y, childGeometry.width, childGeometry.height);
+            }
         }
-        cell.getGeometry().setRect(x, g.y, w, g.height);
+    }
+
+    public static adjustChildrenCellSizes(cell: mxgraph.mxCell, shapeProvider: ShapeProvider, graph: mxgraph.mxGraph) {
+        const g = cell.getGeometry();
+        let parentWidth = g.width;
+        if (cell.children !== undefined && cell.children !== null) {
+            for (const child of cell.children) {
+                if (child.getId().endsWith(VertexProvider.ID_SUFFIX_TYPE)) {
+                    continue;
+                }
+                const childGeometry = child.getGeometry();
+                let preferredSize = graph.getPreferredSizeForCell(child);
+                let shapedata = shapeProvider.getInitialData(cell.style.split(';')[0]);
+                let widthMax = parentWidth - shapedata.size.margin;
+                let width = Math.min(preferredSize.width, widthMax);
+                child.getGeometry().setRect(childGeometry.x, childGeometry.y, width, childGeometry.height);
+            }
+        }
+        VertexProvider.adjustChildrenPositions(cell);
     }
 
     public provideVertex(node: IModelNode, x?: number, y?: number): mxgraph.mxCell {
@@ -97,7 +123,6 @@ export class VertexProvider extends ProviderBase {
                 if (inDegree < 2) {
                     return '';
                 }
-
                 let dropdown = document.createElement('select');
                 let options = ['AND', 'OR'];
                 let optionElements: HTMLOptionElement[] = [];

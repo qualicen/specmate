@@ -13,6 +13,7 @@ import { ProcessStep } from 'src/app/model/ProcessStep';
 import { UndoService } from 'src/app/modules/actions/modules/common-controls/services/undo.service';
 import { NavigatorService } from 'src/app/modules/navigation/modules/navigator/services/navigator.service';
 import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
+import { Monitorable } from 'src/app/modules/notification/modules/operation-monitor/base/monitorable';
 import { IContainer } from '../../../../../../../model/IContainer';
 import { IModelConnection } from '../../../../../../../model/IModelConnection';
 import { IModelNode } from '../../../../../../../model/IModelNode';
@@ -99,7 +100,9 @@ export class GraphicalEditor implements OnDestroy {
 
         this.validationService.onEnd(async () => {
             if (!this.isInGraphTransition && this.graph !== undefined && this.graph['destroyed'] !== true) {
+                // console.log('Validation ends');
                 this.updateValidities();
+
             }
         });
         let undoSubscription = this.undoService.undoPressed.subscribe(() => {
@@ -511,49 +514,88 @@ export class GraphicalEditor implements OnDestroy {
         };
     }
 
-    private updateValidities(): void {
-        if (this.graph === undefined) {
-            return;
-        }
-
-        const vertices = this.graph.getChildCells(this.graph.getDefaultParent());
-
-        for (const vertex of vertices) {
-            StyleChanger.replaceStyle(vertex, this.graph, EditorStyle.INVALID_STYLE_NAME, EditorStyle.VALID_STYLE_NAME);
-            this.graph.setCellWarning(vertex, null);
-        }
-
-        const validationResult = this.validationService.getValidationResults(this.model);
-        for (const invalidNode of validationResult) {
-            const vertexId = invalidNode.element.url;
-            const vertex = vertices.find(vertex => vertex.id === vertexId);
-            if (vertex === undefined) {
-                continue;
+    private async updateValidities(): Promise<void> {
+        setTimeout(() => {
+            this.graphicalEditorService.start();
+            let start = Date.now();
+            if (this.graph === undefined) {
+                return;
             }
-            StyleChanger.replaceStyle(vertex, this.graph, EditorStyle.VALID_STYLE_NAME, EditorStyle.INVALID_STYLE_NAME);
-            const overlay = this.graph.setCellWarning(vertex, invalidNode.message, undefined, true);
-            if (Type.is(invalidNode.element, CEGNode) || Type.is(invalidNode.element, ProcessStep)) {
-                overlay.offset = new mx.mxPoint(-13, -12);
-            }
-            if (Type.is(invalidNode.element, ProcessStart) || Type.is(invalidNode.element, ProcessEnd)) {
-                overlay.align = mx.mxConstants.ALIGN_CENTER;
-                overlay.offset = new mx.mxPoint(0, -13);
-            }
-            if (Type.is(invalidNode.element, ProcessDecision)) {
-                overlay.align = mx.mxConstants.ALIGN_CENTER;
-                overlay.offset = new mx.mxPoint(0, -18);
-            }
-        }
-        this.graph.getView().revalidate();
 
-        if (Type.is(this.model, CEGModel)) {
+            const vertices = this.graph.getChildCells(this.graph.getDefaultParent());
+
+            const validationResult = this.validationService.getValidationResultsGrouped(this.model);
+            // console.log(validationResult);
             for (const vertex of vertices) {
-                StyleChanger.removeStyle(vertex, this.graph, EditorStyle.CAUSE_STYLE_NAME);
-                StyleChanger.removeStyle(vertex, this.graph, EditorStyle.EFFECT_STYLE_NAME);
-                StyleChanger.removeStyle(vertex, this.graph, EditorStyle.INNER_STYLE_NAME);
-                StyleChanger.addStyle(vertex, this.graph, this.getNodeType(vertex));
+                let resultItem = validationResult.find(element => element.element.url === vertex.id);
+                if (resultItem !== undefined) {
+                    let validationMessage = resultItem.messages.reduce((a, b) => a + '<br>' + b);
+                    let overlays = this.graph.getCellOverlays(vertex);
+                    if (overlays != undefined && overlays.length === 1) {
+                        // let overlayMessage = overlays[0].toString().replace('<font color=red>', '').replace('</font>', '');
+                        let overlay = overlays[0];
+                        if (validationMessage !== overlay.toString()) {
+                            overlay.tooltip = validationMessage;
+                            // this.graph.setCellWarning(vertex, null);
+                            // const overlay = this.graph.setCellWarning(vertex, validationMessage, undefined, true);
+                            // this.graph.getView().invalidate(vertex);
+                            // this.graph.getView().validate(vertex);
+                        }
+                    } else {
+                        StyleChanger.addStyle(vertex, this.graph, EditorStyle.INVALID_STYLE_NAME);
+                        // const overlay = this.graph.setCellWarning(vertex, validationMessage, undefined, true);
+                        this.graph.addCellOverlay(vertex, new mx.mxCellOverlay(this.graph.warningImage, validationMessage));
+                        // this.graph.getView().invalidate(vertex);
+                        // this.graph.getView().validate(vertex);
+
+                    }
+                } else {
+                    StyleChanger.removeStyle(vertex, this.graph, EditorStyle.INVALID_STYLE_NAME);
+                    this.graph.setCellWarning(vertex, null);
+                }
+
+                // console.log(vertex.id + ': ' + this.graph.getCellOverlays(vertex));
+
+                if (Type.is(this.model, CEGModel)) {
+                    StyleChanger.removeStyle(vertex, this.graph, EditorStyle.CAUSE_STYLE_NAME);
+                    StyleChanger.removeStyle(vertex, this.graph, EditorStyle.EFFECT_STYLE_NAME);
+                    StyleChanger.removeStyle(vertex, this.graph, EditorStyle.INNER_STYLE_NAME);
+                    StyleChanger.addStyle(vertex, this.graph, this.getNodeType(vertex));
+                }
             }
-        }
+
+            /* //const validationResult = this.validationService.getValidationResults(this.model);
+            for (const invalidNode of validationResult) {
+                const vertexId = invalidNode.element.url;
+                const vertex = vertices.find(vertex => vertex.id === vertexId);
+                if (vertex === undefined) {
+                    continue;
+                }
+                StyleChanger.addStyle(vertex, this.graph, EditorStyle.INVALID_STYLE_NAME);
+                const overlay = this.graph.setCellWarning(vertex, invalidNode.message, undefined, true);
+                if (Type.is(invalidNode.element, CEGNode) || Type.is(invalidNode.element, ProcessStep)) {
+                    overlay.offset = new mx.mxPoint(-13, -12);
+                }
+                if (Type.is(invalidNode.element, ProcessStart) || Type.is(invalidNode.element, ProcessEnd)) {
+                    overlay.align = mx.mxConstants.ALIGN_CENTER;
+                    overlay.offset = new mx.mxPoint(0, -13);
+                }
+                if (Type.is(invalidNode.element, ProcessDecision)) {
+                    overlay.align = mx.mxConstants.ALIGN_CENTER;
+                    overlay.offset = new mx.mxPoint(0, -18);
+                }
+                this.graph.getView().invalidate(vertex);
+                this.graph.getView().validate(vertex);
+            } */
+            let now = Date.now();
+            console.log(now - start);
+            // this.graph.getView().revalidate();
+            // console.log(Date.now() - now);
+            // console.log('Graph ends');
+
+            this.graphicalEditorService.end();
+        }, 1);
+
     }
 
     private setFunctionGetPreferredSizeForCell(graph: mxgraph.mxGraph, shapeProvider: ShapeProvider) {

@@ -72,7 +72,7 @@ public class TestBase implements SauceOnDemandSessionIdProvider {
     public static LinkedList<String[]> browsersStrings() {
         LinkedList<String[]> browsers = new LinkedList<String[]>();
 
-        browsers.add(new String[]{"Windows 10", "79.0", "Chrome", null, null});
+        browsers.add(new String[]{"Windows 10", "88.0", "Chrome", null, null});
         //browsers.add(new String[]{"Windows 10", "18.17763", "MicrosoftEdge", null, null});
         //browsers.add(new String[]{"Windows 10", "73.0", "firefox", null, null});
         return browsers;

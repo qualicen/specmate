@@ -58,6 +58,12 @@ public class ModelEditorTest extends TestBase {
 			// Check if error message is shown (Assert true)
 			assertTrue(cegEditor.errorMessageDisplayed());
 				
+		 	try {
+				Thread.sleep(30000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		 
 			// Connecting created nodes
 			cegEditor.connectNode(nodeAlter, nodeAutofahren);
 			cegEditor.connectNode(nodeFS, nodeAutofahren);

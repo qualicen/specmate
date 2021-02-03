@@ -20,4 +20,6 @@ public interface IConfigService {
 	public void addUpdateConfigurationProperty(String key, String value);
 
 	String[] getConfigurationPropertyArray(String key);
+	
+	String[] getConfigurationPropertyArray(String key, String[] defaultValue);
 }

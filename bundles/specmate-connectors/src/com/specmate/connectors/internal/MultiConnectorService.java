@@ -77,8 +77,8 @@ public class MultiConnectorService {
 		@Override
 		public void run() {
 
-			List<String> configuredProjects = Arrays
-					.asList(configService.getConfigurationPropertyArray(IProjectConfigService.KEY_PROJECT_IDS));
+			List<String> configuredProjects = Arrays.asList(
+					configService.getConfigurationPropertyArray(IProjectConfigService.KEY_PROJECT_IDS, new String[0]));
 			List<String> newProjects = new ArrayList<>();
 
 			for (IMultiConnector multiConnector : multiConnectorService.getMultiConnectors()) {
@@ -86,8 +86,8 @@ public class MultiConnectorService {
 				logService.log(LogService.LOG_INFO, "Syncing multi connector " + multiConnector.getId());
 
 				try {
-					for (Map.Entry<String, Map<String, String>> connectorConfigEntry : multiConnector.getProjectConfigs()
-							.entrySet()) {
+					for (Map.Entry<String, Map<String, String>> connectorConfigEntry : multiConnector
+							.getProjectConfigs().entrySet()) {
 
 						String technicalProjectId = connectorConfigEntry.getKey();
 
@@ -96,7 +96,8 @@ public class MultiConnectorService {
 								.createSpecmateProjectName(technicalProjectId);
 
 						// add prefix to config entries
-						Map<String, String> projectConfigEntries = addPrefixToConfig(specmateProjectId, connectorConfigEntry.getValue());
+						Map<String, String> projectConfigEntries = addPrefixToConfig(specmateProjectId,
+								connectorConfigEntry.getValue());
 
 						if (!configuredProjects.contains(specmateProjectId)) {
 							configService.addUpdateConfigurationProperties(projectConfigEntries);
@@ -133,7 +134,7 @@ public class MultiConnectorService {
 	private Map<String, String> addPrefixToConfig(String specmateProjectId, Map<String, String> orignalConfig) {
 
 		String prefix = IProjectConfigService.PROJECT_PREFIX + specmateProjectId + ".connector.";
-		
+
 		Map<String, String> newConfig = new HashMap<String, String>();
 
 		for (Map.Entry<String, String> entry : orignalConfig.entrySet()) {

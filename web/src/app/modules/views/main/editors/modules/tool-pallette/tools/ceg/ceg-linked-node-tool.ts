@@ -35,8 +35,7 @@ export class CEGLinkedNodeTool extends CreateNodeToolBase<CEGLinkedNode> impleme
     ngOnInit(): void {
     }
 
-    public async perform(): Promise<CEGLinkedNode> {
-        this.compoundId = Id.uuid;
+    public async perform(compoundId = Id.uuid): Promise<CEGLinkedNode> {
         let node = await super.perform();
         let linkedNode: CEGNode = undefined;
         if (this.value !== undefined) {
@@ -54,8 +53,8 @@ export class CEGLinkedNodeTool extends CreateNodeToolBase<CEGLinkedNode> impleme
         }
         linkedNode.linksFrom.push(proxy);
         node.name = linkedNode.variable + ' ' + linkedNode.condition;
-        this.dataService.updateElement(linkedNode, true, this.compoundId);
-        this.dataService.updateElement(node, true, this.compoundId);
+        this.dataService.updateElement(linkedNode, true, compoundId);
+        this.dataService.updateElement(node, true, compoundId);
         return node;
     }
 

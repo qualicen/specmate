@@ -62,15 +62,6 @@ export class GraphTransformer {
     }
 
     private async deleteNode(node: IModelNode, compoundId: string): Promise<void> {
-        const contents: IContainer[] = await this.dataService.readContents(this.parent.url, true);
-        const connections = contents
-            .filter((element: IContainer) => this.elementProvider.isConnection(element))
-            .map((element: IContainer) => element as IModelConnection)
-            .filter((connection: IModelConnection) => connection.source.url === node.url || connection.target.url === node.url);
-        for (let i = 0; i < connections.length; i++) {
-            await this.deleteConnection(connections[i], compoundId);
-        }
-
         if (Type.is(node, CEGNode) && (node as CEGNode).linksFrom?.length > 0) {
             for (const linkingNodeProxy of (node as CEGNode).linksFrom) {
                 const linkingNode = await this.dataService.readElement(linkingNodeProxy.url, true) as CEGLinkedNode;

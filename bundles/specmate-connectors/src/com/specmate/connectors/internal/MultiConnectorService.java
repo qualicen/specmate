@@ -84,9 +84,6 @@ public class MultiConnectorService {
 
 		@Override
 		public void run() {
-			List<String> configuredProjects = Arrays.asList(
-					configService.getConfigurationPropertyArray(IProjectConfigService.KEY_PROJECT_IDS, new String[0]));
-			List<String> newProjects = new ArrayList<>();
 
 			for (IMultiConnector multiConnector : multiConnectorService.getMultiConnectors()) {
 
@@ -106,9 +103,28 @@ public class MultiConnectorService {
 						Map<String, String> projectConfigEntries = addPrefixToConfig(specmateProjectId,
 								connectorConfigEntry.getValue());
 
+						// we have to read this again each time to avoid accidentally adding identically
+						// named projects.
+						List<String> configuredProjects = Arrays.asList(configService
+								.getConfigurationPropertyArray(IProjectConfigService.KEY_PROJECT_IDS, new String[0]));
+
 						if (!configuredProjects.contains(specmateProjectId)) {
+
+							logService.log(LogService.LOG_INFO, "Adding project " + specmateProjectId);
+
+							// update config: add project config entries
 							configService.addUpdateConfigurationProperties(projectConfigEntries);
-							newProjects.add(specmateProjectId);
+
+							// update config: add project id to list of activated projects
+							List<String> allProjects = new ArrayList<>();
+							allProjects.addAll(configuredProjects);
+							allProjects.add(specmateProjectId);
+							configService.addUpdateConfigurationProperty(IProjectConfigService.KEY_PROJECT_IDS,
+									String.join(",", allProjects));
+
+							// trigger project creation.
+							// this could be removed in case ProjectConfigService would monitor the config!
+							projectConfigService.configureProjects(new String[] { specmateProjectId });
 						}
 
 					}
@@ -116,22 +132,6 @@ public class MultiConnectorService {
 					logService.log(LogService.LOG_ERROR, "Error syncing projects for " + multiConnector.getId(), e);
 				}
 
-			}
-
-			if (newProjects.size() > 0) {
-				try {
-
-					List<String> allProjects = new ArrayList<>();
-					allProjects.addAll(configuredProjects);
-					allProjects.addAll(newProjects);
-					configService.addUpdateConfigurationProperty(IProjectConfigService.KEY_PROJECT_IDS,
-							String.join(",", allProjects));
-
-					projectConfigService.configureProjects(newProjects.toArray(new String[0]));
-
-				} catch (SpecmateException e) {
-					logService.log(LogService.LOG_ERROR, "Error adding generated projects ", e);
-				}
 			}
 
 		}

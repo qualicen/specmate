@@ -183,9 +183,9 @@ public class ProjectConfigService implements IProjectConfigService {
 		Hashtable<String, Object> multiProjectConfig = new Hashtable<String, Object>();
 		multiProjectConfig.put(KEY_PROJECT_ID, multiProjectID);
 
-		// Set the target of the 'connector' reference in the Project.
-		// This ensures that the right connector will be bound to the project.
-		multiProjectConfig.put("connector.target", multiConnectorFilter);
+		// Set the target of the 'multiconnector' reference in the Project.
+		// This ensures that the right multiconnector will be bound to the project.
+		multiProjectConfig.put("multiconnector.target", multiConnectorFilter);
 		
 		// multiproject.<projectname>.projectnamepattern
 		String projectNamePattern = configService.getConfigurationProperty(IProjectConfigService.MULTIPROJECT_PREFIX + multiProjectID + "." + IProjectConfigService.KEY_MULTIPROJECT_PROJECTNAMEPATTERN);

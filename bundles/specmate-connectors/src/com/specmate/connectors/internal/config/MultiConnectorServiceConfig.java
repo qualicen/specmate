@@ -13,6 +13,9 @@ import com.specmate.common.OSGiUtil;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.config.api.IConfigService;
 
+/**
+ * Reads config and activates multi projects
+ */
 @Component(immediate = true)
 public class MultiConnectorServiceConfig {
 

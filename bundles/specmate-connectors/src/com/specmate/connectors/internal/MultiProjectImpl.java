@@ -15,6 +15,10 @@ import com.specmate.connectors.api.IProjectConfigService;
 import com.specmate.connectors.config.ProjectConfigService;
 import com.specmate.model.administration.ErrorCode;
 
+/**
+ * The default implementation for multi projects.
+ *
+ */
 @Component(immediate = true, service = IMultiProject.class, configurationPid = ProjectConfigService.MULTIPROJECT_CONFIG_FACTORY_PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
 public class MultiProjectImpl implements IMultiProject {
 
@@ -27,6 +31,7 @@ public class MultiProjectImpl implements IMultiProject {
 	/** The pattern to create the name of the generated projects */
 	private String projectNamePattern;
 
+	/** The placeholder for project name patterns **/
 	private static final String PATTERN_NAME = "%project%";
 
 	@Activate

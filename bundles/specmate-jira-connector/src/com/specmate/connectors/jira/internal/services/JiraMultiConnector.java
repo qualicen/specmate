@@ -63,12 +63,11 @@ public class JiraMultiConnector implements IMultiConnector {
 	 * Crates a list of all template properties (without prefix).
 	 */
 	private static Map<String, String> getTemplateProperties(Map<String, Object> properties) {
+		int tmplPrefixLenght = JiraConfigConstants.KEY_JIRA_MULTIPROJECT_TEMPLATE_PREFIX.length();
 		Map<String, String> templateProperties = new HashMap<>();
 		for (String propertyKey : properties.keySet()) {
 			if (propertyKey.startsWith(JiraConfigConstants.KEY_JIRA_MULTIPROJECT_TEMPLATE_PREFIX)) {
-				templateProperties.put(
-						propertyKey.substring(JiraConfigConstants.KEY_JIRA_MULTIPROJECT_TEMPLATE_PREFIX.length()),
-						(String) properties.get(propertyKey));
+				templateProperties.put(propertyKey.substring(tmplPrefixLenght), (String) properties.get(propertyKey));
 
 			}
 		}

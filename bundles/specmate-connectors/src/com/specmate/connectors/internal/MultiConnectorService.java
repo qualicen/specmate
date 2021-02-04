@@ -9,6 +9,7 @@ import java.util.Map;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
+import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
@@ -17,7 +18,6 @@ import org.osgi.service.log.LogService;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.config.api.IConfigService;
 import com.specmate.connectors.api.IMultiConnector;
-import com.specmate.connectors.api.IMultiProject;
 import com.specmate.connectors.api.IProjectConfigService;
 import com.specmate.connectors.internal.config.MultiConnectorServiceConfig;
 import com.specmate.connectors.internal.config.PollKeys;
@@ -25,6 +25,10 @@ import com.specmate.scheduler.Scheduler;
 import com.specmate.scheduler.SchedulerIteratorFactory;
 import com.specmate.scheduler.SchedulerTask;
 
+/**
+ * This service controls all existing multi connectors. Furthermore, it is
+ * responsible for starting the sync task for multi connectors.
+ */
 @Component(immediate = true, configurationPid = MultiConnectorServiceConfig.PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
 public class MultiConnectorService {
 
@@ -33,6 +37,7 @@ public class MultiConnectorService {
 	private LogService logService;
 	private IConfigService configService;
 	private IProjectConfigService projectConfigService;
+	private Scheduler scheduler;
 
 	@Activate
 	public void activate(Map<String, Object> properties) throws SpecmateException {
@@ -45,10 +50,13 @@ public class MultiConnectorService {
 			return;
 		}
 
-		MultiConnectorTask task = new MultiConnectorTask(this, logService);
-
 		Scheduler scheduler = new Scheduler();
-		scheduler.schedule(task, SchedulerIteratorFactory.create(schedule));
+		scheduler.schedule(new MultiConnectorTask(this, logService), SchedulerIteratorFactory.create(schedule));
+	}
+
+	@Deactivate
+	public void deactivate() {
+		scheduler.cancel();
 	}
 
 	@Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
@@ -76,7 +84,6 @@ public class MultiConnectorService {
 
 		@Override
 		public void run() {
-
 			List<String> configuredProjects = Arrays.asList(
 					configService.getConfigurationPropertyArray(IProjectConfigService.KEY_PROJECT_IDS, new String[0]));
 			List<String> newProjects = new ArrayList<>();

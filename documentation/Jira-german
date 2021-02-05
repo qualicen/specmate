@@ -1,0 +1,44 @@
+# Specmate als Jira-Plugin
+
+## Konfiguration
+
+DAS MÜSSTE JMD. ANDERES SCHREIBEN!
+
+## Nutzung von Specmate innerhalb von Jira-Projekten
+
+Wenn Sie Specmate für Ihr Jira-Projekt verwenden wollen,
+loggen Sie sich bei Jira ein. Unten rechts auf Ihrer Projekt-Seite
+sehen Sie Specmate und ein Dropdown-Menü. Wenn Sie auf dieses
+klicken, erscheint ein Link zur Anmeldung bei Specmate via Jira.
+
+![](Images_ger/Jira-Projektseite.png "Jira-Projektseite")
+
+Melden Sie sich bei Specmate mit Ihren Zugangsdaten für Jira an
+und wählen Sie beim Dropdown-Menü "Projekt" Ihr Jira-Projekt aus,
+für das Specmate verwendet wird.
+
+![](Images_ger/Anmeldungspecmate.png "Anmeldung Specmate")
+
+Nachdem Sie sich bei Specmate angemeldet haben, sehen Sie diese Ansicht:
+
+![](Images_ger/Willkommen_neu.png "Willkommen_neu")
+
+Auf der linken Seite können Sie im *Projektexplorer* auf Ihre in JIRA angelegten Projekte zugreifen. [XXX?]
+
+Wenn Sie Specmate von Jira aus verwenden, können Sie nicht nur
+Specmate nutzen, um Ihr Projekt zu verbessern, sondern auch Ihre
+Anforderungen direkt aus Jira importieren. Nachdem Sie sich bei
+Specmate über Jira angemeldet haben, sehen Sie auf der linken
+Seite Ihre Anforderungen aus Ihrem Jira-Projekt.
+
+Nachdem Sie ein Modell in Specmate erstellt haben (Genaueres
+dazu erfahren Sie im Verlauf dieser Anleitung!), können Sie in
+dem von Ihnen geöffneten Jira-Issue die erstellten Modelle inkl.
+kleiner Vorschau-Bilder im Abschnitt "Specmate" sehen. Hier werden
+Ihnen außerdem bereits angelegte Testspezifikationen angezeigt
+und auch wieviele Testfälle diese je enthalten:
+
+![](Images_ger/Jira-Anzeige-Minimodel-und-Testspezifikation.png "Jira-Anzeige-Minimodel-und-Testspezifikation")
+
+Mittels der zwei grauen Buttons, können Sie direkt von Jira aus
+ein neues CEG- oder Prozessmodell anlegen.

@@ -1,6 +1,72 @@
 ---
 title: SpecmateDoc
 ---
+## Contents
+
+- [Installation, configuration and commissioning](#Installation,configurationandcommissioning)
+  - [Installation](##Installation)
+  - [Configuration](##Configuration)
+  - [How to start](##Howtostart)
+  - [Login](##Login)
+  - [Login via JIRA](##LoginviaJIRA)
+- [Overview usage and methodology](#Overviewusageandmethodology)
+	- [User interface](##Userinterface)
+		- [Project view](###Projectview)
+    - [Library view](###Libraryview)
+    - [Search](###Search)
+- [Create model](#Createmodel)
+  - [How do you decide which model to create?](##Howdoyoudecidewhichmodeltocreate?)
+  - [Basic editor functions for CEGs and process models](##BasiceditorfunctionsforCEGsandprocessmodels)
+    - [Editor functions in the CEG Editor](###EditorfunctionsintheCEGEditor)
+        - [1. Node](####1.Node)
+        - [2. Auto-Layout](####2.Auto-Layout)
+        - [3. Show and hide auxiliary lines (grid)](####3.Showandhideauxiliarylines(grid))
+        - [4. Maximize and enlarge modeling area](####4.Maximizeandenlargemodelingarea)
+        - [5. Create connections](####5.Createconnections)
+        - [6. Marking](####6.Marking)
+        - [7. Error message](####7.Errormessage)
+        - [8. deleted](####8.Delete)
+        - [9. Undo](####9.Undo)
+      - [Properties](###Properties)
+      - [Links & Actions](###Links&Actions)
+      - [The process model editor and its functions](###Theprocessmodeleditoranditsfunctions)
+        - [Traces](####Traces)
+      - [Copy and Paste](###CopyandPaste)
+        - [Copy from the editors](####Copyfromtheeditors)
+        - [Copying from the project or library view](####Copyingfromtheprojectorlibraryview)
+  -[Advanced functions and explanations of the cause-effect diagram](##Advancedfunctionsandexplanationsofthecauseeffectdiagram)
+      - [Connection](##Connection)
+        - [Negate connections](####Negateconnections)
+        - [Description](####Description)
+      - [Node](###Node)
+        - [Variable](####Variable)
+        - [Condition](####Condition)
+        - [Type (And/Or)](####Type(And/Or))
+          - [Excursus: Exclusive Or](#####Excursus:ExclusiveOr)
+        - [Validate](####Validate)
+  - [Equivalence class analysis](##Equivalenceclassanalysis)
+      - [Motivation and goal](###Motivationandgoal)
+        - [Example 1](####Example1)
+        - [Example 2](####Example2)
+  - [Process Diagram](##ProcessDiagram)
+      - [Start/End](###Start/End)
+      - [Step](###Step)
+      - [Decision](###Decision)
+      - [Connections in process models](###Connectionsinprocessmodels)
+      - [Validate in process models](###Validateinprocessmodels)
+- [Error messages](#Errormessages)
+    - [1st process models](##1stprocessmodels)
+    - [2nd CEG models](##2ndCEGmodels)
+- [Test specification](#Testspecification)
+    - [Test specification from CEG models](##TestspecificationfromCEGmodels)
+      - [Rules for creating test specifications](###Rulesforcreatingtestspecifications)
+    - [Test specification from process models](##Testspecificationfromprocessmodels)
+- [Test Procedure](#TestProcedure)
+- [Export of test definitions and procedures](#Exportoftestdefinitionsandprocedures)
+    - [Export of test definitions](##Exportoftesdefinitions)
+    - [Export of test procedures](##Exportoftestprocedures)
+- [Library](#Library)
+
 
 # Installation, configuration and commissioning
 
@@ -214,7 +280,7 @@ The process model editor works similarly to the CEG editor: Instead of selecting
 
 As in the CEG editor, connections are created by moving the cursor over the respective node (this also applies to the start, end and the decision nodes); an arrow with a grey border appears in the node, which can be dragged to any node by clicking the mouse button as a connection. The only difference is that the connections that originate from a decision node differ in that a condition must be assigned to them in the right-hand properties column. In contrast to the CEG editor, the nodes can only be named in the properties column and not directly by clicking on a node. For further explanation, see the section [Connections in the process model](###Connections-in-the-process-model).
 
-### Traces
+#### Traces
 
 The *Traces* column shows all requests associated with the selected step. Traces are only displayed in process diagrams. You can also add requirements by searching for them in the search field. Both the ID and the name of the requirement can be searched. The displayed requirements can then be added to the selected step by clicking on them. Requirements that have already been added can be deleted by clicking on the adjacent red recycle bin icon.
 
@@ -250,14 +316,29 @@ After opening the cause-and-effect editor, you will see a modeling area in the m
 
 ### Connection
 
+A connection describes a relationship between the two nodes it connects. The start node can be understood as a cause and the end node as an effect.
 To connect two nodes, proceed as follows:
 Move your cursor to the cause node you have already created: A gray bordered arrow appears inside your node. Now you can connect the node to another node that should represent the effect by dragging the connection from the first to the second node while holding down the mouse button.
+If you have selected a connection in the editor, then you have the possibility on the right side to change the *properties* of the connection.
 
-### Negate connections
+The following properties can be edited:
+
+#### Negate connections
 
 When a connection is created and selected, you also have the option to [negate](#negate) the connection: To do this, simply click on the connection you want to negate and check "negate" in the properties column on the right side. Alternatively, you can right-click on the connection (Windows) or hold down the control key when clicking on the connection (OS): A pop-up appears where you can select the options "Delete" or "Negate". The connection then appears in the editor as a dotted line (arrow) whereas a normal connection is shown as an arrow with a solid line.
 
+This means that the effect occurs,
+if the cause is not present, and the effect will not occur if the cause is present.
+
 If you want to check whether your CEG model is correct, click on the validate button and see if anything is displayed in the *properties* column under the heading *Errors & Warnings*. For example, an unnamed variable (node) is displayed as an error. For example, an unnamed node is displayed as an error. You can learn more about validation below or [here](####Validate).
+
+#### Description
+
+You can add a *description* to any connection between two nodes. This can contribute to your own understanding or that of a colleague. You can also change the type of node in the *properties* column, as explained above.
+
+![](Images_eng/Nodeproperties.png "Node properties")
+
+Make sure that the node or connection whose properties you want to edit has been clicked before. You can see whether this is the case by the green-dashed border, as the previous illustration shows. If no individual component (node or connection) in the model is clicked, the properties column describes the properties of the entire model.
 
 ### Node
 
@@ -328,25 +409,6 @@ In Specmate the Exclusive Or can be easily constructed: For example, if you have
 
 Thus the statement is rewritten to "If A and not B, or B and not A, then C".
 
-### Connections
-
-A connection describes a relationship between the two nodes it connects. The start node can be understood as a cause and the end node as an effect.
-If you have selected a connection in the editor, then you have the possibility on the right side to change the *properties* of the connection.
-
-The following properties can be edited:
-
-#### Negate
-
-*Negate* negates the connection between two nodes. This means that the effect occurs,
-if the cause is not present, and the effect will not occur if the cause is present.
-
-#### Description
-
-You can add a *description* to any connection between two nodes. This can contribute to your own understanding or that of a colleague. You can also change the type of node in the *properties* column, as explained above.
-
-![](Images_eng/Nodeproperties.png "Node properties")
-
-Make sure that the node or connection whose properties you want to edit has been clicked before. You can see whether this is the case by the green-dashed border, as the previous illustration shows. If no individual component (node or connection) in the model is clicked, the properties column describes the properties of the entire model.
 
 #### Validate
 
@@ -454,7 +516,7 @@ A list of various possible errors can be found in the following section.
 
 For all error messages that are visualized by a triangular framed exclamation mark in the model editor, the following applies: If you move your cursor over the symbol, the reason for the error message is displayed in a small window.
 
-### 1st process models
+## 1st process models
 
 If you receive an error message in the process model editor, check whether one of the following scenarios applies to you:
 
@@ -474,7 +536,7 @@ If you receive an error message in the process model editor, check whether one o
 
 If one or more of these scenarios apply to your process model, correct the error source and press the validate button.
 
-### 2nd CEG models
+## 2nd CEG models
 
 If you receive an error message in the CEG model editor, check whether one of the following scenarios applies to you:
 

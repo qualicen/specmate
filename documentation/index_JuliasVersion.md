@@ -1,6 +1,72 @@
 ---
 title: SpecmateDoc
 ---
+## Inhalt
+
+- [Installation, Konfiguration und Inbetriebnahme](#Installation,KonfigurationundInbetriebnahme)
+	- [Installation](##Installation)
+	- [Konfiguration](##Konfiguration)
+	- [Start von Specmate](##StartvonSpecmate)
+	- [Login](##Login)
+	- [Login via JIRA](##LoginviaJIRA)
+- [Überblick Verwendung und Methodik](#ÜberblickVerwendungundMethodik)
+	- [Bedienoberfläche](##Bedienoberfläche)
+		- [Projektansicht](###Projektansicht)
+		- [Bibliotheksansicht](###Bibliotheksansicht)
+		- [Suche](###Suche)
+- [Modell erstellen](#Modellerstellen)
+	- [Wie entscheiden Sie, welches Modell zu erstellen ist?](##WieentscheidenSie,welchesModellzuerstellenist?)
+	- [Grundlegende Editorfunktionen für CEGs und Prozessmodelle](GrundlegendeEditorfunktionenfürCEGsundProzessmodelle)
+		- [Editor-Funktionen im CEG-Editor](###EditorFunktionenimCEG-Editor)
+			- [1. Knoten](####1.Knoten)
+			- [2. Auto-Layout](####2.Auto-Layout)
+			- [3. Hilfslininen (Gitter) ein- und ausblenden](####3.Hilfslininen(Gitter)ein-undausblenden)
+			- [4. Modellierungsbereich maximieren und vergrößern](####4.Modellierungsbereichmaximierenundvergrößern)
+			- [5. Verbindungen erstellen](####5.Verbindungenerstellen)
+			- [6. Markieren](####6.Markieren)
+			- [7. Fehlermeldungen und Warnungen](####7.FehlermeldungenundWarnungen)
+			- [8. Löschen](####8.Löschen)
+			- [9. Rückgängig machen](####9.Rückgängigmachen)
+		- [Eigenschaften](###Eigenschaften)
+		- [Links & Actions](###Links&Actions)
+		- [Editor-Funktionen im Prozessmodell-Editor](###EditorFunktionenimProzessmodell-Editor)
+			- [Traces](####Traces)
+			- [Copy and Paste](###CopyandPaste)
+		- [Kopieren aus den Editoren](####KopierenausdenEditoren)
+		- [Kopieren aus der Projekt- oder Bibliotheksansicht](####KopierenausderProjekt-oderBibliotheksansicht)
+	-[Erweiterte Funktionen und Erläuterungen zum Ursache-Wirkungs-Diagramm](##ErweiterteFunktionenundErläuterungenzumUrsache-Wirkungs-Diagramm)
+	-[Verbindung](###Verbindung)
+	 - [Verbindungen negieren](####Verbindungennegieren)
+		- [Beschreibung](####Beschreibung)
+	- [Knoten: Arten und Bedingungen](###Knoten:ArtenundBedingungen)
+	- [Variable](###Variable)
+	- [Bedingung](###Bedingung)
+	- [Typ (And/Or)](###Typ(And/Or))
+		- [Exkurs: Exklusives Oder](####Exkurs:ExklusivesOder)
+	- [Validieren](###Validieren)
+- [Äquivalenklassenanalyse](##Äquivalenzklassenanalyse)
+	- [Motivation und Ziel](###MotivationundZiel)
+		- [Beispiel 1](####Beispiel1)
+		- [Beispiel 2](####Beispiel2)
+- [Erweiterte Funktionen und Erläuterungen zum Prozessmodell](##ErweiterteFunktionenundErläuterungenzumProzessmodell)
+	- [Start/Ende](###Start/Ende)
+	- [Schritt](###Schritt)
+	- [Entscheidung](###Entscheidung)
+	- [Verbindungen im Prozessmodell](###VerbindungenimProzessmodell)
+	- [Validieren im Prozessmodell](###alidierenimProzessmodell)
+- [Fehlermeldungen](#Fehlermeldungen)
+	- [Fehlermeldungen bei Prozessmodelllen](##FehlermeldungenbeiProzessmodellen)
+	- [Fehlermeldungen bei CEG-Modellen](##FehlermeldungenbeiCEG-Modellen)
+- [Testspezifikation](#Testspezifikation)
+	- [Testspezifikation aus CEG-Modellen](##TestspezifikationausCEG-Modellen)
+		- [Regeln zur Erzeugung von Testspezifikationen](###RegelnzurErzeugungvonTestspezifikationen)
+	- [Testspezifikation aus Prozessmodellen](##TestspezifikationausProzessmodellen)
+- [Testprozedur](#Testprozedur)
+	- [Export von Testspezifikationen und -prozeduren](#ExportvonTestspezifikationenund-prozeduren)
+		- [Export von Testspezifikationen](##ExportvonTestspezifikationen)
+		- [Export von Testprozeduren](##ExportvonTestprozeduren)
+- [Bibliothek](#Bibliothek)
+
 
 # Installation, Konfiguration und Inbetriebnahme
 
@@ -214,7 +280,7 @@ Der Prozessmodell-Editor funktioniert ähnlich wie der CEG-Editor: Anstatt dass 
 
 Das Erstellen von Verbindungen erfolgt wie im CEG-Editor dadurch, dass der Cursor über den jeweiligen Knoten (dies gilt auch für den Start- End- und Entscheidungsknoten) bewegt wird; es erscheint ein grau umrandeter Pfeil im Knoten, der durch Klicken der Maustaste als Verbindung zu einem beliebigen Knoten gezogen werden kann. Lediglich die Verbindungen, die von einem Entscheidungsknoten ausgehen, unterscheiden sich dahingehend, dass ihnen eine Bedingung in der rechten Eigenschaftsspalte zugeordnet werden muss. Im Gegensatz zum CEG-Editor können die Knoten nur in der Eigenschaftsspalte und nicht direkt durch das Anklicken eines Knotens benannt werden. Weitere Erläuterungen finden Sie im Abschnitt [Verbindungen im Prozessmodell](###Verbindungen-im-Prozessmodell).
 
-### Traces
+#### Traces
 
 Die Spalte *Traces* zeigt alle Anforderungen, die mit dem ausgewählten Schritt verbunden sind. Traces werden nur in Prozessdiagrammen angezeigt. Darüber hinaus können Sie Anforderungen hinzufügen, indem Sie im Suchfeld nach ihnen suchen. Es kann sowohl nach der ID als auch nach dem Namen der Anforderung gesucht werden. Die angezeigten Anforderungen können dann durch Anklicken zu dem ausgewählten Schritt hinzugefügt werden. Bereits hinzugefügte Anforderungen können durch Anklicken des nebenstehenden roten Papierkorb-Symbols gelöscht werden.
 
@@ -253,11 +319,24 @@ Nach dem Öffnen des Ursache-Wirkungs-Editors wird Ihnen in der Mitte ein Modell
 Um zwei Knoten zu verbinden, gehen Sie wie folgt vor:
 Bewegen Sie Ihren Cursor auf den von Ihnen bereits erstellten Knoten, der die Ursache darstellen soll: Es erscheint grau umrandeter Pfeil innerhalb Ihres Knotens. Nun können Sie den Knoten mit einem anderen Knoten, der die Wirkung darstellen soll, verbinden, indem Sie mit gedrückter Maustaste die Verbindung vom ersten zum zweiten Knoten ziehen.
 
-### Verbindungen negieren
+Die folgenden Eigenschaften können bearbeitet werden:
+
+####  Verbindungen negieren
+
+*Negieren* negiert die Verbindung zwischen zwei Knoten. Das bedeutet, dass die Wirkung auftritt,
+wenn die Ursache nicht vorhanden ist, und die Wirkung bleibt aus, wenn die Ursache vorhanden ist.
 
 Wenn eine Verbindung erstellt und ausgewählt wird, haben Sie außerdem die Möglichkeit die Verbindung zu [negieren](#negieren): Dafür müssen Sie lediglich die zu negierende Verbindung anklicken und in der Eigenschaftsspalte auf der rechten Seite ein Häkchen bei "Negate" setzen. Oder sie klicken mit der rechten Maustaste auf die Verbindung (Windows) bzw. Sie halten die Control-Taste gedrückt, wenn Sie auf die Verbindung klicken (Mac): Es erscheint ein Pop-Up, in dem Sie die Optionen "Löschen" oder "Negieren" auswählen können. Die Verbindung erscheint danach im Editor als gestrichelte Linie (Pfeil), wohingegen eine normale Verbindung als Pfeil mit durchgezogener Linie dargestellt wird.
 
 Wenn Sie überprüfen wollen, ob Ihr CEG-Modell korrekt ist, klicken Sie oben links auf den Validieren-Button und schauen Sie, ob in der Spalte *Eigenschaften* unter der Überschrift *Fehler & Warnungen* etwas angezeigt wird. Ein unbenannter Knoten wird beispielsweise als Fehler angezeigt. Näheres zum Thema Validieren erfahren Sie weiter unten oder [hier](####Validieren).
+
+#### Beschreibung
+
+Zu jeder Verbindung zwischen zwei Knoten können Sie eine *Beschreibung* hinzufügen. Dies kann zum eigenen Verständnis oder dem  einer Kollegin oder eines Kollegen beitragen. Außerdem können Sie – wie bereits oben erläutert – den Typ des Knotens in der Spalte *Eigenschaften* ändern.
+
+![](Images_ger/Knoteneigenschaften.png "Knoteneigenschaften")
+
+Achten Sie darauf, dass der Knoten oder die Verbindung, deren Eigenschaften Sie bearbeiten wollen, vorher angeklickt wurde. Ob dies der Fall ist, erkennen Sie auch an der grüngestrichelten Umrandung, wie die vorausgegangene Abbildung illustriert. Ist keine einzelne Komponente (Knoten oder Verbindung) im Modell angeklickt, werden in der Eigenschaftsspalte die Eigenschaften des gesamten Modells beschrieben.
 
 ### Knoten: Arten und Bedingungen
 
@@ -284,11 +363,11 @@ In der Formulierung der Bedingungen ist  die Verwendung der Zeichen jedoch zulä
 
 Haben Sie im Editor einen Knoten ausgewählt, dann haben Sie auf der rechten Seite die Möglichkeit die *Eigenschaften* des Knotens zu ändern. Die folgenden Eigenschaften können bearbeitet werden:
 
-#### Variable
+### Variable
 
 Hier können Sie den Namen der Variable ändern, das heißt den Namen der Ursache oder der Wirkung.
 
-#### Bedingung
+### Bedingung
 
 Die Bedingung, die die Variable annehmen kann, ist standardmäßig auf *is present* gesetzt.
 Um die Beschreibung des Zustandes zu ändern, wählen Sie bitte den entsprechenden Knoten aus und schreiben die gewünschte Bedingung in das Feld *Bedingung*.
@@ -301,7 +380,7 @@ Variablennamen haben und bei denen die Bedingung mit = gesetzt ist, jeweils imme
 Eine bewährte Vorgehensweise ist, die Variablen immer als positive Aussagen zu deklarieren
 (z.B. *Türen zugesperrt: wahr* statt *Türen nicht zugesperrt: nicht wahr*).
 
-#### Typ (And/Or)
+### Typ (And/Or)
 
 Wenn ein Knoten mehrere eingehende Verbindungen hat, können Sie den *Typ* des Knotens ändern. Wählen Sie dazu den entsprechenden Knoten aus und ändern Sie auf der rechten Seite unter *Eigenschaften* den *Typ* des Knotens. Abhängig vom Typ des Knotens können eingehende Verbindungen als ODER-Verknüpfungen oder UND-Verknüpfungen definiert werden. Wenn der Typ des Knotens auf AND gesetzt ist, müssen alle Vorgängerknoten
 mit einer Verbindung zu dem jeweiligen Knoten bereits erfüllt sein,
@@ -318,7 +397,7 @@ Beispiel für eine ODER-Beziehung:
 
 ![](Images_ger/OR-Bedingung.PNG "ExampleOr")
 
-##### Exkurs: Exklusives Oder
+#### Exkurs: Exklusives Oder
 
 Ein *Exklusives Oder*, oder *XOR*, sagt aus, dass *genau eine* Ursache wahr sein muss, um eine Wirkung zu erzielen. Im Deutschen erkennt man ein solches Exklusives Oder an der Formulierung "entweder... oder... (aber nicht beides)".
 
@@ -328,18 +407,6 @@ In Specmate kann das Exklusive Oder leicht konstruiert werden: Hat man zum Beisp
 
 Die Aussage wird also umgeschrieben zu "Wenn A und nicht B, oder B und nicht A, dann C".
 
-### Verbindungen
-
-Eine Verbindung beschreibt einen Zusammenhang zwischen den beiden Knoten, die sie verbindet. Der Startknoten kann als Ursache und der Endknoten als Wirkung aufgefasst werden.
-Haben Sie im Editor eine Verbindung ausgewählt, dann haben Sie auf der rechten Seite die Möglichkeit, die *Eigenschaften* der Verbindung zu ändern.
-
-Die folgenden Eigenschaften können bearbeitet werden:
-
-#### Negieren
-
-*Negieren* negiert die Verbindung zwischen zwei Knoten. Das bedeutet, dass die Wirkung auftritt,
-wenn die Ursache nicht vorhanden ist, und die Wirkung bleibt aus, wenn die Ursache vorhanden ist.
-
 #### Beschreibung
 
 Zu jeder Verbindung zwischen zwei Knoten können Sie eine *Beschreibung* hinzufügen. Dies kann zum eigenen Verständnis oder dem  einer Kollegin oder eines Kollegen beitragen. Außerdem können Sie – wie bereits oben erläutert – den Typ des Knotens in der Spalte *Eigenschaften* ändern.
@@ -348,7 +415,7 @@ Zu jeder Verbindung zwischen zwei Knoten können Sie eine *Beschreibung* hinzuf�
 
 Achten Sie darauf, dass der Knoten oder die Verbindung, deren Eigenschaften Sie bearbeiten wollen, vorher angeklickt wurde. Ob dies der Fall ist, erkennen Sie auch an der grüngestrichelten Umrandung, wie die vorausgegangene Abbildung illustriert. Ist keine einzelne Komponente (Knoten oder Verbindung) im Modell angeklickt, werden in der Eigenschaftsspalte die Eigenschaften des gesamten Modells beschrieben.
 
-#### Validieren
+### Validieren
 
 Wenn Sie ein CEG-Modell oder Prozessmodell anlegen oder angelegt haben, können Sie oben links im Bildschirm neben dem Specmate-Logo eine weitere Schaltfläche erkennen: den *Validieren*-Button. Wenn Sie auf diese Schaltfläche klicken, wird die Prüfung Ihres Modells aktualisiert. Ist ihr Modell korrekt, wird Ihnen in dem Abschnitt *Eigenschaften* unter der Überschrift *Fehler und Warnungen* in grüner Schrift die Meldung "Keine Warnungen." angezeigt. Ist Ihr Modell fehlerhaft, werden hier die Fehler aufgeführt. In diesem Fall müssen Sie den Fehler beheben und erneut auf den *Validieren*-Button klicken. Das Anklicken des *Validieren*-Buttons ist außerdem nötig, um eine spätere Testgenerierung überhaupt möglich zu machen.
 
@@ -454,7 +521,7 @@ Eine Auflistung verschiedener möglicher Fehler finden Sie im nachfolgenden Absc
 
 Im Folgenden finden Sie die entsprechenden Ursachen, wenn Ihnen Specmate eine Fehlermeldung anzeigt. Für alle Fehlermeldungen, die durch ein dreieckig gerahmtes Ausrufezeichen im Modell-Editor visualisiert werden, gilt: Bewegen Sie Ihren Cursor über das Symbol, wird Ihnen in einem kleinen Fenster der Grund für die Fehlermeldung angezeigt.
 
-### 1. Prozessmodelle
+## 1. Fehlermeldungen bei Prozessmodellen
 
 Wird Ihnen im Prozessmodell-Editor eine Fehlermeldung angezeigt, überprüfen Sie, ob eines der folgenden Szenarien für Sie zutrifft:
 
@@ -474,7 +541,7 @@ Wird Ihnen im Prozessmodell-Editor eine Fehlermeldung angezeigt, überprüfen Si
 
 Trifft eines oder mehrere dieser Szenarien für Ihr Prozessmodell zu, beheben Sie die Fehlerquelle und drücken Sie auf den Validieren-Button.
 
-### 2. CEG-Modelle
+## 2. Fehlermeldungen bei CEG-Modelle
 
 Wird Ihnen im CEG-Modell-Editor eine Fehlermeldung angezeigt, überprüfen Sie, ob eines der folgenden Szenarien für Sie zutrifft:
 

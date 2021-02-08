@@ -3,17 +3,11 @@ import { TranslateService } from '@ngx-translate/core';
 import { mxgraph } from 'mxgraph'; // Typings only - no code!
 import { Subscription } from 'rxjs';
 import { CEGModel } from 'src/app/model/CEGModel';
-import { CEGNode } from 'src/app/model/CEGNode';
 import { Process } from 'src/app/model/Process';
 import { ProcessConnection } from 'src/app/model/ProcessConnection';
-import { ProcessDecision } from 'src/app/model/ProcessDecision';
-import { ProcessEnd } from 'src/app/model/ProcessEnd';
-import { ProcessStart } from 'src/app/model/ProcessStart';
-import { ProcessStep } from 'src/app/model/ProcessStep';
 import { UndoService } from 'src/app/modules/actions/modules/common-controls/services/undo.service';
 import { NavigatorService } from 'src/app/modules/navigation/modules/navigator/services/navigator.service';
 import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
-import { Monitorable } from 'src/app/modules/notification/modules/operation-monitor/base/monitorable';
 import { IContainer } from '../../../../../../../model/IContainer';
 import { IModelConnection } from '../../../../../../../model/IModelConnection';
 import { IModelNode } from '../../../../../../../model/IModelNode';
@@ -299,14 +293,14 @@ export class GraphicalEditor implements OnDestroy {
         });
 
         // Set the focus to the container if a node is selected
-        this.graph.addListener(mx.mxEvent.CLICK, (sender: any, evt: any) => {
+        this.graph.addListener(mx.mxEvent.CLICK, () => {
             if (!this.graph.isEditing()) {
                 this.graph.container.setAttribute('tabindex', '-1');
                 this.graph.container.focus();
             }
         });
 
-        this.graph.getSelectionModel().addListener(mx.mxEvent.CHANGE, async (args: any) => {
+        this.graph.getSelectionModel().addListener(mx.mxEvent.CHANGE, async () => {
             let selectionCount = this.graph.getSelectionCount();
             this.graph.getModel().beginUpdate();
 
@@ -400,7 +394,7 @@ export class GraphicalEditor implements OnDestroy {
     }
 
     private makeVertexTool(tool: ToolBase) {
-        const onDrop = (graph: mxgraph.mxGraph, evt: MouseEvent, cell: mxgraph.mxCell) => {
+        const onDrop = (graph: mxgraph.mxGraph, evt: MouseEvent) => {
             this.graph.stopEditing(false);
             const initialData: ShapeData = this.shapeProvider.getInitialData(tool.style);
             const coords = this.graph.getPointForEvent(evt);
@@ -430,7 +424,7 @@ export class GraphicalEditor implements OnDestroy {
     }
 
     private makeClickTool(tool: ToolBase) {
-        document.getElementById(tool.elementId).addEventListener('click', (evt) => tool.perform(), false);
+        document.getElementById(tool.elementId).addEventListener('click', () => tool.perform(), false);
     }
 
     private initUndoManager(): void {

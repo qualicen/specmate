@@ -66,10 +66,8 @@ export class GraphValidator {
                     StyleChanger.addStyle(vertex, graph, nodeType);
                 }
             }
-            if (i === vertices.length - 1) {
-                this.graphicalEditorService.end(GraphicalEditorService.OP_INIT);
-            }
         }
+        this.graphicalEditorService.end(GraphicalEditorService.OP_VALIDATION);
     }
 
     private createOverlay(graph: mxgraph.mxGraph, element: IContainer, message: string) {

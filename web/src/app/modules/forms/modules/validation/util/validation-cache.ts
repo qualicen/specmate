@@ -6,6 +6,7 @@ import { ValidationErrorSeverity } from '../../../../../validation/validation-er
 
 
 export type ValidationPair = { element: IContainer, message: string, severity: ValidationErrorSeverity };
+export type ValidationGroup = { element: IContainer, messages: string[] };
 
 export class ValidationCache {
 
@@ -23,6 +24,20 @@ export class ValidationCache {
     private emptyValidatatonResults: ValidationPair[] = [];
     public getValidationResults(url: string): ValidationPair[] {
         return this.dataCache[url] || this.emptyValidatatonResults;
+    }
+
+    public getValidationResultsGrouped(url: string): ValidationGroup[] {
+        let validationResult = this.getValidationResults(url);
+        let result: ValidationGroup[] = [];
+        for (const pair of validationResult) {
+            let resultItem = result.find(element => element.element === pair.element);
+            if (resultItem !== undefined) {
+                resultItem.messages.push(pair.message);
+            } else {
+                result.push({ element: pair.element, messages: [pair.message] });
+            }
+        }
+        return result;
     }
 
     public addValidationResultsToCache(validationResults: ValidationResult[]): void {

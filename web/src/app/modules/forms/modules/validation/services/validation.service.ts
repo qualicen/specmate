@@ -106,7 +106,7 @@ export class ValidationService extends Monitorable {
             this.validationCache.addValidationResultsToCache(elementResults);
             this.isValidating = false;
             this.end();
-        }, 1);
+        }, 0);
     }
 
     private getValidationResultsFor(element: IContainer, contents: IContainer[]): ValidationResult[] {

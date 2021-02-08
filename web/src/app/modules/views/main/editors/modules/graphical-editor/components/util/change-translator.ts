@@ -94,6 +94,9 @@ export class ChangeTranslator {
     }
 
     private async translateStyleChange(change: mxgraph.mxStyleChange): Promise<void> {
+        if (change.cell.isVertex()) {
+            return;
+        }
         const element = await this.getElement(change.cell.id);
         if (element === undefined) {
             return;
@@ -355,7 +358,6 @@ export class ChangeTranslator {
 
     private async translateEdgeChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange | mxgraph.mxGeometryChange,
         connection: IModelConnection): Promise<void> {
-
         if (change['terminal']) {
             await this.translateEdgeEndsChange(change as mxgraph.mxTerminalChange, connection);
         } else if (change['value'] !== undefined && change['value'] !== null) {

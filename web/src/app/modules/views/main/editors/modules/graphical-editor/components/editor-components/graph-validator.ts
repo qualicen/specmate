@@ -33,7 +33,7 @@ export class GraphValidator {
 
         const vertices = graph.getChildCells(graph.getDefaultParent());
         if (vertices.length > 1) {
-            this.graphicalEditorService.start('graphValidation');
+            this.graphicalEditorService.start(GraphicalEditorService.OP_VALIDATION);
         }
 
         const validationResult = this.validationService.getValidationResultsGrouped(model);
@@ -67,7 +67,7 @@ export class GraphValidator {
                 }
             }
             if (i === vertices.length - 1) {
-                this.graphicalEditorService.end('graphValidation');
+                this.graphicalEditorService.end(GraphicalEditorService.OP_INIT);
             }
         }
     }
@@ -89,6 +89,4 @@ export class GraphValidator {
         }
         return new mx.mxCellOverlay(graph.warningImage, message, align, undefined, offset);
     }
-
-
 }

@@ -96,8 +96,6 @@ export class GraphicalEditor implements OnDestroy {
         this.graphValidator = new GraphValidator(validationService, graphicalEditorService);
         this.validationService.onEnd(async () => {
             if (!this.isInGraphTransition && this.graph !== undefined && this.graph['destroyed'] !== true) {
-                // console.log('Validation ends');
-                // this.updateValidities();
                 this.graphValidator.updateValidities(this.graph, this.model);
 
             }
@@ -513,8 +511,6 @@ export class GraphicalEditor implements OnDestroy {
         };
     }
 
-
-
     private setFunctionGetPreferredSizeForCell(graph: mxgraph.mxGraph, shapeProvider: ShapeProvider) {
         let graphGetPreferredSizeForCell = graph.getPreferredSizeForCell;
         graph.getPreferredSizeForCell = function (cell: mxgraph.mxCell) {
@@ -552,8 +548,7 @@ export class GraphicalEditor implements OnDestroy {
     }
 
     public static getCEGNodeType(cell: mxgraph.mxCell) {
-        if (cell.edges === undefined || cell.edge) {
-            // The cell is an edge
+        if (cell.isEdge()) {
             return '';
         }
 

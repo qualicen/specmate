@@ -152,7 +152,7 @@ export class GraphicalEditor implements OnDestroy {
             return;
         }
 
-        this.graphicalEditorService.start('init');
+        this.graphicalEditorService.start(GraphicalEditorService.OP_INIT);
         if (this.graph !== undefined) {
             this.destroyGraph();
         }
@@ -163,7 +163,7 @@ export class GraphicalEditor implements OnDestroy {
         this.graphValidator.updateValidities(this.graph, this.model);
         this.undoManager.clear();
         this.graphicalEditorService.triggerGraphicalModelInitFinish();
-        this.graphicalEditorService.end('init');
+        this.graphicalEditorService.end(GraphicalEditorService.OP_INIT);
     }
 
     private async createGraph(): Promise<void> {

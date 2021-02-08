@@ -7,6 +7,9 @@ export class GraphicalEditorService extends Monitorable {
     public initModel: EventEmitter<void> = new EventEmitter<void>();
     public initModelFinish: EventEmitter<void> = new EventEmitter<void>();
 
+    public static OP_INIT = 'init';
+    public static OP_VALIDATION = 'validation';
+
     constructor() {
         super();
     }

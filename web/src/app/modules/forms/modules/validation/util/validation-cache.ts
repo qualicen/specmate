@@ -4,7 +4,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { IContainer } from '../../../../../model/IContainer';
 import { ValidationErrorSeverity } from '../../../../../validation/validation-error-severity';
 
-
 export type ValidationPair = { element: IContainer, message: string, severity: ValidationErrorSeverity };
 export type ValidationGroup = { element: IContainer, messages: string[] };
 

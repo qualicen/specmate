@@ -21,7 +21,6 @@ const mx: typeof mxgraph = require('mxgraph')({
 
 export class GraphValidator {
 
-
     constructor(private validationService: ValidationService,
         private graphicalEditorService: GraphicalEditorService) {
     }

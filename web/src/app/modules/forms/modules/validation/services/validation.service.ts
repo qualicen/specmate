@@ -16,8 +16,6 @@ import { ValidationResult } from '../../../../../validation/validation-result';
 import { NavigatorService } from '../../../../navigation/modules/navigator/services/navigator.service';
 import { ValidationCache, ValidationGroup, ValidationPair } from '../util/validation-cache';
 
-
-
 @Injectable()
 export class ValidationService extends Monitorable {
 

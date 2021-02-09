@@ -165,8 +165,11 @@ export class SpecmateDataService extends Monitorable {
     }
 
     public async updateElement(element: IContainer, virtual: boolean, compoundId: string): Promise<void> {
+        if (!this.hasElement(element.url)) {
+            return;
+        }
         this.start(SpecmateDataService.OP_UPDATE + '-' + element.url);
-        this.elementChanged.emit(element.url);
+        // this.elementChanged.emit(element.url);
         if (virtual) {
             this.updateElementVirtual(element, compoundId);
         } else {

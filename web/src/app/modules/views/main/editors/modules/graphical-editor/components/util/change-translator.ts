@@ -1,5 +1,6 @@
 import { mxgraph } from 'mxgraph';
 import { CEGConnection } from 'src/app/model/CEGConnection';
+import { CEGLinkedNode } from 'src/app/model/CEGLinkedNode';
 import { CEGNode } from 'src/app/model/CEGNode';
 import { ProcessConnection } from 'src/app/model/ProcessConnection';
 import { Type } from 'src/app/util/type';
@@ -11,6 +12,7 @@ import { Process } from '../../../../../../../../model/Process';
 import { Arrays } from '../../../../../../../../util/arrays';
 import { Id } from '../../../../../../../../util/id';
 import { SpecmateDataService } from '../../../../../../../data/modules/data-service/services/specmate-data.service';
+import { CEGConnectionTool } from '../../../tool-pallette/tools/ceg/ceg-connection-tool';
 import { ConnectionToolBase } from '../../../tool-pallette/tools/connection-tool-base';
 import { CreateNodeToolBase } from '../../../tool-pallette/tools/create-node-tool-base';
 import { DeleteToolBase } from '../../../tool-pallette/tools/delete-tool-base';
@@ -23,8 +25,6 @@ import { ToolProvider } from '../../providers/properties/tool-provider';
 import { VertexProvider } from '../../providers/properties/vertex-provider';
 import { EditorStyle } from '../editor-components/editor-style';
 import { StyleChanger } from './style-changer';
-import { CEGConnectionTool } from '../../../tool-pallette/tools/ceg/ceg-connection-tool';
-import { CEGLinkedNode } from 'src/app/model/CEGLinkedNode';
 
 
 declare var require: any;
@@ -270,7 +270,7 @@ export class ChangeTranslator {
         delete cells[oldId];
         cells[newId] = cell;
 
-        if (Type.is(node, CEGLinkedNode)) {
+        if (Type.is(node, CEGLinkedNode) || Type.is(node, CEGNode)) {
             cell.setValue(node);
         }
 

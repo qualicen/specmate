@@ -17,11 +17,14 @@ export class CEGNodeTool extends CreateNodeToolBase<CEGNode> {
     public name = 'tools.addCegNode';
     public style = new ShapeProvider(CEGModel).getStyle(CEGNode);
 
+    public copyfrom: CEGNode;
+
     protected getElementFactory(coords: { x: number; y: number; }): ElementFactoryBase<CEGNode> {
-        return new CEGNodeFactory(coords, this.dataService);
+        return new CEGNodeFactory(coords, this.dataService, this.copyfrom);
     }
 
     public async perform(compoundId = Id.uuid): Promise<CEGNode> {
+        this.copyfrom = this.value as CEGNode;
         const node = await super.perform(compoundId);
         if (this.value !== undefined && Type.is(this.value, CEGNode)) {
             const linkingNodeProxies = (this.value as CEGNode).linksFrom;
@@ -30,7 +33,7 @@ export class CEGNodeTool extends CreateNodeToolBase<CEGNode> {
                 const proxy = new Proxy();
                 proxy.url = node.url;
                 (linkingNode as CEGLinkedNode).linkTo = proxy;
-                this.dataService.updateElement(linkingNode, true, compoundId);
+                await this.dataService.updateElement(linkingNode, true, compoundId);
             }
         }
         return node;

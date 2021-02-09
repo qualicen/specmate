@@ -14,8 +14,7 @@ import { ValidNameValidator } from '../../../../../validation/valid-name-validat
 import { ValidationErrorSeverity } from '../../../../../validation/validation-error-severity';
 import { ValidationResult } from '../../../../../validation/validation-result';
 import { NavigatorService } from '../../../../navigation/modules/navigator/services/navigator.service';
-import { ValidationCache, ValidationPair } from '../util/validation-cache';
-
+import { ValidationCache, ValidationGroup, ValidationPair } from '../util/validation-cache';
 
 @Injectable()
 export class ValidationService extends Monitorable {
@@ -34,6 +33,10 @@ export class ValidationService extends Monitorable {
 
     public getValidationResults(parentElement: IContainer): ValidationPair[] {
         return parentElement ? this.validationCache.getValidationResults(parentElement.url) : [];
+    }
+
+    public getValidationResultsGrouped(parentElement: IContainer): ValidationGroup[] {
+        return parentElement ? this.validationCache.getValidationResultsGrouped(parentElement.url) : [];
     }
 
     private static requiredFieldValidatorMap: { [className: string]: RequiredFieldsValidator };
@@ -92,7 +95,7 @@ export class ValidationService extends Monitorable {
             this.validationCache.addValidationResultsToCache(elementResults);
             this.isValidating = false;
             this.end();
-        }, 1);
+        }, 0);
     }
 
     private getValidationResultsFor(element: IContainer, contents: IContainer[]): ValidationResult[] {

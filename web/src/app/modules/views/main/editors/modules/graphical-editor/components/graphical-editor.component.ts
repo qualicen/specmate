@@ -3,13 +3,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { mxgraph } from 'mxgraph'; // Typings only - no code!
 import { Subscription } from 'rxjs';
 import { CEGModel } from 'src/app/model/CEGModel';
-import { CEGNode } from 'src/app/model/CEGNode';
 import { Process } from 'src/app/model/Process';
 import { ProcessConnection } from 'src/app/model/ProcessConnection';
-import { ProcessDecision } from 'src/app/model/ProcessDecision';
-import { ProcessEnd } from 'src/app/model/ProcessEnd';
-import { ProcessStart } from 'src/app/model/ProcessStart';
-import { ProcessStep } from 'src/app/model/ProcessStep';
 import { UndoService } from 'src/app/modules/actions/modules/common-controls/services/undo.service';
 import { NavigatorService } from 'src/app/modules/navigation/modules/navigator/services/navigator.service';
 import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
@@ -35,6 +30,7 @@ import { GraphicalEditorService } from '../services/graphical-editor.service';
 import { EditorKeyHandler } from './editor-components/editor-key-handler';
 import { EditorPopup } from './editor-components/editor-popup';
 import { EditorStyle } from './editor-components/editor-style';
+import { GraphValidator } from './editor-components/graph-validator';
 import { ChangeTranslator } from './util/change-translator';
 import { StyleChanger } from './util/style-changer';
 
@@ -61,6 +57,7 @@ export class GraphicalEditor implements OnDestroy {
     private shapeProvider: ShapeProvider;
     private changeTranslator: ChangeTranslator;
     private vertexProvider: VertexProvider;
+    private graphValidator: GraphValidator;
 
     private isInGraphTransition = false;
 
@@ -96,10 +93,11 @@ export class GraphicalEditor implements OnDestroy {
             }
         });
         this.subscriptions.push(hasNavigatedSubscription);
-
+        this.graphValidator = new GraphValidator(validationService, graphicalEditorService);
         this.validationService.onEnd(async () => {
             if (!this.isInGraphTransition && this.graph !== undefined && this.graph['destroyed'] !== true) {
-                this.updateValidities();
+                this.graphValidator.updateValidities(this.graph, this.model);
+
             }
         });
         let undoSubscription = this.undoService.undoPressed.subscribe(() => {
@@ -154,6 +152,7 @@ export class GraphicalEditor implements OnDestroy {
             return;
         }
 
+        this.graphicalEditorService.start(GraphicalEditorService.OP_INIT);
         if (this.graph !== undefined) {
             this.destroyGraph();
         }
@@ -161,9 +160,10 @@ export class GraphicalEditor implements OnDestroy {
         await this.createGraph();
 
         this.isInGraphTransition = false;
-        this.updateValidities();
+        this.graphValidator.updateValidities(this.graph, this.model);
         this.undoManager.clear();
         this.graphicalEditorService.triggerGraphicalModelInitFinish();
+        this.graphicalEditorService.end(GraphicalEditorService.OP_INIT);
     }
 
     private async createGraph(): Promise<void> {
@@ -291,14 +291,14 @@ export class GraphicalEditor implements OnDestroy {
         });
 
         // Set the focus to the container if a node is selected
-        this.graph.addListener(mx.mxEvent.CLICK, (sender: any, evt: any) => {
+        this.graph.addListener(mx.mxEvent.CLICK, () => {
             if (!this.graph.isEditing()) {
                 this.graph.container.setAttribute('tabindex', '-1');
                 this.graph.container.focus();
             }
         });
 
-        this.graph.getSelectionModel().addListener(mx.mxEvent.CHANGE, async (args: any) => {
+        this.graph.getSelectionModel().addListener(mx.mxEvent.CHANGE, async () => {
             let selectionCount = this.graph.getSelectionCount();
             this.graph.getModel().beginUpdate();
 
@@ -392,7 +392,7 @@ export class GraphicalEditor implements OnDestroy {
     }
 
     private makeVertexTool(tool: ToolBase) {
-        const onDrop = (graph: mxgraph.mxGraph, evt: MouseEvent, cell: mxgraph.mxCell) => {
+        const onDrop = (graph: mxgraph.mxGraph, evt: MouseEvent) => {
             this.graph.stopEditing(false);
             const initialData: ShapeData = this.shapeProvider.getInitialData(tool.style);
             const coords = this.graph.getPointForEvent(evt);
@@ -422,7 +422,7 @@ export class GraphicalEditor implements OnDestroy {
     }
 
     private makeClickTool(tool: ToolBase) {
-        document.getElementById(tool.elementId).addEventListener('click', (evt) => tool.perform(), false);
+        document.getElementById(tool.elementId).addEventListener('click', () => tool.perform(), false);
     }
 
     private initUndoManager(): void {
@@ -480,7 +480,7 @@ export class GraphicalEditor implements OnDestroy {
             if (Type.is(this.model, CEGModel)) {
                 for (const url in vertexCache) {
                     const vertex = vertexCache[url];
-                    const type = this.getNodeType(vertex);
+                    const type = GraphicalEditor.getCEGNodeType(vertex);
                     StyleChanger.addStyle(vertex, this.graph, type);
                 }
             }
@@ -509,51 +509,6 @@ export class GraphicalEditor implements OnDestroy {
             let geo = this.model.getGeometry(cell);
             return geo == null || !geo.relative;
         };
-    }
-
-    private updateValidities(): void {
-        if (this.graph === undefined) {
-            return;
-        }
-
-        const vertices = this.graph.getChildCells(this.graph.getDefaultParent());
-
-        for (const vertex of vertices) {
-            StyleChanger.replaceStyle(vertex, this.graph, EditorStyle.INVALID_STYLE_NAME, EditorStyle.VALID_STYLE_NAME);
-            this.graph.setCellWarning(vertex, null);
-        }
-
-        const validationResult = this.validationService.getValidationResults(this.model);
-        for (const invalidNode of validationResult) {
-            const vertexId = invalidNode.element.url;
-            const vertex = vertices.find(vertex => vertex.id === vertexId);
-            if (vertex === undefined) {
-                continue;
-            }
-            StyleChanger.replaceStyle(vertex, this.graph, EditorStyle.VALID_STYLE_NAME, EditorStyle.INVALID_STYLE_NAME);
-            const overlay = this.graph.setCellWarning(vertex, invalidNode.message, undefined, true);
-            if (Type.is(invalidNode.element, CEGNode) || Type.is(invalidNode.element, ProcessStep)) {
-                overlay.offset = new mx.mxPoint(-13, -12);
-            }
-            if (Type.is(invalidNode.element, ProcessStart) || Type.is(invalidNode.element, ProcessEnd)) {
-                overlay.align = mx.mxConstants.ALIGN_CENTER;
-                overlay.offset = new mx.mxPoint(0, -13);
-            }
-            if (Type.is(invalidNode.element, ProcessDecision)) {
-                overlay.align = mx.mxConstants.ALIGN_CENTER;
-                overlay.offset = new mx.mxPoint(0, -18);
-            }
-        }
-        this.graph.getView().revalidate();
-
-        if (Type.is(this.model, CEGModel)) {
-            for (const vertex of vertices) {
-                StyleChanger.removeStyle(vertex, this.graph, EditorStyle.CAUSE_STYLE_NAME);
-                StyleChanger.removeStyle(vertex, this.graph, EditorStyle.EFFECT_STYLE_NAME);
-                StyleChanger.removeStyle(vertex, this.graph, EditorStyle.INNER_STYLE_NAME);
-                StyleChanger.addStyle(vertex, this.graph, this.getNodeType(vertex));
-            }
-        }
     }
 
     private setFunctionGetPreferredSizeForCell(graph: mxgraph.mxGraph, shapeProvider: ShapeProvider) {
@@ -592,9 +547,8 @@ export class GraphicalEditor implements OnDestroy {
         return this._model;
     }
 
-    private getNodeType(cell: mxgraph.mxCell) {
-        if (cell.edges === undefined || cell.edge) {
-            // The cell is an edge
+    public static getCEGNodeType(cell: mxgraph.mxCell) {
+        if (cell.isEdge()) {
             return '';
         }
 

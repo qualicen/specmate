@@ -14,7 +14,7 @@ export abstract class CreateNodeToolBase<T extends IModelNode> extends CreateToo
 
     public coords: { x: number, y: number };
     public name: string;
-    public value: CEGLinkedNode;
+    public value: CEGLinkedNode | CEGNode;
 
     public async perform(compoundId = Id.uuid): Promise<T> {
         if (this.coords === undefined) {

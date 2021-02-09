@@ -14,6 +14,7 @@ import { CEGNode } from 'src/app/model/CEGNode';
 import { Proxy } from 'src/app/model/support/proxy';
 import { Id } from 'src/app/util/id';
 import { OnInit } from '@angular/core';
+import { Type } from 'src/app/util/type';
 
 export class CEGLinkedNodeTool extends CreateNodeToolBase<CEGLinkedNode> implements OnInit {
 
@@ -38,8 +39,8 @@ export class CEGLinkedNodeTool extends CreateNodeToolBase<CEGLinkedNode> impleme
     public async perform(compoundId = Id.uuid): Promise<CEGLinkedNode> {
         let node = await super.perform();
         let linkedNode: CEGNode = undefined;
-        if (this.value !== undefined) {
-            linkedNode = await this.dataService.readElement(this.value.linkTo.url, true) as CEGNode;
+        if (this.value !== undefined && Type.is(this.value, CEGLinkedNode)) {
+            linkedNode = await this.dataService.readElement((this.value as CEGLinkedNode).linkTo.url, true) as CEGNode;
         } else {
             linkedNode = await this.getLinkedNodeWithDialog(node);
         }

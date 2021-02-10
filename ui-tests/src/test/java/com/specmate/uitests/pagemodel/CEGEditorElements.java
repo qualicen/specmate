@@ -22,7 +22,7 @@ public class CEGEditorElements extends EditorElements {
 	By TypeAND = By.id("type-AND");
 	By TypeOR = By.id("type-OR");
 
-	By nodeSelector = By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;'] > rect");
+	By nodeSelector = By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;']");
 
 	public CEGEditorElements(WebDriver driver, Actions builder) { // constructor
 		super(driver, builder);

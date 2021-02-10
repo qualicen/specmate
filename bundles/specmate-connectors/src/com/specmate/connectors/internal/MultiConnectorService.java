@@ -18,6 +18,7 @@ import org.osgi.service.log.LogService;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.config.api.IConfigService;
 import com.specmate.connectors.api.IMultiConnector;
+import com.specmate.connectors.api.IMultiProject;
 import com.specmate.connectors.api.IProjectConfigService;
 import com.specmate.connectors.internal.config.MultiConnectorServiceConfig;
 import com.specmate.connectors.internal.config.PollKeys;
@@ -90,18 +91,14 @@ public class MultiConnectorService {
 				logService.log(LogService.LOG_INFO, "Syncing multi connector " + multiConnector.getId());
 
 				try {
-					for (Map.Entry<String, Map<String, String>> connectorConfigEntry : multiConnector
+					for (Map.Entry<String, Map<String, String>> connectorConfigEntries : multiConnector
 							.getProjectConfigs().entrySet()) {
 
-						String technicalProjectId = connectorConfigEntry.getKey();
+						String technicalProjectId = connectorConfigEntries.getKey();
 
 						// get specmate name for project
 						String specmateProjectId = multiConnector.getMultiProject()
 								.createSpecmateProjectName(technicalProjectId);
-
-						// add prefix to config entries
-						Map<String, String> projectConfigEntries = addPrefixToConfig(specmateProjectId,
-								connectorConfigEntry.getValue());
 
 						// we have to read this again each time to avoid accidentally adding identically
 						// named projects.
@@ -113,7 +110,8 @@ public class MultiConnectorService {
 							logService.log(LogService.LOG_INFO, "Adding project " + specmateProjectId);
 
 							// update config: add project config entries
-							configService.addUpdateConfigurationProperties(projectConfigEntries);
+							configService.addUpdateConfigurationProperties(
+									getProjectConfig(multiConnector, connectorConfigEntries, specmateProjectId));
 
 							// update config: add project id to list of activated projects
 							List<String> allProjects = new ArrayList<>();
@@ -136,19 +134,53 @@ public class MultiConnectorService {
 
 		}
 
-	}
+		private Map<String, String> getProjectConfig(IMultiConnector multiConnector,
+				Map.Entry<String, Map<String, String>> connectorConfigEntries, String specmateProjectId) {
+			Map<String, String> projectConfigEntries = new HashMap<String, String>();
 
-	private Map<String, String> addPrefixToConfig(String specmateProjectId, Map<String, String> orignalConfig) {
+			// add prefix to config entries
+			addConnectorConfig(projectConfigEntries, specmateProjectId, connectorConfigEntries.getValue());
 
-		String prefix = IProjectConfigService.PROJECT_PREFIX + specmateProjectId + ".connector.";
+			// add template properties to `projectConfigEntries`
+			Map<String, String> templateConfigEntries = multiConnector.getMultiProject().getTemplateConfigEntries();
+			addTemplateConfig(projectConfigEntries, specmateProjectId, templateConfigEntries);
 
-		Map<String, String> newConfig = new HashMap<String, String>();
-
-		for (Map.Entry<String, String> entry : orignalConfig.entrySet()) {
-			newConfig.put(prefix + entry.getKey(), entry.getValue());
+			return projectConfigEntries;
 		}
 
-		return newConfig;
+	}
+
+	private static void addConnectorConfig(Map<String, String> projectConfigEntries, String specmateProjectId,
+			Map<String, String> connectorConfigEntries) {
+		String connectorConfigPrefix = IProjectConfigService.PROJECT_PREFIX + specmateProjectId + ".connector.";
+		addElementsToConfig(projectConfigEntries, connectorConfigPrefix, connectorConfigEntries);
+	}
+
+	private static void addTemplateConfig(Map<String, String> projectConfigEntries, String specmateProjectId,
+			Map<String, String> templateConfigEntries) {
+
+		Map<String, String> replacedTemplateConfigEntries = new HashMap<>();
+		for (Map.Entry<String, String> entry : templateConfigEntries.entrySet()) {
+			if (entry.getValue() == null) {
+				replacedTemplateConfigEntries.put(entry.getKey(), null);
+			} else {
+				
+				// TODO make smarter replacement. Allow usage of all, so far, used keys as placeholder( e.g., 'jira.project' or 'jira.url' )
+				
+				replacedTemplateConfigEntries.put(entry.getKey(),
+						entry.getValue().replace(IMultiProject.PATTERN_NAME, specmateProjectId));
+			}
+		}
+
+		String connectorConfigPrefix = IProjectConfigService.PROJECT_PREFIX + specmateProjectId + ".";
+		addElementsToConfig(projectConfigEntries, connectorConfigPrefix, replacedTemplateConfigEntries);
+	}
+
+	private static void addElementsToConfig(Map<String, String> targetConfig, String sourcePrefix,
+			Map<String, String> sourceConfig) {
+		for (Map.Entry<String, String> entry : sourceConfig.entrySet()) {
+			targetConfig.put(sourcePrefix + entry.getKey(), entry.getValue());
+		}
 	}
 
 	@Reference

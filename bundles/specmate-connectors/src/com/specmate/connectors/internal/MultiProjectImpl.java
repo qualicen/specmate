@@ -1,6 +1,8 @@
 package com.specmate.connectors.internal;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
 import org.osgi.service.component.annotations.Activate;
@@ -31,8 +33,8 @@ public class MultiProjectImpl implements IMultiProject {
 	/** The pattern to create the name of the generated projects */
 	private String projectNamePattern;
 
-	/** The placeholder for project name patterns **/
-	private static final String PATTERN_NAME = "%project%";
+	/** The template config entries for thiis multi project **/
+	private Map<String, String> templateConfigEntries;
 
 	@Activate
 	public void activate(Map<String, Object> properties) throws SpecmateInternalException {
@@ -44,11 +46,34 @@ public class MultiProjectImpl implements IMultiProject {
 
 		projectNamePattern = (String) properties.getOrDefault(IProjectConfigService.KEY_MULTIPROJECT_PROJECTNAMEPATTERN,
 				id + "_" + PATTERN_NAME);
+	
+		retrieveTemplateConfigEntries(properties);
 
 		if (StringUtils.isEmpty(id)) {
 			throw new SpecmateInternalException(ErrorCode.CONFIGURATION,
 					"Multiproject configured without providing an ID.");
 		}
+	}
+	
+	/**
+	 * Scans all config properties for template properties and stores them in 'templateConfigEntries'
+	 * 
+	 * @param properties all config properties
+	 */
+	private void retrieveTemplateConfigEntries(Map<String, Object> properties) {
+		
+		templateConfigEntries = new HashMap<>();
+		
+		String keyPrefix = IProjectConfigService.MULTIPROJECT_PREFIX + id + "."
+				+ IProjectConfigService.KEY_MULTIPROJECT_TEMPLATE + ".";
+		int keyPrefixLength = keyPrefix.length();
+		
+		for ( Entry<String, Object> entry : properties.entrySet() ) {			
+			String key = entry.getKey();			
+			if (key != null && key.startsWith(keyPrefix)) {				
+				templateConfigEntries.put(key.substring(keyPrefixLength), (String)entry.getValue());
+			}			
+		}		
 	}
 
 	@Override
@@ -70,6 +95,11 @@ public class MultiProjectImpl implements IMultiProject {
 	@Override
 	public IMultiConnector getConnector() {
 		return multiConnector;
+	}
+
+	@Override
+	public Map<String, String> getTemplateConfigEntries() {
+		return templateConfigEntries;
 	}
 
 }

@@ -44,7 +44,7 @@ public class CEGEditorElements extends EditorElements {
 
 		WebDriverWait wait = new WebDriverWait(driver, 30);
 		wait.until(ExpectedConditions
-				.visibilityOfElementLocated(cegNodeSelector)));
+				.visibilityOfElementLocated(cegNodeSelector));
 
 		WebElement variableTextfield = driver.findElement(propertiesVariable);
 		WebElement conditionTextfield = driver.findElement(propertiesCondition);
@@ -61,7 +61,7 @@ public class CEGEditorElements extends EditorElements {
 	 * connection
 	 */
 	public int connectNode(int node1, int node2) {
-		return super.connect(node1, node2, nodeSelector);
+		return super.connect(node1, node2, cegNodeSelector);
 	}
 
 	public void toggleNegateButtonOn(WebElement connection) {
@@ -109,7 +109,7 @@ public class CEGEditorElements extends EditorElements {
 	}
 
 	public void changeTypeToANDInNode(int node) {
-		WebElement nodeElement = UITestUtil.getElementWithIndex(node, driver, nodeSelector);
+		WebElement nodeElement = UITestUtil.getElementWithIndex(node, driver, cegNodeSelector);
 		builder.moveToElement(nodeElement, 0, 25).click().build().perform();
 		driver.findElement(By.cssSelector("g > g > g > foreignObject > div > select")).click();
 		driver.findElement(By.cssSelector("g > g > g > foreignObject > div > select > option[value=AND]")).click();
@@ -117,7 +117,7 @@ public class CEGEditorElements extends EditorElements {
 	}
 
 	public void changeTypeToORInNode(int node) {
-		WebElement nodeElement = UITestUtil.getElementWithIndex(node, driver, nodeSelector);
+		WebElement nodeElement = UITestUtil.getElementWithIndex(node, driver, cegNodeSelector);
 		builder.moveToElement(nodeElement, 0, 25).click().build().perform();
 		driver.findElement(By.cssSelector("g > g > g > foreignObject > div > select")).click();
 		driver.findElement(By.cssSelector("g > g > g > foreignObject > div > select > option[value=OR]")).click();
@@ -125,7 +125,7 @@ public class CEGEditorElements extends EditorElements {
 
 	public void changeTypeToAND(int node) {
 		// Click two times as clicking only once will minimize the node
-		WebElement nodeElement = UITestUtil.getElementWithIndex(node, driver, nodeSelector);
+		WebElement nodeElement = UITestUtil.getElementWithIndex(node, driver, cegNodeSelector);
 		builder.moveToElement(nodeElement, 0, 25).click().build().perform();
 		driver.findElement(propertiesType).click();
 		driver.findElement(TypeAND).click();
@@ -133,7 +133,7 @@ public class CEGEditorElements extends EditorElements {
 
 	public void changeTypeToOR(int node) {
 		// Click two times as clicking only once will minimize the node
-		WebElement nodeElement = UITestUtil.getElementWithIndex(node, driver, nodeSelector);
+		WebElement nodeElement = UITestUtil.getElementWithIndex(node, driver, cegNodeSelector);
 		builder.moveToElement(nodeElement, 0, 25).click().build().perform();
 		driver.findElement(propertiesType).click();
 		driver.findElement(TypeOR).click();

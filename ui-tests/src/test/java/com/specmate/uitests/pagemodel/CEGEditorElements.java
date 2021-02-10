@@ -44,7 +44,7 @@ public class CEGEditorElements extends EditorElements {
 
 		WebDriverWait wait = new WebDriverWait(driver, 30);
 		wait.until(ExpectedConditions.visibilityOfElementLocated(
-				By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible; cursor: move;']")));
+				By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;']")));
 
 		WebElement variableTextfield = driver.findElement(propertiesVariable);
 		WebElement conditionTextfield = driver.findElement(propertiesCondition);

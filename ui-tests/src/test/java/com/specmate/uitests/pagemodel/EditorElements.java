@@ -112,7 +112,7 @@ public class EditorElements {
 		;
 
 		wait.until(ExpectedConditions.visibilityOfElementLocated(
-				By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;']:nth-child(" + numberOfConnections
+				By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;']:nth-child(" + (numberOfConnections+1)
 						+ ") > path:nth-child(2)")));
 
 		return numberOfConnections;

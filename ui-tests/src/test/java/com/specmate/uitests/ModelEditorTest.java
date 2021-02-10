@@ -94,7 +94,7 @@ public class ModelEditorTest extends TestBase {
 			cegEditor.changeTypeToORInNode(nodeAutofahren);
 			cegEditor.changeTypeToANDInNode(nodeAutofahren);
 			
-			assertTrue(cegEditor.correctModelCreated(3, 2));
+			assertTrue(cegEditor.correctModelCreated(3, 2, true));
 						
 			// Save CEG
 			commonControl.save();

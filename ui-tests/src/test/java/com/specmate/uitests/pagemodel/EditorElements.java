@@ -124,7 +124,7 @@ public class EditorElements {
 	 * @return true if the model contains the number of nodes and connections
 	 *         specified by the parameters
 	 */
-	public boolean correctModelCreated(int assertedNodeNumber, int assertedConnectionNumber) {
+	public boolean correctModelCreated(int assertedNodeNumber, int assertedConnectionNumber, boolean isCEG) {
 		WebDriverWait wait = new WebDriverWait(driver, 30);
 		wait.until(ExpectedConditions.visibilityOfElementLocated(
 				By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;'] > path:nth-child(2)")));
@@ -136,6 +136,10 @@ public class EditorElements {
 
 		int numberOfActivities = driver
 				.findElements(By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;'] > rect")).size();
+		
+		if (isCEG) {
+			numberOfActivities = numberOfActivities / 3;
+		}
 		int numberOfDecisions = driver
 				.findElements(By.cssSelector(
 						"g > g:nth-child(2) > g[style*='visibility: visible;'] > path[stroke-width='2']:nth-child(1)"))

@@ -54,6 +54,9 @@ public class ModelEditorTest extends TestBase {
 			int nodeAlter = cegEditor.createNode("Alter", ">17",100,100);//results in x=15, y=60
 			int nodeFS = cegEditor.createNode("Führerschein", "vorhanden",100,300);//results in x=15, y=27
 			int nodeAutofahren = cegEditor.createNode("Autofahren", "erlaubt", 300, 200);
+			System.out.println(nodeAlter);
+			System.out.println(nodeFS);
+			System.out.println(nodeAutofahren);
 			
 			// Check if error message is shown (Assert true)
 			assertTrue(cegEditor.errorMessageDisplayed());

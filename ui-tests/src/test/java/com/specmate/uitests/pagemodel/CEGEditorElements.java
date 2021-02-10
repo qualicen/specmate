@@ -22,7 +22,7 @@ public class CEGEditorElements extends EditorElements {
 	By TypeAND = By.id("type-AND");
 	By TypeOR = By.id("type-OR");
 
-	By nodeSelector = By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible; cursor: move;'] > rect");
+	By nodeSelector = By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;'] > rect");
 
 	public CEGEditorElements(WebDriver driver, Actions builder) { // constructor
 		super(driver, builder);
@@ -35,7 +35,7 @@ public class CEGEditorElements extends EditorElements {
 	public int createNode(String variable, String condition, int x, int y) {
 
 		int numberOfNodes = driver
-				.findElements(By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible; cursor: move;']"))
+				.findElements(By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;']"))
 				.size();
 
 		// Click node button and drag and drop to editorview

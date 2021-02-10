@@ -109,7 +109,7 @@ public class ProcessModelTest extends TestBase {
 		assertTrue(processEditor.noWarningsMessageDisplayed());
 		
 
-		assertTrue(processEditor.correctModelCreated(6, 6, false));
+		assertTrue(processEditor.correctModelCreated(6, 6));
 
 		// Save Process
 		commonControl.save();

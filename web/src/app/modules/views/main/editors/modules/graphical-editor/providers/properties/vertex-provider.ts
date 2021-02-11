@@ -41,8 +41,9 @@ export class VertexProvider extends ProviderBase {
         super(element);
     }
 
-    public provideCEGNode(url: string, x: number, y: number, width: number, height: number, data: CEGmxModelNode): mxgraph.mxCell {
-        const value: string = null;
+    public provideCEGNode(url: string, x: number, y: number, width: number, height: number,
+        data: CEGmxModelNode, node: CEGNode): mxgraph.mxCell {
+        const value = node;
         const style = this.shapeProvider.getStyle(new CEGNode());
         const parent = this.graph.getDefaultParent();
         this.graph.getModel().beginUpdate();
@@ -110,7 +111,7 @@ export class VertexProvider extends ProviderBase {
         if (Type.is(node, CEGNode)) {
             let n = node as CEGNode;
             const data = new CEGmxModelNode(n.variable, n.condition, n.type);
-            return this.provideCEGNode(node.url, x || node.x, y || node.y, width, height, data);
+            return this.provideCEGNode(node.url, x || node.x, y || node.y, width, height, data, node as CEGNode);
         }
         if (Type.is(node, CEGLinkedNode)) {
             let n = node as CEGLinkedNode;

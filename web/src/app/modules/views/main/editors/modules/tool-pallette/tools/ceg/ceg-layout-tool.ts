@@ -27,10 +27,10 @@ export class CEGLayoutTool extends ToolBase {
     }
 
     public perform(compoundId = Id.uuid): Promise<any> {
-        return this.layoutGraph(compoundId);
+        return this.layoutGraph();
     }
 
-    public layoutGraph(compoundId = Id.uuid): Promise<any> {
+    public layoutGraph(): Promise<any> {
         const nodeList = this.graph.getModel().getChildVertices(this.graph.getDefaultParent()).filter(n => !n.isEdge());
         let nodeOrdering = this.toposort(this.graph, nodeList);
         if (nodeOrdering.length == 0 && nodeList.length > 0) {

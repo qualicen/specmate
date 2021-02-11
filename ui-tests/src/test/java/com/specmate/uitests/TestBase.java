@@ -118,8 +118,8 @@ public class TestBase implements SauceOnDemandSessionIdProvider {
         // Get the uri to send the commands to
         seleniumURI = "@ondemand.saucelabs.com:443";
         
-        // Set the buildTag to the Travis Build number 
-        buildTag = System.getenv("TRAVIS_BUILD_NUMBER");
+        // Set the buildTag to the Github Action number 
+        buildTag = "#" + System.getenv("GITHUB_RUN_NUMBER");
         if (buildTag == null) {
             buildTag = System.getenv("SAUCE_BUILD_NAME");
         }

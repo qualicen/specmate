@@ -44,9 +44,8 @@ public class MultiProjectImpl implements IMultiProject {
 			id = (String) properties.get(ProjectConfigService.KEY_PROJECT_ID);
 		}
 
-		projectNamePattern = (String) properties.getOrDefault(IProjectConfigService.KEY_MULTIPROJECT_PROJECTNAMEPATTERN,
-				id + "_" + PATTERN_NAME);
-	
+		projectNamePattern = (String) properties.get(IProjectConfigService.KEY_MULTIPROJECT_PROJECTNAMEPATTERN);
+
 		retrieveTemplateConfigEntries(properties);
 
 		if (StringUtils.isEmpty(id)) {
@@ -54,31 +53,27 @@ public class MultiProjectImpl implements IMultiProject {
 					"Multiproject configured without providing an ID.");
 		}
 	}
-	
+
 	/**
-	 * Scans all config properties for template properties and stores them in 'templateConfigEntries'
+	 * Scans all config properties for template properties and stores them in
+	 * 'templateConfigEntries'
 	 * 
 	 * @param properties all config properties
 	 */
 	private void retrieveTemplateConfigEntries(Map<String, Object> properties) {
-		
+
 		templateConfigEntries = new HashMap<>();
-		
+
 		String keyPrefix = IProjectConfigService.MULTIPROJECT_PREFIX + id + "."
 				+ IProjectConfigService.KEY_MULTIPROJECT_TEMPLATE + ".";
 		int keyPrefixLength = keyPrefix.length();
-		
-		for ( Entry<String, Object> entry : properties.entrySet() ) {			
-			String key = entry.getKey();			
-			if (key != null && key.startsWith(keyPrefix)) {				
-				templateConfigEntries.put(key.substring(keyPrefixLength), (String)entry.getValue());
-			}			
-		}		
-	}
 
-	@Override
-	public String createSpecmateProjectName(String technicalProjectName) {
-		return projectNamePattern.replace(PATTERN_NAME, technicalProjectName);
+		for (Entry<String, Object> entry : properties.entrySet()) {
+			String key = entry.getKey();
+			if (key != null && key.startsWith(keyPrefix)) {
+				templateConfigEntries.put(key.substring(keyPrefixLength), (String) entry.getValue());
+			}
+		}
 	}
 
 	@Override
@@ -102,4 +97,8 @@ public class MultiProjectImpl implements IMultiProject {
 		return templateConfigEntries;
 	}
 
+	@Override
+	public String getProjectNamePattern() {
+		return projectNamePattern;
+	}
 }

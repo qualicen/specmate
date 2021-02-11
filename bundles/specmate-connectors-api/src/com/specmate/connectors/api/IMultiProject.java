@@ -17,11 +17,17 @@ public interface IMultiProject {
 	 */
 	IMultiConnector getConnector();
 	
+//	/**
+//	 * Creates the name of a specmate project given the technical name of the project.
+//	 * @param technicalProjectName the technical name of the project (e.g., the name of the corresponding jira project)
+//	 */
+//	String createSpecmateProjectName(String technicalProjectName);
+	
+	
 	/**
-	 * Creates the name of a specmate project given the technical name of the project.
-	 * @param technicalProjectName the technical name of the project (e.g., the name of the corresponding jira project)
+	 * Returns the config value for the projectnamepattern property.
 	 */
-	String createSpecmateProjectName(String technicalProjectName);
+	String getProjectNamePattern();
 	
 	/**
 	 * Returns the config entries which are listed as template entries in the config.

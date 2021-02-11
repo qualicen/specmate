@@ -12,6 +12,10 @@ import com.specmate.common.exception.SpecmateException;
  */
 public interface IMultiConnector {
 
+	public static String KEY_PID = "pid";
+
+	public static String KEY_CONNECTOR = "connector.";
+
 	/**
 	 * Returns the id of the connector
 	 */

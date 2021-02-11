@@ -32,7 +32,7 @@ export class Config {
     public static ACTIVATE_DEFAUTL_TOOL_ON_SUCCESS = false;
 
     public static LOADING_MODAL_DELAY = 300;
-    public static LOADING_DEBOUNCE_DELAY = 1;
+    public static LOADING_DEBOUNCE_DELAY = 10;
 
     public static LOG_START_MESSAGE = 'Specmate Started';
     public static LOG_LENGTH = 100;

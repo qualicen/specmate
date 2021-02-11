@@ -4,11 +4,11 @@ export abstract class Monitorable {
     private startOperation: EventEmitter<string> = new EventEmitter<string>();
     private endOperation: EventEmitter<string> = new EventEmitter<string>();
 
-    protected start(operation = this.constructor.name): void {
+    public start(operation = this.constructor.name): void {
         this.startOperation.emit(operation);
     }
 
-    protected end(operation = this.constructor.name): void {
+    public end(operation = this.constructor.name): void {
         this.endOperation.emit(operation);
     }
 

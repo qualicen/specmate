@@ -169,7 +169,6 @@ export class SpecmateDataService extends Monitorable {
             return;
         }
         this.start(SpecmateDataService.OP_UPDATE + '-' + element.url);
-        // this.elementChanged.emit(element.url);
         if (virtual) {
             this.updateElementVirtual(element, compoundId);
         } else {

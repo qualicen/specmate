@@ -18,6 +18,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { ContentsContainerService } from 'src/app/modules/views/main/editors/modules/contents-container/services/content-container.service';
 import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
 import { SpecmateType } from 'src/app/util/specmate-type';
+import { CEGNode } from 'src/app/model/CEGNode';
+import { CEGLinkedNode } from 'src/app/model/CEGLinkedNode';
 
 @Component({
     moduleId: module.id.toString(),
@@ -220,12 +222,34 @@ export class ElementTree implements OnInit {
 
     public async delete(): Promise<void> {
         try {
+
+            let linkingNodeUrls: string[] = [];
+            if (Type.is(this.element, CEGModel)) {
+                const contents = await this.dataService.readContents(this.element.url, false);
+                linkingNodeUrls = contents
+                    .filter(element => (element as CEGNode).linksFrom?.length > 0)
+                    .map(element => (element as CEGNode).linksFrom)
+                    .reduce((a, b) => a.concat(b), [])
+                    .map(proxy => proxy.url);
+            }
+
             let message = this.translate.instant('doYouReallyWantToDeletePermanent', { name: this.element.name });
             if (Type.is(this.element, Folder)) {
                 message = this.translate.instant('doYouReallyWantToDeleteFolderPermanent', { name: this.element.name });
             }
+            if (linkingNodeUrls.length > 0) {
+                message += '\n\n' + this.translate.instant('linkedNodesInModel');
+            }
             await this.modal.openOkCancel('ConfirmationRequired', message);
-            await this.dataService.deleteElement(this.element.url, false, Id.uuid);
+
+            const compoundId = Id.uuid;
+            for (const url of linkingNodeUrls) {
+                const linkingNode = await this.dataService.readElement(url, true) as CEGLinkedNode;
+                delete linkingNode.linkTo;
+                await this.dataService.updateElement(linkingNode, true, compoundId);
+            }
+
+            await this.dataService.deleteElement(this.element.url, true, compoundId);
             await this.dataService.commit(this.translate.instant('delete'));
             await this.dataService.readContents(this.parent.url, false);
         } catch (e) { }

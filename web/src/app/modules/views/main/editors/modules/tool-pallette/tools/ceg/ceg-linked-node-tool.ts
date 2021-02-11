@@ -14,6 +14,7 @@ import { CEGNode } from 'src/app/model/CEGNode';
 import { Proxy } from 'src/app/model/support/proxy';
 import { Id } from 'src/app/util/id';
 import { OnInit } from '@angular/core';
+import { Type } from 'src/app/util/type';
 
 export class CEGLinkedNodeTool extends CreateNodeToolBase<CEGLinkedNode> implements OnInit {
 
@@ -35,12 +36,11 @@ export class CEGLinkedNodeTool extends CreateNodeToolBase<CEGLinkedNode> impleme
     ngOnInit(): void {
     }
 
-    public async perform(): Promise<CEGLinkedNode> {
-        this.compoundId = Id.uuid;
+    public async perform(compoundId = Id.uuid): Promise<CEGLinkedNode> {
         let node = await super.perform();
         let linkedNode: CEGNode = undefined;
-        if (this.value !== undefined) {
-            linkedNode = await this.dataService.readElement(this.value.linkTo.url, true) as CEGNode;
+        if (this.value !== undefined && Type.is(this.value, CEGLinkedNode)) {
+            linkedNode = await this.dataService.readElement((this.value as CEGLinkedNode).linkTo.url, true) as CEGNode;
         } else {
             linkedNode = await this.getLinkedNodeWithDialog(node);
         }
@@ -54,8 +54,8 @@ export class CEGLinkedNodeTool extends CreateNodeToolBase<CEGLinkedNode> impleme
         }
         linkedNode.linksFrom.push(proxy);
         node.name = linkedNode.variable + ' ' + linkedNode.condition;
-        this.dataService.updateElement(linkedNode, true, this.compoundId);
-        this.dataService.updateElement(node, true, this.compoundId);
+        this.dataService.updateElement(linkedNode, true, compoundId);
+        this.dataService.updateElement(node, true, compoundId);
         return node;
     }
 

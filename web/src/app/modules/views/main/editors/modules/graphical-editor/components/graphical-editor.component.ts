@@ -219,28 +219,27 @@ export class GraphicalEditor implements OnDestroy {
 
         this.graph.getModel().addListener(mx.mxEvent.CHANGE, async (sender: mxgraph.mxEventSource, evt: mxgraph.mxEventObject) => {
             const edit = evt.getProperty('edit') as mxgraph.mxUndoableEdit;
-
             const done: any[] = [];
-
             const isAddEdit = edit.changes.find(change => ChangeTranslator.isAddChange(change)) !== undefined;
+            const compoundId = Id.uuid;
 
             try {
                 if (!isAddEdit) {
                     for (const change of edit.changes.filter(filteredChange => filteredChange.child && !filteredChange.child.vertex)) {
-                        await this.changeTranslator.translate(change, this.graph, this.contents);
+                        await this.changeTranslator.translate(change, this.graph, this.contents, compoundId);
                         done.push(change);
                     }
                     for (const change of edit.changes.filter(filteredChange => filteredChange.child && filteredChange.child.vertex)) {
-                        await this.changeTranslator.translate(change, this.graph, this.contents);
+                        await this.changeTranslator.translate(change, this.graph, this.contents, compoundId);
                         done.push(change);
                     }
                 } else {
                     for (const change of edit.changes.filter(filteredChange => filteredChange.child && filteredChange.child.vertex)) {
-                        await this.changeTranslator.translate(change, this.graph, this.contents);
+                        await this.changeTranslator.translate(change, this.graph, this.contents, compoundId);
                         done.push(change);
                     }
                     for (const change of edit.changes.filter(filteredChange => filteredChange.child && !filteredChange.child.vertex)) {
-                        await this.changeTranslator.translate(change, this.graph, this.contents);
+                        await this.changeTranslator.translate(change, this.graph, this.contents, compoundId);
                         done.push(change);
                     }
                 }
@@ -253,10 +252,10 @@ export class GraphicalEditor implements OnDestroy {
                         done.push(styleChange);
                     });
                 for (const cellId in styleChangeMap) {
-                    await this.changeTranslator.translate(styleChangeMap[cellId], this.graph, this.contents);
+                    await this.changeTranslator.translate(styleChangeMap[cellId], this.graph, this.contents, compoundId);
                 }
                 for (const change of edit.changes.filter(filteredChange => done.indexOf(filteredChange) < 0)) {
-                    await this.changeTranslator.translate(change, this.graph, this.contents);
+                    await this.changeTranslator.translate(change, this.graph, this.contents, compoundId);
                 }
             } catch (e) {
                 // This is actually for debug purposes; However, mxgraph or the change translation fails silently without this.
@@ -413,7 +412,7 @@ export class GraphicalEditor implements OnDestroy {
             try {
                 if (initialData.style === EditorStyle.BASE_CEG_NODE_STYLE) {
                     this.vertexProvider.provideCEGNode(vertexUrl, coords.x, coords.y,
-                        initialData.size.width, initialData.size.height, initialData.text as CEGmxModelNode);
+                        initialData.size.width, initialData.size.height, initialData.text as CEGmxModelNode, undefined);
                 } else if (initialData.style === EditorStyle.BASE_CEG_LINKED_NODE_STYLE) {
                     this.vertexProvider.provideLinkedCEGNode(vertexUrl, coords.x, coords.y,
                         initialData.size.width, initialData.size.height, initialData.text as CEGmxModelNode, undefined);
@@ -437,7 +436,7 @@ export class GraphicalEditor implements OnDestroy {
     }
 
     private makeClickTool(tool: ToolBase) {
-        document.getElementById(tool.elementId).addEventListener('click', (evt) => tool.perform(), false);
+        document.getElementById(tool.elementId).addEventListener('click', (evt) => tool.perform(Id.uuid), false);
     }
 
     private initUndoManager(): void {

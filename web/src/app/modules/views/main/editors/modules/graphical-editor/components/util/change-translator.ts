@@ -1,5 +1,6 @@
 import { mxgraph } from 'mxgraph';
 import { CEGConnection } from 'src/app/model/CEGConnection';
+import { CEGLinkedNode } from 'src/app/model/CEGLinkedNode';
 import { CEGNode } from 'src/app/model/CEGNode';
 import { ProcessConnection } from 'src/app/model/ProcessConnection';
 import { Type } from 'src/app/util/type';
@@ -11,6 +12,7 @@ import { Process } from '../../../../../../../../model/Process';
 import { Arrays } from '../../../../../../../../util/arrays';
 import { Id } from '../../../../../../../../util/id';
 import { SpecmateDataService } from '../../../../../../../data/modules/data-service/services/specmate-data.service';
+import { CEGConnectionTool } from '../../../tool-pallette/tools/ceg/ceg-connection-tool';
 import { ConnectionToolBase } from '../../../tool-pallette/tools/connection-tool-base';
 import { CreateNodeToolBase } from '../../../tool-pallette/tools/create-node-tool-base';
 import { DeleteToolBase } from '../../../tool-pallette/tools/delete-tool-base';
@@ -23,8 +25,6 @@ import { ToolProvider } from '../../providers/properties/tool-provider';
 import { VertexProvider } from '../../providers/properties/vertex-provider';
 import { EditorStyle } from '../editor-components/editor-style';
 import { StyleChanger } from './style-changer';
-import { CEGConnectionTool } from '../../../tool-pallette/tools/ceg/ceg-connection-tool';
-import { CEGLinkedNode } from 'src/app/model/CEGLinkedNode';
 
 
 declare var require: any;
@@ -41,6 +41,8 @@ export class ChangeTranslator {
     private nodeNameConverter: ConverterBase<IContainer, string | CEGmxModelNode>;
     public preventDataUpdates = false;
 
+    private compoundIdStore: { [key: number]: string } = {};
+
     constructor(private model: CEGModel | Process,
         private dataService: SpecmateDataService,
         private toolProvider: ToolProvider,
@@ -51,7 +53,7 @@ export class ChangeTranslator {
     }
 
     private async getElement(id: string) {
-        let element = this.contents.find(element => element.url === id);
+        let element = this.contents.find(elem => elem.url === id);
         if (element === undefined) {
             element = this.parentComponents[id];
         }
@@ -74,7 +76,7 @@ export class ChangeTranslator {
 
 
     public async translate(change: (mxgraph.mxTerminalChange | mxgraph.mxChildChange | mxgraph.mxStyleChange),
-        graph: mxgraph.mxGraph, contents?: IContainer[]): Promise<void> {
+        graph: mxgraph.mxGraph, contents?: IContainer[], compoundId = Id.uuid): Promise<void> {
         if (this.preventDataUpdates) {
             return;
         }
@@ -83,18 +85,18 @@ export class ChangeTranslator {
         if (change['cell'] === undefined && change['child'] !== undefined) {
             const childChange = change as mxgraph.mxChildChange;
             if (childChange.parent !== undefined && childChange.parent !== null) {
-                await this.translateAdd(childChange, graph);
+                await this.translateAdd(childChange, graph, compoundId);
             } else {
-                await this.translateDelete(childChange);
+                await this.translateDelete(childChange, compoundId);
             }
         } else if (change['style'] !== undefined) {
-            await this.translateStyleChange(change as mxgraph.mxStyleChange);
+            await this.translateStyleChange(change as mxgraph.mxStyleChange, compoundId);
         } else if (change['cell'] !== undefined) {
-            await this.translateTerminalChange(change as mxgraph.mxTerminalChange);
+            await this.translateTerminalChange(change as mxgraph.mxTerminalChange, compoundId);
         }
     }
 
-    private async translateStyleChange(change: mxgraph.mxStyleChange): Promise<void> {
+    private async translateStyleChange(change: mxgraph.mxStyleChange, compoundId = Id.uuid): Promise<void> {
         const element = await this.getElement(change.cell.id);
         if (element === undefined) {
             return;
@@ -122,12 +124,12 @@ export class ChangeTranslator {
             }
 
             if (changeMade) {
-                await this.dataService.updateElement(connection, true, Id.uuid);
+                await this.dataService.updateElement(connection, true, compoundId);
             }
         }
     }
 
-    private async translateDelete(change: mxgraph.mxChildChange): Promise<void> {
+    private async translateDelete(change: mxgraph.mxChildChange, compoundId = Id.uuid): Promise<void> {
         const deleteTool = this.toolProvider.tools.find(tool => (tool as DeleteToolBase).isDeleteTool === true) as DeleteToolBase;
         deleteTool.element = await this.getElement(change.child.id);
         if (deleteTool.element === undefined) {
@@ -145,10 +147,10 @@ export class ChangeTranslator {
         for (const key of keys) {
             delete this.parentComponents[key];
         }
-        deleteTool.perform();
+        deleteTool.perform(compoundId);
     }
 
-    private async translateAdd(change: mxgraph.mxChildChange, graph: mxgraph.mxGraph): Promise<void> {
+    private async translateAdd(change: mxgraph.mxChildChange, graph: mxgraph.mxGraph, compoundId = Id.uuid): Promise<void> {
         if (await this.getElement(change.child.id) !== undefined) {
             console.log('Child already addded');
             return;
@@ -162,9 +164,9 @@ export class ChangeTranslator {
 
         let addedElement: IContainer = undefined;
         if (change.child.edge) {
-            addedElement = await this.translateEdgeAdd(change, graph);
+            addedElement = await this.translateEdgeAdd(change, graph, compoundId);
         } else {
-            addedElement = await this.translateNodeAdd(change, graph);
+            addedElement = await this.translateNodeAdd(change, graph, compoundId);
         }
 
         if (addedElement !== undefined) {
@@ -178,7 +180,7 @@ export class ChangeTranslator {
         return (cell.style as String).includes(EditorStyle.ADDITIONAL_CEG_CONNECTION_NEGATED_STYLE);
     }
 
-    private async translateEdgeAdd(change: mxgraph.mxChildChange, graph: mxgraph.mxGraph): Promise<IModelConnection> {
+    private async translateEdgeAdd(change: mxgraph.mxChildChange, graph: mxgraph.mxGraph, compoundId = Id.uuid): Promise<IModelConnection> {
         const tool = this.determineTool(change) as ConnectionToolBase<any>;
 
         const sourceCell = change.child.source;
@@ -219,7 +221,7 @@ export class ChangeTranslator {
         const condition = change.child.value;
         if (condition !== null && condition !== undefined && condition !== '') {
             (connection as ProcessConnection).condition = condition;
-            await this.dataService.updateElement(connection, true, Id.uuid);
+            await this.dataService.updateElement(connection, true, compoundId);
         } else {
             cell.value = '';
         }
@@ -235,11 +237,11 @@ export class ChangeTranslator {
         return connection;
     }
 
-    private async translateNodeAdd(change: mxgraph.mxChildChange, graph: mxgraph.mxGraph): Promise<IModelNode> {
+    private async translateNodeAdd(change: mxgraph.mxChildChange, graph: mxgraph.mxGraph, compoundId = Id.uuid): Promise<IModelNode> {
         const tool = this.determineTool(change) as CreateNodeToolBase<IModelNode>;
         tool.coords = { x: change.child.geometry.x, y: change.child.geometry.y };
         tool.value = change.child.getValue();
-        let node = await tool.perform();
+        let node = await tool.perform(compoundId);
 
         if (Type.is(node, CEGNode)) {
             const value =
@@ -256,7 +258,7 @@ export class ChangeTranslator {
         } else {
             node.name = change.child.value;
         }
-        await this.dataService.updateElement(node, true, Id.uuid);
+        await this.dataService.updateElement(node, true, compoundId);
 
         // Update the ids, thus mxgraph and dataService uses the same
         let oldId = change.child.id;
@@ -268,7 +270,7 @@ export class ChangeTranslator {
         delete cells[oldId];
         cells[newId] = cell;
 
-        if (Type.is(node, CEGLinkedNode)) {
+        if (Type.is(node, CEGLinkedNode) || Type.is(node, CEGNode)) {
             cell.setValue(node);
         }
 
@@ -307,15 +309,15 @@ export class ChangeTranslator {
         return node;
     }
 
-    private async translateTerminalChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange): Promise<void> {
+    private async translateTerminalChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange, compoundId = Id.uuid): Promise<void> {
         const element = await this.getElement(change.cell.id);
         if (element === undefined) {
             return;
         }
         if (change.cell.edge) {
-            await this.translateEdgeChange(change, element as IModelConnection);
+            await this.translateEdgeChange(change, element as IModelConnection, compoundId);
         } else {
-            await this.translateNodeChange(change, element as IModelNode);
+            await this.translateNodeChange(change, element as IModelNode, compoundId);
         }
     }
 
@@ -324,7 +326,8 @@ export class ChangeTranslator {
         return (cell.id.endsWith(VertexProvider.ID_SUFFIX_VARIABLE) || cell.id.endsWith(VertexProvider.ID_SUFFIX_CONDITION));
     }
 
-    private async translateNodeChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange, element: IModelNode): Promise<void> {
+    private async translateNodeChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange,
+        element: IModelNode, compoundId = Id.uuid): Promise<void> {
         let cell = change.cell as mxgraph.mxCell;
         if (this.ignoreChanges(cell)) {
             return;
@@ -348,19 +351,19 @@ export class ChangeTranslator {
                     for (const key in elementValues) {
                         element[key] = elementValues[key];
                     }
-                    await this.dataService.updateElement(element, true, Id.uuid);
+                    await this.dataService.updateElement(element, true, compoundId);
                 }
             } else {
                 // Keep change.cell to avoid having a parent a child value
                 element['variable'] = change.cell.value;
-                await this.dataService.updateElement(element, true, Id.uuid);
+                await this.dataService.updateElement(element, true, compoundId);
             }
         } else if (change['geometry'] !== undefined && change['geometry'] !== null) {
             element['x'] = Math.max(0, cell.geometry.x);
             element['y'] = Math.max(0, cell.geometry.y);
             element['width'] = cell.geometry.width;
             element['height'] = cell.geometry.height;
-            await this.dataService.updateElement(element, true, Id.uuid);
+            await this.dataService.updateElement(element, true, compoundId);
         }
     }
 
@@ -369,14 +372,14 @@ export class ChangeTranslator {
     }
 
     private async translateEdgeChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange | mxgraph.mxGeometryChange,
-        connection: IModelConnection): Promise<void> {
+        connection: IModelConnection, compoundId = Id.uuid): Promise<void> {
 
         if (change['terminal']) {
-            await this.translateEdgeEndsChange(change as mxgraph.mxTerminalChange, connection);
+            await this.translateEdgeEndsChange(change as mxgraph.mxTerminalChange, connection, compoundId);
         } else if (change['value'] !== undefined && change['value'] !== null) {
-            await this.translateEdgeValueChange(change as mxgraph.mxValueChange, connection);
+            await this.translateEdgeValueChange(change as mxgraph.mxValueChange, connection, compoundId);
         } else if (change['geometry'] !== undefined && change['geometry'] !== null) {
-            await this.translateEdgeLabelPositionChange(change as mxgraph.mxGeometryChange, connection);
+            await this.translateEdgeLabelPositionChange(change as mxgraph.mxGeometryChange, connection, compoundId);
         } else {
             if (change['previous']) {
                 // Edge is undone
@@ -387,29 +390,30 @@ export class ChangeTranslator {
         }
     }
 
-    private async translateEdgeValueChange(change: mxgraph.mxValueChange, connection: IModelConnection): Promise<void> {
+    private async translateEdgeValueChange(change: mxgraph.mxValueChange,
+        connection: IModelConnection, compoundId = Id.uuid): Promise<void> {
         const elementValues = this.nodeNameConverter.convertFrom(change.cell.value, connection);
         for (const key in elementValues) {
             connection[key] = elementValues[key];
         }
 
-        const changeId = Id.uuid;
-        this.dataService.updateElement(connection, true, changeId);
+        this.dataService.updateElement(connection, true, compoundId);
     }
 
-    private async translateEdgeLabelPositionChange(change: mxgraph.mxGeometryChange, connection: IModelConnection): Promise<void> {
+    private async translateEdgeLabelPositionChange(change: mxgraph.mxGeometryChange,
+        connection: IModelConnection, compoundId = Id.uuid): Promise<void> {
         if (Type.is(connection, ProcessConnection)) {
             let con = (connection as ProcessConnection);
             let labelX = change.geometry.x;
             let labelY = change.geometry.y;
             con.labelX = labelX;
             con.labelY = labelY;
-            const changeId = Id.uuid;
-            this.dataService.updateElement(con, true, changeId);
+            this.dataService.updateElement(con, true, compoundId);
         }
     }
 
-    private async translateEdgeEndsChange(change: mxgraph.mxTerminalChange, connection: IModelConnection): Promise<void> {
+    private async translateEdgeEndsChange(change: mxgraph.mxTerminalChange,
+        connection: IModelConnection, compoundId = Id.uuid): Promise<void> {
         if (change.cell.target === undefined
             || change.cell.target === null
             || change.cell.source === undefined
@@ -456,10 +460,9 @@ export class ChangeTranslator {
         Arrays.remove(previous[field], connectionProxy);
         terminal[field].push(connectionProxy);
 
-        const changeId = Id.uuid;
-        this.dataService.updateElement(previous, true, changeId);
-        this.dataService.updateElement(terminal, true, changeId);
-        this.dataService.updateElement(connection, true, changeId);
+        this.dataService.updateElement(previous, true, compoundId);
+        this.dataService.updateElement(terminal, true, compoundId);
+        this.dataService.updateElement(connection, true, compoundId);
     }
 
     private determineTool(change: (mxgraph.mxTerminalChange | mxgraph.mxChildChange)): ToolBase {

@@ -53,7 +53,10 @@ export class ModelSearchBarComponent implements OnInit {
         mergeMap(term => {
             return this.dataService.search(term, ModelSearchBarComponent.SEARCH_FILTER)
                 .then(v => {
-                    const result = this.parentModel !== undefined ? v.filter(model => model.url !== this.parentModel.url) : v;
+                    let result = v;
+                    if (this.parentModel !== undefined) {
+                        result = v.filter(model => model.url !== this.parentModel.url && !model.recycled);
+                    }
                     if (result.length > 0) {
                         return result as CEGModel[];
                     } else {

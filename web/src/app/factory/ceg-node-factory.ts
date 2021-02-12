@@ -29,6 +29,8 @@ export class CEGNodeFactory extends PositionableElementFactoryBase<CEGNode> {
         node.condition = this.copyFrom?.condition ?? Config.CEG_NODE_NEW_CONDITION;
         node.x = this.coords.x;
         node.y = this.coords.y;
+        node.width = this.copyFrom?.width ?? Config.CEG_NODE_WIDTH;
+        node.height = this.copyFrom?.height ?? Config.CEG_NODE_HEIGHT;
         node.tracesFrom = this.copyFrom?.tracesFrom ?? [];
         node.tracesTo = this.copyFrom?.tracesTo ?? [];
         node.incomingConnections = this.copyFrom?.incomingConnections ?? [];

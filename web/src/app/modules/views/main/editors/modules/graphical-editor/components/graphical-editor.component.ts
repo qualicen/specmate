@@ -38,6 +38,7 @@ import { ChangeTranslator } from './util/change-translator';
 import { StyleChanger } from './util/style-changer';
 import { GraphicalEditorService } from '../services/graphical-editor.service';
 import { Subscription } from 'rxjs';
+import { CEGLinkedNode } from 'src/app/model/CEGLinkedNode';
 
 declare var require: any;
 
@@ -553,6 +554,10 @@ export class GraphicalEditor implements OnDestroy {
             }
             return originalTooltip(cell);
         };
+
+        mx.mxConnectionHandler.prototype.isValidTarget =
+            (target) => target.value === undefined || target.value === null || !Type.is(target.value, CEGLinkedNode);
+
     }
 
     private updateValidities(): void {

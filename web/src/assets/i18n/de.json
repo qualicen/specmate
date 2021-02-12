@@ -149,6 +149,7 @@
 	"layoutErrorCircle": "Das Modell konnte nicht geordnet werden: Der Graph enthält einen Kreis.",
 	"library": "Bibliothek",
 	"linkExistingModel": "Verlinkten Knoten ändern",
+	"linkedNodesInModel": "Es befinden sich referenzierte Knoten in dem Modell. Alle Modelle mit Referenzen auf diese Knoten werden invalide, wenn Sie dieses Modell löschen.",
 	"linkingDialog": {
 		"confirm": "Knoten verlinken",
 		"enterModelName": "Geben Sie den Modelnamen ein",

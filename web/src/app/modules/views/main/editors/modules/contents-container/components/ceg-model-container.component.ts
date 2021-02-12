@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { CEGNode } from 'src/app/model/CEGNode';
 import { CEGModelFactory } from '../../../../../../../factory/ceg-model-factory';
 import { ModelFactoryBase } from '../../../../../../../factory/model-factory-base';
 import { CEGModel } from '../../../../../../../model/CEGModel';
@@ -10,11 +11,11 @@ import { SpecmateDataService } from '../../../../../../data/modules/data-service
 import { NavigatorService } from '../../../../../../navigation/modules/navigator/services/navigator.service';
 import { ConfirmationModal } from '../../../../../../notification/modules/modals/services/confirmation-modal.service';
 import { AdditionalInformationService } from '../../../../../side/modules/links-actions/services/additional-information.service';
+import { GraphicalEditorService } from '../../graphical-editor/services/graphical-editor.service';
+import { ModelImageService } from '../../graphical-editor/services/model-image.service';
 import { ClipboardService } from '../../tool-pallette/services/clipboard-service';
 import { TestSpecificationContentContainerBase } from '../base/testspecification-generatable-content-container-base';
 import { ContentsContainerService } from '../services/content-container.service';
-import { GraphicalEditorService } from '../../graphical-editor/services/graphical-editor.service';
-import { ModelImageService } from '../../graphical-editor/services/model-image.service';
 
 @Component({
     moduleId: module.id.toString(),
@@ -98,5 +99,15 @@ export class CEGModelContainer extends TestSpecificationContentContainerBase<CEG
         const cmpA = this.objectifIndicator.substring(0, relevantLength);
         const cmpB = desc.substring(0, relevantLength);
         return cmpA === cmpB;
+    }
+
+    public async recycle(element: CEGModel): Promise<void> {
+        let message = this.translate.instant('doYouReallyWantToDelete', { name: element.name });
+        const contents = await this.dataService.readContents(element.url, true);
+        const anyLinkedNode = contents.find(elem => Type.is(elem, CEGNode) && (elem as CEGNode).linksFrom?.length > 0);
+        if (anyLinkedNode !== undefined) {
+            message += '\n\n' + this.translate.instant('linkedNodesInModel');
+        }
+        super.recycle(element, message);
     }
 }

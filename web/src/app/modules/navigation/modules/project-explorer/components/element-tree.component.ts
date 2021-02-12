@@ -224,6 +224,7 @@ export class ElementTree implements OnInit {
         try {
 
             let linkingNodeUrls: string[] = [];
+            let linkedNodeUrls: string[] = [];
             if (Type.is(this.element, CEGModel)) {
                 const contents = await this.dataService.readContents(this.element.url, false);
                 linkingNodeUrls = contents
@@ -231,6 +232,9 @@ export class ElementTree implements OnInit {
                     .map(element => (element as CEGNode).linksFrom)
                     .reduce((a, b) => a.concat(b), [])
                     .map(proxy => proxy.url);
+                linkedNodeUrls = contents
+                    .map(element => (element as CEGLinkedNode).linkTo?.url)
+                    .filter(url => url !== undefined);
             }
 
             let message = this.translate.instant('doYouReallyWantToDeletePermanent', { name: this.element.name });
@@ -247,6 +251,17 @@ export class ElementTree implements OnInit {
                 const linkingNode = await this.dataService.readElement(url, true) as CEGLinkedNode;
                 delete linkingNode.linkTo;
                 await this.dataService.updateElement(linkingNode, true, compoundId);
+            }
+            for (const linkedNodeUrl of linkedNodeUrls) {
+                const linkedNode = await this.dataService.readElement(linkedNodeUrl, true) as CEGNode;
+                const urlsToDelete = linkedNode
+                    .linksFrom.filter(proxy => Url.isParent(this.element.url, proxy.url))
+                    .map(proxy => proxy.url);
+                for (const urlToDelete of urlsToDelete) {
+                    const index = linkedNode.linksFrom.findIndex(proxy => proxy.url === urlToDelete);
+                    linkedNode.linksFrom.splice(index, 1);
+                }
+                await this.dataService.updateElement(linkedNode, true, compoundId);
             }
 
             await this.dataService.deleteElement(this.element.url, true, compoundId);

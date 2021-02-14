@@ -2,6 +2,8 @@ package com.specmate.emfrest.crud;
 
 import java.util.Arrays;
 
+import javax.ws.rs.core.MultivaluedMap;
+
 import org.osgi.service.component.annotations.Component;
 
 import com.specmate.common.exception.SpecmateException;
@@ -26,7 +28,8 @@ public class CopyService extends RestServiceBase {
 	}
 
 	@Override
-	public RestResult<?> post(Object target, Object child, String token) throws SpecmateException {
+	public RestResult<?> post(Object target, Object child, MultivaluedMap<String, String> queryParams, String token)
+			throws SpecmateException {
 		return CrudUtil.duplicate(target, Arrays.asList(TestSpecification.class, Folder.class));
 	}
 }

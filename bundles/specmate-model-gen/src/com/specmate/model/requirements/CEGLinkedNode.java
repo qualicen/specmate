@@ -2,8 +2,6 @@
  */
 package com.specmate.model.requirements;
 
-import com.specmate.model.base.IModelNode;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>CEG Linked Node</b></em>'.
@@ -20,7 +18,7 @@ import com.specmate.model.base.IModelNode;
  * @model annotation="http://specmate.com/form_meta disabled1='name' disabled2='description'"
  * @generated
  */
-public interface CEGLinkedNode extends IModelNode {
+public interface CEGLinkedNode extends CEGNode {
 	/**
 	 * Returns the value of the '<em><b>Link To</b></em>' reference.
 	 * It is bidirectional and its opposite is '{@link com.specmate.model.requirements.CEGNode#getLinksFrom <em>Links From</em>}'.

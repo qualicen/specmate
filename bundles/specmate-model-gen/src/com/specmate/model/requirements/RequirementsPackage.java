@@ -719,7 +719,7 @@ public interface RequirementsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CEG_LINKED_NODE__ID = BasePackage.IMODEL_NODE__ID;
+	int CEG_LINKED_NODE__ID = CEG_NODE__ID;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -728,7 +728,7 @@ public interface RequirementsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CEG_LINKED_NODE__NAME = BasePackage.IMODEL_NODE__NAME;
+	int CEG_LINKED_NODE__NAME = CEG_NODE__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -737,7 +737,7 @@ public interface RequirementsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CEG_LINKED_NODE__DESCRIPTION = BasePackage.IMODEL_NODE__DESCRIPTION;
+	int CEG_LINKED_NODE__DESCRIPTION = CEG_NODE__DESCRIPTION;
 
 	/**
 	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
@@ -746,7 +746,7 @@ public interface RequirementsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CEG_LINKED_NODE__RECYCLED = BasePackage.IMODEL_NODE__RECYCLED;
+	int CEG_LINKED_NODE__RECYCLED = CEG_NODE__RECYCLED;
 
 	/**
 	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
@@ -755,7 +755,7 @@ public interface RequirementsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CEG_LINKED_NODE__HAS_RECYCLED_CHILDREN = BasePackage.IMODEL_NODE__HAS_RECYCLED_CHILDREN;
+	int CEG_LINKED_NODE__HAS_RECYCLED_CHILDREN = CEG_NODE__HAS_RECYCLED_CHILDREN;
 
 	/**
 	 * The feature id for the '<em><b>Contents</b></em>' containment reference list.
@@ -764,7 +764,7 @@ public interface RequirementsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CEG_LINKED_NODE__CONTENTS = BasePackage.IMODEL_NODE__CONTENTS;
+	int CEG_LINKED_NODE__CONTENTS = CEG_NODE__CONTENTS;
 
 	/**
 	 * The feature id for the '<em><b>Traces To</b></em>' reference list.
@@ -773,7 +773,7 @@ public interface RequirementsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CEG_LINKED_NODE__TRACES_TO = BasePackage.IMODEL_NODE__TRACES_TO;
+	int CEG_LINKED_NODE__TRACES_TO = CEG_NODE__TRACES_TO;
 
 	/**
 	 * The feature id for the '<em><b>Traces From</b></em>' reference list.
@@ -782,7 +782,7 @@ public interface RequirementsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CEG_LINKED_NODE__TRACES_FROM = BasePackage.IMODEL_NODE__TRACES_FROM;
+	int CEG_LINKED_NODE__TRACES_FROM = CEG_NODE__TRACES_FROM;
 
 	/**
 	 * The feature id for the '<em><b>X</b></em>' attribute.
@@ -791,7 +791,7 @@ public interface RequirementsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CEG_LINKED_NODE__X = BasePackage.IMODEL_NODE__X;
+	int CEG_LINKED_NODE__X = CEG_NODE__X;
 
 	/**
 	 * The feature id for the '<em><b>Y</b></em>' attribute.
@@ -800,7 +800,7 @@ public interface RequirementsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CEG_LINKED_NODE__Y = BasePackage.IMODEL_NODE__Y;
+	int CEG_LINKED_NODE__Y = CEG_NODE__Y;
 
 	/**
 	 * The feature id for the '<em><b>Width</b></em>' attribute.
@@ -809,7 +809,7 @@ public interface RequirementsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CEG_LINKED_NODE__WIDTH = BasePackage.IMODEL_NODE__WIDTH;
+	int CEG_LINKED_NODE__WIDTH = CEG_NODE__WIDTH;
 
 	/**
 	 * The feature id for the '<em><b>Height</b></em>' attribute.
@@ -818,7 +818,7 @@ public interface RequirementsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CEG_LINKED_NODE__HEIGHT = BasePackage.IMODEL_NODE__HEIGHT;
+	int CEG_LINKED_NODE__HEIGHT = CEG_NODE__HEIGHT;
 
 	/**
 	 * The feature id for the '<em><b>Outgoing Connections</b></em>' reference list.
@@ -827,7 +827,7 @@ public interface RequirementsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CEG_LINKED_NODE__OUTGOING_CONNECTIONS = BasePackage.IMODEL_NODE__OUTGOING_CONNECTIONS;
+	int CEG_LINKED_NODE__OUTGOING_CONNECTIONS = CEG_NODE__OUTGOING_CONNECTIONS;
 
 	/**
 	 * The feature id for the '<em><b>Incoming Connections</b></em>' reference list.
@@ -836,7 +836,43 @@ public interface RequirementsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CEG_LINKED_NODE__INCOMING_CONNECTIONS = BasePackage.IMODEL_NODE__INCOMING_CONNECTIONS;
+	int CEG_LINKED_NODE__INCOMING_CONNECTIONS = CEG_NODE__INCOMING_CONNECTIONS;
+
+	/**
+	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CEG_LINKED_NODE__TYPE = CEG_NODE__TYPE;
+
+	/**
+	 * The feature id for the '<em><b>Variable</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CEG_LINKED_NODE__VARIABLE = CEG_NODE__VARIABLE;
+
+	/**
+	 * The feature id for the '<em><b>Condition</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CEG_LINKED_NODE__CONDITION = CEG_NODE__CONDITION;
+
+	/**
+	 * The feature id for the '<em><b>Links From</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CEG_LINKED_NODE__LINKS_FROM = CEG_NODE__LINKS_FROM;
 
 	/**
 	 * The feature id for the '<em><b>Link To</b></em>' reference.
@@ -845,7 +881,7 @@ public interface RequirementsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CEG_LINKED_NODE__LINK_TO = BasePackage.IMODEL_NODE_FEATURE_COUNT + 0;
+	int CEG_LINKED_NODE__LINK_TO = CEG_NODE_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>CEG Linked Node</em>' class.
@@ -854,7 +890,7 @@ public interface RequirementsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CEG_LINKED_NODE_FEATURE_COUNT = BasePackage.IMODEL_NODE_FEATURE_COUNT + 1;
+	int CEG_LINKED_NODE_FEATURE_COUNT = CEG_NODE_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>CEG Linked Node</em>' class.
@@ -863,7 +899,7 @@ public interface RequirementsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CEG_LINKED_NODE_OPERATION_COUNT = BasePackage.IMODEL_NODE_OPERATION_COUNT + 0;
+	int CEG_LINKED_NODE_OPERATION_COUNT = CEG_NODE_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.specmate.model.requirements.NodeType <em>Node Type</em>}' enum.

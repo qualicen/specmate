@@ -2,21 +2,16 @@
  */
 package com.specmate.model.requirements.impl;
 
-import com.specmate.model.base.impl.IModelNodeImpl;
-
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 import com.specmate.model.requirements.CEGLinkedNode;
 import com.specmate.model.requirements.CEGNode;
 import com.specmate.model.requirements.RequirementsPackage;
 
-import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>CEG Linked Node</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>CEG
+ * Linked Node</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
@@ -26,10 +21,9 @@ import org.eclipse.emf.ecore.InternalEObject;
  *
  * @generated
  */
-public class CEGLinkedNodeImpl extends IModelNodeImpl implements CEGLinkedNode {
+public class CEGLinkedNodeImpl extends CEGNodeImpl implements CEGLinkedNode {
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected CEGLinkedNodeImpl() {
@@ -37,8 +31,7 @@ public class CEGLinkedNodeImpl extends IModelNodeImpl implements CEGLinkedNode {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -47,8 +40,7 @@ public class CEGLinkedNodeImpl extends IModelNodeImpl implements CEGLinkedNode {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -57,8 +49,7 @@ public class CEGLinkedNodeImpl extends IModelNodeImpl implements CEGLinkedNode {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public CEGNode basicGetLinkTo() {
@@ -66,8 +57,7 @@ public class CEGLinkedNodeImpl extends IModelNodeImpl implements CEGLinkedNode {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public NotificationChain basicSetLinkTo(CEGNode newLinkTo, NotificationChain msgs) {
@@ -76,8 +66,7 @@ public class CEGLinkedNodeImpl extends IModelNodeImpl implements CEGLinkedNode {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -86,8 +75,7 @@ public class CEGLinkedNodeImpl extends IModelNodeImpl implements CEGLinkedNode {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -103,8 +91,7 @@ public class CEGLinkedNodeImpl extends IModelNodeImpl implements CEGLinkedNode {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -117,8 +104,7 @@ public class CEGLinkedNodeImpl extends IModelNodeImpl implements CEGLinkedNode {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -132,8 +118,7 @@ public class CEGLinkedNodeImpl extends IModelNodeImpl implements CEGLinkedNode {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -147,8 +132,7 @@ public class CEGLinkedNodeImpl extends IModelNodeImpl implements CEGLinkedNode {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -162,8 +146,7 @@ public class CEGLinkedNodeImpl extends IModelNodeImpl implements CEGLinkedNode {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -175,4 +158,4 @@ public class CEGLinkedNodeImpl extends IModelNodeImpl implements CEGLinkedNode {
 		return super.eIsSet(featureID);
 	}
 
-} //CEGLinkedNodeImpl
+} // CEGLinkedNodeImpl

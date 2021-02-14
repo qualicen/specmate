@@ -142,6 +142,7 @@ public class RequirementsSwitch<T> extends Switch<T> {
 			case RequirementsPackage.CEG_LINKED_NODE: {
 				CEGLinkedNode cegLinkedNode = (CEGLinkedNode)theEObject;
 				T result = caseCEGLinkedNode(cegLinkedNode);
+				if (result == null) result = caseCEGNode(cegLinkedNode);
 				if (result == null) result = caseIModelNode(cegLinkedNode);
 				if (result == null) result = caseISpecmatePositionableModelObject(cegLinkedNode);
 				if (result == null) result = caseISpecmateModelObject(cegLinkedNode);

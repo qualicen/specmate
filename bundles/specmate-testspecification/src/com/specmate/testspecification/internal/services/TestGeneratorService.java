@@ -1,5 +1,8 @@
 package com.specmate.testspecification.internal.services;
 
+import java.util.List;
+
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
 import org.eclipse.emf.ecore.EObject;
@@ -54,11 +57,15 @@ public class TestGeneratorService extends RestServiceBase {
 
 	/** {@inheritDoc} */
 	@Override
-	public RestResult<?> post(Object target, Object object, String token) throws SpecmateException {
+	public RestResult<?> post(Object target, Object object, MultivaluedMap<String, String> queryParams, String token)
+			throws SpecmateException {
 		TestSpecification specification = (TestSpecification) target;
 		EObject container = specification.eContainer();
 		if (container instanceof CEGModel) {
-			new CEGTestCaseGenerator(specification).generate();
+			List<String> withLinksParams = queryParams.get("considerLinks");
+			boolean withLinks = withLinksParams != null && withLinksParams.size() > 0
+					&& withLinksParams.get(0).toLowerCase().equals("true");
+			new CEGTestCaseGenerator(specification, withLinks).generate();
 			testGenCounter.inc();
 		} else if (container instanceof Process) {
 			new ProcessTestCaseGenerator(specification).generate();

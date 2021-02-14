@@ -248,6 +248,7 @@
 	},
 	"successful": "Successful",
 	"testspec": {
+		"considerLinks": "Consider Linked Nodes",
 		"errorMessage": "No logical testspecification could be generated due to the following errors. Please check your model.",
 		"errorTitle": "Generation not possible",
 		"generate": "Generate test specification",

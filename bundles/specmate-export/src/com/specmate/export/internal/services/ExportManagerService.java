@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.iterators.IteratorChain;
+import org.eclipse.emf.ecore.EObject;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -24,6 +25,7 @@ import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateValidationException;
 import com.specmate.export.api.IExporter;
 import com.specmate.model.export.Export;
+import com.specmate.model.support.util.SpecmateEcoreUtil;
 import com.specmate.model.testspecification.TestProcedure;
 import com.specmate.model.testspecification.TestSpecification;
 import com.specmate.usermodel.UserSession;
@@ -133,6 +135,7 @@ public class ExportManagerService {
 
 	/** Returns a list of exporters for which a user is authorized */
 	public List<IExporter> getExporters(Object object, String userToken) {
+		String projectId = SpecmateEcoreUtil.getProjectId((EObject) object);
 
 		Set<IExporter> allowedExporters = allowedExportersMap.get(userToken);
 		if (allowedExporters == null) {
@@ -141,11 +144,15 @@ public class ExportManagerService {
 
 		final Set<IExporter> _allowedExporters = allowedExporters;
 		if (object instanceof TestSpecification) {
-			return testSpecificationExporters.stream().filter(e -> _allowedExporters.contains(e))
+			return testSpecificationExporters.stream()
+					.filter(e -> _allowedExporters.contains(e)
+							&& (e.getProjectName() == null || e.getProjectName().equals(projectId)))
 					.collect(Collectors.toList());
 		}
 		if (object instanceof TestProcedure) {
-			return testProcedureExporters.stream().filter(e -> _allowedExporters.contains(e))
+			return testProcedureExporters.stream()
+					.filter(e -> _allowedExporters.contains(e)
+							&& (e.getProjectName() == null || e.getProjectName().equals(projectId)))
 					.collect(Collectors.toList());
 		}
 		return Collections.emptyList();

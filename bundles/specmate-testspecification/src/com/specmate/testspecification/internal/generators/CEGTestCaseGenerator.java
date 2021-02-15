@@ -72,19 +72,37 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 		}
 	}
 
+	/**
+	 * Enlarges the node set by the nodes (from other model) reachable via linked
+	 * nodes
+	 */
 	private void addLinkedNodes() {
-		List<CEGLinkedNode> linkedNodes = pickInstancesOf(nodes, CEGLinkedNode.class);
+		// fetch the linked nodes in the original model, this will be our worklist
+		LinkedList<CEGLinkedNode> linkedNodes = new LinkedList<>(pickInstancesOf(nodes, CEGLinkedNode.class));
+
+		// these are the linked nodes we already handled (needed to avoid cycles)
 		Set<CEGLinkedNode> handledLinkedNodes = new HashSet<CEGLinkedNode>();
+
 		while (!linkedNodes.isEmpty()) {
-			CEGLinkedNode linkedNode = linkedNodes.get(0);
-			linkedNodes.remove(linkedNode);
+			// take the first linked node from the work list
+			CEGLinkedNode linkedNode = linkedNodes.pop();
+			// add to handled list to signal that we don't need to handle this one again
 			handledLinkedNodes.add(linkedNode);
 			if (linkedNode.getLinkTo() != null) {
+				// get all nodes reachable from the linked node via the incomingConnections
+				// relation
 				Set<CEGNode> newNodes = getReachableNodes(linkedNode.getLinkTo());
+				// remove the linked node from the collection (it is represented by the linking
+				// node)
 				newNodes.remove(linkedNode.getLinkTo());
+				// add all the reachable nodes to our global nodes list (used for generating
+				// tests)
 				nodes.addAll(newNodes);
+				// there might be more linked nodes in the collections of reachable nodes ...
 				List<CEGLinkedNode> newlinkedNodes = pickInstancesOf(List.copyOf(newNodes), CEGLinkedNode.class);
+				// ... remove the ones that we already handled ...
 				newlinkedNodes.removeAll(handledLinkedNodes);
+				// ... and add them to the worklist
 				linkedNodes.addAll(newlinkedNodes);
 			}
 		}

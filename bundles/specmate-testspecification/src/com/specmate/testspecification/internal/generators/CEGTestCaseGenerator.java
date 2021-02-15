@@ -1,6 +1,8 @@
 package com.specmate.testspecification.internal.generators;
 
 import static com.specmate.model.support.util.SpecmateEcoreUtil.getCondition;
+import static com.specmate.model.support.util.SpecmateEcoreUtil.getIncomingConnections;
+import static com.specmate.model.support.util.SpecmateEcoreUtil.getType;
 import static com.specmate.model.support.util.SpecmateEcoreUtil.getVariable;
 import static com.specmate.model.support.util.SpecmateEcoreUtil.pickInstancesOf;
 
@@ -134,7 +136,7 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 	@Override
 	protected void generateParameters() {
 		for (IModelNode node : nodes) {
-			String name = SpecmateEcoreUtil.getVariable(node);
+			String name = getVariable(node);
 			ParameterType type = determineParameterTypeForNode(node);
 			if (type != null && !parameterExists(specification, name, type)) {
 				TestParameter parameter = createTestParameter(name, type);
@@ -181,7 +183,7 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 	 *         <code>null</code> if the node is an intermediate node.
 	 */
 	private ParameterType determineParameterTypeForNode(IModelNode node) {
-		if (SpecmateEcoreUtil.getIncomingConnections(node, considerLinks).isEmpty()) {
+		if (getIncomingConnections(node, considerLinks).isEmpty()) {
 			return ParameterType.INPUT;
 		} else if (node.getOutgoingConnections().isEmpty()) {
 			return ParameterType.OUTPUT;
@@ -236,7 +238,7 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 
 	private Collection<CEGNode> getRelevantNodes(CEGNodeEvaluation evaluation, String name) {
 		Multimap<String, CEGNode> variableToNodeMap = ArrayListMultimap.create();
-		evaluation.keySet().stream().forEach(n -> variableToNodeMap.put(SpecmateEcoreUtil.getVariable(n), n));
+		evaluation.keySet().stream().forEach(n -> variableToNodeMap.put(getVariable(n), n));
 		Collection<CEGNode> allnodes = variableToNodeMap.get(name);
 
 		boolean allMutex = allnodes.stream().allMatch(c -> {
@@ -352,8 +354,8 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 			}
 			IModelNode node = entry.getKey();
 			if (determineParameterTypeForNode(node) != ParameterType.INPUT) {
-				boolean handled = SpecmateEcoreUtil.getIncomingConnections(node, considerLinks).stream()
-						.map(conn -> conn.getSource()).allMatch(n -> evaluation.containsKey(n));
+				boolean handled = getIncomingConnections(node, considerLinks).stream().map(conn -> conn.getSource())
+						.allMatch(n -> evaluation.containsKey(n));
 				if (!handled) {
 					return Optional.of(node);
 				}
@@ -385,7 +387,7 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 		SortedSet<CEGNodeEvaluation> consistent = new TreeSet<CEGNodeEvaluation>(nodeEvalSetComparator);
 		SortedSet<CEGNodeEvaluation> inconsistent = new TreeSet<CEGNodeEvaluation>(nodeEvalSetComparator);
 		AssertUtil.assertEquals(evaluation.get(node).tag, ETag.ALL);
-		switch (SpecmateEcoreUtil.getType(node)) {
+		switch (getType(node)) {
 		case AND:
 			handleAllCase(true, evaluation, node, consistent, inconsistent);
 			break;
@@ -403,10 +405,10 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 		boolean failure;
 		// case where node is true in AND case or node is false in OR case
 		if ((isAnd && nodeValue) || (!isAnd && !nodeValue)) {
-			for (IModelConnection selectedConn : SpecmateEcoreUtil.getIncomingConnections(node, considerLinks)) {
+			for (IModelConnection selectedConn : getIncomingConnections(node, considerLinks)) {
 				CEGNodeEvaluation newEvaluation = (CEGNodeEvaluation) evaluation.clone();
 				failure = false;
-				for (IModelConnection conn : SpecmateEcoreUtil.getIncomingConnections(node, considerLinks)) {
+				for (IModelConnection conn : getIncomingConnections(node, considerLinks)) {
 					boolean value = isAnd ^ ((CEGConnection) conn).isNegate();
 					ETag tag = conn == selectedConn ? ETag.ALL : ETag.ANY;
 					failure = failure
@@ -420,10 +422,10 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 			}
 			// case where node is false in AND case or node is true in OR case
 		} else {
-			for (IModelConnection selectedConn : SpecmateEcoreUtil.getIncomingConnections(node, considerLinks)) {
+			for (IModelConnection selectedConn : getIncomingConnections(node, considerLinks)) {
 				CEGNodeEvaluation newEvaluation = (CEGNodeEvaluation) evaluation.clone();
 				failure = false;
-				for (IModelConnection conn : SpecmateEcoreUtil.getIncomingConnections(node, considerLinks)) {
+				for (IModelConnection conn : getIncomingConnections(node, considerLinks)) {
 					boolean value = ((conn == selectedConn) ^ (isAnd ^ ((CEGConnection) conn).isNegate()));
 					ETag tag = conn == selectedConn ? ETag.ALL : ETag.ANY;
 					failure = failure
@@ -656,7 +658,7 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 			int varForNode = getVarForNode(node);
 			IVecInt vector = getPredecessorVector(node);
 			if (vector.size() > 0) {
-				if (SpecmateEcoreUtil.getType(node) == NodeType.AND) {
+				if (getType(node) == NodeType.AND) {
 					translator.and(varForNode, vector);
 				} else {
 					translator.or(varForNode, vector);
@@ -681,7 +683,7 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 		for (IModelNode node : nodes) {
 			CEGNode cegNode = (CEGNode) node;
 			if (getCondition(node).trim().startsWith("=")) {
-				String variable = SpecmateEcoreUtil.getVariable(cegNode);
+				String variable = getVariable(cegNode);
 				if (!multiMap.containsKey(variable)) {
 					multiMap.put(variable, new HashSet<CEGNode>());
 				}
@@ -707,7 +709,7 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 	/** Returns a variable/value vector for all predeccessors of a node */
 	private IVecInt getPredecessorVector(IModelNode node) {
 		IVecInt vector = new VecInt();
-		for (IModelConnection conn : SpecmateEcoreUtil.getIncomingConnections(node, considerLinks)) {
+		for (IModelConnection conn : getIncomingConnections(node, considerLinks)) {
 			IModelNode pre = conn.getSource();
 			int var = getVarForNode(pre);
 			if (((CEGConnection) conn).isNegate()) {

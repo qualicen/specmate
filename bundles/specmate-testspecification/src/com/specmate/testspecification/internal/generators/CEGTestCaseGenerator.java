@@ -25,6 +25,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil.EqualityHelper;
+import org.osgi.service.log.LogService;
 import org.sat4j.core.VecInt;
 import org.sat4j.maxsat.SolverFactory;
 import org.sat4j.maxsat.WeightedMaxSatDecorator;
@@ -63,10 +64,12 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 
 	private Comparator<CEGNodeEvaluation> nodeEvalSetComparator;
 	private boolean considerLinks;
+	private LogService logService;
 
-	public CEGTestCaseGenerator(TestSpecification specification, boolean considerLinks) {
+	public CEGTestCaseGenerator(TestSpecification specification, boolean considerLinks, LogService logService) {
 		super(specification, CEGModel.class, CEGNode.class);
 		this.considerLinks = considerLinks;
+		this.logService = logService;
 		if (considerLinks) {
 			addLinkedNodes();
 		}
@@ -108,6 +111,10 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 		}
 	}
 
+	/**
+	 *
+	 * @return The nodes reachable via the incomingConnection relationship
+	 */
 	private Set<CEGNode> getReachableNodes(CEGNode node) {
 		LinkedList<CEGNode> workList = new LinkedList<CEGNode>();
 		Set<CEGNode> reached = new HashSet<>();
@@ -117,6 +124,8 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 			if (!reached.contains(currentNode)) {
 				reached.add(currentNode);
 				currentNode.getIncomingConnections().stream().forEach(conn -> workList.add((CEGNode) conn.getSource()));
+			} else {
+				logService.log(LogService.LOG_WARNING, "Found a cicle in the CEG when generating test cases.");
 			}
 		}
 		return reached;
@@ -231,7 +240,7 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 		Collection<CEGNode> allnodes = variableToNodeMap.get(name);
 
 		boolean allMutex = allnodes.stream().allMatch(c -> {
-			String condition = SpecmateEcoreUtil.getCondition(c).trim();
+			String condition = getCondition(c).trim();
 			return condition.startsWith("=") || condition.startsWith("not =");
 		});
 
@@ -671,7 +680,7 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 		Map<String, Set<CEGNode>> multiMap = new HashMap<String, Set<CEGNode>>();
 		for (IModelNode node : nodes) {
 			CEGNode cegNode = (CEGNode) node;
-			if (SpecmateEcoreUtil.getCondition(node).trim().startsWith("=")) {
+			if (getCondition(node).trim().startsWith("=")) {
 				String variable = SpecmateEcoreUtil.getVariable(cegNode);
 				if (!multiMap.containsKey(variable)) {
 					multiMap.put(variable, new HashSet<CEGNode>());

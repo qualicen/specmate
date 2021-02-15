@@ -41,8 +41,6 @@ public class JiraMultiConnector implements IMultiConnector {
 	/** The password for jira server */
 	private String password;
 
-	private Map<String, String> templateProperties;
-
 	/** The associated multiproject */
 	private IMultiProject multiProject;
 
@@ -54,24 +52,8 @@ public class JiraMultiConnector implements IMultiConnector {
 		url = (String) properties.get(JiraConfigConstants.KEY_JIRA_URL);
 		username = (String) properties.get(JiraConfigConstants.KEY_JIRA_USERNAME);
 		password = (String) properties.get(JiraConfigConstants.KEY_JIRA_PASSWORD);
-		templateProperties = getTemplateProperties(properties);
 
 		logService.log(LogService.LOG_DEBUG, "Initialized Jira Multi Connector with " + properties.toString() + ".");
-	}
-
-	/**
-	 * Crates a list of all template properties (without prefix).
-	 */
-	private static Map<String, String> getTemplateProperties(Map<String, Object> properties) {
-		int tmplPrefixLenght = JiraConfigConstants.KEY_JIRA_MULTIPROJECT_TEMPLATE_PREFIX.length();
-		Map<String, String> templateProperties = new HashMap<>();
-		for (String propertyKey : properties.keySet()) {
-			if (propertyKey.startsWith(JiraConfigConstants.KEY_JIRA_MULTIPROJECT_TEMPLATE_PREFIX)) {
-				templateProperties.put(propertyKey.substring(tmplPrefixLenght), (String) properties.get(propertyKey));
-
-			}
-		}
-		return templateProperties;
 	}
 
 	private void validateConfig(Map<String, Object> properties) throws SpecmateException {
@@ -122,19 +104,12 @@ public class JiraMultiConnector implements IMultiConnector {
 
 		HashMap<String, String> projectConfig = new HashMap<>();
 
-		// generated properties
-		projectConfig.put("pid", JiraConfigConstants.CONNECTOR_PID);
-		projectConfig.put(JiraConfigConstants.KEY_JIRA_URL, url);
-		projectConfig.put(JiraConfigConstants.KEY_JIRA_PROJECT, jiraProjectId);
-		projectConfig.put(JiraConfigConstants.KEY_JIRA_USERNAME, username);
-		projectConfig.put(JiraConfigConstants.KEY_JIRA_PASSWORD, password);
-
-		// template properties
-		for (Map.Entry<String, String> templatePropertyEntry : templateProperties.entrySet()) {
-			projectConfig.put("jira." + templatePropertyEntry.getKey(), templatePropertyEntry.getValue());
-		}
+		projectConfig.put(KEY_CONNECTOR + KEY_PID, JiraConfigConstants.CONNECTOR_PID);
+		projectConfig.put(KEY_CONNECTOR + JiraConfigConstants.KEY_JIRA_URL, url);
+		projectConfig.put(KEY_CONNECTOR + JiraConfigConstants.KEY_JIRA_PROJECT, jiraProjectId);
+		projectConfig.put(KEY_CONNECTOR + JiraConfigConstants.KEY_JIRA_USERNAME, username);
+		projectConfig.put(KEY_CONNECTOR + JiraConfigConstants.KEY_JIRA_PASSWORD, password);
 
 		return projectConfig;
 	}
-
 }

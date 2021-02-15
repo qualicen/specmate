@@ -18,6 +18,7 @@ import org.osgi.service.log.LogService;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.config.api.IConfigService;
 import com.specmate.connectors.api.IMultiConnector;
+import com.specmate.connectors.api.IMultiProject;
 import com.specmate.connectors.api.IProjectConfigService;
 import com.specmate.connectors.internal.config.MultiConnectorServiceConfig;
 import com.specmate.connectors.internal.config.PollKeys;
@@ -31,6 +32,9 @@ import com.specmate.scheduler.SchedulerTask;
  */
 @Component(immediate = true, configurationPid = MultiConnectorServiceConfig.PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
 public class MultiConnectorService {
+
+	/** prefix of placeholders in config entries **/
+	private static String PLACEHOLDERPREFIX = "$";
 
 	private List<IMultiConnector> multiConnectors = new ArrayList<>();
 
@@ -90,18 +94,16 @@ public class MultiConnectorService {
 				logService.log(LogService.LOG_INFO, "Syncing multi connector " + multiConnector.getId());
 
 				try {
-					for (Map.Entry<String, Map<String, String>> connectorConfigEntry : multiConnector
+					for (Map.Entry<String, Map<String, String>> projectConfigMapEntry : multiConnector
 							.getProjectConfigs().entrySet()) {
 
-						String technicalProjectId = connectorConfigEntry.getKey();
+						String technicalProjectId = projectConfigMapEntry.getKey();
+						Map<String, String> projectConfig = projectConfigMapEntry.getValue();
 
-						// get specmate name for project
-						String specmateProjectId = multiConnector.getMultiProject()
-								.createSpecmateProjectName(technicalProjectId);
+						IMultiProject multiProject = multiConnector.getMultiProject();
 
-						// add prefix to config entries
-						Map<String, String> projectConfigEntries = addPrefixToConfig(specmateProjectId,
-								connectorConfigEntry.getValue());
+						String specmateProjectId = getSpecmateProjectName(multiConnector, technicalProjectId,
+								projectConfig, multiProject);
 
 						// we have to read this again each time to avoid accidentally adding identically
 						// named projects.
@@ -112,8 +114,15 @@ public class MultiConnectorService {
 
 							logService.log(LogService.LOG_INFO, "Adding project " + specmateProjectId);
 
+							// add template entries to project config
+							Map<String, String> templateConfigEntries = multiProject.getTemplateConfigEntries();
+							projectConfig.putAll(replacePlaceholders(templateConfigEntries, projectConfig));
+
 							// update config: add project config entries
-							configService.addUpdateConfigurationProperties(projectConfigEntries);
+							String connectorConfigPrefix = IProjectConfigService.PROJECT_PREFIX + specmateProjectId
+									+ ".";
+							configService.addUpdateConfigurationProperties(
+									addPrefixToKeys(connectorConfigPrefix, projectConfig));
 
 							// update config: add project id to list of activated projects
 							List<String> allProjects = new ArrayList<>();
@@ -136,19 +145,75 @@ public class MultiConnectorService {
 
 		}
 
-	}
-
-	private Map<String, String> addPrefixToConfig(String specmateProjectId, Map<String, String> orignalConfig) {
-
-		String prefix = IProjectConfigService.PROJECT_PREFIX + specmateProjectId + ".connector.";
-
-		Map<String, String> newConfig = new HashMap<String, String>();
-
-		for (Map.Entry<String, String> entry : orignalConfig.entrySet()) {
-			newConfig.put(prefix + entry.getKey(), entry.getValue());
+		private String getSpecmateProjectName(IMultiConnector multiConnector, String technicalProjectId,
+				Map<String, String> projectConfig, IMultiProject multiProject) {
+			// get specmate name for project
+			String projectNamePattern = multiProject.getProjectNamePattern();
+			String specmateProjectId;
+			if (projectNamePattern == null) {
+				specmateProjectId = multiConnector.getId() + "_" + technicalProjectId;
+			} else {
+				specmateProjectId = replacePlaceholders(projectNamePattern, projectConfig);
+			}
+			return specmateProjectId;
 		}
 
-		return newConfig;
+	}
+
+	/**
+	 * Tries to replace placeholders in template config with values from project
+	 * config.
+	 *
+	 * @param templateConfig template config entries which may (or may not) contain
+	 *                       placeholders
+	 * @param projectConfig  datasource for replacements.
+	 * @return copy of template config in which placeholders are replaced.
+	 */
+	private static Map<String, String> replacePlaceholders(Map<String, String> templateConfig,
+			Map<String, String> projectConfig) {
+
+		Map<String, String> replacedTemplateConfigEntries = new HashMap<>();
+
+		for (Map.Entry<String, String> templateConfigEntry : templateConfig.entrySet()) {
+			if (templateConfigEntry.getValue() == null) {
+				replacedTemplateConfigEntries.put(templateConfigEntry.getKey(), null);
+			} else {
+				replacedTemplateConfigEntries.put(templateConfigEntry.getKey(),
+						replacePlaceholders(templateConfigEntry.getValue(), projectConfig));
+			}
+		}
+
+		return replacedTemplateConfigEntries;
+	}
+
+	/**
+	 * Tries to replace placeholders in a string with values from project config.
+	 *
+	 * @param value         string which may (or may not) contain placeholders
+	 * @param projectConfig datasource for replacements.
+	 * @return copy of 'value' in which placeholders are replaced.
+	 */
+	private static String replacePlaceholders(String value, Map<String, String> projectConfig) {
+
+		// project.companyjira_MFP.connector.jira.url ->
+		// project.companyjira_MFP.connector.jira.url
+
+		for (String key : projectConfig.keySet()) {
+			value = value.replace(PLACEHOLDERPREFIX + key, projectConfig.getOrDefault(key, ""));
+		}
+
+		return value;
+	}
+
+	private static Map<String, String> addPrefixToKeys(String sourcePrefix, Map<String, String> sourceConfig) {
+
+		Map<String, String> targetConfig = new HashMap<>();
+
+		for (Map.Entry<String, String> entry : sourceConfig.entrySet()) {
+			targetConfig.put(sourcePrefix + entry.getKey(), entry.getValue());
+		}
+
+		return targetConfig;
 	}
 
 	@Reference

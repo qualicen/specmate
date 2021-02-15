@@ -36,6 +36,9 @@ public interface IProjectConfigService {
 	/** The prefix for multiproject configuration keys */
 	public static final String KEY_MULTIPROJECT_PROJECTNAMEPATTERN = "projectnamepattern";
 	
+	/** The prefix for multiproject configuration keys */
+	public static final String KEY_MULTIPROJECT_TEMPLATE= "template";
+	
 	/** The configuration key for the list of top-level library folder ids. */
 	public static final String KEY_PROJECT_LIBRARY = ".library";
 

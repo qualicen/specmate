@@ -9,29 +9,45 @@ import { Validator } from '../validator-decorator';
 import { ValidationUtil } from '../validation-util';
 import { CEGLinkedNode } from 'src/app/model/CEGLinkedNode';
 import { SpecmateDataService } from 'src/app/modules/data/modules/data-service/services/specmate-data.service';
+import { Url } from 'src/app/util/url';
 
 @Validator(CEGModel)
 export class DuplicateNodeValidator extends ElementValidatorBase<CEGModel> {
     public async validate(element: CEGModel, contents: IContainer[], dataService: SpecmateDataService): Promise<ValidationResult> {
         const nodes = contents
             .filter((e: IContainer) => Type.is(e, CEGNode)).map(e => e as CEGNode);
-        const linkingNodes = contents
-            .filter((e: IContainer) => Type.is(e, CEGLinkedNode)).map(e => e as CEGLinkedNode);
+
+        const linkingNodesMap: { [linkToUrl: string]: CEGLinkedNode } = {};
+
+        const linkingNodes = contents.filter((e: IContainer) => Type.is(e, CEGLinkedNode));
         const linkedNodes = await Promise.all(
             linkingNodes
-                .map(n => n.linkTo.url)
-                .map(async url => await dataService.readElement(url, true))
+                .map(e => e as CEGLinkedNode)
+                .filter(n => n.linkTo !== undefined)
+                .map(async linkingNode => {
+                    const linkedNode = (await dataService.readElement(linkingNode.linkTo.url, true)) as CEGNode;
+                    linkingNodesMap[linkingNode.linkTo.url] = linkingNode;
+                    return linkedNode;
+                })
         );
-        const duplicates: Set<CEGNode> = new Set();
-        for (let i = 0; i < nodes.length; i++) {
-            let currentNode: CEGNode = nodes[i];
+
+        const allNodes = nodes.concat(linkedNodes);
+
+        const duplicates: Set<IContainer> = new Set();
+        for (let i = 0; i < allNodes.length; i++) {
+            let currentNode: CEGNode = allNodes[i];
             let currentDuplicates: CEGNode[] =
-                nodes.filter((otherNode: CEGNode) =>
+                allNodes.filter((otherNode: CEGNode) =>
                     ValidationUtil.compareStrTrimmed(otherNode.variable, currentNode.variable) &&
                     ValidationUtil.compareStrTrimmed(otherNode.condition, currentNode.condition) &&
                     otherNode !== currentNode &&
                     !duplicates.has(otherNode));
-            currentDuplicates.forEach(node => duplicates.add(node));
+            currentDuplicates.map(duplicate => {
+                if (!Url.isParent(element.url, duplicate.url)) {
+                    return linkingNodesMap[duplicate.url];
+                }
+                return duplicate;
+            }).forEach(node => duplicates.add(node));
         }
         const dupList = Array.from(duplicates.keys());
         if (dupList.length > 0) {

@@ -101,12 +101,15 @@ export class ValidationService extends Monitorable {
         if (requiredFieldsValidator === undefined) {
             return [];
         }
-        const requiredFieldsResults: ValidationResult = requiredFieldsValidator.validate(element);
-        const validNameResult: ValidationResult = this.validNameValidator.validate(element);
-        const textLengthValidationResult: ValidationResult = this.textLengthValidator.validate(element);
+        const requiredFieldsResults: ValidationResult = await requiredFieldsValidator.validate(element, [], this.dataService);
+        const validNameResult: ValidationResult = await this.validNameValidator.validate(element, [], this.dataService);
+        const textLengthValidationResult: ValidationResult = await this.textLengthValidator.validate(element, [], this.dataService);
         const elementValidators = this.getElementValidators(element) || [];
         let elementResults: ValidationResult[] =
-            elementValidators.map((validator: ElementValidatorBase<IContainer>) => validator.validate(element, contents, this.dataService))
+            (await Promise.all(
+                elementValidators
+                .map(async (validator: ElementValidatorBase<IContainer>) => await validator.validate(element, contents, this.dataService))
+            ))
                 .concat(requiredFieldsResults)
                 .concat(validNameResult)
                 .concat(textLengthValidationResult);

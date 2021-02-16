@@ -581,7 +581,10 @@ export class GraphicalEditor implements OnDestroy {
             }
             StyleChanger.replaceStyle(vertex, this.graph, EditorStyle.VALID_STYLE_NAME, EditorStyle.INVALID_STYLE_NAME);
             const overlay = this.graph.setCellWarning(vertex, invalidNode.message, undefined, true);
-            if (Type.is(invalidNode.element, CEGNode) || Type.is(invalidNode.element, ProcessStep)) {
+            if (Type.is(invalidNode.element, CEGNode) || Type.is(invalidNode.element, CEGLinkedNode)) {
+                overlay.offset = new mx.mxPoint(-13, -12);
+            }
+            if (Type.is(invalidNode.element, ProcessStep)) {
                 overlay.offset = new mx.mxPoint(-13, -12);
             }
             if (Type.is(invalidNode.element, ProcessStart) || Type.is(invalidNode.element, ProcessEnd)) {

@@ -6,6 +6,7 @@ import { ValidationResult } from '../validation-result';
 import { Validator } from '../validator-decorator';
 import { ValidationUtil } from '../validation-util';
 import { ValidationErrorSeverity } from '../validation-error-severity';
+import { SpecmateDataService } from 'src/app/modules/data/modules/data-service/services/specmate-data.service';
 
 /**
  * Detects nodes in a model that have a character in the variable name that is not allowed for
@@ -16,7 +17,7 @@ import { ValidationErrorSeverity } from '../validation-error-severity';
 @Validator(CEGNode)
 export class InvalidNodeVariableValidator extends ElementValidatorBase<CEGNode> {
 
-    public validate(element: CEGNode, contents: IContainer[]): ValidationResult {
+    public async validate(element: CEGNode, contents: IContainer[], dataService: SpecmateDataService): Promise<ValidationResult> {
 
         if (!this.isValidNode(element)) {
             let message = ValidationMessage.ERROR_INVALID_VARIABLE;

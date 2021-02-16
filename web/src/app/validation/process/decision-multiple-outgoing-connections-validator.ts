@@ -1,3 +1,4 @@
+import { SpecmateDataService } from 'src/app/modules/data/modules/data-service/services/specmate-data.service';
 import { IContainer } from '../../model/IContainer';
 import { Process } from '../../model/Process';
 import { ProcessDecision } from '../../model/ProcessDecision';
@@ -9,7 +10,7 @@ import { Validator } from '../validator-decorator';
 
 @Validator(Process)
 export class DecisionMultipleOutgoingConnectionsValidator extends ElementValidatorBase<Process> {
-    public validate(element: Process, contents: IContainer[]): ValidationResult {
+    public async validate(element: Process, contents: IContainer[], dataService: SpecmateDataService): Promise<ValidationResult> {
         const invalidNodes: IContainer[] = contents
             .filter((element: IContainer) => Type.is(element, ProcessDecision))
             .filter((element: ProcessDecision) =>

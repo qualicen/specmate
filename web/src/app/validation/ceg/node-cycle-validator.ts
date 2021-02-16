@@ -1,4 +1,5 @@
 import { CEGLinkedNode } from 'src/app/model/CEGLinkedNode';
+import { SpecmateDataService } from 'src/app/modules/data/modules/data-service/services/specmate-data.service';
 import { CEGConnection } from '../../model/CEGConnection';
 import { CEGModel } from '../../model/CEGModel';
 import { CEGNode } from '../../model/CEGNode';
@@ -23,7 +24,7 @@ export class NodeCycleValidator extends ElementValidatorBase<CEGModel> {
     // Set of already explored Nodes
     private closedSet: Set<CEGNode>;
 
-    public validate(element: CEGModel, contents: IContainer[]): ValidationResult {
+    public async validate(element: CEGModel, contents: IContainer[], dataService: SpecmateDataService): Promise<ValidationResult> {
         /**
          * Uses DFS to find all back-edges (=Circles)
          */

@@ -11,10 +11,11 @@ import { ValidationMessage } from '../validation-message';
 import { ValidationUtil } from '../validation-util';
 import { ValidationErrorSeverity } from '../validation-error-severity';
 import { SpecmateType } from 'src/app/util/specmate-type';
+import { SpecmateDataService } from 'src/app/modules/data/modules/data-service/services/specmate-data.service';
 
 @Validator(Process)
 export class InvalidConditionTextValidator extends ElementValidatorBase<Process> {
-    public validate(element: Process, contents: IContainer[]): ValidationResult {
+    public async validate(element: Process, contents: IContainer[], dataService: SpecmateDataService): Promise<ValidationResult> {
         let processNodes: IModelNode[] =
             contents.filter((element: IContainer) =>
             SpecmateType.isNodeOfProcess(element)) as IModelNode[];

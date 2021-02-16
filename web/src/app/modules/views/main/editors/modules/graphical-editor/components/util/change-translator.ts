@@ -243,6 +243,10 @@ export class ChangeTranslator {
         tool.value = change.child.getValue();
         let node = await tool.perform(compoundId);
 
+        if (node === undefined) {
+            return undefined;
+        }
+
         if (Type.is(node, CEGNode)) {
             const value =
                 new CEGmxModelNode(change.child.children[0].value, change.child.children[1].value, change.child.children[2].value || 'AND');

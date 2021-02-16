@@ -23,6 +23,8 @@ import { LoggingService } from '../../../../views/side/modules/log-list/services
 
 export class TestSpecificationGeneratorButton {
 
+    public considerLinks = false;
+
     private contents: IContainer[];
 
     private _model: CEGModel | Process;
@@ -65,7 +67,7 @@ export class TestSpecificationGeneratorButton {
         this.modal.confirmSave()
             .then(() => this.dataService.createElement(testSpec, true, Id.uuid))
             .then(() => this.dataService.commit(this.translate.instant('save')))
-            .then(() => this.dataService.performOperations(testSpec.url, 'generateTests'))
+            .then(() => this.dataService.performOperations(testSpec.url, 'generateTests', null, false, {'considerLinks' : String(this.considerLinks)}))
             .then(async () => {
                 let contents: IContainer[] = [];
 

@@ -1,346 +1,937 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="model" nsURI="http://specmate.com/20200921/model" nsPrefix="com.specmate.model">
-  <eSubpackages name="base" nsURI="http://specmate.com/20200921/model/base" nsPrefix="com.specmate.model.basemodel">
-    <eClassifiers xsi:type="ecore:EClass" name="INamed" abstract="true" interface="true">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
-        <eAnnotations source="http://specmate.com/form_meta">
-          <details key="shortDesc" value="Name"/>
-          <details key="longDesc" value=""/>
-          <details key="required" value="true"/>
-          <details key="type" value="text"/>
-          <details key="position" value="0"/>
-          <details key="allowedPattern" value="^[^,;|]*$"/>
+<ecore:EPackage
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    name="model"
+    nsURI="http://specmate.com/20200921/model"
+    nsPrefix="com.specmate.model">
+  <eSubpackages
+      name="base"
+      nsURI="http://specmate.com/20200921/model/base"
+      nsPrefix="com.specmate.model.basemodel">
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="INamed"
+        abstract="true"
+        interface="true">
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="name"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations
+            source="http://specmate.com/form_meta">
+          <details
+              key="shortDesc"
+              value="Name"/>
+          <details
+              key="longDesc"
+              value=""/>
+          <details
+              key="required"
+              value="true"/>
+          <details
+              key="type"
+              value="text"/>
+          <details
+              key="position"
+              value="0"/>
+          <details
+              key="allowedPattern"
+              value="^[^,;|]*$"/>
         </eAnnotations>
       </eStructuralFeatures>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="IDescribed" abstract="true" interface="true">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
-        <eAnnotations source="http://specmate.com/form_meta">
-          <details key="shortDesc" value="Description"/>
-          <details key="longDesc" value=""/>
-          <details key="required" value="false"/>
-          <details key="type" value="longText"/>
-          <details key="rows" value="5"/>
-          <details key="position" value="100"/>
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="IDescribed"
+        abstract="true"
+        interface="true">
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="description"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations
+            source="http://specmate.com/form_meta">
+          <details
+              key="shortDesc"
+              value="Description"/>
+          <details
+              key="longDesc"
+              value=""/>
+          <details
+              key="required"
+              value="false"/>
+          <details
+              key="type"
+              value="longText"/>
+          <details
+              key="rows"
+              value="5"/>
+          <details
+              key="position"
+              value="100"/>
         </eAnnotations>
       </eStructuralFeatures>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="IID" abstract="true" interface="true">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="IID"
+        abstract="true"
+        interface="true">
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="id"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="IContentElement" abstract="true" interface="true"
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="IContentElement"
+        abstract="true"
+        interface="true"
         eSuperTypes="#//base/IID #//base/INamed #//base/IDescribed #//base/IRecycled"/>
-    <eClassifiers xsi:type="ecore:EClass" name="IContainer" abstract="true" interface="true"
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="IContainer"
+        abstract="true"
+        interface="true"
         eSuperTypes="#//base/IContentElement">
-      <eStructuralFeatures xsi:type="ecore:EReference" name="contents" upperBound="-1"
-          eType="#//base/IContentElement" containment="true"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EReference"
+          name="contents"
+          upperBound="-1"
+          eType="#//base/IContentElement"
+          containment="true"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="ISpecmateModelObject" abstract="true"
-        interface="true" eSuperTypes="#//base/IContainer #//base/ITracingElement"/>
-    <eClassifiers xsi:type="ecore:EClass" name="Folder" eSuperTypes="#//base/ISpecmateModelObject">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="library" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="ISpecmateModelObject"
+        abstract="true"
+        interface="true"
+        eSuperTypes="#//base/IContainer #//base/ITracingElement"/>
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="Folder"
+        eSuperTypes="#//base/ISpecmateModelObject">
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="library"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="IPositionable" abstract="true" interface="true">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="position" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="IPositionable"
+        abstract="true"
+        interface="true">
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="position"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="IExternal">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="extId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="extId2" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="source" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="live" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="IExternal">
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="extId"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="extId2"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="source"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="live"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="ISpecmatePositionableModelObject"
-        abstract="true" interface="true" eSuperTypes="#//base/ISpecmateModelObject">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="x" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="y" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="width" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="height" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="ISpecmatePositionableModelObject"
+        abstract="true"
+        interface="true"
+        eSuperTypes="#//base/ISpecmateModelObject">
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="x"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="y"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="width"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="height"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="IModelConnection" eSuperTypes="#//base/ISpecmateModelObject">
-      <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//base/IModelNode"
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="IModelConnection"
+        eSuperTypes="#//base/ISpecmateModelObject">
+      <eStructuralFeatures
+          xsi:type="ecore:EReference"
+          name="source"
+          eType="#//base/IModelNode"
           eOpposite="#//base/IModelNode/outgoingConnections"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//base/IModelNode"
+      <eStructuralFeatures
+          xsi:type="ecore:EReference"
+          name="target"
+          eType="#//base/IModelNode"
           eOpposite="#//base/IModelNode/incomingConnections"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="IModelNode" eSuperTypes="#//base/ISpecmatePositionableModelObject">
-      <eStructuralFeatures xsi:type="ecore:EReference" name="outgoingConnections"
-          upperBound="-1" eType="#//base/IModelConnection" eOpposite="#//base/IModelConnection/source"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="incomingConnections"
-          upperBound="-1" eType="#//base/IModelConnection" eOpposite="#//base/IModelConnection/target"/>
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="IModelNode"
+        eSuperTypes="#//base/ISpecmatePositionableModelObject">
+      <eStructuralFeatures
+          xsi:type="ecore:EReference"
+          name="outgoingConnections"
+          upperBound="-1"
+          eType="#//base/IModelConnection"
+          eOpposite="#//base/IModelConnection/source"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EReference"
+          name="incomingConnections"
+          upperBound="-1"
+          eType="#//base/IModelConnection"
+          eOpposite="#//base/IModelConnection/target"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="ITracingElement">
-      <eStructuralFeatures xsi:type="ecore:EReference" name="tracesTo" upperBound="-1"
-          eType="#//base/ITracingElement" eOpposite="#//base/ITracingElement/tracesFrom"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="tracesFrom" upperBound="-1"
-          eType="#//base/ITracingElement" eOpposite="#//base/ITracingElement/tracesTo"/>
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="ITracingElement">
+      <eStructuralFeatures
+          xsi:type="ecore:EReference"
+          name="tracesTo"
+          upperBound="-1"
+          eType="#//base/ITracingElement"
+          eOpposite="#//base/ITracingElement/tracesFrom"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EReference"
+          name="tracesFrom"
+          upperBound="-1"
+          eType="#//base/ITracingElement"
+          eOpposite="#//base/ITracingElement/tracesTo"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="IRecycled" abstract="true" interface="true">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="recycled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
-        <eAnnotations source="http://specmate.com/internalAttribute"/>
-      </eStructuralFeatures>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="hasRecycledChildren"
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="IRecycled"
+        abstract="true"
+        interface="true">
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="recycled"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
-        <eAnnotations source="http://specmate.com/internalAttribute"/>
+        <eAnnotations
+            source="http://specmate.com/internalAttribute"/>
+      </eStructuralFeatures>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="hasRecycledChildren"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+        <eAnnotations
+            source="http://specmate.com/internalAttribute"/>
       </eStructuralFeatures>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="ModelImage" eSuperTypes="#//base/IContentElement">
-      <eAnnotations source="http://specmate.com/form_meta">
-        <details key="disabled1" value="name"/>
-        <details key="disabled2" value="description"/>
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="ModelImage"
+        eSuperTypes="#//base/IContentElement">
+      <eAnnotations
+          source="http://specmate.com/form_meta">
+        <details
+            key="disabled1"
+            value="name"/>
+        <details
+            key="disabled2"
+            value="description"/>
       </eAnnotations>
-      <eAnnotations source="http://specmate.com/notLoadingOnList"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="imageData" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eAnnotations
+          source="http://specmate.com/notLoadingOnList"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="imageData"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eClassifiers>
   </eSubpackages>
-  <eSubpackages name="requirements" nsURI="http://specmate.com/20200921/model/requirements"
+  <eSubpackages
+      name="requirements"
+      nsURI="http://specmate.com/20200921/model/requirements"
       nsPrefix="com.specmate.model.requirements">
-    <eClassifiers xsi:type="ecore:EClass" name="Requirement" eSuperTypes="#//base/ISpecmateModelObject #//base/IExternal">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="numberOfTests" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="tac" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="implementingUnit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="implementingBOTeam" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="implementingITTeam" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="plannedRelease" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="status" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="isRegressionRequirement"
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="Requirement"
+        eSuperTypes="#//base/ISpecmateModelObject #//base/IExternal">
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="numberOfTests"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="tac"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="implementingUnit"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="implementingBOTeam"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="implementingITTeam"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="plannedRelease"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="status"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="isRegressionRequirement"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="platform" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="platform"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="CEGModel" eSuperTypes="#//base/ISpecmateModelObject">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="modelRequirements" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
-        <eAnnotations source="http://specmate.com/form_meta">
-          <details key="shortDesc" value="Model Requirements"/>
-          <details key="longDesc" value=""/>
-          <details key="required" value="false"/>
-          <details key="type" value="longText"/>
-          <details key="rows" value="5"/>
-          <details key="position" value="110"/>
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="CEGModel"
+        eSuperTypes="#//base/ISpecmateModelObject">
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="modelRequirements"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations
+            source="http://specmate.com/form_meta">
+          <details
+              key="shortDesc"
+              value="Model Requirements"/>
+          <details
+              key="longDesc"
+              value=""/>
+          <details
+              key="required"
+              value="false"/>
+          <details
+              key="type"
+              value="longText"/>
+          <details
+              key="rows"
+              value="5"/>
+          <details
+              key="position"
+              value="110"/>
         </eAnnotations>
       </eStructuralFeatures>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="CEGNode" eSuperTypes="#//base/IModelNode">
-      <eAnnotations source="http://specmate.com/form_meta">
-        <details key="disabled1" value="name"/>
-        <details key="disabled2" value="description"/>
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="CEGNode"
+        eSuperTypes="#//base/IModelNode">
+      <eAnnotations
+          source="http://specmate.com/form_meta">
+        <details
+            key="disabled1"
+            value="name"/>
+        <details
+            key="disabled2"
+            value="description"/>
       </eAnnotations>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//requirements/NodeType">
-        <eAnnotations source="http://specmate.com/form_meta">
-          <details key="shortDesc" value="Type"/>
-          <details key="longDesc" value="The type of a node"/>
-          <details key="required" value="true"/>
-          <details key="type" value="singleSelection"/>
-          <details key="values" value="[&quot;AND&quot;, &quot;OR&quot;]"/>
-          <details key="position" value="3"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="type"
+          eType="#//requirements/NodeType">
+        <eAnnotations
+            source="http://specmate.com/form_meta">
+          <details
+              key="shortDesc"
+              value="Type"/>
+          <details
+              key="longDesc"
+              value="The type of a node"/>
+          <details
+              key="required"
+              value="true"/>
+          <details
+              key="type"
+              value="singleSelection"/>
+          <details
+              key="values"
+              value="[&quot;AND&quot;, &quot;OR&quot;]"/>
+          <details
+              key="position"
+              value="3"/>
         </eAnnotations>
       </eStructuralFeatures>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="variable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
-        <eAnnotations source="http://specmate.com/form_meta">
-          <details key="shortDesc" value="Variable"/>
-          <details key="longDesc" value="The variable of a node"/>
-          <details key="required" value="true"/>
-          <details key="type" value="text"/>
-          <details key="position" value="1"/>
-          <details key="allowedPattern" value="^[^,;|]*$"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="variable"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations
+            source="http://specmate.com/form_meta">
+          <details
+              key="shortDesc"
+              value="Variable"/>
+          <details
+              key="longDesc"
+              value="The variable of a node"/>
+          <details
+              key="required"
+              value="true"/>
+          <details
+              key="type"
+              value="text"/>
+          <details
+              key="position"
+              value="1"/>
+          <details
+              key="allowedPattern"
+              value="^[^,;|]*$"/>
         </eAnnotations>
       </eStructuralFeatures>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="condition" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
-        <eAnnotations source="http://specmate.com/form_meta">
-          <details key="shortDesc" value="Condition"/>
-          <details key="longDesc" value="The condition the variable has to fulfil"/>
-          <details key="required" value="true"/>
-          <details key="type" value="text"/>
-          <details key="position" value="2"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="condition"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations
+            source="http://specmate.com/form_meta">
+          <details
+              key="shortDesc"
+              value="Condition"/>
+          <details
+              key="longDesc"
+              value="The condition the variable has to fulfil"/>
+          <details
+              key="required"
+              value="true"/>
+          <details
+              key="type"
+              value="text"/>
+          <details
+              key="position"
+              value="2"/>
         </eAnnotations>
       </eStructuralFeatures>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="linksFrom" upperBound="-1"
-          eType="#//requirements/CEGLinkedNode" eOpposite="#//requirements/CEGLinkedNode/linkTo"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EReference"
+          name="linksFrom"
+          upperBound="-1"
+          eType="#//requirements/CEGLinkedNode"
+          eOpposite="#//requirements/CEGLinkedNode/linkTo"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EEnum" name="NodeType">
-      <eLiterals name="AND"/>
-      <eLiterals name="OR" value="1"/>
+    <eClassifiers
+        xsi:type="ecore:EEnum"
+        name="NodeType">
+      <eLiterals
+          name="AND"/>
+      <eLiterals
+          name="OR"
+          value="1"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="CEGConnection" eSuperTypes="#//base/IModelConnection">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="negate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
-        <eAnnotations source="http://specmate.com/form_meta">
-          <details key="shortDesc" value="Negate"/>
-          <details key="longDesc" value="Negation of this connection"/>
-          <details key="type" value="checkbox"/>
-          <details key="position" value="1"/>
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="CEGConnection"
+        eSuperTypes="#//base/IModelConnection">
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="negate"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+        <eAnnotations
+            source="http://specmate.com/form_meta">
+          <details
+              key="shortDesc"
+              value="Negate"/>
+          <details
+              key="longDesc"
+              value="Negation of this connection"/>
+          <details
+              key="type"
+              value="checkbox"/>
+          <details
+              key="position"
+              value="1"/>
         </eAnnotations>
       </eStructuralFeatures>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="CEGLinkedNode" eSuperTypes="#//base/IModelNode">
-      <eAnnotations source="http://specmate.com/form_meta">
-        <details key="disabled1" value="name"/>
-        <details key="disabled2" value="description"/>
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="CEGLinkedNode"
+        eSuperTypes="#//requirements/CEGNode">
+      <eAnnotations
+          source="http://specmate.com/form_meta">
+        <details
+            key="disabled1"
+            value="name"/>
+        <details
+            key="disabled2"
+            value="description"/>
       </eAnnotations>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="linkTo" eType="#//requirements/CEGNode"
+      <eStructuralFeatures
+          xsi:type="ecore:EReference"
+          name="linkTo"
+          eType="#//requirements/CEGNode"
           eOpposite="#//requirements/CEGNode/linksFrom"/>
     </eClassifiers>
   </eSubpackages>
-  <eSubpackages name="testspecification" nsURI="http://specmate.com/20200921/model/testspecification"
+  <eSubpackages
+      name="testspecification"
+      nsURI="http://specmate.com/20200921/model/testspecification"
       nsPrefix="com.specmate.model.testspecification">
-    <eClassifiers xsi:type="ecore:EClass" name="TestSpecification" eSuperTypes="#//base/IContainer"/>
-    <eClassifiers xsi:type="ecore:EClass" name="TestParameter" eSuperTypes="#//base/IContentElement">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//testspecification/ParameterType"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="assignments" upperBound="-1"
-          eType="#//testspecification/ParameterAssignment" eOpposite="#//testspecification/ParameterAssignment/parameter"/>
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="TestSpecification"
+        eSuperTypes="#//base/IContainer"/>
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="TestParameter"
+        eSuperTypes="#//base/IContentElement">
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="type"
+          eType="#//testspecification/ParameterType"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EReference"
+          name="assignments"
+          upperBound="-1"
+          eType="#//testspecification/ParameterAssignment"
+          eOpposite="#//testspecification/ParameterAssignment/parameter"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="TestCase" eSuperTypes="#//base/IContainer #//base/IPositionable">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="consistent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="TestCase"
+        eSuperTypes="#//base/IContainer #//base/IPositionable">
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="consistent"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="ParameterAssignment" eSuperTypes="#//base/IContentElement">
-      <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" eType="#//testspecification/TestParameter"
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="ParameterAssignment"
+        eSuperTypes="#//base/IContentElement">
+      <eStructuralFeatures
+          xsi:type="ecore:EReference"
+          name="parameter"
+          eType="#//testspecification/TestParameter"
           eOpposite="#//testspecification/TestParameter/assignments"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="condition" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    </eClassifiers>
-    <eClassifiers xsi:type="ecore:EEnum" name="ParameterType">
-      <eLiterals name="INPUT"/>
-      <eLiterals name="OUTPUT" value="1"/>
-    </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="TestProcedure" eSuperTypes="#//base/IContainer #//base/IExternal">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="isRegressionTest" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
-        <eAnnotations source="http://specmate.com/form_meta">
-          <details key="shortDesc" value="Regression Test"/>
-          <details key="type" value="checkbox"/>
-          <details key="position" value="3"/>
-          <details key="longDesc" value=""/>
-        </eAnnotations>
-      </eStructuralFeatures>
-    </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="TestStep" eSuperTypes="#//base/IContentElement #//base/IPositionable">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedOutcome" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="referencedTestParameters"
-          upperBound="-1" eType="#//testspecification/TestParameter"/>
-    </eClassifiers>
-  </eSubpackages>
-  <eSubpackages name="processes" nsURI="http://specmate.com/20200921/model/processes"
-      nsPrefix="com.specmate.model.processes">
-    <eClassifiers xsi:type="ecore:EClass" name="Process" eSuperTypes="#//base/IContainer"/>
-    <eClassifiers xsi:type="ecore:EClass" name="ProcessNode" abstract="true" eSuperTypes="#//base/IModelNode"/>
-    <eClassifiers xsi:type="ecore:EClass" name="ProcessStep" eSuperTypes="#//processes/ProcessNode">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedOutcome" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
-        <eAnnotations source="http://specmate.com/form_meta">
-          <details key="shortDesc" value="Expected Outcome"/>
-          <details key="longDesc" value=""/>
-          <details key="required" value="false"/>
-          <details key="type" value="text"/>
-          <details key="position" value="101"/>
-        </eAnnotations>
-      </eStructuralFeatures>
-    </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="ProcessDecision" eSuperTypes="#//processes/ProcessNode"/>
-    <eClassifiers xsi:type="ecore:EClass" name="ProcessConnection" eSuperTypes="#//base/IModelConnection">
-      <eAnnotations source="http://specmate.com/form_meta">
-        <details key="disabled1" value="name"/>
-      </eAnnotations>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="condition" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
-        <eAnnotations source="http://specmate.com/form_meta">
-          <details key="shortDesc" value="Condition"/>
-          <details key="longDesc" value="The condition the variable has to fulfil"/>
-          <details key="required" value="false"/>
-          <details key="type" value="text"/>
-          <details key="position" value="2"/>
-        </eAnnotations>
-      </eStructuralFeatures>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="labelX" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="labelY" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
-    </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="ProcessStart" eSuperTypes="#//processes/ProcessNode">
-      <eAnnotations source="http://specmate.com/form_meta">
-        <details key="disabled1" value="name"/>
-      </eAnnotations>
-    </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="ProcessEnd" eSuperTypes="#//processes/ProcessNode">
-      <eAnnotations source="http://specmate.com/form_meta">
-        <details key="disabled1" value="name"/>
-      </eAnnotations>
-    </eClassifiers>
-  </eSubpackages>
-  <eSubpackages name="history" nsURI="http://specmate.com/20200921/model/history"
-      nsPrefix="com.specmate.model.processes">
-    <eClassifiers xsi:type="ecore:EClass" name="History">
-      <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
-          eType="#//history/HistoryEntry" containment="true"/>
-    </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="HistoryEntry">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="timestamp" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="user" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="deletedObjects" upperBound="-1"
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="value"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="changes" upperBound="-1"
-          eType="#//history/Change" containment="true"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="condition"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="Change">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="objectName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="objectType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
-          defaultValueLiteral=""/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="oldValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="newValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="feature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="isCreate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="isDelete" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eClassifiers
+        xsi:type="ecore:EEnum"
+        name="ParameterType">
+      <eLiterals
+          name="INPUT"/>
+      <eLiterals
+          name="OUTPUT"
+          value="1"/>
+    </eClassifiers>
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="TestProcedure"
+        eSuperTypes="#//base/IContainer #//base/IExternal">
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="isRegressionTest"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+        <eAnnotations
+            source="http://specmate.com/form_meta">
+          <details
+              key="shortDesc"
+              value="Regression Test"/>
+          <details
+              key="type"
+              value="checkbox"/>
+          <details
+              key="position"
+              value="3"/>
+          <details
+              key="longDesc"
+              value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="TestStep"
+        eSuperTypes="#//base/IContentElement #//base/IPositionable">
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="expectedOutcome"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EReference"
+          name="referencedTestParameters"
+          upperBound="-1"
+          eType="#//testspecification/TestParameter"/>
     </eClassifiers>
   </eSubpackages>
-  <eSubpackages name="administration" nsURI="http://specmate.com/20200921/model/administration"
-      nsPrefix="com.specmate.model.administration">
-    <eClassifiers xsi:type="ecore:EClass" name="Status">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  <eSubpackages
+      name="processes"
+      nsURI="http://specmate.com/20200921/model/processes"
+      nsPrefix="com.specmate.model.processes">
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="Process"
+        eSuperTypes="#//base/IContainer"/>
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="ProcessNode"
+        abstract="true"
+        eSuperTypes="#//base/IModelNode"/>
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="ProcessStep"
+        eSuperTypes="#//processes/ProcessNode">
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="expectedOutcome"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations
+            source="http://specmate.com/form_meta">
+          <details
+              key="shortDesc"
+              value="Expected Outcome"/>
+          <details
+              key="longDesc"
+              value=""/>
+          <details
+              key="required"
+              value="false"/>
+          <details
+              key="type"
+              value="text"/>
+          <details
+              key="position"
+              value="101"/>
+        </eAnnotations>
+      </eStructuralFeatures>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="ProblemDetail">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="ecode" eType="#//administration/ErrorCode"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="status" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="detail" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="instance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="ProcessDecision"
+        eSuperTypes="#//processes/ProcessNode"/>
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="ProcessConnection"
+        eSuperTypes="#//base/IModelConnection">
+      <eAnnotations
+          source="http://specmate.com/form_meta">
+        <details
+            key="disabled1"
+            value="name"/>
+      </eAnnotations>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="condition"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations
+            source="http://specmate.com/form_meta">
+          <details
+              key="shortDesc"
+              value="Condition"/>
+          <details
+              key="longDesc"
+              value="The condition the variable has to fulfil"/>
+          <details
+              key="required"
+              value="false"/>
+          <details
+              key="type"
+              value="text"/>
+          <details
+              key="position"
+              value="2"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="labelX"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="labelY"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EEnum" name="ErrorCode">
-      <eLiterals name="noSuchService" value="10"/>
-      <eLiterals name="methodNotAllowed" value="20"/>
-      <eLiterals name="inMaintenanceMode" value="30"/>
-      <eLiterals name="invalidData" value="40"/>
-      <eLiterals name="validator" value="41"/>
-      <eLiterals name="noAuthorization" value="50"/>
-      <eLiterals name="internalProblem" value="100"/>
-      <eLiterals name="userSession" value="101"/>
-      <eLiterals name="configuration" value="102"/>
-      <eLiterals name="persistency" value="103"/>
-      <eLiterals name="migration" value="104"/>
-      <eLiterals name="seralization" value="105"/>
-      <eLiterals name="restService" value="106"/>
-      <eLiterals name="scheduler" value="107"/>
-      <eLiterals name="hpProxy" value="108"/>
-      <eLiterals name="jira" value="109"/>
-      <eLiterals name="metrics" value="110"/>
-      <eLiterals name="search" value="111"/>
-      <eLiterals name="testgeneration" value="112" literal="testgeneration"/>
-      <eLiterals name="trello" value="113"/>
-      <eLiterals name="nlp" value="114" literal="nlp"/>
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="ProcessStart"
+        eSuperTypes="#//processes/ProcessNode">
+      <eAnnotations
+          source="http://specmate.com/form_meta">
+        <details
+            key="disabled1"
+            value="name"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="ProcessEnd"
+        eSuperTypes="#//processes/ProcessNode">
+      <eAnnotations
+          source="http://specmate.com/form_meta">
+        <details
+            key="disabled1"
+            value="name"/>
+      </eAnnotations>
     </eClassifiers>
   </eSubpackages>
-  <eSubpackages name="batch" nsURI="http://specmate.com/20200921/model/batch" nsPrefix="com.specmate.model.batch">
-    <eClassifiers xsi:type="ecore:EClass" name="BatchOperation">
-      <eStructuralFeatures xsi:type="ecore:EReference" name="operations" upperBound="-1"
-          eType="#//batch/Operation" containment="true"/>
-    </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="Operation">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//batch/OperationType"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//base/IContentElement"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//base/IContentElement"
+  <eSubpackages
+      name="history"
+      nsURI="http://specmate.com/20200921/model/history"
+      nsPrefix="com.specmate.model.processes">
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="History">
+      <eStructuralFeatures
+          xsi:type="ecore:EReference"
+          name="entries"
+          upperBound="-1"
+          eType="#//history/HistoryEntry"
           containment="true"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EEnum" name="OperationType">
-      <eLiterals name="CREATE"/>
-      <eLiterals name="UPDATE" value="1"/>
-      <eLiterals name="DELETE" value="2"/>
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="HistoryEntry">
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="timestamp"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="user"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="deletedObjects"
+          upperBound="-1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="comment"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EReference"
+          name="changes"
+          upperBound="-1"
+          eType="#//history/Change"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="Change">
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="objectName"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="objectType"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          defaultValueLiteral=""/>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="oldValue"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="newValue"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="feature"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="isCreate"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="isDelete"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     </eClassifiers>
   </eSubpackages>
-  <eSubpackages name="export" nsURI="http://specmate.com/20200921/model/export" nsPrefix="com.specmate.model.export">
-    <eClassifiers xsi:type="ecore:EClass" name="Export" eSuperTypes="#//base/INamed">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="content" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  <eSubpackages
+      name="administration"
+      nsURI="http://specmate.com/20200921/model/administration"
+      nsPrefix="com.specmate.model.administration">
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="Status">
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="value"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="ProblemDetail">
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="ecode"
+          eType="#//administration/ErrorCode"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="status"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="detail"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="instance"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers
+        xsi:type="ecore:EEnum"
+        name="ErrorCode">
+      <eLiterals
+          name="noSuchService"
+          value="10"/>
+      <eLiterals
+          name="methodNotAllowed"
+          value="20"/>
+      <eLiterals
+          name="inMaintenanceMode"
+          value="30"/>
+      <eLiterals
+          name="invalidData"
+          value="40"/>
+      <eLiterals
+          name="validator"
+          value="41"/>
+      <eLiterals
+          name="noAuthorization"
+          value="50"/>
+      <eLiterals
+          name="internalProblem"
+          value="100"/>
+      <eLiterals
+          name="userSession"
+          value="101"/>
+      <eLiterals
+          name="configuration"
+          value="102"/>
+      <eLiterals
+          name="persistency"
+          value="103"/>
+      <eLiterals
+          name="migration"
+          value="104"/>
+      <eLiterals
+          name="seralization"
+          value="105"/>
+      <eLiterals
+          name="restService"
+          value="106"/>
+      <eLiterals
+          name="scheduler"
+          value="107"/>
+      <eLiterals
+          name="hpProxy"
+          value="108"/>
+      <eLiterals
+          name="jira"
+          value="109"/>
+      <eLiterals
+          name="metrics"
+          value="110"/>
+      <eLiterals
+          name="search"
+          value="111"/>
+      <eLiterals
+          name="testgeneration"
+          value="112"
+          literal="testgeneration"/>
+      <eLiterals
+          name="trello"
+          value="113"/>
+      <eLiterals
+          name="nlp"
+          value="114"
+          literal="nlp"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages
+      name="batch"
+      nsURI="http://specmate.com/20200921/model/batch"
+      nsPrefix="com.specmate.model.batch">
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="BatchOperation">
+      <eStructuralFeatures
+          xsi:type="ecore:EReference"
+          name="operations"
+          upperBound="-1"
+          eType="#//batch/Operation"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="Operation">
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="type"
+          eType="#//batch/OperationType"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EReference"
+          name="target"
+          eType="#//base/IContentElement"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EReference"
+          name="value"
+          eType="#//base/IContentElement"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers
+        xsi:type="ecore:EEnum"
+        name="OperationType">
+      <eLiterals
+          name="CREATE"/>
+      <eLiterals
+          name="UPDATE"
+          value="1"/>
+      <eLiterals
+          name="DELETE"
+          value="2"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages
+      name="export"
+      nsURI="http://specmate.com/20200921/model/export"
+      nsPrefix="com.specmate.model.export">
+    <eClassifiers
+        xsi:type="ecore:EClass"
+        name="Export"
+        eSuperTypes="#//base/INamed">
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="type"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures
+          xsi:type="ecore:EAttribute"
+          name="content"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eClassifiers>
   </eSubpackages>
 </ecore:EPackage>

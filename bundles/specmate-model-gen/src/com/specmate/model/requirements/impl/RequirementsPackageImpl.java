@@ -502,7 +502,7 @@ public class RequirementsPackageImpl extends EPackageImpl implements Requirement
 		cegModelEClass.getESuperTypes().add(theBasePackage.getISpecmateModelObject());
 		cegNodeEClass.getESuperTypes().add(theBasePackage.getIModelNode());
 		cegConnectionEClass.getESuperTypes().add(theBasePackage.getIModelConnection());
-		cegLinkedNodeEClass.getESuperTypes().add(theBasePackage.getIModelNode());
+		cegLinkedNodeEClass.getESuperTypes().add(this.getCEGNode());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(requirementEClass, Requirement.class, "Requirement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

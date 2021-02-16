@@ -1,5 +1,7 @@
 package com.specmate.emfrest.crud;
 
+import javax.ws.rs.core.MultivaluedMap;
+
 import org.eclipse.emf.ecore.EObject;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -25,14 +27,13 @@ public class RecycleService extends RestServiceBase {
 	}
 
 	@Override
-	public RestResult<?> post(Object target, Object child, String token) throws SpecmateException {
+	public RestResult<?> post(Object target, Object child, MultivaluedMap<String, String> queryParams, String token)
+			throws SpecmateException {
 		return CrudUtil.recycle(target, authService.getUserName(token));
 	}
-	
+
 	@Reference
 	public void setAuthService(IAuthenticationService authService) {
 		this.authService = authService;
 	}
 }
-
-

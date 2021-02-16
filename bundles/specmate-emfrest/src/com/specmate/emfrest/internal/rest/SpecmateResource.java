@@ -100,10 +100,10 @@ public abstract class SpecmateResource {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public final Object post(@PathParam(SERVICE_KEY) String serviceName, EObject posted,
+	public final Object post(@PathParam(SERVICE_KEY) String serviceName, EObject posted, @Context UriInfo uriInfo,
 			@Context HttpServletRequest request) {
-		return handleRequest(serviceName, s -> s.canPost(getResourceObject(), posted),
-				s -> s.post(getResourceObject(), posted, AuthorizationHeader.getToken(request)), true, request);
+		return handleRequest(serviceName, s -> s.canPost(getResourceObject(), posted), s -> s.post(getResourceObject(),
+				posted, uriInfo.getQueryParameters(), AuthorizationHeader.getToken(request)), true, request);
 
 	}
 
@@ -123,9 +123,9 @@ public abstract class SpecmateResource {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public final Object batch(String postedJson, @Context HttpServletRequest request) {
-		return handleRequest("batch", s -> s.canPost(getResourceObject(), postedJson),
-				s -> s.post(getResourceObject(), postedJson, AuthorizationHeader.getToken(request)), true, request);
+	public final Object batch(String postedJson, @Context UriInfo uriInfo, @Context HttpServletRequest request) {
+		return handleRequest("batch", s -> s.canPost(getResourceObject(), postedJson), s -> s.post(getResourceObject(),
+				postedJson, uriInfo.getQueryParameters(), AuthorizationHeader.getToken(request)), true, request);
 
 	}
 

@@ -249,6 +249,7 @@
 	},
 	"successful": "Erfolgreich",
 	"testspec": {
+		"considerLinks": "Verknüpfte Knoten beachten",
 		"errorMessage": "Es konnte keine logische Testfallspezifikation erzeugt werden, da das Modell die folgenden Fehler enthält. Bitte überprüfen Sie ihr Modell.",
 		"errorTitle": "Generierung nicht möglich",
 		"generate": "Testspezifikation generieren",

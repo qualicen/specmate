@@ -45,6 +45,10 @@ export class CEGLinkedNodeTool extends CreateNodeToolBase<CEGLinkedNode> impleme
             linkedNode = await this.getLinkedNodeWithDialog(node);
         }
 
+        if (linkedNode === undefined) {
+            return undefined;
+        }
+
         node.linkTo = new Proxy();
         node.linkTo.url = linkedNode.url;
         let proxy = new Proxy();

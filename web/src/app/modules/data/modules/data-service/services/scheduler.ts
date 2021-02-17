@@ -241,6 +241,11 @@ export class Scheduler {
         if (!this.currentlyExists(command.url)) {
             return;
         }
+        let lastCommand: Command = this.getLastUnresolvedCommand();
+        if (this.isTrivialCreateDeletePair(lastCommand, command)) {
+            this.unScheduleLastCommand(lastCommand.url);
+            return;
+        }
         this.commands.push(command);
         if (Type.is(command.originalValue, CEGNode)) {
             let n = command.originalValue as CEGNode;
@@ -273,6 +278,12 @@ export class Scheduler {
                 c1.changedSameFields(c2) && c1.url === c2.url;
         }
         return false;
+    }
+
+    private isTrivialCreateDeletePair(command1: Command, command2: Command): boolean {
+        return command1.operationType === EOperation.CREATE
+            && command2.operationType === EOperation.DELETE
+            && command1.newValue.id === command2.originalValue.id;
     }
 
     public isVirtualElement(url: string): boolean {

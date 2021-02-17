@@ -68,7 +68,7 @@ export class AdditionalInformationService {
         let parentUrls: string[] = [];
         let url: string = Url.parent(this.element.url);
 
-        while (!Url.isRoot(url, this.auth.token.project)) {
+        while (!Url.isRoot(url, this.auth.project)) {
             parentUrls.push(url);
             url = Url.parent(url);
         }

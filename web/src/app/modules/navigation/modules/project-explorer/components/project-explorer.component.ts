@@ -122,9 +122,8 @@ export class ProjectExplorer implements OnInit {
             return;
         }
 
-        // const project: IContainer = await this.dataService.readElement(this.auth.token.project);
         let libraryFolders: string[] = this.auth.session.libraryFolders;
-        let projectContents: IContainer[] = await this.dataService.readContents(this.auth.token.project);
+        let projectContents: IContainer[] = await this.dataService.readContents(this.auth.project);
 
         // In this case, we were logged out automatically.
         if (projectContents === undefined) {
@@ -201,7 +200,7 @@ export class ProjectExplorer implements OnInit {
     }
 
     public get projectName(): string {
-        return this.auth.token.project;
+        return this.auth.project;
     }
 
     public isRecycled(element: IContainer) {

@@ -163,6 +163,14 @@ export class AuthenticationService {
         }
     }
 
+    public get allowedProjects(): string[] {
+        return this.session.allowedPathPattern
+            .split('\|')
+            .map(pattern => pattern.replace(Config.URL_BASE, ''))
+            .map(pattern => pattern.replace(/\/\.\*/g, ''))
+            .map(pattern => pattern.replace(/\(|\)/g, ''));
+    }
+
     public async getProjectNames(): Promise<string[]> {
         return await this.serviceInterface.projectnames();
     }

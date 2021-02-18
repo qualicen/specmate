@@ -49,7 +49,8 @@ export class ShapeProvider extends ProviderBase {
             style: EditorStyle.BASE_CEG_LINKED_NODE_STYLE,
             size: {
                 width: Config.CEG_NODE_WIDTH,
-                height: Config.CEG_NODE_HEIGHT
+                height: Config.CEG_NODE_HEIGHT,
+                margin: 15
             },
             text: new NodeNameConverterProvider(type).nodeNameConverter.convertTo({
                 variable: Config.CEG_NODE_NEW_VARIABLE,

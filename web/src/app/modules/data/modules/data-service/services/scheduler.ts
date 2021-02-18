@@ -281,6 +281,9 @@ export class Scheduler {
     }
 
     private isTrivialCreateDeletePair(command1: Command, command2: Command): boolean {
+        if (command1 === undefined || command2 === undefined) {
+            return false;
+        }
         return command1.operationType === EOperation.CREATE
             && command2.operationType === EOperation.DELETE
             && command1.newValue.id === command2.originalValue.id;

@@ -3,6 +3,7 @@ package com.specmate.auth.internal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.emf.cdo.common.id.CDOID;
 import org.osgi.service.component.annotations.Activate;
@@ -60,10 +61,10 @@ public class PersistentSessionService extends BaseSessionService {
 
 	@Override
 	public UserSession create(AccessRights source, AccessRights target, String userName, String password,
-			String projectName) throws SpecmateException {
+			Set<String> projectNames) throws SpecmateException {
 
 		userMetricsService.loginCounter(sessionView, userName);
-		UserSession session = createSession(source, target, userName, password, sanitize(projectName));
+		UserSession session = createSession(source, target, userName, password, sanitize(projectNames));
 
 		sessionTransaction.doAndCommit(new IChange<Object>() {
 			@Override

@@ -48,11 +48,14 @@ public class ProjectConfigService implements IProjectConfigService {
 	@Activate
 	public void activate() throws SpecmateException {
 		String[] projectsIDs = configService.getConfigurationPropertyArray(KEY_PROJECT_IDS);
-		if (projectsIDs == null) {
-			return;
+		if (projectsIDs != null) {
+			configureProjects(projectsIDs);
 		}
 
-		configureProjects(projectsIDs);
+		String[] multiProjectsIDs = configService.getConfigurationPropertyArray(KEY_MULTIPROJECT_IDS);
+		if (multiProjectsIDs != null) {
+			configureMultiProjects(multiProjectsIDs);
+		}
 	}
 
 	@Override
@@ -76,6 +79,24 @@ public class ProjectConfigService implements IProjectConfigService {
 				bootstrapProjectLibrary(projectID);
 			} catch (SpecmateException e) {
 				logService.log(LogService.LOG_ERROR, "Could not create project " + projectID, e);
+			}
+		}
+	}
+
+	@Override
+	public void configureMultiProjects(String[] multiProjectsIDs) throws SpecmateException {
+		for (int i = 0; i < multiProjectsIDs.length; i++) {
+			String multiProjectID = multiProjectsIDs[i];
+			try {
+				String multiProjectPrefix = MULTIPROJECT_PREFIX + multiProjectID;
+
+				Configurable multiConnector = createMultiConnector(multiProjectPrefix, multiProjectID);
+				if (multiConnector != null) {
+					configureConfigurable(multiConnector);
+				}
+				configureMultiProject(multiProjectID, multiConnector);
+			} catch (SpecmateException e) {
+				logService.log(LogService.LOG_ERROR, "Could not create multi project " + multiProjectID, e);
 			}
 		}
 	}
@@ -147,6 +168,62 @@ public class ProjectConfigService implements IProjectConfigService {
 	}
 
 	/**
+	 * Configures a single multi project
+	 */
+	private void configureMultiProject(String multiProjectID, Configurable multiConnector) throws SpecmateException {
+
+		String multiConnectorFilter;
+		if (multiConnector != null) {
+			multiConnectorFilter = "(" + KEY_CONNECTOR_ID + "=" + multiProjectID + ")";
+		} else {
+			multiConnectorFilter = "(" + KEY_CONNECTOR_ID + "= NO_ID)";
+		}
+
+		Hashtable<String, Object> multiProjectConfig = new Hashtable<String, Object>();
+		multiProjectConfig.put(KEY_PROJECT_ID, multiProjectID);
+
+		// Set the target of the 'multiconnector' reference in the Project.
+		// This ensures that the right multiconnector will be bound to the project.
+		multiProjectConfig.put("multiconnector.target", multiConnectorFilter);
+
+		// multiproject.<projectname>.projectnamepattern
+		String projectNamePattern = configService.getConfigurationProperty(IProjectConfigService.MULTIPROJECT_PREFIX
+				+ multiProjectID + "." + IProjectConfigService.KEY_MULTIPROJECT_PROJECTNAMEPATTERN);
+		if (projectNamePattern != null) {
+			multiProjectConfig.put(IProjectConfigService.KEY_MULTIPROJECT_PROJECTNAMEPATTERN, projectNamePattern);
+		}
+
+		// multiproject.<projectname>.template.*
+		Set<Entry<Object, Object>> templateConfigEntries = configService
+				.getConfigurationProperties(IProjectConfigService.MULTIPROJECT_PREFIX + multiProjectID + "."
+						+ IProjectConfigService.KEY_MULTIPROJECT_TEMPLATE);
+		addConfigEntriesToConfig(multiProjectConfig, templateConfigEntries);
+
+		OSGiUtil.configureFactory(configAdmin, MULTIPROJECT_CONFIG_FACTORY_PID, multiProjectConfig);
+	}
+
+	/**
+	 * Adds a set of config entries to a given project config. Checks for
+	 * duplicates.
+	 * 
+	 * @param projectConfig
+	 * @param configEntriesToAdd
+	 */
+	private void addConfigEntriesToConfig(Hashtable<String, Object> projectConfig,
+			Set<Entry<Object, Object>> configEntriesToAdd) {
+
+		for (Entry<Object, Object> newConfigEntry : configEntriesToAdd) {
+			Object newConfigEntryKey = newConfigEntry.getKey();
+
+			if (!projectConfig.containsKey(newConfigEntryKey)) {
+				projectConfig.put((String) newConfigEntry.getKey(), (String) newConfigEntry.getValue());
+			} else {
+				logService.log(LogService.LOG_WARNING, "Duplicated config entries for key " + newConfigEntryKey);
+			}
+		}
+	}
+
+	/**
 	 * Creates an exporter from the config for the project given by the config
 	 * prefix.
 	 *
@@ -177,6 +254,23 @@ public class ProjectConfigService implements IProjectConfigService {
 			return null;
 		}
 		connector.addConfigValue(KEY_CONNECTOR_ID, projectID);
+		return connector;
+	}
+
+	/**
+	 * Creates an connector from the config for the project given by the config
+	 * prefix.
+	 *
+	 * @param multiProjectID
+	 */
+	private Configurable createMultiConnector(String multiProjectPrefix, String multiProjectID) {
+		String connectorPrefix = multiProjectPrefix + "." + "multiconnector";
+		Configurable connector = new Configurable();
+		connector = fillConfigurable(connector, connectorPrefix);
+		if (connector == null) {
+			return null;
+		}
+		connector.addConfigValue(KEY_CONNECTOR_ID, multiProjectID);
 		return connector;
 	}
 

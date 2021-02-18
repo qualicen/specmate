@@ -168,6 +168,21 @@ public class ConfigService implements IConfigService {
 	}
 
 	/**
+	 * Retrieves a configured property as a list. Returns the default value if no
+	 * entry is found in the configuration.
+	 */
+	@Override
+	public String[] getConfigurationPropertyArray(String key, String[] defaultValue) {
+		String[] value = getConfigurationPropertyArray(key);
+
+		if (value != null) {
+			return value;
+		} else {
+			return defaultValue;
+		}
+	}
+
+	/**
 	 * The bnd launcher provides access to the command line arguments via the
 	 * Launcher object. This object is registered under Object.
 	 */
@@ -189,5 +204,15 @@ public class ConfigService implements IConfigService {
 	@Reference
 	public void setLogService(LogService logService) {
 		this.logService = logService;
+	}
+
+	@Override
+	public void addUpdateConfigurationProperties(Map<String, String> entries) {
+		configuration.putAll(entries);
+	}
+
+	@Override
+	public void addUpdateConfigurationProperty(String key, String value) {
+		configuration.put(key, value);
 	}
 }

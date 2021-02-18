@@ -1,7 +1,8 @@
-import { ChangeDetectorRef, EventEmitter, Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Config } from 'src/app/config/config';
 import { SpecmateDataService } from 'src/app/modules/data/modules/data-service/services/specmate-data.service';
 import { ValidationService } from 'src/app/modules/forms/modules/validation/services/validation.service';
+import { GraphicalEditorService } from 'src/app/modules/views/main/editors/modules/graphical-editor/services/graphical-editor.service';
 import { ModelImageService } from 'src/app/modules/views/main/editors/modules/graphical-editor/services/model-image.service';
 import { Arrays } from 'src/app/util/arrays';
 import { Monitorable } from '../base/monitorable';
@@ -49,11 +50,13 @@ export class OperationMonitorService {
 
     constructor(dataService: SpecmateDataService,
         validationService: ValidationService,
-        modelIageService: ModelImageService) {
+        modelIageService: ModelImageService,
+        graphicalEditorService: GraphicalEditorService) {
 
         this.subjects.push(dataService);
         this.subjects.push(validationService);
         this.subjects.push(modelIageService);
+        this.subjects.push(graphicalEditorService);
 
         this.subjects.forEach((monitorable) => {
             this.activeOperations.set(monitorable, []);
@@ -143,5 +146,4 @@ export class OperationMonitorService {
         this._isLoading = isLoading;
         this.loadingStateChanged.emit(this.isLoading);
     }
-
 }

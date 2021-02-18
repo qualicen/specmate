@@ -6,8 +6,14 @@ public interface IProjectConfigService {
 	/** The prefix for project configuration keys */
 	public static final String PROJECT_PREFIX = "project.";
 
+	/** The prefix for multiproject configuration keys */
+	public static final String MULTIPROJECT_PREFIX = "multiproject.";
+
 	/** The PID of the project config factory */
 	public static final String PROJECT_CONFIG_FACTORY_PID = "com.specmate.connectors.projectconfigfactory";
+	
+	/** The PID of the multi project config factory */
+	public static final String MULTIPROJECT_CONFIG_FACTORY_PID = "com.specmate.connectors.multiprojectconfigfactory";
 
 	/** The configuration key for the id of a connector */
 	public static final String KEY_CONNECTOR_ID = "connectorID";
@@ -24,6 +30,15 @@ public interface IProjectConfigService {
 	/** The configuration key for the list of projects. */
 	public static final String KEY_PROJECT_IDS = PROJECT_PREFIX + "projects";
 
+	/** The configuration key for the list of multiprojects. */
+	public static final String KEY_MULTIPROJECT_IDS = MULTIPROJECT_PREFIX + "multiprojects";
+	
+	/** The prefix for multiproject configuration keys */
+	public static final String KEY_MULTIPROJECT_PROJECTNAMEPATTERN = "projectnamepattern";
+	
+	/** The prefix for multiproject configuration keys */
+	public static final String KEY_MULTIPROJECT_TEMPLATE= "template";
+	
 	/** The configuration key for the list of top-level library folder ids. */
 	public static final String KEY_PROJECT_LIBRARY = ".library";
 
@@ -38,4 +53,11 @@ public interface IProjectConfigService {
 	 * configuration service.
 	 */
 	public void configureProjects(String[] projectIDs) throws SpecmateException;
+
+	/**
+	 * Configures the given multiprojects based on the configuration data from the
+	 * configuration service.
+	 */
+	public void configureMultiProjects(String[] multiProjectIDs) throws SpecmateException;
+
 }

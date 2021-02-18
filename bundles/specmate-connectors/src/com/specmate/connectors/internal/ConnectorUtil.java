@@ -11,15 +11,13 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.lang3.StringUtils;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.osgi.service.log.LogService;
-import com.google.common.collect.Iterators;
 
 import com.specmate.common.exception.SpecmateException;
-import com.specmate.connectors.api.IRequirementsSource;
+import com.specmate.connectors.api.IConnector;
 import com.specmate.model.base.BaseFactory;
 import com.specmate.model.base.Folder;
 import com.specmate.model.base.IContainer;
@@ -44,21 +42,21 @@ public class ConnectorUtil {
 	 * Retrieves requirements from all sources and processes them in batches of
 	 * BATCH_SIZE
 	 */
-	public static void syncRequirementsFromSources(List<IRequirementsSource> requirementsSources,
+	public static void syncConnectors(List<IConnector> connectors,
 			ITransaction transaction, LogService logService) {
 		lock.lock();
 		try {
-			logService.log(LogService.LOG_INFO, "Synchronizing requirements");
+			logService.log(LogService.LOG_INFO, "Synchronizing connectors");
 			Resource resource = transaction.getResource();
-			for (IRequirementsSource source : requirementsSources) {
-				logService.log(LogService.LOG_INFO, "Retrieving requirements from " + source.getId());
+			for (IConnector connector : connectors) {
+				logService.log(LogService.LOG_INFO, "Retrieving requirements from " + connector.getId());
 				try {
-					Collection<Requirement> requirements = source.getRequirements();
+					Collection<Requirement> requirements = connector.getRequirements();
 					if (requirements == null) {
 						continue;
 					}
 
-					IContainer localRootContainer = getOrCreateLocalRootContainer(resource, source.getId());
+					IContainer localRootContainer = getOrCreateLocalRootContainer(resource, connector.getId());
 					HashMap<String, EObject> localRequirementsMap = buildLocalRequirementsMap(localRootContainer);
 
 					Requirement[] reqArray = requirements.toArray(new Requirement[0]);
@@ -71,7 +69,7 @@ public class ConnectorUtil {
 						greatestUnhandledIndex = upperIndexExclusive;
 						List<Requirement> tosync = Arrays.asList(current);
 
-						doAndCommitTransaction(transaction, localRootContainer, localRequirementsMap, tosync, source,
+						doAndCommitTransaction(transaction, localRootContainer, localRequirementsMap, tosync, connector,
 								logService);
 					}
 				} catch (Exception e) {
@@ -88,7 +86,7 @@ public class ConnectorUtil {
 	/**
 	 * Retrieves a single requirement with a given id
 	 */
-	public static void syncRequirementById(String id, IRequirementsSource source, ITransaction transaction,
+	public static void syncRequirementById(String id, IConnector source, ITransaction transaction,
 			LogService logService) {
 		lock.lock();
 		try {
@@ -139,7 +137,7 @@ public class ConnectorUtil {
 	 * Syncs remote requirements with locally available requirements.
 	 */
 	private static void syncContainers(IContainer localRootContainer, HashMap<String, EObject> localRequirementsMap,
-			Collection<Requirement> requirements, IRequirementsSource source, LogService logService) {
+			Collection<Requirement> requirements, IConnector source, LogService logService) {
 		// Build hashset (extid -> requirement) for remote requirements
 		HashMap<String, EObject> remoteRequirementsMap = new HashMap<>();
 		buildExtIdMap(requirements.iterator(), remoteRequirementsMap);
@@ -289,7 +287,7 @@ public class ConnectorUtil {
 	}
 
 	private static void doAndCommitTransaction(ITransaction transaction, IContainer localRootContainer,
-			HashMap<String, EObject> localRequirementsMap, List<Requirement> tosync, IRequirementsSource source,
+			HashMap<String, EObject> localRequirementsMap, List<Requirement> tosync, IConnector source,
 			LogService logService) {
 		try {
 			transaction.doAndCommit(new IChange<Object>() {

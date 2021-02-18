@@ -92,11 +92,14 @@ export class ChangeTranslator {
         } else if (change['style'] !== undefined) {
             await this.translateStyleChange(change as mxgraph.mxStyleChange, compoundId);
         } else if (change['cell'] !== undefined) {
-            await this.translateTerminalChange(change as mxgraph.mxTerminalChange, compoundId);
+            await this.translateTerminalChange(change as mxgraph.mxTerminalChange, graph, compoundId);
         }
     }
 
     private async translateStyleChange(change: mxgraph.mxStyleChange, compoundId = Id.uuid): Promise<void> {
+        if (change.cell.isVertex()) {
+            return;
+        }
         const element = await this.getElement(change.cell.id);
         if (element === undefined) {
             return;
@@ -313,7 +316,11 @@ export class ChangeTranslator {
         return node;
     }
 
-    private async translateTerminalChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange, compoundId = Id.uuid): Promise<void> {
+    private async translateTerminalChange(
+        change: mxgraph.mxTerminalChange | mxgraph.mxValueChange,
+        graph: mxgraph.mxGraph,
+        compoundId = Id.uuid): Promise<void> {
+
         const element = await this.getElement(change.cell.id);
         if (element === undefined) {
             return;
@@ -321,7 +328,7 @@ export class ChangeTranslator {
         if (change.cell.edge) {
             await this.translateEdgeChange(change, element as IModelConnection, compoundId);
         } else {
-            await this.translateNodeChange(change, element as IModelNode, compoundId);
+            await this.translateNodeChange(change, element as IModelNode, graph, compoundId);
         }
     }
 
@@ -330,43 +337,52 @@ export class ChangeTranslator {
         return (cell.id.endsWith(VertexProvider.ID_SUFFIX_VARIABLE) || cell.id.endsWith(VertexProvider.ID_SUFFIX_CONDITION));
     }
 
-    private async translateNodeChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange,
-        element: IModelNode, compoundId = Id.uuid): Promise<void> {
+    private async translateNodeChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange, element: IModelNode,
+        graph: mxgraph.mxGraph, compoundId = Id.uuid): Promise<void> {
         let cell = change.cell as mxgraph.mxCell;
         if (this.ignoreChanges(cell)) {
             return;
         }
-        if (change['value'] !== undefined && change['value'] !== null) {
-            if (this.isTextInputChange(change)) {
-                VertexProvider.adjustChildCellSize(cell, element.width);
-            }
-            if (this.nodeNameConverter) {
-                if (this.parentComponents[cell.getId()] !== undefined) {
-                    // The changed node is a sublabel / child
-                    cell = cell.getParent();
-                }
-                if (!Type.is(element, CEGLinkedNode)) {
-                    let value = cell.value;
-                    if (Type.is(element, CEGNode)) {
-                        value = new CEGmxModelNode(cell.children[0].value, cell.children[1].value, cell.children[2].value);
-                    }
-
-                    const elementValues = this.nodeNameConverter.convertFrom(value, element);
-                    for (const key in elementValues) {
-                        element[key] = elementValues[key];
-                    }
-                    await this.dataService.updateElement(element, true, compoundId);
-                }
+        if (this.isTextInputChange(change) && !Type.is(element, CEGLinkedNode)) {
+            if (cell.value === '' || cell.value === undefined || cell.value === null) {
+                StyleChanger.addStyle(cell, graph, EditorStyle.EMPTY_TEXT_NAME);
             } else {
-                // Keep change.cell to avoid having a parent a child value
-                element['variable'] = change.cell.value;
+                StyleChanger.removeStyle(cell, graph, EditorStyle.EMPTY_TEXT_NAME);
+            }
+            graph.getView().validate(cell);
+            graph.updateCellSize(cell.parent, true);
+            VertexProvider.adjustChildrenCellSizes(cell.parent, this.shapeProvider, graph);
+        }
+        let isLabelCell = false;
+        if (this.nodeNameConverter) {
+            if (this.parentComponents[cell.getId()] !== undefined) {
+                // The changed node is a sublabel / child
+                isLabelCell = true;
+                cell = cell.getParent();
+            }
+            if (!Type.is(element, CEGLinkedNode)) {
+                let value = cell.value;
+                if (Type.is(element, CEGNode)) {
+                    value = new CEGmxModelNode(cell.children[0].value, cell.children[1].value, cell.children[2].value);
+                }
+
+                const elementValues = this.nodeNameConverter.convertFrom(value, element);
+                for (const key in elementValues) {
+                    element[key] = elementValues[key];
+                }
                 await this.dataService.updateElement(element, true, compoundId);
             }
-        } else if (change['geometry'] !== undefined && change['geometry'] !== null) {
+        } else {
+            // Keep change.cell to avoid having a parent a child value
+            element['variable'] = change.cell.value;
+            await this.dataService.updateElement(element, true, compoundId);
+        }
+        if (!isLabelCell) {
             element['x'] = Math.max(0, cell.geometry.x);
             element['y'] = Math.max(0, cell.geometry.y);
             element['width'] = cell.geometry.width;
             element['height'] = cell.geometry.height;
+            VertexProvider.adjustChildrenCellSizes(cell, this.shapeProvider, graph);
             await this.dataService.updateElement(element, true, compoundId);
         }
     }
@@ -377,7 +393,6 @@ export class ChangeTranslator {
 
     private async translateEdgeChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange | mxgraph.mxGeometryChange,
         connection: IModelConnection, compoundId = Id.uuid): Promise<void> {
-
         if (change['terminal']) {
             await this.translateEdgeEndsChange(change as mxgraph.mxTerminalChange, connection, compoundId);
         } else if (change['value'] !== undefined && change['value'] !== null) {
@@ -535,6 +550,9 @@ export class ChangeTranslator {
                             graph.getModel().beginUpdate();
                             try {
                                 graph.model.setValue(child, val);
+                                graph.updateCellSize(child, true);
+                                graph.updateCellSize(cell, true);
+                                VertexProvider.adjustChildrenPositions(cell);
                             } finally {
                                 let width = child.geometry.width;
                                 if (width <= 0) {
@@ -552,6 +570,7 @@ export class ChangeTranslator {
             try {
                 if (value !== cell.value) {
                     graph.model.setValue(cell, value);
+                    graph.updateCellSize(cell, false);
                 }
                 StyleChanger.setStyle(cell, graph, this.shapeProvider.getStyle(changedElement));
             }

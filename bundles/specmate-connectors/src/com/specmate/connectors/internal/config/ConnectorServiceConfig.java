@@ -16,9 +16,8 @@ import com.specmate.config.api.IConfigService;
 @Component(immediate = true)
 public class ConnectorServiceConfig {
 
-	public static final String DISABLED_STRING = "disabled";
 	public static final String PID = "com.specmate.connectors.ConnectorService";
-	public static final String KEY_POLL_SCHEDULE = "connectorPollSchedule";
+
 
 	private ConfigurationAdmin configurationAdmin;
 	private IConfigService configService;
@@ -28,14 +27,14 @@ public class ConnectorServiceConfig {
 	@Activate
 	public void configureConnectorService() throws SpecmateException {
 		Dictionary<String, Object> properties = new Hashtable<>();
-		String connectorScheduleStr = configService.getConfigurationProperty(KEY_POLL_SCHEDULE, DISABLED_STRING);
+		String connectorScheduleStr = configService.getConfigurationProperty(PollKeys.KEY_POLL_SCHEDULE, PollKeys.DISABLED_STRING);
 
-		if (connectorScheduleStr.equalsIgnoreCase(DISABLED_STRING)) {
+		if (connectorScheduleStr.equalsIgnoreCase(PollKeys.DISABLED_STRING)) {
 			logService.log(LogService.LOG_INFO, "Connectors service disabled.");
 			return;
 		}
 
-		properties.put(KEY_POLL_SCHEDULE, connectorScheduleStr);
+		properties.put(PollKeys.KEY_POLL_SCHEDULE, connectorScheduleStr);
 		logService.log(LogService.LOG_DEBUG,
 				"Configuring Connectors with:\n" + OSGiUtil.configDictionaryToString(properties));
 

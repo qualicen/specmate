@@ -12,10 +12,9 @@ public interface IProject {
 	String getID();
 
 	/**
-	 * @return the defined requirements source for the project, or
-	 *         <code>null</code>.
+	 * @return the defined connector for the project, or <code>null</code>.
 	 */
-	IRequirementsSource getConnector();
+	IConnector getConnector();
 
 	/**
 	 * @return the defined sink to which test information is exported, or

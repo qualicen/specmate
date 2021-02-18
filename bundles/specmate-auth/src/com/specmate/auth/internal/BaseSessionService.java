@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -101,6 +102,17 @@ public abstract class BaseSessionService implements ISessionService {
 		}
 		return session.getUserName();
 	}
+	
+	protected Set<String> sanitize(Set<String> projectNames) {
+		
+		Set<String> sanitizedProjectNames = new HashSet<String>();
+		
+		for (String projectName : projectNames) {
+			sanitizedProjectNames.add(sanitize(projectName));	
+		}
+		
+		return sanitizedProjectNames;
+	}
 
 	protected String sanitize(String projectName) {
 		StringBuilder sb = new StringBuilder();
@@ -115,24 +127,46 @@ public abstract class BaseSessionService implements ISessionService {
 
 		return sb.toString();
 	}
+	
+	protected String generateAllowedPathPattern(Set<String> projectNames) {
+	
+		StringBuffer sb = new StringBuffer();
+		
+		Iterator<String> it = projectNames.iterator();
+		while(it.hasNext() ) {
+			String projectName = it.next();
+			
+			sb.append("(");
+			sb.append(String.format(pathPattern, projectName) );
+			sb.append(")");
+			
+			if (it.hasNext()) {
+				sb.append("|");	
+			}
+		}		
+		
+		return sb.toString();		
+	}
 
 	protected UserSession createSession(AccessRights source, AccessRights target, String userName, String password,
-			String projectName) {
+			Set<String> projectNames) {
 		UserSession session = UsermodelFactory.eINSTANCE.createUserSession();
 		session.setSourceSystem(source);
 		session.setTargetSystem(target);
-		session.setAllowedPathPattern(String.format(pathPattern, projectName));
+		session.setAllowedPathPattern( generateAllowedPathPattern(projectNames) );
 		session.setUserName(userName);
 		session.setLastActive(new Date().getTime());
-		String token = randomString.nextString();
-		session.setId(token);
+		session.setId(randomString.nextString());
 
-		String projectLibraryKey = IProjectConfigService.PROJECT_PREFIX + projectName
-				+ IProjectConfigService.KEY_PROJECT_LIBRARY;
-		String[] libraryFolderIds = configService.getConfigurationPropertyArray(projectLibraryKey);
-		if (libraryFolderIds != null) {
-			session.getLibraryFolders().addAll(Arrays.asList(libraryFolderIds));
+		for (String projectName : projectNames) {
+			String projectLibraryKey = IProjectConfigService.PROJECT_PREFIX + projectName
+					+ IProjectConfigService.KEY_PROJECT_LIBRARY;
+			String[] libraryFolderIds = configService.getConfigurationPropertyArray(projectLibraryKey);
+			if (libraryFolderIds != null) {
+				session.getLibraryFolders().addAll(Arrays.asList(libraryFolderIds));
+			}
 		}
+		
 		try {
 			sessionListeners.forEach(l -> l.sessionCreated(session, userName, password));
 		} catch (Throwable t) {

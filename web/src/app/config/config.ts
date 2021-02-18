@@ -32,7 +32,7 @@ export class Config {
     public static ACTIVATE_DEFAUTL_TOOL_ON_SUCCESS = false;
 
     public static LOADING_MODAL_DELAY = 300;
-    public static LOADING_DEBOUNCE_DELAY = 1;
+    public static LOADING_DEBOUNCE_DELAY = 10;
 
     public static LOG_START_MESSAGE = 'Specmate Started';
     public static LOG_LENGTH = 100;
@@ -132,7 +132,7 @@ export class Config {
     public static ELEMENT_CHUNK_SIZE = 100;
 
 
-    public static readonly CEG_LAYOUT_CLEARANCE_X = 90;
+    public static readonly CEG_LAYOUT_CLEARANCE_X = 45;
     public static readonly CEG_LAYOUT_CLEARANCE_Y = 45;
 
     public static readonly SUPPORTED_BROWSERS = [

@@ -1,5 +1,6 @@
 package com.specmate.config.api;
 
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -13,6 +14,12 @@ public interface IConfigService {
 	public Integer getConfigurationPropertyInt(String key, int defaultValue);
 
 	Set<Entry<Object, Object>> getConfigurationProperties(String prefix);
+	
+	public void addUpdateConfigurationProperties(Map<String, String> entries);
+	
+	public void addUpdateConfigurationProperty(String key, String value);
 
 	String[] getConfigurationPropertyArray(String key);
+	
+	String[] getConfigurationPropertyArray(String key, String[] defaultValue);
 }

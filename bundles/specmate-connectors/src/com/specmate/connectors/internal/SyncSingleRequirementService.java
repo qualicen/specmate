@@ -11,7 +11,7 @@ import org.osgi.service.log.LogService;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.api.IProjectService;
-import com.specmate.connectors.api.IRequirementsSource;
+import com.specmate.connectors.api.IConnector;
 import com.specmate.emfrest.api.IRestService;
 import com.specmate.emfrest.api.RestServiceBase;
 import com.specmate.model.base.Folder;
@@ -56,7 +56,7 @@ public class SyncSingleRequirementService extends RestServiceBase {
 
 			String projectId = SpecmateEcoreUtil.getProjectId((EObject) object);
 			IProject project = projectService.getProject(projectId);
-			IRequirementsSource source = project.getConnector();
+			IConnector source = project.getConnector();
 
 			new Thread(new Runnable() {
 				@Override

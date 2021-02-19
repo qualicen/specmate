@@ -36,6 +36,9 @@ public interface IProjectConfigService {
 	/** The prefix for multiproject configuration keys */
 	public static final String KEY_MULTIPROJECT_PROJECTNAMEPATTERN = "projectnamepattern";
 	
+	/** The key for max number of projects **/
+	public static final String KEY_MULTIPROJECT_MAXNUMBEROFPROJECTS = "maxprojects";
+	
 	/** The prefix for multiproject configuration keys */
 	public static final String KEY_MULTIPROJECT_TEMPLATE= "template";
 	

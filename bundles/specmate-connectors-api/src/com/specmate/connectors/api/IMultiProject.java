@@ -27,4 +27,10 @@ public interface IMultiProject {
 	 * config.
 	 */
 	Map<String, String> getTemplateConfigEntries();
+	
+	
+	/**
+	 * Returns the config value for maxprojects
+	 */
+	int getMaxNumberOfProjectsConfig();
 }

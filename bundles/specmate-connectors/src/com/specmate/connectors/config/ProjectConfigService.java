@@ -192,6 +192,13 @@ public class ProjectConfigService implements IProjectConfigService {
 		if (projectNamePattern != null) {
 			multiProjectConfig.put(IProjectConfigService.KEY_MULTIPROJECT_PROJECTNAMEPATTERN, projectNamePattern);
 		}
+		
+		// multiproject.<projectname>.maxprojects
+		String maxprojects = configService.getConfigurationProperty(IProjectConfigService.MULTIPROJECT_PREFIX
+				+ multiProjectID + "." + IProjectConfigService.KEY_MULTIPROJECT_MAXNUMBEROFPROJECTS);
+		if (maxprojects != null) {
+			multiProjectConfig.put(IProjectConfigService.KEY_MULTIPROJECT_MAXNUMBEROFPROJECTS, maxprojects);
+		}
 
 		// multiproject.<projectname>.template.*
 		Set<Entry<Object, Object>> templateConfigEntries = configService

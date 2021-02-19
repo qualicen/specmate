@@ -92,10 +92,17 @@ public class MultiConnectorService {
 			for (IMultiConnector multiConnector : multiConnectorService.getMultiConnectors()) {
 
 				logService.log(LogService.LOG_INFO, "Syncing multi connector " + multiConnector.getId());
+				
+				int maxNoProjects = multiConnector.getMultiProject().getMaxNumberOfProjectsConfig();
+				int noProjects = 0;
 
 				try {
 					for (Map.Entry<String, Map<String, String>> projectConfigMapEntry : multiConnector
 							.getProjectConfigs().entrySet()) {
+												
+						if (noProjects++ >= maxNoProjects ) {
+							break;
+						}
 
 						String technicalProjectId = projectConfigMapEntry.getKey();
 						Map<String, String> projectConfig = projectConfigMapEntry.getValue();
@@ -134,8 +141,7 @@ public class MultiConnectorService {
 							// trigger project creation.
 							// this could be removed in case ProjectConfigService would monitor the config!
 							projectConfigService.configureProjects(new String[] { specmateProjectId });
-						}
-
+						} 
 					}
 				} catch (SpecmateException e) {
 					logService.log(LogService.LOG_ERROR, "Error syncing projects for " + multiConnector.getId(), e);

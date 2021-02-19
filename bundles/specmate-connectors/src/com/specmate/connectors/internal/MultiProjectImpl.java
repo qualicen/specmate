@@ -36,6 +36,12 @@ public class MultiProjectImpl implements IMultiProject {
 	/** The template config entries for thiis multi project **/
 	private Map<String, String> templateConfigEntries;
 
+	/**
+	 * The maximum number of projects to handle. Used to keep the number of projects
+	 * low. E.g., for testing and demo purposes.
+	 **/
+	private int maxNumberOfProjects = Integer.MAX_VALUE;
+
 	@Activate
 	public void activate(Map<String, Object> properties) throws SpecmateInternalException {
 
@@ -45,6 +51,16 @@ public class MultiProjectImpl implements IMultiProject {
 		}
 
 		projectNamePattern = (String) properties.get(IProjectConfigService.KEY_MULTIPROJECT_PROJECTNAMEPATTERN);
+
+		String intString = (String) properties.get(IProjectConfigService.KEY_MULTIPROJECT_MAXNUMBEROFPROJECTS);
+		try {
+			if (intString != null) {
+				maxNumberOfProjects = Integer.parseInt(intString);
+			}
+		} catch (NumberFormatException nfe) {
+			throw new SpecmateInternalException(ErrorCode.CONFIGURATION, "Config value for "
+					+ IProjectConfigService.KEY_MULTIPROJECT_MAXNUMBEROFPROJECTS + " not valid: '" + intString + "'");
+		}
 
 		retrieveTemplateConfigEntries(properties);
 
@@ -100,5 +116,10 @@ public class MultiProjectImpl implements IMultiProject {
 	@Override
 	public String getProjectNamePattern() {
 		return projectNamePattern;
+	}
+
+	@Override
+	public int getMaxNumberOfProjectsConfig() {	
+		return maxNumberOfProjects;
 	}
 }

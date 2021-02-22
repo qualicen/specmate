@@ -35,8 +35,8 @@ jobs:
       run: chmod +x bundles/gradlew
     - name: Build Backend
       run: (cd bundles && ./gradlew --no-daemon jar -x :specmate-dbprovider-oracle:jar)
-#    - name: Run Tests
-#      run: (cd bundles && ./gradlew --no-daemon check -x :specmate-dbprovider-oracle:check)
+    - name: Run Tests
+      run: (cd bundles && ./gradlew --no-daemon check -x :specmate-dbprovider-oracle:check)
     - uses: saucelabs/sauce-connect-action@v1.1.2
       with:
         username: ${{ secrets.SAUCE_USERNAME }}

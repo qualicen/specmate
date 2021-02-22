@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
@@ -25,6 +25,9 @@ enum ActiveTab { project, library, recycleBin }
 })
 export class ProjectExplorer implements OnInit {
     ActiveTab = ActiveTab;
+
+    @ViewChild('searchBox')
+    private searchBox: ElementRef<HTMLInputElement>;
 
     public _rootElements: IContainer[];
     public _rootLibraries: IContainer[];
@@ -122,14 +125,17 @@ export class ProjectExplorer implements OnInit {
             return;
         }
 
-        // const project: IContainer = await this.dataService.readElement(this.auth.token.project);
         let libraryFolders: string[] = this.auth.session.libraryFolders;
-        let projectContents: IContainer[] = await this.dataService.readContents(this.auth.token.project);
+        let projectContents: IContainer[] = await this.dataService.readContents(this.auth.project);
 
         // In this case, we were logged out automatically.
         if (projectContents === undefined) {
             this.clean();
             return;
+        }
+
+        if (this.searchBox !== undefined && this.searchBox !== null) {
+            this.searchBox.nativeElement.value = '';
         }
 
         this._rootElements = projectContents.filter(c => Type.is(c, Requirement) || (Type.is(c, Folder) && !(c as Folder).library));
@@ -201,7 +207,7 @@ export class ProjectExplorer implements OnInit {
     }
 
     public get projectName(): string {
-        return this.auth.token.project;
+        return this.auth.project;
     }
 
     public isRecycled(element: IContainer) {

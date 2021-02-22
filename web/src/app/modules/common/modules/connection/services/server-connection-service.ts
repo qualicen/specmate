@@ -41,7 +41,7 @@ export class ServerConnectionService {
         try {
             if (this.auth.isAuthenticated) {
                 try {
-                    await this.serviceInterface.checkConnection(this.auth.token.project);
+                    await this.serviceInterface.checkConnection(this.auth.project);
                 } catch (e) {
                     if (e.status === 401) {
                         this.auth.inactivityLoggedOut = true;

@@ -26,7 +26,7 @@ export class AuthenticationService {
 
     public get token(): UserToken {
         const token = this.cookiesService.getCookie(this.tokenCookieName);
-        const project = this.cookiesService.getCookie(this.projectCookieName);
+        const project = this.project;
 
         if (token !== undefined && project !== undefined) {
             const userToken = new UserToken(token, project, this.session);
@@ -34,6 +34,17 @@ export class AuthenticationService {
         }
 
         return UserToken.INVALID;
+    }
+
+    public get project(): string {
+        return this.cookiesService.getCookie(this.projectCookieName).replace(/"/g, '');
+    }
+
+    public changeProject(project: string): void {
+        if (this.isAuthenticatedForProject(project.replace(/"/g, ''))) {
+            this.cookiesService.setCookie(this.projectCookieName, project.replace(/"/g, ''));
+            this.authChanged.emit();
+        }
     }
 
     public set session(session: UserSession) {
@@ -130,7 +141,7 @@ export class AuthenticationService {
     }
 
     public isAuthenticatedForProject(project: string): boolean {
-        return this.token.project === project;
+        return this.allowedProjects.indexOf(project.replace(/"/g, '')) >= 0;
     }
 
     private clearToken(): void {
@@ -161,6 +172,16 @@ export class AuthenticationService {
         if (wasAuthenticated !== this.isAuthenticated) {
             this.authChanged.emit(this.isAuthenticatedState);
         }
+    }
+
+    public get allowedProjects(): string[] {
+        return this.session.allowedPathPattern
+            .split('\|')
+            .map(pattern => pattern.replace(Config.URL_BASE, ''))
+            .map(pattern => pattern.replace(/\/\.\*/g, ''))
+            .map(pattern => pattern.replace(/\(|\)/g, ''))
+            .map(pattern => pattern.replace(/\//g, ''))
+            .map(pattern => pattern.replace(/"/g, ''));
     }
 
     public async getProjectNames(): Promise<string[]> {

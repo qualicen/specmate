@@ -36,13 +36,15 @@ export class AuthenticationService {
         return UserToken.INVALID;
     }
 
+    private _project: string;
+
     public get project(): string {
-        return this.cookiesService.getCookie(this.projectCookieName).replace(/"/g, '');
+        return this._project;
     }
 
     public changeProject(project: string): void {
         if (this.isAuthenticatedForProject(project.replace(/"/g, ''))) {
-            this.cookiesService.setCookie(this.projectCookieName, project.replace(/"/g, ''));
+            this._project = project;
             this.authChanged.emit();
         }
     }
@@ -103,6 +105,7 @@ export class AuthenticationService {
         try {
             const wasAuthenticated: boolean = this.isAuthenticated;
             this.session = await this.serviceInterface.authenticate(user);
+            this._project = user.projectName;
             this.isAuthenticatedState = this.determineIsAuthenticated();
             if (this.isAuthenticated) {
                 if (wasAuthenticated !== this.isAuthenticated) {

@@ -5,4 +5,5 @@ Export-Package: \
 	specmate-common;version=latest,\
 	specmate-model-gen;version=latest,\
 	org.apache.servicemix.bundles.junit,\
-	org.eclipse.osgi.services
+	org.eclipse.osgi.services,\
+	osgi.core;version=6.0

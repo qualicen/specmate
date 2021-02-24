@@ -56,6 +56,9 @@ public class Migrator20200605 implements IMigrator {
 		aMapper.migrateNewDoubleAttribute(objectName, "height", 0.0, true);
 		aMapper.migrateNewObjectReferenceNtoM(objectName, "outgoingConnections", true, "model/base/IModelNode");
 		aMapper.migrateNewObjectReferenceNtoM(objectName, "incomingConnections", true, "model/base/IModelNode");
+		aMapper.migrateNewIntegerAttribute(objectName, "type", 0, true);
+		aMapper.migrateNewStringAttribute(objectName, "variable", "", true);
+		aMapper.migrateNewStringAttribute(objectName, "condition", "", true);
 		aMapper.migrateNewObjectReferenceOneToN(objectName, "linkTo", false);
 	}
 

@@ -59,6 +59,7 @@ public class Migrator20200605 implements IMigrator {
 		aMapper.migrateNewIntegerAttribute(objectName, "type", 0, true);
 		aMapper.migrateNewStringAttribute(objectName, "variable", "", true);
 		aMapper.migrateNewStringAttribute(objectName, "condition", "", true);
+		aMapper.migrateNewObjectReferenceNtoM(objectName, "linksFrom", true, "model/requirements/CEGNode");
 		aMapper.migrateNewObjectReferenceOneToN(objectName, "linkTo", false);
 	}
 

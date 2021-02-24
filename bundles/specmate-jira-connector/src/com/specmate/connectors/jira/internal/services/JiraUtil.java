@@ -15,6 +15,7 @@ import com.atlassian.jira.rest.client.api.domain.BasicProject;
 import com.atlassian.jira.rest.client.internal.async.AsynchronousJiraRestClientFactory;
 import com.specmate.common.exception.SpecmateAuthorizationException;
 import com.specmate.common.exception.SpecmateException;
+import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.model.testspecification.TestStep;
 
 public class JiraUtil {
@@ -39,6 +40,13 @@ public class JiraUtil {
 				return false;
 			}
 			return false;
+		} catch (RuntimeException rte) {
+			/*
+			 * catch all other types of network exceptions which are hidden as
+			 * RuntimeException by the atlassian library
+			 */
+			throw new SpecmateInternalException(com.specmate.model.administration.ErrorCode.JIRA,
+					"There was an error connecting to Jira.", rte);
 		} finally {
 			if (client != null) {
 				try {
@@ -55,7 +63,8 @@ public class JiraUtil {
 	/**
 	 * Gets a list of all project-keys a given pair of credentials has access to.
 	 */
-	public static List<String> getProjects(String serverUrl, String username, String password) throws SpecmateException {
+	public static List<String> getProjects(String serverUrl, String username, String password)
+			throws SpecmateException {
 		JiraRestClient client = null;
 		try {
 
@@ -76,7 +85,15 @@ public class JiraUtil {
 				return null;
 			}
 			return null;
+		} catch (RuntimeException rte) {
+			/*
+			 * catch all other types of network exceptions which are hidden as
+			 * RuntimeException by the atlassian library
+			 */
+			throw new SpecmateInternalException(com.specmate.model.administration.ErrorCode.JIRA,
+					"There was an error connecting to Jira.", rte);
 		} finally {
+
 			if (client != null) {
 				try {
 					client.close();

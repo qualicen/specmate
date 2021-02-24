@@ -54,7 +54,7 @@ public class MultiConnectorService {
 			return;
 		}
 
-		Scheduler scheduler = new Scheduler();
+		Scheduler scheduler = new Scheduler(logService);
 		scheduler.schedule(new MultiConnectorTask(this, logService), SchedulerIteratorFactory.create(schedule));
 	}
 

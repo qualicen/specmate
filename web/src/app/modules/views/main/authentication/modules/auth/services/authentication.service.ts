@@ -24,6 +24,8 @@ export class AuthenticationService {
 
     private _authChanged: EventEmitter<boolean>;
 
+    private readonly SELECTED_PROJECT_KEY = 'selectedProject';
+
     public get token(): UserToken {
         const token = this.cookiesService.getCookie(this.tokenCookieName);
         const project = this.project;
@@ -39,11 +41,16 @@ export class AuthenticationService {
     private _project: string;
 
     public get project(): string {
+        if (this._project === undefined) {
+            this._project = localStorage.getItem(this.SELECTED_PROJECT_KEY);
+        }
         return this._project;
     }
 
     public changeProject(project: string): void {
-        if (this.isAuthenticatedForProject(project.replace(/"/g, ''))) {
+        const projectClean = project.replace(/"/g, '');
+        if (this.isAuthenticatedForProject(projectClean)) {
+            localStorage.setItem(this.SELECTED_PROJECT_KEY, projectClean);
             this._project = project;
             this.authChanged.emit();
         }

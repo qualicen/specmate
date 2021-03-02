@@ -42,7 +42,7 @@ export class AuthenticationService {
 
     public get project(): string {
         if (this._project === undefined) {
-            this._project = localStorage.getItem(this.SELECTED_PROJECT_KEY);
+            this._project = sessionStorage.getItem(this.SELECTED_PROJECT_KEY);
         }
         return this._project;
     }
@@ -50,7 +50,7 @@ export class AuthenticationService {
     public changeProject(project: string): void {
         const projectClean = project.replace(/"/g, '');
         if (this.isAuthenticatedForProject(projectClean)) {
-            localStorage.setItem(this.SELECTED_PROJECT_KEY, projectClean);
+            sessionStorage.setItem(this.SELECTED_PROJECT_KEY, projectClean);
             this._project = project;
             this.authChanged.emit();
         }

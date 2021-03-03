@@ -11,7 +11,7 @@ import { CookiesService } from 'src/app/modules/common/modules/cookies/services/
 @Injectable()
 export class AuthenticationService {
 
-   private static SPECMATE_AUTH_COOKIE_BASE = 'specmate-auth-';
+    private static SPECMATE_AUTH_COOKIE_BASE = 'specmate-auth-';
 
     private tokenCookieName = AuthenticationService.SPECMATE_AUTH_COOKIE_BASE + 'token' + '-' + window.location.hostname;
     private projectCookieName = AuthenticationService.SPECMATE_AUTH_COOKIE_BASE + 'project' + '-' + window.location.hostname;
@@ -40,8 +40,8 @@ export class AuthenticationService {
     private _project: string;
 
     public get project(): string {
-        if (this._project === undefined) {
-            this._project = sessionStorage.getItem(this.SELECTED_PROJECT_KEY);
+        if (this._project === undefined || this._project === null) {
+            this._project = localStorage.getItem(this.SELECTED_PROJECT_KEY);
         }
         return this._project;
     }
@@ -49,7 +49,7 @@ export class AuthenticationService {
     public changeProject(project: string): void {
         const projectClean = project.replace(/"/g, '');
         if (this.isAuthenticatedForProject(projectClean)) {
-            sessionStorage.setItem(this.SELECTED_PROJECT_KEY, projectClean);
+            localStorage.setItem(this.SELECTED_PROJECT_KEY, projectClean);
             this._project = project;
             this.authChanged.emit();
         }
@@ -150,6 +150,9 @@ export class AuthenticationService {
     }
 
     public isAuthenticatedForProject(project: string): boolean {
+        if (project === null || project === undefined) {
+            return false;
+        }
         return this.allowedProjects.indexOf(project.replace(/"/g, '')) >= 0;
     }
 
@@ -184,6 +187,9 @@ export class AuthenticationService {
     }
 
     public get allowedProjects(): string[] {
+        if (this.session === undefined || this.session === null) {
+            return [];
+        }
         return this.session.allowedPathPattern
             .split('\|')
             .map(pattern => pattern.replace(Config.URL_BASE, ''))

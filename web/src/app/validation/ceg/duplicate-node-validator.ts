@@ -42,6 +42,8 @@ export class DuplicateNodeValidator extends ElementValidatorBase<CEGModel> {
                     ValidationUtil.compareStrTrimmed(otherNode.condition, currentNode.condition) &&
                     otherNode !== currentNode &&
                     !duplicates.has(otherNode));
+            
+            // If the duplicate is not in the current model (is a linking node), we return the acually linked node.
             currentDuplicates.map(duplicate => {
                 if (!Url.isParent(element.url, duplicate.url)) {
                     return linkingNodesMap[duplicate.url];

@@ -31,5 +31,10 @@
                 "node_modules/core-js/es"
             ]
         }
+    },
+    "angularCompilerOptions": {
+        "fullTemplateTypeCheck": true,
+        "preserveWhitespaces": true,
+        "strictTemplates": true
     }
 }

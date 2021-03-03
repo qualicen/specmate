@@ -57,12 +57,8 @@ export class VertexProvider extends ProviderBase {
         const labelType = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_TYPE, data.type,
             VertexProvider.INITIAL_CHILD_NODE_X, 0.70, 0, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.TYPE_NAME_STYLE, true);
 
-        if (data.variable === '' || data.variable === undefined || data.variable === null) {
-            StyleChanger.addStyle(labelVariable, this.graph, EditorStyle.EMPTY_TEXT_NAME);
-        }
-        if (data.condition === '' || data.condition === undefined || data.condition === null) {
-            StyleChanger.addStyle(labelCondition, this.graph, EditorStyle.EMPTY_TEXT_NAME);
-        }
+        this.addEmptyTextStyle(data.variable, labelVariable);
+        this.addEmptyTextStyle(data.condition, labelCondition);
 
         labelVariable.isConnectable = () => false;
         labelCondition.isConnectable = () => false;
@@ -89,15 +85,22 @@ export class VertexProvider extends ProviderBase {
         const vertexSymbol = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_LINK_ICON, '🔗',
             8, 8, 0, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.ICON_STYLE, false);
 
-        VertexProvider.adjustChildCellSize(vertexVariable, width);
-        VertexProvider.adjustChildCellSize(vertexCondition, width);
+        this.addEmptyTextStyle(data.variable, vertexVariable);
+        this.addEmptyTextStyle(data.condition, vertexCondition);
 
         vertexVariable.isConnectable = () => false;
         vertexCondition.isConnectable = () => false;
         vertexSymbol.isConnectable = () => false;
 
+        VertexProvider.adjustChildrenCellSizes(vertex, this.shapeProvider, this.graph);
         this.graph.getModel().endUpdate();
         return vertex;
+    }
+
+    private addEmptyTextStyle(text: string, cell: mxgraph.mxCell) {
+        if (text === '' || text === undefined || text === null) {
+            StyleChanger.addStyle(cell, this.graph, EditorStyle.EMPTY_TEXT_NAME);
+        }
     }
 
     public static adjustChildCellSize(cell: mxgraph.mxCell, nodeWidth: number) {

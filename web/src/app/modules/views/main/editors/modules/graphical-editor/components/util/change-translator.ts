@@ -343,7 +343,7 @@ export class ChangeTranslator {
         if (this.ignoreChanges(cell)) {
             return;
         }
-        if (this.isTextInputChange(change) && !Type.is(element, CEGLinkedNode)) {
+        if (this.isTextInputChange(change)) {
             if (cell.value === '' || cell.value === undefined || cell.value === null) {
                 StyleChanger.addStyle(cell, graph, EditorStyle.EMPTY_TEXT_NAME);
             } else {
@@ -527,6 +527,8 @@ export class ChangeTranslator {
                 try {
                     graph.model.setValue(cell.children[0], linkedNode.variable);
                     graph.model.setValue(cell.children[1], linkedNode.condition);
+                    StyleChanger.removeStyle(cell.children[0], graph, EditorStyle.EMPTY_TEXT_NAME);
+                    StyleChanger.removeStyle(cell.children[1], graph, EditorStyle.EMPTY_TEXT_NAME);
                 } finally {
                     graph.getModel().endUpdate();
                 }

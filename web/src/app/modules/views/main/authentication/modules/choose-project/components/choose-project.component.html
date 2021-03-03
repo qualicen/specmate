@@ -1,2 +1,7 @@
-<input type="text" class="form-control form-control-sm d-inline-block" [(ngModel)]="project" [ngbTypeahead]="search"
-    [editable]="false" />
+<div class="input-group input-group-sm">
+    <div class="input-group-prepend">
+        <div class="input-group-text"><span class="fa fa-suitcase"></span></div>
+    </div>
+    <input type="text" class="form-control form-control-sm" [(ngModel)]="project" [ngbTypeahead]="search"
+        [editable]="false">
+</div>

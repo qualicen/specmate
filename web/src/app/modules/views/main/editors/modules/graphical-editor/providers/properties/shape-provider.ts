@@ -138,6 +138,26 @@ export class ShapeProvider extends ProviderBase {
             },
             text: undefined
         };
+
+        this.shapeMap['VariableNameDisabled'] = {
+            style: EditorStyle.VARIABLE_NAME_DISABLED_STYLE,
+            size: {
+                width: 75,
+                height: mx.mxConstants.DEFAULT_FONTSIZE,
+                margin: 30
+            },
+            text: undefined
+        };
+
+        this.shapeMap['BaseTextInputDisabled'] = {
+            style: EditorStyle.TEXT_INPUT_DISABLED_STYLE,
+            size: {
+                width: 75,
+                height: mx.mxConstants.DEFAULT_FONTSIZE,
+                margin: 30
+            },
+            text: undefined
+        };
     }
 
     private getShapeData(element: { className: string }): ShapeData[] {

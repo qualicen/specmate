@@ -10,6 +10,7 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 
+import com.specmate.connectors.api.IConnector;
 import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.api.IProjectService;
 
@@ -40,5 +41,27 @@ public class ProjectServiceImpl implements IProjectService {
 	@Override
 	public Map<String, IProject> getProjects() {
 		return Collections.unmodifiableMap(projects);
+	}
+
+	@Override
+	public Map<String, String> getLoginPoints() {
+
+		Map<String, String> loginPoints = new HashMap<>();
+
+		for (Map.Entry<String, IProject> projectEntries : projects.entrySet()) {
+
+			IConnector connector = projectEntries.getValue().getConnector();
+			if (connector == null) {
+				continue;
+			}
+
+			String loginPointName = connector.getLoginPointName();
+
+			if (!loginPoints.containsKey(loginPointName)) {
+				loginPoints.put(loginPointName, projectEntries.getKey());
+			}
+		}
+
+		return loginPoints;
 	}
 }

@@ -1,4 +1,5 @@
 import { CEGLinkedNode } from 'src/app/model/CEGLinkedNode';
+import { SpecmateDataService } from 'src/app/modules/data/modules/data-service/services/specmate-data.service';
 import { CEGConnection } from '../../model/CEGConnection';
 import { CEGModel } from '../../model/CEGModel';
 import { CEGNode } from '../../model/CEGNode';
@@ -25,7 +26,7 @@ export class ContradictoryCondidionValidator extends ElementValidatorBase<CEGMod
     private openList: TopologicalNode[];
     private topoNodes: {[url: string]: TopologicalNode};
 
-    public validate(element: CEGModel, contents: IContainer[]): ValidationResult {
+    public async validate(element: CEGModel, contents: IContainer[], dataService: SpecmateDataService): Promise<ValidationResult> {
         this.initValidation(contents);
 
         let contradictions: Contradiction[] = [];

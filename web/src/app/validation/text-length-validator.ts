@@ -5,9 +5,10 @@ import { ValidationErrorSeverity } from './validation-error-severity';
 import { ValidationMessage } from './validation-message';
 import { Type } from '../util/type';
 import { ModelImage } from '../model/ModelImage';
+import { SpecmateDataService } from '../modules/data/modules/data-service/services/specmate-data.service';
 
 export class TextLengthValidator extends ElementValidatorBase<IContainer> {
-    public validate(element: IContainer, contents?: IContainer[]): ValidationResult {
+    public async validate(element: IContainer, contents: IContainer[], dataService: SpecmateDataService): Promise<ValidationResult> {
         const keys = Object.keys(element);
         for (let i = 0; i < keys.length; i++) {
             const key = keys[i];

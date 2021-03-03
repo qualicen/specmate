@@ -1,4 +1,5 @@
 import { CEGLinkedNode } from 'src/app/model/CEGLinkedNode';
+import { SpecmateDataService } from 'src/app/modules/data/modules/data-service/services/specmate-data.service';
 import { CEGModel } from '../../model/CEGModel';
 import { CEGNode } from '../../model/CEGNode';
 import { IContainer } from '../../model/IContainer';
@@ -11,7 +12,7 @@ import { Validator } from '../validator-decorator';
 @Validator(CEGModel)
 export class SingleNodesValidator extends ElementValidatorBase<CEGModel> {
 
-    public validate(element: CEGModel, contents: IContainer[]): ValidationResult {
+    public async validate(element: CEGModel, contents: IContainer[], dataService: SpecmateDataService): Promise<ValidationResult> {
         let invalidNodes: IContainer[] = contents.filter((element: IContainer) => {
             if (!Type.is(element, CEGNode) && !Type.is(element, CEGLinkedNode)) {
                 return false;

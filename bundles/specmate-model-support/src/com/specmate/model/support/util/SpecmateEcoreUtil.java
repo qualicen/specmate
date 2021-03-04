@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.eclipse.emf.cdo.CDOObject;
 import org.eclipse.emf.cdo.CDOState;
@@ -16,13 +15,11 @@ import org.eclipse.emf.cdo.common.id.CDOID;
 import org.eclipse.emf.cdo.common.id.CDOIDUtil;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
-import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
@@ -32,12 +29,10 @@ import com.specmate.common.UUIDUtil;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.model.administration.ErrorCode;
-import com.specmate.model.base.BasePackage;
 import com.specmate.model.base.Folder;
 import com.specmate.model.base.IContainer;
 import com.specmate.model.base.IContentElement;
 import com.specmate.model.base.IRecycled;
-import com.specmate.model.base.ModelImage;
 import com.specmate.model.testspecification.TestProcedure;
 import com.specmate.model.testspecification.TestStep;
 
@@ -80,7 +75,7 @@ public class SpecmateEcoreUtil {
 		parentsList.addFirst(firstParent);
 		while (parentsList.size() > 0) {
 			EObject parent = parentsList.pop();
-			TreeIterator<EObject> contents = ((EObject) parent).eAllContents();
+			TreeIterator<EObject> contents = parent.eAllContents();
 			Iterator<EObject> filtered;
 			filtered = Iterators.filter(contents, o -> ((IRecycled) o).isRecycled());
 			if (filtered.hasNext()) {
@@ -302,7 +297,8 @@ public class SpecmateEcoreUtil {
 
 	public static String getProjectId(EObject target) {
 		Folder projectFolder = getLastAncestorOfType(target, Folder.class);
-		if (projectFolder != null && projectFolder.cdoState() != CDOState.TRANSIENT) {
+		if (projectFolder != null
+				&& (projectFolder.cdoState() != CDOState.TRANSIENT || projectFolder.getId().startsWith("__TEST__"))) {
 			return projectFolder.getId();
 		} else {
 			return null;

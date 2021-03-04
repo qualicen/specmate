@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.google.common.collect.Lists;
 import com.specmate.common.exception.SpecmateAuthorizationException;
@@ -69,14 +70,14 @@ public class CrudUtil {
 			theTarget.setHasRecycledChildren(true);
 			ArrayList<EObject> children = Lists.newArrayList(theTarget.eAllContents());
 			for (Iterator<EObject> iterator = children.iterator(); iterator.hasNext();) {
-				EObject child = (EObject) iterator.next();
+				EObject child = iterator.next();
 				if (child instanceof IRecycled) {
 					IRecycled theChild = (IRecycled) child;
 					theChild.setRecycled(true);
 					theChild.setHasRecycledChildren(true);
 				}
 			}
-			
+
 			EObject parent = SpecmateEcoreUtil.getParent(theTarget);
 			while (parent != null && !SpecmateEcoreUtil.isProject(parent)) {
 				if (parent instanceof IRecycled) {
@@ -99,7 +100,7 @@ public class CrudUtil {
 			// Update all children
 			ArrayList<EObject> children = Lists.newArrayList(theTarget.eAllContents());
 			for (Iterator<EObject> iterator = children.iterator(); iterator.hasNext();) {
-				EObject child = (EObject) iterator.next();
+				EObject child = iterator.next();
 				if (child instanceof IRecycled) {
 					IRecycled theChild = (IRecycled) child;
 					theChild.setRecycled(false);
@@ -139,13 +140,23 @@ public class CrudUtil {
 	}
 
 	private static IContainer filteredCopy(List<Class<? extends IContainer>> avoidRecurse, EObject original) {
-		IContainer copy = (IContainer) EcoreUtil.copy(original);
+		IContainer copy = (IContainer) copyWithBidirectionalReferences(original);
 		List<IContentElement> retain = copy.getContents().stream()
 				.filter(el -> !avoidRecurse.stream().anyMatch(avoid -> avoid.isAssignableFrom(el.getClass())))
 				.collect(Collectors.toList());
 		copy.getContents().clear();
 		copy.getContents().addAll(retain);
 		return copy;
+	}
+
+	public static <T extends EObject> T copyWithBidirectionalReferences(T eObject) {
+		CopierWithBidirectionalReferences copier = new CopierWithBidirectionalReferences();
+		EObject result = copier.copy(eObject);
+		copier.copyReferences();
+
+		@SuppressWarnings("unchecked")
+		T t = (T) result;
+		return t;
 	}
 
 	private static void setUniqueCopyId(IContainer copy, IContainer parent) {
@@ -223,5 +234,70 @@ public class CrudUtil {
 			}
 		}
 		return true;
+	}
+
+	public static class CopierWithBidirectionalReferences extends EcoreUtil.Copier {
+
+		// Copied from EcoreUtil.copyReference and removed check for bidirectional
+		// references
+		@Override
+		protected void copyReference(EReference eReference, EObject eObject, EObject copyEObject) {
+			if (eObject.eIsSet(eReference)) {
+				EStructuralFeature.Setting setting = getTarget(eReference, eObject, copyEObject);
+				if (setting != null) {
+					Object value = eObject.eGet(eReference, resolveProxies);
+					if (eReference.isMany()) {
+						@SuppressWarnings("unchecked")
+						InternalEList<EObject> source = (InternalEList<EObject>) value;
+						@SuppressWarnings("unchecked")
+						InternalEList<EObject> target = (InternalEList<EObject>) setting;
+						if (source.isEmpty()) {
+							target.clear();
+						} else {
+							boolean isBidirectional = eReference.getEOpposite() != null;
+							int index = 0;
+							for (Iterator<EObject> k = resolveProxies ? source.iterator() : source.basicIterator(); k
+									.hasNext();) {
+								EObject referencedEObject = k.next();
+								EObject copyReferencedEObject = get(referencedEObject);
+								if (copyReferencedEObject == null) {
+									if (useOriginalReferences && !isBidirectional) {
+										target.addUnique(index, referencedEObject);
+										++index;
+									}
+								} else {
+									if (isBidirectional) {
+										int position = target.indexOf(copyReferencedEObject);
+										if (position == -1) {
+											target.addUnique(index, copyReferencedEObject);
+										} else if (index != position) {
+											target.move(index, copyReferencedEObject);
+										}
+									} else {
+										target.addUnique(index, copyReferencedEObject);
+									}
+									++index;
+								}
+							}
+						}
+					} else {
+						if (value == null) {
+							setting.set(null);
+						} else {
+							Object copyReferencedEObject = get(value);
+							if (copyReferencedEObject == null) {
+								// Patched to enable bidirectional copies
+								if (useOriginalReferences /* && eReference.getEOpposite() == null */) {
+									setting.set(value);
+								}
+							} else {
+								setting.set(copyReferencedEObject);
+							}
+						}
+					}
+				}
+			}
+		}
+
 	}
 }

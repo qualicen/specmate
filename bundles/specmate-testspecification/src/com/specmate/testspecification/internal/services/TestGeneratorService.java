@@ -1,11 +1,15 @@
 package com.specmate.testspecification.internal.services;
 
+import java.util.List;
+
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
 import org.eclipse.emf.ecore.EObject;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.log.LogService;
 
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
@@ -32,6 +36,7 @@ public class TestGeneratorService extends RestServiceBase {
 
 	private IMetricsService metricsService;
 	private ICounter testGenCounter;
+	private LogService logService;
 
 	@Activate
 	public void activate() throws SpecmateException {
@@ -54,11 +59,15 @@ public class TestGeneratorService extends RestServiceBase {
 
 	/** {@inheritDoc} */
 	@Override
-	public RestResult<?> post(Object target, Object object, String token) throws SpecmateException {
+	public RestResult<?> post(Object target, Object object, MultivaluedMap<String, String> queryParams, String token)
+			throws SpecmateException {
 		TestSpecification specification = (TestSpecification) target;
 		EObject container = specification.eContainer();
 		if (container instanceof CEGModel) {
-			new CEGTestCaseGenerator(specification).generate();
+			List<String> withLinksParams = queryParams.get("considerLinks");
+			boolean withLinks = withLinksParams != null && withLinksParams.size() > 0
+					&& withLinksParams.get(0).toLowerCase().equals("true");
+			new CEGTestCaseGenerator(specification, withLinks, logService).generate();
 			testGenCounter.inc();
 		} else if (container instanceof Process) {
 			new ProcessTestCaseGenerator(specification).generate();
@@ -69,6 +78,11 @@ public class TestGeneratorService extends RestServiceBase {
 							+ container.getClass().getSimpleName() + ".");
 		}
 		return new RestResult<>(Response.Status.NO_CONTENT);
+	}
+
+	@Reference
+	public void setLogService(LogService logService) {
+		this.logService = logService;
 	}
 
 	@Reference

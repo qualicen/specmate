@@ -32,7 +32,12 @@ import com.specmate.model.administration.ErrorCode;
 import com.specmate.model.base.Folder;
 import com.specmate.model.base.IContainer;
 import com.specmate.model.base.IContentElement;
+import com.specmate.model.base.IModelConnection;
+import com.specmate.model.base.IModelNode;
 import com.specmate.model.base.IRecycled;
+import com.specmate.model.requirements.CEGLinkedNode;
+import com.specmate.model.requirements.CEGNode;
+import com.specmate.model.requirements.NodeType;
 import com.specmate.model.testspecification.TestProcedure;
 import com.specmate.model.testspecification.TestStep;
 
@@ -325,6 +330,67 @@ public class SpecmateEcoreUtil {
 		List<TestStep> steps = SpecmateEcoreUtil.pickInstancesOf(testProcedure.getContents(), TestStep.class);
 		steps.sort((s1, s2) -> Integer.compare(s1.getPosition(), s2.getPosition()));
 		return steps;
+	}
+
+	public static List<IModelConnection> getIncomingConnections(IModelNode node, boolean considerLinks) {
+		if (node instanceof CEGLinkedNode) {
+			if (!considerLinks) {
+				return Collections.emptyList();
+			}
+			IModelNode linkedNode = ((CEGLinkedNode) node).getLinkTo();
+			if (linkedNode != null) {
+				return linkedNode.getIncomingConnections();
+			} else {
+				return null;
+			}
+		} else {
+			return node.getIncomingConnections();
+		}
+	}
+
+	public static String getVariable(IModelNode node) {
+		if (node instanceof CEGLinkedNode) {
+			CEGNode linkedNode = ((CEGLinkedNode) node).getLinkTo();
+			if (linkedNode != null) {
+				return linkedNode.getVariable();
+			} else {
+				return null;
+			}
+		} else if (node instanceof CEGNode) {
+			return ((CEGNode) node).getVariable();
+		} else {
+			return null;
+		}
+	}
+
+	public static String getCondition(IModelNode node) {
+		if (node instanceof CEGLinkedNode) {
+			CEGNode linkedNode = ((CEGLinkedNode) node).getLinkTo();
+			if (linkedNode != null) {
+				return linkedNode.getCondition();
+			} else {
+				return null;
+			}
+		} else if (node instanceof CEGNode) {
+			return ((CEGNode) node).getCondition();
+		} else {
+			return null;
+		}
+	}
+
+	public static NodeType getType(IModelNode node) {
+		if (node instanceof CEGLinkedNode) {
+			CEGNode linkedNode = ((CEGLinkedNode) node).getLinkTo();
+			if (linkedNode != null) {
+				return linkedNode.getType();
+			} else {
+				return null;
+			}
+		} else if (node instanceof CEGNode) {
+			return ((CEGNode) node).getType();
+		} else {
+			return null;
+		}
 	}
 
 }

@@ -44,7 +44,6 @@ public class XrayServerExportService extends JiraExportServiceBase {
 	protected void exportTestStepsPost(TestProcedure procedure, BasicIssue issue) throws SpecmateException {
 		String basicAuth = Base64.getEncoder().encodeToString(String.format("%s:%s", username, password).getBytes());
 		RestClient restClient = new RestClient(url, EAuthType.BASIC, basicAuth, 10000, logService);
-
 		try (restClient) {
 			List<TestStep> steps = SpecmateEcoreUtil.getStepsSorted(procedure);
 			for (TestStep step : steps) {

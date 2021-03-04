@@ -1,6 +1,7 @@
 import { Config } from '../config/config';
 import { CEGNode } from '../model/CEGNode';
 import { IContainer } from '../model/IContainer';
+import { SpecmateDataService } from '../modules/data/modules/data-service/services/specmate-data.service';
 import { Id } from '../util/id';
 import { Url } from '../util/url';
 import { ElementFactoryBase } from './element-factory-base';
@@ -8,9 +9,11 @@ import { PositionableElementFactoryBase } from './positionable-element-factory-b
 
 export class CEGNodeFactory extends PositionableElementFactoryBase<CEGNode> {
 
-    public create(parent: IContainer, commit: boolean, compoundId?: string, name?: string): Promise<CEGNode> {
+    constructor(protected coords: { x: number; y: number; }, protected dataService: SpecmateDataService, private copyFrom?: CEGNode) {
+        super(coords, dataService);
+    }
 
-        compoundId = compoundId || Id.uuid;
+    public create(parent: IContainer, commit: boolean, compoundId = Id.uuid, name?: string): Promise<CEGNode> {
 
         let id: string = Id.uuid;
         let url: string = Url.build([parent.url, id]);
@@ -21,15 +24,18 @@ export class CEGNodeFactory extends PositionableElementFactoryBase<CEGNode> {
         node.url = url;
         node.recycled = false;
         node.hasRecycledChildren = false;
-        node.type = Config.CEG_NODE_NEW_TYPE;
-        node.variable = Config.CEG_NODE_NEW_VARIABLE;
-        node.condition = Config.CEG_NODE_NEW_CONDITION;
+        node.type = this.copyFrom?.type ?? Config.CEG_NODE_NEW_TYPE;
+        node.variable = this.copyFrom?.variable ?? Config.CEG_NODE_NEW_VARIABLE;
+        node.condition = this.copyFrom?.condition ?? Config.CEG_NODE_NEW_CONDITION;
         node.x = this.coords.x;
         node.y = this.coords.y;
-        node.tracesFrom = [];
-        node.tracesTo = [];
+        node.width = this.copyFrom?.width ?? Config.CEG_NODE_WIDTH;
+        node.height = this.copyFrom?.height ?? Config.CEG_NODE_HEIGHT;
+        node.tracesFrom = this.copyFrom?.tracesFrom ?? [];
+        node.tracesTo = this.copyFrom?.tracesTo ?? [];
         node.incomingConnections = [];
         node.outgoingConnections = [];
+        node.linksFrom = this.copyFrom?.linksFrom ?? [];
 
         return this.dataService.createElement(node, true, compoundId).then(() => node);
     }

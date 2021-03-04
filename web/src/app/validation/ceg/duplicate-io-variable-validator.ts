@@ -1,3 +1,4 @@
+import { SpecmateDataService } from 'src/app/modules/data/modules/data-service/services/specmate-data.service';
 import { CEGModel } from '../../model/CEGModel';
 import { CEGNode } from '../../model/CEGNode';
 import { IContainer } from '../../model/IContainer';
@@ -11,7 +12,7 @@ type IO = ('input' | 'output');
 
 @Validator(CEGModel)
 export class DuplicateIOVariableValidator extends ElementValidatorBase<CEGModel> {
-    public validate(element: CEGModel, contents: IContainer[]): ValidationResult {
+    public async validate(element: CEGModel, contents: IContainer[], dataService: SpecmateDataService): Promise<ValidationResult> {
 
         const nodeMap: { [variable: string]: IContainer[] } = {};
         const typeMap: { [variable: string]: IO[] } = {};

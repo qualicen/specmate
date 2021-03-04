@@ -3,6 +3,7 @@
 package com.specmate.model.requirements;
 
 import com.specmate.model.base.IModelNode;
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -16,6 +17,7 @@ import com.specmate.model.base.IModelNode;
  *   <li>{@link com.specmate.model.requirements.CEGNode#getType <em>Type</em>}</li>
  *   <li>{@link com.specmate.model.requirements.CEGNode#getVariable <em>Variable</em>}</li>
  *   <li>{@link com.specmate.model.requirements.CEGNode#getCondition <em>Condition</em>}</li>
+ *   <li>{@link com.specmate.model.requirements.CEGNode#getLinksFrom <em>Links From</em>}</li>
  * </ul>
  *
  * @see com.specmate.model.requirements.RequirementsPackage#getCEGNode()
@@ -91,5 +93,19 @@ public interface CEGNode extends IModelNode {
 	 * @generated
 	 */
 	void setCondition(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Links From</b></em>' reference list.
+	 * The list contents are of type {@link com.specmate.model.requirements.CEGLinkedNode}.
+	 * It is bidirectional and its opposite is '{@link com.specmate.model.requirements.CEGLinkedNode#getLinkTo <em>Link To</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Links From</em>' reference list.
+	 * @see com.specmate.model.requirements.RequirementsPackage#getCEGNode_LinksFrom()
+	 * @see com.specmate.model.requirements.CEGLinkedNode#getLinkTo
+	 * @model opposite="linkTo"
+	 * @generated
+	 */
+	EList<CEGLinkedNode> getLinksFrom();
 
 } // CEGNode

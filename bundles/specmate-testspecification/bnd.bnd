@@ -20,7 +20,8 @@
 	org.apache.commons.lang3;version=3.5,\
 	org.eclipse.equinox.common,\
 	org.eclipse.net4j.util,\
-	specmate-metrics;version=latest
+	specmate-metrics;version=latest,\
+	osgi.core;version=6.0
 Private-Package: \
 	com.specmate.testspecification.internal.services,\
 	com.specmate.testspecification.internal.exporters

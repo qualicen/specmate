@@ -59,6 +59,7 @@ import com.specmate.migration.test.attributeadded.testmodel.base.IModifiable;
  *   <li>{@link com.specmate.migration.test.attributeadded.testmodel.artefact.Sketch#getStringVar3 <em>String Var3</em>}</li>
  *   <li>{@link com.specmate.migration.test.attributeadded.testmodel.artefact.Sketch#getStringVar4 <em>String Var4</em>}</li>
  *   <li>{@link com.specmate.migration.test.attributeadded.testmodel.artefact.Sketch#getStringVar5 <em>String Var5</em>}</li>
+ *   <li>{@link com.specmate.migration.test.attributeadded.testmodel.artefact.Sketch#getLinkedDiagram <em>Linked Diagram</em>}</li>
  * </ul>
  *
  * @see com.specmate.migration.test.attributeadded.testmodel.artefact.ArtefactPackage#getSketch()
@@ -1235,5 +1236,29 @@ public interface Sketch extends IModifiable, IContainer {
 	 * @generated
 	 */
 	void setStringVar5(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Linked Diagram</b></em>' reference.
+	 * It is bidirectional and its opposite is '{@link com.specmate.migration.test.attributeadded.testmodel.artefact.Diagram#getLinkfrom <em>Linkfrom</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Linked Diagram</em>' reference.
+	 * @see #setLinkedDiagram(Diagram)
+	 * @see com.specmate.migration.test.attributeadded.testmodel.artefact.ArtefactPackage#getSketch_LinkedDiagram()
+	 * @see com.specmate.migration.test.attributeadded.testmodel.artefact.Diagram#getLinkfrom
+	 * @model opposite="linkfrom"
+	 * @generated
+	 */
+	Diagram getLinkedDiagram();
+
+	/**
+	 * Sets the value of the '{@link com.specmate.migration.test.attributeadded.testmodel.artefact.Sketch#getLinkedDiagram <em>Linked Diagram</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Linked Diagram</em>' reference.
+	 * @see #getLinkedDiagram()
+	 * @generated
+	 */
+	void setLinkedDiagram(Diagram value);
 
 } // Sketch

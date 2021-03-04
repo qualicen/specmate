@@ -26,10 +26,10 @@ export abstract class DeleteToolBase extends TypeAwareToolBase {
         this.graphTransformer = new GraphTransformer(dataService, selectedElementService, parent);
     }
 
-    public async perform(): Promise<any> {
+    public async perform(compoundId = Id.uuid): Promise<any> {
         if (this.element === undefined) {
             throw new Error('Element undefined');
         }
-        await this.graphTransformer.deleteElementAndDeselect(this.element, Id.uuid);
+        await this.graphTransformer.deleteElementAndDeselect(this.element, compoundId);
     }
 }

@@ -5,6 +5,7 @@
 [comment @main/]
 
 [file (aClass.name.concat('.ts'), false)]
+/* tslint:disable */
 	import './support/gentypes';
 	import { Proxy } from './support/proxy';
 

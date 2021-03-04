@@ -1,7 +1,7 @@
-<div class="d-inline-block" ngbDropdown #chooseProjectDrop="ngbDropdown">
-    <button class="btn btn-outline-primary btn-sm" id="dropdownManual" ngbDropdownAnchor
-        (focus)="chooseProjectDrop.open()">{{project}}</button>
-    <div ngbDropdownMenu aria-labelledby="dropdownManual">
-        <button ngbDropdownItem *ngFor="let project of projects" (click)="activate(project)">{{project}}</button>
+<div class="input-group input-group-sm">
+    <div class="input-group-prepend">
+        <div class="input-group-text"><span class="fa fa-suitcase"></span></div>
     </div>
+    <input type="text" class="form-control form-control-sm" [(ngModel)]="project" [ngbTypeahead]="search"
+        [editable]="false">
 </div>

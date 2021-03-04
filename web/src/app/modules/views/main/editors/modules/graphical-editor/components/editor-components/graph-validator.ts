@@ -1,4 +1,5 @@
 import { mxgraph } from 'mxgraph'; // Typings only - no code!
+import { CEGLinkedNode } from 'src/app/model/CEGLinkedNode';
 import { CEGModel } from 'src/app/model/CEGModel';
 import { CEGNode } from 'src/app/model/CEGNode';
 import { IContainer } from 'src/app/model/IContainer';
@@ -73,7 +74,10 @@ export class GraphValidator {
         let align = mx.mxConstants.ALIGN_RIGHT;
         let offset;
 
-        if (Type.is(element, CEGNode) || Type.is(element, ProcessStep)) {
+        if (Type.is(element, CEGNode) || Type.is(element, CEGLinkedNode)) {
+            offset = new mx.mxPoint(-13, -12);
+        }
+        if (Type.is(element, ProcessStep)) {
             offset = new mx.mxPoint(-13, -12);
         }
         if (Type.is(element, ProcessStart) || Type.is(element, ProcessEnd)) {

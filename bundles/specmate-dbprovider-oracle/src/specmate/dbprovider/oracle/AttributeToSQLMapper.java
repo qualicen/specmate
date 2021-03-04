@@ -26,8 +26,8 @@ public class AttributeToSQLMapper extends SQLMapper implements IAttributeToSQLMa
 	}
 
 	@Override
-	public void migrateNewStringAttribute(String objectName, String attributeName, String defaultValue)
-			throws SpecmateException {
+	public void migrateNewStringAttribute(String objectName, String attributeName, String defaultValue,
+			boolean isDerived) throws SpecmateException {
 
 		// TODO I'm not sure if CDO uses VARCHAR or CLOB [1] for strings. 4000 is the
 		// maximum number of characters supported by oracle. I think that might not be
@@ -40,12 +40,12 @@ public class AttributeToSQLMapper extends SQLMapper implements IAttributeToSQLMa
 			alterString += " DEFAULT '" + defaultValue + "'";
 		}
 
-		executeChange(alterString, objectName, attributeName, hasDefault(defaultValue));
+		executeChange(alterString, objectName, attributeName, hasDefault(defaultValue), isDerived);
 	}
 
 	@Override
-	public void migrateNewBooleanAttribute(String objectName, String attributeName, Boolean defaultValue)
-			throws SpecmateException {
+	public void migrateNewBooleanAttribute(String objectName, String attributeName, Boolean defaultValue,
+			boolean isDerived) throws SpecmateException {
 
 		String alterString = "ALTER TABLE " + objectName + " ADD " + attributeName + " NUMBER";
 
@@ -53,12 +53,12 @@ public class AttributeToSQLMapper extends SQLMapper implements IAttributeToSQLMa
 			alterString += " DEFAULT " + (defaultValue == true ? 1 : 0);
 		}
 
-		executeChange(alterString, objectName, attributeName, hasDefault(defaultValue));
+		executeChange(alterString, objectName, attributeName, hasDefault(defaultValue), isDerived);
 	}
 
 	@Override
-	public void migrateNewIntegerAttribute(String objectName, String attributeName, Integer defaultValue)
-			throws SpecmateException {
+	public void migrateNewIntegerAttribute(String objectName, String attributeName, Integer defaultValue,
+			boolean isDerived) throws SpecmateException {
 
 		String alterString = "ALTER TABLE " + objectName + " ADD " + attributeName + " NUMBER";
 
@@ -66,11 +66,24 @@ public class AttributeToSQLMapper extends SQLMapper implements IAttributeToSQLMa
 			alterString += " DEFAULT " + defaultValue.intValue();
 		}
 
-		executeChange(alterString, objectName, attributeName, hasDefault(defaultValue));
+		executeChange(alterString, objectName, attributeName, hasDefault(defaultValue), isDerived);
 	}
 
 	@Override
-	public void migrateNewDoubleAttribute(String objectName, String attributeName, Double defaultValue)
+	public void migrateNewDoubleAttribute(String objectName, String attributeName, Double defaultValue,
+			boolean isDerived) throws SpecmateException {
+
+		String alterString = "ALTER TABLE " + objectName + " ADD " + attributeName + " NUMBER";
+
+		if (hasDefault(defaultValue)) {
+			alterString += " DEFAULT " + defaultValue;
+		}
+
+		executeChange(alterString, objectName, attributeName, hasDefault(defaultValue), isDerived);
+	}
+
+	@Override
+	public void migrateNewLongAttribute(String objectName, String attributeName, Long defaultValue, boolean isDerived)
 			throws SpecmateException {
 
 		String alterString = "ALTER TABLE " + objectName + " ADD " + attributeName + " NUMBER";
@@ -79,24 +92,11 @@ public class AttributeToSQLMapper extends SQLMapper implements IAttributeToSQLMa
 			alterString += " DEFAULT " + defaultValue;
 		}
 
-		executeChange(alterString, objectName, attributeName, hasDefault(defaultValue));
+		executeChange(alterString, objectName, attributeName, hasDefault(defaultValue), isDerived);
 	}
 
 	@Override
-	public void migrateNewLongAttribute(String objectName, String attributeName, Long defaultValue)
-			throws SpecmateException {
-
-		String alterString = "ALTER TABLE " + objectName + " ADD " + attributeName + " NUMBER";
-
-		if (hasDefault(defaultValue)) {
-			alterString += " DEFAULT " + defaultValue;
-		}
-
-		executeChange(alterString, objectName, attributeName, hasDefault(defaultValue));
-	}
-
-	@Override
-	public void migrateNewDateAttribute(String objectName, String attributeName, Date defaultValue)
+	public void migrateNewDateAttribute(String objectName, String attributeName, Date defaultValue, boolean isDerived)
 			throws SpecmateException {
 
 		String alterString = "ALTER TABLE " + objectName + " ADD " + attributeName + " DATE";
@@ -105,22 +105,39 @@ public class AttributeToSQLMapper extends SQLMapper implements IAttributeToSQLMa
 			alterString += " DEFAULT '" + df.format(defaultValue) + "'";
 		}
 
-		executeChange(alterString, objectName, attributeName, hasDefault(defaultValue));
+		executeChange(alterString, objectName, attributeName, hasDefault(defaultValue), isDerived);
 	}
 
 	@Override
-	public void migrateNewObjectReference(String objectName, String attributeName) throws SpecmateException {
-		migrateNewReference(objectName, attributeName, "NUMBER");
+	public void migrateNewObjectReferenceNtoM(String objectName, String attributeName, boolean isDerived,
+			String derivedFrom) throws SpecmateException {
+		migrateNewReference(objectName, attributeName, "NUMBER", isDerived, derivedFrom);
 	}
 
 	@Override
-	public void migrateNewStringReference(String objectName, String attributeName) throws SpecmateException {
-		migrateNewReference(objectName, attributeName, "VARCHAR2(4000)");
-	}
-
-	private void migrateNewReference(String objectName, String attributeName, String type) throws SpecmateException {
+	public void migrateNewObjectReferenceOneToN(String objectName, String attributeName, boolean isDerived)
+			throws SpecmateException {
 		String failmsg = "Migration: Could not add column " + attributeName + " to table " + objectName + ".";
-		String tableNameList = getListTableName(objectName, attributeName);
+		List<String> queries = new ArrayList<>();
+
+		queries.add("ALTER TABLE " + objectName + " ADD " + attributeName + " NUMBER");
+
+		if (!isDerived) {
+			queries.add(insertExternalAttributeReference(objectName, attributeName));
+		}
+		SQLUtil.executeStatements(queries, connection, failmsg);
+	}
+
+	@Override
+	public void migrateNewStringReference(String objectName, String attributeName, boolean isDerived,
+			String derivedFrom) throws SpecmateException {
+		migrateNewReference(objectName, attributeName, "VARCHAR2(4000)", isDerived, derivedFrom);
+	}
+
+	private void migrateNewReference(String objectName, String attributeName, String type, boolean isDerived,
+			String derivedFrom) throws SpecmateException {
+		String failmsg = "Migration: Could not add column " + attributeName + " to table " + objectName + ".";
+		String tableNameList = getListTableName(objectName, attributeName, isDerived, derivedFrom);
 		List<String> queries = new ArrayList<>();
 
 		queries.add("ALTER TABLE " + objectName + " ADD " + attributeName + " NUMBER");
@@ -131,17 +148,26 @@ public class AttributeToSQLMapper extends SQLMapper implements IAttributeToSQLMa
 		queries.add("ALTER TABLE " + tableNameList + " ADD CONSTRAINT "
 				+ SQLUtil.createTimebasedIdentifier("C", OracleProviderConfig.MAX_ID_LENGTH)
 				+ " PRIMARY KEY (CDO_SOURCE, CDO_VERSION, CDO_IDX)");
-		queries.add(insertExternalAttributeReference(objectName, attributeName));
+
+		if (!isDerived) {
+			queries.add(insertExternalAttributeReference(objectName, attributeName));
+		}
 		SQLUtil.executeStatements(queries, connection, failmsg);
 	}
 
-	private String getListTableName(String objectName, String attributeName) throws SpecmateException {
+	private String getListTableName(String objectName, String attributeName, boolean isDerived, String derivedFrom)
+			throws SpecmateException {
 		String firstShot = objectName + "_" + attributeName + "_LIST";
 		if (firstShot.length() <= ORACLE_MAX_TABLE_NAME_LENGTH) {
 			return firstShot;
 		}
-		int id = Math.abs(getLatestId());
-		id++;
+		int id = 0;
+		if (isDerived) {
+			id = Math.abs(getExternalRefId(derivedFrom, attributeName));
+		} else {
+			id = Math.abs(getLatestId());
+			id++;
+		}
 		String idStr = Integer.toString(id);
 		String suffix = "_FLS" + idStr;
 		if (suffix.length() > attributeName.length()) {

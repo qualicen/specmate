@@ -32,8 +32,8 @@ public class StatusService extends RestServiceBase implements IStatusService {
 		normalStatus.setValue(ESpecmateStatus.NORMAL.getName());
 		Status maintenanceStatus = AdministrationFactory.eINSTANCE.createStatus();
 		maintenanceStatus.setValue(ESpecmateStatus.MAINTENANCE.getName());
-		this.statusMap.put(ESpecmateStatus.NORMAL.getName(), normalStatus);
-		this.statusMap.put(ESpecmateStatus.MAINTENANCE.getName(), maintenanceStatus);
+		statusMap.put(ESpecmateStatus.NORMAL.getName(), normalStatus);
+		statusMap.put(ESpecmateStatus.MAINTENANCE.getName(), maintenanceStatus);
 	}
 
 	@Override
@@ -63,7 +63,8 @@ public class StatusService extends RestServiceBase implements IStatusService {
 	}
 
 	@Override
-	public RestResult<?> post(Object target, Object object, String token) throws SpecmateException {
+	public RestResult<?> post(Object target, Object object, MultivaluedMap<String, String> queryParams, String token)
+			throws SpecmateException {
 		if (target instanceof Resource) {
 			Status status = (Status) object;
 			switch (status.getValue()) {
@@ -88,6 +89,6 @@ public class StatusService extends RestServiceBase implements IStatusService {
 
 	@Override
 	public void setCurrentStatus(ESpecmateStatus status) {
-		this.currentStatus = status;
+		currentStatus = status;
 	}
 }

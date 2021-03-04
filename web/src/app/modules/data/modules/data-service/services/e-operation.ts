@@ -1,3 +1,7 @@
 export enum EOperation {
-    CREATE, DELETE, UPDATE, INIT
+    CREATE = 'CREATE',
+    DELETE = 'DELETE',
+    UPDATE = 'UPDATE',
+    INIT = 'INIT'
+
 }

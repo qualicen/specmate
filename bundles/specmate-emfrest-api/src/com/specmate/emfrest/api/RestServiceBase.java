@@ -53,7 +53,8 @@ public abstract class RestServiceBase implements IRestService {
 	 * org.eclipse.emf.ecore.EObject)
 	 */
 	@Override
-	public RestResult<?> post(Object parent, Object child, String token) throws SpecmateException {
+	public RestResult<?> post(Object parent, Object child, MultivaluedMap<String, String> queryParams, String token)
+			throws SpecmateException {
 		return null;
 	}
 
@@ -110,7 +111,7 @@ public abstract class RestServiceBase implements IRestService {
 
 	@Override
 	public int compareTo(IRestService otherService) {
-		return Integer.compare(otherService.getPriority(), this.getPriority());
+		return Integer.compare(otherService.getPriority(), getPriority());
 	}
 
 }

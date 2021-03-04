@@ -68,6 +68,7 @@ public class ArtefactFactoryImpl extends EFactoryImpl implements ArtefactFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Diagram createDiagram() {
 		DiagramImpl diagram = new DiagramImpl();
 		return diagram;
@@ -78,6 +79,7 @@ public class ArtefactFactoryImpl extends EFactoryImpl implements ArtefactFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Sketch createSketch() {
 		SketchImpl sketch = new SketchImpl();
 		return sketch;
@@ -88,6 +90,7 @@ public class ArtefactFactoryImpl extends EFactoryImpl implements ArtefactFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ArtefactPackage getArtefactPackage() {
 		return (ArtefactPackage)getEPackage();
 	}

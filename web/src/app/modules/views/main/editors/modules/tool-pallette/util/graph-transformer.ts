@@ -1,3 +1,6 @@
+import { CEGLinkedNode } from 'src/app/model/CEGLinkedNode';
+import { CEGNode } from 'src/app/model/CEGNode';
+import { Type } from 'src/app/util/type';
 import { Coords, GraphElementFactorySelector } from '../../../../../../../factory/util/graph-element-factory-selector';
 import { IContainer } from '../../../../../../../model/IContainer';
 import { IModelConnection } from '../../../../../../../model/IModelConnection';
@@ -20,7 +23,7 @@ export class GraphTransformer {
 
     // Delete
     public async deleteAll(elements: IContainer[], compoundId: string): Promise<void> {
-        await this.selectionService.deselectElements(elements);
+        this.selectionService.deselectElements(elements);
         // We have to delete connections first to avoid updating already deleted nodes.
         for (const element of elements) {
             if (this.elementProvider.isConnection(element)) {
@@ -59,14 +62,24 @@ export class GraphTransformer {
     }
 
     private async deleteNode(node: IModelNode, compoundId: string): Promise<void> {
-        const contents: IContainer[] = await this.dataService.readContents(this.parent.url, true);
-        const connections = contents
-            .filter((element: IContainer) => this.elementProvider.isConnection(element))
-            .map((element: IContainer) => element as IModelConnection)
-            .filter((connection: IModelConnection) => connection.source.url === node.url || connection.target.url === node.url);
-        for (let i = 0 ; i < connections.length; i++) {
-            await this.deleteConnection(connections[i], compoundId);
+        if (Type.is(node, CEGNode) && (node as CEGNode).linksFrom?.length > 0) {
+            for (const linkingNodeProxy of (node as CEGNode).linksFrom) {
+                const linkingNode = await this.dataService.readElement(linkingNodeProxy.url, true) as CEGLinkedNode;
+                delete linkingNode.linkTo;
+                await this.dataService.updateElement(linkingNode, true, compoundId);
+            }
         }
+
+        if (Type.is(node, CEGLinkedNode) && (node as CEGLinkedNode).linkTo !== undefined) {
+            const linkingNode = node as CEGLinkedNode;
+            const linkedNode = await this.dataService.readElement(linkingNode.linkTo.url, true) as CEGNode;
+            const index = linkedNode.linksFrom.findIndex(proxy => proxy.url === node.url);
+            if (index > -1) {
+                linkedNode.linksFrom.splice(index, 1);
+            }
+            await this.dataService.updateElement(linkedNode, true, compoundId);
+        }
+
         await this.dataService.deleteElement(node.url, true, compoundId);
     }
 
@@ -111,17 +124,28 @@ export class GraphTransformer {
      * This is used when you only want to clone the data for later work.
      */
     public async cloneSubgraph(templates: IContainer[], compoundId: string, changeGraph: boolean, offset = 100): Promise<IContainer[]> {
-        let urlMap: {[old: string]: IModelNode} = {};
+        let urlMap: { [old: string]: IModelNode } = {};
         let out: IContainer[] = [];
         // Old URL -> New Node map
         for (const template of templates) {
             if (this.elementProvider.isNode(template)) {
-                let temp = <IModelNode> template;
-                let newCoord = { x: temp.x, y: temp.y + offset};
+                let temp = <IModelNode>template;
+                let newCoord = { x: temp.x, y: temp.y + offset };
                 let node = <IModelNode>await this.cloneNode(temp, newCoord, compoundId, changeGraph);
                 urlMap[template.url] = node;
                 node.incomingConnections = [];
                 node.outgoingConnections = [];
+                if (Type.is(template, CEGLinkedNode)) {
+                    (node as CEGLinkedNode).linkTo = Objects.clone((template as CEGLinkedNode).linkTo);
+                    const linkedNode = await this.dataService.readElement((template as CEGLinkedNode).linkTo.url) as CEGNode;
+                    const proxy = new Proxy();
+                    proxy.url = node.url;
+                    if (linkedNode.linksFrom === undefined) {
+                        linkedNode.linksFrom = [];
+                    }
+                    linkedNode.linksFrom.push(proxy);
+                    await this.updateElement(linkedNode, compoundId);
+                }
                 if (changeGraph) {
                     this.transferData(temp, node);
                     await this.updateElement(node, compoundId);
@@ -133,7 +157,7 @@ export class GraphTransformer {
         // Filter Connections that are within the subgraph
         for (const template of templates) {
             if (this.elementProvider.isConnection(template)) {
-                let temp = <IModelConnection> template;
+                let temp = <IModelConnection>template;
                 if ((temp.target.url in urlMap) && (temp.source.url in urlMap)) {
                     let source = urlMap[temp.source.url];
                     let target = urlMap[temp.target.url];
@@ -176,7 +200,7 @@ export class GraphTransformer {
     }
 
     private transferData(from: IContainer, to: IContainer) {
-        let fields: string[] = MetaInfo[from.className].map( (item: FieldMetaItem) => item.name);
+        let fields: string[] = MetaInfo[from.className].map((item: FieldMetaItem) => item.name);
         for (const field of fields) {
             if (from.hasOwnProperty(field)) {
                 to[field] = from[field];

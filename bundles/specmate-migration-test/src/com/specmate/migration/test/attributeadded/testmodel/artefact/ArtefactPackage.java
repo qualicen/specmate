@@ -7,6 +7,7 @@ import com.specmate.migration.test.attributeadded.testmodel.base.BasePackage;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
 
 /**
  * <!-- begin-user-doc -->
@@ -122,13 +123,22 @@ public interface ArtefactPackage extends EPackage {
 	int DIAGRAM__NOTES = BasePackage.IMODIFIABLE_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Linkfrom</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIAGRAM__LINKFROM = BasePackage.IMODIFIABLE_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>Diagram</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DIAGRAM_FEATURE_COUNT = BasePackage.IMODIFIABLE_FEATURE_COUNT + 5;
+	int DIAGRAM_FEATURE_COUNT = BasePackage.IMODIFIABLE_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of operations of the '<em>Diagram</em>' class.
@@ -591,13 +601,22 @@ public interface ArtefactPackage extends EPackage {
 	int SKETCH__STRING_VAR5 = BasePackage.IMODIFIABLE_FEATURE_COUNT + 47;
 
 	/**
+	 * The feature id for the '<em><b>Linked Diagram</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SKETCH__LINKED_DIAGRAM = BasePackage.IMODIFIABLE_FEATURE_COUNT + 48;
+
+	/**
 	 * The number of structural features of the '<em>Sketch</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SKETCH_FEATURE_COUNT = BasePackage.IMODIFIABLE_FEATURE_COUNT + 48;
+	int SKETCH_FEATURE_COUNT = BasePackage.IMODIFIABLE_FEATURE_COUNT + 49;
 
 	/**
 	 * The number of operations of the '<em>Sketch</em>' class.
@@ -640,6 +659,17 @@ public interface ArtefactPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getDiagram_Notes();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.specmate.migration.test.attributeadded.testmodel.artefact.Diagram#getLinkfrom <em>Linkfrom</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Linkfrom</em>'.
+	 * @see com.specmate.migration.test.attributeadded.testmodel.artefact.Diagram#getLinkfrom()
+	 * @see #getDiagram()
+	 * @generated
+	 */
+	EReference getDiagram_Linkfrom();
 
 	/**
 	 * Returns the meta object for class '{@link com.specmate.migration.test.attributeadded.testmodel.artefact.Sketch <em>Sketch</em>}'.
@@ -1147,6 +1177,17 @@ public interface ArtefactPackage extends EPackage {
 	EAttribute getSketch_StringVar5();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.specmate.migration.test.attributeadded.testmodel.artefact.Sketch#getLinkedDiagram <em>Linked Diagram</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Linked Diagram</em>'.
+	 * @see com.specmate.migration.test.attributeadded.testmodel.artefact.Sketch#getLinkedDiagram()
+	 * @see #getSketch()
+	 * @generated
+	 */
+	EReference getSketch_LinkedDiagram();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1194,6 +1235,14 @@ public interface ArtefactPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute DIAGRAM__NOTES = eINSTANCE.getDiagram_Notes();
+
+		/**
+		 * The meta object literal for the '<em><b>Linkfrom</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DIAGRAM__LINKFROM = eINSTANCE.getDiagram_Linkfrom();
 
 		/**
 		 * The meta object literal for the '{@link com.specmate.migration.test.attributeadded.testmodel.artefact.impl.SketchImpl <em>Sketch</em>}' class.
@@ -1564,6 +1613,14 @@ public interface ArtefactPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SKETCH__STRING_VAR5 = eINSTANCE.getSketch_StringVar5();
+
+		/**
+		 * The meta object literal for the '<em><b>Linked Diagram</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SKETCH__LINKED_DIAGRAM = eINSTANCE.getSketch_LinkedDiagram();
 
 	}
 

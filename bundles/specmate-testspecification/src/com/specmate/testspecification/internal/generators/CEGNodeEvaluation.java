@@ -1,9 +1,11 @@
 package com.specmate.testspecification.internal.generators;
 
+import static com.specmate.model.support.util.SpecmateEcoreUtil.getCondition;
+import static com.specmate.model.support.util.SpecmateEcoreUtil.getVariable;
+
 import java.util.Comparator;
 import java.util.TreeMap;
 
-import com.specmate.model.base.IContainer;
 import com.specmate.model.requirements.CEGNode;
 
 @SuppressWarnings("serial")
@@ -15,11 +17,11 @@ class CEGNodeEvaluation extends TreeMap<CEGNode, TaggedBoolean> {
 		@Override
 		public int compare(CEGNode c1, CEGNode c2) {
 
-			int result = c1.getVariable().compareTo(c2.getVariable());
+			int result = getVariable(c1).compareTo(getVariable(c2));
 			if (result != 0) {
 				return result;
 			} else {
-				return c1.getCondition().compareTo(c2.getCondition());
+				return getCondition(c1).compareTo(getCondition(c2));
 			}
 		}
 	};

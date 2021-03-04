@@ -38,8 +38,7 @@ public class ListService extends RestServiceBase {
 	public RestResult<?> get(Object target, MultivaluedMap<String, String> queryParams, String token)
 			throws SpecmateException {
 		List<EObject> children = SpecmateEcoreUtil.getChildren(target);
-		children = children.stream()
-				.filter(element -> element.eClass().getEAnnotation(NOTLOADINGANNOTATIONURL) == null)
+		children = children.stream().filter(element -> element.eClass().getEAnnotation(NOTLOADINGANNOTATIONURL) == null)
 				.collect(Collectors.toList());
 		return new RestResult<>(Response.Status.OK, children);
 	}
@@ -50,7 +49,8 @@ public class ListService extends RestServiceBase {
 	}
 
 	@Override
-	public RestResult<?> post(Object parent, Object toAdd, String token) throws SpecmateException {
+	public RestResult<?> post(Object parent, Object toAdd, MultivaluedMap<String, String> queryParams, String token)
+			throws SpecmateException {
 		return CrudUtil.create(parent, (EObject) toAdd, authService.getUserName(token));
 	}
 

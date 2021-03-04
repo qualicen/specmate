@@ -24,7 +24,7 @@ public class CEGTestGenerationTest {
 	@Test
 	public void testCEGTestGenerationRemoveNot() throws SpecmateException {
 		TestSpecification spec = getTestSpecificationRemoveNot();
-		CEGTestCaseGenerator generator = new CEGTestCaseGenerator(spec);
+		CEGTestCaseGenerator generator = new CEGTestCaseGenerator(spec, false, null);
 		generator.generate();
 		List<TestCase> testcases = SpecmateEcoreUtil.pickInstancesOf(spec.getContents(), TestCase.class);
 		Assert.assertTrue(testcases.stream().noneMatch(tc -> {
@@ -77,7 +77,7 @@ public class CEGTestGenerationTest {
 	@Test
 	public void testCEGTestGenerationSameVariable() throws SpecmateException {
 		TestSpecification spec = getTestSpecificationSameVariable();
-		CEGTestCaseGenerator generator = new CEGTestCaseGenerator(spec);
+		CEGTestCaseGenerator generator = new CEGTestCaseGenerator(spec, false, null);
 		generator.generate();
 		List<TestCase> testcases = SpecmateEcoreUtil.pickInstancesOf(spec.getContents(), TestCase.class).stream()
 				.filter(tc -> tc.isConsistent()).collect(Collectors.toList());

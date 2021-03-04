@@ -1,5 +1,7 @@
 import * as he from 'he';
 import { mxgraph } from 'mxgraph'; // Typings only - no code!
+import { SpecmateDataService } from 'src/app/modules/data/modules/data-service/services/specmate-data.service';
+import { CEGLinkedNode } from '../../../../../../../../model/CEGLinkedNode';
 import { CEGNode } from '../../../../../../../../model/CEGNode';
 import { IContainer } from '../../../../../../../../model/IContainer';
 import { IModelNode } from '../../../../../../../../model/IModelNode';
@@ -7,6 +9,7 @@ import { Type } from '../../../../../../../../util/type';
 import { EditorStyle } from '../../components/editor-components/editor-style';
 import { StyleChanger } from '../../components/util/style-changer';
 import { ConverterBase } from '../../converters/converter-base';
+import { ChangeGuardService } from '../../services/change-guard.service';
 import { CEGmxModelNode } from './ceg-mx-model-node';
 import { ProviderBase } from './provider-base';
 import { ShapeProvider } from './shape-provider';
@@ -25,16 +28,23 @@ export class VertexProvider extends ProviderBase {
     public static ID_SUFFIX_VARIABLE = '/variable';
     public static ID_SUFFIX_CONDITION = '/condition';
     public static ID_SUFFIX_TYPE = '/type';
+    public static ID_SUFFIX_LINK_ICON = '/link-icon';
 
     private static INITIAL_CHILD_NODE_X = 0.5;
+    private static EMPTY_CHILD_NODE_WIDTH = 50;
 
-    constructor(element: IContainer, private graph: mxgraph.mxGraph,
-        private shapeProvider: ShapeProvider, private nodeNameConverter: ConverterBase<any, CEGmxModelNode | string>) {
+    constructor(element: IContainer,
+        private graph: mxgraph.mxGraph,
+        private shapeProvider: ShapeProvider,
+        private nodeNameConverter: ConverterBase<any, CEGmxModelNode | string>,
+        private dataService: SpecmateDataService,
+        private changeGuard: ChangeGuardService) {
         super(element);
     }
 
-    public provideCEGNode(url: string, x: number, y: number, width: number, height: number, data: CEGmxModelNode): mxgraph.mxCell {
-        const value: string = null;
+    public provideCEGNode(url: string, x: number, y: number, width: number, height: number,
+        data: CEGmxModelNode, node: CEGNode): mxgraph.mxCell {
+        const value = node;
         const style = this.shapeProvider.getStyle(new CEGNode());
         const parent = this.graph.getDefaultParent();
         this.graph.getModel().beginUpdate();
@@ -47,12 +57,8 @@ export class VertexProvider extends ProviderBase {
         const labelType = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_TYPE, data.type,
             VertexProvider.INITIAL_CHILD_NODE_X, 0.70, 0, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.TYPE_NAME_STYLE, true);
 
-        if (data.variable === '' || data.variable === undefined || data.variable === null) {
-            StyleChanger.addStyle(labelVariable, this.graph, EditorStyle.EMPTY_TEXT_NAME);
-        }
-        if (data.condition === '' || data.condition === undefined || data.condition === null) {
-            StyleChanger.addStyle(labelCondition, this.graph, EditorStyle.EMPTY_TEXT_NAME);
-        }
+        this.addEmptyTextStyle(data.variable, labelVariable);
+        this.addEmptyTextStyle(data.condition, labelCondition);
 
         labelVariable.isConnectable = () => false;
         labelCondition.isConnectable = () => false;
@@ -61,6 +67,52 @@ export class VertexProvider extends ProviderBase {
         VertexProvider.adjustChildrenCellSizes(vertex, this.shapeProvider, this.graph);
         this.graph.getModel().endUpdate();
         return vertex;
+    }
+
+    public provideLinkedCEGNode(url: string, x: number, y: number, width: number, height: number,
+        data: CEGmxModelNode, node: CEGLinkedNode): mxgraph.mxCell {
+
+        const value = node;
+        const style = this.shapeProvider.getStyle(CEGLinkedNode);
+        const parent = this.graph.getDefaultParent();
+        this.graph.getModel().beginUpdate();
+        const vertex = this.graph.insertVertex(parent, url, value, x, y, width, height, style);
+        const vertexVariable = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_VARIABLE, data.variable,
+            // tslint:disable-next-line: max-line-length
+            VertexProvider.INITIAL_CHILD_NODE_X, 0.15, 0, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.VARIABLE_NAME_DISABLED_STYLE, true);
+        const vertexCondition = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_CONDITION, data.condition,
+            VertexProvider.INITIAL_CHILD_NODE_X, 0.4, 0, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.TEXT_INPUT_DISABLED_STYLE, true);
+        const vertexSymbol = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_LINK_ICON, '🔗',
+            8, 8, 0, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.ICON_STYLE, false);
+
+        this.addEmptyTextStyle(data.variable, vertexVariable);
+        this.addEmptyTextStyle(data.condition, vertexCondition);
+
+        vertexVariable.isConnectable = () => false;
+        vertexCondition.isConnectable = () => false;
+        vertexSymbol.isConnectable = () => false;
+
+        VertexProvider.adjustChildrenCellSizes(vertex, this.shapeProvider, this.graph);
+        this.graph.getModel().endUpdate();
+        return vertex;
+    }
+
+    private addEmptyTextStyle(text: string, cell: mxgraph.mxCell) {
+        if (text === '' || text === undefined || text === null) {
+            StyleChanger.addStyle(cell, this.graph, EditorStyle.EMPTY_TEXT_NAME);
+        }
+    }
+
+    public static adjustChildCellSize(cell: mxgraph.mxCell, nodeWidth: number) {
+        const g = cell.getGeometry();
+        let x = VertexProvider.INITIAL_CHILD_NODE_X;
+        let w = 0;
+        const minWidth = VertexProvider.EMPTY_CHILD_NODE_WIDTH;
+        if (g.width < minWidth && (cell.value === '' || cell.value === null || cell.value === undefined)) {
+            x = x - (minWidth / nodeWidth) / 2;
+            w = minWidth;
+        }
+        cell.getGeometry().setRect(x, g.y, w, g.height);
     }
 
     public static adjustChildrenPositions(cell: mxgraph.mxCell) {
@@ -94,14 +146,31 @@ export class VertexProvider extends ProviderBase {
         VertexProvider.adjustChildrenPositions(cell);
     }
 
-    public provideVertex(node: IModelNode, x?: number, y?: number): mxgraph.mxCell {
+    public async provideVertex(node: IModelNode, x?: number, y?: number): Promise<mxgraph.mxCell> {
         const width = node.width > 0 ? node.width : this.shapeProvider.getInitialSize(node).width;
         const height = node.height > 0 ? node.height : this.shapeProvider.getInitialSize(node).height;
 
         if (Type.is(node, CEGNode)) {
             let n = node as CEGNode;
             const data = new CEGmxModelNode(n.variable, n.condition, n.type);
-            return this.provideCEGNode(node.url, x || node.x, y || node.y, width, height, data);
+            return this.provideCEGNode(node.url, x || node.x, y || node.y, width, height, data, node as CEGNode);
+        }
+        if (Type.is(node, CEGLinkedNode)) {
+            let n = node as CEGLinkedNode;
+            let linkedNode = undefined;
+            let variable = '';
+            let condition = '';
+            let type = '';
+            if (n.linkTo !== undefined) {
+                linkedNode = await this.dataService.readElement(n.linkTo.url) as CEGNode;
+                if (linkedNode !== undefined) {
+                    variable = linkedNode.variable;
+                    condition = linkedNode.condition;
+                    type = linkedNode.type;
+                }
+            }
+            const data = new CEGmxModelNode(variable, condition, type);
+            return this.provideLinkedCEGNode(node.url, x || node.x, y || node.y, width, height, data, node as CEGLinkedNode);
         }
 
         const value: string = (this.nodeNameConverter ? this.nodeNameConverter.convertTo(node) : node.name) as string;
@@ -111,8 +180,8 @@ export class VertexProvider extends ProviderBase {
         return vertex;
     }
 
-    public static initRenderer(graph: mxgraph.mxGraph) {
-        graph.convertValueToString = function (cell: mxgraph.mxCell) {
+    public initRenderer(graph: mxgraph.mxGraph) {
+        graph.convertValueToString = (cell: mxgraph.mxCell) => {
             if (cell.getId().endsWith(VertexProvider.ID_SUFFIX_TYPE)) {
                 let parent = cell.getParent();
                 let edges = parent.edges;
@@ -137,7 +206,17 @@ export class VertexProvider extends ProviderBase {
                     dropdown.appendChild(optionElem);
                     optionElements.push(optionElem);
                 }
-                mx.mxEvent.addListener(dropdown, 'change', (evt: mxgraph.mxEventObject) => {
+
+                mx.mxEvent.addListener(dropdown, 'click', async (evt: MouseEvent) => {
+                    const element = await this.dataService.readElement(parent.id, true);
+                    const guardResult = await this.changeGuard.guardSelectedElements([element]);
+                    if (!guardResult) {
+                        evt.stopPropagation();
+                        evt.preventDefault();
+                    }
+                });
+
+                mx.mxEvent.addListener(dropdown, 'change', async (evt: mxgraph.mxEventObject) => {
                     graph.model.setValue(cell, dropdown.value);
                 });
 
@@ -167,7 +246,7 @@ export class VertexProvider extends ProviderBase {
                 return '';
 
             }
-            return he.encode(cell.value);
+            return he.encode(cell.value + '').replace('[object Object]', '');
         };
     }
 

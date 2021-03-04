@@ -165,13 +165,16 @@ export class SpecmateDataService extends Monitorable {
     }
 
     public async updateElement(element: IContainer, virtual: boolean, compoundId: string): Promise<void> {
+        if (!this.hasElement(element.url)) {
+            return;
+        }
         this.start(SpecmateDataService.OP_UPDATE + '-' + element.url);
-        this.elementChanged.emit(element.url);
         if (virtual) {
             this.updateElementVirtual(element, compoundId);
         } else {
             await this.updateElementServer(element);
         }
+        this.elementChanged.emit(element.url);
         this.end(SpecmateDataService.OP_UPDATE + '-' + element.url);
     }
 
@@ -227,13 +230,17 @@ export class SpecmateDataService extends Monitorable {
         try {
             this.start(SpecmateDataService.OP_COMMIT);
             const batchOperation = this.scheduler.toBatchOperation();
+            let elementsToRead = this.scheduler.getElementsToReload();
             await this.serviceInterface.performBatchOperation(batchOperation, this.auth.token);
             this.scheduler.resolveBatchOperation(batchOperation);
             this.scheduler.clearCommits();
+            await this.reloadElemensAfterCommit(elementsToRead);
+            this.scheduler.clearElementsToReload();
             this.end(SpecmateDataService.OP_COMMIT);
             this.committed.emit();
         } catch (error) {
             this.simpleModal.openOk(this.translate.instant('saveError.title'), this.translate.instant('saveError.retry'));
+            console.error(error);
         }
 
     }
@@ -360,7 +367,7 @@ export class SpecmateDataService extends Monitorable {
             });
     }
 
-    public performOperations(url: string, operation: string, payload?: any, httpGET?: boolean): Promise<any> {
+    public performOperations(url: string, operation: string, payload?: any, httpGET?: boolean, optParameters?: { [key: string]: string }): Promise<any> {
         if (!this.auth.isAuthenticatedForUrl(url)) {
             return Promise.resolve(false);
         }
@@ -371,7 +378,8 @@ export class SpecmateDataService extends Monitorable {
         } else {
             performFunction = this.serviceInterface.performOperationPOST;
         }
-        return performFunction.apply(this.serviceInterface, [url, operation, payload, this.auth.token])
+        let params = optParameters ? optParameters:{};
+        return performFunction.apply(this.serviceInterface, [url, operation, payload, params, this.auth.token])
             .then((result: any) => {
                 this.end(SpecmateDataService.OP_PERFORM_OPERATION + '-' + url);
                 return result;
@@ -462,5 +470,10 @@ export class SpecmateDataService extends Monitorable {
         }
     }
 
-
+    private async reloadElemensAfterCommit(elementUrls: string[]) {
+        for (const url of elementUrls) {
+            this.cache.deleteElement(url);
+            await this.readElement(url, false);
+        }
+    }
 }

@@ -90,12 +90,18 @@ public class TestMigratorImpl implements IMigrator {
 				.getName();
 		String notes = com.specmate.migration.test.attributeadded.testmodel.artefact.ArtefactPackage.Literals.DIAGRAM__NOTES
 				.getName();
+		String linkFrom = com.specmate.migration.test.attributeadded.testmodel.artefact.ArtefactPackage.Literals.DIAGRAM__LINKFROM
+				.getName();
+		String linkedDiagram = com.specmate.migration.test.attributeadded.testmodel.artefact.ArtefactPackage.Literals.SKETCH__LINKED_DIAGRAM
+				.getName();
 
 		aAdded.migrateNewStringAttribute(folder, name, "");
 		aAdded.migrateNewStringAttribute(diagram, name, null);
 		aAdded.migrateNewStringAttribute(sketch, name, null);
 		aAdded.migrateNewDateAttribute(diagram, created, DEFAULT_DATE);
 		aAdded.migrateNewStringReference(diagram, notes);
+		aAdded.migrateNewObjectReferenceNtoM(diagram, linkFrom);
+		aAdded.migrateNewObjectReferenceOneToN(sketch, linkedDiagram);
 	}
 
 	private void migrateSeveralAttributesAdded(Connection connection) throws SpecmateException {
@@ -157,7 +163,7 @@ public class TestMigratorImpl implements IMigrator {
 		aAdded.migrateNewBooleanAttribute(document, tested, false);
 		aAdded.migrateNewLongAttribute(document, length, null);
 		aAdded.migrateNewStringAttribute(document, owner, null);
-		aAdded.migrateNewObjectReference(document, contents);
+		aAdded.migrateNewObjectReferenceNtoM(document, contents);
 	}
 
 	private void migrateAttributeRenamed(Connection connection) throws SpecmateException {

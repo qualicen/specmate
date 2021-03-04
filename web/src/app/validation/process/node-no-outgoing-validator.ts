@@ -1,3 +1,4 @@
+import { SpecmateDataService } from 'src/app/modules/data/modules/data-service/services/specmate-data.service';
 import { SpecmateType } from 'src/app/util/specmate-type';
 import { IContainer } from '../../model/IContainer';
 import { IModelNode } from '../../model/IModelNode';
@@ -11,7 +12,7 @@ import { Validator } from '../validator-decorator';
 
 @Validator(Process)
 export class NodeNoOutgoingValidator extends ElementValidatorBase<Process> {
-    public validate(element: Process, contents: IContainer[]): ValidationResult {
+    public async validate(element: Process, contents: IContainer[], dataService: SpecmateDataService): Promise<ValidationResult> {
         let processNodes: IModelNode[] =
             contents.filter((element: IContainer) => SpecmateType.isNodeOfProcess(element)) as IModelNode[];
         let nodesWithoutOutgoing: IContainer[] =

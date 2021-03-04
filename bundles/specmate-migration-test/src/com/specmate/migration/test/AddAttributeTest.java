@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.migration.test.attributeadded.testmodel.artefact.ArtefactFactory;
 import com.specmate.migration.test.attributeadded.testmodel.artefact.Diagram;
+import com.specmate.migration.test.attributeadded.testmodel.artefact.Sketch;
 import com.specmate.migration.test.attributeadded.testmodel.base.BasePackage;
 import com.specmate.migration.test.attributeadded.testmodel.base.Folder;
 import com.specmate.migration.test.support.TestMigratorImpl;
@@ -55,10 +56,16 @@ public class AddAttributeTest extends MigrationTestBase {
 		d1.setName("d1");
 		d1.setId("d1");
 
+		Sketch s1 = ArtefactFactory.eINSTANCE.createSketch();
+		s1.setName("s1");
+		s1.setId("s1");
+		s1.setLinkedDiagram(d1);
+
 		transaction.doAndCommit(new IChange<Object>() {
 			@Override
 			public Object doChange() throws SpecmateException {
 				rootFolder.getContents().add(d1);
+				rootFolder.getContents().add(s1);
 				return null;
 			}
 		});

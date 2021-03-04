@@ -7,6 +7,7 @@ import { GenericFormModule } from '../../../../forms/modules/generic-form/generi
 import { NavigatorModule } from '../../../../navigation/modules/navigator/navigator.module';
 import { SpecmateSharedModule } from '../../../../specmate/specmate.shared.module';
 import { PropertiesEditor } from './components/properties-editor.component';
+import { LinkModelButtonModule } from '../../../../linking/modules/link-model-button/link-model-button.module';
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import { PropertiesEditor } from './components/properties-editor.component';
     FormsModule,
     ReactiveFormsModule,
     SpecmateSharedModule,
-    IconsModule
+    IconsModule,
+    LinkModelButtonModule
   ],
   declarations: [
     // COMPONENTS IN THIS MODULE

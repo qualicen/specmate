@@ -93,9 +93,20 @@
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//requirements/CEGNode/type"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//requirements/CEGNode/variable"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//requirements/CEGNode/condition"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference specmate.ecore#//requirements/CEGNode/linksFrom"/>
       </genClasses>
       <genClasses ecoreClass="specmate.ecore#//requirements/CEGConnection">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute specmate.ecore#//requirements/CEGConnection/negate"/>
+      </genClasses>
+      <genClasses ecoreClass="specmate.ecore#//requirements/CEGLinkedNode">
+        <genAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="return getLinkTo().getIncomingConnections();"/>
+        </genAnnotations>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference specmate.ecore#//requirements/CEGLinkedNode/linkTo"/>
+        <genOperations ecoreOperation="specmate.ecore#//requirements/CEGLinkedNode/getAllIncomingConnections"
+            body="if(getLinkTo()!=null){&#xA;&#x9;return getLinkTo().getIncomingConnections();&#xA;}&#xA;else {&#xA;&#x9;return Collections.emptyList();&#xA;}"/>
       </genClasses>
     </nestedGenPackages>
     <nestedGenPackages prefix="Testspecification" disposableProviderFactory="true"

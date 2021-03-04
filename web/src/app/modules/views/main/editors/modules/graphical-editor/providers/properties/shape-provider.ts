@@ -3,6 +3,7 @@ import { CEGConnection } from 'src/app/model/CEGConnection';
 import { Type } from 'src/app/util/type';
 import { Config } from '../../../../../../../../config/config';
 import { CEGNode } from '../../../../../../../../model/CEGNode';
+import { CEGLinkedNode } from '../../../../../../../../model/CEGLinkedNode';
 import { ProcessDecision } from '../../../../../../../../model/ProcessDecision';
 import { ProcessEnd } from '../../../../../../../../model/ProcessEnd';
 import { ProcessStart } from '../../../../../../../../model/ProcessStart';
@@ -41,6 +42,19 @@ export class ShapeProvider extends ProviderBase {
                 variable: Config.CEG_NODE_NEW_VARIABLE,
                 condition: Config.CEG_NODE_NEW_CONDITION,
                 type: Config.CEG_NODE_NEW_TYPE
+            })
+        };
+
+        this.shapeMap[CEGLinkedNode.className] = {
+            style: EditorStyle.BASE_CEG_LINKED_NODE_STYLE,
+            size: {
+                width: Config.CEG_NODE_WIDTH,
+                height: Config.CEG_NODE_HEIGHT,
+                margin: 15
+            },
+            text: new NodeNameConverterProvider(type).nodeNameConverter.convertTo({
+                variable: Config.CEG_NODE_NEW_VARIABLE,
+                condition: Config.CEG_NODE_NEW_CONDITION
             })
         };
 
@@ -117,6 +131,26 @@ export class ShapeProvider extends ProviderBase {
 
         this.shapeMap['BaseTextInput'] = {
             style: EditorStyle.TEXT_INPUT_STYLE,
+            size: {
+                width: 75,
+                height: mx.mxConstants.DEFAULT_FONTSIZE,
+                margin: 30
+            },
+            text: undefined
+        };
+
+        this.shapeMap['VariableNameDisabled'] = {
+            style: EditorStyle.VARIABLE_NAME_DISABLED_STYLE,
+            size: {
+                width: 75,
+                height: mx.mxConstants.DEFAULT_FONTSIZE,
+                margin: 30
+            },
+            text: undefined
+        };
+
+        this.shapeMap['BaseTextInputDisabled'] = {
+            style: EditorStyle.TEXT_INPUT_DISABLED_STYLE,
             size: {
                 width: 75,
                 height: mx.mxConstants.DEFAULT_FONTSIZE,

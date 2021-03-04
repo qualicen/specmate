@@ -1,10 +1,11 @@
+/* tslint:disable */
 	import './support/gentypes';
 	import { Proxy } from './support/proxy';
 
 
 	export class CEGConnection  {
 
-		___nsuri: string = "http://specmate.com/20200605/model/requirements";
+		___nsuri: string = "http://specmate.com/20200921/model/requirements";
 		public url: string;
 		public className: string = "CEGConnection";
 		public static className: string = "CEGConnection";

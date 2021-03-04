@@ -11,7 +11,7 @@ export abstract class ToolBase {
     public abstract isVertexTool: boolean;
     public abstract isHidden: boolean;
 
-    public abstract async perform(): Promise<any>;
+    public abstract perform(compoundId: string): Promise<any>;
 
     constructor(protected dataService: SpecmateDataService,
         protected selectedElementService: SelectedElementService,

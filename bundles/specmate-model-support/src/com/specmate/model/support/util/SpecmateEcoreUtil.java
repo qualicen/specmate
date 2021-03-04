@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.eclipse.emf.cdo.CDOObject;
 import org.eclipse.emf.cdo.CDOState;
@@ -16,13 +15,11 @@ import org.eclipse.emf.cdo.common.id.CDOID;
 import org.eclipse.emf.cdo.common.id.CDOIDUtil;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
-import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
@@ -32,12 +29,15 @@ import com.specmate.common.UUIDUtil;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.model.administration.ErrorCode;
-import com.specmate.model.base.BasePackage;
 import com.specmate.model.base.Folder;
 import com.specmate.model.base.IContainer;
 import com.specmate.model.base.IContentElement;
+import com.specmate.model.base.IModelConnection;
+import com.specmate.model.base.IModelNode;
 import com.specmate.model.base.IRecycled;
-import com.specmate.model.base.ModelImage;
+import com.specmate.model.requirements.CEGLinkedNode;
+import com.specmate.model.requirements.CEGNode;
+import com.specmate.model.requirements.NodeType;
 import com.specmate.model.testspecification.TestProcedure;
 import com.specmate.model.testspecification.TestStep;
 
@@ -80,7 +80,7 @@ public class SpecmateEcoreUtil {
 		parentsList.addFirst(firstParent);
 		while (parentsList.size() > 0) {
 			EObject parent = parentsList.pop();
-			TreeIterator<EObject> contents = ((EObject) parent).eAllContents();
+			TreeIterator<EObject> contents = parent.eAllContents();
 			Iterator<EObject> filtered;
 			filtered = Iterators.filter(contents, o -> ((IRecycled) o).isRecycled());
 			if (filtered.hasNext()) {
@@ -329,6 +329,67 @@ public class SpecmateEcoreUtil {
 		List<TestStep> steps = SpecmateEcoreUtil.pickInstancesOf(testProcedure.getContents(), TestStep.class);
 		steps.sort((s1, s2) -> Integer.compare(s1.getPosition(), s2.getPosition()));
 		return steps;
+	}
+
+	public static List<IModelConnection> getIncomingConnections(IModelNode node, boolean considerLinks) {
+		if (node instanceof CEGLinkedNode) {
+			if (!considerLinks) {
+				return Collections.emptyList();
+			}
+			IModelNode linkedNode = ((CEGLinkedNode) node).getLinkTo();
+			if (linkedNode != null) {
+				return linkedNode.getIncomingConnections();
+			} else {
+				return null;
+			}
+		} else {
+			return node.getIncomingConnections();
+		}
+	}
+
+	public static String getVariable(IModelNode node) {
+		if (node instanceof CEGLinkedNode) {
+			CEGNode linkedNode = ((CEGLinkedNode) node).getLinkTo();
+			if (linkedNode != null) {
+				return linkedNode.getVariable();
+			} else {
+				return null;
+			}
+		} else if (node instanceof CEGNode) {
+			return ((CEGNode) node).getVariable();
+		} else {
+			return null;
+		}
+	}
+
+	public static String getCondition(IModelNode node) {
+		if (node instanceof CEGLinkedNode) {
+			CEGNode linkedNode = ((CEGLinkedNode) node).getLinkTo();
+			if (linkedNode != null) {
+				return linkedNode.getCondition();
+			} else {
+				return null;
+			}
+		} else if (node instanceof CEGNode) {
+			return ((CEGNode) node).getCondition();
+		} else {
+			return null;
+		}
+	}
+
+	public static NodeType getType(IModelNode node) {
+		if (node instanceof CEGLinkedNode) {
+			CEGNode linkedNode = ((CEGLinkedNode) node).getLinkTo();
+			if (linkedNode != null) {
+				return linkedNode.getType();
+			} else {
+				return null;
+			}
+		} else if (node instanceof CEGNode) {
+			return ((CEGNode) node).getType();
+		} else {
+			return null;
+		}
 	}
 
 }

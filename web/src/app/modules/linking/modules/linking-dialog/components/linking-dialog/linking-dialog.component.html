@@ -1,0 +1,17 @@
+<div class="modal-header">
+    <h5 class="modal-title">{{ 'linkingDialog.title' | translate}}</h5>
+</div>
+<div class="modal-body">
+    <p>{{'linkingDialog.stepOne' | translate}}</p>
+    <model-search-bar (selectedModel)="updateModel($event)" [parentModel]="parentModel"></model-search-bar>
+    <br />
+    <p>{{'linkingDialog.stepTwo' | translate}}</p>
+    <effect-selector [effects]="effects | async" (selectedEffect)="updateEffect($event)"></effect-selector>
+</div>
+<div class="modal-footer">
+    <!--Buttons-->
+    <button type="button" class="btn btn-sm expand btn-outline-success" (click)="link()"
+        [disabled]="!(hasLink | async)">{{'linkingDialog.confirm' | translate}}</button>
+    <button type="button" class="btn btn-sm expand btn-outline-danger"
+        (click)="close()">{{'cancel' | translate}}</button>
+</div>

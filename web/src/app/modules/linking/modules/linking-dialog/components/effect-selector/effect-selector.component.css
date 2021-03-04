@@ -1,0 +1,7 @@
+select {
+    width: 75%;
+}
+
+select.no-selection {
+    border: 2px dotted #f00;
+}

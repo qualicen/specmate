@@ -97,6 +97,10 @@ public class RequirementsAdapterFactory extends AdapterFactoryImpl {
 				return createCEGConnectionAdapter();
 			}
 			@Override
+			public Adapter caseCEGLinkedNode(CEGLinkedNode object) {
+				return createCEGLinkedNodeAdapter();
+			}
+			@Override
 			public Adapter caseIID(IID object) {
 				return createIIDAdapter();
 			}
@@ -217,6 +221,20 @@ public class RequirementsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createCEGConnectionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.specmate.model.requirements.CEGLinkedNode <em>CEG Linked Node</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.specmate.model.requirements.CEGLinkedNode
+	 * @generated
+	 */
+	public Adapter createCEGLinkedNodeAdapter() {
 		return null;
 	}
 

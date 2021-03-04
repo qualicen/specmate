@@ -68,24 +68,31 @@ export class ServiceInterface {
         await this.http.delete(Url.urlDelete(url)).toPromise();
     }
 
-    public async performOperationPOST(url: string, serviceSuffix: string, payload: any, token: UserToken): Promise<any> {
-        return await this.http.post(Url.urlCustomService(url, serviceSuffix), payload).toPromise();
+    public async performOperationPOST(url: string, serviceSuffix: string, payload: any, parameters: { [key: string]: string }, token: UserToken): Promise<any> {
+        let urlParams = this.toUrlParams(parameters);
+        return await this.http.post(Url.urlCustomService(url, serviceSuffix), payload, { params: urlParams }).toPromise();
     }
 
-    public async performOperationGET(url: string, serviceSuffix: string, payload: any, token: UserToken): Promise<any> {
-        return await this.http.get(Url.urlCustomService(url, serviceSuffix)).toPromise();
+    public async performOperationGET(url: string, serviceSuffix: string, payload: any,parameters: { [key: string]: string },  token: UserToken): Promise<any> {
+        let urlParams = this.toUrlParams(parameters);
+        return await this.http.get(Url.urlCustomService(url, serviceSuffix), { params: urlParams }).toPromise();
     }
 
     public async performQuery(url: string, serviceSuffix: string, parameters: { [key: string]: string }, token: UserToken): Promise<any> {
+        let urlParams = this.toUrlParams(parameters);
+        const result = await this.http
+            .get(Url.urlCustomService(url, serviceSuffix), { params: urlParams }).toPromise();
+        return result;
+    }
+
+    private toUrlParams(parameters: { [key: string]: string }): HttpParams {
         let urlParams = new HttpParams();
         for (let key in parameters) {
             if (parameters[key]) {
                 urlParams = urlParams.append(key, parameters[key]);
             }
         }
-        const result = await this.http
-            .get(Url.urlCustomService(url, serviceSuffix), { params: urlParams }).toPromise();
-        return result;
+        return urlParams;
     }
 
     /** Perform a model search.

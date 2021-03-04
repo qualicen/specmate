@@ -135,6 +135,17 @@ export class GraphTransformer {
                 urlMap[template.url] = node;
                 node.incomingConnections = [];
                 node.outgoingConnections = [];
+                if (Type.is(template, CEGLinkedNode)) {
+                    (node as CEGLinkedNode).linkTo = Objects.clone((template as CEGLinkedNode).linkTo);
+                    const linkedNode = await this.dataService.readElement((template as CEGLinkedNode).linkTo.url) as CEGNode;
+                    const proxy = new Proxy();
+                    proxy.url = node.url;
+                    if (linkedNode.linksFrom === undefined) {
+                        linkedNode.linksFrom = [];
+                    }
+                    linkedNode.linksFrom.push(proxy);
+                    await this.updateElement(linkedNode, compoundId);
+                }
                 if (changeGraph) {
                     this.transferData(temp, node);
                     await this.updateElement(node, compoundId);

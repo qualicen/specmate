@@ -11,9 +11,7 @@ import { CookiesService } from 'src/app/modules/common/modules/cookies/services/
 @Injectable()
 export class AuthenticationService {
 
-    private static SPECMATE_AUTH_COOKIE_BASE = 'specmate-auth-';
-
-    private tokenCookieName = AuthenticationService.SPECMATE_AUTH_COOKIE_BASE + 'token' + '-' + window.location.hostname;
+    private tokenCookieName = 'specmate-auth-token' + '-' + window.location.hostname;
 
     private isAuthenticatedState = this.determineIsAuthenticated();
 
@@ -64,8 +62,7 @@ export class AuthenticationService {
 
     private get isAllCookiesSet(): boolean {
         const session = localStorage.getItem(this.SESSION_KEY);
-        const hasSession = session !== undefined && session !== null;
-        return hasSession;
+        return session !== undefined && session !== null;
     }
 
     private _authFailed: boolean;
@@ -153,10 +150,6 @@ export class AuthenticationService {
         return this.allowedProjects.indexOf(project.replace(/"/g, '')) >= 0;
     }
 
-    private clearToken(): void {
-        localStorage.removeItem(this.SESSION_KEY);
-    }
-
     public async deauthenticate(omitServer?: boolean): Promise<void> {
         await this.doDeauth(omitServer);
     }
@@ -174,7 +167,7 @@ export class AuthenticationService {
                 // just for cleanliness.
             }
         }
-        this.clearToken();
+        localStorage.removeItem(this.SESSION_KEY);
         this.isAuthenticatedState = this.determineIsAuthenticated();
         if (wasAuthenticated !== this.isAuthenticated) {
             this.authChanged.emit(this.isAuthenticatedState);

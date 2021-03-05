@@ -41,8 +41,8 @@ title: SpecmateDoc
 	- [Knoten: Arten und Bedingungen](###Knoten:ArtenundBedingungen)
 	- [Variable](###Variable)
 	- [Bedingung](###Bedingung)
-	- [Typ (And/Or)](###Typ(And/Or))
-		- [Exkurs: Exklusives Oder](####Exkurs:ExklusivesOder)
+	- [Typ And/Or](###TypAnd/Or)
+		- [Exkurs: Exklusives Oder](####ExkursExklusivesOder)
 	- [Validieren](###Validieren)
 - [Äquivalenklassenanalyse](##Äquivalenzklassenanalyse)
 	- [Motivation und Ziel](###MotivationundZiel)
@@ -380,7 +380,7 @@ Variablennamen haben und bei denen die Bedingung mit = gesetzt ist, jeweils imme
 Eine bewährte Vorgehensweise ist, die Variablen immer als positive Aussagen zu deklarieren
 (z.B. *Türen zugesperrt: wahr* statt *Türen nicht zugesperrt: nicht wahr*).
 
-### Typ (And/Or)
+### Typ And/Or
 
 Wenn ein Knoten mehrere eingehende Verbindungen hat, können Sie den *Typ* des Knotens ändern. Wählen Sie dazu den entsprechenden Knoten aus und ändern Sie auf der rechten Seite unter *Eigenschaften* den *Typ* des Knotens. Abhängig vom Typ des Knotens können eingehende Verbindungen als ODER-Verknüpfungen oder UND-Verknüpfungen definiert werden. Wenn der Typ des Knotens auf AND gesetzt ist, müssen alle Vorgängerknoten
 mit einer Verbindung zu dem jeweiligen Knoten bereits erfüllt sein,
@@ -397,13 +397,13 @@ Beispiel für eine ODER-Beziehung:
 
 ![](Images_ger/OR-Bedingung.PNG "ExampleOr")
 
-#### Exkurs: Exklusives Oder
+#### Exkurs Exklusives Oder
 
 Ein *Exklusives Oder*, oder *XOR*, sagt aus, dass *genau eine* Ursache wahr sein muss, um eine Wirkung zu erzielen. Im Deutschen erkennt man ein solches Exklusives Oder an der Formulierung "entweder... oder... (aber nicht beides)".
 
 In Specmate kann das Exklusive Oder leicht konstruiert werden: Hat man zum Beispiel die Aussage "Entweder A, oder B, dann C" können Sie diese Aussage mithilfe von zwei Hilfsvariablen D und E und durch [Negation](#Negieren) modellieren:
 
-![](Images_ger/ExclusiveOR.PNG "ExklusivesOder")
+![](Images_ger/ExclusiveOR.png "Exklusives Oder")
 
 Die Aussage wird also umgeschrieben zu "Wenn A und nicht B, oder B und nicht A, dann C".
 

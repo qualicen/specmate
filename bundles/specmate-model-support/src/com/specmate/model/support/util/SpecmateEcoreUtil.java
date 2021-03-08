@@ -302,7 +302,7 @@ public class SpecmateEcoreUtil {
 
 	public static String getProjectId(EObject target) {
 		Folder projectFolder = getLastAncestorOfType(target, Folder.class);
-		if (projectFolder != null
+		if (projectFolder != null && projectFolder.getId() != null
 				&& (projectFolder.cdoState() != CDOState.TRANSIENT || projectFolder.getId().startsWith("__TEST__"))) {
 			return projectFolder.getId();
 		} else {

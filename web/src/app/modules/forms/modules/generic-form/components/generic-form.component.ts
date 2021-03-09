@@ -1,6 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { FieldMetaItem, MetaInfo } from '../../../../../model/meta/field-meta';
 import { Arrays } from '../../../../../util/arrays';
 import { Id } from '../../../../../util/id';
@@ -13,7 +15,7 @@ import { Converters } from '../conversion/converters';
     selector: 'generic-form',
     templateUrl: 'generic-form.component.html'
 })
-export class GenericForm {
+export class GenericForm implements OnDestroy {
 
     public get errorMessage(): string {
         return this.translate.instant('fieldInvalid');
@@ -24,6 +26,8 @@ export class GenericForm {
     private ready = false;
 
     private _element: any;
+
+    private dataServiceSubscription: Subscription;
 
     @Input()
     public hiddenFields: string[];
@@ -58,11 +62,13 @@ export class GenericForm {
 
     constructor(private formBuilder: FormBuilder, protected dataService: SpecmateDataService, private translate: TranslateService) {
         this.initEmpty();
+        this.dataServiceSubscription = this.dataService.elementChanged.subscribe((url: string) => {
+            if (this._element && url === this._element.url) {
+                this.updateForm();
+            }
+        });
     }
 
-    ngDoCheck(args: any) {
-        this.updateForm();
-    }
 
     private orderFieldMeta(): void {
         this._meta.sort((item1: FieldMetaItem, item2: FieldMetaItem) => Number.parseInt(item1.position) - Number.parseInt(item2.position));
@@ -99,7 +105,8 @@ export class GenericForm {
         }
         this.formGroup = this.formBuilder.group(formBuilderObject);
 
-        this.formGroup.valueChanges.subscribe(() => {
+        let formGroupObserverable = this.formGroup.valueChanges.pipe(debounceTime(300), distinctUntilChanged());
+        formGroupObserverable.subscribe(() => {
             this.updateFormModel();
             return '';
         });
@@ -111,6 +118,8 @@ export class GenericForm {
         if (!this.ready) {
             return;
         }
+        // We need this, since in some cases, the update event is fired,
+        // even though the data did actually not change. We want to prevent unnecessary updates.
         let changed = false;
         let formBuilderObject: any = {};
         for (let i = 0; i < this._meta.length; i++) {
@@ -132,9 +141,6 @@ export class GenericForm {
     }
 
     private updateFormModel(): void {
-        // We need this, since in some cases, the update event on the control is fired,
-        // even though the data did actually not change. We want to prevent unnecessary updates.
-        let changed = false;
         let isEmptyString = false;
         for (let i = 0; i < this._meta.length; i++) {
             let fieldMeta: FieldMetaItem = this._meta[i];
@@ -154,16 +160,19 @@ export class GenericForm {
             const originalValue = this.element[fieldName] || '';
             if (originalValue !== updateValue + '') {
                 this.element[fieldName] = updateValue;
-                changed = true;
             }
         }
-        if (changed && (this.isValid || isEmptyString)) {
+        if (this.isValid || isEmptyString) {
             this.dataService.updateElement(this.element, true, Id.uuid);
         }
     }
 
     public get isValid(): boolean {
         return this.formGroup.valid;
+    }
+
+    ngOnDestroy(): void {
+        this.dataServiceSubscription.unsubscribe();
     }
 }
 

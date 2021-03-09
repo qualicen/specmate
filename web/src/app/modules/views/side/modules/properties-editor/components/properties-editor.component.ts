@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { IContainer } from '../../../../../../model/IContainer';
 import { ProcessStep } from '../../../../../../model/ProcessStep';
 import { Type } from '../../../../../../util/type';
@@ -9,6 +9,7 @@ import { CEGNode } from 'src/app/model/CEGNode';
 import { SpecmateDataService } from 'src/app/modules/data/modules/data-service/services/specmate-data.service';
 import { CEGModel } from 'src/app/model/CEGModel';
 import { Url } from 'src/app/util/url';
+import { Subscription } from 'rxjs';
 
 @Component({
     moduleId: module.id.toString(),
@@ -16,7 +17,7 @@ import { Url } from 'src/app/util/url';
     templateUrl: 'properties-editor.component.html',
     styleUrls: ['properties-editor.component.css']
 })
-export class PropertiesEditor {
+export class PropertiesEditor implements OnDestroy {
 
     public isCollapsed = false;
 
@@ -26,12 +27,14 @@ export class PropertiesEditor {
     private _linkedModel: CEGModel;
     private _linkingModels: CEGModel[];
 
+    private dataServiceSubscription: Subscription;
+
     constructor(selectedElementService: SelectedElementService, private dataService: SpecmateDataService) {
         selectedElementService.selectionChanged.subscribe(async (elements: IContainer[]) => {
             this.onSelectionOrElementChange(elements);
         });
 
-        dataService.elementChanged.subscribe(async (url: string) => {
+        this.dataServiceSubscription = dataService.elementChanged.subscribe(async (url: string) => {
             if (!this.dataService.hasElement(url) || this._selectedElement?.url !== url) {
                 return;
             }
@@ -98,5 +101,9 @@ export class PropertiesEditor {
 
     public get linkingModels(): CEGModel[] {
         return this._linkingModels;
+    }
+
+    ngOnDestroy(): void {
+        this.dataServiceSubscription.unsubscribe();
     }
 }

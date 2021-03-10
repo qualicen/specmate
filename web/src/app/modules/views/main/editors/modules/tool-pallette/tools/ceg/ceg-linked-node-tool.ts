@@ -39,8 +39,10 @@ export class CEGLinkedNodeTool extends CreateNodeToolBase<CEGLinkedNode> impleme
     public async perform(compoundId = Id.uuid): Promise<CEGLinkedNode> {
         let node = await super.perform();
         let linkedNode: CEGNode = undefined;
-        if (this.value !== undefined && Type.is(this.value, CEGLinkedNode) && (this.value as CEGLinkedNode).linkTo) {
-            linkedNode = await this.dataService.readElement((this.value as CEGLinkedNode).linkTo.url, true) as CEGNode;
+        let valueLink = (this.value as CEGLinkedNode).linkTo;
+        if (this.value !== undefined && Type.is(this.value, CEGLinkedNode) && valueLink !== undefined && valueLink !== null
+            && valueLink.url !== undefined && valueLink.url !== null) {
+            linkedNode = await this.dataService.readElement(valueLink.url, true) as CEGNode;
         } else {
             linkedNode = await this.getLinkedNodeWithDialog(node);
         }

@@ -51,7 +51,7 @@ export class ValidationService extends Monitorable {
     public async validateCurrent(): Promise<void> {
         const element = this.navigator.currentElement;
         const contents = this.navigator.currentContents;
-        this.refreshValidation(element, contents);
+        await this.refreshValidation(element, contents);
     }
 
     private validateElement(element: IContainer): ValidationPair[] {
@@ -68,35 +68,33 @@ export class ValidationService extends Monitorable {
     }
 
     public async refreshValidation(element: IContainer, contents: IContainer[] = [], clear = true): Promise<void> {
-        setTimeout(async () => {
-            this.start();
-            this.isValidating = true;
+        this.start();
+        this.isValidating = true;
 
-            if (clear) {
-                this.validationCache.clear();
+        if (clear) {
+            this.validationCache.clear();
+        }
+        let elementResults: ValidationResult[] = await this.getValidationResultsFor(element, contents);
+        if (SpecmateType.isModel(element)) {
+            let childElements = contents.filter(c => !Type.is(c, TestSpecification));
+            for (let child of childElements) {
+                elementResults = elementResults.concat(await this.getValidationResultsFor(child, []));
             }
-            let elementResults: ValidationResult[] = await this.getValidationResultsFor(element, contents);
-            if (SpecmateType.isModel(element)) {
-                let childElements = contents.filter(c => !Type.is(c, TestSpecification));
-                for (let child of childElements) {
-                    elementResults = elementResults.concat(await this.getValidationResultsFor(child, []));
-                }
+        }
+        if (Type.is(element, TestSpecification)) {
+            let childElements = contents.filter(c => !Type.is(c, TestProcedure));
+            for (let child of childElements) {
+                elementResults = elementResults.concat(await this.getValidationResultsFor(child, []));
             }
-            if (Type.is(element, TestSpecification)) {
-                let childElements = contents.filter(c => !Type.is(c, TestProcedure));
-                for (let child of childElements) {
-                    elementResults = elementResults.concat(await this.getValidationResultsFor(child, []));
-                }
+        }
+        if (Type.is(element, TestProcedure)) {
+            for (let child of contents) {
+                elementResults = elementResults.concat(await this.getValidationResultsFor(child, []));
             }
-            if (Type.is(element, TestProcedure)) {
-                for (let child of contents) {
-                    elementResults = elementResults.concat(await this.getValidationResultsFor(child, []));
-                }
-            }
-            this.validationCache.addValidationResultsToCache(elementResults);
-            this.isValidating = false;
-            this.end();
-        }, 0);
+        }
+        this.validationCache.addValidationResultsToCache(elementResults);
+        this.isValidating = false;
+        this.end();
     }
 
     private async getValidationResultsFor(element: IContainer, contents: IContainer[]): Promise<ValidationResult[]> {
@@ -109,9 +107,8 @@ export class ValidationService extends Monitorable {
         const textLengthValidationResult: ValidationResult = await this.textLengthValidator.validate(element, [], this.dataService);
         const elementValidators = this.getElementValidators(element) || [];
         let elementResults: ValidationResult[] =
-            (await Promise.all(
-                elementValidators
-                .map(async (validator: ElementValidatorBase<IContainer>) => await validator.validate(element, contents, this.dataService))
+            (await Promise.all(elementValidators.map(async (validator: ElementValidatorBase<IContainer>) =>
+                await validator.validate(element, contents, this.dataService))
             ))
                 .concat(requiredFieldsResults)
                 .concat(validNameResult)

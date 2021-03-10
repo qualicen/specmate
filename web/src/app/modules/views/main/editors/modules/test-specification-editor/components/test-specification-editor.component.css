@@ -14,7 +14,9 @@
 }
 
 .test-case-row {
-    cursor: move;
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
 }
 
 .test-case-inconsistent {

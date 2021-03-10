@@ -5,5 +5,7 @@
 }
 
 .test-procedure-row {
-    cursor: move;
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
 }

@@ -1,22 +1,21 @@
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { CEGNode } from 'src/app/model/CEGNode';
+import { IContainer } from 'src/app/model/IContainer';
+import { Proxy } from 'src/app/model/support/proxy';
+import { SpecmateDataService } from 'src/app/modules/data/modules/data-service/services/specmate-data.service';
+import { LinkingDialogComponent } from 'src/app/modules/linking/modules/linking-dialog/components/linking-dialog/linking-dialog.component';
+import { ModalService } from 'src/app/modules/notification/modules/modals/services/modal-service';
+import { SelectedElementService } from 'src/app/modules/views/side/modules/selected-element/services/selected-element.service';
+import { Id } from 'src/app/util/id';
+import { Type } from 'src/app/util/type';
 import { CEGLinkedNodeFactory } from '../../../../../../../../factory/ceg-linked-node-factory';
 import { ElementFactoryBase } from '../../../../../../../../factory/element-factory-base';
-import { CEGModel } from '../../../../../../../../model/CEGModel';
 import { CEGLinkedNode } from '../../../../../../../../model/CEGLinkedNode';
-import { CreateNodeToolBase } from '../create-node-tool-base';
+import { CEGModel } from '../../../../../../../../model/CEGModel';
 import { ShapeProvider } from '../../../graphical-editor/providers/properties/shape-provider';
-import { ModalService } from 'src/app/modules/notification/modules/modals/services/modal-service';
-import { SpecmateDataService } from 'src/app/modules/data/modules/data-service/services/specmate-data.service';
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { IContainer } from 'src/app/model/IContainer';
-import { LinkingDialogComponent } from 'src/app/modules/linking/modules/linking-dialog/components/linking-dialog/linking-dialog.component';
-import { SelectedElementService } from 'src/app/modules/views/side/modules/selected-element/services/selected-element.service';
-import { CEGNode } from 'src/app/model/CEGNode';
-import { Proxy } from 'src/app/model/support/proxy';
-import { Id } from 'src/app/util/id';
-import { OnInit } from '@angular/core';
-import { Type } from 'src/app/util/type';
+import { CreateNodeToolBase } from '../create-node-tool-base';
 
-export class CEGLinkedNodeTool extends CreateNodeToolBase<CEGLinkedNode> implements OnInit {
+export class CEGLinkedNodeTool extends CreateNodeToolBase<CEGLinkedNode> {
 
     protected modelType: { className: string; } = CEGModel;
 
@@ -33,13 +32,11 @@ export class CEGLinkedNodeTool extends CreateNodeToolBase<CEGLinkedNode> impleme
         super(dataService, selectedElementService, parent);
 
     }
-    ngOnInit(): void {
-    }
 
     public async perform(compoundId = Id.uuid): Promise<CEGLinkedNode> {
         let node = await super.perform();
         let linkedNode: CEGNode = undefined;
-        let valueLink = (this.value as CEGLinkedNode).linkTo;
+        let valueLink = (this.value as CEGLinkedNode)?.linkTo;
         if (this.value !== undefined && Type.is(this.value, CEGLinkedNode) && valueLink !== undefined && valueLink !== null
             && valueLink.url !== undefined && valueLink.url !== null) {
             linkedNode = await this.dataService.readElement(valueLink.url, true) as CEGNode;

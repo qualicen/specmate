@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable, SystemJsNgModuleLoader } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Config } from 'src/app/config/config';
 import { SpecmateDataService } from 'src/app/modules/data/modules/data-service/services/specmate-data.service';
 import { ValidationService } from 'src/app/modules/forms/modules/validation/services/validation.service';

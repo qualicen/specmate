@@ -110,6 +110,7 @@ export class AuthenticationService {
             if (this.isAuthenticated) {
                 if (wasAuthenticated !== this.isAuthenticated) {
                     this.isAuthenticatedState = true;
+                    localStorage.setItem(this.SELECTED_PROJECT_KEY, this._project);
                     this.authChanged.emit(this.isAuthenticatedState);
                 }
                 this.authFailed = false;

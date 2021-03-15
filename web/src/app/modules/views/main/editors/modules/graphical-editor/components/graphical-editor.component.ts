@@ -321,6 +321,9 @@ export class GraphicalEditor implements OnDestroy {
                         // We selected a child/ sublabel --> Select Parent instead
                         selections[0] = selections[0].getParent();
                     }
+                } else {
+                    // Remove all label-nodes from the selection
+                    selections = selections.filter(element => element.getParent() === this.graph.getDefaultParent());
                 }
 
                 for (const cell of selections) {

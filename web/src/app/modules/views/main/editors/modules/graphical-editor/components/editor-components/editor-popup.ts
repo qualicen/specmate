@@ -2,9 +2,7 @@ import { mxgraph } from 'mxgraph';
 import { CEGConnection } from 'src/app/model/CEGConnection';
 import { StyleChanger } from '../util/style-changer';
 import { EditorStyle } from './editor-style';
-import { SpecmateDataService } from 'src/app/modules/data/modules/data-service/services/specmate-data.service';
 import { Type } from 'src/app/util/type';
-import { replaceClass } from '../util/css-utils';
 import { TranslateService } from '@ngx-translate/core';
 import { IContainer } from 'src/app/model/IContainer';
 
@@ -20,7 +18,6 @@ export class EditorPopup {
     constructor(private graph: mxgraph.mxGraph, private contents: IContainer[], private translate: TranslateService) { }
 
     public init(): void {
-
         this.graph.popupMenuHandler['autoExpand'] = true;
 
         this.graph.popupMenuHandler.isSelectOnPopup = function (me) {
@@ -32,27 +29,28 @@ export class EditorPopup {
     }
 
     private async provideMenu(menu: mxgraph.mxPopupMenuHandler, cell: mxgraph.mxCell, evt: PointerEvent) {
-
         if (cell === undefined || cell === null) {
             return;
         }
-
-        let element: IContainer = undefined;
-        let currentCell = cell;
-        while (element === undefined) {
-            element = this.contents.find(element => element.url === currentCell.id);
-            currentCell = currentCell.parent;
+        if (cell.getParent() !== this.graph.getDefaultParent()) {
+            // We selected a child/ sublabel --> Select Parent instead
+            cell = cell.getParent();
         }
 
-        currentCell = this.graph.getModel().getChildCells(this.graph.getDefaultParent()).find(graphCell => graphCell.id === element.url);
+        let element: IContainer = undefined;
+        while (element === undefined) {
+            element = this.contents.find(element => element.url === cell.id);
+        }
+
+        let selectedCells = this.graph.getSelectionCells();
+        selectedCells = selectedCells.filter(element => element.parent == this.graph.getDefaultParent());
 
         const deleteText = this.translate.instant('delete');
         menu.addItem(deleteText, null, () => {
-            this.graph.removeCells([currentCell]);
+            this.graph.removeCells(selectedCells);
         }, undefined, 'fa fa-trash-o', undefined, undefined);
 
-        if (Type.is(element, CEGConnection)) {
-
+        if (Type.is(element, CEGConnection) && selectedCells.length === 1) {
             const connection = element as CEGConnection;
             const icon = connection.negate ? 'fa fa-check' : 'fa fa-circle-o';
 

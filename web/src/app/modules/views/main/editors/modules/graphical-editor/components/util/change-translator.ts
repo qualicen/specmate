@@ -179,6 +179,7 @@ export class ChangeTranslator {
         } else {
             graph.removeCells([change.child]);
         }
+        graph.setSelectionCell(change.child);
     }
 
     private isNegatedCEGNode(cell: mxgraph.mxCell): boolean {

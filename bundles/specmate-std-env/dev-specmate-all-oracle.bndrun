@@ -50,26 +50,6 @@
 	bnd.identity;id='log4j',\
 	bnd.identity;id='specmate-export',\
 	bnd.identity;id='com.sun.xml.bind.jaxb-osgi'
-	osgi.identity;filter:='(osgi.identity=specmate-jettystarter)',\
-	osgi.identity;filter:='(osgi.identity=org.eclipse.emf.cdo.server.ocl)',\
-	osgi.identity;filter:='(osgi.identity=org.json)',\
-	osgi.identity;filter:='(osgi.identity=specmate-file-connector)',\
-	osgi.identity;filter:='(osgi.identity=specmate-search)',\
-	osgi.identity;filter:='(osgi.identity=specmate-migration)',\
-	osgi.identity;filter:='(osgi.identity=specmate-persistency-cdo)',\
-	osgi.identity;filter:='(osgi.identity=specmate-administration)',\
-	osgi.identity;filter:='(osgi.identity=org.apache.commons.fileupload)',\
-	osgi.identity;filter:='(osgi.identity=specmate-trello-connector)',\
-	osgi.identity;filter:='(osgi.identity=specmate-auth-api)',\
-	osgi.identity;filter:='(osgi.identity=specmate-auth)',\
-	osgi.identity;filter:='(osgi.identity=specmate-dbprovider-api)',\
-	osgi.identity;filter:='(osgi.identity=specmate-jira-connector)',\
-	osgi.identity;filter:='(osgi.identity=specmate-dbprovider-oracle)',\
-	osgi.identity;filter:='(osgi.identity=specmate-nlp)',\
-	osgi.identity;filter:='(osgi.identity=specmate-model-generation)',\
-	bnd.identity;id='log4j',\
-	bnd.identity;id='specmate-export',\
-	bnd.identity;id='com.sun.xml.bind.jaxb-osgi'
 -runbundles: \
 	javassist;version='[3.18.1,3.18.2)',\
 	javax.annotation-api;version='[1.2.0,1.2.1)',\
@@ -173,47 +153,6 @@
 	org.apache.httpcomponents.httpclient;version='[4.5.5,4.5.6)',\
 	org.eclipse.emf.cdo.ecore.retrofit;version='[4.2.300,4.2.301)',\
 	com.sun.xml.bind.jaxb-osgi;version='[2.3.3,2.3.4)',\
-	org.json;version='[0.0.0,0.0.1)',\
-	specmate-administration;version='[0.0.0,0.0.1)',\
-	specmate-auth;version='[0.0.0,0.0.1)',\
-	specmate-auth-api;version='[0.0.0,0.0.1)',\
-	specmate-cause-effect-patterns;version='[0.0.0,0.0.1)',\
-	specmate-cdo-server;version='[0.0.0,0.0.1)',\
-	specmate-common;version='[0.0.0,0.0.1)',\
-	specmate-config;version='[0.0.0,0.0.1)',\
-	specmate-config-api;version='[0.0.0,0.0.1)',\
-	specmate-connectors;version='[0.0.0,0.0.1)',\
-	specmate-connectors-api;version='[0.0.0,0.0.1)',\
-	specmate-dbprovider-api;version='[0.0.0,0.0.1)',\
-	specmate-dbprovider-oracle;version='[0.0.0,0.0.1)',\
-	specmate-dummy-data;version='[0.0.0,0.0.1)',\
-	specmate-emfjson;version='[0.0.0,0.0.1)',\
-	specmate-emfrest;version='[0.0.0,0.0.1)',\
-	specmate-emfrest-api;version='[0.0.0,0.0.1)',\
-	specmate-export;version='[0.0.0,0.0.1)',\
-	specmate-export-api;version='[0.0.0,0.0.1)',\
-	specmate-file-connector;version='[0.0.0,0.0.1)',\
-	specmate-hp-connector;version='[0.0.0,0.0.1)',\
-	specmate-jettystarter;version='[0.0.0,0.0.1)',\
-	specmate-jira-connector;version='[0.0.0,0.0.1)',\
-	specmate-logging;version='[0.0.0,0.0.1)',\
-	specmate-logging-slf4j;version='[0.0.0,0.0.1)',\
-	specmate-logging-slf4j-julbridge;version='[1.6.0,1.6.1)',\
-	specmate-metrics;version='[0.0.0,0.0.1)',\
-	specmate-migration;version='[0.0.0,0.0.1)',\
-	specmate-model-gen;version='[0.0.0,0.0.1)',\
-	specmate-model-generation;version='[0.0.0,0.0.1)',\
-	specmate-model-support;version='[0.0.0,0.0.1)',\
-	specmate-nlp;version='[0.0.0,0.0.1)',\
-	specmate-objectif;version='[0.0.0,0.0.1)',\
-	specmate-persistency-api;version='[0.0.0,0.0.1)',\
-	specmate-persistency-cdo;version='[0.0.0,0.0.1)',\
-	specmate-rest;version='[0.0.0,0.0.1)',\
-	specmate-search;version='[0.0.0,0.0.1)',\
-	specmate-testspecification;version='[0.0.0,0.0.1)',\
-	specmate-trello-connector;version='[0.0.0,0.0.1)',\
-	specmate-ui-core;version='[0.0.0,0.0.1)',\
-	specmate-xtext;version='[0.0.0,0.0.1)',\
 	jaxb-api;version='[2.3.0,2.3.1)',\
 	org.apache.felix.gogo.command;version='[1.0.2,1.0.3)',\
 	org.apache.felix.gogo.runtime;version='[1.1.0,1.1.1)',\
@@ -242,7 +181,49 @@
 	org.eclipse.jetty.webapp;version='[9.4.32,9.4.33)',\
 	org.eclipse.jetty.xml;version='[9.4.32,9.4.33)',\
 	org.eclipse.osgi.services;version='[3.9.0,3.9.1)',\
-	org.eclipse.osgi.util;version='[3.5.300,3.5.301)'
+	org.eclipse.osgi.util;version='[3.5.300,3.5.301)',\
+	org.json;version=snapshot,\
+	specmate-administration;version=snapshot,\
+	specmate-auth;version=snapshot,\
+	specmate-auth-api;version=snapshot,\
+	specmate-cause-effect-patterns;version=snapshot,\
+	specmate-cdo-server;version=snapshot,\
+	specmate-common;version=snapshot,\
+	specmate-config;version=snapshot,\
+	specmate-config-api;version=snapshot,\
+	specmate-connectors;version=snapshot,\
+	specmate-connectors-api;version=snapshot,\
+	specmate-dbprovider-api;version=snapshot,\
+	specmate-dbprovider-oracle;version=snapshot,\
+	specmate-dummy-data;version=snapshot,\
+	specmate-emfjson;version=snapshot,\
+	specmate-emfrest;version=snapshot,\
+	specmate-emfrest-api;version=snapshot,\
+	specmate-export;version=snapshot,\
+	specmate-export-api;version=snapshot,\
+	specmate-file-connector;version=snapshot,\
+	specmate-hp-connector;version=snapshot,\
+	specmate-jettystarter;version=snapshot,\
+	specmate-jira-connector;version=snapshot,\
+	specmate-logging;version=snapshot,\
+	specmate-logging-slf4j;version=snapshot,\
+	specmate-logging-slf4j-julbridge;version=snapshot,\
+	specmate-metrics;version=snapshot,\
+	specmate-migration;version=snapshot,\
+	specmate-model-gen;version=snapshot,\
+	specmate-model-generation;version=snapshot,\
+	specmate-model-support;version=snapshot,\
+	specmate-nlp;version=snapshot,\
+	specmate-objectif;version=snapshot,\
+	specmate-persistency-api;version=snapshot,\
+	specmate-persistency-cdo;version=snapshot,\
+	specmate-rest;version=snapshot,\
+	specmate-scheduler;version=snapshot,\
+	specmate-search;version=snapshot,\
+	specmate-testspecification;version=snapshot,\
+	specmate-trello-connector;version=snapshot,\
+	specmate-ui-core;version=snapshot,\
+	specmate-xtext;version=snapshot
 
 -runproperties: \
 	jetty.http.port=8080,\

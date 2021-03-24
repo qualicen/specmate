@@ -15,7 +15,8 @@ public interface IRestService extends Comparable<IRestService> {
 
 	boolean canPost(Object object2, Object object);
 
-	RestResult<?> post(Object object2, Object object, String token) throws SpecmateException;
+	RestResult<?> post(Object object2, Object object, MultivaluedMap<String, String> queryParams, String token)
+			throws SpecmateException;
 
 	boolean canPut(Object object2, Object object);
 

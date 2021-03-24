@@ -9,11 +9,11 @@
   <genPackages prefix="Testmodel" basePackage="com.specmate.migration.test.attributeadded"
       disposableProviderFactory="true" ecorePackage="attributeadded.ecore#/">
     <nestedGenPackages prefix="Base" disposableProviderFactory="true" ecorePackage="attributeadded.ecore#//base">
-      <genClasses image="false" ecoreClass="attributeadded.ecore#//base/INamed">
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//base/INamed/name"/>
-      </genClasses>
       <genClasses image="false" ecoreClass="attributeadded.ecore#//base/IID">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//base/IID/id"/>
+      </genClasses>
+      <genClasses image="false" ecoreClass="attributeadded.ecore#//base/INamed">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//base/INamed/name"/>
       </genClasses>
       <genClasses image="false" ecoreClass="attributeadded.ecore#//base/IContentElement"/>
       <genClasses image="false" ecoreClass="attributeadded.ecore#//base/IContainer">
@@ -26,7 +26,61 @@
       <genClasses image="false" ecoreClass="attributeadded.ecore#//base/IModifiable"/>
     </nestedGenPackages>
     <nestedGenPackages prefix="Artefact" disposableProviderFactory="true" ecorePackage="attributeadded.ecore#//artefact">
-      <genClasses ecoreClass="attributeadded.ecore#//artefact/Diagram"/>
+      <genClasses ecoreClass="attributeadded.ecore#//artefact/Diagram">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Diagram/created"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Diagram/notes"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference attributeadded.ecore#//artefact/Diagram/linkfrom"/>
+      </genClasses>
+      <genClasses ecoreClass="attributeadded.ecore#//artefact/Sketch">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/byteVar1"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/byteVar2"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/byteVar3"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/byteVar4"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/byteVar5"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/shortVar1"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/shortVar2"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/shortVar3"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/shortVar4"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/shortVar5"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/intVar1"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/intVar2"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/intVar3"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/intVar4"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/intVar5"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/charVar1"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/charVar2"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/charVar3"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/charVar4"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/charVar5"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/longVar1"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/longVar2"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/longVar3"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/longVar4"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/longVar5"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/floatVar1"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/floatVar2"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/floatVar3"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/floatVar4"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/floatVar5"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/doubleVar1"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/doubleVar2"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/doubleVar3"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/doubleVar4"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/doubleVar5"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/booleanVar1"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/booleanVar2"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/booleanVar3"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/booleanVar4"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/booleanVar5"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/stringVar1"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/stringVar2"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/stringVar3"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/stringVar4"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute attributeadded.ecore#//artefact/Sketch/stringVar5"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference attributeadded.ecore#//artefact/Sketch/linkedDiagram"/>
+      </genClasses>
     </nestedGenPackages>
   </genPackages>
 </genmodel:GenModel>

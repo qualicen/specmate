@@ -11,18 +11,16 @@ import { CookiesService } from 'src/app/modules/common/modules/cookies/services/
 @Injectable()
 export class AuthenticationService {
 
-
-    private static SPECMATE_AUTH_COOKIE_BASE = 'specmate-auth-';
-
-    private tokenCookieName = AuthenticationService.SPECMATE_AUTH_COOKIE_BASE + 'token' + '-' + window.location.hostname;
-    private projectCookieName = AuthenticationService.SPECMATE_AUTH_COOKIE_BASE + 'project' + '-' + window.location.hostname;
-    private sessionCookieName = AuthenticationService.SPECMATE_AUTH_COOKIE_BASE + 'session' + '-' + window.location.hostname;
+    private tokenCookieName = 'specmate-auth-token' + '-' + window.location.hostname;
 
     private isAuthenticatedState = this.determineIsAuthenticated();
 
     private serviceInterface: ServiceInterface;
 
     private _authChanged: EventEmitter<boolean>;
+
+    private readonly SELECTED_PROJECT_KEY = 'selectedProject';
+    private readonly SESSION_KEY = 'session';
 
     public get token(): UserToken {
         const token = this.cookiesService.getCookie(this.tokenCookieName);
@@ -36,31 +34,35 @@ export class AuthenticationService {
         return UserToken.INVALID;
     }
 
+    private _project: string;
+
     public get project(): string {
-        return this.cookiesService.getCookie(this.projectCookieName).replace(/"/g, '');
+        if (this._project === undefined || this._project === null) {
+            this._project = localStorage.getItem(this.SELECTED_PROJECT_KEY);
+        }
+        return this._project;
     }
 
     public changeProject(project: string): void {
-        if (this.isAuthenticatedForProject(project.replace(/"/g, ''))) {
-            this.cookiesService.setCookie(this.projectCookieName, project.replace(/"/g, ''));
+        const projectClean = project.replace(/"/g, '');
+        if (this.isAuthenticatedForProject(projectClean)) {
+            localStorage.setItem(this.SELECTED_PROJECT_KEY, projectClean);
+            this._project = project;
             this.authChanged.emit();
         }
     }
 
     public set session(session: UserSession) {
-        this.cookiesService.setCookie(this.sessionCookieName, session);
+        localStorage.setItem(this.SESSION_KEY, JSON.stringify(session));
     }
 
     public get session(): UserSession {
-        return this.cookiesService.getCookieObject(this.sessionCookieName) as UserSession;
+        return JSON.parse(localStorage.getItem(this.SESSION_KEY));
     }
 
     private get isAllCookiesSet(): boolean {
-        const hasTokenCookie = this.cookiesService.getCookie(this.tokenCookieName) !== undefined;
-        const hasProjectCookie = this.cookiesService.getCookie(this.projectCookieName) !== undefined;
-        const hasSessionCookie = this.cookiesService.getCookie(this.sessionCookieName) !== undefined;
-
-        return hasTokenCookie && hasProjectCookie && hasSessionCookie;
+        const session = localStorage.getItem(this.SESSION_KEY);
+        return session !== undefined && session !== null;
     }
 
     private _authFailed: boolean;
@@ -103,10 +105,12 @@ export class AuthenticationService {
         try {
             const wasAuthenticated: boolean = this.isAuthenticated;
             this.session = await this.serviceInterface.authenticate(user);
+            this._project = user.projectName;
             this.isAuthenticatedState = this.determineIsAuthenticated();
             if (this.isAuthenticated) {
                 if (wasAuthenticated !== this.isAuthenticated) {
                     this.isAuthenticatedState = true;
+                    localStorage.setItem(this.SELECTED_PROJECT_KEY, this._project);
                     this.authChanged.emit(this.isAuthenticatedState);
                 }
                 this.authFailed = false;
@@ -141,13 +145,10 @@ export class AuthenticationService {
     }
 
     public isAuthenticatedForProject(project: string): boolean {
+        if (project === null || project === undefined) {
+            return false;
+        }
         return this.allowedProjects.indexOf(project.replace(/"/g, '')) >= 0;
-    }
-
-    private clearToken(): void {
-        this.cookiesService.removeCookie(this.tokenCookieName);
-        this.cookiesService.removeCookie(this.projectCookieName);
-        this.cookiesService.removeCookie(this.sessionCookieName);
     }
 
     public async deauthenticate(omitServer?: boolean): Promise<void> {
@@ -167,7 +168,7 @@ export class AuthenticationService {
                 // just for cleanliness.
             }
         }
-        this.clearToken();
+        localStorage.removeItem(this.SESSION_KEY);
         this.isAuthenticatedState = this.determineIsAuthenticated();
         if (wasAuthenticated !== this.isAuthenticated) {
             this.authChanged.emit(this.isAuthenticatedState);
@@ -175,6 +176,9 @@ export class AuthenticationService {
     }
 
     public get allowedProjects(): string[] {
+        if (this.session === undefined || this.session === null) {
+            return [];
+        }
         return this.session.allowedPathPattern
             .split('\|')
             .map(pattern => pattern.replace(Config.URL_BASE, ''))

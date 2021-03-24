@@ -66,7 +66,9 @@ export class ModelImageService extends Monitorable {
                 let modelImage: ModelImage;
                 modelImage = await this.dataService.performOperations(model.url, 'listModelImage', undefined, true);
                 if (modelImage !== null && modelImage !== undefined) {
-                    await this.dataService.deleteElement(modelImage.url, true, Id.uuid);
+                    if (this.dataService.hasElement(modelImage.url)) {
+                        await this.dataService.deleteElement(modelImage.url, true, Id.uuid);
+                    }
                 }
             }
             this.end();

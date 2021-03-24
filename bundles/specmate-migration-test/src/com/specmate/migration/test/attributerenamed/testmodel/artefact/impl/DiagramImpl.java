@@ -93,6 +93,7 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isIstested() {
 		return (Boolean)eDynamicGet(ArtefactPackage.DIAGRAM__ISTESTED, BasePackage.Literals.ITESTABLE__ISTESTED, true, true);
 	}
@@ -102,6 +103,7 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setIstested(boolean newIstested) {
 		eDynamicSet(ArtefactPackage.DIAGRAM__ISTESTED, BasePackage.Literals.ITESTABLE__ISTESTED, newIstested);
 	}
@@ -111,6 +113,7 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getId() {
 		return (String)eDynamicGet(ArtefactPackage.DIAGRAM__ID, BasePackage.Literals.IID__ID, true, true);
 	}
@@ -120,6 +123,7 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setId(String newId) {
 		eDynamicSet(ArtefactPackage.DIAGRAM__ID, BasePackage.Literals.IID__ID, newId);
 	}
@@ -130,6 +134,7 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public EList<IContentElement> getContents() {
 		return (EList<IContentElement>)eDynamicGet(ArtefactPackage.DIAGRAM__CONTENTS, BasePackage.Literals.ICONTAINER__CONTENTS, true, true);
 	}

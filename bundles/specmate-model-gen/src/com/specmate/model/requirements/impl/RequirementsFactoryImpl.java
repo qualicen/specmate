@@ -61,6 +61,7 @@ public class RequirementsFactoryImpl extends EFactoryImpl implements Requirement
 			case RequirementsPackage.CEG_MODEL: return (EObject)createCEGModel();
 			case RequirementsPackage.CEG_NODE: return (EObject)createCEGNode();
 			case RequirementsPackage.CEG_CONNECTION: return (EObject)createCEGConnection();
+			case RequirementsPackage.CEG_LINKED_NODE: return (EObject)createCEGLinkedNode();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -138,6 +139,17 @@ public class RequirementsFactoryImpl extends EFactoryImpl implements Requirement
 	public CEGConnection createCEGConnection() {
 		CEGConnectionImpl cegConnection = new CEGConnectionImpl();
 		return cegConnection;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public CEGLinkedNode createCEGLinkedNode() {
+		CEGLinkedNodeImpl cegLinkedNode = new CEGLinkedNodeImpl();
+		return cegLinkedNode;
 	}
 
 	/**

@@ -19,6 +19,8 @@ export enum ModalState {
 @Injectable()
 export class OperationMonitorService {
 
+    private static noModalOperations = [SpecmateDataService.OP_SEARCH];
+
     private _isLoading: boolean;
 
     private delayTimer: any;
@@ -90,19 +92,29 @@ export class OperationMonitorService {
         return num;
     }
 
+    private get hasActiveModalOperation(): boolean {
+        let num = 0;
+        this.subjects.forEach(monitorable => {
+            num += this.activeOperations.get(monitorable)
+                .filter(name => OperationMonitorService.noModalOperations.indexOf(name) < 0)
+                .length;
+        });
+        return num > 0;
+    }
+
     public get hasActiveOperation(): boolean {
         return this.numActiveOperations > 0;
     }
 
     private actOnStateChanged(): void {
         if (this.delayState === DelayState.IDLE) {
-            if (this.hasActiveOperation) {
+            if (this.hasActiveModalOperation) {
                 this.delayState = DelayState.START;
                 this.setModalOpening();
                 this.isLoading = true;
             }
         } else if (this.delayState === DelayState.START) {
-            if (!this.hasActiveOperation) {
+            if (!this.hasActiveModalOperation) {
                 this.delayState = DelayState.DELAY;
                 this.delayTimer = setTimeout(() => {
                     this.delayState = DelayState.IDLE;
@@ -111,7 +123,7 @@ export class OperationMonitorService {
                 }, Config.LOADING_DEBOUNCE_DELAY);
             }
         } else if (this.delayState === DelayState.DELAY) {
-            if (this.hasActiveOperation) {
+            if (this.hasActiveModalOperation) {
                 this.delayState = DelayState.START;
                 clearTimeout(this.delayTimer);
             }

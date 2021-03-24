@@ -6,8 +6,8 @@ import { NavigatorService } from '../../../../../../navigation/modules/navigator
 import { SelectedElementService } from '../../../../../side/modules/selected-element/services/selected-element.service';
 import { ToolProvider } from '../../graphical-editor/providers/properties/tool-provider';
 import { ToolBase } from '../tools/tool-base';
-import { ClipboardService } from './clipboard-service';
 import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
+import { ModalService } from 'src/app/modules/notification/modules/modals/services/modal-service';
 
 @Injectable()
 export class EditorToolsService {
@@ -23,7 +23,8 @@ export class EditorToolsService {
         private navigator: NavigatorService,
         private selectedElementService: SelectedElementService,
         private translate: TranslateService,
-        private modal: ConfirmationModal) {
+        private modal: ConfirmationModal,
+        private modalService: ModalService) {
         this.init(this.navigator.currentElement);
         this.navigator.hasNavigated.subscribe((model: IContainer) => this.init(model));
     }
@@ -44,7 +45,7 @@ export class EditorToolsService {
         }
         if (!this.providerMap[this.model.url]) {
             this.providerMap[this.model.url] = new ToolProvider(this.model, this.dataService,
-                this.selectedElementService, this.modal, this.translate);
+                this.selectedElementService, this.modal, this.translate, this.modalService);
         }
         return this.providerMap[this.model.url];
     }

@@ -1,9 +1,9 @@
+import { CEGLinkedNode } from 'src/app/model/CEGLinkedNode';
+import { CEGNode } from 'src/app/model/CEGNode';
+import { IContainer } from 'src/app/model/IContainer';
+import { Id } from 'src/app/util/id';
 import { ElementFactoryBase } from '../../../../../../../factory/element-factory-base';
-import { IContainer } from '../../../../../../../model/IContainer';
 import { IModelNode } from '../../../../../../../model/IModelNode';
-import { SpecmateDataService } from '../../../../../../data/modules/data-service/services/specmate-data.service';
-import { SelectedElementService } from '../../../../../side/modules/selected-element/services/selected-element.service';
-import { Coords } from '../../graphical-editor/util/coords';
 import { CreateToolBase } from './create-tool-base';
 
 export abstract class CreateNodeToolBase<T extends IModelNode> extends CreateToolBase {
@@ -14,20 +14,21 @@ export abstract class CreateNodeToolBase<T extends IModelNode> extends CreateToo
 
     public coords: { x: number, y: number };
     public name: string;
+    public value: CEGLinkedNode | CEGNode;
 
-    public async perform(): Promise<T> {
+    public async perform(compoundId = Id.uuid): Promise<T> {
         if (this.coords === undefined) {
             throw new Error('Coords undefined');
         }
-        return await this.createNewNodeAtCoords();
+        return await this.createNewNodeAtCoords(compoundId);
     }
 
-    private async createNewNodeAtCoords(): Promise<T> {
+    private async createNewNodeAtCoords(compoundId = Id.uuid): Promise<T> {
         if (this.name === undefined || this.coords === undefined) {
             throw new Error('Necessary data undefined.');
         }
         const factory = this.getElementFactory(this.coords);
-        const node = await factory.create(this.parent, false, undefined, this.name);
+        const node = await factory.create(this.parent, false, compoundId, this.name);
         this.selectedElementService.select(node);
         return node;
     }

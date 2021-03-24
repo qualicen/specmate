@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
@@ -22,7 +23,8 @@ import com.specmate.usermodel.UserSession;
 public abstract class AuthRestServiceBase extends RestServiceBase implements IResponseAlteringService {
 
 	@Override
-	public RestResult<?> post(Object parent, Object child, String token) throws SpecmateException {
+	public RestResult<?> post(Object parent, Object child, MultivaluedMap<String, String> queryParams, String token)
+			throws SpecmateException {
 		UserSessionAndUser userSessionAndUser = getUserSessionAndUser(parent, child, token);
 		return new RestResult<>(Response.Status.OK, userSessionAndUser);
 	}

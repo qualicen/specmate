@@ -3,6 +3,7 @@
 package com.specmate.migration.test.attributeadded.testmodel.artefact.impl;
 
 import com.specmate.migration.test.attributeadded.testmodel.artefact.ArtefactPackage;
+import com.specmate.migration.test.attributeadded.testmodel.artefact.Diagram;
 import com.specmate.migration.test.attributeadded.testmodel.artefact.Sketch;
 
 import com.specmate.migration.test.attributeadded.testmodel.base.BasePackage;
@@ -81,6 +82,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.specmate.migration.test.attributeadded.testmodel.artefact.impl.SketchImpl#getStringVar3 <em>String Var3</em>}</li>
  *   <li>{@link com.specmate.migration.test.attributeadded.testmodel.artefact.impl.SketchImpl#getStringVar4 <em>String Var4</em>}</li>
  *   <li>{@link com.specmate.migration.test.attributeadded.testmodel.artefact.impl.SketchImpl#getStringVar5 <em>String Var5</em>}</li>
+ *   <li>{@link com.specmate.migration.test.attributeadded.testmodel.artefact.impl.SketchImpl#getLinkedDiagram <em>Linked Diagram</em>}</li>
  * </ul>
  *
  * @generated
@@ -600,6 +602,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isTested() {
 		return (Boolean)eDynamicGet(ArtefactPackage.SKETCH__TESTED, BasePackage.Literals.ITESTABLE__TESTED, true, true);
 	}
@@ -609,6 +612,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTested(boolean newTested) {
 		eDynamicSet(ArtefactPackage.SKETCH__TESTED, BasePackage.Literals.ITESTABLE__TESTED, newTested);
 	}
@@ -618,6 +622,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return (String)eDynamicGet(ArtefactPackage.SKETCH__NAME, BasePackage.Literals.INAMED__NAME, true, true);
 	}
@@ -627,6 +632,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		eDynamicSet(ArtefactPackage.SKETCH__NAME, BasePackage.Literals.INAMED__NAME, newName);
 	}
@@ -636,6 +642,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getId() {
 		return (String)eDynamicGet(ArtefactPackage.SKETCH__ID, BasePackage.Literals.IID__ID, true, true);
 	}
@@ -645,6 +652,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setId(String newId) {
 		eDynamicSet(ArtefactPackage.SKETCH__ID, BasePackage.Literals.IID__ID, newId);
 	}
@@ -655,6 +663,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public EList<IContentElement> getContents() {
 		return (EList<IContentElement>)eDynamicGet(ArtefactPackage.SKETCH__CONTENTS, BasePackage.Literals.ICONTAINER__CONTENTS, true, true);
 	}
@@ -664,6 +673,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public byte getByteVar1() {
 		return (Byte)eDynamicGet(ArtefactPackage.SKETCH__BYTE_VAR1, ArtefactPackage.Literals.SKETCH__BYTE_VAR1, true, true);
 	}
@@ -673,6 +683,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setByteVar1(byte newByteVar1) {
 		eDynamicSet(ArtefactPackage.SKETCH__BYTE_VAR1, ArtefactPackage.Literals.SKETCH__BYTE_VAR1, newByteVar1);
 	}
@@ -682,6 +693,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public byte getByteVar2() {
 		return (Byte)eDynamicGet(ArtefactPackage.SKETCH__BYTE_VAR2, ArtefactPackage.Literals.SKETCH__BYTE_VAR2, true, true);
 	}
@@ -691,6 +703,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setByteVar2(byte newByteVar2) {
 		eDynamicSet(ArtefactPackage.SKETCH__BYTE_VAR2, ArtefactPackage.Literals.SKETCH__BYTE_VAR2, newByteVar2);
 	}
@@ -700,6 +713,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public byte getByteVar3() {
 		return (Byte)eDynamicGet(ArtefactPackage.SKETCH__BYTE_VAR3, ArtefactPackage.Literals.SKETCH__BYTE_VAR3, true, true);
 	}
@@ -709,6 +723,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setByteVar3(byte newByteVar3) {
 		eDynamicSet(ArtefactPackage.SKETCH__BYTE_VAR3, ArtefactPackage.Literals.SKETCH__BYTE_VAR3, newByteVar3);
 	}
@@ -718,6 +733,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public byte getByteVar4() {
 		return (Byte)eDynamicGet(ArtefactPackage.SKETCH__BYTE_VAR4, ArtefactPackage.Literals.SKETCH__BYTE_VAR4, true, true);
 	}
@@ -727,6 +743,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setByteVar4(byte newByteVar4) {
 		eDynamicSet(ArtefactPackage.SKETCH__BYTE_VAR4, ArtefactPackage.Literals.SKETCH__BYTE_VAR4, newByteVar4);
 	}
@@ -736,6 +753,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public byte getByteVar5() {
 		return (Byte)eDynamicGet(ArtefactPackage.SKETCH__BYTE_VAR5, ArtefactPackage.Literals.SKETCH__BYTE_VAR5, true, true);
 	}
@@ -745,6 +763,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setByteVar5(byte newByteVar5) {
 		eDynamicSet(ArtefactPackage.SKETCH__BYTE_VAR5, ArtefactPackage.Literals.SKETCH__BYTE_VAR5, newByteVar5);
 	}
@@ -754,6 +773,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public short getShortVar1() {
 		return (Short)eDynamicGet(ArtefactPackage.SKETCH__SHORT_VAR1, ArtefactPackage.Literals.SKETCH__SHORT_VAR1, true, true);
 	}
@@ -763,6 +783,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setShortVar1(short newShortVar1) {
 		eDynamicSet(ArtefactPackage.SKETCH__SHORT_VAR1, ArtefactPackage.Literals.SKETCH__SHORT_VAR1, newShortVar1);
 	}
@@ -772,6 +793,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public short getShortVar2() {
 		return (Short)eDynamicGet(ArtefactPackage.SKETCH__SHORT_VAR2, ArtefactPackage.Literals.SKETCH__SHORT_VAR2, true, true);
 	}
@@ -781,6 +803,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setShortVar2(short newShortVar2) {
 		eDynamicSet(ArtefactPackage.SKETCH__SHORT_VAR2, ArtefactPackage.Literals.SKETCH__SHORT_VAR2, newShortVar2);
 	}
@@ -790,6 +813,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public short getShortVar3() {
 		return (Short)eDynamicGet(ArtefactPackage.SKETCH__SHORT_VAR3, ArtefactPackage.Literals.SKETCH__SHORT_VAR3, true, true);
 	}
@@ -799,6 +823,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setShortVar3(short newShortVar3) {
 		eDynamicSet(ArtefactPackage.SKETCH__SHORT_VAR3, ArtefactPackage.Literals.SKETCH__SHORT_VAR3, newShortVar3);
 	}
@@ -808,6 +833,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public short getShortVar4() {
 		return (Short)eDynamicGet(ArtefactPackage.SKETCH__SHORT_VAR4, ArtefactPackage.Literals.SKETCH__SHORT_VAR4, true, true);
 	}
@@ -817,6 +843,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setShortVar4(short newShortVar4) {
 		eDynamicSet(ArtefactPackage.SKETCH__SHORT_VAR4, ArtefactPackage.Literals.SKETCH__SHORT_VAR4, newShortVar4);
 	}
@@ -826,6 +853,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public short getShortVar5() {
 		return (Short)eDynamicGet(ArtefactPackage.SKETCH__SHORT_VAR5, ArtefactPackage.Literals.SKETCH__SHORT_VAR5, true, true);
 	}
@@ -835,6 +863,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setShortVar5(short newShortVar5) {
 		eDynamicSet(ArtefactPackage.SKETCH__SHORT_VAR5, ArtefactPackage.Literals.SKETCH__SHORT_VAR5, newShortVar5);
 	}
@@ -844,6 +873,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getIntVar1() {
 		return (Integer)eDynamicGet(ArtefactPackage.SKETCH__INT_VAR1, ArtefactPackage.Literals.SKETCH__INT_VAR1, true, true);
 	}
@@ -853,6 +883,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setIntVar1(int newIntVar1) {
 		eDynamicSet(ArtefactPackage.SKETCH__INT_VAR1, ArtefactPackage.Literals.SKETCH__INT_VAR1, newIntVar1);
 	}
@@ -862,6 +893,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getIntVar2() {
 		return (Integer)eDynamicGet(ArtefactPackage.SKETCH__INT_VAR2, ArtefactPackage.Literals.SKETCH__INT_VAR2, true, true);
 	}
@@ -871,6 +903,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setIntVar2(int newIntVar2) {
 		eDynamicSet(ArtefactPackage.SKETCH__INT_VAR2, ArtefactPackage.Literals.SKETCH__INT_VAR2, newIntVar2);
 	}
@@ -880,6 +913,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getIntVar3() {
 		return (Integer)eDynamicGet(ArtefactPackage.SKETCH__INT_VAR3, ArtefactPackage.Literals.SKETCH__INT_VAR3, true, true);
 	}
@@ -889,6 +923,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setIntVar3(int newIntVar3) {
 		eDynamicSet(ArtefactPackage.SKETCH__INT_VAR3, ArtefactPackage.Literals.SKETCH__INT_VAR3, newIntVar3);
 	}
@@ -898,6 +933,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getIntVar4() {
 		return (Integer)eDynamicGet(ArtefactPackage.SKETCH__INT_VAR4, ArtefactPackage.Literals.SKETCH__INT_VAR4, true, true);
 	}
@@ -907,6 +943,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setIntVar4(int newIntVar4) {
 		eDynamicSet(ArtefactPackage.SKETCH__INT_VAR4, ArtefactPackage.Literals.SKETCH__INT_VAR4, newIntVar4);
 	}
@@ -916,6 +953,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getIntVar5() {
 		return (Integer)eDynamicGet(ArtefactPackage.SKETCH__INT_VAR5, ArtefactPackage.Literals.SKETCH__INT_VAR5, true, true);
 	}
@@ -925,6 +963,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setIntVar5(int newIntVar5) {
 		eDynamicSet(ArtefactPackage.SKETCH__INT_VAR5, ArtefactPackage.Literals.SKETCH__INT_VAR5, newIntVar5);
 	}
@@ -934,6 +973,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public char getCharVar1() {
 		return (Character)eDynamicGet(ArtefactPackage.SKETCH__CHAR_VAR1, ArtefactPackage.Literals.SKETCH__CHAR_VAR1, true, true);
 	}
@@ -943,6 +983,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCharVar1(char newCharVar1) {
 		eDynamicSet(ArtefactPackage.SKETCH__CHAR_VAR1, ArtefactPackage.Literals.SKETCH__CHAR_VAR1, newCharVar1);
 	}
@@ -952,6 +993,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public char getCharVar2() {
 		return (Character)eDynamicGet(ArtefactPackage.SKETCH__CHAR_VAR2, ArtefactPackage.Literals.SKETCH__CHAR_VAR2, true, true);
 	}
@@ -961,6 +1003,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCharVar2(char newCharVar2) {
 		eDynamicSet(ArtefactPackage.SKETCH__CHAR_VAR2, ArtefactPackage.Literals.SKETCH__CHAR_VAR2, newCharVar2);
 	}
@@ -970,6 +1013,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public char getCharVar3() {
 		return (Character)eDynamicGet(ArtefactPackage.SKETCH__CHAR_VAR3, ArtefactPackage.Literals.SKETCH__CHAR_VAR3, true, true);
 	}
@@ -979,6 +1023,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCharVar3(char newCharVar3) {
 		eDynamicSet(ArtefactPackage.SKETCH__CHAR_VAR3, ArtefactPackage.Literals.SKETCH__CHAR_VAR3, newCharVar3);
 	}
@@ -988,6 +1033,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public char getCharVar4() {
 		return (Character)eDynamicGet(ArtefactPackage.SKETCH__CHAR_VAR4, ArtefactPackage.Literals.SKETCH__CHAR_VAR4, true, true);
 	}
@@ -997,6 +1043,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCharVar4(char newCharVar4) {
 		eDynamicSet(ArtefactPackage.SKETCH__CHAR_VAR4, ArtefactPackage.Literals.SKETCH__CHAR_VAR4, newCharVar4);
 	}
@@ -1006,6 +1053,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public char getCharVar5() {
 		return (Character)eDynamicGet(ArtefactPackage.SKETCH__CHAR_VAR5, ArtefactPackage.Literals.SKETCH__CHAR_VAR5, true, true);
 	}
@@ -1015,6 +1063,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCharVar5(char newCharVar5) {
 		eDynamicSet(ArtefactPackage.SKETCH__CHAR_VAR5, ArtefactPackage.Literals.SKETCH__CHAR_VAR5, newCharVar5);
 	}
@@ -1024,6 +1073,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public long getLongVar1() {
 		return (Long)eDynamicGet(ArtefactPackage.SKETCH__LONG_VAR1, ArtefactPackage.Literals.SKETCH__LONG_VAR1, true, true);
 	}
@@ -1033,6 +1083,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLongVar1(long newLongVar1) {
 		eDynamicSet(ArtefactPackage.SKETCH__LONG_VAR1, ArtefactPackage.Literals.SKETCH__LONG_VAR1, newLongVar1);
 	}
@@ -1042,6 +1093,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public long getLongVar2() {
 		return (Long)eDynamicGet(ArtefactPackage.SKETCH__LONG_VAR2, ArtefactPackage.Literals.SKETCH__LONG_VAR2, true, true);
 	}
@@ -1051,6 +1103,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLongVar2(long newLongVar2) {
 		eDynamicSet(ArtefactPackage.SKETCH__LONG_VAR2, ArtefactPackage.Literals.SKETCH__LONG_VAR2, newLongVar2);
 	}
@@ -1060,6 +1113,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public long getLongVar3() {
 		return (Long)eDynamicGet(ArtefactPackage.SKETCH__LONG_VAR3, ArtefactPackage.Literals.SKETCH__LONG_VAR3, true, true);
 	}
@@ -1069,6 +1123,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLongVar3(long newLongVar3) {
 		eDynamicSet(ArtefactPackage.SKETCH__LONG_VAR3, ArtefactPackage.Literals.SKETCH__LONG_VAR3, newLongVar3);
 	}
@@ -1078,6 +1133,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public long getLongVar4() {
 		return (Long)eDynamicGet(ArtefactPackage.SKETCH__LONG_VAR4, ArtefactPackage.Literals.SKETCH__LONG_VAR4, true, true);
 	}
@@ -1087,6 +1143,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLongVar4(long newLongVar4) {
 		eDynamicSet(ArtefactPackage.SKETCH__LONG_VAR4, ArtefactPackage.Literals.SKETCH__LONG_VAR4, newLongVar4);
 	}
@@ -1096,6 +1153,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public long getLongVar5() {
 		return (Long)eDynamicGet(ArtefactPackage.SKETCH__LONG_VAR5, ArtefactPackage.Literals.SKETCH__LONG_VAR5, true, true);
 	}
@@ -1105,6 +1163,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLongVar5(long newLongVar5) {
 		eDynamicSet(ArtefactPackage.SKETCH__LONG_VAR5, ArtefactPackage.Literals.SKETCH__LONG_VAR5, newLongVar5);
 	}
@@ -1114,6 +1173,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public float getFloatVar1() {
 		return (Float)eDynamicGet(ArtefactPackage.SKETCH__FLOAT_VAR1, ArtefactPackage.Literals.SKETCH__FLOAT_VAR1, true, true);
 	}
@@ -1123,6 +1183,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFloatVar1(float newFloatVar1) {
 		eDynamicSet(ArtefactPackage.SKETCH__FLOAT_VAR1, ArtefactPackage.Literals.SKETCH__FLOAT_VAR1, newFloatVar1);
 	}
@@ -1132,6 +1193,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public float getFloatVar2() {
 		return (Float)eDynamicGet(ArtefactPackage.SKETCH__FLOAT_VAR2, ArtefactPackage.Literals.SKETCH__FLOAT_VAR2, true, true);
 	}
@@ -1141,6 +1203,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFloatVar2(float newFloatVar2) {
 		eDynamicSet(ArtefactPackage.SKETCH__FLOAT_VAR2, ArtefactPackage.Literals.SKETCH__FLOAT_VAR2, newFloatVar2);
 	}
@@ -1150,6 +1213,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public float getFloatVar3() {
 		return (Float)eDynamicGet(ArtefactPackage.SKETCH__FLOAT_VAR3, ArtefactPackage.Literals.SKETCH__FLOAT_VAR3, true, true);
 	}
@@ -1159,6 +1223,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFloatVar3(float newFloatVar3) {
 		eDynamicSet(ArtefactPackage.SKETCH__FLOAT_VAR3, ArtefactPackage.Literals.SKETCH__FLOAT_VAR3, newFloatVar3);
 	}
@@ -1168,6 +1233,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public float getFloatVar4() {
 		return (Float)eDynamicGet(ArtefactPackage.SKETCH__FLOAT_VAR4, ArtefactPackage.Literals.SKETCH__FLOAT_VAR4, true, true);
 	}
@@ -1177,6 +1243,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFloatVar4(float newFloatVar4) {
 		eDynamicSet(ArtefactPackage.SKETCH__FLOAT_VAR4, ArtefactPackage.Literals.SKETCH__FLOAT_VAR4, newFloatVar4);
 	}
@@ -1186,6 +1253,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public float getFloatVar5() {
 		return (Float)eDynamicGet(ArtefactPackage.SKETCH__FLOAT_VAR5, ArtefactPackage.Literals.SKETCH__FLOAT_VAR5, true, true);
 	}
@@ -1195,6 +1263,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setFloatVar5(float newFloatVar5) {
 		eDynamicSet(ArtefactPackage.SKETCH__FLOAT_VAR5, ArtefactPackage.Literals.SKETCH__FLOAT_VAR5, newFloatVar5);
 	}
@@ -1204,6 +1273,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getDoubleVar1() {
 		return (Double)eDynamicGet(ArtefactPackage.SKETCH__DOUBLE_VAR1, ArtefactPackage.Literals.SKETCH__DOUBLE_VAR1, true, true);
 	}
@@ -1213,6 +1283,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDoubleVar1(double newDoubleVar1) {
 		eDynamicSet(ArtefactPackage.SKETCH__DOUBLE_VAR1, ArtefactPackage.Literals.SKETCH__DOUBLE_VAR1, newDoubleVar1);
 	}
@@ -1222,6 +1293,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getDoubleVar2() {
 		return (Double)eDynamicGet(ArtefactPackage.SKETCH__DOUBLE_VAR2, ArtefactPackage.Literals.SKETCH__DOUBLE_VAR2, true, true);
 	}
@@ -1231,6 +1303,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDoubleVar2(double newDoubleVar2) {
 		eDynamicSet(ArtefactPackage.SKETCH__DOUBLE_VAR2, ArtefactPackage.Literals.SKETCH__DOUBLE_VAR2, newDoubleVar2);
 	}
@@ -1240,6 +1313,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getDoubleVar3() {
 		return (Double)eDynamicGet(ArtefactPackage.SKETCH__DOUBLE_VAR3, ArtefactPackage.Literals.SKETCH__DOUBLE_VAR3, true, true);
 	}
@@ -1249,6 +1323,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDoubleVar3(double newDoubleVar3) {
 		eDynamicSet(ArtefactPackage.SKETCH__DOUBLE_VAR3, ArtefactPackage.Literals.SKETCH__DOUBLE_VAR3, newDoubleVar3);
 	}
@@ -1258,6 +1333,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getDoubleVar4() {
 		return (Double)eDynamicGet(ArtefactPackage.SKETCH__DOUBLE_VAR4, ArtefactPackage.Literals.SKETCH__DOUBLE_VAR4, true, true);
 	}
@@ -1267,6 +1343,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDoubleVar4(double newDoubleVar4) {
 		eDynamicSet(ArtefactPackage.SKETCH__DOUBLE_VAR4, ArtefactPackage.Literals.SKETCH__DOUBLE_VAR4, newDoubleVar4);
 	}
@@ -1276,6 +1353,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public double getDoubleVar5() {
 		return (Double)eDynamicGet(ArtefactPackage.SKETCH__DOUBLE_VAR5, ArtefactPackage.Literals.SKETCH__DOUBLE_VAR5, true, true);
 	}
@@ -1285,6 +1363,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDoubleVar5(double newDoubleVar5) {
 		eDynamicSet(ArtefactPackage.SKETCH__DOUBLE_VAR5, ArtefactPackage.Literals.SKETCH__DOUBLE_VAR5, newDoubleVar5);
 	}
@@ -1294,6 +1373,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isBooleanVar1() {
 		return (Boolean)eDynamicGet(ArtefactPackage.SKETCH__BOOLEAN_VAR1, ArtefactPackage.Literals.SKETCH__BOOLEAN_VAR1, true, true);
 	}
@@ -1303,6 +1383,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBooleanVar1(boolean newBooleanVar1) {
 		eDynamicSet(ArtefactPackage.SKETCH__BOOLEAN_VAR1, ArtefactPackage.Literals.SKETCH__BOOLEAN_VAR1, newBooleanVar1);
 	}
@@ -1312,6 +1393,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isBooleanVar2() {
 		return (Boolean)eDynamicGet(ArtefactPackage.SKETCH__BOOLEAN_VAR2, ArtefactPackage.Literals.SKETCH__BOOLEAN_VAR2, true, true);
 	}
@@ -1321,6 +1403,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBooleanVar2(boolean newBooleanVar2) {
 		eDynamicSet(ArtefactPackage.SKETCH__BOOLEAN_VAR2, ArtefactPackage.Literals.SKETCH__BOOLEAN_VAR2, newBooleanVar2);
 	}
@@ -1330,6 +1413,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isBooleanVar3() {
 		return (Boolean)eDynamicGet(ArtefactPackage.SKETCH__BOOLEAN_VAR3, ArtefactPackage.Literals.SKETCH__BOOLEAN_VAR3, true, true);
 	}
@@ -1339,6 +1423,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBooleanVar3(boolean newBooleanVar3) {
 		eDynamicSet(ArtefactPackage.SKETCH__BOOLEAN_VAR3, ArtefactPackage.Literals.SKETCH__BOOLEAN_VAR3, newBooleanVar3);
 	}
@@ -1348,6 +1433,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isBooleanVar4() {
 		return (Boolean)eDynamicGet(ArtefactPackage.SKETCH__BOOLEAN_VAR4, ArtefactPackage.Literals.SKETCH__BOOLEAN_VAR4, true, true);
 	}
@@ -1357,6 +1443,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBooleanVar4(boolean newBooleanVar4) {
 		eDynamicSet(ArtefactPackage.SKETCH__BOOLEAN_VAR4, ArtefactPackage.Literals.SKETCH__BOOLEAN_VAR4, newBooleanVar4);
 	}
@@ -1366,6 +1453,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isBooleanVar5() {
 		return (Boolean)eDynamicGet(ArtefactPackage.SKETCH__BOOLEAN_VAR5, ArtefactPackage.Literals.SKETCH__BOOLEAN_VAR5, true, true);
 	}
@@ -1375,6 +1463,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBooleanVar5(boolean newBooleanVar5) {
 		eDynamicSet(ArtefactPackage.SKETCH__BOOLEAN_VAR5, ArtefactPackage.Literals.SKETCH__BOOLEAN_VAR5, newBooleanVar5);
 	}
@@ -1384,6 +1473,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getStringVar1() {
 		return (String)eDynamicGet(ArtefactPackage.SKETCH__STRING_VAR1, ArtefactPackage.Literals.SKETCH__STRING_VAR1, true, true);
 	}
@@ -1393,6 +1483,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setStringVar1(String newStringVar1) {
 		eDynamicSet(ArtefactPackage.SKETCH__STRING_VAR1, ArtefactPackage.Literals.SKETCH__STRING_VAR1, newStringVar1);
 	}
@@ -1402,6 +1493,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getStringVar2() {
 		return (String)eDynamicGet(ArtefactPackage.SKETCH__STRING_VAR2, ArtefactPackage.Literals.SKETCH__STRING_VAR2, true, true);
 	}
@@ -1411,6 +1503,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setStringVar2(String newStringVar2) {
 		eDynamicSet(ArtefactPackage.SKETCH__STRING_VAR2, ArtefactPackage.Literals.SKETCH__STRING_VAR2, newStringVar2);
 	}
@@ -1420,6 +1513,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getStringVar3() {
 		return (String)eDynamicGet(ArtefactPackage.SKETCH__STRING_VAR3, ArtefactPackage.Literals.SKETCH__STRING_VAR3, true, true);
 	}
@@ -1429,6 +1523,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setStringVar3(String newStringVar3) {
 		eDynamicSet(ArtefactPackage.SKETCH__STRING_VAR3, ArtefactPackage.Literals.SKETCH__STRING_VAR3, newStringVar3);
 	}
@@ -1438,6 +1533,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getStringVar4() {
 		return (String)eDynamicGet(ArtefactPackage.SKETCH__STRING_VAR4, ArtefactPackage.Literals.SKETCH__STRING_VAR4, true, true);
 	}
@@ -1447,6 +1543,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setStringVar4(String newStringVar4) {
 		eDynamicSet(ArtefactPackage.SKETCH__STRING_VAR4, ArtefactPackage.Literals.SKETCH__STRING_VAR4, newStringVar4);
 	}
@@ -1456,6 +1553,7 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getStringVar5() {
 		return (String)eDynamicGet(ArtefactPackage.SKETCH__STRING_VAR5, ArtefactPackage.Literals.SKETCH__STRING_VAR5, true, true);
 	}
@@ -1465,8 +1563,65 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setStringVar5(String newStringVar5) {
 		eDynamicSet(ArtefactPackage.SKETCH__STRING_VAR5, ArtefactPackage.Literals.SKETCH__STRING_VAR5, newStringVar5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Diagram getLinkedDiagram() {
+		return (Diagram)eDynamicGet(ArtefactPackage.SKETCH__LINKED_DIAGRAM, ArtefactPackage.Literals.SKETCH__LINKED_DIAGRAM, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Diagram basicGetLinkedDiagram() {
+		return (Diagram)eDynamicGet(ArtefactPackage.SKETCH__LINKED_DIAGRAM, ArtefactPackage.Literals.SKETCH__LINKED_DIAGRAM, false, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetLinkedDiagram(Diagram newLinkedDiagram, NotificationChain msgs) {
+		msgs = eDynamicInverseAdd((InternalEObject)newLinkedDiagram, ArtefactPackage.SKETCH__LINKED_DIAGRAM, msgs);
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setLinkedDiagram(Diagram newLinkedDiagram) {
+		eDynamicSet(ArtefactPackage.SKETCH__LINKED_DIAGRAM, ArtefactPackage.Literals.SKETCH__LINKED_DIAGRAM, newLinkedDiagram);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case ArtefactPackage.SKETCH__LINKED_DIAGRAM:
+				Diagram linkedDiagram = basicGetLinkedDiagram();
+				if (linkedDiagram != null)
+					msgs = ((InternalEObject)linkedDiagram).eInverseRemove(this, ArtefactPackage.DIAGRAM__LINKFROM, Diagram.class, msgs);
+				return basicSetLinkedDiagram((Diagram)otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -1479,6 +1634,8 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 		switch (featureID) {
 			case ArtefactPackage.SKETCH__CONTENTS:
 				return ((InternalEList<?>)getContents()).basicRemove(otherEnd, msgs);
+			case ArtefactPackage.SKETCH__LINKED_DIAGRAM:
+				return basicSetLinkedDiagram(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -1589,6 +1746,9 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 				return getStringVar4();
 			case ArtefactPackage.SKETCH__STRING_VAR5:
 				return getStringVar5();
+			case ArtefactPackage.SKETCH__LINKED_DIAGRAM:
+				if (resolve) return getLinkedDiagram();
+				return basicGetLinkedDiagram();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1750,6 +1910,9 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 			case ArtefactPackage.SKETCH__STRING_VAR5:
 				setStringVar5((String)newValue);
 				return;
+			case ArtefactPackage.SKETCH__LINKED_DIAGRAM:
+				setLinkedDiagram((Diagram)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -1909,6 +2072,9 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 			case ArtefactPackage.SKETCH__STRING_VAR5:
 				setStringVar5(STRING_VAR5_EDEFAULT);
 				return;
+			case ArtefactPackage.SKETCH__LINKED_DIAGRAM:
+				setLinkedDiagram((Diagram)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -2019,6 +2185,8 @@ public class SketchImpl extends MinimalEObjectImpl.Container implements Sketch {
 				return STRING_VAR4_EDEFAULT == null ? getStringVar4() != null : !STRING_VAR4_EDEFAULT.equals(getStringVar4());
 			case ArtefactPackage.SKETCH__STRING_VAR5:
 				return STRING_VAR5_EDEFAULT == null ? getStringVar5() != null : !STRING_VAR5_EDEFAULT.equals(getStringVar5());
+			case ArtefactPackage.SKETCH__LINKED_DIAGRAM:
+				return basicGetLinkedDiagram() != null;
 		}
 		return super.eIsSet(featureID);
 	}

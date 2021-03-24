@@ -1,3 +1,4 @@
+import { SpecmateDataService } from 'src/app/modules/data/modules/data-service/services/specmate-data.service';
 import { IContainer } from '../../model/IContainer';
 import { Process } from '../../model/Process';
 import { ProcessStart } from '../../model/ProcessStart';
@@ -9,7 +10,7 @@ import { Validator } from '../validator-decorator';
 
 @Validator(Process)
 export class StartNodeValidator extends ElementValidatorBase<Process> {
-    public validate(element: Process, contents: IContainer[]): ValidationResult {
+    public async validate(element: Process, contents: IContainer[], dataService: SpecmateDataService): Promise<ValidationResult> {
         const startNodes = contents.filter(elem => Type.is(ProcessStart, elem));
         let hasNoStartNode: boolean = startNodes.length === 0;
         if (hasNoStartNode) {

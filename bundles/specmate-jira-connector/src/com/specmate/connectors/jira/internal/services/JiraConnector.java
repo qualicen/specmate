@@ -111,12 +111,6 @@ public class JiraConnector extends DetailsService implements IConnector, IRestSe
 	/** The configured id of this connector */
 	private String id;
 
-	/** The configured name of the project to pull items from */
-	private String projectName;
-
-	/** The configured Url of the jira server */
-	private String url;
-
 	/** The configured pagination size */
 	private int paginationSizeInt;
 
@@ -143,25 +137,24 @@ public class JiraConnector extends DetailsService implements IConnector, IRestSe
 	/** The story cache */
 	private ICache<String, Issue> cache;
 
-	/** The rest client to access jira */
-	private JiraRestClient jiraClient;
-
 	/** The project service to access other projects **/
 	private IProjectService projectService;
 
-	public JiraRestClient getJiraClient() {
-		return jiraClient;
-	}
+	/** The configuration of the jira server */
+	private String serverUrl;
+	private String serverProject;
+	private String serverUsername;
+	private String serverPassword;
 
 	@Activate
 	public void activate(Map<String, Object> properties) throws SpecmateException {
 		validateConfig(properties);
 
 		id = (String) properties.get(IProjectConfigService.KEY_CONNECTOR_ID);
-		url = (String) properties.get(JiraConfigConstants.KEY_JIRA_URL);
-		projectName = (String) properties.get(JiraConfigConstants.KEY_JIRA_PROJECT);
-		String username = (String) properties.get(JiraConfigConstants.KEY_JIRA_USERNAME);
-		String password = (String) properties.get(JiraConfigConstants.KEY_JIRA_PASSWORD);
+		serverUrl = (String) properties.get(JiraConfigConstants.KEY_JIRA_URL);
+		serverProject = (String) properties.get(JiraConfigConstants.KEY_JIRA_PROJECT);
+		serverUsername = (String) properties.get(JiraConfigConstants.KEY_JIRA_USERNAME);
+		serverPassword = (String) properties.get(JiraConfigConstants.KEY_JIRA_PASSWORD);
 
 		String paginationSizeStr = (String) properties.getOrDefault(JiraConfigConstants.KEY_JIRA_PAGINATION_SIZE,
 				PAGINATION_SIZE_DEFAULT);
@@ -193,14 +186,7 @@ public class JiraConnector extends DetailsService implements IConnector, IRestSe
 		parentJQL = (String) properties.getOrDefault(JiraConfigConstants.KEY_JIRA_PARENT_SQL, DEFAULT_PARENT_JQL);
 		childrenJQL = (String) properties.getOrDefault(JiraConfigConstants.KEY_JIRA_CHILDREN_SQL, DEFAULT_CHILDREN_JQL);
 
-		try {
-			jiraClient = JiraUtil.createJiraRESTClient(url, username, password);
-		} catch (URISyntaxException e) {
-			logService.log(LogService.LOG_ERROR, "Could not create Jira REST client. Reason is: " + e.getMessage());
-			throw new SpecmateInternalException(ErrorCode.JIRA, "Could not create Jira REST client", e);
-		}
-
-		defaultFolder = createFolder(projectName + "-Default", projectName + "-Default");
+		defaultFolder = createFolder(serverProject + "-Default", serverProject + "-Default");
 
 		cache = cacheService.createCache(JIRA_STORY_CACHE_NAME, 500, cacheTime, new ICacheLoader<String, Issue>() {
 
@@ -216,11 +202,15 @@ public class JiraConnector extends DetailsService implements IConnector, IRestSe
 
 	@Deactivate
 	public void deactivate() throws SpecmateInternalException {
+		cacheService.removeCache(JIRA_STORY_CACHE_NAME);
+	}
+
+	private JiraRestClient getJiraClient() throws SpecmateInternalException {
 		try {
-			jiraClient.close();
-			cacheService.removeCache(JIRA_STORY_CACHE_NAME);
-		} catch (IOException e) {
-			throw new SpecmateInternalException(ErrorCode.INTERNAL_PROBLEM, "Could not close JIRA client.", e);
+			return JiraUtil.createJiraRESTClient(serverUrl, serverUsername, serverPassword);
+		} catch (URISyntaxException e) {
+			logService.log(LogService.LOG_ERROR, "Could not create Jira REST client. Reason is: " + e.getMessage());
+			throw new SpecmateInternalException(ErrorCode.JIRA, "Could not create Jira REST client", e);
 		}
 	}
 
@@ -279,7 +269,7 @@ public class JiraConnector extends DetailsService implements IConnector, IRestSe
 	}
 
 	private List<Issue> getStoriesForEpic(Issue epic) throws SpecmateException {
-		String jql = childrenJQL.replaceAll(PROJECT_PLACEHOLDER, projectName).replace(PARENT_ID_PLACEHOLDER,
+		String jql = childrenJQL.replaceAll(PROJECT_PLACEHOLDER, serverProject).replace(PARENT_ID_PLACEHOLDER,
 				epic.getKey());
 		return getIssues(jql);
 	}
@@ -287,21 +277,21 @@ public class JiraConnector extends DetailsService implements IConnector, IRestSe
 	private List<Issue> getStoriesWithoutEpic() throws SpecmateException {
 		logService.log(LogService.LOG_DEBUG,
 				String.format("Jira connector (%s): retrieving default requirements. Query is %s", id, directJQL));
-		String jql = directJQL.replaceAll(PROJECT_PLACEHOLDER, projectName);
+		String jql = directJQL.replaceAll(PROJECT_PLACEHOLDER, serverProject);
 		return getIssues(jql);
 	}
 
 	private List<Issue> getEpics() throws SpecmateException {
 		logService.log(LogService.LOG_DEBUG,
 				String.format("Jira connector (%s): retrieving parent requirements. Query is %s", id, parentJQL));
-		String jql = parentJQL.replaceAll(PROJECT_PLACEHOLDER, projectName);
+		String jql = parentJQL.replaceAll(PROJECT_PLACEHOLDER, serverProject);
 		return getIssues(jql);
 	}
 
 	private Issue getStory(String storyId) throws SpecmateException {
 		logService.log(LogService.LOG_DEBUG,
 				String.format("Jira connector (%s) retrieving item with id %s", id, storyId));
-		List<Issue> issues = getIssues("project=" + projectName + " AND id=" + storyId);
+		List<Issue> issues = getIssues("project=" + serverProject + " AND id=" + storyId);
 		if (issues == null || issues.size() == 0) {
 			throw new SpecmateInternalException(ErrorCode.INTERNAL_PROBLEM, "JIRA Issue not found: " + storyId);
 		}
@@ -313,32 +303,52 @@ public class JiraConnector extends DetailsService implements IConnector, IRestSe
 
 		List<Issue> issues = new ArrayList<>();
 
-		int maxResults = Integer.MAX_VALUE;
-		while (issues.size() < maxResults) {
-			try {
-				SearchResult searchResult = jiraClient.getSearchClient()
-						.searchJql(jql, paginationSizeInt, issues.size(), null).claim();
-				maxResults = searchResult.getTotal();
-				searchResult.getIssues().forEach(issue -> issues.add(issue));
-				logService.log(LogService.LOG_DEBUG, "Jira Connector (" + id + "): Loaded ~"
-						+ searchResult.getMaxResults() + " issues from Jira " + url + " project: " + projectName);
-			} catch (RestClientException e) {
-				if (e.getStatusCode().get() == 400) {
-					logService.log(LogService.LOG_WARNING, String.format(
-							"Jira Connector (%s): Received 400 status, JQL: %s, Details: %s", id, jql, e.getMessage()));
-					return issues;
-				} else {
-					logService.log(LogService.LOG_ERROR, String.format(
-							"Jira Connector (%s): Could not load issue from jira. Reason: %s", id, e.getMessage()));
-					throw new SpecmateInternalException(ErrorCode.INTERNAL_PROBLEM, "Could not load issues from jira",
-							e);
+		JiraRestClient jiraClient = null;
+		try {
+
+			jiraClient = this.getJiraClient();
+
+			int maxResults = Integer.MAX_VALUE;
+			while (issues.size() < maxResults) {
+				try {
+
+					SearchResult searchResult = jiraClient.getSearchClient()
+							.searchJql(jql, paginationSizeInt, issues.size(), null).claim();
+					maxResults = searchResult.getTotal();
+					searchResult.getIssues().forEach(issue -> issues.add(issue));
+					logService.log(LogService.LOG_DEBUG,
+							"Jira Connector (" + id + "): Loaded ~" + searchResult.getMaxResults()
+									+ " issues from Jira " + serverUrl + " project: " + serverProject);
+				} catch (RestClientException e) {
+					if (e.getStatusCode().get() == 400) {
+						logService.log(LogService.LOG_WARNING,
+								String.format("Jira Connector (%s): Received 400 status, JQL: %s, Details: %s", id, jql,
+										e.getMessage()));
+						return issues;
+					} else {
+						logService.log(LogService.LOG_ERROR, String.format(
+								"Jira Connector (%s): Could not load issue from jira. Reason: %s", id, e.getMessage()));
+						throw new SpecmateInternalException(ErrorCode.INTERNAL_PROBLEM,
+								"Could not load issues from jira", e);
+					}
 				}
+
 			}
 
-		}
+			logService.log(LogService.LOG_INFO, "Jira Connector (" + id + "): Finished loading of " + issues.size()
+					+ " issues from Jira " + serverUrl + " project: " + serverProject);
 
-		logService.log(LogService.LOG_INFO, "Jira Connector (" + id + "): Finished loading of " + issues.size()
-				+ " issues from Jira " + url + " project: " + projectName);
+		} catch (Exception e) {
+			throw new SpecmateInternalException(ErrorCode.INTERNAL_PROBLEM, e);
+		} finally {
+
+			try {
+				jiraClient.close();
+				cacheService.removeCache(JIRA_STORY_CACHE_NAME);
+			} catch (IOException e) {
+				throw new SpecmateInternalException(ErrorCode.INTERNAL_PROBLEM, "Could not close JIRA client.", e);
+			}
+		}
 
 		return issues;
 	}
@@ -358,7 +368,7 @@ public class JiraConnector extends DetailsService implements IConnector, IRestSe
 	@Override
 	public Set<IProject> authenticate(String username, String password) throws SpecmateException {
 
-		List<String> accessibleJiraProjectNames = JiraUtil.getProjects(url, username, password);
+		List<String> accessibleJiraProjectNames = JiraUtil.getProjects(serverUrl, username, password);
 		Set<IProject> accessibleSpecmateProjectNames = new HashSet<>();
 
 		for (String specmateProjectName : projectService.getProjectNames()) {
@@ -477,11 +487,11 @@ public class JiraConnector extends DetailsService implements IConnector, IRestSe
 	}
 
 	public String getProjectName() {
-		return projectName;
+		return serverProject;
 	}
 
 	public String getUrl() {
-		return url;
+		return serverUrl;
 	}
 
 	@Override

@@ -8,6 +8,7 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
 
 /**
  * <!-- begin-user-doc -->
@@ -40,7 +41,7 @@ public interface RequirementsPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://specmate.com/20200605/model/requirements";
+	String eNS_URI = "http://specmate.com/20200921/model/requirements";
 
 	/**
 	 * The package namespace name.
@@ -548,13 +549,22 @@ public interface RequirementsPackage extends EPackage {
 	int CEG_NODE__CONDITION = BasePackage.IMODEL_NODE_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Links From</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CEG_NODE__LINKS_FROM = BasePackage.IMODEL_NODE_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>CEG Node</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CEG_NODE_FEATURE_COUNT = BasePackage.IMODEL_NODE_FEATURE_COUNT + 3;
+	int CEG_NODE_FEATURE_COUNT = BasePackage.IMODEL_NODE_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of operations of the '<em>CEG Node</em>' class.
@@ -693,6 +703,205 @@ public interface RequirementsPackage extends EPackage {
 	int CEG_CONNECTION_OPERATION_COUNT = BasePackage.IMODEL_CONNECTION_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.specmate.model.requirements.impl.CEGLinkedNodeImpl <em>CEG Linked Node</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.specmate.model.requirements.impl.CEGLinkedNodeImpl
+	 * @see com.specmate.model.requirements.impl.RequirementsPackageImpl#getCEGLinkedNode()
+	 * @generated
+	 */
+	int CEG_LINKED_NODE = 4;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CEG_LINKED_NODE__ID = CEG_NODE__ID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CEG_LINKED_NODE__NAME = CEG_NODE__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CEG_LINKED_NODE__DESCRIPTION = CEG_NODE__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Recycled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CEG_LINKED_NODE__RECYCLED = CEG_NODE__RECYCLED;
+
+	/**
+	 * The feature id for the '<em><b>Has Recycled Children</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CEG_LINKED_NODE__HAS_RECYCLED_CHILDREN = CEG_NODE__HAS_RECYCLED_CHILDREN;
+
+	/**
+	 * The feature id for the '<em><b>Contents</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CEG_LINKED_NODE__CONTENTS = CEG_NODE__CONTENTS;
+
+	/**
+	 * The feature id for the '<em><b>Traces To</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CEG_LINKED_NODE__TRACES_TO = CEG_NODE__TRACES_TO;
+
+	/**
+	 * The feature id for the '<em><b>Traces From</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CEG_LINKED_NODE__TRACES_FROM = CEG_NODE__TRACES_FROM;
+
+	/**
+	 * The feature id for the '<em><b>X</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CEG_LINKED_NODE__X = CEG_NODE__X;
+
+	/**
+	 * The feature id for the '<em><b>Y</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CEG_LINKED_NODE__Y = CEG_NODE__Y;
+
+	/**
+	 * The feature id for the '<em><b>Width</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CEG_LINKED_NODE__WIDTH = CEG_NODE__WIDTH;
+
+	/**
+	 * The feature id for the '<em><b>Height</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CEG_LINKED_NODE__HEIGHT = CEG_NODE__HEIGHT;
+
+	/**
+	 * The feature id for the '<em><b>Outgoing Connections</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CEG_LINKED_NODE__OUTGOING_CONNECTIONS = CEG_NODE__OUTGOING_CONNECTIONS;
+
+	/**
+	 * The feature id for the '<em><b>Incoming Connections</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CEG_LINKED_NODE__INCOMING_CONNECTIONS = CEG_NODE__INCOMING_CONNECTIONS;
+
+	/**
+	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CEG_LINKED_NODE__TYPE = CEG_NODE__TYPE;
+
+	/**
+	 * The feature id for the '<em><b>Variable</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CEG_LINKED_NODE__VARIABLE = CEG_NODE__VARIABLE;
+
+	/**
+	 * The feature id for the '<em><b>Condition</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CEG_LINKED_NODE__CONDITION = CEG_NODE__CONDITION;
+
+	/**
+	 * The feature id for the '<em><b>Links From</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CEG_LINKED_NODE__LINKS_FROM = CEG_NODE__LINKS_FROM;
+
+	/**
+	 * The feature id for the '<em><b>Link To</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CEG_LINKED_NODE__LINK_TO = CEG_NODE_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>CEG Linked Node</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CEG_LINKED_NODE_FEATURE_COUNT = CEG_NODE_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>CEG Linked Node</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CEG_LINKED_NODE_OPERATION_COUNT = CEG_NODE_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link com.specmate.model.requirements.NodeType <em>Node Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -700,7 +909,7 @@ public interface RequirementsPackage extends EPackage {
 	 * @see com.specmate.model.requirements.impl.RequirementsPackageImpl#getNodeType()
 	 * @generated
 	 */
-	int NODE_TYPE = 4;
+	int NODE_TYPE = 5;
 
 
 	/**
@@ -877,6 +1086,17 @@ public interface RequirementsPackage extends EPackage {
 	EAttribute getCEGNode_Condition();
 
 	/**
+	 * Returns the meta object for the reference list '{@link com.specmate.model.requirements.CEGNode#getLinksFrom <em>Links From</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Links From</em>'.
+	 * @see com.specmate.model.requirements.CEGNode#getLinksFrom()
+	 * @see #getCEGNode()
+	 * @generated
+	 */
+	EReference getCEGNode_LinksFrom();
+
+	/**
 	 * Returns the meta object for class '{@link com.specmate.model.requirements.CEGConnection <em>CEG Connection</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -896,6 +1116,27 @@ public interface RequirementsPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getCEGConnection_Negate();
+
+	/**
+	 * Returns the meta object for class '{@link com.specmate.model.requirements.CEGLinkedNode <em>CEG Linked Node</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>CEG Linked Node</em>'.
+	 * @see com.specmate.model.requirements.CEGLinkedNode
+	 * @generated
+	 */
+	EClass getCEGLinkedNode();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.specmate.model.requirements.CEGLinkedNode#getLinkTo <em>Link To</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Link To</em>'.
+	 * @see com.specmate.model.requirements.CEGLinkedNode#getLinkTo()
+	 * @see #getCEGLinkedNode()
+	 * @generated
+	 */
+	EReference getCEGLinkedNode_LinkTo();
 
 	/**
 	 * Returns the meta object for enum '{@link com.specmate.model.requirements.NodeType <em>Node Type</em>}'.
@@ -1065,6 +1306,14 @@ public interface RequirementsPackage extends EPackage {
 		EAttribute CEG_NODE__CONDITION = eINSTANCE.getCEGNode_Condition();
 
 		/**
+		 * The meta object literal for the '<em><b>Links From</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CEG_NODE__LINKS_FROM = eINSTANCE.getCEGNode_LinksFrom();
+
+		/**
 		 * The meta object literal for the '{@link com.specmate.model.requirements.impl.CEGConnectionImpl <em>CEG Connection</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1081,6 +1330,24 @@ public interface RequirementsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CEG_CONNECTION__NEGATE = eINSTANCE.getCEGConnection_Negate();
+
+		/**
+		 * The meta object literal for the '{@link com.specmate.model.requirements.impl.CEGLinkedNodeImpl <em>CEG Linked Node</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.specmate.model.requirements.impl.CEGLinkedNodeImpl
+		 * @see com.specmate.model.requirements.impl.RequirementsPackageImpl#getCEGLinkedNode()
+		 * @generated
+		 */
+		EClass CEG_LINKED_NODE = eINSTANCE.getCEGLinkedNode();
+
+		/**
+		 * The meta object literal for the '<em><b>Link To</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CEG_LINKED_NODE__LINK_TO = eINSTANCE.getCEGLinkedNode_LinkTo();
 
 		/**
 		 * The meta object literal for the '{@link com.specmate.model.requirements.NodeType <em>Node Type</em>}' enum.

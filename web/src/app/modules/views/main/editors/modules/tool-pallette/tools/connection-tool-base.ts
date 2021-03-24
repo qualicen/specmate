@@ -1,3 +1,4 @@
+import { Id } from 'src/app/util/id';
 import { ElementFactoryBase } from '../../../../../../../factory/element-factory-base';
 import { IContainer } from '../../../../../../../model/IContainer';
 import { IModelConnection } from '../../../../../../../model/IModelConnection';
@@ -15,14 +16,14 @@ export abstract class ConnectionToolBase<T extends IModelConnection> extends Cre
     public source: IModelNode;
     public target: IModelNode;
 
-    public async perform(): Promise<IModelConnection> {
+    public async perform(compoundId = Id.uuid): Promise<IModelConnection> {
         if (this.source === undefined || this.target === undefined) {
             throw new Error('Source or target undefined');
         }
-        return await this.createNewConnection();
+        return await this.createNewConnection(compoundId);
     }
 
-    private async createNewConnection(): Promise<IModelConnection> {
+    private async createNewConnection(compoundId = Id.uuid): Promise<IModelConnection> {
         const contents = await this.dataService.readContents(this.parent.url, true);
         let siblingConnections: T[] = (contents.filter((element: IContainer) => this.isConnection(element)) as T[]);
         let alreadyExists: boolean =
@@ -30,7 +31,7 @@ export abstract class ConnectionToolBase<T extends IModelConnection> extends Cre
                 connection.source.url === this.source.url && connection.target.url === this.target.url);
         if (!alreadyExists) {
             const factory = this.getFactory(this.source, this.target);
-            const connection = await factory.create(this.parent, false);
+            const connection = await factory.create(this.parent, false, compoundId);
             this.selectedElementService.select(connection);
             return connection;
         }

@@ -1,10 +1,11 @@
+/* tslint:disable */
 	import './support/gentypes';
 	import { Proxy } from './support/proxy';
 
 
 	export class CEGNode  {
 
-		___nsuri: string = "http://specmate.com/20200605/model/requirements";
+		___nsuri: string = "http://specmate.com/20200921/model/requirements";
 		public url: string;
 		public className: string = "CEGNode";
 		public static className: string = "CEGNode";
@@ -28,6 +29,7 @@
 		public tracesFrom: Proxy[];
 		public outgoingConnections: Proxy[];
 		public incomingConnections: Proxy[];
+		public linksFrom: Proxy[];
 
 		// Containment
 

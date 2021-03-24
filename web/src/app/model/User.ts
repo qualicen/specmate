@@ -1,10 +1,11 @@
+/* tslint:disable */
 	import './support/gentypes';
 	import { Proxy } from './support/proxy';
 
 
 	export class User  {
 
-		___nsuri: string = "http://specmate.com/20200605/model/user";
+		___nsuri: string = "http://specmate.com/20200921/model/user";
 		public url: string;
 		public className: string = "User";
 		public static className: string = "User";

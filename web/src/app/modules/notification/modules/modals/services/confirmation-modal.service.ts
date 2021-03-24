@@ -34,6 +34,12 @@ export class ConfirmationModal extends SimpleModal {
         return modalRef.result;
     }
 
+    public confirmChange(title: string, message: string): Promise<any> {
+        const modalRef = this.modalService.open(TypedModalContent);
+        modalRef.componentInstance.options = Dialogtype.okCancelDialog(title, message);
+        return modalRef.result;
+    }
+
     public async confirmSave(message?: string): Promise<void> {
         if (this.dataService.hasCommits) {
             await this.validator.validateCurrent();

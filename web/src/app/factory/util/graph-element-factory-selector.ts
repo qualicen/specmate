@@ -1,3 +1,4 @@
+import { CEGLinkedNode } from 'src/app/model/CEGLinkedNode';
 import { CEGConnection } from '../../model/CEGConnection';
 import { CEGNode } from '../../model/CEGNode';
 import { IContainer } from '../../model/IContainer';
@@ -11,6 +12,7 @@ import { ProcessStart } from '../../model/ProcessStart';
 import { ProcessStep } from '../../model/ProcessStep';
 import { SpecmateDataService } from '../../modules/data/modules/data-service/services/specmate-data.service';
 import { CEGConnectionFactory } from '../ceg-connection-factory';
+import { CEGLinkedNodeFactory } from '../ceg-linked-node-factory';
 import { CEGNodeFactory } from '../ceg-node-factory';
 import { ConnectionElementFactoryBase } from '../connection-element-factory-base';
 import { PositionableElementFactoryBase } from '../positionable-element-factory-base';
@@ -20,13 +22,16 @@ import { ProcessEndFactory } from '../process-end-factory';
 import { ProcessStartFactory } from '../process-start-factory';
 import { ProcessStepFactory } from '../process-step-factory';
 
-export type Coords =  {x: number, y: number};
+export type Coords = { x: number, y: number };
 export class GraphElementFactorySelector {
     public static getNodeFactory(template: IContainer, coords: Coords, dataService: SpecmateDataService):
-                        PositionableElementFactoryBase<ISpecmatePositionableModelObject> {
+        PositionableElementFactoryBase<ISpecmatePositionableModelObject> {
         switch (template.className) {
             case CEGNode.className:
                 return new CEGNodeFactory(coords, dataService);
+
+            case CEGLinkedNode.className:
+                return new CEGLinkedNodeFactory(coords, dataService);
 
             case ProcessStart.className:
                 return new ProcessStartFactory(coords, dataService);
@@ -44,7 +49,7 @@ export class GraphElementFactorySelector {
     }
 
     public static getConnectionFactory(template: IContainer, source: IModelNode, target: IModelNode, dataService: SpecmateDataService):
-                        ConnectionElementFactoryBase<IModelConnection> {
+        ConnectionElementFactoryBase<IModelConnection> {
         switch (template.className) {
             case CEGConnection.className:
                 return new CEGConnectionFactory(source, target, dataService);
@@ -52,6 +57,6 @@ export class GraphElementFactorySelector {
             case ProcessConnection.className:
                 return new ProcessConnectionFactory(source, target, dataService);
         }
-        throw new Error('Unknown Connectiontype "' +  template.className + '"');
+        throw new Error('Unknown Connectiontype "' + template.className + '"');
     }
 }

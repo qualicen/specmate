@@ -1,5 +1,6 @@
 package com.specmate.emfrest.internal.batch;
 
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
 import org.json.JSONArray;
@@ -30,12 +31,12 @@ public class BatchService extends RestServiceBase {
 	private static final String SERVICE_NAME = "batch";
 	private IAuthenticationService authService;
 	private IObjectResolver resolver;
-	private IMetricsService metricsService; 
+	private IMetricsService metricsService;
 	private ICounter saveCounter;
-	
+
 	@Activate
 	public void activate() throws SpecmateException {
-		this.saveCounter = metricsService.createCounter("save_counter", "The total number of save operations");
+		saveCounter = metricsService.createCounter("save_counter", "The total number of save operations");
 	}
 
 	@Override
@@ -50,14 +51,15 @@ public class BatchService extends RestServiceBase {
 	}
 
 	@Override
-	public RestResult<?> post(Object projectObj, Object batchOperationObj, String token) throws SpecmateException {
+	public RestResult<?> post(Object projectObj, Object batchOperationObj, MultivaluedMap<String, String> queryParams,
+			String token) throws SpecmateException {
 		Folder project = (Folder) projectObj;
 		EMFJsonDeserializer emfJsonDeserializer = new EMFJsonDeserializer(resolver, project.eResource());
 		JSONObject batchObj = new JSONObject(new JSONTokener((String) batchOperationObj));
 		JSONArray batchOps = batchObj.getJSONArray(BatchPackage.Literals.BATCH_OPERATION__OPERATIONS.getName());
 		String userName = authService.getUserName(token);
-		
-		if(batchOps.length()>0) {
+
+		if (batchOps.length() > 0) {
 			saveCounter.inc();
 		}
 
@@ -88,7 +90,7 @@ public class BatchService extends RestServiceBase {
 	public void setObjectResolver(IObjectResolver resolver) {
 		this.resolver = resolver;
 	}
-	
+
 	@Reference
 	public void setMetricsService(IMetricsService metricsService) {
 		this.metricsService = metricsService;

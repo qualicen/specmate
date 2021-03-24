@@ -1,10 +1,11 @@
+/* tslint:disable */
 	import './support/gentypes';
 	import { Proxy } from './support/proxy';
 
 
 	export class ProcessNode  {
 
-		___nsuri: string = "http://specmate.com/20200605/model/processes";
+		___nsuri: string = "http://specmate.com/20200921/model/processes";
 		public url: string;
 		public className: string = "ProcessNode";
 		public static className: string = "ProcessNode";

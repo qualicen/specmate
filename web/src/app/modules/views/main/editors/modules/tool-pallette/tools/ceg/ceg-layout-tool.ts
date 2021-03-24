@@ -6,6 +6,7 @@ import { SelectedElementService } from 'src/app/modules/views/side/modules/selec
 import { IContainer } from 'src/app/model/IContainer';
 import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
 import { TranslateService } from '@ngx-translate/core';
+import { Id } from 'src/app/util/id';
 
 
 class Dimension {
@@ -25,7 +26,7 @@ export class CEGLayoutTool extends ToolBase {
         super(dataService, selectedElementService, parent);
     }
 
-    public perform(): Promise<any> {
+    public perform(compoundId = Id.uuid): Promise<any> {
         return this.layoutGraph();
     }
 

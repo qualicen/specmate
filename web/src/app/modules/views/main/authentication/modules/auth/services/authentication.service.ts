@@ -101,6 +101,10 @@ export class AuthenticationService {
         return this._authChanged;
     }
 
+    public async getLoginpoints(): Promise<{ [loginpoints: string]: string }> {
+        return this.serviceInterface.loginpoints();
+    }
+
     public async authenticate(user: User): Promise<UserToken> {
         try {
             const wasAuthenticated: boolean = this.isAuthenticated;

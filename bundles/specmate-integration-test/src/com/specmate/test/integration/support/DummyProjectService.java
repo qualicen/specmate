@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -37,6 +38,12 @@ public class DummyProjectService implements IProjectService {
 	@Override
 	public Map<String, IProject> getProjects() {
 		return Collections.unmodifiableMap(projects);
+	}
+
+	@Override
+	public Map<String, String> getLoginPoints() {
+		return projects.entrySet().stream()
+				.collect(Collectors.toMap(k -> k.toString(), v -> v.getValue().getID().toString()));
 	}
 
 }

@@ -16,6 +16,8 @@ import com.specmate.auth.api.ISessionService;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.export.api.IExporter;
 import com.specmate.export.internal.services.ExportManagerService;
+import com.specmate.model.base.BaseFactory;
+import com.specmate.model.base.Folder;
 import com.specmate.model.testspecification.TestProcedure;
 import com.specmate.model.testspecification.TestSpecification;
 import com.specmate.model.testspecification.TestspecificationFactory;
@@ -24,6 +26,7 @@ import com.specmate.usermodel.UsermodelFactory;
 
 public class TestExportManager {
 
+	private static final String PROJECT_NAME = "__TEST__theproject";
 	private static final String TOKEN = "testtoken";
 	private ISessionListener listener;
 
@@ -56,7 +59,7 @@ public class TestExportManager {
 				.thenReturn(userAuthorizedForProject);
 
 		IExporter exporter = Mockito.mock(IExporter.class);
-		when(exporter.getProjectName()).thenReturn(projectIsNull ? null : "theproject");
+		when(exporter.getProjectName()).thenReturn(projectIsNull ? null : PROJECT_NAME);
 		when(exporter.canExportTestProcedure()).thenReturn(true);
 		when(exporter.canExportTestSpecification()).thenReturn(true);
 		when(exporter.isAuthorizedToExport(any(), any())).thenReturn(userAuthorizedForExporter);
@@ -69,8 +72,14 @@ public class TestExportManager {
 		session.setId(TOKEN);
 		listener.sessionCreated(session, "irrelevantUser", "irrelevantPassword");
 
+		Folder folder = BaseFactory.eINSTANCE.createFolder();
+		folder.setName(PROJECT_NAME);
+		folder.setId(PROJECT_NAME);
+
 		TestSpecification ts = TestspecificationFactory.eINSTANCE.createTestSpecification();
 		TestProcedure tp = TestspecificationFactory.eINSTANCE.createTestProcedure();
+		ts.getContents().add(tp);
+		folder.getContents().add(ts);
 
 		if (exportAvailable) {
 			Assert.assertEquals(1, exportManagerService.getExporters(ts, TOKEN).size());

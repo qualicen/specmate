@@ -22,6 +22,11 @@ public abstract class ConnectorBase implements IConnector {
 	@Override
 	public void setProject(IProject project) {
 		this.project = project;
+	}	
+
+	@Override
+	public String getLoginPointName() {
+		return "Project " + project.getID();
 	}
 
 }

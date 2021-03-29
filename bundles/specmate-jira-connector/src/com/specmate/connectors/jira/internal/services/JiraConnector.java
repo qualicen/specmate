@@ -514,4 +514,9 @@ public class JiraConnector extends DetailsService implements IConnector, IRestSe
 	public void setProject(IProject project) {
 		this.project = project;
 	}
+
+	@Override
+	public String getLoginPointName() {
+		return "Jira Server " + this.serverUrl;
+	}
 }

@@ -6,6 +6,7 @@ import java.io.OutputStreamWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
@@ -45,7 +46,8 @@ public class JsonWriter {
 	/** {@inheritDoc} */
 	public boolean isWriteable(Class<?> clazz, Type type, Annotation[] annotation, MediaType mediaType) {
 		return mediaType.toString().equals(MEDIA_TYPE)
-				&& (EObject.class.isAssignableFrom(clazz) || List.class.isAssignableFrom(clazz));
+				&& (EObject.class.isAssignableFrom(clazz) || List.class.isAssignableFrom(clazz)
+						|| Map.class.isAssignableFrom(clazz));
 	}
 
 	/**
@@ -71,7 +73,14 @@ public class JsonWriter {
 				logService.log(LogService.LOG_ERROR, "Could not serialize object.", e);
 				throw new WebApplicationException(e);
 			}
-		} else {
+		} else if (obj instanceof Map) {
+			try {
+				result = serializer.serialize((Map<?, ?>) obj).toString();
+			} catch (Exception e) {
+				logService.log(LogService.LOG_ERROR, "Could not serialize object.", e);
+				throw new WebApplicationException(e);
+			}
+		}else {
 			throw new WebApplicationException("Cannot serialize " + clazz);
 		}
 

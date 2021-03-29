@@ -180,4 +180,8 @@ export class Url {
     public static urlProjectNames(): string {
         return Url.build([Config.URL_BASE, 'projectnames']);
     }
+
+    public static urlLoginpoints(): string {
+        return Url.build([Config.URL_BASE, 'loginpoints']);
+    }
 }

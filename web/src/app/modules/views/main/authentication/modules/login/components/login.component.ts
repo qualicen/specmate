@@ -13,12 +13,23 @@ export class Login implements OnInit {
     public username = '';
     public password = '';
     public _project = '';
-    public projectnames: string[];
+    public loginpoints: { name: string, defaultProject: string }[];
 
     public isAuthenticating = false;
 
     constructor(private auth: AuthenticationService, private navigator: NavigatorService) {
-        auth.getProjectNames().then(res => this.projectnames = res);
+        auth.getLoginpoints().then(res => this.loginpoints = this.translateLoginpoints(res));
+    }
+
+    private translateLoginpoints(loginpoints: { [loginpoint: string]: string }): { name: string, defaultProject: string }[] {
+        const result = [];
+        for (const entry in loginpoints) {
+            result.push({
+                name: entry,
+                defaultProject: loginpoints[entry]
+            });
+        }
+        return result;
     }
 
     public get project(): string {

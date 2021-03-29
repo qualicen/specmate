@@ -202,4 +202,9 @@ public class HPConnector extends DetailsService implements IConnector, IRestServ
 	public void setLogService(LogService logService) {
 		this.logService = logService;
 	}
+
+	@Override
+	public String getLoginPointName() {
+		return "Project " + project.getID();
+	}
 }

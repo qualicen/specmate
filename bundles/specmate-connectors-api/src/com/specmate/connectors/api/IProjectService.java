@@ -8,4 +8,5 @@ public interface IProjectService {
 	IProject getProject(String projectName);
 	Set<String> getProjectNames();
 	Map<String, IProject> getProjects();
+	Map<String, String> getLoginPoints();
 }

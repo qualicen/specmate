@@ -60,8 +60,8 @@ public interface IConnector {
 	IContainer getContainerForRequirement(Requirement requirement) throws SpecmateException;
 
 	/**
-	 * Returns a set of projects given credentials have access to. Returns an empty set if
-	 * credentials are invalid.
+	 * Returns a set of projects given credentials have access to. Returns an empty
+	 * set if credentials are invalid.
 	 *
 	 * @return Returns a set of projects the credentials can access. If successful,
 	 *         this set must contain at least the current project which the user
@@ -71,7 +71,22 @@ public interface IConnector {
 	 *         credentials do not match (for any project) an empty set must be
 	 *         returned.
 	 */
-	Set<IProject> authenticate(String username, String password)
-			throws SpecmateException;
+	Set<IProject> authenticate(String username, String password) throws SpecmateException;
 
+	/**
+	 * Generates a readable ID of this login point name. This feature is helpful for
+	 * connectors which supports multi-project logins.
+	 * 
+	 * For example, a jira connector (which supports multi-project logins) may
+	 * generate a string like 'JIRA Server https://jira.company.com'. Therefore, all
+	 * other connectors which connect to the same server can be identified folded
+	 * toghether.
+	 * 
+	 * Connector with identical login point names will listed as just one entry in
+	 * the login dialog.
+	 * 
+	 * If your connector does not support multi-project logins, just generate a
+	 * unique name, for example, embedding your project name. 'Project ABC'.
+	 */
+	String getLoginPointName();
 }

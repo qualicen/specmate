@@ -1,4 +1,6 @@
 import { mxgraph } from 'mxgraph';
+import { Config } from 'src/app/config/config';
+import { ElementFactoryBase } from 'src/app/factory/element-factory-base';
 import { CEGConnection } from 'src/app/model/CEGConnection';
 import { CEGLinkedNode } from 'src/app/model/CEGLinkedNode';
 import { CEGNode } from 'src/app/model/CEGNode';
@@ -177,6 +179,7 @@ export class ChangeTranslator {
         } else {
             graph.removeCells([change.child]);
         }
+        graph.setSelectionCell(change.child);
     }
 
     private isNegatedCEGNode(cell: mxgraph.mxCell): boolean {
@@ -264,6 +267,9 @@ export class ChangeTranslator {
             node.name = linkedNode.variable + ' ' + linkedNode.condition;
         } else {
             node.name = change.child.value;
+        }
+        if (node.name === undefined || node.name === null || node.name.trim() === '') {
+            node.name = Config.EMPTY_NODE_NAME + ' ' + ElementFactoryBase.getDateStr();
         }
         await this.dataService.updateElement(node, true, compoundId);
 

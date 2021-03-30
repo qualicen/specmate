@@ -367,7 +367,8 @@ export class SpecmateDataService extends Monitorable {
             });
     }
 
-    public performOperations(url: string, operation: string, payload?: any, httpGET?: boolean, optParameters?: { [key: string]: string }): Promise<any> {
+    public performOperations(url: string, operation: string, payload?: any, httpGET?: boolean,
+        optParameters?: { [key: string]: string }): Promise<any> {
         if (!this.auth.isAuthenticatedForUrl(url)) {
             return Promise.resolve(false);
         }
@@ -378,7 +379,7 @@ export class SpecmateDataService extends Monitorable {
         } else {
             performFunction = this.serviceInterface.performOperationPOST;
         }
-        let params = optParameters ? optParameters:{};
+        let params = optParameters ? optParameters : {};
         return performFunction.apply(this.serviceInterface, [url, operation, payload, params, this.auth.token])
             .then((result: any) => {
                 this.end(SpecmateDataService.OP_PERFORM_OPERATION + '-' + url);

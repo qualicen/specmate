@@ -97,12 +97,13 @@ export class GraphicalEditor implements OnDestroy {
         });
         this.subscriptions.push(hasNavigatedSubscription);
         this.graphValidator = new GraphValidator(validationService, graphicalEditorService);
-        this.validationService.onEnd(async () => {
+        let validationSubscription = this.validationService.onEnd(async () => {
             if (!this.isInGraphTransition && this.graph !== undefined && this.graph['destroyed'] !== true) {
                 this.graphValidator.updateValidities(this.graph, this.model);
 
             }
         });
+        this.subscriptions.push(validationSubscription);
         let undoSubscription = this.undoService.undoPressed.subscribe(() => {
             this.undo();
         });
@@ -112,10 +113,11 @@ export class GraphicalEditor implements OnDestroy {
         });
         this.subscriptions.push(redoSubscription);
 
-        this.graphicalEditorService.initModel.subscribe(async () => {
+        let initModelSubscription = this.graphicalEditorService.initModel.subscribe(async () => {
             await this.init();
             validationService.validateCurrent();
         });
+        this.subscriptions.push(initModelSubscription);
     }
 
     /*********************** MX Graph ***********************/
@@ -142,6 +144,7 @@ export class GraphicalEditor implements OnDestroy {
     }
 
     ngOnDestroy(): void {
+        this.destroyGraph();
         this.subscriptions.forEach(subscription => {
             subscription.unsubscribe();
         });
@@ -387,7 +390,7 @@ export class GraphicalEditor implements OnDestroy {
 
         this.initTools();
 
-        this.dataService.elementChanged.subscribe((url: string) => {
+        let dataServiceSubscription = this.dataService.elementChanged.subscribe((url: string) => {
             const cells = this.graph.getModel().getChildCells(this.graph.getDefaultParent());
             const cell = cells.find(vertex => vertex.id === url);
             const modelElement = this.contents.find(node => node.url === url);
@@ -396,18 +399,21 @@ export class GraphicalEditor implements OnDestroy {
             }
             this.changeTranslator.retranslate(modelElement, this.graph, cell);
         });
+        this.subscriptions.push(dataServiceSubscription);
     }
 
     private destroyGraph(): void {
-        this.graph.destroy();
-        this.graph.dropEnabled = false;
-        while (this.graph.mouseListeners.length > 0) {
-            this.graph.mouseListeners.pop();
+        if (this.graph !== undefined) {
+            this.graph.destroy();
+            this.graph.dropEnabled = false;
+            while (this.graph.mouseListeners.length > 0) {
+                this.graph.mouseListeners.pop();
+            }
+            while (this.graph.eventListeners.length > 0) {
+                this.graph.eventListeners.pop();
+            }
+            this.graph = undefined;
         }
-        while (this.graph.eventListeners.length > 0) {
-            this.graph.eventListeners.pop();
-        }
-        this.graph = undefined;
     }
 
     private initTools(): void {
@@ -530,9 +536,6 @@ export class GraphicalEditor implements OnDestroy {
     }
 
     private async initCEGModel(): Promise<void> {
-        // Remove this?
-        this.graph.setHtmlLabels(true);
-
         const graph = this.graph;
         this.graph.isCellEditable = function (cell) {
             let c = cell as mxgraph.mxCell;

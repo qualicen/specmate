@@ -66,6 +66,7 @@ export class Config {
     public static CEG_NEW_MODEL_NAME = 'New Model';
     public static CEG_NEW_MODEL_DESCRIPTION = '';
 
+    public static EMPTY_NODE_NAME = 'Empty Node';
     public static CEG_NEW_NODE_NAME = 'New Node';
     public static CEG_NEW_NODE_DESCRIPTION = '';
     public static CEG_NODE_NEW_TYPE = 'AND';

@@ -1,5 +1,6 @@
 import * as he from 'he';
 import { mxgraph } from 'mxgraph'; // Typings only - no code!
+import { ProcessNode } from 'src/app/model/ProcessNode';
 import { SpecmateDataService } from 'src/app/modules/data/modules/data-service/services/specmate-data.service';
 import { CEGLinkedNode } from '../../../../../../../../model/CEGLinkedNode';
 import { CEGNode } from '../../../../../../../../model/CEGNode';
@@ -48,23 +49,9 @@ export class VertexProvider extends ProviderBase {
         const style = this.shapeProvider.getStyle(new CEGNode());
         const parent = this.graph.getDefaultParent();
         this.graph.getModel().beginUpdate();
-        const vertex = this.graph.insertVertex(parent, url, value, x, y, width, height, style);
+        const vertex = this.graph.insertVertex(parent, url, data, x, y, width, height, EditorStyle.BASE_CEG_NODE_STYLE);
+        //const vertex = this.graph.insertVertex(parent, url, data, x, y, width, height, null);
 
-        const labelVariable = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_VARIABLE, data.variable,
-            VertexProvider.INITIAL_CHILD_NODE_X, 0.15, 0, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.VARIABLE_NAME_STYLE, true);
-        const labelCondition = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_CONDITION, data.condition,
-            VertexProvider.INITIAL_CHILD_NODE_X, 0.45, 0, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.TEXT_INPUT_STYLE, true);
-        const labelType = this.graph.insertVertex(vertex, url + VertexProvider.ID_SUFFIX_TYPE, data.type,
-            VertexProvider.INITIAL_CHILD_NODE_X, 0.70, 0, (mx.mxConstants.DEFAULT_FONTSIZE), EditorStyle.TYPE_NAME_STYLE, true);
-
-        this.addEmptyTextStyle(data.variable, labelVariable);
-        this.addEmptyTextStyle(data.condition, labelCondition);
-
-        labelVariable.isConnectable = () => false;
-        labelCondition.isConnectable = () => false;
-        labelType.isConnectable = () => false;
-
-        VertexProvider.adjustChildrenCellSizes(vertex, this.shapeProvider, this.graph);
         this.graph.getModel().endUpdate();
         return vertex;
     }
@@ -181,7 +168,7 @@ export class VertexProvider extends ProviderBase {
     }
 
     public initRenderer(graph: mxgraph.mxGraph) {
-        graph.convertValueToString = (cell: mxgraph.mxCell) => {
+        /* graph.convertValueToString = (cell: mxgraph.mxCell) => {
             if (cell.getId().endsWith(VertexProvider.ID_SUFFIX_TYPE)) {
                 let parent = cell.getParent();
                 let edges = parent.edges;
@@ -247,7 +234,7 @@ export class VertexProvider extends ProviderBase {
 
             }
             return he.encode(cell.value + '').replace('[object Object]', '');
-        };
+        }; */
     }
 
     public static isCEGTextInputCell(cell: mxgraph.mxCell): boolean {

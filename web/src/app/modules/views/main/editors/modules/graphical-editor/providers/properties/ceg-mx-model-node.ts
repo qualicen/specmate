@@ -8,6 +8,7 @@ export class CEGmxModelNode {
     public variable: string;
     public condition: string;
     public type: string;
+    public editField: string;
 
     constructor(public _variable: string, public _condition: string, public _type: string) {
         this.variable = xssEncode(_variable);

@@ -254,8 +254,8 @@ export class ChangeTranslator {
         }
 
         if (Type.is(node, CEGNode)) {
-            const value =
-                new CEGmxModelNode(change.child.children[0].value, change.child.children[1].value, change.child.children[2].value || 'AND');
+            const value = change.child.value;
+            // new CEGmxModelNode(change.child.children[0].value, change.child.children[1].value, change.child.children[2].value || 'AND');
             const elementValues = this.nodeNameConverter.convertFrom(value, node);
             for (const key in elementValues) {
                 node[key] = elementValues[key];
@@ -288,7 +288,7 @@ export class ChangeTranslator {
         }
 
 
-        if (Type.is(node, CEGNode) || Type.is(node, CEGLinkedNode)) {
+        /* if (Type.is(node, CEGNode) || Type.is(node, CEGLinkedNode)) {
             let variable = cell.children[0];
             let condition = cell.children[1];
 
@@ -318,7 +318,7 @@ export class ChangeTranslator {
             cells[type.id] = type;
             this.parentComponents[type.id] = node;
             delete this.parentComponents[oldIdType];
-        }
+        } */
         return node;
     }
 
@@ -369,9 +369,9 @@ export class ChangeTranslator {
             if (!Type.is(element, CEGLinkedNode)) {
                 let value = cell.value;
                 if (Type.is(element, CEGNode)) {
-                    value = new CEGmxModelNode(cell.children[0].value, cell.children[1].value, cell.children[2].value);
+                    value = cell.value;
                 }
-
+                console.log(value);
                 const elementValues = this.nodeNameConverter.convertFrom(value, element);
                 for (const key in elementValues) {
                     element[key] = elementValues[key];
@@ -549,29 +549,16 @@ export class ChangeTranslator {
                 }
             }
         } else if (value instanceof CEGmxModelNode) {
-            for (const key in value) {
-                if (value.hasOwnProperty(key)) {
-                    const val = value[key];
-                    let child = cell.children.find(s => s.getId().endsWith(key));
-                    if (child !== undefined) {
-                        if (child.value !== val) {
-                            graph.getModel().beginUpdate();
-                            try {
-                                graph.model.setValue(child, val);
-                                graph.updateCellSize(child, true);
-                                graph.updateCellSize(cell, true);
-                                VertexProvider.adjustChildrenPositions(cell);
-                            } finally {
-                                let width = child.geometry.width;
-                                if (width <= 0) {
-                                    width = this.shapeProvider.getInitialSize(changedElement).width;
-                                }
-                                VertexProvider.adjustChildCellSize(child, width);
-                                graph.getModel().endUpdate();
-                            }
-                        }
-                    }
-                }
+            if (value !== cell.value) {
+                let previous = cell.value;
+                previous.variable = value.variable;
+                previous.condition = value.condition;
+                previous.type = value.type;
+
+                cell.setValue(previous);
+                graph.getView().invalidate(cell);
+                graph.getView().validate(cell);
+
             }
         } else {
             graph.getModel().beginUpdate();

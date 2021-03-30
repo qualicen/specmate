@@ -469,7 +469,7 @@ export class GraphicalEditor implements OnDestroy {
                 mx.mxUtils.write(td2, cell.value.condition);
 
 
-                // tr1.appendChild(tdIcons);
+                tr1.appendChild(tdIcons);
                 tr1.appendChild(td1);
                 tr2.appendChild(td2);
                 body.appendChild(tr1);

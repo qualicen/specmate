@@ -49,8 +49,8 @@ export class VertexProvider extends ProviderBase {
         const style = this.shapeProvider.getStyle(new CEGNode());
         const parent = this.graph.getDefaultParent();
         this.graph.getModel().beginUpdate();
-        const vertex = this.graph.insertVertex(parent, url, data, x, y, width, height, EditorStyle.BASE_CEG_NODE_STYLE);
-        //const vertex = this.graph.insertVertex(parent, url, data, x, y, width, height, null);
+        // const vertex = this.graph.insertVertex(parent, url, data, x, y, width, height, EditorStyle.BASE_CEG_NODE_STYLE);
+         const vertex = this.graph.insertVertex(parent, url, data, x, y, width, height, null);
 
         this.graph.getModel().endUpdate();
         return vertex;

@@ -447,7 +447,7 @@ export class GraphicalEditor implements OnDestroy {
                 let tr1 = document.createElement('tr');
 
                 let tdIcons = document.createElement('td');
-                tdIcons.rowSpan = 2;
+                tdIcons.rowSpan = 3;
                 mx.mxUtils.write(tdIcons, '🔗');
 
                 let td1 = document.createElement('td');
@@ -469,7 +469,7 @@ export class GraphicalEditor implements OnDestroy {
                 mx.mxUtils.write(td2, cell.value.condition);
 
 
-                tr1.appendChild(tdIcons);
+                // tr1.appendChild(tdIcons);
                 tr1.appendChild(td1);
                 tr2.appendChild(td2);
                 body.appendChild(tr1);
@@ -505,14 +505,9 @@ export class GraphicalEditor implements OnDestroy {
                             this.graph.getModel().setValue(cell, newValue);
                         });
 
-                        tdIcons.rowSpan = 3;
+
                     }
                 }
-                table.appendChild(body);
-                let overlay = new mx.mxCellOverlay(new mx.mxImage('/assets/img/editor-tools/connector.png', 16, 16));
-                this.graph.addCellOverlay(cell, overlay);
-
-
                 return table;
             }
             return '';

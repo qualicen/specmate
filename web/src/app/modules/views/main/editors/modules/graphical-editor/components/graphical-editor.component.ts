@@ -536,9 +536,6 @@ export class GraphicalEditor implements OnDestroy {
     }
 
     private async initCEGModel(): Promise<void> {
-        // Remove this?
-        this.graph.setHtmlLabels(true);
-
         const graph = this.graph;
         this.graph.isCellEditable = function (cell) {
             let c = cell as mxgraph.mxCell;

@@ -8,7 +8,7 @@ title: SpecmateDoc
 	- [Konfiguration](##Konfiguration)
 	- [Start von Specmate](##StartvonSpecmate)
 	- [Login](##Login)
-	- [Login via JIRA](##LoginviaJIRA)
+	- [Login über das JIRA-Plugin](##LoginüberdasJIRA-Plugin)
 - [Überblick Verwendung und Methodik](#ÜberblickVerwendungundMethodik)
 	- [Bedienoberfläche](##Bedienoberfläche)
 		- [Projektansicht](###Projektansicht)
@@ -82,14 +82,14 @@ Diese Anleitung basiert auf der Version 0.4.1.
 - Entpacken Sie die Zip-Datei und starten Sie die in dem Ordner enthaltene Stapelverarbeitungsdatei mithilfe Ihrer Konsole. Sie erkennen diese Datei an der Endung ".sh" oder ".bat" abhängig von Ihrem Betriebssystem (sh bei Mac und Linux und bat bei Windows).
 
 ## Start von Specmate
-Specmate ist ein web-basiertes Werkzeug. Um Specmate zu starten, öffnen Sie Ihren Browser (am besten Chrome) und navigieren Sie zu http://localhost:8080, um auf die Startseite von Specmate zuzugreifen.
+Specmate ist ein web-basiertes Werkzeug. Wenn Sie Specmate auf Ihrem lokalen Rechner installiert  und gestartet haben, öffnen Sie Ihren Browser (am besten Chrome) und navigieren Sie zu http://localhost:8080 oder der Ihnen für Specmate zugewiesenen Seite, um auf die Startseite von Specmate zuzugreifen.
 
 ## Login
 Nach dem Aufruf von Specmate wird Ihnen die Anmeldeseite angezeigt. Bitte geben Sie hier einen Benutzernamen, ein Passwort und ein Specmate-Projekt ein. Für die Verwendung von Specmate benötigen Sie keinen dezidierten Login, stattdessen können Sie die Anmeldedaten der Anforderungsquelle, die mit dem Specmate-Projekt verbunden ist, verwenden.
 
-## Login via JIRA
+## Login über das JIRA-Plugin
 
-Wenn Sie Specmate für Ihr Jira-Projekt verwenden wollen, loggen Sie sich bei Jira ein. Unten rechts auf Ihrer Projekt-Seite sehen Sie Specmate und ein Dropdown-Menü. Wenn Sie auf dieses klicken, erscheint ein Link zur Anmeldung bei Specmate via Jira.
+Wenn Sie Specmate für Ihr Jira-Projekt verwenden wollen und dafür das JIRA-Plugin installiert haben, loggen Sie sich bei Jira ein. Unten rechts auf Ihrer Projekt-Seite sehen Sie Specmate und ein Dropdown-Menü. Wenn Sie auf dieses klicken, erscheint ein Link zur Anmeldung bei Specmate via Jira.
 
 ![](Images_ger/Jira-Projektseite.png "Jira-Projektseite")
 
@@ -542,7 +542,7 @@ Wird Ihnen im Prozessmodell-Editor eine Fehlermeldung angezeigt, überprüfen Si
 
 Trifft eines oder mehrere dieser Szenarien für Ihr Prozessmodell zu, beheben Sie die Fehlerquelle und drücken Sie auf den Validieren-Button.
 
-## 2. Fehlermeldungen bei CEG-Modelle
+## 2. Fehlermeldungen bei CEG-Modellen
 
 Wird Ihnen im CEG-Modell-Editor eine Fehlermeldung angezeigt, überprüfen Sie, ob eines der folgenden Szenarien für Sie zutrifft:
 

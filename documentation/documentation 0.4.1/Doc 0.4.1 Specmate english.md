@@ -8,7 +8,7 @@ title: SpecmateDoc
   - [Configuration](##Configuration)
   - [How to start](##Howtostart)
   - [Login](##Login)
-  - [Login via JIRA](##LoginviaJIRA)
+  - [Login via the JIRA plugin](##LoginviatheJIRAplugin)
 - [Overview usage and methodology](#Overviewusageandmethodology)
 	- [User interface](##Userinterface)
 		- [Project view](###Projectview)
@@ -81,14 +81,14 @@ title: SpecmateDoc
 - Unzip the zip file and run the batch file contained in the folder using your console. You can recognize this file by the ending ".sh" or ".bat" depending on your operating system (sh for Mac and Linux and bat for Windows).
 
 ## How to start
-Specmate is a web-based tool. To launch Specmate, open your browser (Chrome is best) and navigate to http://localhost:8080 to access the Specmate home page.
+Specmate is a web-based tool. Once you have installed and launched Specmate on your local machine, open your browser (Chrome is best) and navigate to http://localhost:8080 or the page assigned to you for Specmate to access the Specmate home page.
 
 ## Login
 After launching Specmate, you will be presented with the login page. Please enter a username, password, and Specmate project here. You do not need a dedicated login to use Specmate, instead you can use the credentials of the request source associated with the Specmate project.
 
-## Login via JIRA
+## Login via the JIRA plugin
 
-If you want to use Specmate for your Jira project, log in to Jira. At the bottom right of your project page, you will see Specmate and a dropdown menu. When you click on it, a link to login to Specmate via Jira will appear.
+If you want to use Specmate for your Jira project and if you have installed the JIRA-Plugin, log in to Jira. At the bottom right of your project page, you will see Specmate and a dropdown menu. When you click on it, a link to login to Specmate via Jira will appear.
 
 ![](Images_eng/jira-project-page.png "jira-project-page")
 

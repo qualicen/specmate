@@ -14,7 +14,6 @@ import { CEGmxModelNode } from './ceg-mx-model-node';
 import { ProviderBase } from './provider-base';
 import { CEGmxModelLinkedNode } from './ceg-mx-model-linked-node';
 import { CEGModel } from 'src/app/model/CEGModel';
-import { ProcessModelContainer } from '../../../contents-container/components/process-model-container.component';
 import { Process } from 'src/app/model/Process';
 
 export type ShapeData = {
@@ -63,8 +62,8 @@ export class ShapeProvider extends ProviderBase {
                 }) as CEGmxModelLinkedNode
             };
         }
-        if (Type.is(type, Process)) {
 
+        if (Type.is(type, Process)) {
             this.shapeMap[ProcessStart.className] = {
                 style: EditorStyle.BASE_PROCESS_START_STYLE,
                 size: {
@@ -126,46 +125,6 @@ export class ShapeProvider extends ProviderBase {
                 };
             }
         });
-
-        /* this.shapeMap['VariableName'] = {
-            style: EditorStyle.VARIABLE_NAME_STYLE,
-            size: {
-                width: 75,
-                height: mx.mxConstants.DEFAULT_FONTSIZE,
-                margin: 30
-            },
-            text: undefined
-        };
-
-        this.shapeMap['BaseTextInput'] = {
-            style: EditorStyle.TEXT_INPUT_STYLE,
-            size: {
-                width: 75,
-                height: mx.mxConstants.DEFAULT_FONTSIZE,
-                margin: 30
-            },
-            text: undefined
-        };
-
-        this.shapeMap['VariableNameDisabled'] = {
-            style: EditorStyle.VARIABLE_NAME_DISABLED_STYLE,
-            size: {
-                width: 75,
-                height: mx.mxConstants.DEFAULT_FONTSIZE,
-                margin: 30
-            },
-            text: undefined
-        };
-
-        this.shapeMap['BaseTextInputDisabled'] = {
-            style: EditorStyle.TEXT_INPUT_DISABLED_STYLE,
-            size: {
-                width: 75,
-                height: mx.mxConstants.DEFAULT_FONTSIZE,
-                margin: 30
-            },
-            text: undefined
-        }; */
     }
 
     private getShapeData(element: { className: string }): ShapeData[] {

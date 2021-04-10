@@ -25,7 +25,6 @@ import { CEGmxModelLinkedNode } from '../../providers/properties/ceg-mx-model-li
 import { CEGmxModelNode } from '../../providers/properties/ceg-mx-model-node';
 import { ShapeProvider } from '../../providers/properties/shape-provider';
 import { ToolProvider } from '../../providers/properties/tool-provider';
-import { VertexProvider } from '../../providers/properties/vertex-provider';
 import { EditorStyle } from '../editor-components/editor-style';
 import { StyleChanger } from './style-changer';
 
@@ -256,13 +255,11 @@ export class ChangeTranslator {
 
         if (Type.is(node, CEGNode)) {
             const value = change.child.value;
-            // new CEGmxModelNode(change.child.children[0].value, change.child.children[1].value, change.child.children[2].value || 'AND');
             const elementValues = this.nodeNameConverter.convertFrom(value, node);
             for (const key in elementValues) {
                 node[key] = elementValues[key];
             }
             node.name = node['variable'] + ' ' + node['condition'];
-            // change.child.setValue(elementValues);
         } else if (Type.is(node, CEGLinkedNode)) {
             const linkingNode = node as CEGLinkedNode;
             const linkedNode = await this.dataService.readElement(linkingNode.linkTo.url, true) as CEGNode;
@@ -289,7 +286,6 @@ export class ChangeTranslator {
         if (Type.is(node, CEGLinkedNode) || Type.is(node, CEGNode)) {
             graph.getView().validate(cell);
         }
-
         return node;
     }
 
@@ -479,7 +475,7 @@ export class ChangeTranslator {
             } else {
                 graph.getModel().beginUpdate();
                 try {
-                    cell.setValue(new CEGmxModelLinkedNode('', ''));
+                    cell.setValue(new CEGmxModelLinkedNode(undefined, undefined));
                     changedElement.name = 'unlinked CEG linked node';
                 } finally {
                     graph.getModel().endUpdate();

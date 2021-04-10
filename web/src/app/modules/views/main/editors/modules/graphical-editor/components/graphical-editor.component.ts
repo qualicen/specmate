@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, ElementRef, Input, OnDestroy, ViewC
 import { TranslateService } from '@ngx-translate/core';
 import { mxgraph } from 'mxgraph'; // Typings only - no code!
 import { Subscription } from 'rxjs';
-import { CEGLinkedNode } from 'src/app/model/CEGLinkedNode';
+import { isFunction } from 'rxjs/internal-compatibility';
 import { CEGModel } from 'src/app/model/CEGModel';
 import { Process } from 'src/app/model/Process';
 import { ProcessConnection } from 'src/app/model/ProcessConnection';
@@ -305,7 +305,6 @@ export class GraphicalEditor implements OnDestroy {
 
                 if (selectionCount === 1) {
                     let selection = selections[0];
-                    // TODO Error if cancel linked node
                     const selectedElement = await this.dataService.readElement(selection.getId(), true);
                     this.selectedElementService.select(selectedElement);
                 } else {
@@ -403,6 +402,7 @@ export class GraphicalEditor implements OnDestroy {
     private makeVertexTool(tool: ToolBase) {
         const onDrop = (graph: mxgraph.mxGraph, evt: MouseEvent) => {
             this.graph.stopEditing(false);
+            this.graph.clearSelection();
             const initialData: ShapeData = mx.mxUtils.clone(this.shapeProvider.getInitialData(tool.style));
             const coords = this.graph.getPointForEvent(evt);
             const vertexUrl = Url.build([this.model.url, Id.uuid]);
@@ -455,7 +455,7 @@ export class GraphicalEditor implements OnDestroy {
         this.elementProvider = new ElementProvider(this.model, this._contents);
         this.nodeNameConverter = new NodeNameConverterProvider(this.model).nodeNameConverter;
         this.vertexProvider
-            = new VertexProvider(this.model, this.graph, this.shapeProvider, this.nodeNameConverter, this.dataService);
+            = new VertexProvider(this.model, this.graph, this.shapeProvider, this.nodeNameConverter, this.dataService, this.translate);
         const parent = this.graph.getDefaultParent();
         this.changeTranslator.preventDataUpdates = true;
 
@@ -499,15 +499,14 @@ export class GraphicalEditor implements OnDestroy {
             this.validationService.validateCurrent();
         }
     }
-
     private async initCEGModel(): Promise<void> {
         const graph = this.graph;
 
         this.vertexProvider.initCEGVertexRenderer();
 
         this.graph.getTooltipForCell = function (cell: mxgraph.mxCell) {
-            if (cell.value instanceof CEGmxModelNode || cell.value instanceof CEGmxModelNode) {
-                return cell.value.toString();
+            if (cell.value instanceof CEGmxModelNode || cell.value instanceof CEGmxModelLinkedNode) {
+                return cell.value.getHint();
             }
             return mx.mxGraph.prototype.getTooltipForCell.apply(this, arguments);
         };
@@ -531,6 +530,7 @@ export class GraphicalEditor implements OnDestroy {
                         mx.mxEvent.getClientX(evt), mx.mxEvent.getClientY(evt));
                     let state = graph.getView().getState(cell);
 
+                    // if no field is clicked directly, variable is selected for the upper half of the cell, condition otherwise
                     if (state != null) {
                         point.x -= state.x;
                         point.y -= state.y;
@@ -577,14 +577,6 @@ export class GraphicalEditor implements OnDestroy {
             let result = mx.mxGraph.prototype.getPreferredSizeForCell.apply(this, arguments);
             if (result !== null) {
                 let width = result.width;
-/*                 if (cell.children !== undefined && cell.children !== null) {
-                    for (const child of cell.children) {
-                        let resultChild = graph.getPreferredSizeForCell(child);
-                        if (resultChild !== undefined) {
-                            width = Math.max(width, resultChild.width);
-                        }
-                    }
-                } */
                 if (cell.style !== undefined) {
                     let shapeData = shapeProvider.getInitialData(cell.style.split(';')[0]);
                     if (shapeData !== undefined) {

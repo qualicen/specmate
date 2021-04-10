@@ -1,5 +1,3 @@
-import { CEGLinkedNode } from 'src/app/model/CEGLinkedNode';
-import { CEGNode } from 'src/app/model/CEGNode';
 import { xssEncode } from '../../components/util/xss-encoder';
 
 export class CEGmxModelNode {
@@ -15,7 +13,10 @@ export class CEGmxModelNode {
         this.type = type;
     }
 
-    public toString(): string {
+    public getHint(): string {
+        if (this.variable === '' && this.condition === '') {
+            return '';
+        }
         return this.variable + ' ' + this.condition;
     }
 }

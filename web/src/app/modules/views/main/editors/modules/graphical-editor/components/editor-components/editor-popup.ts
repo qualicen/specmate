@@ -2,9 +2,7 @@ import { mxgraph } from 'mxgraph';
 import { CEGConnection } from 'src/app/model/CEGConnection';
 import { StyleChanger } from '../util/style-changer';
 import { EditorStyle } from './editor-style';
-import { SpecmateDataService } from 'src/app/modules/data/modules/data-service/services/specmate-data.service';
 import { Type } from 'src/app/util/type';
-import { replaceClass } from '../util/css-utils';
 import { TranslateService } from '@ngx-translate/core';
 import { IContainer } from 'src/app/model/IContainer';
 

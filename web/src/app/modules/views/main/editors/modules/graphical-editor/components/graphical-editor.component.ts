@@ -264,7 +264,6 @@ export class GraphicalEditor implements OnDestroy {
                 edit.undo();
                 this.changeTranslator.preventDataUpdates = false;
             } finally {
-                // this.graph.getView().revalidate();
                 this.undoService.setUndoEnabled(this.undoManager.canUndo());
                 this.undoService.setRedoEnabled(this.undoManager.canRedo());
             }
@@ -552,15 +551,18 @@ export class GraphicalEditor implements OnDestroy {
         };
 
         this.graph.getModel().valueForCellChanged = function (cell, value) {
-            if (value instanceof CEGmxModelNode) {
-                let previous = mx.mxUtils.clone(cell.value);
-                cell.value = value;
+            if (cell.isVertex()) {
+                if (value instanceof CEGmxModelNode) {
+                    let previous = mx.mxUtils.clone(cell.value);
+                    cell.value = value;
+                    return previous;
+                }
+                let changedField = cell.value.editField;
+                let previous = cell.value[changedField];
+                cell.value[changedField] = value;
                 return previous;
             }
-            let changedField = cell.value.editField;
-            let previous = cell.value[changedField];
-            cell.value[changedField] = value;
-            return previous;
+            return '';
         };
 
         mx.mxConnectionHandler.prototype.isValidTarget = function (cell: mxgraph.mxCell) {

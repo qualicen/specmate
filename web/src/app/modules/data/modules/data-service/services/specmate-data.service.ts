@@ -134,6 +134,7 @@ export class SpecmateDataService extends Monitorable {
     }
 
     public async readElement(url: string, virtual?: boolean): Promise<IContainer> {
+        console.log(url);
         this.start(SpecmateDataService.OP_READ_ELEMENT + '-' + url);
         let readElementTask: Promise<IContainer> = undefined;
         if (virtual === undefined && (this.scheduler.isVirtualElement(url) || this.cache.isCachedElement(url)) || virtual) {
@@ -445,6 +446,7 @@ export class SpecmateDataService extends Monitorable {
     }
 
     private handleError(message: string, url: string, error: any): Promise<any> {
+        debugger;
         console.error(message);
         if (error.status === 401) {
             this.auth.deauthenticate();

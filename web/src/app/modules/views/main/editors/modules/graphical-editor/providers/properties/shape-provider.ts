@@ -12,11 +12,15 @@ import { EditorStyle } from '../../components/editor-components/editor-style';
 import { NodeNameConverterProvider } from '../conversion/node-name-converter-provider';
 import { CEGmxModelNode } from './ceg-mx-model-node';
 import { ProviderBase } from './provider-base';
+import { CEGmxModelLinkedNode } from './ceg-mx-model-linked-node';
+import { CEGModel } from 'src/app/model/CEGModel';
+import { ProcessModelContainer } from '../../../contents-container/components/process-model-container.component';
+import { Process } from 'src/app/model/Process';
 
 export type ShapeData = {
     style: string,
     size: { width: number, height: number, margin: number },
-    text: string | CEGmxModelNode
+    text: CEGmxModelLinkedNode | CEGmxModelNode | string
 };
 
 const mx: typeof mxgraph = require('mxgraph')({
@@ -31,80 +35,84 @@ export class ShapeProvider extends ProviderBase {
     constructor(type: { className: string }) {
         super(type);
 
-        this.shapeMap[CEGNode.className] = {
-            style: EditorStyle.BASE_CEG_NODE_STYLE,
-            size: {
-                width: Config.CEG_NODE_WIDTH,
-                height: Config.CEG_NODE_HEIGHT,
-                margin: 15
-            },
-            text: new NodeNameConverterProvider(type).nodeNameConverter.convertTo({
-                variable: Config.CEG_NODE_NEW_VARIABLE,
-                condition: Config.CEG_NODE_NEW_CONDITION,
-                type: Config.CEG_NODE_NEW_TYPE
-            })
-        };
+        if (Type.is(type, CEGModel)) {
+            this.shapeMap[CEGNode.className] = {
+                style: EditorStyle.BASE_CEG_NODE_STYLE,
+                size: {
+                    width: Config.CEG_NODE_WIDTH,
+                    height: Config.CEG_NODE_HEIGHT,
+                    margin: 15
+                },
+                text: new NodeNameConverterProvider(type).nodeNameConverter.convertTo({
+                    variable: Config.CEG_NODE_NEW_VARIABLE,
+                    condition: Config.CEG_NODE_NEW_CONDITION,
+                    type: Config.CEG_NODE_NEW_TYPE
+                }) as CEGmxModelNode
+            };
 
-        this.shapeMap[CEGLinkedNode.className] = {
-            style: EditorStyle.BASE_CEG_LINKED_NODE_STYLE,
-            size: {
-                width: Config.CEG_NODE_WIDTH,
-                height: Config.CEG_NODE_HEIGHT,
-                margin: 15
-            },
-            text: new NodeNameConverterProvider(type).nodeNameConverter.convertTo({
-                variable: Config.CEG_NODE_NEW_VARIABLE,
-                condition: Config.CEG_NODE_NEW_CONDITION
-            })
-        };
+            this.shapeMap[CEGLinkedNode.className] = {
+                style: EditorStyle.BASE_CEG_LINKED_NODE_STYLE,
+                size: {
+                    width: Config.CEG_NODE_WIDTH,
+                    height: Config.CEG_NODE_HEIGHT,
+                    margin: 15
+                },
+                text: new NodeNameConverterProvider(type).nodeNameConverter.convertTo({
+                    variable: Config.CEG_NODE_NEW_VARIABLE,
+                    condition: Config.CEG_NODE_NEW_CONDITION
+                }) as CEGmxModelLinkedNode
+            };
+        }
+        if (Type.is(type, Process)) {
 
-        this.shapeMap[ProcessStart.className] = {
-            style: EditorStyle.BASE_PROCESS_START_STYLE,
-            size: {
-                width: Config.PROCESS_START_END_NODE_RADIUS * 2,
-                height: Config.PROCESS_START_END_NODE_RADIUS * 2,
-                margin: 0
-            },
-            text: new NodeNameConverterProvider(type).nodeNameConverter.convertTo({
-                name: 'Start'
-            })
-        };
+            this.shapeMap[ProcessStart.className] = {
+                style: EditorStyle.BASE_PROCESS_START_STYLE,
+                size: {
+                    width: Config.PROCESS_START_END_NODE_RADIUS * 2,
+                    height: Config.PROCESS_START_END_NODE_RADIUS * 2,
+                    margin: 0
+                },
+                text: new NodeNameConverterProvider(type).nodeNameConverter.convertTo({
+                    name: 'Start'
+                })
+            };
 
-        this.shapeMap[ProcessEnd.className] = {
-            style: EditorStyle.BASE_PROCESS_END_STYLE,
-            size: {
-                width: Config.PROCESS_START_END_NODE_RADIUS * 2,
-                height: Config.PROCESS_START_END_NODE_RADIUS * 2,
-                margin: 0
-            },
-            text: new NodeNameConverterProvider(type).nodeNameConverter.convertTo({
-                name: 'End'
-            })
-        };
+            this.shapeMap[ProcessEnd.className] = {
+                style: EditorStyle.BASE_PROCESS_END_STYLE,
+                size: {
+                    width: Config.PROCESS_START_END_NODE_RADIUS * 2,
+                    height: Config.PROCESS_START_END_NODE_RADIUS * 2,
+                    margin: 0
+                },
+                text: new NodeNameConverterProvider(type).nodeNameConverter.convertTo({
+                    name: 'End'
+                })
+            };
 
-        this.shapeMap[ProcessStep.className] = {
-            style: EditorStyle.BASE_PROCESS_STEP_STYLE,
-            size: {
-                width: Config.CEG_NODE_WIDTH,
-                height: Config.CEG_NODE_HEIGHT,
-                margin: 15
-            },
-            text: new NodeNameConverterProvider(type).nodeNameConverter.convertTo({
-                name: Config.PROCESS_NEW_STEP_NAME
-            })
-        };
+            this.shapeMap[ProcessStep.className] = {
+                style: EditorStyle.BASE_PROCESS_STEP_STYLE,
+                size: {
+                    width: Config.CEG_NODE_WIDTH,
+                    height: Config.CEG_NODE_HEIGHT,
+                    margin: 15
+                },
+                text: new NodeNameConverterProvider(type).nodeNameConverter.convertTo({
+                    name: Config.PROCESS_NEW_STEP_NAME
+                })
+            };
 
-        this.shapeMap[ProcessDecision.className] = {
-            style: EditorStyle.BASE_PROCESS_DECISION_STYLE,
-            size: {
-                width: Config.PROCESS_DECISION_NODE_DIM,
-                height: Config.PROCESS_DECISION_NODE_DIM,
-                margin: 40
-            },
-            text: new NodeNameConverterProvider(type).nodeNameConverter.convertTo({
-                name: Config.PROCESS_NEW_DECISION_NAME
-            })
-        };
+            this.shapeMap[ProcessDecision.className] = {
+                style: EditorStyle.BASE_PROCESS_DECISION_STYLE,
+                size: {
+                    width: Config.PROCESS_DECISION_NODE_DIM,
+                    height: Config.PROCESS_DECISION_NODE_DIM,
+                    margin: 40
+                },
+                text: new NodeNameConverterProvider(type).nodeNameConverter.convertTo({
+                    name: Config.PROCESS_NEW_DECISION_NAME
+                })
+            };
+        }
 
 
         this.styles.push((element: { className: string }) => this.shapeMap[element.className]);
@@ -119,7 +127,7 @@ export class ShapeProvider extends ProviderBase {
             }
         });
 
-        this.shapeMap['VariableName'] = {
+        /* this.shapeMap['VariableName'] = {
             style: EditorStyle.VARIABLE_NAME_STYLE,
             size: {
                 width: 75,
@@ -157,7 +165,7 @@ export class ShapeProvider extends ProviderBase {
                 margin: 30
             },
             text: undefined
-        };
+        }; */
     }
 
     private getShapeData(element: { className: string }): ShapeData[] {
@@ -172,7 +180,7 @@ export class ShapeProvider extends ProviderBase {
         return this.getShapeData(element).find(shapeData => shapeData.size !== undefined).size;
     }
 
-    public getInitialText(element: { className: string }): string | CEGmxModelNode {
+    public getInitialText(element: { className: string }): CEGmxModelLinkedNode | CEGmxModelNode | string {
         return this.getShapeData(element).find(shapeData => shapeData.text !== undefined).text;
     }
 

@@ -21,6 +21,7 @@ import { DeleteToolBase } from '../../../tool-pallette/tools/delete-tool-base';
 import { ToolBase } from '../../../tool-pallette/tools/tool-base';
 import { ConverterBase } from '../../converters/converter-base';
 import { NodeNameConverterProvider } from '../../providers/conversion/node-name-converter-provider';
+import { CEGmxModelLinkedNode } from '../../providers/properties/ceg-mx-model-linked-node';
 import { CEGmxModelNode } from '../../providers/properties/ceg-mx-model-node';
 import { ShapeProvider } from '../../providers/properties/shape-provider';
 import { ToolProvider } from '../../providers/properties/tool-provider';
@@ -40,7 +41,7 @@ export class ChangeTranslator {
 
     private contents: IContainer[];
     private parentComponents: { [key: string]: IContainer };
-    private nodeNameConverter: ConverterBase<IContainer, string | CEGmxModelNode>;
+    private nodeNameConverter: ConverterBase<IContainer, string | CEGmxModelNode | CEGmxModelLinkedNode>;
     public preventDataUpdates = false;
 
     private compoundIdStore: { [key: number]: string } = {};
@@ -261,10 +262,12 @@ export class ChangeTranslator {
                 node[key] = elementValues[key];
             }
             node.name = node['variable'] + ' ' + node['condition'];
+            // change.child.setValue(elementValues);
         } else if (Type.is(node, CEGLinkedNode)) {
             const linkingNode = node as CEGLinkedNode;
             const linkedNode = await this.dataService.readElement(linkingNode.linkTo.url, true) as CEGNode;
             node.name = linkedNode.variable + ' ' + linkedNode.condition;
+            change.child.setValue(new CEGmxModelLinkedNode(linkedNode.variable, linkedNode.condition));
         } else {
             node.name = change.child.value;
         }
@@ -284,41 +287,9 @@ export class ChangeTranslator {
         cells[newId] = cell;
 
         if (Type.is(node, CEGLinkedNode) || Type.is(node, CEGNode)) {
-            cell.setValue(node);
+            graph.getView().validate(cell);
         }
 
-
-        /* if (Type.is(node, CEGNode) || Type.is(node, CEGLinkedNode)) {
-            let variable = cell.children[0];
-            let condition = cell.children[1];
-
-            let oldIdVariable = variable.id;
-            let oldIdCondition = condition.id;
-
-            variable.setId(newId + VertexProvider.ID_SUFFIX_VARIABLE);
-            condition.setId(newId + VertexProvider.ID_SUFFIX_CONDITION);
-
-            delete cells[oldIdVariable];
-            delete cells[oldIdCondition];
-
-            cells[variable.id] = variable;
-            cells[condition.id] = condition;
-
-            this.parentComponents[variable.id] = node;
-            this.parentComponents[condition.id] = node;
-
-            delete this.parentComponents[oldIdVariable];
-            delete this.parentComponents[oldIdCondition];
-        }
-        if (Type.is(node, CEGNode)) {
-            let type = cell.children[2];
-            let oldIdType = type.id;
-            type.setId(newId + VertexProvider.ID_SUFFIX_TYPE);
-            delete cells[oldIdType];
-            cells[type.id] = type;
-            this.parentComponents[type.id] = node;
-            delete this.parentComponents[oldIdType];
-        } */
         return node;
     }
 
@@ -338,64 +309,29 @@ export class ChangeTranslator {
         }
     }
 
-    private isTextInputChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange): boolean {
-        const cell = change.cell as mxgraph.mxCell;
-        return (cell.id.endsWith(VertexProvider.ID_SUFFIX_VARIABLE) || cell.id.endsWith(VertexProvider.ID_SUFFIX_CONDITION));
-    }
 
     private async translateNodeChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange, element: IModelNode,
         graph: mxgraph.mxGraph, compoundId = Id.uuid): Promise<void> {
         let cell = change.cell as mxgraph.mxCell;
-        if (this.ignoreChanges(cell)) {
-            return;
-        }
-        if (this.isTextInputChange(change)) {
-            if (cell.value === '' || cell.value === undefined || cell.value === null) {
-                StyleChanger.addStyle(cell, graph, EditorStyle.EMPTY_TEXT_NAME);
-            } else {
-                StyleChanger.removeStyle(cell, graph, EditorStyle.EMPTY_TEXT_NAME);
-            }
-            graph.getView().validate(cell);
-            graph.updateCellSize(cell.parent, true);
-            VertexProvider.adjustChildrenCellSizes(cell.parent, this.shapeProvider, graph);
-        }
-        let isLabelCell = false;
         if (this.nodeNameConverter) {
-            if (this.parentComponents[cell.getId()] !== undefined) {
-                // The changed node is a sublabel / child
-                isLabelCell = true;
-                cell = cell.getParent();
-            }
             if (!Type.is(element, CEGLinkedNode)) {
                 let value = cell.value;
-                if (Type.is(element, CEGNode)) {
-                    value = cell.value;
-                }
-                console.log(value);
                 const elementValues = this.nodeNameConverter.convertFrom(value, element);
                 for (const key in elementValues) {
                     element[key] = elementValues[key];
                 }
-                await this.dataService.updateElement(element, true, compoundId);
             }
         } else {
             // Keep change.cell to avoid having a parent a child value
             element['variable'] = change.cell.value;
-            await this.dataService.updateElement(element, true, compoundId);
         }
-        if (!isLabelCell) {
-            element['x'] = Math.max(0, cell.geometry.x);
-            element['y'] = Math.max(0, cell.geometry.y);
-            element['width'] = cell.geometry.width;
-            element['height'] = cell.geometry.height;
-            VertexProvider.adjustChildrenCellSizes(cell, this.shapeProvider, graph);
-            await this.dataService.updateElement(element, true, compoundId);
-        }
+        element['x'] = Math.max(0, cell.geometry.x);
+        element['y'] = Math.max(0, cell.geometry.y);
+        element['width'] = cell.geometry.width;
+        element['height'] = cell.geometry.height;
+        await this.dataService.updateElement(element, true, compoundId);
     }
 
-    private ignoreChanges(cell: mxgraph.mxCell) {
-        return cell.getId().endsWith(VertexProvider.ID_SUFFIX_LINK_ICON);
-    }
 
     private async translateEdgeChange(change: mxgraph.mxTerminalChange | mxgraph.mxValueChange | mxgraph.mxGeometryChange,
         connection: IModelConnection, compoundId = Id.uuid): Promise<void> {
@@ -531,18 +467,19 @@ export class ChangeTranslator {
                 let linkedNode = (await this.dataService.readElement(node.linkTo.url)) as CEGNode;
                 graph.getModel().beginUpdate();
                 try {
-                    graph.model.setValue(cell.children[0], linkedNode.variable);
-                    graph.model.setValue(cell.children[1], linkedNode.condition);
-                    StyleChanger.removeStyle(cell.children[0], graph, EditorStyle.EMPTY_TEXT_NAME);
-                    StyleChanger.removeStyle(cell.children[1], graph, EditorStyle.EMPTY_TEXT_NAME);
+                    let previous = mx.mxUtils.clone(cell.value) as CEGmxModelLinkedNode;
+                    if (previous.variable !== linkedNode.variable || previous.condition !== linkedNode.condition) {
+                        previous.variable = linkedNode.variable;
+                        previous.condition = linkedNode.condition;
+                        cell.setValue(previous);
+                    }
                 } finally {
                     graph.getModel().endUpdate();
                 }
             } else {
                 graph.getModel().beginUpdate();
                 try {
-                    graph.model.setValue(cell.children[0], undefined);
-                    graph.model.setValue(cell.children[1], undefined);
+                    cell.setValue(new CEGmxModelLinkedNode('', ''));
                     changedElement.name = 'unlinked CEG linked node';
                 } finally {
                     graph.getModel().endUpdate();
@@ -550,15 +487,13 @@ export class ChangeTranslator {
             }
         } else if (value instanceof CEGmxModelNode) {
             if (value !== cell.value) {
-                let previous = cell.value;
-                previous.variable = value.variable;
-                previous.condition = value.condition;
-                previous.type = value.type;
-
-                cell.setValue(previous);
-                graph.getView().invalidate(cell);
-                graph.getView().validate(cell);
-
+                let previous = mx.mxUtils.clone(cell.value);
+                if (previous.variable !== value.variable || previous.condition !== value.condition || previous.type !== value.type) {
+                    previous.variable = value.variable;
+                    previous.condition = value.condition;
+                    previous.type = value.type;
+                    graph.getModel().setValue(cell, previous);
+                }
             }
         } else {
             graph.getModel().beginUpdate();
@@ -573,6 +508,8 @@ export class ChangeTranslator {
                 graph.getModel().endUpdate();
             }
         }
+        graph.getView().invalidate(cell);
+        graph.getView().validate(cell);
         this.preventDataUpdates = false;
     }
 }

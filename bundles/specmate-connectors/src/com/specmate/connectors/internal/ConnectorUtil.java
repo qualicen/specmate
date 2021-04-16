@@ -42,8 +42,7 @@ public class ConnectorUtil {
 	 * Retrieves requirements from all sources and processes them in batches of
 	 * BATCH_SIZE
 	 */
-	public static void syncConnectors(List<IConnector> connectors,
-			ITransaction transaction, LogService logService) {
+	public static void syncConnectors(List<IConnector> connectors, ITransaction transaction, LogService logService) {
 		lock.lock();
 		try {
 			logService.log(LogService.LOG_INFO, "Synchronizing connectors");
@@ -105,7 +104,8 @@ public class ConnectorUtil {
 							transaction.doAndCommit(new IChange<Object>() {
 								@Override
 								public Object doChange() throws SpecmateException {
-									SpecmateEcoreUtil.copyAttributeValues(requirement, localRequirementsMap.get(id), false);
+									SpecmateEcoreUtil.copyAttributeValues(requirement, localRequirementsMap.get(id),
+											false);
 									return null;
 								}
 							});
@@ -259,7 +259,9 @@ public class ConnectorUtil {
 	 * @param requirementsMap
 	 */
 	private static void buildExtIdMap(Iterator<? extends EObject> iterator, HashMap<String, EObject> requirementsMap) {
+		int i = 0;
 		while (iterator.hasNext()) {
+			i++;
 			EObject content = iterator.next();
 			if (content == null) {
 				continue;
@@ -275,7 +277,7 @@ public class ConnectorUtil {
 
 	/**
 	 * Build hashset (extid -> requirement) for local requirements
-	 * 
+	 *
 	 * @param localRootContainer
 	 * @return
 	 */

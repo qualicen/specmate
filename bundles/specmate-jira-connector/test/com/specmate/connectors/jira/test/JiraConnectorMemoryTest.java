@@ -14,6 +14,7 @@ import java.util.concurrent.TimeoutException;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
@@ -76,14 +77,15 @@ public class JiraConnectorMemoryTest {
 		connector.setCacheService(new TestCacheService());
 		connector.setLogService(new TestLogService());
 		connector.activate(config);
-		for (int i = 1; i <= 50; i++) {
+		for (int i = 1; i <= 2; i++) {
 			connector.getRequirements();
 			idCounter = 0;
 			Runtime.getRuntime().gc();
 		}
 		stopMemoryThread = true;
 		memoryThread.join();
-		System.out.println(maxMemory / 1000.0 / 1000.0 + " MB");
+		// Should acquire no more than 2gb of heap memory
+		Assert.assertTrue(maxMemory / 1e9 < 2);
 
 	}
 

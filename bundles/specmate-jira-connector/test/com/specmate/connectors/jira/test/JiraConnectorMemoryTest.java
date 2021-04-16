@@ -35,6 +35,7 @@ import com.atlassian.jira.rest.client.api.domain.Filter;
 import com.atlassian.jira.rest.client.api.domain.Issue;
 import com.atlassian.jira.rest.client.api.domain.IssueType;
 import com.atlassian.jira.rest.client.api.domain.SearchResult;
+import com.atlassian.jira.rest.client.api.domain.Status;
 import com.specmate.common.cache.ICache;
 import com.specmate.common.cache.ICacheLoader;
 import com.specmate.common.cache.ICacheService;
@@ -49,15 +50,41 @@ import io.atlassian.util.concurrent.Promise;
 
 public class JiraConnectorMemoryTest {
 
+	boolean stopMemoryThread = false;
+	long maxMemory = 0;
+	private int idCounter = 0;
+
 	@Test
-	public void testNoMemoryLeak() throws SpecmateException {
+	public void testNoMemoryLeak() throws SpecmateException, InterruptedException {
+
+		Thread memoryThread = new Thread() {
+			@Override
+			public void run() {
+				while (!stopMemoryThread) {
+					maxMemory = Math.max(maxMemory, Runtime.getRuntime().totalMemory());
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+					}
+				}
+			};
+		};
+		memoryThread.start();
 		JiraConnector connector = new JiraConnector();
 		Map<String, Object> config = getConnectorConfig();
 		connector.setJiraRestClientFactory(new TestJiraClientFactory());
 		connector.setCacheService(new TestCacheService());
 		connector.setLogService(new TestLogService());
 		connector.activate(config);
-		connector.getRequirements();
+		for (int i = 1; i <= 50; i++) {
+			connector.getRequirements();
+			idCounter = 0;
+			Runtime.getRuntime().gc();
+		}
+		stopMemoryThread = true;
+		memoryThread.join();
+		System.out.println(maxMemory / 1000.0 / 1000.0 + " MB");
+
 	}
 
 	private Map<String, Object> getConnectorConfig() {
@@ -151,10 +178,12 @@ public class JiraConnectorMemoryTest {
 
 	private class TestSearchClient implements SearchRestClient {
 
-		private int idCounter = 0;
-
-		private static final int MAX_EPICS = 10000;
+		private static final int MAX_EPICS = 20000;
 		private static final int STORIES_PER_EPIC = 50;
+
+		IssueType epicType = new IssueType(null, (long) idCounter++, "epic", false, "", null);
+		IssueType storyType = new IssueType(null, (long) idCounter++, "story", false, "", null);
+		Status status = new Status(null, (long) idCounter++, "open", null, null, null);
 
 		@Override
 		public Promise<Iterable<Filter>> getFavouriteFilters() {
@@ -212,20 +241,20 @@ public class JiraConnectorMemoryTest {
 		}
 
 		private Issue createEpic() {
-			IssueType epicType = new IssueType(null, (long) idCounter++, "epic", false, "", null);
+
 			int id = idCounter++;
-			Issue issue = new Issue("Summary for epic " + id, null, "TP-" + id, (long) id, null, epicType, null, null,
+			Issue issue = new Issue("Summary for epic " + id, null, "TP-" + id, (long) id, null, epicType, status, null,
 					null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
 					null, null, null, null, null, null, null, null);
 			return issue;
 		}
 
 		private Issue createStory() {
-			IssueType epicType = new IssueType(null, (long) idCounter++, "story", false, "", null);
+
 			int id = idCounter++;
-			Issue issue = new Issue("Summary for story " + id, null, "TP-" + id, (long) id, null, epicType, null, null,
+			Issue issue = new Issue("Summary for story " + id, null, "TP-" + id, (long) id, null, storyType, status,
 					null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-					null, null, null, null, null, null, null, null);
+					null, null, null, null, null, null, null, null, null);
 			return issue;
 		}
 

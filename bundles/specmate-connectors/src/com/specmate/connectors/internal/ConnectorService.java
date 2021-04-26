@@ -72,7 +72,7 @@ public class ConnectorService {
 					SchedulerTask connectorRunnable = new ConnectorTask(connectorService, transaction, logService);
 					connectorRunnable.run();
 					modelSearchService.startReIndex();
-					Scheduler scheduler = new Scheduler();
+					Scheduler scheduler = new Scheduler(logService);
 					scheduler.schedule(connectorRunnable, SchedulerIteratorFactory.create(schedule));
 				} catch (SpecmateException e) {
 					e.printStackTrace();

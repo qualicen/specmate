@@ -126,10 +126,10 @@ public class JiraConnector extends DetailsService implements IConnector, IRestSe
 	private int cacheTime;
 
 	/** Map from issues to epics */
-	private Map<Issue, Folder> epicFolders = new HashMap<>();
+	private Map<String, Folder> epicFolders = new HashMap<>();
 
 	/** Map from requirements to issues */
-	private Map<Requirement, Issue> requirmentEpics = new HashMap<>();
+	private Map<String, String> requirmentEpics = new HashMap<>();
 
 	/** Default folder to put requirements that have no parent */
 	private Folder defaultFolder;
@@ -145,6 +145,9 @@ public class JiraConnector extends DetailsService implements IConnector, IRestSe
 	private String serverProject;
 	private String serverUsername;
 	private String serverPassword;
+
+	/** Factory to create instances of a jira rest client */
+	private IJiraClientFactory jiraRestClientFactory;
 
 	@Activate
 	public void activate(Map<String, Object> properties) throws SpecmateException {
@@ -205,13 +208,15 @@ public class JiraConnector extends DetailsService implements IConnector, IRestSe
 		cacheService.removeCache(JIRA_STORY_CACHE_NAME);
 	}
 
-	private JiraRestClient getJiraClient() throws SpecmateInternalException {
-		try {
-			return JiraUtil.createJiraRESTClient(serverUrl, serverUsername, serverPassword);
-		} catch (URISyntaxException e) {
-			logService.log(LogService.LOG_ERROR, "Could not create Jira REST client. Reason is: " + e.getMessage());
-			throw new SpecmateInternalException(ErrorCode.JIRA, "Could not create Jira REST client", e);
+	private IJiraClientFactory getJiraClientFactory() {
+		if (jiraRestClientFactory == null) {
+			jiraRestClientFactory = new DefaultJiraClientFactory();
 		}
+		return jiraRestClientFactory;
+	}
+
+	private JiraRestClient getJiraClient() throws SpecmateInternalException {
+		return getJiraClientFactory().createJiraClient(serverUrl, serverUsername, serverPassword);
 	}
 
 	private void validateConfig(Map<String, Object> properties) throws SpecmateException {
@@ -259,7 +264,7 @@ public class JiraConnector extends DetailsService implements IConnector, IRestSe
 				List<Issue> stories = getStoriesForEpic(epic);
 				for (Issue story : stories) {
 					Requirement requirement = createRequirement(story);
-					requirmentEpics.put(requirement, epic);
+					requirmentEpics.put(story.getKey(), epic.getKey());
 					requirements.add(requirement);
 				}
 			}
@@ -306,7 +311,7 @@ public class JiraConnector extends DetailsService implements IConnector, IRestSe
 		JiraRestClient jiraClient = null;
 		try {
 
-			jiraClient = this.getJiraClient();
+			jiraClient = getJiraClient();
 
 			int maxResults = Integer.MAX_VALUE;
 			while (issues.size() < maxResults) {
@@ -358,11 +363,11 @@ public class JiraConnector extends DetailsService implements IConnector, IRestSe
 		if (!withFolders) {
 			return null;
 		}
-		Issue epic = requirmentEpics.get(requirement);
-		if (epic == null) {
+		String epicId = requirmentEpics.get(requirement.getExtId());
+		if (epicId == null) {
 			return defaultFolder;
 		}
-		return epicFolders.get(epic);
+		return epicFolders.get(epicId);
 	}
 
 	@Override
@@ -392,11 +397,11 @@ public class JiraConnector extends DetailsService implements IConnector, IRestSe
 
 	private static Requirement createRequirement(Issue story) {
 		Requirement requirement = RequirementsFactory.eINSTANCE.createRequirement();
-		String id = story.getKey();
+		String storyId = story.getKey();
 		String idShort = Long.toString(story.getId());
-		requirement.setId(id + "-" + idShort);
-		requirement.setExtId(id);
-		requirement.setExtId2(id);
+		requirement.setId(storyId + "-" + idShort);
+		requirement.setExtId(storyId);
+		requirement.setExtId2(storyId);
 		requirement.setSource(JIRA_SOURCE_ID);
 		requirement.setName(story.getSummary());
 		requirement.setDescription(story.getDescription());
@@ -406,11 +411,11 @@ public class JiraConnector extends DetailsService implements IConnector, IRestSe
 	}
 
 	private void createFolderIfNotExists(Issue epic) {
-		if (!epicFolders.containsKey(epic)) {
+		if (!epicFolders.containsKey(epic.getKey())) {
 			String folderId = epic.getKey();
 			String folderName = folderId + ": " + epic.getSummary();
 			Folder folder = createFolder(folderId, folderName);
-			epicFolders.put(epic, folder);
+			epicFolders.put(epic.getKey(), folder);
 		}
 	}
 
@@ -513,5 +518,22 @@ public class JiraConnector extends DetailsService implements IConnector, IRestSe
 	@Override
 	public void setProject(IProject project) {
 		this.project = project;
+	}
+
+	public void setJiraRestClientFactory(IJiraClientFactory jiraRestClientFactory) {
+		this.jiraRestClientFactory = jiraRestClientFactory;
+	}
+
+	private class DefaultJiraClientFactory implements IJiraClientFactory {
+		@Override
+		public JiraRestClient createJiraClient(String serverUrl, String serverUsername, String serverPassword)
+				throws SpecmateInternalException {
+			try {
+				return JiraUtil.createJiraRESTClient(serverUrl, serverUsername, serverPassword);
+			} catch (URISyntaxException e) {
+				logService.log(LogService.LOG_ERROR, "Could not create Jira REST client. Reason is: " + e.getMessage());
+				throw new SpecmateInternalException(ErrorCode.JIRA, "Could not create Jira REST client", e);
+			}
+		}
 	}
 }

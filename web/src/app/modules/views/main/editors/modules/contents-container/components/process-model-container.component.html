@@ -50,10 +50,11 @@
                     <input type="text" #newNameInput (keyup)="0" id="processModelNameForm"
                         class="form-control form-control-sm" placeholder="{{'name' | translate}}" />
                     <div class="input-group-append">
-                        <button id="requirement-createprocess-button" title="{{'createProcess' | translate}}"
-                            (click)="create(newNameInput.value)" class="btn btn-sm expand btn-outline-primary"
+                        <button id="requirement-createprocess-button" (click)="create(newNameInput.value)"
+                            class="btn btn-sm expand btn-outline-primary"
                             [disabled]="!isCreateButtonEnabled(newNameInput.value)"
-                            [class.disabled]="!isCreateButtonEnabled(newNameInput.value)">
+                            [class.disabled]="!isCreateButtonEnabled(newNameInput.value)"
+                            [title]="isCreateButtonEnabled(newNameInput.value) ? ('createProcess' | translate) : ('nameNotEmpty' | translate)">
                             <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;{{'createProcess' | translate}}
                         </button>
                     </div>
@@ -67,10 +68,11 @@
                     <input type="text" #pasteNameInput (keyup)="0" class="form-control form-control-sm"
                         [placeholder]="clipboardModelName" [disabled]="!canPaste" />
                     <div class="input-group-append">
-                        <button id="requirement-paste-button" title="{{'paste' | translate}}"
-                            (click)="paste(pasteNameInput.value)" class="btn btn-sm expand btn-outline-primary"
+                        <button id="requirement-paste-button" (click)="paste(pasteNameInput.value)"
+                            class="btn btn-sm expand btn-outline-primary"
                             [disabled]="!canPaste || !validPattern(pasteNameInput.value)"
-                            [class.disabled]="!canPaste || !validPattern(pasteNameInput.value)">
+                            [class.disabled]="!canPaste || !validPattern(pasteNameInput.value)"
+                            [title]="!canPaste || !validPattern(pasteNameInput.value) ?('pasteNotPossible' | translate):('paste' | translate)">
                             <i class="fa fa-paste" aria-hidden="true"></i>&nbsp;{{'paste' | translate}}
                         </button>
                     </div>

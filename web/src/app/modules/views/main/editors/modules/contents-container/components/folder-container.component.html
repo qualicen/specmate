@@ -39,10 +39,11 @@
                     <input type="text" #newNameInput (keyup)="0" class="form-control form-control-sm"
                         placeholder="{{'name' | translate}}" />
                     <div class="input-group-append">
-                        <button id="requirement-createfolder-button" title="{{'createFolder' | translate}}"
-                            (click)="create(newNameInput.value)" class="btn btn-sm expand btn-outline-primary"
+                        <button id="requirement-createfolder-button" (click)="create(newNameInput.value)"
+                            class="btn btn-sm expand btn-outline-primary"
                             [disabled]="!isCreateButtonEnabled(newNameInput.value)"
-                            [class.disabled]="!isCreateButtonEnabled(newNameInput.value)">
+                            [class.disabled]="!isCreateButtonEnabled(newNameInput.value)"
+                            [title]="isCreateButtonEnabled(newNameInput.value) ? ('createFolder' | translate) : ('nameNotEmpty' | translate)">
                             <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;{{'createFolder' | translate}}
                         </button>
                     </div>

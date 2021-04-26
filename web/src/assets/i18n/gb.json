@@ -122,6 +122,7 @@
 	"createTestStep": "Create test step",
 	"csv": "CSV",
 	"delete": "Delete",
+	"deleteParameter": "Delete parameter",
 	"description": "Description",
 	"discard": "Discard",
 	"discardUnsavedChangesConfirmation": "You have unsaved changes. Do you really want to discard them?",
@@ -178,6 +179,7 @@
 	"logoutFailed": "Log out failed.",
 	"maximize": "Maximize",
 	"name": "Name",
+	"nameNotEmpty": "The name must not be empty or contain invalid characters",
 	"navigate": {
 		"back": "Back",
 		"forward": "Forward"
@@ -199,6 +201,7 @@
 	"noTestSpecifications": "No test specifications",
 	"noTestSpecificationsFound": "No test specifications found",
 	"notAuthorizedToExport": "User not authorized to export",
+	"notDeleteTestParameter": "Deletion not possible, because the parameter is used in a test procedure",
 	"null": {
 		"Requirement": "",
 		"restoreZoom": ""
@@ -211,6 +214,7 @@
 	"password": "Password",
 	"paste": "Paste",
 	"pasteAsName": "Paste with name",
+	"pasteNotPossible": "Paste not possible because no matching model was copied",
 	"payload": "Payload",
 	"procedureExportFailed": "Procedure could not be exported",
 	"procedureExportedSuccessfully": "Procedure exported successfully",

@@ -122,6 +122,7 @@
 	"createTestStep": "Testschritt anlegen",
 	"csv": "CSV",
 	"delete": "Löschen",
+	"deleteParameter": "Parameter löschen",
 	"description": "Beschreibung",
 	"discard": "Verwerfen",
 	"discardUnsavedChangesConfirmation": "Es gibt ungespeicherte Änderungen. Verwerfen?",
@@ -178,6 +179,7 @@
 	"logoutFailed": "Abmeldung fehlgeschlagen.",
 	"maximize": "Maximieren",
 	"name": "Name",
+	"nameNotEmpty": "Der Name darf nicht leer sein oder ungültige Zeichen enthalten",
 	"navigate": {
 		"back": "Zurück",
 		"forward": "Vorwärts"
@@ -199,6 +201,7 @@
 	"noTestSpecifications": "Keine Testspezifikationen",
 	"noTestSpecificationsFound": "Keine Testspezifikation gefunden",
 	"notAuthorizedToExport": "Benutzer nicht zum Exportieren authorisiert",
+	"notDeleteTestParameter": "Löschen nicht möglich, da der Parameter in einer Testprozedur verwendet wird",
 	"null": {
 		"Requirement": "",
 		"restoreZoom": ""
@@ -211,6 +214,7 @@
 	"password": "Passwort",
 	"paste": "Einfügen",
 	"pasteAsName": "Mit Namen einfügen",
+	"pasteNotPossible": "Einfügen nicht möglich, da kein passendes Modell kopiert wurde",
 	"payload": "Ladung",
 	"procedureExportFailed": "Prozedur konnte nicht exportiert werden",
 	"procedureExportedSuccessfully": "Prozedur erfolgreich exportiert",

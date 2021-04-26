@@ -50,26 +50,22 @@ public class TestRequirementsSource implements IConnector {
 
 	@Override
 	public IProject getProject() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void setProject(IProject project) {
-		// TODO Auto-generated method stub
-
+		// ignored
 	}
 
 	@Override
 	public Requirement getRequirementById(String id) throws com.specmate.common.exception.SpecmateException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Set<IProject> authenticate(String username, String password)
 			throws com.specmate.common.exception.SpecmateException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

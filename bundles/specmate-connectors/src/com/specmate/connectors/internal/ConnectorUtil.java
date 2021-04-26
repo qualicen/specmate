@@ -259,9 +259,7 @@ public class ConnectorUtil {
 	 * @param requirementsMap
 	 */
 	private static void buildExtIdMap(Iterator<? extends EObject> iterator, HashMap<String, EObject> requirementsMap) {
-		int i = 0;
 		while (iterator.hasNext()) {
-			i++;
 			EObject content = iterator.next();
 			if (content == null) {
 				continue;

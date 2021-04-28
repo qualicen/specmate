@@ -156,5 +156,7 @@ export class EditorStyle {
         const edgeStyle = graph.getStylesheet().getDefaultEdgeStyle();
         edgeStyle[mx.mxConstants.STYLE_STROKECOLOR] = EditorStyle.EDGE_DIM_STYLE[mx.mxConstants.STYLE_STROKECOLOR];
         edgeStyle[mx.mxConstants.STYLE_STROKEWIDTH] = EditorStyle.EDGE_DIM_STYLE[mx.mxConstants.STYLE_STROKEWIDTH];
+        edgeStyle[mx.mxConstants.STYLE_FONTSIZE] = '18';
+        edgeStyle[mx.mxConstants.DEFAULT_FONTSIZE] = '18';
     }
 }

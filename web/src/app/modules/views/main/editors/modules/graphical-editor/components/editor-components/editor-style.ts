@@ -147,8 +147,8 @@ export class EditorStyle {
         vertexStyle[mx.mxConstants.STYLE_STROKECOLOR] = '#000000';
         vertexStyle[mx.mxConstants.STYLE_STROKEWIDTH] = '2';
         vertexStyle[mx.mxConstants.STYLE_DASHED] = '0';
-        vertexStyle[mx.mxConstants.STYLE_FONTSIZE] = '18';
-        vertexStyle[mx.mxConstants.DEFAULT_FONTSIZE] = '18';
+        vertexStyle[mx.mxConstants.STYLE_FONTSIZE] = '16';
+        vertexStyle[mx.mxConstants.DEFAULT_FONTSIZE] = '16';
 
         stylesheet.putCellStyle(EditorStyle.EDGE_DIM_STYLE_NAME, EditorStyle.EDGE_DIM_STYLE);
         stylesheet.putCellStyle(EditorStyle.EDGE_HIGHLIGHT_STYLE_NAME, EditorStyle.EDGE_HIGHLIGHT_STYLE);
@@ -156,7 +156,7 @@ export class EditorStyle {
         const edgeStyle = graph.getStylesheet().getDefaultEdgeStyle();
         edgeStyle[mx.mxConstants.STYLE_STROKECOLOR] = EditorStyle.EDGE_DIM_STYLE[mx.mxConstants.STYLE_STROKECOLOR];
         edgeStyle[mx.mxConstants.STYLE_STROKEWIDTH] = EditorStyle.EDGE_DIM_STYLE[mx.mxConstants.STYLE_STROKEWIDTH];
-        edgeStyle[mx.mxConstants.STYLE_FONTSIZE] = '18';
-        edgeStyle[mx.mxConstants.DEFAULT_FONTSIZE] = '18';
+        edgeStyle[mx.mxConstants.STYLE_FONTSIZE] = '16';
+        edgeStyle[mx.mxConstants.DEFAULT_FONTSIZE] = '16';
     }
 }

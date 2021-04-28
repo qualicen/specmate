@@ -158,5 +158,7 @@ export class EditorStyle {
         edgeStyle[mx.mxConstants.STYLE_STROKEWIDTH] = EditorStyle.EDGE_DIM_STYLE[mx.mxConstants.STYLE_STROKEWIDTH];
         edgeStyle[mx.mxConstants.STYLE_FONTSIZE] = '16';
         edgeStyle[mx.mxConstants.DEFAULT_FONTSIZE] = '16';
+        edgeStyle[mx.mxConstants.STYLE_LABEL_BORDERCOLOR] = '#ffffffDC';
+        edgeStyle[mx.mxConstants.STYLE_LABEL_BACKGROUNDCOLOR] = '#ffffffDC';
     }
 }

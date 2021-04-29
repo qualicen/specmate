@@ -18,6 +18,7 @@
 	"-show-model-button": "",
 	"-show-process-button": "",
 	"-textfield": "",
+	"AND": "und (∧)",
 	"Action": "Aktion",
 	"CEGGenerator": {
 		"confirm": "Ursache-Wirkungs-Modell erstellen",
@@ -57,6 +58,7 @@
 	"NoWarnings": "Keine Warnungen",
 	"Node": "Knoten",
 	"NumberOfTestCases": "Anzahl Testfälle",
+	"OR": "oder (∨)",
 	"Output": "Ausgabe",
 	"OutputParameter": "Ausgangsparameter",
 	"ParameterMappings": "Parameter Zuordnung",

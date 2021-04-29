@@ -201,6 +201,14 @@ textarea:focus,
   border: 1px solid rgb(61, 61, 61) !important;
 }
 
+.table-vert td + td {
+  border-left: 1px solid #dee2e6;
+}
+
+.table-vert th + th {
+  border-left: 1px solid #dee2e6;
+}
+
 .editor-container {
   position: relative;
   width: 0px;

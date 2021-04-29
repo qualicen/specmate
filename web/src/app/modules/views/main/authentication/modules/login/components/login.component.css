@@ -5,3 +5,7 @@
 .waiting {
     cursor: wait;
 }
+
+.row {
+    justify-content: center;
+}

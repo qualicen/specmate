@@ -209,6 +209,14 @@ textarea:focus,
   border-left: 1px solid #dee2e6;
 }
 
+.table-vert tr:first-child th + th {
+  border-left: 0px solid rgba(0, 0, 0, 0);
+}
+
+.table-vert tr:first-child th:not(:empty) {
+  border-left: 1px solid #dee2e6;
+}
+
 .editor-container {
   position: relative;
   width: 0px;

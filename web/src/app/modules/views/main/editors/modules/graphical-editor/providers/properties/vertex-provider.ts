@@ -1,3 +1,4 @@
+import { TranslateService } from '@ngx-translate/core';
 import * as he from 'he';
 import { mxgraph } from 'mxgraph'; // Typings only - no code!
 import { SpecmateDataService } from 'src/app/modules/data/modules/data-service/services/specmate-data.service';
@@ -38,7 +39,8 @@ export class VertexProvider extends ProviderBase {
         private shapeProvider: ShapeProvider,
         private nodeNameConverter: ConverterBase<any, CEGmxModelNode | string>,
         private dataService: SpecmateDataService,
-        private changeGuard: ChangeGuardService) {
+        private changeGuard: ChangeGuardService,
+        private translate: TranslateService) {
         super(element);
     }
 
@@ -197,7 +199,7 @@ export class VertexProvider extends ProviderBase {
                 let optionElements: HTMLOptionElement[] = [];
                 for (const option of options) {
                     let optionElem = document.createElement('option');
-                    optionElem.innerHTML = option;
+                    optionElem.innerHTML = this.translate.instant(option);
                     optionElem.setAttribute('value', option);
                     if (option === cell.getValue()) {
                         optionElem.setAttribute('selected', 'true');

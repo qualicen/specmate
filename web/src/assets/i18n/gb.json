@@ -18,6 +18,7 @@
 	"-show-model-button": "",
 	"-show-process-button": "",
 	"-textfield": "",
+	"AND": "and (∧)",
 	"Action": "Action",
 	"CEGGenerator": {
 		"confirm": "Generate Cause-Effect-Model",
@@ -57,6 +58,7 @@
 	"NoWarnings": "No Warnings",
 	"Node": "Node",
 	"NumberOfTestCases": "Number of Test Cases",
+	"OR": "or (∨)",
 	"Output": "Output",
 	"OutputParameter": "Output Parameters",
 	"ParameterMappings": "Parameter Mappings",

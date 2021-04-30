@@ -493,7 +493,8 @@ export class GraphicalEditor implements OnDestroy {
         this.elementProvider = new ElementProvider(this.model, this._contents);
         this.nodeNameConverter = new NodeNameConverterProvider(this.model).nodeNameConverter;
         this.vertexProvider
-            = new VertexProvider(this.model, this.graph, this.shapeProvider, this.nodeNameConverter, this.dataService, this.changeGuard);
+            = new VertexProvider(this.model, this.graph, this.shapeProvider, this.nodeNameConverter,
+                this.dataService, this.changeGuard, this.translate);
         this.vertexProvider.initRenderer(this.graph);
         const parent = this.graph.getDefaultParent();
         this.changeTranslator.preventDataUpdates = true;

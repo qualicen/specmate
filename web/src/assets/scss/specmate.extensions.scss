@@ -198,7 +198,23 @@ textarea:focus,
 }
 
 .tableInput:focus {
-  border: 1px solid rgb(204, 204, 204) !important;
+  border: 1px solid rgb(61, 61, 61) !important;
+}
+
+.table-vert td + td {
+  border-left: 1px solid #dee2e6;
+}
+
+.table-vert th + th {
+  border-left: 1px solid #dee2e6;
+}
+
+.table-vert tr:first-child th + th {
+  border-left: 0px solid rgba(0, 0, 0, 0);
+}
+
+.table-vert tr:first-child th:not(:empty) {
+  border-left: 1px solid #dee2e6;
 }
 
 .editor-container {

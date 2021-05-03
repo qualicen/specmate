@@ -304,7 +304,6 @@ export class GraphicalEditor implements OnDestroy {
         });
 
         this.graph.getSelectionModel().addListener(mx.mxEvent.CHANGE, async () => {
-            let selectionCount = this.graph.getSelectionCount();
             this.graph.getModel().beginUpdate();
 
             // Dim all Edges
@@ -313,10 +312,15 @@ export class GraphicalEditor implements OnDestroy {
             }
             this.highlightedEdges = [];
 
-            if (selectionCount >= 1) {
+            const selections = this.graph.getSelectionModel().cells;
+
+            if (selections.length >= 1) {
                 // Highlight All Edges
-                let selections = this.graph.getSelectionModel().cells;
                 if (selections.length === 1) {
+                    if (selections[0].getParent() === null) {
+                        this.graph.getModel().endUpdate();
+                        return;
+                    }
                     if (selections[0].getParent() !== this.graph.getDefaultParent()) {
                         // We selected a child/ sublabel --> Select Parent instead
                         selections[0] = selections[0].getParent();
@@ -334,8 +338,8 @@ export class GraphicalEditor implements OnDestroy {
                     StyleChanger.replaceStyle(edge, this.graph, EditorStyle.EDGE_DIM_STYLE_NAME, EditorStyle.EDGE_HIGHLIGHT_STYLE_NAME);
                 }
 
-                if (selectionCount === 1) {
-                    let selection = selections[0];
+                if (selections.length === 1) {
+                    const selection = selections[0];
                     const selectedElement = await this.dataService.readElement(selection.getId(), true);
                     this.selectedElementService.select(selectedElement);
                 } else {

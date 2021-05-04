@@ -67,10 +67,13 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 	private Comparator<CEGNodeEvaluation> nodeEvalSetComparator;
 	private boolean considerLinks;
 	private LogService logService;
+	private boolean germanLanguage;
 
-	public CEGTestCaseGenerator(TestSpecification specification, boolean considerLinks, LogService logService) {
+	public CEGTestCaseGenerator(TestSpecification specification, boolean considerLinks, boolean germanLanguage,
+			LogService logService) {
 		super(specification, CEGModel.class, CEGNode.class);
 		this.considerLinks = considerLinks;
+		this.germanLanguage = germanLanguage;
 		this.logService = logService;
 		if (considerLinks) {
 			addLinkedNodes();
@@ -243,7 +246,7 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 
 		boolean allMutex = allnodes.stream().allMatch(c -> {
 			String condition = getCondition(c).trim();
-			return condition.startsWith("=") || condition.startsWith("not =");
+			return condition.startsWith("=") || condition.startsWith(getTranslatedNegationWord() + " =");
 		});
 
 		List<CEGNode> positives = allnodes.stream().filter(c -> {
@@ -269,7 +272,11 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 
 	/** Negates a condition. */
 	private String negateCondition(String condition) {
-		return "not " + condition;
+		return getTranslatedNegationWord() + " " + condition;
+	}
+
+	private String getTranslatedNegationWord() {
+		return germanLanguage ? "nicht" : "not";
 	}
 
 	/**

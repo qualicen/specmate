@@ -12,6 +12,7 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.log.LogService;
 
 import com.specmate.scheduler.*;
 import com.specmate.common.exception.SpecmateException;
@@ -25,6 +26,7 @@ import com.specmate.usermodel.UsermodelFactory;
 @Component(immediate=true)
 public class UserMetricService implements IUserMetricsService {
 
+	private LogService logService;
 	private IPersistencyService persistencyService;
 	private IMetricsService metricsService;
 	private IView sessionView;
@@ -75,7 +77,7 @@ public class UserMetricService implements IUserMetricsService {
 			String scheduleDay = "day 23 59 59";
 			SchedulerTask dailyMetricTask = new MetricTask(specmate_current_day);
 			//metricRunnable.run();
-			Scheduler scheduler = new Scheduler();
+			Scheduler scheduler = new Scheduler(logService);
 			scheduler.schedule(dailyMetricTask, SchedulerIteratorFactory.create(scheduleDay));
 			// Get the reseted counter back
 			specmate_current_day = ((MetricTask) dailyMetricTask).getGauge();
@@ -83,7 +85,7 @@ public class UserMetricService implements IUserMetricsService {
 			String scheduleWeek = "week 23 59 59";
 			SchedulerTask weeklyMetricTask = new MetricTask(specmate_current_week);
 			//metricRunnableWeek.run();
-			Scheduler schedulerWeek = new Scheduler();
+			Scheduler schedulerWeek = new Scheduler(logService);
 			schedulerWeek.schedule(weeklyMetricTask, SchedulerIteratorFactory.create(scheduleWeek, getNextSunday()));
 			// Get the reseted counter back
 			specmate_current_week = ((MetricTask) weeklyMetricTask).getGauge();
@@ -91,7 +93,7 @@ public class UserMetricService implements IUserMetricsService {
 			String scheduleMonth = "monthlastday 23 59 59";
 			SchedulerTask monthlyMetricTask = new MetricTask(specmate_current_month);
 			//metricRunnableMonth.run();
-			Scheduler schedulerMonth = new Scheduler();
+			Scheduler schedulerMonth = new Scheduler(logService);
 			schedulerMonth.schedule(monthlyMetricTask, SchedulerIteratorFactory.create(scheduleMonth));
 			// Get the reseted counter back
 			specmate_current_month = ((MetricTask) monthlyMetricTask).getGauge();
@@ -99,7 +101,7 @@ public class UserMetricService implements IUserMetricsService {
 			String scheduleYear = "year 23 59 59";
 			SchedulerTask yearlyMetricTask = new MetricTask(specmate_current_year);
 			//metricRunnableYear.run();
-			Scheduler schedulerYear = new Scheduler();
+			Scheduler schedulerYear = new Scheduler(logService);
 			schedulerYear.schedule(yearlyMetricTask, SchedulerIteratorFactory.create(scheduleYear, getLastDayOfYear()));
 			// Get the reseted counter back
 			specmate_current_year = ((MetricTask) yearlyMetricTask).getGauge();
@@ -256,5 +258,10 @@ public class UserMetricService implements IUserMetricsService {
 	@Reference 
 	public void setPersistencyService(IPersistencyService persistencyService) {
 		this.persistencyService = persistencyService;
+	}	
+
+	@Reference
+	public void setLogService(LogService logService) {
+		this.logService = logService;
 	}
 }

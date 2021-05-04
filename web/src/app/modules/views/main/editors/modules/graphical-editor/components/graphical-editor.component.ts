@@ -278,7 +278,6 @@ export class GraphicalEditor implements OnDestroy {
         });
 
         this.graph.getSelectionModel().addListener(mx.mxEvent.CHANGE, async () => {
-            let selectionCount = this.graph.getSelectionCount();
             this.graph.getModel().beginUpdate();
 
             // Dim all Edges
@@ -287,10 +286,10 @@ export class GraphicalEditor implements OnDestroy {
             }
             this.highlightedEdges = [];
 
-            if (selectionCount >= 1) {
-                // Highlight All Edges
-                let selections = this.graph.getSelectionModel().cells;
+            const selections = this.graph.getSelectionModel().cells;
 
+            if (selections.length >= 1) {
+                // Highlight All Edges
                 for (const cell of selections) {
                     if (cell.edge) {
                         this.highlightedEdges.push(cell);
@@ -302,8 +301,8 @@ export class GraphicalEditor implements OnDestroy {
                     StyleChanger.replaceStyle(edge, this.graph, EditorStyle.EDGE_DIM_STYLE_NAME, EditorStyle.EDGE_HIGHLIGHT_STYLE_NAME);
                 }
 
-                if (selectionCount === 1) {
-                    let selection = selections[0];
+                if (selections.length === 1) {
+                    const selection = selections[0];
                     const selectedElement = await this.dataService.readElement(selection.getId(), true);
                     this.selectedElementService.select(selectedElement);
                 } else {
@@ -455,6 +454,7 @@ export class GraphicalEditor implements OnDestroy {
         this.nodeNameConverter = new NodeNameConverterProvider(this.model).nodeNameConverter;
         this.vertexProvider
             = new VertexProvider(this.model, this.graph, this.shapeProvider, this.nodeNameConverter, this.dataService, this.translate);
+
         const parent = this.graph.getDefaultParent();
         this.changeTranslator.preventDataUpdates = true;
 

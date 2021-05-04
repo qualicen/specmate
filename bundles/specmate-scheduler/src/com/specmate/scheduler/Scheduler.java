@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.osgi.service.log.LogService;
+
 import com.specmate.scheduler.iterators.ScheduleIterator;
 
 /**
@@ -22,24 +24,32 @@ public class Scheduler {
 
 		private SchedulerTask schedulerTask;
 		private ScheduleIterator iterator;
+		private LogService logService;
 
-		public SchedulerTimerTask(SchedulerTask schedulerTask, ScheduleIterator iterator) {
+		public SchedulerTimerTask(SchedulerTask schedulerTask, ScheduleIterator iterator, LogService logService) {
 			this.schedulerTask = schedulerTask;
 			this.iterator = iterator;
+			this.logService = logService;
 		}
 
 		public void run() {
 			try {
 				schedulerTask.run();
-			} finally {
+			} catch (Throwable t) {
+				logService.log(LogService.LOG_ERROR, "There was an error executing scheduler task", t);
+			}
+			finally {			
 				reschedule(schedulerTask, iterator);
 			}
 		}
 	}
 
 	private final Timer timer = new Timer();
+	
+	private LogService logService;
 
-	public Scheduler() {
+	public Scheduler(LogService logService) {
+		this.logService = logService;
 	}
 
 	/**
@@ -85,7 +95,7 @@ public class Scheduler {
 					throw new IllegalStateException("Task already scheduled " + "or cancelled");
 				}
 				schedulerTask.state = SchedulerTask.SCHEDULED;
-				schedulerTask.timerTask = new SchedulerTimerTask(schedulerTask, iterator);
+				schedulerTask.timerTask = new SchedulerTimerTask(schedulerTask, iterator, logService);
 				timer.schedule(schedulerTask.timerTask, time);
 			}
 		}
@@ -99,7 +109,7 @@ public class Scheduler {
 		} else {
 			synchronized (schedulerTask.lock) {
 				if (schedulerTask.state != SchedulerTask.CANCELLED) {
-					schedulerTask.timerTask = new SchedulerTimerTask(schedulerTask, iterator);
+					schedulerTask.timerTask = new SchedulerTimerTask(schedulerTask, iterator, logService);
 					timer.schedule(schedulerTask.timerTask, time);
 				}
 			}

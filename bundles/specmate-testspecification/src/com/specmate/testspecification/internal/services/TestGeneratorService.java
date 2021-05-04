@@ -34,6 +34,8 @@ import com.specmate.testspecification.internal.generators.ProcessTestCaseGenerat
 @Component(immediate = true, service = IRestService.class)
 public class TestGeneratorService extends RestServiceBase {
 
+	private static final String QUERY_KEY_CONSIDER_LINKS = "considerLinks";
+	private static final String QUERY_KEY_LANGUAGE = "lang";
 	private IMetricsService metricsService;
 	private ICounter testGenCounter;
 	private LogService logService;
@@ -64,10 +66,15 @@ public class TestGeneratorService extends RestServiceBase {
 		TestSpecification specification = (TestSpecification) target;
 		EObject container = specification.eContainer();
 		if (container instanceof CEGModel) {
-			List<String> withLinksParams = queryParams.get("considerLinks");
+			List<String> withLinksParams = queryParams.get(QUERY_KEY_CONSIDER_LINKS);
 			boolean withLinks = withLinksParams != null && withLinksParams.size() > 0
 					&& withLinksParams.get(0).toLowerCase().equals("true");
-			new CEGTestCaseGenerator(specification, withLinks, logService).generate();
+
+			List<String> germanLangParams = queryParams.get(QUERY_KEY_LANGUAGE);
+			boolean germanLanguage = germanLangParams != null && germanLangParams.size() > 0
+					&& germanLangParams.get(0).toLowerCase().equals("de");
+
+			new CEGTestCaseGenerator(specification, withLinks, germanLanguage, logService).generate();
 			testGenCounter.inc();
 		} else if (container instanceof Process) {
 			new ProcessTestCaseGenerator(specification).generate();

@@ -7,10 +7,12 @@
 .test-case-name-header {
     white-space: nowrap;
     min-width: 200px;
+    vertical-align: middle;
 }
 
 .test-procedure-header {
     white-space: nowrap;
+    vertical-align: middle;
 }
 
 .test-case-row {

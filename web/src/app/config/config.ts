@@ -58,7 +58,7 @@ export class Config {
     public static GRAPHICAL_EDITOR_ZOOM_MAX = 5;
 
     public static CEG_NODE_WIDTH = 150;
-    public static CEG_NODE_HEIGHT = 60;
+    public static CEG_NODE_HEIGHT = 90;
     public static CEG_NODE_ARC_DIST: number = 17 +
         Math.sqrt((Config.CEG_NODE_WIDTH / 2.0) * (Config.CEG_NODE_WIDTH / 2.0) +
             (Config.CEG_NODE_HEIGHT / 2.0) * (Config.CEG_NODE_HEIGHT / 2.0));
@@ -76,7 +76,7 @@ export class Config {
     public static CEG_NEW_CONNECTION_NAME = 'New Connection';
     public static CEG_NEW_CONNECTION_DESCRIPTION = '';
 
-    public static PROCESS_DECISION_NODE_DIM = 60;
+    public static PROCESS_DECISION_NODE_DIM = 80;
     public static PROCESS_START_END_NODE_RADIUS = 25;
     public static PROCESS_NEW_PROCESS_NAME = 'New Process';
     public static PROCESS_NEW_PROCESS_DESCRIPTION = '';

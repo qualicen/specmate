@@ -106,12 +106,7 @@ export class EditorKeyHandler {
     }
 
     private static getFilteredSelectedCells(graph: mxgraph.mxGraph): mxgraph.mxCell[] {
-        let cells = graph.getSelectionCells();
-        let parent = graph.getDefaultParent();
-
-        cells = cells.filter((cell: mxgraph.mxCell) => {
-            return cell.getParent() === parent;
-        });
-        return cells;
+        const parent = graph.getDefaultParent();
+        return graph.getSelectionCells().filter(cell => cell !== null && cell !== undefined && cell.getParent() === parent);
     }
 }

@@ -144,7 +144,7 @@ export class VertexProvider extends ProviderBase {
                 let optionElements: HTMLOptionElement[] = [];
                 for (const option of options) {
                     let optionElem = document.createElement('option');
-                    optionElem.innerHTML = option;
+                    optionElem.innerHTML = this.translate.instant(option);
                     optionElem.setAttribute('value', option);
                     if (option === value.type) {
                         optionElem.setAttribute('selected', 'true');

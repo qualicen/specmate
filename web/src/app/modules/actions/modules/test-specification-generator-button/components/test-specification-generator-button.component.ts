@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { CEGLinkedNode } from 'src/app/model/CEGLinkedNode';
+import { Type } from 'src/app/util/type';
 import { Config } from '../../../../../config/config';
 import { ElementFactoryBase } from '../../../../../factory/element-factory-base';
 import { CEGModel } from '../../../../../model/CEGModel';
@@ -67,7 +69,8 @@ export class TestSpecificationGeneratorButton {
         this.modal.confirmSave()
             .then(() => this.dataService.createElement(testSpec, true, Id.uuid))
             .then(() => this.dataService.commit(this.translate.instant('save')))
-            .then(() => this.dataService.performOperations(testSpec.url, 'generateTests', null, false, {'considerLinks' : String(this.considerLinks)}))
+            .then(() => this.dataService
+                .performOperations(testSpec.url, 'generateTests', null, false, { 'considerLinks': String(this.considerLinks), 'lang': this.translate.currentLang }))
             .then(async () => {
                 let contents: IContainer[] = [];
 
@@ -107,5 +110,12 @@ export class TestSpecificationGeneratorButton {
             return false;
         }
         return this.validator.isValid(this.model);
+    }
+
+    public get hasLinkedNodes(): boolean {
+        if (this.contents === undefined) {
+            return false;
+        }
+        return this.contents.some(e => Type.is(e, CEGLinkedNode));
     }
 }

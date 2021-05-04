@@ -5,7 +5,7 @@
         </span></label>
     <select [formControlName]="meta.name" class="form-control form-control-sm"
         id="{{'properties-' + meta.name + '-dropdown'}}">
-        <option *ngFor="let option of options" id="{{'type-' + option}}" [value]="option">{{option}}</option>
+        <option *ngFor="let option of options" id="{{'type-' + option}}" [value]="option">{{option | translate}}</option>
     </select>
     <div class="form-control-feedback">
         <span [hidden]="form.controls[meta.name].valid" class="form-text">{{errorMessage}}</span>

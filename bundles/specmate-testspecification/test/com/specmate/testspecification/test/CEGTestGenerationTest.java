@@ -22,9 +22,68 @@ import com.specmate.testspecification.internal.generators.CEGTestCaseGenerator;
 public class CEGTestGenerationTest {
 
 	@Test
+	public void testCEGTestGenerationLanguage() throws SpecmateException {
+		TestSpecification spec = getTestSpecificationLanguage();
+		CEGTestCaseGenerator generator = new CEGTestCaseGenerator(spec, false, false, null);
+		generator.generate();
+		List<TestCase> testcases = SpecmateEcoreUtil.pickInstancesOf(spec.getContents(), TestCase.class);
+		Assert.assertTrue(testcases.stream().noneMatch(tc -> {
+			List<ParameterAssignment> assignments = SpecmateEcoreUtil.pickInstancesOf(tc.getContents(),
+					ParameterAssignment.class);
+			return assignments.stream().anyMatch(a -> a.getCondition().startsWith("nicht"));
+		}));
+		Assert.assertTrue(testcases.stream().anyMatch(tc -> {
+			List<ParameterAssignment> assignments = SpecmateEcoreUtil.pickInstancesOf(tc.getContents(),
+					ParameterAssignment.class);
+			return assignments.stream().anyMatch(a -> a.getCondition().startsWith("not"));
+		}));
+
+		spec = getTestSpecificationLanguage();
+		generator = new CEGTestCaseGenerator(spec, false, true, null);
+		generator.generate();
+		testcases = SpecmateEcoreUtil.pickInstancesOf(spec.getContents(), TestCase.class);
+		Assert.assertTrue(testcases.stream().noneMatch(tc -> {
+			List<ParameterAssignment> assignments = SpecmateEcoreUtil.pickInstancesOf(tc.getContents(),
+					ParameterAssignment.class);
+			return assignments.stream().anyMatch(a -> a.getCondition().startsWith("not"));
+		}));
+		Assert.assertTrue(testcases.stream().anyMatch(tc -> {
+			List<ParameterAssignment> assignments = SpecmateEcoreUtil.pickInstancesOf(tc.getContents(),
+					ParameterAssignment.class);
+			return assignments.stream().anyMatch(a -> a.getCondition().startsWith("nicht"));
+		}));
+	}
+
+	private TestSpecification getTestSpecificationLanguage() {
+		RequirementsFactory f = RequirementsFactory.eINSTANCE;
+		CEGModel ceg = f.createCEGModel();
+		ceg.setId("ceg");
+
+		CEGNode trueNode = f.createCEGNode();
+		trueNode.setId("trueNode");
+		trueNode.setVariable("A");
+		trueNode.setCondition("true");
+
+		CEGNode trueEffect = f.createCEGNode();
+		trueEffect.setId("trueEffect");
+		trueEffect.setVariable("trueEffect");
+		trueEffect.setCondition("true");
+
+		CEGConnection conn1 = f.createCEGConnection();
+		conn1.setSource(trueNode);
+		conn1.setTarget(trueEffect);
+
+		TestSpecification spec = TestspecificationFactory.eINSTANCE.createTestSpecification();
+		spec.setId("testspec");
+
+		ceg.getContents().addAll(Arrays.asList(trueNode, trueEffect, conn1, spec));
+		return spec;
+	}
+
+	@Test
 	public void testCEGTestGenerationRemoveNot() throws SpecmateException {
 		TestSpecification spec = getTestSpecificationRemoveNot();
-		CEGTestCaseGenerator generator = new CEGTestCaseGenerator(spec, false, null);
+		CEGTestCaseGenerator generator = new CEGTestCaseGenerator(spec, false, false, null);
 		generator.generate();
 		List<TestCase> testcases = SpecmateEcoreUtil.pickInstancesOf(spec.getContents(), TestCase.class);
 		Assert.assertTrue(testcases.stream().noneMatch(tc -> {
@@ -77,7 +136,7 @@ public class CEGTestGenerationTest {
 	@Test
 	public void testCEGTestGenerationSameVariable() throws SpecmateException {
 		TestSpecification spec = getTestSpecificationSameVariable();
-		CEGTestCaseGenerator generator = new CEGTestCaseGenerator(spec, false, null);
+		CEGTestCaseGenerator generator = new CEGTestCaseGenerator(spec, false, false, null);
 		generator.generate();
 		List<TestCase> testcases = SpecmateEcoreUtil.pickInstancesOf(spec.getContents(), TestCase.class).stream()
 				.filter(tc -> tc.isConsistent()).collect(Collectors.toList());

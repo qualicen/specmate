@@ -550,20 +550,21 @@ export class GraphicalEditor implements OnDestroy {
             return cell.value[evt.fieldname] || '';
         };
 
-        this.graph.getModel().valueForCellChanged = function (cell, value) {
-            if (cell.isVertex()) {
-                if (value instanceof CEGmxModelNode) {
-                    let previous = mx.mxUtils.clone(cell.value);
-                    cell.value = value;
+        this.graph.getModel()['valueForCellChanged'] =
+            function (cell: mxgraph.mxCell, value: CEGmxModelLinkedNode | CEGmxModelNode | string) {
+                if (cell.isVertex()) {
+                    if (value instanceof CEGmxModelNode) {
+                        let previous = mx.mxUtils.clone(cell.value);
+                        cell.value = value;
+                        return previous;
+                    }
+                    let changedField = cell.value.editField;
+                    let previous = cell.value[changedField];
+                    cell.value[changedField] = value;
                     return previous;
                 }
-                let changedField = cell.value.editField;
-                let previous = cell.value[changedField];
-                cell.value[changedField] = value;
-                return previous;
-            }
-            return '';
-        };
+                return '';
+            };
 
         mx.mxConnectionHandler.prototype.isValidTarget = function (cell: mxgraph.mxCell) {
             return cell.value === undefined || cell.value === null || !(cell.value instanceof CEGmxModelLinkedNode);

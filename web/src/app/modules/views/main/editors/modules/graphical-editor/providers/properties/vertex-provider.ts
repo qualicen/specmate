@@ -21,6 +21,8 @@ const mx: typeof mxgraph = require('mxgraph')({
     mxBasePath: 'mxgraph'
 });
 
+export enum NodeType { CAUSE, INNER, EFFECT }
+
 export class VertexProvider extends ProviderBase {
 
     public static ID_VARIABLE = 'variable';
@@ -179,25 +181,15 @@ export class VertexProvider extends ProviderBase {
     }
 
     private createCEGIconsRendering(cell: mxgraph.mxCell, tdIcons: HTMLTableDataCellElement) {
-        // TODO besser Icons für Cause/ Effect /Inner node finden
         if (cell.edges != null && cell.edges.length > 0) {
             let incomingEdges = cell.edges.filter(e => e.target === cell);
             let outgoingEdges = cell.edges.filter(e => e.source === cell);
             if (incomingEdges.length > 0 && outgoingEdges.length > 0) {
-                let icon = document.createElement('i');
-                icon.className = 'fa fa-battery-half';
-                icon.setAttribute('aria-hidden', 'true');
-                tdIcons.appendChild(icon);
+                tdIcons.appendChild(this.createNodeIcon(NodeType.INNER));
             } else if (incomingEdges.length > 0) {
-                let icon = document.createElement('i');
-                icon.className = 'fa fa-battery-full';
-                icon.setAttribute('aria-hidden', 'true');
-                tdIcons.appendChild(icon);
+                tdIcons.appendChild(this.createNodeIcon(NodeType.EFFECT));
             } else if (outgoingEdges.length > 0) {
-                let icon = document.createElement('i');
-                icon.className = 'fa fa-battery-empty';
-                icon.setAttribute('aria-hidden', 'true');
-                tdIcons.appendChild(icon);
+                tdIcons.appendChild(this.createNodeIcon(NodeType.CAUSE));
             }
         } else {
             let icon = document.createElement('i');
@@ -214,5 +206,37 @@ export class VertexProvider extends ProviderBase {
             StyleChanger.removeStyle(cell, this.graph, EditorStyle.INNER_STYLE_NAME);
             StyleChanger.addStyle(cell, this.graph, nodeType);
         }
+    }
+
+    private createNodeIcon(type: NodeType): HTMLElement {
+        let container = document.createElement('span');
+        container.className = 'fa-stack fa-lg';
+        container.setAttribute('aria-hidden', 'true');
+
+        let box = document.createElement('i');
+        box.className = 'fa fa-square-o fa-stack-1x';
+        box.style.fontSize = '1.35em';
+
+        let arrow = document.createElement('i');
+        arrow.className = 'fa fa-long-arrow-right fa-stack-1x';
+        arrow.style.top = '-1px';
+        container.appendChild(box);
+        container.appendChild(arrow);
+
+        if (type === NodeType.EFFECT) {
+            arrow.style.left = '-10px';
+        }
+        if (type === NodeType.CAUSE) {
+            arrow.style.left = '10px';
+        }
+        if (type === NodeType.INNER) {
+            arrow.style.left = '-10px';
+            let arrowRight = document.createElement('i');
+            arrowRight.className = 'fa fa-long-arrow-right fa-stack-1x';
+            arrowRight.style.top = '-1px';
+            arrowRight.style.left = '10px';
+            container.appendChild(arrowRight);
+        }
+        return container;
     }
 }

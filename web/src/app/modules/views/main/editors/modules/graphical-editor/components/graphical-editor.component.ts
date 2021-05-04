@@ -214,6 +214,7 @@ export class GraphicalEditor implements OnDestroy {
         rubberBand.reset();
         this.graph.setHtmlLabels(true);
         this.graph.setTooltips(true);
+        this.graph.enterStopsCellEditing = true;
 
         this.graph.zoomFactor = 1.1;
 

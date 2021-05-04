@@ -80,14 +80,12 @@ export class VertexProvider extends ProviderBase {
 
                 let td1 = document.createElement('td');
                 td1.style.textAlign = 'center';
-                td1.style.fontSize = '11px';
                 td1.style.color = '#774400';
                 td1.style.fontWeight = 'bold';
 
                 let tr2 = document.createElement('tr');
                 let td2 = document.createElement('td');
                 td2.style.textAlign = 'center';
-                td2.style.fontSize = '11px';
                 td2.style.color = '#774400';
 
                 tr1.appendChild(tdIcons);
@@ -111,7 +109,6 @@ export class VertexProvider extends ProviderBase {
             return '';
         };
     }
-
 
     private createCEGNodeRendering(cell: mxgraph.mxCell,
         body: HTMLTableSectionElement, td1: HTMLTableDataCellElement, td2: HTMLTableDataCellElement) {
@@ -139,7 +136,6 @@ export class VertexProvider extends ProviderBase {
             if (incomingEdges.length > 1) {
                 let tr3 = document.createElement('tr');
                 let dropdown = document.createElement('select');
-                dropdown.style.fontSize = '11px';
                 let options = ['AND', 'OR'];
                 let optionElements: HTMLOptionElement[] = [];
                 for (const option of options) {
@@ -210,31 +206,37 @@ export class VertexProvider extends ProviderBase {
 
     private createNodeIcon(type: NodeType): HTMLElement {
         let container = document.createElement('span');
-        container.className = 'fa-stack fa-lg';
+        container.className = 'fa-stack';
+        container.style.fontWeight = 'bold';
         container.setAttribute('aria-hidden', 'true');
 
         let box = document.createElement('i');
         box.className = 'fa fa-square-o fa-stack-1x';
-        box.style.fontSize = '1.35em';
+        box.style.fontSize = '1.6em';
+        box.style.fontWeight = 'bold';
 
         let arrow = document.createElement('i');
         arrow.className = 'fa fa-long-arrow-right fa-stack-1x';
         arrow.style.top = '-1px';
+        arrow.style.fontWeight = 'bold';
+        arrow.style.fontSize = '1.1em';
         container.appendChild(box);
         container.appendChild(arrow);
 
         if (type === NodeType.EFFECT) {
-            arrow.style.left = '-10px';
+            arrow.style.left = '-7px';
         }
         if (type === NodeType.CAUSE) {
-            arrow.style.left = '10px';
+            arrow.style.left = '12px';
         }
         if (type === NodeType.INNER) {
-            arrow.style.left = '-10px';
+            arrow.style.left = '-7px';
             let arrowRight = document.createElement('i');
             arrowRight.className = 'fa fa-long-arrow-right fa-stack-1x';
             arrowRight.style.top = '-1px';
-            arrowRight.style.left = '10px';
+            arrowRight.style.left = '12px';
+            arrowRight.style.fontWeight = 'bold';
+            arrowRight.style.fontSize = '1.1em';
             container.appendChild(arrowRight);
         }
         return container;

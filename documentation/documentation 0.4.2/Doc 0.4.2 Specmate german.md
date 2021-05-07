@@ -668,7 +668,7 @@ Testspezifikationen können in Specmate in drei Formaten exportiert werden:
 - als Java-Testhüllen
 - als JavaScript-Testhüllen
 
-![](Bilder_0.4.2/Testspezifikationen.png "testspecificationen")
+![](Bilder_0.4.2/Testspezifikationen.png "Testspezifikationen")
 
 Die Parameterzuordnung bei den Testschritten kann im CSV-Format exportiert werden oder direkt nach Atlassian JIRA:
 

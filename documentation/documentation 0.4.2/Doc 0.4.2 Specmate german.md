@@ -403,7 +403,7 @@ damit der Knoten erfüllt wird. Dieses OR ist ein *inklusives Oder*, das heißt 
 
 Beispiel für eine ODER-Beziehung:
 
-![](Bilder_0.4.2/OR-Knoten_Beispiel.PNG "ExampleOr")
+![](Bilder_0.4.2/OR-Knoten_Beispiel.PNG "OR-Knoten_Beispiel")
 
 ### Rekurrenzen im CEG-Modell
 
@@ -427,7 +427,7 @@ Wenn dieses Modell in das bestehende Basis-Modell integriert werden soll, kann d
 
 Um eine solche Verknüpfung herzustellen, bewegen Sie den Cursor über das Werkzeug "verknüpfter Knoten" und ziehen sie den Knoten – wie bei der Erstellung eines normalen Knotens – in den Modellierungsbereich. Es erscheint jedoch kein Knoten, sondern es wird Ihnen ein Fenster angezeigt:
 
-![](Bilder_0.4.2/Modell-auswählen.png "Modell auswählen")
+![](Bilder_0.4.2/Modell-auswählen.png "Modell-auswählen")
 
 Geben Sie im Abschnitt "Schritt 1" in die Suchmaske den Namen des Modells ein, das Sie in Ihr Basis-Modell integrieren möchten. Wenn Sie mindestens zwei Zeichen in die Suchmaske eingegeben haben, schlägt Ihnen Specmate passende Modelle vor. Haben Sie bei "Schritt 1" ein Modell ausgewählt, zeigt Specmate Ihnen unter "Schritt 2" mögliche Knoten an. Es werden nur Zielknoten des zu integrierenden Modells angezeigt.
 
@@ -496,7 +496,7 @@ Und für die Ausgabevariable *verkaufen*:
 
 Das dazugehörige CEG-Modell würde dann so aussehen:
 
-![](Bilder_0.4.2/Aktienverkaufen.png "Aktien verkaufen")
+![](Bilder_0.4.2/Aktienverkaufen.png "Aktienverkaufen")
 
 Im Allgemeinen gilt:
 

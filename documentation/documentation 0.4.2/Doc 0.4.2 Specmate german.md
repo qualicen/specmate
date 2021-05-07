@@ -15,7 +15,7 @@ title: SpecmateDoc
 		- [Suche](###Suche)
 - [Modell erstellen](#Modellerstellen)
 	- [Wie entscheiden Sie, welches Modell zu erstellen ist?](##WieentscheidenSie,welchesModellzuerstellenist?)
-	- [Grundlegende Editorfunktionen für CEGs und Prozessmodelle](GrundlegendeEditorfunktionenfürCEGsundProzessmodelle)
+	- [Grundlegende Editorfunktionen für CEGs und Prozessmodelle](###GrundlegendeEditorfunktionenfürCEGsundProzessmodelle)
 		- [Editor-Funktionen im CEG-Editor](###EditorFunktionenimCEG-Editor)
 			- [1. Knoten](####1.Knoten)
 			- [2. Verknüpfte Knoten](####2.VerknüpfteKnoten)
@@ -65,7 +65,6 @@ title: SpecmateDoc
 - [Testprozedur](#Testprozedur)
 	- [Export von Testspezifikationen und -prozeduren](#ExportvonTestspezifikationenund-prozeduren)
 		- [Export von Testspezifikationen](##ExportvonTestspezifikationen)
-		- [Export von Testprozeduren](##ExportvonTestprozeduren)
 - [Bibliothek](#Bibliothek)
 
 
@@ -132,6 +131,12 @@ Wenn eine Anforderung in der *Projektansicht* ausgewählt ist, wird Ihnen die fo
 In dieser Ansicht können Sie alle Informationen über die Anforderungen einsehen, sowie zugehörige Modelle bzw. Testspezifikationen erstellen oder bereits erstellte Modelle bzw. Testspezifikationen einsehen.
 
 ### Bibliotheksansicht
+
+Die Bibliothek ist Ihr "Baukasten" für Modelle. Hier können Sie Modelle oder Teile von Modellen, welche Sie häufig verwenden, speichern. Durch [Copy & Paste](#copy-and-paste) können Sie diese Bausteine kopieren und in anderen Modellen einfügen.
+
+![](Bilder_0.4.2/BibliothekOrdnung.png "BibliothekOrdnung")
+
+Sie können beliebig viele Ordner, Unterordner, Unterunterordner usw. in der Bibliotheksansicht anlegen und auch wieder löschen. Klicken Sie hierzu auf die von der obigen Abbildung gezeigten Schaltflächen. Genau so können Sie CEGs, Prozessmodelle und Testspezifikationen hier abspeichern. Wie oben bereits beschrieben ist es hier auch möglich nur Teile von komplexeren Modellen, die häufiger verwendet werden, zu speichern.
 
 Wenn ein Ordner in der *Bibliotheks*ansicht ausgewählt ist, wird Ihnen die folgende Ansicht angezeigt:
 
@@ -403,7 +408,7 @@ damit der Knoten erfüllt wird. Dieses OR ist ein *inklusives Oder*, das heißt 
 
 Beispiel für eine ODER-Beziehung:
 
-![](Bilder_0.4.2/OR-Knoten_Beispiel.png "OR-Knoten_Beispiel")
+![](Bilder_0.4.2/OR-Knoten_Beispiel.png "ExampleOr")
 
 ### Rekurrenzen im CEG-Modell
 
@@ -427,7 +432,7 @@ Wenn dieses Modell in das bestehende Basis-Modell integriert werden soll, kann d
 
 Um eine solche Verknüpfung herzustellen, bewegen Sie den Cursor über das Werkzeug "verknüpfter Knoten" und ziehen sie den Knoten – wie bei der Erstellung eines normalen Knotens – in den Modellierungsbereich. Es erscheint jedoch kein Knoten, sondern es wird Ihnen ein Fenster angezeigt:
 
-![](Bilder_0.4.2/Modell-auswählen.png "Modell-auswählen")
+![](Bilder_0.4.2/Modell-auswählen.png "Modell auswählen")
 
 Geben Sie im Abschnitt "Schritt 1" in die Suchmaske den Namen des Modells ein, das Sie in Ihr Basis-Modell integrieren möchten. Wenn Sie mindestens zwei Zeichen in die Suchmaske eingegeben haben, schlägt Ihnen Specmate passende Modelle vor. Haben Sie bei "Schritt 1" ein Modell ausgewählt, zeigt Specmate Ihnen unter "Schritt 2" mögliche Knoten an. Es werden nur Zielknoten des zu integrierenden Modells angezeigt.
 
@@ -496,7 +501,7 @@ Und für die Ausgabevariable *verkaufen*:
 
 Das dazugehörige CEG-Modell würde dann so aussehen:
 
-![](Bilder_0.4.2/Aktienverkaufen.png "Aktienverkaufen")
+![](Bilder_0.4.2/Aktienverkaufen.png "Aktien verkaufen")
 
 Im Allgemeinen gilt:
 
@@ -668,7 +673,7 @@ Testspezifikationen können in Specmate in drei Formaten exportiert werden:
 - als Java-Testhüllen
 - als JavaScript-Testhüllen
 
-![](Bilder_0.4.2/Testspezifikationen.png "Testspezifikationen")
+![](Bilder_0.4.2/Testspezifikationen.png "testspecificationen")
 
 Die Parameterzuordnung bei den Testschritten kann im CSV-Format exportiert werden oder direkt nach Atlassian JIRA:
 
@@ -799,15 +804,3 @@ describe('New_Test_Specification_2021_05_05_10_38_15', () => {
 });`
 
 Um eine Testspezifikation zu exportieren, navigieren Sie bitte zu der betreffenden Testspezifikation in Specmate (z.B. über die [Anforderungsübersicht](#traces)). Auf der rechten Seite im Abschnitt [Links & Actions](#links-actions) finden Sie den Unterabschnitt für den Export. Klicken Sie auf den Link für das gewünschte Export-Format und speichern Sie die angebotene Datei auf Ihrem Rechner.
-
-## Export von Testprozeduren
-
-Specmate unterstützt den Export von Testprozeduren und Textspezifikationen nach Atlassian Jira und XRay.
-
-# Bibliothek
-
-Die Bibliothek ist Ihr "Baukasten" für Modelle. Hier können Sie Modelle oder Teile von Modellen, welche Sie häufig verwenden, speichern. Durch [Copy & Paste](#copy-and-paste) können Sie diese Bausteine kopieren und in anderen Modellen einfügen.
-
-![](Bilder_0.4.2/BibliothekOrdnung.png "BibliothekOrdnung")
-
-Sie können beliebig viele Ordner, Unterordner, Unterunterordner usw. in der Bibliotheksansicht anlegen und auch wieder löschen. Klicken Sie hierzu auf die von der obigen Abbildung gezeigten Schaltflächen. Genau so können Sie CEGs, Prozessmodelle und Testspezifikationen hier abspeichern. Wie oben bereits beschrieben ist es hier auch möglich nur Teile von komplexeren Modellen, die häufiger verwendet werden, zu speichern.

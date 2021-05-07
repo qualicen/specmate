@@ -396,14 +396,14 @@ damit der Knoten erfüllt wird.
 
 Beispiel für eine UND-Beziehung:
 
-![](Bilder_0.4.2/AND-Knoten-Beispiel.PNG "AND-Knoten-Beispiel")
+![](Bilder_0.4.2/AND-Knoten-Beispiel.png "AND-Knoten-Beispiel")
 
 Ist der Typ des Knotens allerdings auf OR gesetzt, muss nur ein einziger direkter Vorgänger erfüllt werden,
 damit der Knoten erfüllt wird. Dieses OR ist ein *inklusives Oder*, das heißt es können auch beide Ursachen wahr sein, damit der Knoten erfüllt ist. Nicht zu verwechseln mit einem [exklusiven Oder](#Exklusives-Oder), bei dem *genau eine* Ursache wahr sein muss, damit der Knoten erfüllt ist.
 
 Beispiel für eine ODER-Beziehung:
 
-![](Bilder_0.4.2/OR-Knoten_Beispiel.PNG "OR-Knoten_Beispiel")
+![](Bilder_0.4.2/OR-Knoten_Beispiel.png "OR-Knoten_Beispiel")
 
 ### Rekurrenzen im CEG-Modell
 
@@ -523,7 +523,7 @@ Die Ausgabevariable *Aktien verkaufen* bleibt gleich.
 
 Es empfiehlt sich hier eine Zusatzvariable *Übergangszeit* einzuführen, die eintritt, wenn die Aktie A weniger als 14€, aber nicht weniger als 12€ wert ist. Das zugehörige CEG-Modell sieht dann wie folgt aus:
 
-![](Bilder_0.4.2/Robo-Assistent2.PNG "Robo-Assistent2")
+![](Bilder_0.4.2/Robo-Assistent2.png "Robo-Assistent2")
 
 ## Erweiterte Funktionen und Erläuterungen zum Prozessdiagramm
 

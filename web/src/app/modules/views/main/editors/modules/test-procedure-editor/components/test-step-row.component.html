@@ -1,6 +1,9 @@
 <ng-container *ngIf="testStep" [formGroup]="formGroup">
     <td>
-        <span class="text-muted"><i class="fa fa-bars" aria-hidden="true"></i></span>
+        <span class="text-muted fa-stack">
+            <i class="fa fa-ellipsis-v fa-stack-1x" aria-hidden="true"></i>
+            <i class="fa fa-ellipsis-v fa-stack-1x" style="left: 4px" aria-hidden="true"></i>
+        </span>
     </td>
     <td>{{getPosition(testStep)}}</td>
     <td>

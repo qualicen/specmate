@@ -1,17 +1,22 @@
 import { xssEncode } from '../../components/util/xss-encoder';
 
 export class CEGmxModelNode {
-    public static VARIABLE_KEY = 'variable';
-    public static CONDITION_KEY = 'condition';
-    public static TYPE_KEY = 'type';
 
     public variable: string;
     public condition: string;
     public type: string;
+    public editField: string;
 
-    constructor(public _variable: string, public _condition: string, public _type: string) {
-        this.variable = xssEncode(_variable);
-        this.condition = xssEncode(_condition);
-        this.type = _type;
+    constructor(variable: string, condition: string, type: string) {
+        this.variable = xssEncode(variable);
+        this.condition = xssEncode(condition);
+        this.type = type;
+    }
+
+    public getHint(): string {
+        if (this.variable === '' && this.condition === '') {
+            return '';
+        }
+        return this.variable + ' ' + this.condition;
     }
 }

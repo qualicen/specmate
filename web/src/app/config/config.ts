@@ -57,7 +57,7 @@ export class Config {
     public static GRAPHICAL_EDITOR_ZOOM_STEP = 0.1;
     public static GRAPHICAL_EDITOR_ZOOM_MAX = 5;
 
-    public static CEG_NODE_WIDTH = 150;
+    public static CEG_NODE_WIDTH = 180;
     public static CEG_NODE_HEIGHT = 90;
     public static CEG_NODE_ARC_DIST: number = 17 +
         Math.sqrt((Config.CEG_NODE_WIDTH / 2.0) * (Config.CEG_NODE_WIDTH / 2.0) +

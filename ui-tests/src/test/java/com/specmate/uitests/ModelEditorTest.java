@@ -43,6 +43,7 @@ public class ModelEditorTest extends TestBase {
 		}
 
 		// Navigation to requirement
+		System.out.println(" Navigation to requirement");
 		projectExplorer.expand("Evaluation");
 		projectExplorer.open("Erlaubnis Autofahren");
 

@@ -91,9 +91,8 @@ public class ModelEditorTest extends TestBase {
 		cegEditor.changeTypeToORInNode(nodeAutofahren);
 		cegEditor.changeTypeToANDInNode(nodeAutofahren);
 
-		// CEG nodes exists of multiple Html-elements, thus we multiply with the second
-		// node, which shows how much elements are created per node
-		assertTrue(cegEditor.correctModelCreated(3 * nodeFS, 2));
+		// Check number of nodes
+		assertTrue(cegEditor.correctModelCreated(nodeFS, 2));
 
 		// Save CEG
 		commonControl.save();

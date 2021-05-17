@@ -36,20 +36,19 @@ export class EditorPopup {
         }
 
         let element: IContainer = undefined;
-        let currentCell = cell;
         while (element === undefined) {
-            element = this.contents.find(element => element.url === currentCell.id);
-            currentCell = currentCell.parent;
+            element = this.contents.find(element => element.url === cell.id);
         }
 
-        currentCell = this.graph.getModel().getChildCells(this.graph.getDefaultParent()).find(graphCell => graphCell.id === element.url);
+        let selectedCells = this.graph.getSelectionCells();
+        selectedCells = selectedCells.filter(element => element.parent == this.graph.getDefaultParent());
 
         const deleteText = this.translate.instant('delete');
         menu.addItem(deleteText, null, () => {
-            this.graph.removeCells([currentCell]);
+            this.graph.removeCells(selectedCells);
         }, undefined, 'fa fa-trash-o', undefined, undefined);
 
-        if (Type.is(element, CEGConnection)) {
+        if (Type.is(element, CEGConnection) && selectedCells.length === 1) {
 
             const connection = element as CEGConnection;
             const icon = connection.negate ? 'fa fa-check' : 'fa fa-circle-o';

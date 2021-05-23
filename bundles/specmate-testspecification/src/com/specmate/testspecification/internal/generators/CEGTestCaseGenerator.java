@@ -223,7 +223,7 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 				TaggedBoolean nodeEval = evaluation.get(node);
 				String condition = getCondition((CEGNode) node);
 				if (nodeEval != null) {
-					String parameterValue = buildParameterValue(condition, nodeEval.value);
+					String parameterValue = buildParameterValue(condition, nodeEval);
 					constraints.add(parameterValue);
 				}
 			}
@@ -263,9 +263,12 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 	 * Creates the string representation of an operator and a value. Negates the
 	 * operator if necessary.
 	 */
-	private String buildParameterValue(String condition, Boolean nodeEval) {
-		if (!nodeEval) {
-			return negateCondition(condition);
+	private String buildParameterValue(String condition, TaggedBoolean nodeEval) {
+		if (!nodeEval.value) {
+			condition = negateCondition(condition);
+		}
+		if (nodeEval.tag == ETag.ALL) {
+			condition = "[ " + condition + " ]";
 		}
 		return condition;
 	}
@@ -315,8 +318,20 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 
 	private Pair<SortedSet<CEGNodeEvaluation>, SortedSet<CEGNodeEvaluation>> refineEvaluations(
 			SortedSet<CEGNodeEvaluation> evaluationList) throws SpecmateException {
+		SortedSet<CEGNodeEvaluation> relaxedEvaluations = new TreeSet<CEGNodeEvaluation>(nodeEvalSetComparator);
+		evaluationList.stream().forEach(e -> {
+			try {
+				CEGNodeEvaluation relaxed = (CEGNodeEvaluation)e.clone();
+				relaxConstraints(relaxed);
+				relaxedEvaluations.add(relaxed);
+			} catch (SpecmateInternalException e1) {
+				// do nothing, if we cannot relax the evaluation
+				relaxedEvaluations.add(e);
+			}
+		});
+
 		Pair<SortedSet<CEGNodeEvaluation>, SortedSet<CEGNodeEvaluation>> mergedEvals = mergeCompatibleEvaluations(
-				evaluationList);
+				relaxedEvaluations);
 		SortedSet<CEGNodeEvaluation> merged = mergedEvals.getLeft();
 		SortedSet<CEGNodeEvaluation> inconsistent = mergedEvals.getRight();
 		SortedSet<CEGNodeEvaluation> filled = new TreeSet<CEGNodeEvaluation>(nodeEvalSetComparator);
@@ -490,6 +505,54 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 		return Pair.of(result, new TreeSet<>(nodeEvalSetComparator));
 	}
 
+	/**
+	 * Checks if a node evaluation is satisfiable in the CEG and relaxes the
+	 * constraints if not. For exaple, it allows multiple true values as
+	 * predecessors of an OR node.
+	 *
+	 * @param eval
+	 * @throws SpecmateInternalException
+	 */
+	private void relaxConstraints(CEGNodeEvaluation eval) throws SpecmateInternalException {
+		// Inititalize solver infrastructure
+		IPBSolver solver = org.sat4j.pb.SolverFactory.newResolution();
+		GateTranslator translator = new GateTranslator(solver);
+		WeightedMaxSatDecorator maxSat = new WeightedMaxSatDecorator(solver);
+		maxSat.newVar(eval.size());
+
+		try {
+			pushCEGStructure(translator);
+			for (Entry<CEGNode, TaggedBoolean> entry : eval.entrySet()) {
+				TaggedBoolean value = entry.getValue();
+				int nodeVar = (value.value ? 1 : -1) * getVarForNode(entry.getKey());
+				if (value.tag == ETag.ALL) {
+					// hard constraint
+					maxSat.addHardClause(getVectorForVariables(nodeVar));
+				} else if (value.tag == ETag.ANY) {
+					// soft constraint, may be relaxed
+					maxSat.addSoftClause(getVectorForVariables(nodeVar));
+				}
+			}
+			int[] foundModel = maxSat.findModel();
+			if (foundModel != null) {
+				for (int i = 0; i < foundModel.length; i++) {
+					CEGNode node = getNodeForVar(Math.abs(foundModel[i]));
+					if (node != null) {
+						// variable in the model related to a node
+						TaggedBoolean tag = eval.get(node);
+						if (tag != null) {
+							// the node is part of the evaluation
+							tag.value = foundModel[i] > 0;
+						}
+					}
+				}
+			}
+		} catch (ContradictionException | TimeoutException c) {
+			throw new SpecmateInternalException(ErrorCode.TESTGENERATION, c);
+		}
+
+	}
+
 	private SortedSet<CEGNodeEvaluation> getMergeCandiate(SortedSet<CEGNodeEvaluation> evaluations)
 			throws SpecmateException {
 		// Map to track between logical variables and evaluations
@@ -592,7 +655,15 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 	private CEGNodeEvaluation mergeAllEvaluations(Set<CEGNodeEvaluation> clique) {
 		CEGNodeEvaluation evaluation = new CEGNodeEvaluation();
 		for (CEGNodeEvaluation toMerge : clique) {
-			evaluation.putAll(toMerge);
+			for (Entry<CEGNode, TaggedBoolean> entry : toMerge.entrySet()) {
+				if (evaluation.containsKey(entry.getKey())) {
+					// Do not overwrite values tagged with ALL
+					if (evaluation.get(entry.getKey()).tag == ETag.ALL) {
+						continue;
+					}
+				}
+				evaluation.put(entry.getKey(), entry.getValue());
+			}
 		}
 		return evaluation;
 	}

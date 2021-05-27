@@ -489,7 +489,7 @@ Oft sind Äquivalenzklassen eindeutig zu ermitteln. Eine Anforderung könnte zum
 
 Der Roboassistent für den Handel mit Wertpapieren wird beauftragt, Aktien eines bestimmten Unternehmens A zu verkaufen, wenn diese einen bestimmten Wert z.B. 14€ erreicht oder überschritten haben.
 
-Hier lauten die Äquivalenzklassen für die Eingabevariable *Größe*:
+Hier lauten die Äquivalenzklassen für die Eingabevariable *Wert*:
 
 - Äquivalenzklasse 1: >14€
 - Äquivalenzklasse 2: <=14€
@@ -513,7 +513,7 @@ Das *Beispiel 1* kann zu folgender Anforderung weiterentwickelt werden:
 
 > Der Robo-Assistent soll die Aktien von Unternehmen A verkaufen, wenn sie den Wert von 14€ erreicht oder übertroffen haben. Liegt der Wert der Aktien jedoch längere Zeit zwischen 12€ und 13,99€ dürfen die Aktien auch verkauft werden, wenn Aktien des Unternehmens B gekauft wurden.
 
-Hier lauten die Äquivalenzklassen für die Eingabevariable *Größe*:
+Hier lauten die Äquivalenzklassen für die Eingabevariable *Wert*:
 
 - Äquivalenzklasse 1: *>14€*
 - Äquivalenzklasse 2: *12€< Wert <= 14€*

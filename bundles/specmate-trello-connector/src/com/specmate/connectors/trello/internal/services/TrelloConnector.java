@@ -48,10 +48,6 @@ public class TrelloConnector extends ConnectorBase {
 	private String token;
 	private String id;
 
-	public TrelloConnector(IProject project) {
-		super(project);
-	}
-
 	@Activate
 	public void activate(Map<String, Object> properties) throws SpecmateException {
 		validateConfig(properties);

@@ -36,7 +36,7 @@ public class DummyProject implements IProject {
 	/** Returns a connector that does nothing and authorizes every user. */
 	@Override
 	public IConnector getConnector() {
-		return new ConnectorBase(this) {
+		ConnectorBase conn = new ConnectorBase() {
 
 			@Override
 			public Collection<Requirement> getRequirements() throws SpecmateException {
@@ -64,6 +64,9 @@ public class DummyProject implements IProject {
 			}
 
 		};
+		conn.setProject(this);
+		;
+		return conn;
 	}
 
 	@Override

@@ -232,7 +232,7 @@ public class ConnectorUtilTest {
 	private abstract class TestRequirementSourceBase extends ConnectorBase {
 
 		public TestRequirementSourceBase(IProject project) {
-			super(project);
+			setProject(project);
 		}
 
 		public static final String REQ_NAME = "req";

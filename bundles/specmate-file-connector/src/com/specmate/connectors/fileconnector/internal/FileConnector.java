@@ -60,10 +60,6 @@ public class FileConnector extends ConnectorBase {
 	/** id of the project folder */
 	private String id;
 
-	public FileConnector(IProject project) {
-		super(project);
-	}
-
 	@Activate
 	public void activate(Map<String, Object> properties) throws SpecmateException {
 		validateConfig(properties);

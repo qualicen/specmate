@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, ElementRef, Input, OnDestroy, ViewC
 import { TranslateService } from '@ngx-translate/core';
 import { mxgraph } from 'mxgraph'; // Typings only - no code!
 import { Subscription } from 'rxjs';
-import { CEGLinkedNode } from 'src/app/model/CEGLinkedNode';
+import { isFunction } from 'rxjs/internal-compatibility';
 import { CEGModel } from 'src/app/model/CEGModel';
 import { Process } from 'src/app/model/Process';
 import { ProcessConnection } from 'src/app/model/ProcessConnection';
@@ -22,6 +22,7 @@ import { EditorToolsService } from '../../tool-pallette/services/editor-tools.se
 import { ToolBase } from '../../tool-pallette/tools/tool-base';
 import { ConverterBase } from '../converters/converter-base';
 import { NodeNameConverterProvider } from '../providers/conversion/node-name-converter-provider';
+import { CEGmxModelLinkedNode } from '../providers/properties/ceg-mx-model-linked-node';
 import { CEGmxModelNode } from '../providers/properties/ceg-mx-model-node';
 import { ElementProvider } from '../providers/properties/element-provider';
 import { NameProvider } from '../providers/properties/name-provider';
@@ -55,7 +56,7 @@ export class GraphicalEditor implements OnDestroy {
 
     private nameProvider: NameProvider;
     private elementProvider: ElementProvider;
-    private nodeNameConverter: ConverterBase<any, string | CEGmxModelNode>;
+    private nodeNameConverter: ConverterBase<any, string | CEGmxModelNode | CEGmxModelLinkedNode>;
     private shapeProvider: ShapeProvider;
     private changeTranslator: ChangeTranslator;
     private vertexProvider: VertexProvider;
@@ -185,12 +186,6 @@ export class GraphicalEditor implements OnDestroy {
             this.modal.openOk(this.translate.instant('graphicalEditorErrorTitle'), message);
         };
 
-        const cellEditorInit = mx.mxCellEditor.prototype.init;
-        mx.mxCellEditor.prototype.init = function () {
-            cellEditorInit.apply(this, arguments);
-            this.textarea.style.resize = '';
-        };
-
         mx.mxEvent.disableContextMenu(this.graphContainerElement.nativeElement);
 
         if (this.graphMouseMove === undefined) {
@@ -218,29 +213,10 @@ export class GraphicalEditor implements OnDestroy {
         const rubberBand = new mx.mxRubberband(this.graph);
         rubberBand.reset();
         this.graph.setHtmlLabels(true);
-
         this.graph.setTooltips(true);
+        this.graph.enterStopsCellEditing = true;
+
         this.graph.zoomFactor = 1.1;
-
-        this.setFunctionGetPreferredSizeForCell(this.graph, this.shapeProvider);
-
-        this.graph.addListener(mx.mxEvent.EDITING_STARTED, (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) => {
-            const cell = evt.properties.cell as mxgraph.mxCell;
-            if (cell !== undefined &&
-                (cell.id.endsWith(VertexProvider.ID_SUFFIX_VARIABLE) || cell.id.endsWith(VertexProvider.ID_SUFFIX_CONDITION))) {
-                let parentWidth = cell.parent.geometry.width;
-                cell.getGeometry().setRect(0, cell.geometry.y, parentWidth, cell.geometry.height);
-                this.graph.getView().invalidate(cell);
-                this.graph.getView().validate(cell);
-            }
-        });
-
-        this.graph.addListener(mx.mxEvent.DOUBLE_CLICK, (sender: mxgraph.mxGraph, evt: mxgraph.mxEventObject) => {
-            const cell = evt.properties.cell as mxgraph.mxCell;
-            if (cell !== undefined && cell.id.endsWith(VertexProvider.ID_SUFFIX_TYPE)) {
-                evt.consumed = true;
-            }
-        });
 
         this.graph.getModel().addListener(mx.mxEvent.CHANGE, async (sender: mxgraph.mxEventSource, evt: mxgraph.mxEventObject) => {
             const edit = evt.getProperty('edit') as mxgraph.mxUndoableEdit;
@@ -289,7 +265,6 @@ export class GraphicalEditor implements OnDestroy {
                 edit.undo();
                 this.changeTranslator.preventDataUpdates = false;
             } finally {
-                this.graph.getView().revalidate();
                 this.undoService.setUndoEnabled(this.undoManager.canUndo());
                 this.undoService.setRedoEnabled(this.undoManager.canRedo());
             }
@@ -316,17 +291,6 @@ export class GraphicalEditor implements OnDestroy {
 
             if (selections.length >= 1) {
                 // Highlight All Edges
-                if (selections.length === 1) {
-                    if (selections[0].getParent() === null) {
-                        this.graph.getModel().endUpdate();
-                        return;
-                    }
-                    if (selections[0].getParent() !== this.graph.getDefaultParent()) {
-                        // We selected a child/ sublabel --> Select Parent instead
-                        selections[0] = selections[0].getParent();
-                    }
-                }
-
                 for (const cell of selections) {
                     if (cell.edge) {
                         this.highlightedEdges.push(cell);
@@ -437,26 +401,19 @@ export class GraphicalEditor implements OnDestroy {
     private makeVertexTool(tool: ToolBase) {
         const onDrop = (graph: mxgraph.mxGraph, evt: MouseEvent) => {
             this.graph.stopEditing(false);
-            const initialData: ShapeData = this.shapeProvider.getInitialData(tool.style);
+            this.graph.clearSelection();
+            const initialData: ShapeData = mx.mxUtils.clone(this.shapeProvider.getInitialData(tool.style));
             const coords = this.graph.getPointForEvent(evt);
             const vertexUrl = Url.build([this.model.url, Id.uuid]);
             this.graph.startEditing(evt);
             try {
-                if (initialData.style === EditorStyle.BASE_CEG_NODE_STYLE) {
-                    this.vertexProvider.provideCEGNode(vertexUrl, coords.x, coords.y,
-                        initialData.size.width, initialData.size.height, initialData.text as CEGmxModelNode, undefined);
-                } else if (initialData.style === EditorStyle.BASE_CEG_LINKED_NODE_STYLE) {
-                    this.vertexProvider.provideLinkedCEGNode(vertexUrl, coords.x, coords.y,
-                        initialData.size.width, initialData.size.height, initialData.text as CEGmxModelNode, undefined);
-                } else {
-                    this.graph.insertVertex(
-                        this.graph.getDefaultParent(),
-                        vertexUrl,
-                        initialData.text,
-                        coords.x, coords.y,
-                        initialData.size.width, initialData.size.height,
-                        initialData.style);
-                }
+                this.graph.insertVertex(
+                    this.graph.getDefaultParent(),
+                    vertexUrl,
+                    initialData.text,
+                    coords.x, coords.y,
+                    initialData.size.width, initialData.size.height,
+                    initialData.style);
             }
             finally {
                 this.graph.stopEditing(true);
@@ -497,14 +454,17 @@ export class GraphicalEditor implements OnDestroy {
         this.elementProvider = new ElementProvider(this.model, this._contents);
         this.nodeNameConverter = new NodeNameConverterProvider(this.model).nodeNameConverter;
         this.vertexProvider
-            = new VertexProvider(this.model, this.graph, this.shapeProvider, this.nodeNameConverter,
-                this.dataService, this.changeGuard, this.translate);
-        this.vertexProvider.initRenderer(this.graph);
+            = new VertexProvider(this.model, this.graph, this.shapeProvider, this.nodeNameConverter, this.dataService, this.translate);
+
         const parent = this.graph.getDefaultParent();
         this.changeTranslator.preventDataUpdates = true;
 
         if (Type.is(this.model, CEGModel)) {
             this.initCEGModel();
+        }
+
+        if (Type.is(this.model, Process)) {
+            this.initProcessModel();
         }
 
         this.graph.getModel().beginUpdate();
@@ -539,69 +499,88 @@ export class GraphicalEditor implements OnDestroy {
             this.validationService.validateCurrent();
         }
     }
-
     private async initCEGModel(): Promise<void> {
         const graph = this.graph;
-        this.graph.isCellEditable = function (cell) {
-            let c = cell as mxgraph.mxCell;
-            if (c.edge) {
-                return false;
-            }
-            if (c.children !== undefined && c.children !== null && c.children.length > 0) {
-                return false;
-            }
 
-            const cellStyle = graph.getStylesheet().getCellStyle(c.getStyle(), undefined);
-            if (cellStyle !== undefined && (cellStyle['editable'] === '0' || cellStyle['editable'] === 'false')) {
-                return false;
+        this.vertexProvider.initCEGVertexRenderer();
+
+        this.graph.getTooltipForCell = function (cell: mxgraph.mxCell) {
+            if (cell.value instanceof CEGmxModelNode || cell.value instanceof CEGmxModelLinkedNode) {
+                return cell.value.getHint();
             }
-            return true;
+            return mx.mxGraph.prototype.getTooltipForCell.apply(this, arguments);
         };
 
-        this.graph.graphHandler.setRemoveCellsFromParent(false);
-
-        this.graph.isCellResizable = function (cell) {
-            let c = cell as mxgraph.mxCell;
-            const cellStyle = graph.getStylesheet().getCellStyle(c.getStyle(), undefined);
-            if (cellStyle !== undefined && (cellStyle['resizable'] === '0' || cellStyle['resizable'] === 'false')) {
-                return false;
+        let stopEditing = mx.mxCellEditor.prototype.stopEditing;
+        mx.mxCellEditor.prototype.stopEditing = function (cancel) {
+            stopEditing.apply(this, arguments);
+            let state = (!cancel) ? this.graph.view.getState(this.editingCell) : null;
+            if (state != null) {
+                state.cell.value.editField = undefined;
             }
-            let geo = this.model.getGeometry(cell);
-            return geo == null || !geo.relative;
         };
 
-        const originalTooltip = this.graph.getTooltipForCell;
+        let getFieldnameForEvent = function (cell: any, evt: any) {
+            if (evt != null) {
+                let htmlElement = mx.mxEvent.getSource(evt);
+                if (htmlElement.hasAttribute('data-node')) {
+                    return htmlElement.getAttribute('data-node');
+                } else {
+                    let point = mx.mxUtils.convertPoint(graph.container,
+                        mx.mxEvent.getClientX(evt), mx.mxEvent.getClientY(evt));
+                    let state = graph.getView().getState(cell);
 
-        this.graph.getTooltipForCell = function (cell) {
-            let c = cell as mxgraph.mxCell;
-            if (c.getId().endsWith(VertexProvider.ID_SUFFIX_LINK_ICON)) {
-                return null;
-            }
-            return originalTooltip(cell);
-        };
-
-        mx.mxConnectionHandler.prototype.isValidTarget =
-            (target) => target.value === undefined || target.value === null || !Type.is(target.value, CEGLinkedNode);
-
-    }
-
-    private setFunctionGetPreferredSizeForCell(graph: mxgraph.mxGraph, shapeProvider: ShapeProvider) {
-        let graphGetPreferredSizeForCell = graph.getPreferredSizeForCell;
-        graph.getPreferredSizeForCell = function (cell: mxgraph.mxCell) {
-            if (cell.getId().endsWith(VertexProvider.ID_SUFFIX_TYPE)) {
-                return undefined;
-            }
-            let result = graphGetPreferredSizeForCell.apply(this, arguments);
-            if (result !== null) {
-                let width = result.width;
-                if (cell.children !== undefined && cell.children !== null) {
-                    for (const child of cell.children) {
-                        let resultChild = graph.getPreferredSizeForCell(child);
-                        if (resultChild !== undefined) {
-                            width = Math.max(width, resultChild.width);
+                    // if no field is clicked directly, variable is selected for the upper half of the cell, condition otherwise
+                    if (state != null) {
+                        point.x -= state.x;
+                        point.y -= state.y;
+                        if (point.y < state.height / 2) {
+                            return VertexProvider.ID_VARIABLE;
+                        } else {
+                            return VertexProvider.ID_CONDITION;
                         }
                     }
                 }
+            }
+            return VertexProvider.ID_VARIABLE;
+        };
+
+        this.graph.getEditingValue = function (cell, evt) {
+            evt.fieldname = getFieldnameForEvent(cell, evt);
+            cell.value.editField = evt.fieldname;
+            return cell.value[evt.fieldname] || '';
+        };
+
+        this.graph.getModel()['valueForCellChanged'] =
+            function (cell: mxgraph.mxCell, value: CEGmxModelLinkedNode | CEGmxModelNode | string) {
+                if (cell.isVertex()) {
+                    if (value instanceof CEGmxModelNode) {
+                        let previous = mx.mxUtils.clone(cell.value);
+                        cell.value = value;
+                        return previous;
+                    }
+                    let changedField = cell.value.editField;
+                    let previous = cell.value[changedField];
+                    cell.value[changedField] = value;
+                    return previous;
+                }
+                return '';
+            };
+
+        mx.mxConnectionHandler.prototype.isValidTarget = function (cell: mxgraph.mxCell) {
+            return cell.value === undefined || cell.value === null || !(cell.value instanceof CEGmxModelLinkedNode);
+        };
+    }
+
+    private async initProcessModel(): Promise<void> {
+        this.setFunctionGetPreferredSizeForCell(this.graph, this.shapeProvider);
+    }
+
+    private setFunctionGetPreferredSizeForCell(graph: mxgraph.mxGraph, shapeProvider: ShapeProvider) {
+        graph.getPreferredSizeForCell = function (cell: mxgraph.mxCell) {
+            let result = mx.mxGraph.prototype.getPreferredSizeForCell.apply(this, arguments);
+            if (result !== null) {
+                let width = result.width;
                 if (cell.style !== undefined) {
                     let shapeData = shapeProvider.getInitialData(cell.style.split(';')[0]);
                     if (shapeData !== undefined) {

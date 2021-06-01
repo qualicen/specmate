@@ -35,6 +35,7 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.SearcherManager;
+import org.apache.lucene.search.Sort;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.eclipse.emf.cdo.util.ObjectNotFoundException;
@@ -309,7 +310,7 @@ public class LuceneBasedModelSearchService extends RestServiceBase implements Ev
 	/** Performs the given lucene query on the given searcher. */
 	private Set<EObject> performSearch(Query query, IndexSearcher isearcher) throws IOException {
 		ScoreDoc[] hits;
-		hits = isearcher.search(query, this.maxSearchResults).scoreDocs;
+		hits = isearcher.search(query, this.maxSearchResults, Sort.RELEVANCE).scoreDocs;
 		Set<EObject> result = new HashSet<>();
 		// Iterate through the results:
 		for (int i = 0; i < hits.length; i++) {

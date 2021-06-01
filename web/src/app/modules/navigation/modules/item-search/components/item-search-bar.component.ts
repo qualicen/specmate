@@ -77,5 +77,5 @@ export class ItemSearchBar {
             tap(() => this.searching = false)
         )
 
-    formatter = (x: { name: string }) => x.name + 'asd';
+    formatter = (elem: { name: string, extId?: string }) => (elem.extId !== undefined ? elem.extId + ': ' : '') +  elem.name;
 }

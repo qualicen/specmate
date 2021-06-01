@@ -1,6 +1,7 @@
 package com.specmate.emfjson;
 
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
@@ -122,6 +123,23 @@ public class EMFJsonSerializer {
 	}
 
 	/**
+	 * Serializes a map of {@link Strings} to JSON
+	 *
+	 * @param list
+	 *            The map of {@link String}s to serialize
+	 * @return The JSON representation of <code>map</code>
+	 * @throws SpecmateException
+	 *             If the object cannot be serialized
+	 */
+	public JSONObject serialize(Map<String, String> map) throws JSONException, SpecmateException {
+		try {
+			return serializeMap(map);
+		} catch (Exception e) {
+			throw new SpecmateInternalException(ErrorCode.SERALIZATION, e);
+		}
+	}
+
+	/**
 	 * Serializes an {@link EObject} to JSON at certain serializing depth. Stops
 	 * serializing if indicated by {@link ISerializerStopPredicate.stopAtDepth} from
 	 * the currently set stop predicate.
@@ -209,6 +227,23 @@ public class EMFJsonSerializer {
 			array.put(serializeValue(value));
 		}
 		return array;
+	}
+
+	/**
+	 * Serializes a map of strings
+	 *
+	 * @param map
+	 *            The map to serialize
+	 * @return A {@link JSONObject} containing the JSON representation of all members
+	 *         of <code>map</code>
+	 * @throws SpecmateException
+	 */
+	private JSONObject serializeMap(Map<String, String> map) throws SpecmateException {
+		JSONObject jsonObj = new JSONObject();
+		for(String key : map.keySet()) {
+			jsonObj.put(key, map.get(key));
+		}
+		return jsonObj;
 	}
 
 	/**

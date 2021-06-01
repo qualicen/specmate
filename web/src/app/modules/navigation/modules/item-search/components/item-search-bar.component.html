@@ -1,6 +1,10 @@
 <ng-template #rt let-r="result" let-t="term">
     <icon-selector [model]="r" [expanded]="false"></icon-selector>&nbsp;
-    <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight><br />
+    <ng-container *ngIf="r.extId !== undefined">
+        <span class="badge badge-primary">{{r.extId}}</span>
+        &nbsp;
+    </ng-container>
+    <ngb-highlight [result]="resultTitle(r)" [term]="t"></ngb-highlight><br />
     <small>
         {{parentNames(r)}}
     </small>

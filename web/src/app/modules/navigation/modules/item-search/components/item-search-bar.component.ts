@@ -4,6 +4,8 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import { catchError, debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
+import { Config } from 'src/app/config/config';
+import { Search } from 'src/app/util/search';
 import { Url } from 'src/app/util/url';
 import { IContainer } from '../../../../../model/IContainer';
 import { SpecmateDataService } from '../../../../data/modules/data-service/services/specmate-data.service';
@@ -40,12 +42,16 @@ export class ItemSearchBar {
         const parentUrl = Url.parent(element.url);
         if (this.itemMap[parentUrl] === undefined) {
             this.itemMap[parentUrl] = [];
-            for (let i = 0; i < parentUrls.length; i++) {
+            for (let i = 0; i < parentUrls.length - 1; i++) {
                 this.dataService.readElement(parentUrls[i], true)
-                    .then(elem => this.itemMap[parentUrl][parentUrls.length - i - 1] = elem.name);
+                    .then(elem => this.itemMap[parentUrl][parentUrls.length - i - 2] = (elem['extId'] !== undefined ? elem['extId'] + ': ' : '') + elem.name);
             }
         }
-        return this.itemMap[parentUrl]?.join(' > ');
+        return this.itemMap[parentUrl]?.join(' ⊳ ');
+    }
+
+    public resultTitle(element: IContainer): string {
+        return element.name;
     }
 
     search: OperatorFunction<string, readonly IContainer[]> = (text$: Observable<string>) =>
@@ -54,8 +60,9 @@ export class ItemSearchBar {
             distinctUntilChanged(),
             tap(() => this.searching = true),
             switchMap(term => {
-                if (term.length > 3) {
-                    return this.dataService.searchObs(term).pipe(
+                if (term !== undefined && term !== null && term.length >= Config.SEARCH_MINIMUM_LENGTH) {
+                    const query = Search.processSearchQuery(term);
+                    return this.dataService.searchObs(query).pipe(
                         tap(() => this.searchFailed = false),
                         catchError(() => {
                             this.searchFailed = true;
@@ -70,5 +77,5 @@ export class ItemSearchBar {
             tap(() => this.searching = false)
         )
 
-    formatter = (x: { name: string }) => x.name;
+    formatter = (x: { name: string }) => x.name + 'asd';
 }

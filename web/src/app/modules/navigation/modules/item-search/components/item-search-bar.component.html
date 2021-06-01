@@ -1,0 +1,16 @@
+<ng-template #rt let-r="result" let-t="term">
+    <icon-selector [model]="r" [expanded]="false"></icon-selector>&nbsp;
+    <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight><br />
+    <small>
+        {{parentNames(r)}}
+    </small>
+</ng-template>
+
+<div class="input-group input-group-sm">
+    <div class="input-group-prepend">
+        <div class="input-group-text"><span class="fa fa-search"></span></div>
+    </div>
+    <input type="text" class="form-control form-control-sm" placeholder="{{'search' | translate}}"
+        [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter" [(ngModel)]="selectedElement"
+        [editable]="false" />
+</div>

@@ -1,0 +1,79 @@
+ul {
+    padding: 0 0 0 10px;
+    width: 100%;
+}
+
+.nav.nav-tabs.justify-content-start {
+    padding: 0 0 0 0;
+    height: auto;
+}
+
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.explorer-list {
+    padding: 0 0 0 0;
+    margin-bottom: 0;
+    padding-top: 3px;
+    display: inline-table;
+}
+
+.left-sidebar {
+    height: 100%;
+    max-height: 100%;
+    width: 100%;
+    display: inline-flex;
+    flex-direction: column;
+}
+
+#list-wrapper {
+    overflow: auto;
+    height: 100%;
+}
+
+#table-wrapper {
+    height: 100%;
+    overflow: auto;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+/* clears the 'X' from Internet Explorer */
+
+.form-control::-ms-clear {
+    display: none;
+    width: 0;
+    height: 0;
+}
+
+.form-control::-ms-reveal {
+    display: none;
+    width: 0;
+    height: 0;
+}
+
+/* clears the 'X' from Chrome */
+
+.form-control::-webkit-search-decoration,
+.form-control::-webkit-search-cancel-button,
+.form-control::-webkit-search-results-button,
+.form-control::-webkit-search-results-decoration {
+    display: none;
+}
+
+.clear-button {
+    border: 0px solid rgba(0, 0, 0, 0) !important;
+    margin-left: -29px;
+    width: 30px;
+    z-index: 10000;
+}
+
+.text-muted {
+    width: 100%;
+    text-align: center;
+    display: block;
+}

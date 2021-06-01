@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { Observable } from 'rxjs';
 import { SimpleModal } from 'src/app/modules/notification/modules/modals/services/simple-modal.service';
 import { Monitorable } from 'src/app/modules/notification/modules/operation-monitor/base/monitorable';
 import { CEGConnection } from '../../../../../model/CEGConnection';
@@ -415,13 +416,17 @@ export class SpecmateDataService extends Monitorable {
             });
     }
 
+    public searchObs(query: string, filter?: { [key: string]: string }): Observable<IContainer[]> {
+        return this.serviceInterface.search(query, this.auth.token, filter);
+    }
+
     public search(query: string, filter?: { [key: string]: string }): Promise<IContainer[]> {
         if (!this.auth.isAuthenticated) {
             return Promise.resolve([]);
         }
         this.start(SpecmateDataService.OP_SEARCH);
         this.logStart(this.translate.instant('log.search') + ': ' + query, '');
-        return this.serviceInterface.search(query, this.auth.token, filter)
+        return this.serviceInterface.search(query, this.auth.token, filter).toPromise()
             .then((result: IContainer[]) => {
                 this.end(SpecmateDataService.OP_SEARCH);
                 this.logFinished(this.translate.instant('log.search') + ': ' + query, '');

@@ -2,6 +2,7 @@ package com.specmate.emfrest.config;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -22,7 +23,7 @@ import com.specmate.rest.RestResult;
 @Component(immediate = true, service = IRestService.class)
 public class ConfigService extends RestServiceBase {
 
-	private static final String[] CONFIG_KEYS = { "uiconfig.enableProjectExplorer" };
+	private static final String CONFIG_PREFIX = "uiconfig";
 
 	private LogService logService;
 	private IConfigService configService;
@@ -39,15 +40,17 @@ public class ConfigService extends RestServiceBase {
 
 	@Override
 	public boolean canGet(Object target) {
-		return (target instanceof EObject) && SpecmateEcoreUtil.isProject((EObject) target);
+		return true;
 	}
 
 	@Override
 	public RestResult<?> get(Object target, MultivaluedMap<String, String> queryParams, String token)
 			throws SpecmateException {
 		Map<String, String> configValues = new HashMap<>();
-		for (String key : CONFIG_KEYS) {
-			configValues.put(key, configService.getConfigurationProperty(key));
+		for (Entry<Object, Object> entry : configService.getConfigurationProperties(CONFIG_PREFIX)) {
+			String key = entry.getKey().toString().replaceFirst(CONFIG_PREFIX + ".", "");
+			String value = entry.getValue().toString();
+			configValues.put(key, value);
 		}
 		return new RestResult<>(Response.Status.OK, configValues);
 	}

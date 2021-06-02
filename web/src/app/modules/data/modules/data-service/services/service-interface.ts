@@ -24,11 +24,14 @@ export class ServiceInterface {
         }
     }
 
+    public async config(token: UserToken): Promise<any> {
+        return this.http.get<any>(Url.urlConfig(token)).toPromise();
+    }
+
     public async authenticate(user: User): Promise<UserSession> {
         const session: UserSession = await this.http.post(Url.urlAuthenticate(), user).toPromise() as UserSession;
         return session;
     }
-
 
     public async deauthenticate(): Promise<void> {
         await this.http.get(Url.urlDeauthenticate(), { responseType: 'text' }).toPromise();
@@ -73,7 +76,7 @@ export class ServiceInterface {
         return await this.http.post(Url.urlCustomService(url, serviceSuffix), payload, { params: urlParams }).toPromise();
     }
 
-    public async performOperationGET(url: string, serviceSuffix: string, payload: any,parameters: { [key: string]: string },  token: UserToken): Promise<any> {
+    public async performOperationGET(url: string, serviceSuffix: string, payload: any, parameters: { [key: string]: string },  token: UserToken): Promise<any> {
         let urlParams = this.toUrlParams(parameters);
         return await this.http.get(Url.urlCustomService(url, serviceSuffix), { params: urlParams }).toPromise();
     }

@@ -14,6 +14,7 @@ import { SpecmateDataService } from '../../../../data/modules/data-service/servi
 import { AuthenticationService } from '../../../../views/main/authentication/modules/auth/services/authentication.service';
 import { NavigatorService } from '../../navigator/services/navigator.service';
 import { Requirement } from 'src/app/model/Requirement';
+import { ConfigProperties, ConfigService } from 'src/app/modules/config/modules/config-service/services/config-service';
 
 enum ActiveTab { project, library, recycleBin }
 
@@ -42,6 +43,8 @@ export class ProjectExplorer implements OnInit {
     private numLibraryFoldersDisplayed = Config.ELEMENT_CHUNK_SIZE;
     private numRecycleBinProjectFoldersDisplayed = Config.ELEMENT_CHUNK_SIZE;
     private numRecycleBinLibraryFoldersDisplayed = Config.ELEMENT_CHUNK_SIZE;
+
+    public config: ConfigProperties;
 
     public get currentElement(): IContainer {
         return this.navigator.currentElement;
@@ -78,7 +81,7 @@ export class ProjectExplorer implements OnInit {
     }
 
     constructor(private translate: TranslateService, private dataService: SpecmateDataService,
-        private navigator: NavigatorService, private auth: AuthenticationService) { }
+        private navigator: NavigatorService, private auth: AuthenticationService, private configService: ConfigService) { }
 
     ngOnInit() {
         this.initialize();
@@ -123,6 +126,14 @@ export class ProjectExplorer implements OnInit {
         if (!this.auth.isAuthenticated) {
             this.clean();
             return;
+        }
+
+        this.config = await this.configService.config();
+
+        if (this.config.enableProjectExplorer === 'true') {
+            this.currentActiveTab = ActiveTab.project;
+        } else {
+            this.currentActiveTab = ActiveTab.library;
         }
 
         let libraryFolders: string[] = this.auth.session.libraryFolders;

@@ -124,6 +124,7 @@ public class CEGEditorElements extends EditorElements {
 
 	public void changeTypeToORInNode(String nodeId) {
 		WebElement nodeElement = driver.findElement(By.id(nodeId));
+		nodeElement.click();
 		//builder.moveToElement(nodeElement, 0, 25).click().build().perform();
 		driver.findElement(By.cssSelector("g > g > g > foreignObject > div > table > tbody > tr > select")).click();
 		driver.findElement(By.cssSelector("g > g > g > foreignObject > div > table > tbody > tr > select > option[value=OR]")).click();
@@ -132,7 +133,7 @@ public class CEGEditorElements extends EditorElements {
 	public void changeTypeToAND(String nodeId) {
 		// Click two times as clicking only once will minimize the node
 		WebElement nodeElement = driver.findElement(By.id(nodeId));
-		builder.moveToElement(nodeElement, 0, 25).click().build().perform();
+		nodeElement.click();
 		driver.findElement(propertiesType).click();
 		driver.findElement(TypeAND).click();
 	}

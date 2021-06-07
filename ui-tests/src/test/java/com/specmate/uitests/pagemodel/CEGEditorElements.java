@@ -46,7 +46,7 @@ public class CEGEditorElements extends EditorElements {
 		wait.until(ExpectedConditions
 				.visibilityOfElementLocated(cegNodeSelector));
 		
-		WebElement node = driver.findElement(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > table "));
+		WebElement node = driver.findElement(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > table"));
 		String nodeId = node.getAttribute("id");
 
 		WebElement variableTextfield = driver.findElement(propertiesVariable);

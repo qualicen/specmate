@@ -69,6 +69,7 @@ export class VertexProvider extends ProviderBase {
             if (cell.isVertex()) {
                 let value = cell.value;
                 let table = document.createElement('table');
+                table.id = cell.getId();
                 table.style.height = '100%';
                 table.style.width = '100%';
 

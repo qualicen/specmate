@@ -146,5 +146,7 @@ public class CEGEditorElements extends EditorElements {
 		//builder.moveToElement(nodeElement, 0, 25).click().build().perform();
 		driver.findElement(propertiesType).click();
 		driver.findElement(TypeOR).click();
+		nodeElement = driver.findElement(By.id(nodeId));
+		nodeElement.click();
 	}
 }

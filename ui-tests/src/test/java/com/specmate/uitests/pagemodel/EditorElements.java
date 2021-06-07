@@ -36,7 +36,7 @@ public class EditorElements {
 	By generateTestSpec = By.id("generatetestspec-button");
 	By relatedRequirement = By.id("traces-addrequirement-textfield");
 
-	By suggestionItem = By.id("ngb-typeahead-1-0");
+	By suggestionItem =  By.cssSelector("[id*='ngb-typeahead']");
 
 	public EditorElements(WebDriver driver, Actions builder) {
 		this.driver = driver;

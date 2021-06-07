@@ -114,32 +114,32 @@ public class CEGEditorElements extends EditorElements {
 		driver.findElement(cancel).click();
 	}
 
-	public void changeTypeToANDInNode(int node) {
-		WebElement nodeElement = UITestUtil.getElementWithIndex(node, driver, cegNodeSelector);
+	public void changeTypeToANDInNode(String nodeId) {
+		WebElement nodeElement = driver.findElement(By.id(nodeId));
 		builder.moveToElement(nodeElement, 0, 25).click().build().perform();
-		driver.findElement(By.cssSelector("g > g > g > foreignObject > div > select")).click();
-		driver.findElement(By.cssSelector("g > g > g > foreignObject > div > select > option[value=AND]")).click();
+		driver.findElement(By.cssSelector("g > g > g > foreignObject > div > table > tbody > tr > select")).click();
+		driver.findElement(By.cssSelector("g > g > g > foreignObject > div > table > tbody > tr > select > option[value=AND]")).click();
 
 	}
 
-	public void changeTypeToORInNode(int node) {
-		WebElement nodeElement = UITestUtil.getElementWithIndex(node, driver, cegNodeSelector);
+	public void changeTypeToORInNode(String nodeId) {
+		WebElement nodeElement = driver.findElement(By.id(nodeId));
 		builder.moveToElement(nodeElement, 0, 25).click().build().perform();
-		driver.findElement(By.cssSelector("g > g > g > foreignObject > div > select")).click();
-		driver.findElement(By.cssSelector("g > g > g > foreignObject > div > select > option[value=OR]")).click();
+		driver.findElement(By.cssSelector("g > g > g > foreignObject > div > table > tbody > tr > select")).click();
+		driver.findElement(By.cssSelector("g > g > g > foreignObject > div > table > tbody > tr > select > option[value=OR]")).click();
 	}
 
-	public void changeTypeToAND(int node) {
+	public void changeTypeToAND(String nodeId) {
 		// Click two times as clicking only once will minimize the node
-		WebElement nodeElement = UITestUtil.getElementWithIndex(node, driver, cegNodeSelector);
+		WebElement nodeElement = driver.findElement(By.id(nodeId));
 		builder.moveToElement(nodeElement, 0, 25).click().build().perform();
 		driver.findElement(propertiesType).click();
 		driver.findElement(TypeAND).click();
 	}
 
-	public void changeTypeToOR(int node) {
+	public void changeTypeToOR(String nodeId) {
 		// Click two times as clicking only once will minimize the node
-		WebElement nodeElement = UITestUtil.getElementWithIndex(node, driver, cegNodeSelector);
+		WebElement nodeElement = driver.findElement(By.id(nodeId));
 		builder.moveToElement(nodeElement, 0, 25).click().build().perform();
 		driver.findElement(propertiesType).click();
 		driver.findElement(TypeOR).click();

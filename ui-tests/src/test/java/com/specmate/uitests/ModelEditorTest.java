@@ -84,15 +84,15 @@ public class ModelEditorTest extends TestBase {
 		assertFalse(cegEditor.negationDisplayed());
 
 		// Change connection type in sidebar
-		//cegEditor.changeTypeToOR(nodeAutofahren);
-		//cegEditor.changeTypeToAND(nodeAutofahren);
+		cegEditor.changeTypeToOR(nodeAutofahren);
+		cegEditor.changeTypeToAND(nodeAutofahren);
 
 		// Change connection type in node
-		//cegEditor.changeTypeToORInNode(nodeAutofahren);
-		//cegEditor.changeTypeToANDInNode(nodeAutofahren);
+		cegEditor.changeTypeToORInNode(nodeAutofahren);
+		cegEditor.changeTypeToANDInNode(nodeAutofahren);
 
 		// Check number of nodes
-		//assertTrue(cegEditor.correctModelCreated(nodeFS, 2));
+		assertTrue(cegEditor.correctModelCreated(3, 2));
 
 		// Save CEG
 		commonControl.save();

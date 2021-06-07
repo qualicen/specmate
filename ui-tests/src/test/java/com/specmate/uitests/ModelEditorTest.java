@@ -51,8 +51,8 @@ public class ModelEditorTest extends TestBase {
 		requirementOverview.createCEGModelFromRequirement(modelName);
 
 		// Adding nodes to the CEG
-		String nodeAlter = cegEditor.createNode("Alter", ">17", 50, 100);// results in x=15, y=60
-		String nodeFS = cegEditor.createNode("Führerschein", "vorhanden", 50, 300);// results in x=15, y=27
+		String nodeAlter = cegEditor.createNode("Alter", ">17", 50, 100);// results in x=7, y=60
+		String nodeFS = cegEditor.createNode("Führerschein", "vorhanden", 50, 300);// results in x=7, y=27
 		String nodeAutofahren = cegEditor.createNode("Autofahren", "erlaubt", 300, 200);
 
 		// Check if error message is shown (Assert true)

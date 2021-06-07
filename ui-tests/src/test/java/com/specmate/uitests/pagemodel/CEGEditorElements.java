@@ -32,7 +32,7 @@ public class CEGEditorElements extends EditorElements {
 	 * creates a new node with corresponding variable and condition at position x,y
 	 * and returns the newly created node
 	 */
-	public int createNode(String variable, String condition, int x, int y) {
+	public String createNode(String variable, String condition, int x, int y) {
 
 		int numberOfNodes = driver
 				.findElements(cegNodeSelector)
@@ -47,8 +47,7 @@ public class CEGEditorElements extends EditorElements {
 				.visibilityOfElementLocated(cegNodeSelector));
 		
 		WebElement node = driver.findElement(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > table "));
-		System.out.println("ABCDEF");
-		System.out.println(node.getAttribute("id"));
+		String nodeId = node.getAttribute("id");
 
 		WebElement variableTextfield = driver.findElement(propertiesVariable);
 		WebElement conditionTextfield = driver.findElement(propertiesCondition);
@@ -57,15 +56,18 @@ public class CEGEditorElements extends EditorElements {
 		conditionTextfield.clear();
 		conditionTextfield.sendKeys(condition);
 
-		return numberOfNodes;
+		return nodeId;
 	}
 
 	/**
 	 * establishes a connection from node1 to node2 and returns the newly created
 	 * connection
 	 */
-	public int connectNode(int node1, int node2) {
-		return super.connect(node1, node2, cegNodeSelector);
+	public int connectNode(String nodeId1, String nodeId2) {
+		driver.findElement(By.id(nodeId1));
+		WebElement nodeElement1 = driver.findElement(By.id(nodeId1));
+		WebElement nodeElement2 = driver.findElement(By.id(nodeId2));
+		return super.connect(nodeElement1, nodeElement2);
 	}
 
 	public void toggleNegateButtonOn(WebElement connection) {

@@ -84,14 +84,13 @@ public class EditorElements {
 	 * establishes a connection from node1 to node2 and returns the newly created
 	 * connection
 	 */
-	public int connect(int node1, int node2, By selector) {
+	public int connect(WebElement nodeElement1, WebElement nodeElement2) {
 
 		int numberOfConnections = driver
 				.findElements(
 						By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;'] > path:nth-child(2)"))
 				.size();
 
-		WebElement nodeElement1 = UITestUtil.getElementWithIndex(node1, driver, selector);
 
 		builder.moveToElement(nodeElement1, 0, 15).click().build().perform();
 
@@ -106,7 +105,6 @@ public class EditorElements {
 
 		Actions action = new Actions(driver);
 
-		WebElement nodeElement2 = UITestUtil.getElementWithIndex(node2, driver, selector);
 
 		action.dragAndDrop(connectionPopUp, nodeElement2).build().perform();
 		;

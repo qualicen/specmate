@@ -59,7 +59,9 @@ public class ProcessEditorElements extends EditorElements {
 	}
 	
 	public int connectActivity(String connectionCondition, int node1, int node2) {
-		int connectionIndex = super.connect(node1, node2, nodeSelector);
+		WebElement nodeElement1 = UITestUtil.getElementWithIndex(node1, driver, nodeSelector);
+		WebElement nodeElement2 = UITestUtil.getElementWithIndex(node1, driver, nodeSelector);
+		int connectionIndex = super.connect(nodeElement1, nodeElement2);
 		
 		// A condition is required if the connection originated from a decision node
 		WebElement conditionTextfield = driver.findElement(propertiesCondition);

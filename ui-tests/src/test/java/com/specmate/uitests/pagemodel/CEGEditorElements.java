@@ -124,11 +124,14 @@ public class CEGEditorElements extends EditorElements {
 	}
 
 	public void changeTypeToORInNode(String nodeId) {
-		WebElement nodeElement = driver.findElement(By.id(nodeId));
+		//WebElement nodeElement = driver.findElement(By.id(nodeId));
 		//nodeElement.click();
 //		builder.moveToElement(nodeElement, 0, 25).click().build().perform();
-		driver.findElement(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > table > tbody > tr > select")).click();
-		driver.findElement(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > table > tbody > tr > select > option[value=OR]")).click();
+		driver.findElement(By.cssSelector("#" + nodeId + " > tbody > tr > select")).click();
+		driver.findElement(By.cssSelector("#" + nodeId + " > tbody > tr > select > option[value=OR]")).click();
+		
+		//driver.findElement(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > table > tbody > tr > select")).click();
+		//driver.findElement(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > table > tbody > tr > select > option[value=OR]")).click();
 	}
 
 	public void changeTypeToAND(String nodeId) {

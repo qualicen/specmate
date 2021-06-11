@@ -96,7 +96,7 @@ public class CEGEditorElements extends EditorElements {
 	}
 
 	public boolean negationDisplayed() {
-		WebDriverWait wait = new WebDriverWait(driver, 1000);
+		WebDriverWait wait = new WebDriverWait(driver, 2000);
 		return UITestUtil.isElementPresent(By.cssSelector(
 				"g > g:nth-child(2) > g[style*='visibility: visible;'] > path:nth-child(2)[stroke-dasharray='6 6']"),
 				driver);

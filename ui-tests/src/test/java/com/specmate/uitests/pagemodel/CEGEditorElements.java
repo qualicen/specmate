@@ -95,8 +95,9 @@ public class CEGEditorElements extends EditorElements {
 		driver.findElement(By.cssSelector(".form-check-input")).click();
 	}
 
-	public boolean negationDisplayed() {
+	public boolean negationDisplayed(String nodeId) {
 		WebDriverWait wait = new WebDriverWait(driver, 2000);
+		driver.findElement(By.id(nodeId)).click();
 		return UITestUtil.isElementPresent(By.cssSelector(
 				"g > g:nth-child(2) > g[style*='visibility: visible;'] > path:nth-child(2)[stroke-dasharray='6 6']"),
 				driver);

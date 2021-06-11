@@ -75,13 +75,13 @@ public class ModelEditorTest extends TestBase {
 		cegEditor.toggleNegateButtonOnLastConnection();
 
 		// Check if tilde is shown (Assert True)
-		assertTrue(cegEditor.negationDisplayed());
+		assertTrue(cegEditor.negationDisplayed(nodeAutofahren));
 
 		// Remove negation
 		cegEditor.toggleNegateButtonOnLastConnection();
 
 		// Check if tile is hidden (Assert false)
-		assertFalse(cegEditor.negationDisplayed());
+		assertFalse(cegEditor.negationDisplayed(nodeFS));
 
 		// Change connection type in sidebar
 		cegEditor.changeTypeToOR(nodeAutofahren);

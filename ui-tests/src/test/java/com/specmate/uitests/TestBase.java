@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -96,7 +97,9 @@ public class TestBase implements SauceOnDemandSessionIdProvider {
         if (buildTag != null) {
             capabilities.setCapability("build", buildTag);
         }
-        this.driver = new RemoteWebDriver(new URL("https://" + username+ ":" + accesskey + seleniumURI +"/wd/hub"), capabilities);
+        //this.driver = new RemoteWebDriver(new URL("https://" + username+ ":" + accesskey + seleniumURI +"/wd/hub"), capabilities);
+        System.setProperty("webdriver.chrome.driver", "Q:\\chromedriver.exe");
+		driver = new ChromeDriver();
         
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);

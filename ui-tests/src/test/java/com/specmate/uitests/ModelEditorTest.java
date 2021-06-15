@@ -58,12 +58,6 @@ public class ModelEditorTest extends TestBase {
 		// Check if error message is shown (Assert true)
 		assertTrue(cegEditor.errorMessageDisplayed());
 
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-
 		// Connecting created nodes
 		cegEditor.connectNode(nodeAlter, nodeAutofahren);
 		cegEditor.connectNode(nodeFS, nodeAutofahren);
@@ -75,49 +69,55 @@ public class ModelEditorTest extends TestBase {
 		cegEditor.toggleNegateButtonOnLastConnection();
 
 		// Check if tilde is shown (Assert True)
-		assertTrue(cegEditor.negationDisplayed(nodeAutofahren));
+		assertTrue(cegEditor.negationDisplayed());
 
 		// Remove negation
 		cegEditor.toggleNegateButtonOnLastConnection();
 
 		// Check if tile is hidden (Assert false)
-		assertFalse(cegEditor.negationDisplayed(nodeFS));
+		assertFalse(cegEditor.negationDisplayed());
 
 		// Change connection type in sidebar
 		cegEditor.changeTypeToOR(nodeAutofahren);
 		cegEditor.changeTypeToAND(nodeAutofahren);
 
 		// Change connection type in node
-		//cegEditor.changeTypeToORInNode(nodeAutofahren);
-		//cegEditor.changeTypeToANDInNode(nodeAutofahren);
+		cegEditor.changeTypeToORInNode(nodeAutofahren);
+		cegEditor.changeTypeToANDInNode(nodeAutofahren);
 
 		// Check number of nodes
-		//assertTrue(cegEditor.correctModelCreated(3, 2));
+		assertTrue(cegEditor.correctModelCreated(3, 2));
 
 		// Save CEG
-		//commonControl.save();
+		commonControl.save();
 
 		// Create test specification
-		//cegEditor.generateTestSpecification();
+		cegEditor.generateTestSpecification();
 
-		//assertTrue(cegEditor.correctTestSpecificationGenerated(3));
+		assertTrue(cegEditor.correctTestSpecificationGenerated(3));
+
+		// Save Testspec
+		commonControl.save();
 
 		// Click on created CEG in the requirement overview
-		//cegEditor.clickOnRelatedRequirement("Erlaubnis Autofahren");
-		//requirementOverview.clickOnCreatedModel(modelName);
+		cegEditor.clickOnRelatedRequirement("Erlaubnis Autofahren");
+		requirementOverview.clickOnCreatedModel(modelName);
+
+		// Save CEG
+		commonControl.save();
 
 		// Duplicate CEG
-		//cegEditor.clickOnRelatedRequirement("Erlaubnis Autofahren");
-		//requirementOverview.duplicateCEGModel(modelName);
+		cegEditor.clickOnRelatedRequirement("Erlaubnis Autofahren");
+		requirementOverview.duplicateCEGModel(modelName);
 		// Click on it, to check if the duplication created a new model
-		//requirementOverview.clickOnDuplicateModel(modelName);
+		requirementOverview.clickOnDuplicateModel(modelName);
 
 		// Delete duplicate
-		//cegEditor.clickOnRelatedRequirement("Erlaubnis Autofahren");
-		//requirementOverview.deleteDuplicateModel(modelName);
-		//requirementOverview.refreshRequirementOverviewPage();
+		cegEditor.clickOnRelatedRequirement("Erlaubnis Autofahren");
+		requirementOverview.deleteDuplicateModel(modelName);
+		requirementOverview.refreshRequirementOverviewPage();
 		// The model should be deleted, thus, use assertFalse
-		//assertFalse(requirementOverview.checkForDeletedDuplicateModel(modelName));
+		assertFalse(requirementOverview.checkForDeletedDuplicateModel(modelName));
 
 		// Delete created model
 		requirementOverview.deleteModel(modelName);

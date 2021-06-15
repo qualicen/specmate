@@ -105,14 +105,35 @@ public class EditorElements {
 
 		Actions action = new Actions(driver);
 
-
 		action.dragAndDrop(connectionPopUp, nodeElement2).build().perform();
-		;
 
 		wait.until(ExpectedConditions.visibilityOfElementLocated(
 				By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;'] > path:nth-child(2)")));
 
 		return numberOfConnections;
+	}
+	
+	public void connectById(String nodeId1, String nodeId2) {
+		WebElement nodeElement1 = driver.findElement(By.id(nodeId1));
+
+		builder.moveToElement(nodeElement1, 0, 15).click().build().perform();
+
+		WebDriverWait wait = new WebDriverWait(driver, 30);
+
+		// Get the connection pop up element, which needs to be dragged to the
+		// connecting node
+		wait.until(ExpectedConditions.visibilityOfElementLocated(
+				By.cssSelector("g > g:nth-child(3) > g[style='cursor: pointer; visibility: visible;']")));
+		WebElement connectionPopUp = driver
+				.findElement(By.cssSelector("g > g:nth-child(3) > g[style='cursor: pointer; visibility: visible;']"));
+
+		Actions action = new Actions(driver);
+
+		WebElement nodeElement2 = driver.findElement(By.id(nodeId2));
+		action.dragAndDrop(connectionPopUp, nodeElement2).build().perform();
+
+		wait.until(ExpectedConditions.visibilityOfElementLocated(
+				By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;'] > path:nth-child(2)")));
 	}
 
 	/**

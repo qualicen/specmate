@@ -42,7 +42,7 @@ public class UITestUtil {
 	 */
 	public static boolean isElementPresent(By selector, WebDriver driver) {
 		// Set the timeout to 1 second in order to avoid delay
-		driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+		UITestUtil.absoluteWait(1500);
 		boolean returnVal = true;
 		try {
 			driver.findElement(selector);
@@ -103,5 +103,12 @@ public class UITestUtil {
 		
 		// calling the method and x,y cordinates should be in the editor
 		act.dragAndDropBy(drag, x, y).build().perform();
+    }
+    public static void absoluteWait(int ms) {
+    	try {
+			Thread.sleep(ms);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
     }
 }

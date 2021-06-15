@@ -34,19 +34,17 @@ public class CEGEditorElements extends EditorElements {
 	 */
 	public String createNode(String variable, String condition, int x, int y) {
 
-		int numberOfNodes = driver
-				.findElements(cegNodeSelector)
-				.size();
+		int numberOfNodes = driver.findElements(cegNodeSelector).size();
 
 		// Click node button and drag and drop to editorview
 
 		UITestUtil.dragAndDrop(toolbarNode, x, y, driver);
 
 		WebDriverWait wait = new WebDriverWait(driver, 30);
-		wait.until(ExpectedConditions
-				.visibilityOfElementLocated(cegNodeSelector));
-		
-		WebElement node = driver.findElement(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > table"));
+		wait.until(ExpectedConditions.visibilityOfElementLocated(cegNodeSelector));
+
+		WebElement node = driver
+				.findElement(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > table"));
 		String nodeId = node.getAttribute("id");
 
 		WebElement variableTextfield = driver.findElement(propertiesVariable);
@@ -63,11 +61,8 @@ public class CEGEditorElements extends EditorElements {
 	 * establishes a connection from node1 to node2 and returns the newly created
 	 * connection
 	 */
-	public int connectNode(String nodeId1, String nodeId2) {
-		driver.findElement(By.id(nodeId1));
-		WebElement nodeElement1 = driver.findElement(By.id(nodeId1));
-		WebElement nodeElement2 = driver.findElement(By.id(nodeId2));
-		return super.connect(nodeElement1, nodeElement2);
+	public void connectNode(String nodeId1, String nodeId2) {
+		super.connectById(nodeId1, nodeId2);
 	}
 
 	public void toggleNegateButtonOn(WebElement connection) {
@@ -88,16 +83,12 @@ public class CEGEditorElements extends EditorElements {
 	}
 
 	public void toggleNegateButtonOnLastConnection() {
-
 		WebDriverWait wait = new WebDriverWait(driver, 10);
-
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".form-check-input")));
 		driver.findElement(By.cssSelector(".form-check-input")).click();
 	}
 
-	public boolean negationDisplayed(String nodeId) {
-		WebDriverWait wait = new WebDriverWait(driver, 2000);
-		driver.findElement(By.id(nodeId)).click();
+	public boolean negationDisplayed() {
 		return UITestUtil.isElementPresent(By.cssSelector(
 				"g > g:nth-child(2) > g[style*='visibility: visible;'] > path:nth-child(2)[stroke-dasharray='6 6']"),
 				driver);
@@ -117,26 +108,19 @@ public class CEGEditorElements extends EditorElements {
 	}
 
 	public void changeTypeToANDInNode(String nodeId) {
-		WebElement nodeElement = driver.findElement(By.id(nodeId));
-//		builder.moveToElement(nodeElement, 0, 25).click().build().perform();
-		driver.findElement(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > table > tbody > tr > select")).click();
-		driver.findElement(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > table > tbody > tr > select > option[value=AND]")).click();
+		String escapedNodeId = nodeId.replace("/", "\\/");
+		driver.findElement(By.cssSelector("#" + escapedNodeId + " > tbody > tr:nth-child(3) > select")).click();
+		driver.findElement(By.cssSelector("#" + escapedNodeId + " > tbody > tr:nth-child(3) > select > option[value=AND]")).click();
 
 	}
 
 	public void changeTypeToORInNode(String nodeId) {
-		//WebElement nodeElement = driver.findElement(By.id(nodeId));
-		//nodeElement.click();
-//		builder.moveToElement(nodeElement, 0, 25).click().build().perform();
-		driver.findElement(By.cssSelector("#" + nodeId + " > tbody > tr > select")).click();
-		driver.findElement(By.cssSelector("#" + nodeId + " > tbody > tr > select > option[value=OR]")).click();
-		
-		//driver.findElement(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > table > tbody > tr > select")).click();
-		//driver.findElement(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > table > tbody > tr > select > option[value=OR]")).click();
+		String escapedNodeId = nodeId.replace("/", "\\/");
+		driver.findElement(By.cssSelector("#" + escapedNodeId + " > tbody > tr:nth-child(3) > select")).click();
+		driver.findElement(By.cssSelector("#" + escapedNodeId + " > tbody > tr:nth-child(3) > select > option[value=OR]")).click();
 	}
 
 	public void changeTypeToAND(String nodeId) {
-		// Click two times as clicking only once will minimize the node
 		WebElement nodeElement = driver.findElement(By.id(nodeId));
 		nodeElement.click();
 		driver.findElement(propertiesType).click();
@@ -144,10 +128,8 @@ public class CEGEditorElements extends EditorElements {
 	}
 
 	public void changeTypeToOR(String nodeId) {
-		// Click two times as clicking only once will minimize the node
 		WebElement nodeElement = driver.findElement(By.id(nodeId));
 		nodeElement.click();
-		//builder.moveToElement(nodeElement, 0, 25).click().build().perform();
 		driver.findElement(propertiesType).click();
 		driver.findElement(TypeOR).click();
 	}

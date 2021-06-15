@@ -1,5 +1,8 @@
 package com.specmate.uitests;
 
+import java.net.URL;
+import java.util.LinkedList;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.After;
 import org.junit.Before;
@@ -11,123 +14,120 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
+import com.saucelabs.common.SauceOnDemandAuthentication;
+import com.saucelabs.common.SauceOnDemandSessionIdProvider;
 import com.saucelabs.junit.SauceOnDemandTestWatcher;
 import com.specmate.uitests.pagemodel.LoginElements;
 import com.specmate.uitests.pagemodel.UITestUtil;
-
-import java.net.URL;
-import java.util.LinkedList;
-import java.util.concurrent.TimeUnit;
-
-import com.saucelabs.common.SauceOnDemandAuthentication;
-import com.saucelabs.common.SauceOnDemandSessionIdProvider;
 
 @Ignore
 @RunWith(Parameterized.class)
 public class TestBase implements SauceOnDemandSessionIdProvider {
 	public static String username = System.getenv("SAUCE_USERNAME");
-    public static String accesskey = System.getenv("SAUCE_ACCESS_KEY");
-    public static String seleniumURI;
-    public static String buildTag;
-    public static final String tunnelidentifier = System.getenv("TRAVIS_JOB_NUMBER");
-    
-    public SauceOnDemandAuthentication authentication = new SauceOnDemandAuthentication();
-    
-    /**Mark the Sauce Job as passed/failed when the test succeeds or fails*/
-    @Rule
-    public SauceOnDemandTestWatcher resultReportingTestWatcher = new SauceOnDemandTestWatcher(this, authentication);
+	public static String accesskey = System.getenv("SAUCE_ACCESS_KEY");
+	public static String seleniumURI;
+	public static String buildTag;
+	public static final String tunnelidentifier = System.getenv("TRAVIS_JOB_NUMBER");
 
-    @Rule
-    public TestName name = new TestName() {
-        public String getMethodName() {
-            return String.format("%s", super.getMethodName());
-        }
-    };
+	public SauceOnDemandAuthentication authentication = new SauceOnDemandAuthentication();
 
-    protected String browser;
-    protected String os;
-    protected String version;
-    protected String deviceName;
-    protected String deviceOrientation;
-    protected String sessionId;
-    protected WebDriver driver;
+	/** Mark the Sauce Job as passed/failed when the test succeeds or fails */
+	@Rule
+	public SauceOnDemandTestWatcher resultReportingTestWatcher = new SauceOnDemandTestWatcher(this, authentication);
 
- 
-    /**Constructor for test instances*/
-    public TestBase(String os, String version, String browser, String deviceName, String deviceOrientation) {
-        super();
-        this.os = os;
-        this.version = version;
-        this.browser = browser;
-        this.deviceName = deviceName;
-        this.deviceOrientation = deviceOrientation;
-    }
+	@Rule
+	public TestName name = new TestName() {
+		public String getMethodName() {
+			return String.format("%s", super.getMethodName());
+		}
+	};
 
-    /**Browser configurations*/
-    @Parameters
-    public static LinkedList<String[]> browsersStrings() {
-        LinkedList<String[]> browsers = new LinkedList<String[]>();
+	protected String browser;
+	protected String os;
+	protected String version;
+	protected String deviceName;
+	protected String deviceOrientation;
+	protected String sessionId;
+	protected WebDriver driver;
 
-        browsers.add(new String[]{"Windows 10", "88.0", "Chrome", null, null});
-        //browsers.add(new String[]{"Windows 10", "18.17763", "MicrosoftEdge", null, null});
-        //browsers.add(new String[]{"Windows 10", "73.0", "firefox", null, null});
-        return browsers;
-    }
+	/** Constructor for test instances */
+	public TestBase(String os, String version, String browser, String deviceName, String deviceOrientation) {
+		super();
+		this.os = os;
+		this.version = version;
+		this.browser = browser;
+		this.deviceName = deviceName;
+		this.deviceOrientation = deviceOrientation;
+	}
 
- 
-    @Before
-    public void setUp() throws Exception {
-        DesiredCapabilities capabilities = new DesiredCapabilities(); 
+	/** Browser configurations */
+	@Parameters
+	public static LinkedList<String[]> browsersStrings() {
+		LinkedList<String[]> browsers = new LinkedList<String[]>();
 
-        capabilities.setCapability(CapabilityType.BROWSER_NAME, browser);
-        capabilities.setCapability(CapabilityType.VERSION, version);
-        capabilities.setCapability("deviceName", deviceName);
-        capabilities.setCapability("device-orientation", deviceOrientation);
-        capabilities.setCapability("platform", os);
-        capabilities.setCapability("tunnel-identifier", "github-action-tunnel"); 
+		browsers.add(new String[] { "Windows 10", "88.0", "Chrome", null, null });
+		// browsers.add(new String[]{"Windows 10", "18.17763", "MicrosoftEdge", null,
+		// null});
+		// browsers.add(new String[]{"Windows 10", "73.0", "firefox", null, null});
+		return browsers;
+	}
 
-        String methodName = name.getMethodName();
-        capabilities.setCapability("name", methodName);
+	@Before
+	public void setUp() throws Exception {
+		DesiredCapabilities capabilities = new DesiredCapabilities();
 
-        if (buildTag != null) {
-            capabilities.setCapability("build", buildTag);
-        }
-        //this.driver = new RemoteWebDriver(new URL("https://" + username+ ":" + accesskey + seleniumURI +"/wd/hub"), capabilities);
-        System.setProperty("webdriver.chrome.driver", "Q:\\chromedriver.exe");
-		driver = new ChromeDriver();
-        
-        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-        driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
+		capabilities.setCapability(CapabilityType.BROWSER_NAME, browser);
+		capabilities.setCapability(CapabilityType.VERSION, version);
+		capabilities.setCapability("deviceName", deviceName);
+		capabilities.setCapability("device-orientation", deviceOrientation);
+		capabilities.setCapability("platform", os);
+		capabilities.setCapability("tunnel-identifier", "github-action-tunnel");
 
-        this.sessionId = (((RemoteWebDriver) driver).getSessionId()).toString();
-    }
+		String methodName = name.getMethodName();
+		capabilities.setCapability("name", methodName);
 
-    @After
-    public void tearDown() throws Exception {
-        driver.quit();
-    }
+		if (buildTag != null) {
+			capabilities.setCapability("build", buildTag);
+		}
+		this.driver = new RemoteWebDriver(new URL("https://" + username + ":" + accesskey + seleniumURI + "/wd/hub"),
+				capabilities);
 
-    public String getSessionId() {
-        return sessionId;
-    }
+		// For local UI Tests uncomment the following two lines and adapt the path to
+		// chromedriver.exe
+		// System.setProperty("webdriver.chrome.driver", "Q:\\chromedriver.exe");
+		// driver = new ChromeDriver();
 
-    @BeforeClass
-    public static void setupClass() {
-        // Get the uri to send the commands to
-        seleniumURI = "@ondemand.saucelabs.com:443";
-        
-        // Set the buildTag to the Github Action number 
-        buildTag = "#" + System.getenv("GITHUB_RUN_NUMBER");
-        if (buildTag == null) {
-            buildTag = System.getenv("SAUCE_BUILD_NAME");
-        }
-    }
-    
+		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
+
+		this.sessionId = (((RemoteWebDriver) driver).getSessionId()).toString();
+	}
+
+	@After
+	public void tearDown() throws Exception {
+		driver.quit();
+	}
+
+	public String getSessionId() {
+		return sessionId;
+	}
+
+	@BeforeClass
+	public static void setupClass() {
+		// Get the uri to send the commands to
+		seleniumURI = "@ondemand.saucelabs.com:443";
+
+		// Set the buildTag to the Github Action number
+		buildTag = "#" + System.getenv("GITHUB_RUN_NUMBER");
+		if (buildTag == null) {
+			buildTag = System.getenv("SAUCE_BUILD_NAME");
+		}
+	}
+
 	public void performLogin(LoginElements login) {
 		UITestUtil.waitForProjectsToLoad(driver);
 		login.username("username");

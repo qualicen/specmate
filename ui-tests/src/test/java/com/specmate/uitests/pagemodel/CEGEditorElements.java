@@ -110,26 +110,27 @@ public class CEGEditorElements extends EditorElements {
 	public void changeTypeToANDInNode(String nodeId) {
 		String escapedNodeId = nodeId.replace("/", "\\/");
 		driver.findElement(By.cssSelector("#" + escapedNodeId + " > tbody > tr:nth-child(3) > select")).click();
-		driver.findElement(By.cssSelector("#" + escapedNodeId + " > tbody > tr:nth-child(3) > select > option[value=AND]")).click();
+		driver.findElement(
+				By.cssSelector("#" + escapedNodeId + " > tbody > tr:nth-child(3) > select > option[value=AND]"))
+				.click();
 
 	}
 
 	public void changeTypeToORInNode(String nodeId) {
 		String escapedNodeId = nodeId.replace("/", "\\/");
 		driver.findElement(By.cssSelector("#" + escapedNodeId + " > tbody > tr:nth-child(3) > select")).click();
-		driver.findElement(By.cssSelector("#" + escapedNodeId + " > tbody > tr:nth-child(3) > select > option[value=OR]")).click();
+		driver.findElement(
+				By.cssSelector("#" + escapedNodeId + " > tbody > tr:nth-child(3) > select > option[value=OR]")).click();
 	}
 
 	public void changeTypeToAND(String nodeId) {
-		WebElement nodeElement = driver.findElement(By.id(nodeId));
-		nodeElement.click();
+		driver.findElement(By.id(nodeId)).click();
 		driver.findElement(propertiesType).click();
 		driver.findElement(TypeAND).click();
 	}
 
 	public void changeTypeToOR(String nodeId) {
-		WebElement nodeElement = driver.findElement(By.id(nodeId));
-		nodeElement.click();
+		driver.findElement(By.id(nodeId)).click();
 		driver.findElement(propertiesType).click();
 		driver.findElement(TypeOR).click();
 	}

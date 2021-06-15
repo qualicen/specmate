@@ -124,7 +124,7 @@ public class CEGEditorElements extends EditorElements {
 	}
 
 	public void changeTypeToAND(String nodeId) {
-		driver.findElement(By.id(nodeId)).click();
+		//driver.findElement(By.id(nodeId)).click();
 		driver.findElement(propertiesType).click();
 		driver.findElement(TypeAND).click();
 	}

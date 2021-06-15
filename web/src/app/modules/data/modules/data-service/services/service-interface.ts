@@ -1,4 +1,5 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import 'rxjs/add/observable/of';
 import { BatchOperation } from '../../../../../model/BatchOperation';
 import { IContainer } from '../../../../../model/IContainer';
@@ -73,7 +74,7 @@ export class ServiceInterface {
         return await this.http.post(Url.urlCustomService(url, serviceSuffix), payload, { params: urlParams }).toPromise();
     }
 
-    public async performOperationGET(url: string, serviceSuffix: string, payload: any,parameters: { [key: string]: string },  token: UserToken): Promise<any> {
+    public async performOperationGET(url: string, serviceSuffix: string, payload: any, parameters: { [key: string]: string },  token: UserToken): Promise<any> {
         let urlParams = this.toUrlParams(parameters);
         return await this.http.get(Url.urlCustomService(url, serviceSuffix), { params: urlParams }).toPromise();
     }
@@ -102,7 +103,7 @@ export class ServiceInterface {
      *                  If a search field begins with '-', this means results that match the query should be excluded.
      *                  Example: {'-name':'car'} --> Exclude results with 'car' in the name
      */
-    public async search(query: string, token: UserToken, filter?: { [key: string]: string }): Promise<IContainer[]> {
+    public search(query: string, token: UserToken, filter?: { [key: string]: string }): Observable<IContainer[]> {
         let urlParams: HttpParams = new HttpParams();
         let queryString = query ? '+(' + query + ')' : '';
         if (filter) {
@@ -119,10 +120,8 @@ export class ServiceInterface {
         urlParams = urlParams.append('query', queryString);
 
         try {
-            const response = await this.http
-                .get<IContainer[]>(Url.urlCustomService(token.project, 'search'), { params: urlParams })
-                .toPromise();
-            return response;
+            return this.http
+                .get<IContainer[]>(Url.urlCustomService(token.project, 'search'), { params: urlParams });
         } catch (e) {
             this.handleError(e);
         }

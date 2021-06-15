@@ -5,11 +5,10 @@ import { VERSION } from '../../../../../../environments/version';
 @Component({
     selector: 'navigation-bar',
     moduleId: module.id.toString(),
-    templateUrl: 'navigation-bar.component.html'
+    templateUrl: 'navigation-bar.component.html',
+    styleUrls: ['navigation-bar.component.css']
 })
 export class NavigationBar {
-    constructor() { }
-
     public get version(): string {
         return VERSION.NUMBER + ' (' + ENV.TYPE + ')';
     }

@@ -6,6 +6,7 @@ import { I18NModule } from '../../../common/modules/i18n/i18n.module';
 import { OperationMonitorModule } from '../../../notification/modules/operation-monitor/operation-monitor.module';
 import { SpecmateSharedModule } from '../../../specmate/specmate.shared.module';
 import { LogoutModule } from '../../../views/main/authentication/modules/logout/logout.module';
+import { ItemSearchModule } from '../item-search/item-search.module';
 import { NavigationBar } from './components/navigation-bar.component';
 
 @NgModule({
@@ -17,7 +18,8 @@ import { NavigationBar } from './components/navigation-bar.component';
     SpecmateSharedModule,
     LogoutModule,
     BrowserVersionCheckerModule,
-    ChooseProjectModule
+    ChooseProjectModule,
+    ItemSearchModule
   ],
   declarations: [
     // COMPONENTS IN THIS MODULE

@@ -1,20 +1,18 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
-import { Subject } from 'rxjs/Subject';
+import { Requirement } from 'src/app/model/Requirement';
+import { ConfigProperties, ConfigService } from 'src/app/modules/config/modules/config-service/services/config-service';
 import { TranslateService } from '../../../../../../../node_modules/@ngx-translate/core';
 import { Config } from '../../../../../config/config';
 import { Folder } from '../../../../../model/Folder';
 import { IContainer } from '../../../../../model/IContainer';
-import { IContentElement } from '../../../../../model/IContentElement';
-import { Search } from '../../../../../util/search';
 import { Type } from '../../../../../util/type';
 import { SpecmateDataService } from '../../../../data/modules/data-service/services/specmate-data.service';
 import { AuthenticationService } from '../../../../views/main/authentication/modules/auth/services/authentication.service';
 import { NavigatorService } from '../../navigator/services/navigator.service';
-import { Requirement } from 'src/app/model/Requirement';
-import { ConfigProperties, ConfigService } from 'src/app/modules/config/modules/config-service/services/config-service';
+
 
 enum ActiveTab { project, library, recycleBin }
 
@@ -27,17 +25,11 @@ enum ActiveTab { project, library, recycleBin }
 export class ProjectExplorer implements OnInit {
     ActiveTab = ActiveTab;
 
-    @ViewChild('searchBox')
-    private searchBox: ElementRef<HTMLInputElement>;
-
     public _rootElements: IContainer[];
     public _rootLibraries: IContainer[];
     public _rootRecycleBinProject: IContainer[];
     public _rootRecycleBinLibrary: IContainer[];
     public currentActiveTab = ActiveTab.project;
-
-    private searchQueries: Subject<string>;
-    protected searchResults: IContentElement[];
 
     private numProjectFoldersDisplayed = Config.ELEMENT_CHUNK_SIZE;
     private numLibraryFoldersDisplayed = Config.ELEMENT_CHUNK_SIZE;
@@ -118,10 +110,6 @@ export class ProjectExplorer implements OnInit {
         return this._rootRecycleBinLibrary.length > this.numRecycleBinLibraryFoldersDisplayed;
     }
 
-    public search(query: string): void {
-        this.searchQueries.next(query);
-    }
-
     private async initialize(): Promise<void> {
         if (!this.auth.isAuthenticated) {
             this.clean();
@@ -145,36 +133,11 @@ export class ProjectExplorer implements OnInit {
             return;
         }
 
-        if (this.searchBox !== undefined && this.searchBox !== null) {
-            this.searchBox.nativeElement.value = '';
-        }
-
         this._rootElements = projectContents.filter(c => Type.is(c, Requirement) || (Type.is(c, Folder) && !(c as Folder).library));
         this._rootLibraries = projectContents.filter(c => Type.is(c, Folder) && (c as Folder).library && libraryFolders.indexOf(c.id) > -1);
         this._rootRecycleBinProject = projectContents.filter(c => Type.is(c, Folder) && !(c as Folder).library);
         this._rootRecycleBinLibrary = projectContents.filter(c => Type.is(c, Folder) && (c as Folder).library
             && libraryFolders.indexOf(c.id) > -1);
-
-        let filter = { '-type': 'Folder' };
-
-        // We clean this in case we're logged out. Thus, we need to reinit here.
-        if (this.searchQueries === undefined) {
-            this.searchQueries = new Subject<string>();
-        }
-        this.searchQueries
-            .debounceTime(300)
-            .distinctUntilChanged()
-            .subscribe(query => {
-                if (query && query.length >= Config.SEARCH_MINIMUM_LENGTH) {
-                    query = Search.processSearchQuery(query);
-                    this.dataService.search(query, filter).then(results => {
-                        this.searchResults = results;
-                    });
-                } else {
-                    this.searchResults = [];
-                }
-            }
-            );
     }
 
     public get recycleBinIsEmpty(): boolean {
@@ -213,8 +176,6 @@ export class ProjectExplorer implements OnInit {
         this._rootLibraries = undefined;
         this._rootRecycleBinProject = undefined;
         this._rootRecycleBinLibrary = undefined;
-        this.searchQueries = undefined;
-        this.searchResults = undefined;
     }
 
     public get projectName(): string {

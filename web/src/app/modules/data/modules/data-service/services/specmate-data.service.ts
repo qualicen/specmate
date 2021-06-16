@@ -19,6 +19,7 @@ import { AuthenticationService } from '../../../../views/main/authentication/mod
 import { LoggingService } from '../../../../views/side/modules/log-list/services/logging.service';
 import { Command } from './command';
 import { DataCache } from './data-cache';
+import { DataServiceError } from './data-service-error';
 import { EOperation } from './e-operation';
 import { Scheduler } from './scheduler';
 import { ServiceInterface } from './service-interface';
@@ -47,6 +48,7 @@ export class SpecmateDataService extends Monitorable {
 
     public committed = new EventEmitter<void>();
     public elementChanged = new EventEmitter<string>(true);
+    public error = new EventEmitter<DataServiceError>();
     private cache: DataCache = new DataCache();
     private serviceInterface: ServiceInterface;
     private scheduler: Scheduler;
@@ -55,7 +57,6 @@ export class SpecmateDataService extends Monitorable {
         private auth: AuthenticationService,
         private logger: LoggingService,
         private translate: TranslateService,
-        private simpleModal: SimpleModal,
         private connectionService: ServerConnectionService) {
         super();
         this.serviceInterface = new ServiceInterface(http);
@@ -239,9 +240,16 @@ export class SpecmateDataService extends Monitorable {
             this.scheduler.clearElementsToReload();
             this.end(SpecmateDataService.OP_COMMIT);
             this.committed.emit();
+
+            const e: string[] = [];
+            const x = e[2];
+            x.charAt(100);
         } catch (error) {
-            this.simpleModal.openOk(this.translate.instant('saveError.title'), this.translate.instant('saveError.retry'));
-            console.error(error);
+            this.error.next({
+                error,
+                title: 'saveError.title',
+                message: 'saveError.retry'
+            });
         }
 
     }

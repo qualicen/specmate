@@ -15,8 +15,6 @@ export class ProcessLayoutTool extends ToolBase {
     public style = '';
     public isHidden = false;
 
-    public graph: mxgraph.mxGraph;
-
     public async perform(): Promise<any> {
         this.layoutGraph();
     }

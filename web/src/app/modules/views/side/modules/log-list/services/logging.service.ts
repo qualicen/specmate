@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Config } from '../../../../../../config/config';
 import { ELogSeverity } from './e-log-severity';
 import { LogElement } from './log-element';

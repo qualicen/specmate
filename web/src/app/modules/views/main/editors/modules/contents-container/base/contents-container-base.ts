@@ -52,7 +52,7 @@ export abstract class ContentContainerBase<T extends IContainer> implements OnIn
         }
     }
 
-    public abstract async createElement(name: string): Promise<T>;
+    public abstract createElement(name: string): Promise<T>;
 
     public async duplicate(element: IContainer): Promise<void> {
         await this.dataService.performOperations(element.url, 'duplicate');

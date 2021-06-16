@@ -1,7 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
 import { Requirement } from 'src/app/model/Requirement';
 import { TranslateService } from '../../../../../../../node_modules/@ngx-translate/core';
 import { Config } from '../../../../../config/config';

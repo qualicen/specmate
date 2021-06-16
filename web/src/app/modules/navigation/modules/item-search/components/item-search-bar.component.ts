@@ -1,8 +1,5 @@
 import { Component } from '@angular/core';
 import { Observable, of, OperatorFunction } from 'rxjs';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
 import { catchError, debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 import { Config } from 'src/app/config/config';
 import { Search } from 'src/app/util/search';

@@ -1,7 +1,7 @@
 import { OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import 'rxjs/add/operator/switchMap';
+import { switchMap } from 'rxjs/operators';
 import { IContainer } from '../../../../../model/IContainer';
 import { Url } from '../../../../../util/url';
 import { SpecmateDataService } from '../../../../data/modules/data-service/services/specmate-data.service';
@@ -17,13 +17,13 @@ export abstract class SpecmateViewBase implements OnInit {
         protected navigator: NavigatorService,
         protected route: ActivatedRoute,
         protected modal: ConfirmationModal,
-        protected translate: TranslateService) {}
+        protected translate: TranslateService) { }
 
     ngOnInit() {
-        this.route.params
-            .switchMap((params: Params) => {
+        this.route.params.pipe(
+            switchMap((params: Params) => {
                 return this.dataService.readElement(Url.fromParams(params));
-            })
+            }))
             .subscribe((element: IContainer) => {
                 this.onElementResolved(element);
             });

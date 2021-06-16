@@ -1,4 +1,8 @@
-{"files": ["src/main.ts", "src/polyfills.ts"],
+{
+    "files": [
+        "src/main.ts",
+        "src/polyfills.ts"
+    ],
     "compilerOptions": {
         "target": "es5",
         "module": "commonjs",

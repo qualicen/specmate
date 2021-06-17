@@ -50,7 +50,7 @@ public class UITestUtil {
 			returnVal = false;
 		} finally {
 			// Change timeout back to the defined value
-			driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+			driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		}
 		return returnVal;
 	}

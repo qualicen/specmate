@@ -108,6 +108,8 @@ public class CEGEditorElements extends EditorElements {
 	}
 
 	public void changeTypeToANDInNode(String nodeId) {
+		WebDriverWait wait = new WebDriverWait(driver, 10);
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.id(nodeId)));
 		String escapedNodeId = nodeId.replace("/", "\\/");
 		driver.findElement(By.cssSelector("#" + escapedNodeId + " > tbody > tr:nth-child(3) > select")).click();
 		driver.findElement(
@@ -117,6 +119,8 @@ public class CEGEditorElements extends EditorElements {
 	}
 
 	public void changeTypeToORInNode(String nodeId) {
+		WebDriverWait wait = new WebDriverWait(driver, 10);
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.id(nodeId)));
 		String escapedNodeId = nodeId.replace("/", "\\/");
 		driver.findElement(By.cssSelector("#" + escapedNodeId + " > tbody > tr:nth-child(3) > select")).click();
 		driver.findElement(
@@ -125,7 +129,7 @@ public class CEGEditorElements extends EditorElements {
 
 	public void changeTypeToAND(String nodeId) {
 		WebDriverWait wait = new WebDriverWait(driver, 10);
-		wait.until(ExpectedConditions.refreshed(ExpectedConditions.stalenessOf(driver.findElement(By.id(nodeId)))));
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.id(nodeId)));
 		driver.findElement(By.id(nodeId)).click();
 		driver.findElement(propertiesType).click();
 		driver.findElement(TypeAND).click();
@@ -133,7 +137,7 @@ public class CEGEditorElements extends EditorElements {
 
 	public void changeTypeToOR(String nodeId) {
 		WebDriverWait wait = new WebDriverWait(driver, 10);
-		wait.until(ExpectedConditions.refreshed(ExpectedConditions.stalenessOf(driver.findElement(By.id(nodeId)))));
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.id(nodeId)));
 		driver.findElement(By.id(nodeId)).click();
 		driver.findElement(propertiesType).click();
 		driver.findElement(TypeOR).click();

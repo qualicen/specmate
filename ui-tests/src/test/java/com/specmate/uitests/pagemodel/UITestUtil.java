@@ -41,7 +41,7 @@ public class UITestUtil {
 	 *         otherwise
 	 */
 	public static boolean isElementPresent(By selector, WebDriver driver) {
-		// Set the timeout to 1 second in order to avoid delay
+		// Set the timeout to 1.5 second in order to avoid delay
 		UITestUtil.absoluteWait(1500);
 		boolean returnVal = true;
 		try {

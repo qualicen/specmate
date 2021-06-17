@@ -242,4 +242,13 @@ export class VertexProvider extends ProviderBase {
         }
         return container;
     }
+
+    public initProcessVertexRenderer() {
+        this.graph.getLabel = (cell: mxgraph.mxCell): any => {
+            let div = document.createElement('div');
+            div.id = cell.getId();
+            mx.mxUtils.write(div, cell.value);
+            return div;
+        };
+    }
 }

@@ -51,10 +51,10 @@ public class ProcessModelTest extends TestBase {
 		requirementOverview.createProcessModelFromRequirement(processName);		
 
 		// Create Start node
-		int startNode = processEditor.createStart(50, 80);
+		String startNode = processEditor.createStart(50, 80);
 
 		// Create Activity 
-		int initActivity = processEditor.createActivity("Initialise", 200, 170);
+		String initActivity = processEditor.createActivity("Initialise", 200, 170);
 
 		// Set expected outcome of init activity 
 		processEditor.setExpectedOutcome("Initialisation completed");
@@ -63,13 +63,13 @@ public class ProcessModelTest extends TestBase {
 		processEditor.setDescription("Description for activity");
 
 		// Create Decision
-		int decision1 = processEditor.createDecison("Age-Check", 150, 270);
+		String decision1 = processEditor.createDecison("Age-Check", 150, 270);
 
 		// Create Activity 
-		int childActivity = processEditor.createActivity("Child", 75, 350);
+		String childActivity = processEditor.createActivity("Child", 75, 350);
 
 		// Create Activity 
-		int parentActivity = processEditor.createActivity("Parent", 350, 350);
+		String parentActivity = processEditor.createActivity("Parent", 350, 350);
 
 		// Reference requirement 
 		processEditor.addRelatedRequirement("Zellenmarkierung");
@@ -86,7 +86,7 @@ public class ProcessModelTest extends TestBase {
 		processEditor.addRelatedRequirement("Zellenmarkierung");
 
 		// Create End node
-		int endNode = processEditor.createEnd(0, 450);
+		String endNode = processEditor.createEnd(0, 450);
 
 		// Check if error message is shown (Assert true)
 		assertTrue(processEditor.errorMessageDisplayed());

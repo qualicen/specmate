@@ -55,6 +55,8 @@ public class EditorElements {
 	}
 
 	public void clickOnRelatedRequirement(String requirement) {
+		WebDriverWait wait = new WebDriverWait(driver, 10);
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.id("requirement-" + requirement + "-link")));
 		driver.findElement(By.id("requirement-" + requirement + "-link")).click();
 		UITestUtil.waitForModalToDisappear(driver);
 	}

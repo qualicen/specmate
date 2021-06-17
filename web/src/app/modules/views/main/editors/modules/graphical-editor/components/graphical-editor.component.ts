@@ -573,6 +573,7 @@ export class GraphicalEditor implements OnDestroy {
     }
 
     private async initProcessModel(): Promise<void> {
+        this.vertexProvider.initProcessVertexRenderer();
         this.setFunctionGetPreferredSizeForCell(this.graph, this.shapeProvider);
     }
 

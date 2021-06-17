@@ -124,12 +124,16 @@ public class CEGEditorElements extends EditorElements {
 	}
 
 	public void changeTypeToAND(String nodeId) {
-		//driver.findElement(By.id(nodeId)).click();
+		WebDriverWait wait = new WebDriverWait(driver, 10);
+		wait.until(ExpectedConditions.refreshed(ExpectedConditions.stalenessOf(driver.findElement(By.id(nodeId)))));
+		driver.findElement(By.id(nodeId)).click();
 		driver.findElement(propertiesType).click();
 		driver.findElement(TypeAND).click();
 	}
 
 	public void changeTypeToOR(String nodeId) {
+		WebDriverWait wait = new WebDriverWait(driver, 10);
+		wait.until(ExpectedConditions.refreshed(ExpectedConditions.stalenessOf(driver.findElement(By.id(nodeId)))));
 		driver.findElement(By.id(nodeId)).click();
 		driver.findElement(propertiesType).click();
 		driver.findElement(TypeOR).click();

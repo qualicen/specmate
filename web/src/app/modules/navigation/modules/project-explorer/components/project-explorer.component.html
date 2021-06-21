@@ -1,7 +1,7 @@
 <div class="left-sidebar">
     <div id="sticky-header-wrapper">
         <ul role="tablist" class="nav nav-tabs justify-content-start" id="explorer">
-            <li class="nav-item">
+            <li *ngIf="config?.enableProjectExplorer === 'true'" class="nav-item">
                 <button [ngClass]="{'active' : currentActiveTab === ActiveTab.project}" role="tab"
                     (click)="switchToProject()" class="nav-link" id="ngb-tab-0" aria-disabled="false"
                     [attr.aria-expanded]="currentActiveTab === ActiveTab.project ? 'true' : 'false'"

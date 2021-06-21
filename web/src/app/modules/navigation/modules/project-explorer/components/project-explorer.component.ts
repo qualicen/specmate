@@ -3,6 +3,7 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import { Requirement } from 'src/app/model/Requirement';
+import { ConfigProperties, ConfigService } from 'src/app/modules/config/modules/config-service/services/config-service';
 import { TranslateService } from '../../../../../../../node_modules/@ngx-translate/core';
 import { Config } from '../../../../../config/config';
 import { Folder } from '../../../../../model/Folder';
@@ -11,6 +12,7 @@ import { Type } from '../../../../../util/type';
 import { SpecmateDataService } from '../../../../data/modules/data-service/services/specmate-data.service';
 import { AuthenticationService } from '../../../../views/main/authentication/modules/auth/services/authentication.service';
 import { NavigatorService } from '../../navigator/services/navigator.service';
+
 
 enum ActiveTab { project, library, recycleBin }
 
@@ -33,6 +35,8 @@ export class ProjectExplorer implements OnInit {
     private numLibraryFoldersDisplayed = Config.ELEMENT_CHUNK_SIZE;
     private numRecycleBinProjectFoldersDisplayed = Config.ELEMENT_CHUNK_SIZE;
     private numRecycleBinLibraryFoldersDisplayed = Config.ELEMENT_CHUNK_SIZE;
+
+    public config: ConfigProperties;
 
     public get currentElement(): IContainer {
         return this.navigator.currentElement;
@@ -69,7 +73,7 @@ export class ProjectExplorer implements OnInit {
     }
 
     constructor(private translate: TranslateService, private dataService: SpecmateDataService,
-        private navigator: NavigatorService, private auth: AuthenticationService) { }
+        private navigator: NavigatorService, private auth: AuthenticationService, private configService: ConfigService) { }
 
     ngOnInit() {
         this.initialize();
@@ -110,6 +114,14 @@ export class ProjectExplorer implements OnInit {
         if (!this.auth.isAuthenticated) {
             this.clean();
             return;
+        }
+
+        this.config = await this.configService.config();
+
+        if (this.config.enableProjectExplorer === 'true') {
+            this.currentActiveTab = ActiveTab.project;
+        } else {
+            this.currentActiveTab = ActiveTab.library;
         }
 
         let libraryFolders: string[] = this.auth.session.libraryFolders;

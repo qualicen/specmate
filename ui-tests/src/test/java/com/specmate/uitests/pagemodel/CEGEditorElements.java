@@ -134,6 +134,7 @@ public class CEGEditorElements extends EditorElements {
 	}
 
 	public void changeTypeToAND(String nodeId) {
+		// Test
 		WebDriverWait wait = new WebDriverWait(driver, 10);
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.id(nodeId)));
 		driver.findElement(By.id(nodeId)).click();

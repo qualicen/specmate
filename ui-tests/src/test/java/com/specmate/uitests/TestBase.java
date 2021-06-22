@@ -79,6 +79,8 @@ public class TestBase implements SauceOnDemandSessionIdProvider {
 
 	@Before
 	public void setUp() throws Exception {
+		// TODO change this to true for local test execution. The path to the chromedriver must be adapted
+		boolean isLocalTest = false;
 		DesiredCapabilities capabilities = new DesiredCapabilities();
 
 		capabilities.setCapability(CapabilityType.BROWSER_NAME, browser);
@@ -94,17 +96,21 @@ public class TestBase implements SauceOnDemandSessionIdProvider {
 		if (buildTag != null) {
 			capabilities.setCapability("build", buildTag);
 		}
-		this.driver = new RemoteWebDriver(new URL("https://" + username + ":" + accesskey + seleniumURI + "/wd/hub"),	capabilities);
-
-		// For local UI Tests uncomment the following two lines and adapt the path to
-		// chromedriver.exe
-		// System.setProperty("webdriver.chrome.driver", "Q:\\chromedriver.exe");
-		// driver = new ChromeDriver();
+		if (!isLocalTest) {
+			this.driver = new RemoteWebDriver(
+					new URL("https://" + username + ":" + accesskey + seleniumURI + "/wd/hub"), capabilities);
+		} else {
+			// TODO Adapt the path
+			System.setProperty("webdriver.chrome.driver", "Q:\\chromedriver.exe");
+			driver = new ChromeDriver();
+		}
 
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 		driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
 
-		this.sessionId = (((RemoteWebDriver) driver).getSessionId()).toString();
+		if (!isLocalTest) {
+			this.sessionId = (((RemoteWebDriver) driver).getSessionId()).toString();
+		}
 	}
 
 	@After

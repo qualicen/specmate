@@ -31,6 +31,10 @@ public class ProcessEditorElements extends EditorElements {
 	 */
 	public String createStart(int x, int y) {
 		UITestUtil.dragAndDrop(toolbarStart, x, y, driver);
+		
+		WebDriverWait wait = new WebDriverWait(driver, 10);
+		wait.until(ExpectedConditions
+				.presenceOfElementLocated(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > div")));
 		WebElement node = driver.findElement(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > div"));
 		String nodeId = node.getAttribute("id");
 
@@ -47,6 +51,8 @@ public class ProcessEditorElements extends EditorElements {
 		wait.until(ExpectedConditions
 				.visibilityOfElementLocated(By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;']")));
 
+		wait.until(ExpectedConditions
+				.presenceOfElementLocated(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > div")));
 		WebElement node = driver.findElement(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > div"));
 		String nodeId = node.getAttribute("id");
 
@@ -91,6 +97,8 @@ public class ProcessEditorElements extends EditorElements {
 		wait.until(ExpectedConditions
 				.visibilityOfElementLocated(By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;']")));
 
+		wait.until(ExpectedConditions
+				.presenceOfElementLocated(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > div")));
 		WebElement node = driver.findElement(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > div"));
 		String nodeId = node.getAttribute("id");
 		return nodeId;
@@ -107,6 +115,8 @@ public class ProcessEditorElements extends EditorElements {
 		wait.until(ExpectedConditions
 				.visibilityOfElementLocated(By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;']")));
 
+		wait.until(ExpectedConditions
+				.presenceOfElementLocated(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > div")));
 		WebElement node = driver.findElement(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > div"));
 		String nodeId = node.getAttribute("id");
 

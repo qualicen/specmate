@@ -46,9 +46,8 @@ public class ProcessEditorElements extends EditorElements {
 		WebDriverWait wait = new WebDriverWait(driver, 30);
 		wait.until(ExpectedConditions
 				.visibilityOfElementLocated(By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;']")));
-		
-		WebElement node = driver
-				.findElement(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > div"));
+
+		WebElement node = driver.findElement(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > div"));
 		String nodeId = node.getAttribute("id");
 
 		WebElement activityTextfield = driver.findElement(propertiesName);
@@ -60,12 +59,17 @@ public class ProcessEditorElements extends EditorElements {
 
 	public void connectActivity(String connectionCondition, String nodeId1, String nodeId2) {
 		super.connectById(nodeId1, nodeId2);
-		WebDriverWait wait = new WebDriverWait(driver, 10);
 
 		// A condition is required if the connection originated from a decision node
-		WebElement conditionTextfield = driver.findElement(propertiesCondition);
-		conditionTextfield.clear();
-		conditionTextfield.sendKeys(connectionCondition);
+		if (!connectionCondition.equals("")) {
+			WebDriverWait wait = new WebDriverWait(driver, 10);
+			wait.until(ExpectedConditions.visibilityOfElementLocated(propertiesCondition));
+			WebElement conditionTextfield = driver.findElement(propertiesCondition);
+			conditionTextfield.clear();
+			conditionTextfield.sendKeys(connectionCondition);
+			UITestUtil.absoluteWait(1500);
+		}
+
 	}
 
 	public void setExpectedOutcome(String outcome) {
@@ -87,8 +91,7 @@ public class ProcessEditorElements extends EditorElements {
 		wait.until(ExpectedConditions
 				.visibilityOfElementLocated(By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;']")));
 
-		WebElement node = driver
-				.findElement(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > div"));
+		WebElement node = driver.findElement(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > div"));
 		String nodeId = node.getAttribute("id");
 		return nodeId;
 	}
@@ -103,9 +106,8 @@ public class ProcessEditorElements extends EditorElements {
 		WebDriverWait wait = new WebDriverWait(driver, 30);
 		wait.until(ExpectedConditions
 				.visibilityOfElementLocated(By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;']")));
-		
-		WebElement node = driver
-				.findElement(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > div"));
+
+		WebElement node = driver.findElement(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > div"));
 		String nodeId = node.getAttribute("id");
 
 		WebElement decisionTextfield = driver.findElement(propertiesName);

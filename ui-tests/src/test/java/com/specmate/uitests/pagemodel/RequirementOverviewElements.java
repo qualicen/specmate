@@ -142,7 +142,7 @@ public class RequirementOverviewElements {
 	public void refreshRequirementOverviewPage() {
 		driver.navigate().refresh();
 		WebDriverWait wait = new WebDriverWait(driver, 30);
-		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("requirements-details")));
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("requirement-detail-headline")));
 	}
 
 	public boolean checkForDeletedModel(String modelName) {

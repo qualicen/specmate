@@ -188,10 +188,7 @@ public class EditorElements {
 	 */
 	public void generateTestSpecification() {
 		// Wait as the save operation needs time to finish
-		try {
-			Thread.sleep(1500);
-		} catch (InterruptedException ie) {
-		}
+		UITestUtil.absoluteWait(1500);
 		UITestUtil.scrollDownTo(generateTestSpec, driver);
 		driver.findElement(generateTestSpec).click();
 		UITestUtil.waitForModalToDisappear(driver);

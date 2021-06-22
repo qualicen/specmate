@@ -31,29 +31,24 @@ public class ProcessEditorElements extends EditorElements {
 	 */
 	public String createStart(int x, int y) {
 		UITestUtil.dragAndDrop(toolbarStart, x, y, driver);
-		
+
 		WebDriverWait wait = new WebDriverWait(driver, 10);
-		wait.until(ExpectedConditions
+		WebElement node = wait.until(ExpectedConditions
 				.presenceOfElementLocated(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > div")));
-		WebElement node = driver.findElement(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > div"));
 		String nodeId = node.getAttribute("id");
 
 		return nodeId;
 	}
 
 	public String createActivity(String variable, int x, int y) {
-
-		int index = driver.findElements(By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;']")).size();
-
 		UITestUtil.dragAndDrop(toolbarStep, x, y, driver);
 
 		WebDriverWait wait = new WebDriverWait(driver, 30);
 		wait.until(ExpectedConditions
 				.visibilityOfElementLocated(By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;']")));
 
-		wait.until(ExpectedConditions
+		WebElement node =  wait.until(ExpectedConditions
 				.presenceOfElementLocated(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > div")));
-		WebElement node = driver.findElement(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > div"));
 		String nodeId = node.getAttribute("id");
 
 		WebElement activityTextfield = driver.findElement(propertiesName);
@@ -69,8 +64,7 @@ public class ProcessEditorElements extends EditorElements {
 		// A condition is required if the connection originated from a decision node
 		if (!connectionCondition.equals("")) {
 			WebDriverWait wait = new WebDriverWait(driver, 10);
-			wait.until(ExpectedConditions.visibilityOfElementLocated(propertiesCondition));
-			WebElement conditionTextfield = driver.findElement(propertiesCondition);
+			WebElement conditionTextfield = wait.until(ExpectedConditions.visibilityOfElementLocated(propertiesCondition));
 			conditionTextfield.clear();
 			conditionTextfield.sendKeys(connectionCondition);
 			UITestUtil.absoluteWait(1500);
@@ -80,44 +74,34 @@ public class ProcessEditorElements extends EditorElements {
 
 	public void setExpectedOutcome(String outcome) {
 		WebDriverWait wait = new WebDriverWait(driver, 30);
-		wait.until(ExpectedConditions.visibilityOfElementLocated(expectedOutcome));
-		WebElement outcomeTextfield = driver.findElement(expectedOutcome);
+		WebElement outcomeTextfield = wait.until(ExpectedConditions.visibilityOfElementLocated(expectedOutcome));
 
 		outcomeTextfield.clear();
 		outcomeTextfield.sendKeys(outcome);
 	}
 
 	public String createEnd(int x, int y) {
-
-		int index = driver.findElements(By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;']")).size();
-
 		UITestUtil.dragAndDrop(toolbarEnd, x, y, driver);
 
 		WebDriverWait wait = new WebDriverWait(driver, 30);
 		wait.until(ExpectedConditions
 				.visibilityOfElementLocated(By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;']")));
 
-		wait.until(ExpectedConditions
+		WebElement node = wait.until(ExpectedConditions
 				.presenceOfElementLocated(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > div")));
-		WebElement node = driver.findElement(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > div"));
 		String nodeId = node.getAttribute("id");
 		return nodeId;
 	}
 
 	public String createDecison(String name, int x, int y) {
-
-		int numberOfDecisions = driver
-				.findElements(By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;']")).size();
-
 		UITestUtil.dragAndDrop(toolbarDecision, x, y, driver);
 
 		WebDriverWait wait = new WebDriverWait(driver, 30);
 		wait.until(ExpectedConditions
 				.visibilityOfElementLocated(By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;']")));
 
-		wait.until(ExpectedConditions
+		WebElement node = wait.until(ExpectedConditions
 				.presenceOfElementLocated(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > div")));
-		WebElement node = driver.findElement(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > div"));
 		String nodeId = node.getAttribute("id");
 
 		WebElement decisionTextfield = driver.findElement(propertiesName);

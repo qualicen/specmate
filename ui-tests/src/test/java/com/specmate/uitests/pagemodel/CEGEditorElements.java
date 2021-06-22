@@ -33,20 +33,14 @@ public class CEGEditorElements extends EditorElements {
 	 * and returns the newly created node
 	 */
 	public String createNode(String variable, String condition, int x, int y) {
-
-		int numberOfNodes = driver.findElements(cegNodeSelector).size();
-
 		// Click node button and drag and drop to editorview
-
 		UITestUtil.dragAndDrop(toolbarNode, x, y, driver);
 
 		WebDriverWait wait = new WebDriverWait(driver, 30);
 		wait.until(ExpectedConditions.visibilityOfElementLocated(cegNodeSelector));
-		
-		wait.until(ExpectedConditions
+
+		WebElement node = wait.until(ExpectedConditions
 				.presenceOfElementLocated(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > table")));
-		WebElement node = driver
-				.findElement(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > table"));
 		String nodeId = node.getAttribute("id");
 
 		WebElement variableTextfield = driver.findElement(propertiesVariable);
@@ -79,15 +73,12 @@ public class CEGEditorElements extends EditorElements {
 		}
 
 		WebDriverWait wait = new WebDriverWait(driver, 10);
-
-		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".form-check-input")));
-		driver.findElement(By.cssSelector(".form-check-input")).click();
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".form-check-input"))).click();
 	}
 
 	public void toggleNegateButtonOnLastConnection() {
 		WebDriverWait wait = new WebDriverWait(driver, 10);
-		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".form-check-input")));
-		driver.findElement(By.cssSelector(".form-check-input")).click();
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".form-check-input"))).click();
 	}
 
 	public boolean negationDisplayed() {
@@ -114,12 +105,10 @@ public class CEGEditorElements extends EditorElements {
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.id(nodeId)));
 		String escapedNodeId = nodeId.replace("/", "\\/");
 		wait.until(ExpectedConditions
-				.presenceOfElementLocated(By.cssSelector("#" + escapedNodeId + " > tbody > tr:nth-child(3) > select")));
-		driver.findElement(By.cssSelector("#" + escapedNodeId + " > tbody > tr:nth-child(3) > select")).click();
+				.presenceOfElementLocated(By.cssSelector("#" + escapedNodeId + " > tbody > tr:nth-child(3) > select")))
+				.click();
 		wait.until(ExpectedConditions.presenceOfElementLocated(
-				By.cssSelector("#" + escapedNodeId + " > tbody > tr:nth-child(3) > select > option[value=AND]")));
-		driver.findElement(
-				By.cssSelector("#" + escapedNodeId + " > tbody > tr:nth-child(3) > select > option[value=AND]"))
+				By.cssSelector("#" + escapedNodeId + " > tbody > tr:nth-child(3) > select > option[value=AND]")))
 				.click();
 
 	}
@@ -128,24 +117,24 @@ public class CEGEditorElements extends EditorElements {
 		WebDriverWait wait = new WebDriverWait(driver, 10);
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.id(nodeId)));
 		String escapedNodeId = nodeId.replace("/", "\\/");
-		driver.findElement(By.cssSelector("#" + escapedNodeId + " > tbody > tr:nth-child(3) > select")).click();
-		driver.findElement(
-				By.cssSelector("#" + escapedNodeId + " > tbody > tr:nth-child(3) > select > option[value=OR]")).click();
+		wait.until(ExpectedConditions
+				.presenceOfElementLocated(By.cssSelector("#" + escapedNodeId + " > tbody > tr:nth-child(3) > select")))
+				.click();
+		wait.until(ExpectedConditions.presenceOfElementLocated(
+				By.cssSelector("#" + escapedNodeId + " > tbody > tr:nth-child(3) > select > option[value=OR]")))
+				.click();
 	}
 
 	public void changeTypeToAND(String nodeId) {
-		// Test
 		WebDriverWait wait = new WebDriverWait(driver, 10);
-		wait.until(ExpectedConditions.presenceOfElementLocated(By.id(nodeId)));
-		driver.findElement(By.id(nodeId)).click();
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.id(nodeId))).click();
 		driver.findElement(propertiesType).click();
 		driver.findElement(TypeAND).click();
 	}
 
 	public void changeTypeToOR(String nodeId) {
 		WebDriverWait wait = new WebDriverWait(driver, 10);
-		wait.until(ExpectedConditions.presenceOfElementLocated(By.id(nodeId)));
-		driver.findElement(By.id(nodeId)).click();
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.id(nodeId))).click();
 		driver.findElement(propertiesType).click();
 		driver.findElement(TypeOR).click();
 	}

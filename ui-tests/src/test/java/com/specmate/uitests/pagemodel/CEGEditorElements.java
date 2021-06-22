@@ -43,6 +43,9 @@ public class CEGEditorElements extends EditorElements {
 		WebDriverWait wait = new WebDriverWait(driver, 30);
 		wait.until(ExpectedConditions.visibilityOfElementLocated(cegNodeSelector));
 
+		WebDriverWait wait2 = new WebDriverWait(driver, 10);
+		wait2.until(ExpectedConditions
+				.presenceOfElementLocated(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > table")));
 		WebElement node = driver
 				.findElement(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > table"));
 		String nodeId = node.getAttribute("id");

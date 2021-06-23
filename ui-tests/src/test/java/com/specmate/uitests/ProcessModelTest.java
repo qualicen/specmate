@@ -119,6 +119,9 @@ public class ProcessModelTest extends TestBase {
 		
 		// Assert that the test specification contains two rows
 		assertTrue(processEditor.correctTestSpecificationGenerated(2));
+		
+		// Save Testspec
+		commonControl.save();
 
 		// Click on created process in the requirement overview
 		processEditor.clickOnRelatedRequirement("Erlaubnis Autofahren");

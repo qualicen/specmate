@@ -117,6 +117,10 @@ public class CEGEditorElements extends EditorElements {
 		WebDriverWait wait = new WebDriverWait(driver, 10);
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.id(nodeId)));
 		String escapedNodeId = nodeId.replace("/", "\\/");
+
+		WebElement node = wait.until(ExpectedConditions
+				.presenceOfElementLocated(By.cssSelector("#" + escapedNodeId + " > tbody > tr:nth-child(3) > select")));
+		wait.until(ExpectedConditions.stalenessOf(node));
 		wait.until(ExpectedConditions
 				.presenceOfElementLocated(By.cssSelector("#" + escapedNodeId + " > tbody > tr:nth-child(3) > select")))
 				.click();

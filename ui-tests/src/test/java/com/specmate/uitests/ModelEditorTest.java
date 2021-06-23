@@ -27,7 +27,6 @@ public class ModelEditorTest extends TestBase {
 	 */
 	@Test
 	public void verifyModelEditorTest() throws InvalidElementStateException {
-		// Test 5
 		Actions builder = new Actions(driver);
 
 		RequirementOverviewElements requirementOverview = new RequirementOverviewElements(driver);

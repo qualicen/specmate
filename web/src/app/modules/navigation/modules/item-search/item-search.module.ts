@@ -1,31 +1,29 @@
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { ConfigServiceModule } from 'src/app/modules/config/modules/config-service/config-service.module';
 import { IconsModule } from '../../../common/modules/icons/icons.module';
 import { SpecmateSharedModule } from '../../../specmate/specmate.shared.module';
 import { NavigatorModule } from '../navigator/navigator.module';
-import { ElementTree } from './components/element-tree.component';
-import { ProjectExplorer } from './components/project-explorer.component';
+import { ItemSearchBar } from './components/item-search-bar.component';
 
 @NgModule({
   imports: [
     // MODULE IMPORTS
     BrowserModule,
+    FormsModule,
     NavigatorModule,
     SpecmateSharedModule,
-    ConfigServiceModule,
     IconsModule,
     NgbModule
   ],
   declarations: [
     // COMPONENTS IN THIS MODULE
-    ProjectExplorer,
-    ElementTree
+    ItemSearchBar
   ],
   exports: [
     // THE COMPONENTS VISIBLE TO THE OUTSIDE
-    ProjectExplorer
+    ItemSearchBar
   ],
   providers: [
     // SERVICES
@@ -35,4 +33,4 @@ import { ProjectExplorer } from './components/project-explorer.component';
   ]
 })
 
-export class ProjectExplorerModule { }
+export class ItemSearchModule { }

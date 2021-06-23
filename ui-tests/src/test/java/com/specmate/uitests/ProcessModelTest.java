@@ -43,8 +43,7 @@ public class ProcessModelTest extends TestBase {
 		} 
 			
 		// Navigation to requirement
-		projectExplorer.expand("Evaluation");
-		projectExplorer.open("Erlaubnis Autofahren");
+		processEditor.clickOnRelatedRequirement("Erlaubnis Autofahren");
 		
 		// Creating and opening new process
 		String processName = "Process Model By Automated UI Test " +  new Timestamp(System.currentTimeMillis());
@@ -121,7 +120,7 @@ public class ProcessModelTest extends TestBase {
 		assertTrue(processEditor.correctTestSpecificationGenerated(2));
 		
 		// Save Testspec
-		commonControl.save();
+		//commonControl.save();
 
 		// Click on created process in the requirement overview
 		processEditor.clickOnRelatedRequirement("Erlaubnis Autofahren");

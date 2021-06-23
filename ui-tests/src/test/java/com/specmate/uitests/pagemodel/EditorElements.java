@@ -55,9 +55,13 @@ public class EditorElements {
 	}
 
 	public void clickOnRelatedRequirement(String requirement) {
+		WebElement itemSearchField = driver.findElement(By.id("item-search-bar-input"));
+		itemSearchField.clear();
+		itemSearchField.sendKeys(requirement);
 		WebDriverWait wait = new WebDriverWait(driver, 30);
-		wait.until(ExpectedConditions.presenceOfElementLocated(By.id(requirement))).click();
-		UITestUtil.waitForModalToDisappear(driver);
+
+		wait.until(ExpectedConditions.visibilityOfElementLocated(suggestionItem));
+		driver.findElement(suggestionItem).click();
 	}
 
 	public void setModelName(String name) {

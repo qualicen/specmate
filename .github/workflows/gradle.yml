@@ -41,7 +41,7 @@ jobs:
       with:
         username: ${{ secrets.SAUCE_USERNAME }}
         accessKey: ${{ secrets.SAUCE_ACCESS_KEY }}
-        tunnelIdentifier: github-action-tunnel-${{ github.GITHUB_RUN_NUMBER }}
+        tunnelIdentifier: github-action-tunnel-${{ github.run_number }}
         scVersion: 4.6.2
     - name: UI-Tests 
       run: |

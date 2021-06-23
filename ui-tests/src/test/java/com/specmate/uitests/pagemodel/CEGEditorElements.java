@@ -1,9 +1,11 @@
 package com.specmate.uitests.pagemodel;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -106,7 +108,7 @@ public class CEGEditorElements extends EditorElements {
 		String escapedNodeId = nodeId.replace("/", "\\/");
 		WebElement node = wait.until(ExpectedConditions
 				.presenceOfElementLocated(By.cssSelector("#" + escapedNodeId + " > tbody > tr:nth-child(3) > select")));
-		wait.until(ExpectedConditions.stalenessOf(node));
+		checkForStaleElement(node);
 		wait.until(ExpectedConditions
 				.presenceOfElementLocated(By.cssSelector("#" + escapedNodeId + " > tbody > tr:nth-child(3) > select")))
 				.click();
@@ -123,7 +125,7 @@ public class CEGEditorElements extends EditorElements {
 
 		WebElement node = wait.until(ExpectedConditions
 				.presenceOfElementLocated(By.cssSelector("#" + escapedNodeId + " > tbody > tr:nth-child(3) > select")));
-		wait.until(ExpectedConditions.stalenessOf(node));
+		checkForStaleElement(node);
 		wait.until(ExpectedConditions
 				.presenceOfElementLocated(By.cssSelector("#" + escapedNodeId + " > tbody > tr:nth-child(3) > select")))
 				.click();
@@ -135,7 +137,7 @@ public class CEGEditorElements extends EditorElements {
 	public void changeTypeToAND(String nodeId) {
 		WebDriverWait wait = new WebDriverWait(driver, 10);
 		WebElement node = wait.until(ExpectedConditions.presenceOfElementLocated(By.id(nodeId)));
-		wait.until(ExpectedConditions.stalenessOf(node));
+		checkForStaleElement(node);
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.id(nodeId))).click();
 		driver.findElement(propertiesType).click();
 		driver.findElement(TypeAND).click();
@@ -144,9 +146,17 @@ public class CEGEditorElements extends EditorElements {
 	public void changeTypeToOR(String nodeId) {
 		WebDriverWait wait = new WebDriverWait(driver, 10);
 		WebElement node = wait.until(ExpectedConditions.presenceOfElementLocated(By.id(nodeId)));
-		wait.until(ExpectedConditions.stalenessOf(node));
+		checkForStaleElement(node);
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.id(nodeId))).click();
 		driver.findElement(propertiesType).click();
 		driver.findElement(TypeOR).click();
+	}
+
+	private void checkForStaleElement(WebElement node) {
+		WebDriverWait wait = new WebDriverWait(driver, 10);
+		try {
+			wait.until(ExpectedConditions.stalenessOf(node));
+		} catch (TimeoutException e) {
+		}
 	}
 }

@@ -1,27 +1,21 @@
 package com.specmate.uitests;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.sql.Timestamp;
+
 import org.junit.Test;
-import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidElementStateException;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.specmate.uitests.pagemodel.CEGEditorElements;
 import com.specmate.uitests.pagemodel.CommonControlElements;
 import com.specmate.uitests.pagemodel.LoginElements;
-import com.specmate.uitests.pagemodel.ProjectExplorerElements;
 import com.specmate.uitests.pagemodel.RequirementOverviewElements;
-import com.specmate.uitests.pagemodel.UITestUtil;
-
-import java.sql.Timestamp;
-
-import static org.junit.Assert.*;
 
 
 public class ModelEditorTest extends TestBase {
-	By suggestionItem =  By.cssSelector("[id*='ngb-typeahead']");
 	public ModelEditorTest(String os, String version, String browser, String deviceName, String deviceOrientation) {
 		super(os, version, browser, deviceName, deviceOrientation);
 	}
@@ -33,10 +27,8 @@ public class ModelEditorTest extends TestBase {
 	 */
 	@Test
 	public void verifyModelEditorTest() throws InvalidElementStateException {
-		// Test 10
 		Actions builder = new Actions(driver);
 
-		ProjectExplorerElements projectExplorer = new ProjectExplorerElements(driver);
 		RequirementOverviewElements requirementOverview = new RequirementOverviewElements(driver);
 		CEGEditorElements cegEditor = new CEGEditorElements(driver, builder);
 		CommonControlElements commonControl = new CommonControlElements(driver);
@@ -51,10 +43,6 @@ public class ModelEditorTest extends TestBase {
 		
 		// Navigation to requirement
 		cegEditor.clickOnRelatedRequirement("Erlaubnis Autofahren");
-
-		
-		//projectExplorer.expand("Evaluation");
-		//projectExplorer.open("Erlaubnis Autofahren");
 
 		// Creating and opening new model
 		String modelName = "Model By Automated UI Test " + new Timestamp(System.currentTimeMillis());
@@ -105,9 +93,6 @@ public class ModelEditorTest extends TestBase {
 		cegEditor.generateTestSpecification();
 
 		assertTrue(cegEditor.correctTestSpecificationGenerated(3));
-
-		// Save Testspec
-		//commonControl.save();
 
 		// Click on created CEG in the requirement overview
 		cegEditor.clickOnRelatedRequirement("Erlaubnis Autofahren");

@@ -223,7 +223,7 @@ public class EditorElements {
 	 * Checks if the test specification contains the number of expected rows
 	 *
 	 * @param expectedRows
-	 * @return true if expexted rows equals actual rows of test specification
+	 * @return true if expected rows equals actual rows of test specification
 	 */
 	public boolean correctTestSpecificationGenerated(int expectedRows) {
 		WebDriverWait wait = new WebDriverWait(driver, 30);

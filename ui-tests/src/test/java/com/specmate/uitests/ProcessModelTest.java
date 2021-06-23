@@ -12,7 +12,6 @@ import org.openqa.selenium.interactions.Actions;
 import com.specmate.uitests.pagemodel.CommonControlElements;
 import com.specmate.uitests.pagemodel.LoginElements;
 import com.specmate.uitests.pagemodel.ProcessEditorElements;
-import com.specmate.uitests.pagemodel.ProjectExplorerElements;
 import com.specmate.uitests.pagemodel.RequirementOverviewElements;
 
 public class ProcessModelTest extends TestBase {
@@ -29,7 +28,6 @@ public class ProcessModelTest extends TestBase {
 	public void verifyProcessModelTest() {
 		Actions builder = new Actions(driver);
 		
-		ProjectExplorerElements projectExplorer = new ProjectExplorerElements(driver);
 		RequirementOverviewElements requirementOverview = new RequirementOverviewElements(driver);
 		CommonControlElements commonControl = new CommonControlElements(driver);
 		LoginElements login = new LoginElements(driver);
@@ -107,7 +105,7 @@ public class ProcessModelTest extends TestBase {
 		// Check if error message is hidden
 		assertTrue(processEditor.noWarningsMessageDisplayed());
 		
-
+		// Check if correct model is created (6 nodes, 6 connections)
 		assertTrue(processEditor.correctModelCreated(6, 6));
 
 		// Save Process
@@ -118,9 +116,6 @@ public class ProcessModelTest extends TestBase {
 		
 		// Assert that the test specification contains two rows
 		assertTrue(processEditor.correctTestSpecificationGenerated(2));
-		
-		// Save Testspec
-		//commonControl.save();
 
 		// Click on created process in the requirement overview
 		processEditor.clickOnRelatedRequirement("Erlaubnis Autofahren");

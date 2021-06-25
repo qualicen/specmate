@@ -26,7 +26,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v1
       with:
-        node-version: '10.17.0'
+        node-version: '12.16.1'
     - name: Start Spacy 
       run: docker run -p "127.0.0.1:80:80" qualicen/spacyapi:en_v2_lg &
     - name: Build Frontend

@@ -1,4 +1,4 @@
-import { Input, OnInit } from '@angular/core';
+import { Injectable, Input, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { IContainer } from '../../../../../../../model/IContainer';
 import { MetaInfo } from '../../../../../../../model/meta/field-meta';
@@ -12,6 +12,7 @@ import { GraphTransformer } from '../../tool-pallette/util/graph-transformer';
 import { GraphicalEditorService } from '../../graphical-editor/services/graphical-editor.service';
 import { ModelImageService } from '../../graphical-editor/services/model-image.service';
 
+@Injectable()
 export abstract class ContentContainerBase<T extends IContainer> implements OnInit {
 
     protected abstract get condition(): (element: IContainer) => boolean;

@@ -1,4 +1,4 @@
-import { OnInit } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { switchMap } from 'rxjs/operators';
@@ -8,6 +8,7 @@ import { SpecmateDataService } from '../../../../data/modules/data-service/servi
 import { NavigatorService } from '../../../../navigation/modules/navigator/services/navigator.service';
 import { ConfirmationModal } from '../../../../notification/modules/modals/services/confirmation-modal.service';
 
+@Injectable()
 export abstract class SpecmateViewBase implements OnInit {
 
     protected abstract get isValid(): boolean;

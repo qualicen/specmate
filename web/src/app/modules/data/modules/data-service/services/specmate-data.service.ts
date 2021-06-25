@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
-import { SimpleModal } from 'src/app/modules/notification/modules/modals/services/simple-modal.service';
 import { Monitorable } from 'src/app/modules/notification/modules/operation-monitor/base/monitorable';
 import { CEGConnection } from '../../../../../model/CEGConnection';
 import { IContainer } from '../../../../../model/IContainer';
@@ -19,7 +18,6 @@ import { AuthenticationService } from '../../../../views/main/authentication/mod
 import { LoggingService } from '../../../../views/side/modules/log-list/services/logging.service';
 import { Command } from './command';
 import { DataCache } from './data-cache';
-import { DataServiceError } from './data-service-error';
 import { EOperation } from './e-operation';
 import { Scheduler } from './scheduler';
 import { ServiceInterface } from './service-interface';
@@ -48,7 +46,6 @@ export class SpecmateDataService extends Monitorable {
 
     public committed = new EventEmitter<void>();
     public elementChanged = new EventEmitter<string>(true);
-    public error = new EventEmitter<DataServiceError>();
     private cache: DataCache = new DataCache();
     private serviceInterface: ServiceInterface;
     private scheduler: Scheduler;
@@ -240,16 +237,8 @@ export class SpecmateDataService extends Monitorable {
             this.scheduler.clearElementsToReload();
             this.end(SpecmateDataService.OP_COMMIT);
             this.committed.emit();
-
-            const e: string[] = [];
-            const x = e[2];
-            x.charAt(100);
         } catch (error) {
-            this.error.next({
-                error,
-                title: 'saveError.title',
-                message: 'saveError.retry'
-            });
+            this.logger.error(this.translate.instant('saveError.retry'));
         }
 
     }

@@ -12,12 +12,11 @@ export class ErrorNotificationModalService {
     private isOpen = false;
 
     constructor(private modalService: ModalService, private logger: LoggingService) {
-        this.logger.logObservable.pipe(switchMap((logElement: LogElement) => {
+        this.logger.logEvent.subscribe(logElement => {
             if (logElement.isError) {
-                return this.open(logElement.message).catch(() => { /* We catch the original error here. */ });
+                this.open(logElement.message).catch();
             }
-            return Promise.resolve();
-        })).subscribe(/* Activate the observable. Without this, the above does nothing. */);
+        });
     }
 
     public open(message: string): Promise<any> {

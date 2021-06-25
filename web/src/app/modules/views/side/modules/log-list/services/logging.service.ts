@@ -1,5 +1,4 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Config } from '../../../../../../config/config';
 import { ELogSeverity } from './e-log-severity';
 import { LogElement } from './log-element';
@@ -8,13 +7,7 @@ import { LogElement } from './log-element';
 export class LoggingService {
     private logHistory: LogElement[] = [];
 
-    private logSubject: BehaviorSubject<LogElement>;
-    public logObservable: Observable<LogElement>;
-
-    constructor() {
-        this.logSubject = new BehaviorSubject<LogElement>(new LogElement(Config.LOG_START_MESSAGE, ELogSeverity.INFO, new Date()));
-        this.logObservable = this.logSubject.asObservable();
-    }
+    public logEvent = new EventEmitter<LogElement>();
 
     public get logs(): LogElement[] {
         return this.logHistory;
@@ -42,6 +35,6 @@ export class LoggingService {
         if (this.logHistory.length > Config.LOG_LENGTH) {
             this.logHistory = this.logHistory.slice(0, Config.LOG_LENGTH);
         }
-        this.logSubject.next(logElement);
+        this.logEvent.next(logElement);
     }
 }

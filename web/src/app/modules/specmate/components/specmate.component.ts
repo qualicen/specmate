@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ErrorNotificationModalService } from '../../notification/modules/modals/services/error-notification-modal.service';
 import { ViewControllerService } from '../../views/controller/modules/view-controller/services/view-controller.service';
 import { AuthenticationService } from '../../views/main/authentication/modules/auth/services/authentication.service';
 
@@ -11,7 +12,6 @@ import { AuthenticationService } from '../../views/main/authentication/modules/a
     templateUrl: 'specmate.component.html',
     styleUrls: ['specmate.component.css']
 })
-
 export class SpecmateComponent {
 
     private _leftWidth = 20;
@@ -78,5 +78,12 @@ export class SpecmateComponent {
     }
 
     constructor(private viewController: ViewControllerService,
-        private auth: AuthenticationService) { }
+        private auth: AuthenticationService,
+        // The error notification service must be instatiated in order to work.
+        // We do this here, in the root of the application.
+        errorNotificationService: ErrorNotificationModalService) {
+        if (errorNotificationService !== undefined) {
+            console.debug('Error notification service initialized.');
+        }
+    }
 }

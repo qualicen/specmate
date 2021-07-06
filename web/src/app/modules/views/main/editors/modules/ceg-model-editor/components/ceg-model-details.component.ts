@@ -19,7 +19,7 @@ import { GraphicalEditor } from '../../graphical-editor/components/graphical-edi
 export class CEGModelDetails extends SpecmateViewBase {
 
     public model: CEGModel;
-    protected contents: IContainer[];
+    public  contents: IContainer[];
 
     @ViewChild(GraphicalEditor, { static: false })
     private editor: GraphicalEditor;

@@ -3,19 +3,16 @@ import { FormGroup } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { FieldMetaItem } from '../../../../../model/meta/field-meta';
 
-@Injectable()
 export abstract class FormElement {
 
-    @Input()
-    public meta: FieldMetaItem;
+    protected _meta: FieldMetaItem;
 
-    @Input()
-    public form: FormGroup;
+    protected _form: FormGroup;
 
     constructor(private translate: TranslateService) { }
 
     public get errorMessage(): string {
-        const control = this.form.controls[this.meta.name];
+        const control = this._form.controls[this._meta.name];
         if (control != undefined && control.errors != undefined) {
             let error = control.errors;
             if (error.required != undefined) {

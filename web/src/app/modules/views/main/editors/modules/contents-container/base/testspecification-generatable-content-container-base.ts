@@ -29,7 +29,7 @@ export abstract class TestSpecificationContentContainerBase<T extends IContainer
         return this.additionalInformationService.canGenerateTestSpecifications;
     }
 
-    public async recycle(element: T,
+    public async recycle(element: IContainer,
         message: string = this.translate.instant('doYouReallyWantToDelete', { name: element.name })): Promise<void> {
         await super.recycle(element, message);
         this.contentService.isDeleted();

@@ -37,6 +37,6 @@
         }
     },
     "angularCompilerOptions": {
-        "strictTemplates": false
+        "strictTemplates": true
     }
 }

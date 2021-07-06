@@ -6,7 +6,7 @@
     "extract": "ngx-translate-extract -i ./src -o ./src/assets/i18n/de.json ./src/assets/i18n/gb.json -m ngx_trans_extr --sort --format namespaced-json",
     "lint": "tslint ./src/**/*.ts -t verbose --exclude './src/app/model/**/*.ts'",
     "clean": "rimraf ../bundles/specmate-ui-core/webcontent/*",
-    "build-dev": "node node_modules/@angular/cli/bin/ng build --configuration=dev",
+    "build-dev": "npm run clean && node node_modules/@angular/cli/bin/ng build --configuration=dev",
     "build-prod": "npm run clean && node node_modules/@angular/cli/bin/ng build --configuration=prod",
     "dep-graph": "ngd -p src/tsconfig.json",
     "init": "npm prune && npm install",

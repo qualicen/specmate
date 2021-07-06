@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { IContainer } from '../../../../../../../model/IContainer';
 import { Requirement } from '../../../../../../../model/Requirement';
@@ -32,6 +32,15 @@ export class RelatedRequirementsContainer extends ContentContainerBase<Requireme
         super(dataService, navigator, translate, modal, clipboardService, graphicalEditorService, modelImageService);
         contentService.onModelDeleted.subscribe(
             () => { this.readContents(); });
+    }
+
+    public get parent(): IContainer {
+        return this._parent;
+    }
+
+    @Input()
+    public set parent(parent: IContainer) {
+        super.setParent(parent);
     }
 
     protected condition = (element: IContainer) => true;

@@ -37,7 +37,7 @@ export class CommonControls {
         if (this.isSaveEnabled) {
             await this.validator.validateCurrent();
             if (this.isSaveEnabled && this.validator.isSavingEnabled()) {
-                if (this.isModel()) {
+                if (this.isModel) {
                     await this.modelImageService.createModelImage(this.navigator.currentElement);
                 }
                 this.dataService.commit(this.translate.instant('save'));
@@ -53,7 +53,7 @@ export class CommonControls {
     }
 
     public undo(): void {
-        if (!this.isModel()) {
+        if (!this.isModel) {
             this.dataService.undo();
         }
         this.undoService.undo();
@@ -86,7 +86,7 @@ export class CommonControls {
     }
 
     public get isUndoEnabled(): boolean {
-        if (this.isModel()) {
+        if (this.isModel) {
             return this.undoService.isUndoEnabled();
         }
         return this.hasCommits;
@@ -112,7 +112,7 @@ export class CommonControls {
     public get isEnabled(): boolean {
         return true;
     }
-    protected isModel(): boolean {
+    public get isModel(): boolean {
         return SpecmateType.isModel(this.navigator.currentElement);
     }
 }

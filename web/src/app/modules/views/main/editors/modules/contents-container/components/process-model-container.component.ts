@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ModelFactoryBase } from '../../../../../../../factory/model-factory-base';
 import { ProcessFactory } from '../../../../../../../factory/process-factory';
@@ -36,6 +36,15 @@ export class ProcessModelContainer extends TestSpecificationContentContainerBase
         protected modelImageService: ModelImageService) {
         super(dataService, navigator, translate, modal, clipboardService,
             contentService, additionalInformationService, graphicalEditorService, modelImageService);
+    }
+
+    public get parent(): IContainer {
+        return this._parent;
+    }
+
+    @Input()
+    public set parent(parent: IContainer) {
+        super.setParent(parent);
     }
 
     protected condition = (element: IContainer) => Type.is(element, Process);

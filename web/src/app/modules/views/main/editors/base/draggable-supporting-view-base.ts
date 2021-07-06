@@ -1,6 +1,7 @@
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { DragulaService } from 'ng2-dragula';
+import { TestStep } from 'src/app/model/TestStep';
 import { IContainer } from '../../../../../model/IContainer';
 import { IContentElement } from '../../../../../model/IContentElement';
 import { IPositionable } from '../../../../../model/IPositionable';
@@ -32,6 +33,10 @@ export abstract class DraggableSupportingViewBase extends SpecmateViewBase {
 
     public get sortedContents(): IContentElement[] {
         return Sort.sortArrayBy(this.relevantElements, 'position');
+    }
+
+    public get testSteps(): TestStep[] {
+        return this.sortedContents as TestStep[];
     }
 
     public dndBagName = 'DND_BAG';

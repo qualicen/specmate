@@ -29,7 +29,7 @@ export class TestSpecificationEditor extends DraggableSupportingViewBase {
     /** The test specification to be shown */
     public testSpecification: TestSpecification;
 
-    protected relevantElements: TestCase[];
+    public relevantElements: TestCase[];
 
     /** Constructor */
     constructor(

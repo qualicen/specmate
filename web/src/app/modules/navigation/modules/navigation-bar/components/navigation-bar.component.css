@@ -16,3 +16,8 @@
     display: flex;
     justify-content: right;
 }
+
+.padding-left-right {
+    padding-left: 10px;
+    padding-right: 10px;
+}

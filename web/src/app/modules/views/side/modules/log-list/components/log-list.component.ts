@@ -36,7 +36,7 @@ export class LogList {
         this.viewController.hideLoggingOutput();
     }
 
-    protected isChecked(severityName: string): boolean {
+    public isChecked(severityName: string): boolean {
         return this.checkboxGroupForm.value[severityName];
     }
 

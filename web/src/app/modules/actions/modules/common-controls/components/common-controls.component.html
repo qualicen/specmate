@@ -7,7 +7,7 @@
     <button id="commoncontrol-undo-button" class="btn btn-sm expand btn-secondary brighter-secondary-outline"
         title="{{'undo' | translate}}" [disabled]="!isUndoEnabled" (click)="cancelEvent($event); undo()"><i
             class="fa fa-undo" aria-hidden="true"></i></button>
-    <button *ngIf="isModel()" id="commoncontrol-redo-button"
+    <button *ngIf="isModel" id="commoncontrol-redo-button"
         class="btn btn-sm expand btn-secondary brighter-secondary-outline" title="{{'redo' | translate}}"
         [disabled]="!isRedoEnabled" (click)="cancelEvent($event); redo()"><i class="fa fa-repeat"
             aria-hidden="true"></i></button>

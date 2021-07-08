@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { CEGModel } from 'src/app/model/CEGModel';
+import { IModelNode } from 'src/app/model/IModelNode';
+import { Process } from 'src/app/model/Process';
 import { Config } from '../../../../../../config/config';
 import { IContainer } from '../../../../../../model/IContainer';
 import { Requirement } from '../../../../../../model/Requirement';
@@ -23,8 +26,12 @@ export class LinksActions {
         return Config.TESTSPEC_DESCRIPTION_TRUNC_LENGTH;
     }
 
-    public get element(): IContainer {
-        return this.additionalInformationService.element;
+    public get element(): IModelNode {
+        return this.additionalInformationService.element as IModelNode;
+    }
+
+    public get cegModel(): CEGModel {
+        return this.element as any as CEGModel;
     }
 
     public get model(): IContainer {

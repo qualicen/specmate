@@ -20,7 +20,7 @@ import { CEGModel } from 'src/app/model/CEGModel';
 export class ProcessDetails extends SpecmateViewBase {
 
     public model: Process;
-    protected contents: IContainer[];
+    public contents: IContainer[];
 
     @ViewChild(GraphicalEditor, { static: false })
     private editor: GraphicalEditor;

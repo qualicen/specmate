@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { NgbTypeaheadSelectItemEvent } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/map';
-import { of } from 'rxjs/observable/of';
+import { of } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, map, switchMap } from 'rxjs/operators';
 import { Config } from 'src/app/config/config';
 import { OperationMonitorService } from 'src/app/modules/notification/modules/operation-monitor/services/operation-monitor.service';
 import { IContainer } from '../../../../../../model/IContainer';
@@ -56,13 +55,13 @@ export class TracingLinks {
 
     /** searches suggestions based on the typed text */
     public search = (text$: Observable<string>) => {
-        return text$
-            .debounceTime(300)
-            .distinctUntilChanged()
-            .map(term => term.trim())
-            .filter(term => term.length >= Config.SEARCH_MINIMUM_LENGTH)
-            .map(term => Search.processSearchQuery(term))
-            .switchMap(async term => {
+        return text$.pipe(
+            debounceTime(300),
+            distinctUntilChanged(),
+            map((term: string) => term.trim()),
+            filter((term: string) => term.length >= Config.SEARCH_MINIMUM_LENGTH),
+            map((term: string) => Search.processSearchQuery(term)),
+            switchMap(async (term: string) => {
                 try {
                     this.operationMonitor.forceModalClosed = true;
                     const result = await this.dataService.search(term, { 'type': 'Requirement' });
@@ -72,12 +71,12 @@ export class TracingLinks {
                     this.operationMonitor.forceModalClosed = false;
                     return of([]);
                 }
-            })
-            .map((searchResult: IContainer[]) => searchResult.filter((result: IContainer) => {
+            }),
+            map((searchResult: IContainer[]) => searchResult.filter((result: IContainer) => {
                 let existing: Proxy = this.model.tracesTo.find((t: Proxy) => t.url === result.url);
                 return existing == undefined;
             }
-            ));
+            )));
     }
 
     /** Remove a trace-link */

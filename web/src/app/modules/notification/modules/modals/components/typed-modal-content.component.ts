@@ -24,7 +24,7 @@ export class TypedModalContent extends ModalBase {
         this._options = newOptions;
     }
 
-    constructor(protected activeModal: NgbActiveModal,
+    constructor(public activeModal: NgbActiveModal,
         private viewControllerService: ViewControllerService,
         private dataService: SpecmateDataService,
         public navigator: NavigatorService,

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { CEGNode } from 'src/app/model/CEGNode';
 import { CEGModelFactory } from '../../../../../../../factory/ceg-model-factory';
@@ -40,6 +40,14 @@ export class CEGModelContainer extends TestSpecificationContentContainerBase<CEG
 
     modelDescription: string;
 
+    public get parent(): IContainer {
+        return this._parent;
+    }
+
+    @Input()
+    public set parent(parent: IContainer) {
+        super.setParent(parent);
+    }
 
     protected condition = (element: IContainer) => Type.is(element, CEGModel);
 
@@ -101,7 +109,7 @@ export class CEGModelContainer extends TestSpecificationContentContainerBase<CEG
         return cmpA === cmpB;
     }
 
-    public async recycle(element: CEGModel): Promise<void> {
+    public async recycle(element: IContainer): Promise<void> {
         let message = this.translate.instant('doYouReallyWantToDelete', { name: element.name });
         const contents = await this.dataService.readContents(element.url, true);
         const anyLinkedNode = contents.find(elem => Type.is(elem, CEGNode) && (elem as CEGNode).linksFrom?.length > 0);

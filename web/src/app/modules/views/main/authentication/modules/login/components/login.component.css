@@ -9,3 +9,7 @@
 .row {
     justify-content: center;
 }
+
+.padding-bottom {
+    padding-bottom: 3px;
+}

@@ -6,3 +6,18 @@
     transform: translateY(-50%) translateX(-110%);
     font-size: small;
 }
+
+.left-controls {
+    display: flex;
+    justify-content: left;
+}
+
+.right-controls {
+    display: flex;
+    justify-content: right;
+}
+
+.padding-left-right {
+    padding-left: 10px;
+    padding-right: 10px;
+}

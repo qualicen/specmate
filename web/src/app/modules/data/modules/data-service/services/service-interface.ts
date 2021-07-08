@@ -1,6 +1,5 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import 'rxjs/add/observable/of';
 import { BatchOperation } from '../../../../../model/BatchOperation';
 import { IContainer } from '../../../../../model/IContainer';
 import { User } from '../../../../../model/User';

@@ -27,7 +27,7 @@
                         </tr>
                     </thead>
                     <tbody [dragula]="dndBagName" [(dragulaModel)]="contents">
-                        <tr test-step-row class="test-procedure-row" *ngFor="let testStep of sortedContents"
+                        <tr test-step-row class="test-procedure-row" *ngFor="let testStep of testSteps"
                             [testStep]="testStep" (onDelete)="updateContents()"></tr>
                     </tbody>
                 </table>

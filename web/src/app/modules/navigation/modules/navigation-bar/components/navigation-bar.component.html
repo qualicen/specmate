@@ -1,20 +1,24 @@
-<nav class="navbar navbar-toggleable-md fixed-top navbar-dark bg-dark">
-    <a id="commoncontrol-specmate-button" title="{{'restart' | translate}}" class="navbar-brand" href="/index.html">
-        <img src="../../../../../../assets/img/specmate_logo_horizontal_small.png" height="30"
-            class="d-inline-block align-top" alt="{{'specmate.logo' | translate}}">
-    </a>
-    <div class="mr-auto">
-        <common-controls></common-controls>
+<nav class="navbar navbar-toggleable-md fixed-top navbar-dark bg-dark padding-left-right">
+    <div class="left-controls">
+        <a id="commoncontrol-specmate-button" title="{{'restart' | translate}}" class="navbar-brand" href="/index.html">
+            <img src="../../../../../../assets/img/specmate_logo_horizontal_small.png" height="30"
+                class="d-inline-block align-top" alt="{{'specmate.logo' | translate}}">
+        </a>
+        <div class="mr-auto">
+            <common-controls></common-controls>
+        </div>
+        <div class="mr-auto">
+            <browser-version-checker></browser-version-checker>
+        </div>
     </div>
-    <div class="mr-auto">
-        <browser-version-checker></browser-version-checker>
+    <div class="right-controls">
+        <span class="navbar-text" style="display: flex">
+            <span class="version-text">{{'version' | translate}}:&nbsp;{{version}}&nbsp;</span>
+            <item-search-bar></item-search-bar>&nbsp;
+            <choose-project></choose-project>&nbsp;
+            <operation-monitor></operation-monitor>&nbsp;
+            <language-chooser class="brighter-secondary-outline"></language-chooser>&nbsp;
+            <logout></logout>
+        </span>
     </div>
-    <span class="navbar-text" style="display: flex">
-        <span class="version-text">{{'version' | translate}}:&nbsp;{{version}}&nbsp;</span>
-        <item-search-bar></item-search-bar>&nbsp;
-        <choose-project></choose-project>&nbsp;
-        <operation-monitor></operation-monitor>&nbsp;
-        <language-chooser class="brighter-secondary-outline"></language-chooser>&nbsp;
-        <logout></logout>
-    </span>
 </nav>

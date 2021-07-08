@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ElementFactoryBase } from '../../../../../../../factory/element-factory-base';
 import { TestSpecificationFactory } from '../../../../../../../factory/test-specification-factory';
@@ -24,7 +24,6 @@ import { ModelImageService } from '../../graphical-editor/services/model-image.s
     templateUrl: 'test-specification-container.component.html',
     styleUrls: ['test-specification-container.component.css']
 })
-
 export class TestSpecificationContainer extends ContentContainerBase<TestSpecification> {
 
     constructor(dataService: SpecmateDataService,
@@ -39,6 +38,15 @@ export class TestSpecificationContainer extends ContentContainerBase<TestSpecifi
 
         contentService.onModelDeleted.subscribe(
             () => { this.readContents(); });
+    }
+
+    public get parent(): IContainer {
+        return this._parent;
+    }
+
+    @Input()
+    public set parent(parent: IContainer) {
+        super.setParent(parent);
     }
 
     protected condition = (element: IContainer) => Type.is(element, TestSpecification);

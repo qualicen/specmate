@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Observable } from 'rxjs/Rx';
+import { Observable, timer } from 'rxjs';
 import { Config } from '../../../../../config/config';
 import { ServiceInterface } from '../../../../data/modules/data-service/services/service-interface';
 import { AuthenticationService } from '../../../../views/main/authentication/modules/auth/services/authentication.service';
@@ -31,7 +31,7 @@ export class ServerConnectionService {
     }
 
     private initTime(): void {
-        this.timer = Observable.timer(0, Config.CONNECTIVITY_CHECK_DELAY);
+        this.timer = timer(0, Config.CONNECTIVITY_CHECK_DELAY);
         this.timer.subscribe(async () => {
             this.checkConnection();
         });

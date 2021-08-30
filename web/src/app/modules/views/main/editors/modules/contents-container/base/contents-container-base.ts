@@ -1,4 +1,4 @@
-import { Input, OnInit } from '@angular/core';
+import { Injectable, Input, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { IContainer } from '../../../../../../../model/IContainer';
 import { MetaInfo } from '../../../../../../../model/meta/field-meta';
@@ -11,20 +11,21 @@ import { ClipboardService } from '../../tool-pallette/services/clipboard-service
 import { GraphTransformer } from '../../tool-pallette/util/graph-transformer';
 import { GraphicalEditorService } from '../../graphical-editor/services/graphical-editor.service';
 import { ModelImageService } from '../../graphical-editor/services/model-image.service';
+import { Folder } from 'src/app/model/Folder';
 
+@Injectable()
 export abstract class ContentContainerBase<T extends IContainer> implements OnInit {
 
     protected abstract get condition(): (element: IContainer) => boolean;
     public contents: IContainer[];
 
-    private _parent: IContainer;
-
-    protected get parent(): IContainer {
-        return this._parent;
+    public get folders(): Folder[] {
+        return this.contents as Folder[];
     }
 
-    @Input()
-    protected set parent(parent: IContainer) {
+    protected _parent: IContainer;
+
+    protected setParent(parent: IContainer) {
         this._parent = parent;
         this.readContents();
     }
@@ -52,7 +53,7 @@ export abstract class ContentContainerBase<T extends IContainer> implements OnIn
         }
     }
 
-    public abstract async createElement(name: string): Promise<T>;
+    public abstract createElement(name: string): Promise<T>;
 
     public async duplicate(element: IContainer): Promise<void> {
         await this.dataService.performOperations(element.url, 'duplicate');
@@ -60,7 +61,7 @@ export abstract class ContentContainerBase<T extends IContainer> implements OnIn
         await this.readContents();
     }
 
-    public async recycle(element: T,
+    public async recycle(element: IContainer,
         message: string = this.translate.instant('doYouReallyWantToDelete', { name: element.name })): Promise<void> {
         try {
             await this.modal.openOkCancel('ConfirmationRequired', message);
@@ -71,7 +72,7 @@ export abstract class ContentContainerBase<T extends IContainer> implements OnIn
 
     protected async readContents(): Promise<void> {
         this.contents = undefined;
-        const contents = await this.dataService.readContents(this.parent.url, false);
+        const contents = await this.dataService.readContents(this._parent.url, false);
         this.contents = contents.filter(this.condition);
     }
 

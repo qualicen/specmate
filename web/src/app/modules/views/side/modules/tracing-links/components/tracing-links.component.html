@@ -18,7 +18,7 @@
             <label for="reqtypeahead">{{'addARequirement' | translate}}:</label>
 
             <input #reqtypeahead id="traces-addrequirement-textfield" type="text" class="form-control form-control-sm"
-                editable="false" placeholder="{{'searchRequirements' | translate}}" [ngbTypeahead]="search"
+                [editable]="false" placeholder="{{'searchRequirements' | translate}}" [ngbTypeahead]="search"
                 [resultTemplate]="rt" (selectItem)="selectItem($event, reqtypeahead)" />
 
             <span *ngIf="searching">{{'searching' | translate}}...</span>

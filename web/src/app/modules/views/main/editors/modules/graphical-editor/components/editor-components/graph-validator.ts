@@ -11,6 +11,7 @@ import { ValidationService } from 'src/app/modules/forms/modules/validation/serv
 import { Type } from 'src/app/util/type';
 import { GraphicalEditorService } from '../../services/graphical-editor.service';
 import { GraphicalEditor } from '../graphical-editor.component';
+import { CEGNodeTypeUtil } from '../util/ceg-node-type-util';
 import { StyleChanger } from '../util/style-changer';
 import { EditorStyle } from './editor-style';
 
@@ -58,7 +59,7 @@ export class GraphValidator {
             }
 
             if (Type.is(model, CEGModel)) {
-                let nodeType = GraphicalEditor.getCEGNodeType(vertex);
+                let nodeType = CEGNodeTypeUtil.getCEGNodeType(vertex);
                 if (!vertex.style.match(new RegExp(';*' + nodeType + ';*'))) {
                     StyleChanger.removeStyle(vertex, graph, EditorStyle.CAUSE_STYLE_NAME);
                     StyleChanger.removeStyle(vertex, graph, EditorStyle.EFFECT_STYLE_NAME);

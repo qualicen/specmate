@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
-import { SimpleModal } from 'src/app/modules/notification/modules/modals/services/simple-modal.service';
 import { Monitorable } from 'src/app/modules/notification/modules/operation-monitor/base/monitorable';
 import { CEGConnection } from '../../../../../model/CEGConnection';
 import { IContainer } from '../../../../../model/IContainer';
@@ -55,7 +54,6 @@ export class SpecmateDataService extends Monitorable {
         private auth: AuthenticationService,
         private logger: LoggingService,
         private translate: TranslateService,
-        private simpleModal: SimpleModal,
         private connectionService: ServerConnectionService) {
         super();
         this.serviceInterface = new ServiceInterface(http);
@@ -240,8 +238,7 @@ export class SpecmateDataService extends Monitorable {
             this.end(SpecmateDataService.OP_COMMIT);
             this.committed.emit();
         } catch (error) {
-            this.simpleModal.openOk(this.translate.instant('saveError.title'), this.translate.instant('saveError.retry'));
-            console.error(error);
+            this.logger.error(this.translate.instant('saveError.retry'));
         }
 
     }

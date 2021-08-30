@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { FolderFactory } from '../../../../../../../factory/folder-factory';
 import { Folder } from '../../../../../../../model/Folder';
@@ -30,6 +30,15 @@ export class FolderContainer extends ContentContainerBase<Folder> {
         graphicalEditorService: GraphicalEditorService,
         protected modelImageService: ModelImageService) {
         super(dataService, navigator, translate, modal, clipboardService, graphicalEditorService, modelImageService);
+    }
+
+    public get parent(): IContainer {
+        return this._parent;
+    }
+
+    @Input()
+    public set parent(parent: IContainer) {
+        super.setParent(parent);
     }
 
     protected condition = (element: IContainer) => Type.is(element, Folder);

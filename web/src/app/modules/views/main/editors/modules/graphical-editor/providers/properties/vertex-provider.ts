@@ -8,6 +8,7 @@ import { IModelNode } from '../../../../../../../../model/IModelNode';
 import { Type } from '../../../../../../../../util/type';
 import { EditorStyle } from '../../components/editor-components/editor-style';
 import { GraphicalEditor } from '../../components/graphical-editor.component';
+import { CEGNodeTypeUtil } from '../../components/util/ceg-node-type-util';
 import { StyleChanger } from '../../components/util/style-changer';
 import { ConverterBase } from '../../converters/converter-base';
 import { CEGmxModelLinkedNode } from './ceg-mx-model-linked-node';
@@ -196,7 +197,7 @@ export class VertexProvider extends ProviderBase {
         }
     }
     private createCEGColorRendering(cell: mxgraph.mxCell) {
-        let nodeType = GraphicalEditor.getCEGNodeType(cell);
+        let nodeType = CEGNodeTypeUtil.getCEGNodeType(cell);
         if (!cell.style.match(new RegExp(';*' + nodeType + ';*'))) {
             StyleChanger.removeStyle(cell, this.graph, EditorStyle.CAUSE_STYLE_NAME);
             StyleChanger.removeStyle(cell, this.graph, EditorStyle.EFFECT_STYLE_NAME);

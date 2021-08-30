@@ -36,10 +36,10 @@ export class ElementTree implements OnInit {
     public parent: IContainer;
 
     @Input()
-    protected library = false;
+    public library = false;
 
     @Input()
-    protected recycleBin = false;
+    public recycleBin = false;
 
     public numChildrenDisplayed = Config.ELEMENT_CHUNK_SIZE;
 

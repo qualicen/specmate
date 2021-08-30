@@ -34,7 +34,7 @@ export class BrowserVersionChecker {
         return true;
     }
 
-    protected get supportedBrowsers(): String {
+    public get supportedBrowsers(): String {
         let supportedBrowsers = Config.SUPPORTED_BROWSERS;
         let chrome = 'Google Chrome ' + supportedBrowsers.find(element => element.browser === 'chrome').minVersion + '+';
         let firefox = 'Mozilla Firefox ' + supportedBrowsers.find(element => element.browser === 'firefox').minVersion + '+';

@@ -1,8 +1,10 @@
+import { Injectable } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { IContainer } from '../../../../../model/IContainer';
 import { Id } from '../../../../../util/id';
 import { SpecmateDataService } from '../../../../data/modules/data-service/services/specmate-data.service';
 
+@Injectable()
 export abstract class SimpleInputFormBase {
 
     private _modelElement: IContainer;

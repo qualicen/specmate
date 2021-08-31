@@ -1,6 +1,7 @@
 package com.specmate.uitests.pagemodel;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -32,19 +33,16 @@ public class CEGEditorElements extends EditorElements {
 	 * creates a new node with corresponding variable and condition at position x,y
 	 * and returns the newly created node
 	 */
-	public int createNode(String variable, String condition, int x, int y) {
-
-		int numberOfNodes = driver
-				.findElements(cegNodeSelector)
-				.size();
-
+	public String createNode(String variable, String condition, int x, int y) {
 		// Click node button and drag and drop to editorview
-
 		UITestUtil.dragAndDrop(toolbarNode, x, y, driver);
 
 		WebDriverWait wait = new WebDriverWait(driver, 30);
-		wait.until(ExpectedConditions
-				.visibilityOfElementLocated(cegNodeSelector));
+		wait.until(ExpectedConditions.visibilityOfElementLocated(cegNodeSelector));
+
+		WebElement node = wait.until(ExpectedConditions
+				.presenceOfElementLocated(By.cssSelector("g > g:nth-child(2) > g > g > foreignObject > div > table")));
+		String nodeId = node.getAttribute("id");
 
 		WebElement variableTextfield = driver.findElement(propertiesVariable);
 		WebElement conditionTextfield = driver.findElement(propertiesCondition);
@@ -53,15 +51,15 @@ public class CEGEditorElements extends EditorElements {
 		conditionTextfield.clear();
 		conditionTextfield.sendKeys(condition);
 
-		return numberOfNodes;
+		return nodeId;
 	}
 
 	/**
 	 * establishes a connection from node1 to node2 and returns the newly created
 	 * connection
 	 */
-	public int connectNode(int node1, int node2) {
-		return super.connect(node1, node2, cegNodeSelector);
+	public void connectNode(String nodeId1, String nodeId2) {
+		super.connectById(nodeId1, nodeId2);
 	}
 
 	public void toggleNegateButtonOn(WebElement connection) {
@@ -76,17 +74,12 @@ public class CEGEditorElements extends EditorElements {
 		}
 
 		WebDriverWait wait = new WebDriverWait(driver, 10);
-
-		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".form-check-input")));
-		driver.findElement(By.cssSelector(".form-check-input")).click();
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".form-check-input"))).click();
 	}
 
 	public void toggleNegateButtonOnLastConnection() {
-
 		WebDriverWait wait = new WebDriverWait(driver, 10);
-
-		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".form-check-input")));
-		driver.findElement(By.cssSelector(".form-check-input")).click();
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".form-check-input"))).click();
 	}
 
 	public boolean negationDisplayed() {
@@ -108,34 +101,61 @@ public class CEGEditorElements extends EditorElements {
 		driver.findElement(cancel).click();
 	}
 
-	public void changeTypeToANDInNode(int node) {
-		WebElement nodeElement = UITestUtil.getElementWithIndex(node, driver, cegNodeSelector);
-		builder.moveToElement(nodeElement, 0, 25).click().build().perform();
-		driver.findElement(By.cssSelector("g > g > g > foreignObject > div > select")).click();
-		driver.findElement(By.cssSelector("g > g > g > foreignObject > div > select > option[value=AND]")).click();
+	public void changeTypeToANDInNode(String nodeId) {
+		WebDriverWait wait = new WebDriverWait(driver, 10);
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.id(nodeId)));
+		String escapedNodeId = nodeId.replace("/", "\\/");
+		WebElement node = wait.until(ExpectedConditions
+				.presenceOfElementLocated(By.cssSelector("#" + escapedNodeId + " > tbody > tr:nth-child(3) > select")));
+		checkForStaleElement(node);
+		wait.until(ExpectedConditions
+				.presenceOfElementLocated(By.cssSelector("#" + escapedNodeId + " > tbody > tr:nth-child(3) > select")))
+				.click();
+		wait.until(ExpectedConditions.presenceOfElementLocated(
+				By.cssSelector("#" + escapedNodeId + " > tbody > tr:nth-child(3) > select > option[value=AND]")))
+				.click();
 
 	}
 
-	public void changeTypeToORInNode(int node) {
-		WebElement nodeElement = UITestUtil.getElementWithIndex(node, driver, cegNodeSelector);
-		builder.moveToElement(nodeElement, 0, 25).click().build().perform();
-		driver.findElement(By.cssSelector("g > g > g > foreignObject > div > select")).click();
-		driver.findElement(By.cssSelector("g > g > g > foreignObject > div > select > option[value=OR]")).click();
+	public void changeTypeToORInNode(String nodeId) {
+		WebDriverWait wait = new WebDriverWait(driver, 10);
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.id(nodeId)));
+		String escapedNodeId = nodeId.replace("/", "\\/");
+
+		WebElement node = wait.until(ExpectedConditions
+				.presenceOfElementLocated(By.cssSelector("#" + escapedNodeId + " > tbody > tr:nth-child(3) > select")));
+		checkForStaleElement(node);
+		wait.until(ExpectedConditions
+				.presenceOfElementLocated(By.cssSelector("#" + escapedNodeId + " > tbody > tr:nth-child(3) > select")))
+				.click();
+		wait.until(ExpectedConditions.presenceOfElementLocated(
+				By.cssSelector("#" + escapedNodeId + " > tbody > tr:nth-child(3) > select > option[value=OR]")))
+				.click();
 	}
 
-	public void changeTypeToAND(int node) {
-		// Click two times as clicking only once will minimize the node
-		WebElement nodeElement = UITestUtil.getElementWithIndex(node, driver, cegNodeSelector);
-		builder.moveToElement(nodeElement, 0, 25).click().build().perform();
+	public void changeTypeToAND(String nodeId) {
+		WebDriverWait wait = new WebDriverWait(driver, 10);
+		WebElement node = wait.until(ExpectedConditions.presenceOfElementLocated(By.id(nodeId)));
+		checkForStaleElement(node);
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.id(nodeId))).click();
 		driver.findElement(propertiesType).click();
 		driver.findElement(TypeAND).click();
 	}
 
-	public void changeTypeToOR(int node) {
-		// Click two times as clicking only once will minimize the node
-		WebElement nodeElement = UITestUtil.getElementWithIndex(node, driver, cegNodeSelector);
-		builder.moveToElement(nodeElement, 0, 25).click().build().perform();
+	public void changeTypeToOR(String nodeId) {
+		WebDriverWait wait = new WebDriverWait(driver, 10);
+		WebElement node = wait.until(ExpectedConditions.presenceOfElementLocated(By.id(nodeId)));
+		checkForStaleElement(node);
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.id(nodeId))).click();
 		driver.findElement(propertiesType).click();
 		driver.findElement(TypeOR).click();
+	}
+
+	private void checkForStaleElement(WebElement node) {
+		WebDriverWait wait = new WebDriverWait(driver, 10);
+		try {
+			wait.until(ExpectedConditions.stalenessOf(node));
+		} catch (TimeoutException e) {
+		}
 	}
 }

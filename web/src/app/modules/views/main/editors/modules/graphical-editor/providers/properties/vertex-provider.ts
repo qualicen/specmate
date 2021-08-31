@@ -70,6 +70,7 @@ export class VertexProvider extends ProviderBase {
             if (cell.isVertex()) {
                 let value = cell.value;
                 let table = document.createElement('table');
+                table.id = cell.getId();
                 table.style.height = '100%';
                 table.style.width = '100%';
 
@@ -241,5 +242,14 @@ export class VertexProvider extends ProviderBase {
             container.appendChild(arrowRight);
         }
         return container;
+    }
+
+    public initProcessVertexRenderer() {
+        this.graph.getLabel = (cell: mxgraph.mxCell): any => {
+            let div = document.createElement('div');
+            div.id = cell.getId();
+            mx.mxUtils.write(div, cell.value);
+            return div;
+        };
     }
 }

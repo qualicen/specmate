@@ -36,7 +36,7 @@ public class EditorElements {
 	By generateTestSpec = By.id("generatetestspec-button");
 	By relatedRequirement = By.id("traces-addrequirement-textfield");
 
-	By suggestionItem = By.id("ngb-typeahead-1-0");
+	By suggestionItem =  By.cssSelector("[id*='ngb-typeahead']");
 
 	public EditorElements(WebDriver driver, Actions builder) {
 		this.driver = driver;
@@ -55,8 +55,13 @@ public class EditorElements {
 	}
 
 	public void clickOnRelatedRequirement(String requirement) {
-		driver.findElement(By.id("requirement-" + requirement + "-link")).click();
-		UITestUtil.waitForModalToDisappear(driver);
+		WebElement itemSearchField = driver.findElement(By.id("item-search-bar-input"));
+		itemSearchField.clear();
+		itemSearchField.sendKeys(requirement);
+		WebDriverWait wait = new WebDriverWait(driver, 30);
+
+		wait.until(ExpectedConditions.visibilityOfElementLocated(suggestionItem));
+		driver.findElement(suggestionItem).click();
 	}
 
 	public void setModelName(String name) {
@@ -84,14 +89,13 @@ public class EditorElements {
 	 * establishes a connection from node1 to node2 and returns the newly created
 	 * connection
 	 */
-	public int connect(int node1, int node2, By selector) {
+	public int connect(WebElement nodeElement1, WebElement nodeElement2) {
 
 		int numberOfConnections = driver
 				.findElements(
 						By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;'] > path:nth-child(2)"))
 				.size();
 
-		WebElement nodeElement1 = UITestUtil.getElementWithIndex(node1, driver, selector);
 
 		builder.moveToElement(nodeElement1, 0, 15).click().build().perform();
 
@@ -106,15 +110,35 @@ public class EditorElements {
 
 		Actions action = new Actions(driver);
 
-		WebElement nodeElement2 = UITestUtil.getElementWithIndex(node2, driver, selector);
-
 		action.dragAndDrop(connectionPopUp, nodeElement2).build().perform();
-		;
 
 		wait.until(ExpectedConditions.visibilityOfElementLocated(
 				By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;'] > path:nth-child(2)")));
 
 		return numberOfConnections;
+	}
+	
+	public void connectById(String nodeId1, String nodeId2) {
+		WebElement nodeElement1 = driver.findElement(By.id(nodeId1));
+
+		builder.moveToElement(nodeElement1, 0, 15).click().build().perform();
+
+		WebDriverWait wait = new WebDriverWait(driver, 30);
+
+		// Get the connection pop up element, which needs to be dragged to the
+		// connecting node
+		wait.until(ExpectedConditions.visibilityOfElementLocated(
+				By.cssSelector("g > g:nth-child(3) > g[style='cursor: pointer; visibility: visible;']")));
+		WebElement connectionPopUp = driver
+				.findElement(By.cssSelector("g > g:nth-child(3) > g[style='cursor: pointer; visibility: visible;']"));
+
+		Actions action = new Actions(driver);
+
+		WebElement nodeElement2 = driver.findElement(By.id(nodeId2));
+		action.dragAndDrop(connectionPopUp, nodeElement2).build().perform();
+
+		wait.until(ExpectedConditions.visibilityOfElementLocated(
+				By.cssSelector("g > g:nth-child(2) > g[style*='visibility: visible;'] > path:nth-child(2)")));
 	}
 
 	/**
@@ -167,10 +191,7 @@ public class EditorElements {
 	 */
 	public void generateTestSpecification() {
 		// Wait as the save operation needs time to finish
-		try {
-			Thread.sleep(1500);
-		} catch (InterruptedException ie) {
-		}
+		UITestUtil.absoluteWait(1500);
 		UITestUtil.scrollDownTo(generateTestSpec, driver);
 		driver.findElement(generateTestSpec).click();
 		UITestUtil.waitForModalToDisappear(driver);
@@ -202,7 +223,7 @@ public class EditorElements {
 	 * Checks if the test specification contains the number of expected rows
 	 *
 	 * @param expectedRows
-	 * @return true if expexted rows equals actual rows of test specification
+	 * @return true if expected rows equals actual rows of test specification
 	 */
 	public boolean correctTestSpecificationGenerated(int expectedRows) {
 		WebDriverWait wait = new WebDriverWait(driver, 30);

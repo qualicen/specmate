@@ -1,5 +1,10 @@
 package com.specmate.uitests;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.sql.Timestamp;
+
 import org.junit.Test;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.interactions.Actions;
@@ -7,12 +12,8 @@ import org.openqa.selenium.interactions.Actions;
 import com.specmate.uitests.pagemodel.CEGEditorElements;
 import com.specmate.uitests.pagemodel.CommonControlElements;
 import com.specmate.uitests.pagemodel.LoginElements;
-import com.specmate.uitests.pagemodel.ProjectExplorerElements;
 import com.specmate.uitests.pagemodel.RequirementOverviewElements;
 
-import java.sql.Timestamp;
-
-import static org.junit.Assert.*;
 
 public class ModelEditorTest extends TestBase {
 	public ModelEditorTest(String os, String version, String browser, String deviceName, String deviceOrientation) {
@@ -26,10 +27,8 @@ public class ModelEditorTest extends TestBase {
 	 */
 	@Test
 	public void verifyModelEditorTest() throws InvalidElementStateException {
-
 		Actions builder = new Actions(driver);
 
-		ProjectExplorerElements projectExplorer = new ProjectExplorerElements(driver);
 		RequirementOverviewElements requirementOverview = new RequirementOverviewElements(driver);
 		CEGEditorElements cegEditor = new CEGEditorElements(driver, builder);
 		CommonControlElements commonControl = new CommonControlElements(driver);
@@ -41,28 +40,21 @@ public class ModelEditorTest extends TestBase {
 			performLogin(login);
 			assertTrue(login.isLoggedIn());
 		}
-
+		
 		// Navigation to requirement
-		projectExplorer.expand("Evaluation");
-		projectExplorer.open("Erlaubnis Autofahren");
+		cegEditor.clickOnRelatedRequirement("Erlaubnis Autofahren");
 
 		// Creating and opening new model
 		String modelName = "Model By Automated UI Test " + new Timestamp(System.currentTimeMillis());
 		requirementOverview.createCEGModelFromRequirement(modelName);
 
 		// Adding nodes to the CEG
-		int nodeAlter = cegEditor.createNode("Alter", ">17", 100, 100);// results in x=15, y=60
-		int nodeFS = cegEditor.createNode("Führerschein", "vorhanden", 100, 300);// results in x=15, y=27
-		int nodeAutofahren = cegEditor.createNode("Autofahren", "erlaubt", 300, 200);
+		String nodeAlter = cegEditor.createNode("Alter", "> 17", 50, 100);// results in x=7, y=60
+		String nodeFS = cegEditor.createNode("Führerschein", "vorhanden", 50, 300);// results in x=7, y=27
+		String nodeAutofahren = cegEditor.createNode("Autofahren", "erlaubt", 300, 200);
 
 		// Check if error message is shown (Assert true)
 		assertTrue(cegEditor.errorMessageDisplayed());
-
-		try {
-			Thread.sleep(60000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 
 		// Connecting created nodes
 		cegEditor.connectNode(nodeAlter, nodeAutofahren);
@@ -91,9 +83,8 @@ public class ModelEditorTest extends TestBase {
 		cegEditor.changeTypeToORInNode(nodeAutofahren);
 		cegEditor.changeTypeToANDInNode(nodeAutofahren);
 
-		// CEG nodes exists of multiple Html-elements, thus we multiply with the second
-		// node, which shows how much elements are created per node
-		assertTrue(cegEditor.correctModelCreated(3 * nodeFS, 2));
+		// Check number of nodes
+		assertTrue(cegEditor.correctModelCreated(3, 2));
 
 		// Save CEG
 		commonControl.save();
@@ -106,6 +97,9 @@ public class ModelEditorTest extends TestBase {
 		// Click on created CEG in the requirement overview
 		cegEditor.clickOnRelatedRequirement("Erlaubnis Autofahren");
 		requirementOverview.clickOnCreatedModel(modelName);
+
+		// Save CEG
+		commonControl.save();
 
 		// Duplicate CEG
 		cegEditor.clickOnRelatedRequirement("Erlaubnis Autofahren");

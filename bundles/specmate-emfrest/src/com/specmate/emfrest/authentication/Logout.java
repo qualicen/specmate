@@ -5,7 +5,8 @@ import javax.ws.rs.core.Response;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.auth.api.IAuthenticationService;
 import com.specmate.common.exception.SpecmateException;
@@ -17,7 +18,10 @@ import com.specmate.rest.RestResult;
 public class Logout extends RestServiceBase {
 	public static final String SERVICE_NAME = "logout";
 	private IAuthenticationService authService;
-	private LogService logService;
+
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 
 	@Override
 	public String getServiceName() {
@@ -34,7 +38,7 @@ public class Logout extends RestServiceBase {
 			throws SpecmateException {
 
 		authService.deauthenticate(token);
-		logService.log(LogService.LOG_INFO, "Session " + token + " deleted.");
+		logger.info("Session " + token + " deleted.");
 
 		return new RestResult<>(Response.Status.OK, token);
 	}
@@ -42,10 +46,5 @@ public class Logout extends RestServiceBase {
 	@Reference
 	public void setAuthService(IAuthenticationService authService) {
 		this.authService = authService;
-	}
-
-	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
 	}
 }

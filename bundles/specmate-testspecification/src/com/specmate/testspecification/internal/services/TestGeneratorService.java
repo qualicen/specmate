@@ -9,7 +9,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
@@ -38,7 +39,10 @@ public class TestGeneratorService extends RestServiceBase {
 	private static final String QUERY_KEY_LANGUAGE = "lang";
 	private IMetricsService metricsService;
 	private ICounter testGenCounter;
-	private LogService logService;
+
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 
 	@Activate
 	public void activate() throws SpecmateException {
@@ -74,7 +78,7 @@ public class TestGeneratorService extends RestServiceBase {
 			boolean germanLanguage = germanLangParams != null && germanLangParams.size() > 0
 					&& germanLangParams.get(0).toLowerCase().equals("de");
 
-			new CEGTestCaseGenerator(specification, withLinks, germanLanguage, logService).generate();
+			new CEGTestCaseGenerator(specification, withLinks, germanLanguage, logger).generate();
 			testGenCounter.inc();
 		} else if (container instanceof Process) {
 			new ProcessTestCaseGenerator(specification).generate();
@@ -88,13 +92,7 @@ public class TestGeneratorService extends RestServiceBase {
 	}
 
 	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
-	}
-
-	@Reference
 	public void setMetricsService(IMetricsService metricsService) {
 		this.metricsService = metricsService;
 	}
-
 }

@@ -12,7 +12,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
@@ -49,17 +50,18 @@ public class HPProxyConnection {
 	 */
 	private RestClient restClient;
 
-	/** The logging service. */
-	private LogService logService;
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 
 	/**
 	 * Service activation
 	 *
 	 * @throws SpecmateException
 	 */
-	public HPProxyConnection(String host, String port, int timeout, LogService logService) throws SpecmateException {
+	public HPProxyConnection(String host, String port, int timeout, Logger logger) throws SpecmateException {
 		validateConfig(host, port, timeout);
-		restClient = new RestClient("http://" + host + ":" + port, timeout * 1000, this.logService);
+		restClient = new RestClient("http://" + host + ":" + port, timeout * 1000, this.logger);
 	}
 
 	/** Validates if all configuration parameters are available. */
@@ -78,7 +80,7 @@ public class HPProxyConnection {
 	/** Service deactivation */
 	public void deactivate() {
 		restClient.close();
-		logService.log(LogService.LOG_INFO, "Shut down HP Server Proxy.");
+		logger.info("Shut down HP Server Proxy.");
 	}
 
 	/** Retrieves requirements details from the HP server. */
@@ -159,11 +161,5 @@ public class HPProxyConnection {
 		}
 
 		return result.getResponse().getStatus() == Status.OK.getStatusCode();
-	}
-
-	/** Service reference */
-	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
 	}
 }

@@ -14,7 +14,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.Provider;
 
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
 
 import com.specmate.auth.api.IAuthenticationService;
 import com.specmate.common.exception.SpecmateException;
@@ -40,7 +40,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 	IAuthenticationService authService;
 
 	@Inject
-	LogService logService;
+	Logger logger;
 
 	@Override
 	public void filter(ContainerRequestContext requestContext) throws IOException {
@@ -54,8 +54,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
 		// Validate the Authorization header
 		if (!AuthorizationHeader.isAuthenticationSet(requestContext)) {
-			logService.log(LogService.LOG_INFO, "No credentials set: on path "
-					+ requestContext.getUriInfo().getAbsolutePath().toString());
+			logger.info("No credentials set: on path " + requestContext.getUriInfo().getAbsolutePath().toString());
 			abortWithUnauthorized(requestContext);
 			return;
 		}
@@ -68,7 +67,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 			boolean refresh = !isHeartBeat(requestContext);
 			authService.validateToken(token, path, refresh);
 		} catch (SpecmateException e) {
-			logService.log(LogService.LOG_INFO, e.getMessage());
+			logger.info(e.getMessage());
 			abortWithUnauthorized(requestContext);
 		}
 	}

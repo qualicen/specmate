@@ -15,7 +15,7 @@ import org.apache.uima.jcas.JCas;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
 
 import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.model.administration.ErrorCode;
@@ -46,7 +46,7 @@ public class DependencyParser extends MaltParser {
 	protected String mode = MODE_MALT;
 
 	private static final int TIMEOUT = 5000;
-	private LogService logService;
+	private Logger logger;
 	private RestClient restClient;
 
 	@Override
@@ -170,7 +170,7 @@ public class DependencyParser extends MaltParser {
 	}
 
 	private JSONObject accessSpacyAPI(String requirement) throws SpecmateInternalException {
-		restClient = new RestClient(SPACY_API_BASE_URL, TIMEOUT, logService);
+		restClient = new RestClient(SPACY_API_BASE_URL, TIMEOUT, logger);
 
 		// Set model parameters
 		JSONObject request = new JSONObject();

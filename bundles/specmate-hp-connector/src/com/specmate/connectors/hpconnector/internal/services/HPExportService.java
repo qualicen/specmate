@@ -7,24 +7,27 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.connectors.hpconnector.internal.config.HPServerProxyConfig;
 import com.specmate.connectors.hpconnector.internal.util.HPProxyConnection;
-import com.specmate.export.api.IExporter;
 import com.specmate.export.api.ExporterBase;
+import com.specmate.export.api.IExporter;
 import com.specmate.model.administration.ErrorCode;
-import com.specmate.model.testspecification.TestProcedure;
 import com.specmate.model.export.Export;
+import com.specmate.model.testspecification.TestProcedure;
 
 @Component(service = IExporter.class, configurationPid = HPServerProxyConfig.EXPORTER_PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
 public class HPExportService extends ExporterBase {
 
 	private static final String EXPORTER_NAME = "HP ALM";
 	private HPProxyConnection hpConnection;
-	private LogService logService;
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 
 	public HPExportService() {
 		super(EXPORTER_NAME);
@@ -35,7 +38,7 @@ public class HPExportService extends ExporterBase {
 		String host = (String) properties.get(HPServerProxyConfig.KEY_HOST);
 		String port = (String) properties.get(HPServerProxyConfig.KEY_PORT);
 		int timeout = Integer.parseInt((String) properties.get(HPServerProxyConfig.KEY_TIMEOUT));
-		hpConnection = new HPProxyConnection(host, port, timeout, logService);
+		hpConnection = new HPProxyConnection(host, port, timeout, logger);
 	}
 
 	@Override
@@ -51,11 +54,6 @@ public class HPExportService extends ExporterBase {
 	@Override
 	public boolean isAuthorizedToExport(String username, String password) {
 		return hpConnection.authenticateExport(username, password);
-	}
-
-	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
 	}
 
 	@Override

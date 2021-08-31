@@ -17,7 +17,8 @@
 	specmate-model-support;version=latest,\
 	specmate-emfrest-api;version=latest,\
 	javax.ws.rs-api,\
-	specmate-rest;version=latest
+	specmate-rest;version=latest,\
+	org.eclipse.osgi
 
 javac.source: 1.8
 javac.target: 1.8

@@ -6,7 +6,8 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.model.base.BaseFactory;
@@ -49,12 +50,9 @@ public class DummyDataService {
 		this.searchService = searchService;
 	}
 
-	private LogService logService;
-
-	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
-	}
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 
 	@Activate
 	public void activate() throws SpecmateException {
@@ -68,7 +66,7 @@ public class DummyDataService {
 				Thread.sleep(5000);
 				fillDummyData();
 			} catch (Exception e) {
-				logService.log(LogService.LOG_ERROR, "Error while writing dummy data.", e);
+				logger.error("Error while writing dummy data.", e);
 			}
 		}).start();
 	}
@@ -98,7 +96,7 @@ public class DummyDataService {
 					}
 				});
 			} catch (Exception e) {
-				logService.log(LogService.LOG_ERROR, e.getMessage());
+				logger.error(e.getMessage());
 			}
 		}
 
@@ -124,7 +122,7 @@ public class DummyDataService {
 					}
 				});
 			} catch (Exception e) {
-				logService.log(LogService.LOG_ERROR, e.getMessage());
+				logger.error(e.getMessage());
 			}
 		}
 
@@ -917,5 +915,4 @@ public class DummyDataService {
 		evalModel1.getContents().add(evalConn6);
 		return evalModel1;
 	}
-
 }

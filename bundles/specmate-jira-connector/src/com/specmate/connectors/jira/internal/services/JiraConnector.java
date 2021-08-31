@@ -21,7 +21,8 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.atlassian.jira.rest.client.api.JiraRestClient;
 import com.atlassian.jira.rest.client.api.RestClientException;
@@ -102,8 +103,9 @@ public class JiraConnector extends DetailsService implements IConnector, IRestSe
 	/** Default evict time for the story cache */
 	private static final String DEFAULT_CACHE_TIME = "120";
 
-	/** The log service reference */
-	private LogService logService;
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 
 	/** The caching service reference */
 	private ICacheService cacheService;
@@ -200,7 +202,7 @@ public class JiraConnector extends DetailsService implements IConnector, IRestSe
 			}
 		});
 
-		logService.log(LogService.LOG_DEBUG, "Initialized Jira Connector with " + properties.toString() + ".");
+		logger.debug("Initialized Jira Connector with " + properties.toString() + ".");
 	}
 
 	@Deactivate
@@ -232,11 +234,6 @@ public class JiraConnector extends DetailsService implements IConnector, IRestSe
 	}
 
 	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
-	}
-
-	@Reference
 	public void setProjectService(IProjectService projectService) {
 		this.projectService = projectService;
 	}
@@ -248,7 +245,7 @@ public class JiraConnector extends DetailsService implements IConnector, IRestSe
 
 	@Override
 	public Collection<Requirement> getRequirements() throws SpecmateException {
-		logService.log(LogService.LOG_DEBUG, String.format("Jira connector (%s): retrieving requirements.", id));
+		logger.debug(String.format("Jira connector (%s): retrieving requirements.", id));
 		List<Requirement> requirements = new ArrayList<>();
 
 		List<Issue> storiesWithoutEpic = getStoriesWithoutEpic();
@@ -280,22 +277,19 @@ public class JiraConnector extends DetailsService implements IConnector, IRestSe
 	}
 
 	private List<Issue> getStoriesWithoutEpic() throws SpecmateException {
-		logService.log(LogService.LOG_DEBUG,
-				String.format("Jira connector (%s): retrieving default requirements. Query is %s", id, directJQL));
+		logger.debug(String.format("Jira connector (%s): retrieving default requirements. Query is %s", id, directJQL));
 		String jql = directJQL.replaceAll(PROJECT_PLACEHOLDER, serverProject);
 		return getIssues(jql);
 	}
 
 	private List<Issue> getEpics() throws SpecmateException {
-		logService.log(LogService.LOG_DEBUG,
-				String.format("Jira connector (%s): retrieving parent requirements. Query is %s", id, parentJQL));
+		logger.debug(String.format("Jira connector (%s): retrieving parent requirements. Query is %s", id, parentJQL));
 		String jql = parentJQL.replaceAll(PROJECT_PLACEHOLDER, serverProject);
 		return getIssues(jql);
 	}
 
 	private Issue getStory(String storyId) throws SpecmateException {
-		logService.log(LogService.LOG_DEBUG,
-				String.format("Jira connector (%s) retrieving item with id %s", id, storyId));
+		logger.debug(String.format("Jira connector (%s) retrieving item with id %s", id, storyId));
 		List<Issue> issues = getIssues("project=" + serverProject + " AND id=" + storyId);
 		if (issues == null || issues.size() == 0) {
 			throw new SpecmateInternalException(ErrorCode.INTERNAL_PROBLEM, "JIRA Issue not found: " + storyId);
@@ -304,7 +298,7 @@ public class JiraConnector extends DetailsService implements IConnector, IRestSe
 	}
 
 	private List<Issue> getIssues(String jql) throws SpecmateException {
-		logService.log(LogService.LOG_DEBUG, String.format("Jira connector (%s): executing query: %s", id, jql));
+		logger.debug(String.format("Jira connector (%s): executing query: %s", id, jql));
 
 		List<Issue> issues = new ArrayList<>();
 
@@ -321,27 +315,24 @@ public class JiraConnector extends DetailsService implements IConnector, IRestSe
 							.searchJql(jql, paginationSizeInt, issues.size(), null).claim();
 					maxResults = searchResult.getTotal();
 					searchResult.getIssues().forEach(issue -> issues.add(issue));
-					logService.log(LogService.LOG_DEBUG,
-							"Jira Connector (" + id + "): Loaded ~" + searchResult.getMaxResults()
-									+ " issues from Jira " + serverUrl + " project: " + serverProject);
+					logger.debug("Jira Connector (" + id + "): Loaded ~" + searchResult.getMaxResults()
+							+ " issues from Jira " + serverUrl + " project: " + serverProject);
 				} catch (RestClientException e) {
 					if (e.getStatusCode().get() == 400) {
-						logService.log(LogService.LOG_WARNING,
-								String.format("Jira Connector (%s): Received 400 status, JQL: %s, Details: %s", id, jql,
-										e.getMessage()));
+						logger.warn(String.format("Jira Connector (%s): Received 400 status, JQL: %s, Details: %s", id,
+								jql, e.getMessage()));
 						return issues;
 					} else {
-						logService.log(LogService.LOG_ERROR, String.format(
-								"Jira Connector (%s): Could not load issue from jira. Reason: %s", id, e.getMessage()));
+						logger.error(String.format("Jira Connector (%s): Could not load issue from jira. Reason: %s",
+								id, e.getMessage()));
 						throw new SpecmateInternalException(ErrorCode.INTERNAL_PROBLEM,
 								"Could not load issues from jira", e);
 					}
 				}
-
 			}
 
-			logService.log(LogService.LOG_INFO, "Jira Connector (" + id + "): Finished loading of " + issues.size()
-					+ " issues from Jira " + serverUrl + " project: " + serverProject);
+			logger.info("Jira Connector (" + id + "): Finished loading of " + issues.size() + " issues from Jira "
+					+ serverUrl + " project: " + serverProject);
 
 		} catch (Exception e) {
 			throw new SpecmateInternalException(ErrorCode.INTERNAL_PROBLEM, e);
@@ -391,7 +382,6 @@ public class JiraConnector extends DetailsService implements IConnector, IRestSe
 
 			}
 		}
-
 		return accessibleSpecmateProjectNames;
 	}
 
@@ -531,9 +521,13 @@ public class JiraConnector extends DetailsService implements IConnector, IRestSe
 			try {
 				return JiraUtil.createJiraRESTClient(serverUrl, serverUsername, serverPassword);
 			} catch (URISyntaxException e) {
-				logService.log(LogService.LOG_ERROR, "Could not create Jira REST client. Reason is: " + e.getMessage());
+				logger.error("Could not create Jira REST client. Reason is: " + e.getMessage());
 				throw new SpecmateInternalException(ErrorCode.JIRA, "Could not create Jira REST client", e);
 			}
 		}
+	}
+
+	public void setLogger(Logger logger) {
+		this.logger = logger;
 	}
 }

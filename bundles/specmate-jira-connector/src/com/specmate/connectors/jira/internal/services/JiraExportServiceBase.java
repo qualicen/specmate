@@ -11,8 +11,8 @@ import java.util.Spliterators;
 import java.util.stream.StreamSupport;
 
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.equinox.log.Logger;
 import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.log.LogService;
 
 import com.atlassian.jira.rest.client.api.JiraRestClient;
 import com.atlassian.jira.rest.client.api.domain.BasicIssue;
@@ -48,7 +48,7 @@ public abstract class JiraExportServiceBase extends ExporterBase {
 	protected String password;
 
 	/** The logging service */
-	protected LogService logService;
+	protected Logger logger;
 
 	public JiraExportServiceBase(String type) {
 		super(type);
@@ -89,7 +89,7 @@ public abstract class JiraExportServiceBase extends ExporterBase {
 			testType = StreamSupport.stream(issueTypesSpliterator, false)
 					.filter(issueType -> issueType.getName().equals("Test")).findFirst().orElseGet(null);
 			if (testType == null) {
-				logService.log(LogService.LOG_ERROR, "Could not get Issue Type for Tests");
+				logger.error("Could not get Issue Type for Tests");
 			}
 		} catch (URISyntaxException e) {
 			throw new SpecmateInternalException(ErrorCode.JIRA, e);
@@ -98,7 +98,7 @@ public abstract class JiraExportServiceBase extends ExporterBase {
 				try {
 					jiraClient.close();
 				} catch (IOException e) {
-					logService.log(LogService.LOG_ERROR, "Could not close jira client");
+					logger.error("Could not close jira client");
 				}
 			}
 		}
@@ -131,7 +131,7 @@ public abstract class JiraExportServiceBase extends ExporterBase {
 				try {
 					jiraClient.close();
 				} catch (IOException e) {
-					logService.log(LogService.LOG_ERROR, "Could not close jira client", e);
+					logger.error("Could not close jira client", e);
 				}
 			}
 		}
@@ -148,7 +148,7 @@ public abstract class JiraExportServiceBase extends ExporterBase {
 		try {
 			return JiraUtil.authenticate(url, projectName, username, password);
 		} catch (SpecmateException e) {
-			logService.log(LogService.LOG_ERROR, "Exception occured when authorizing for export", e);
+			logger.error("Exception occured when authorizing for export", e);
 			return false;
 		}
 	}

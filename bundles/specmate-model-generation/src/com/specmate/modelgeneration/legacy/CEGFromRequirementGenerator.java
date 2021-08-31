@@ -11,7 +11,8 @@ import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.tcas.Annotation;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
@@ -38,7 +39,9 @@ import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
  */
 public abstract class CEGFromRequirementGenerator implements ICEGFromRequirementGenerator {
 
-	private LogService logService;
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 	protected INLPService tagger;
 	private ICauseEffectPatternMatcher patternMatcher;
 	private IAndOrSplitter andOrSplitter;
@@ -50,9 +53,9 @@ public abstract class CEGFromRequirementGenerator implements ICEGFromRequirement
 	private int levelThreeX = 600;
 	private int levelThreeY = 150;
 
-	public CEGFromRequirementGenerator(LogService logService, INLPService tagger) {
+	public CEGFromRequirementGenerator(Logger logger, INLPService tagger) {
 		super();
-		this.logService = logService;
+		this.logger = logger;
 		this.tagger = tagger;
 		patternMatcher = getPatternMatcher();
 		andOrSplitter = getAndOrSplitter();
@@ -77,10 +80,8 @@ public abstract class CEGFromRequirementGenerator implements ICEGFromRequirement
 	 * Add the nodes and connections to the given CEGModel, which are extracted from
 	 * the text.
 	 *
-	 * @param model
-	 *            the CEGModel to add the nodes/connections
-	 * @param text
-	 *            text of the requirement
+	 * @param model the CEGModel to add the nodes/connections
+	 * @param text  text of the requirement
 	 * @return generated CEGModel
 	 */
 	public CEGModel createModel(CEGModel model, String text) throws SpecmateException {
@@ -109,14 +110,10 @@ public abstract class CEGFromRequirementGenerator implements ICEGFromRequirement
 	 * Method add the nodes and connections detected from the sentence to the given
 	 * CEGModel
 	 *
-	 * @param sentence
-	 *            sentences to detect causal relation
-	 * @param jCas
-	 *            NLP tagged text
-	 * @param model
-	 *            CEGModel to add nodes/connections
-	 * @param nodes
-	 *            list of all nodes in the graph
+	 * @param sentence sentences to detect causal relation
+	 * @param jCas     NLP tagged text
+	 * @param model    CEGModel to add nodes/connections
+	 * @param nodes    list of all nodes in the graph
 	 * @throws SpecmateInternalException
 	 */
 	public void detectCausality(Sentence sentence, JCas jCas, CEGModel model, LinkedList<CEGNode> nodes)
@@ -296,12 +293,9 @@ public abstract class CEGFromRequirementGenerator implements ICEGFromRequirement
 	/**
 	 * Method split a cause/effect in the variable and the condition
 	 *
-	 * @param jCas
-	 *            NLP tagged text
-	 * @param sentence
-	 *            sentence containing the cause/effect
-	 * @param text
-	 *            the cause/effect
+	 * @param jCas     NLP tagged text
+	 * @param sentence sentence containing the cause/effect
+	 * @param text     the cause/effect
 	 * @return array containing the variable and the condition. First element:
 	 *         variable, second element condition
 	 */
@@ -359,7 +353,8 @@ public abstract class CEGFromRequirementGenerator implements ICEGFromRequirement
 	}
 
 	protected List<Annotation> getSubjectNounPhrases(JCas jCas, Sentence sentence) {
-		List<Dependency> subjDeps = NLPUtil.findCoveredDependencies(jCas, sentence, getLanguage().getSubjectDependencyType());
+		List<Dependency> subjDeps = NLPUtil.findCoveredDependencies(jCas, sentence,
+				getLanguage().getSubjectDependencyType());
 		return subjDeps.stream().map(dep -> {
 			Token subjToken = dep.getDependent();
 			Optional<Chunk> nounPhrase = JCasUtil.selectCovering(jCas, Chunk.class, subjToken).stream()
@@ -369,13 +364,7 @@ public abstract class CEGFromRequirementGenerator implements ICEGFromRequirement
 	}
 
 	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
-	}
-
-	@Reference
 	void setNlptagging(INLPService tagger) {
 		this.tagger = tagger;
 	}
-
 }

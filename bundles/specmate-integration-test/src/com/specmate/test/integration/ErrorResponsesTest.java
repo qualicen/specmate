@@ -61,8 +61,7 @@ public class ErrorResponsesTest extends EmfRestTest {
 	public void testTamperedUserSessionError() {
 		UserSession tampered = SpecmateEcoreUtil.shallowCopy(session);
 		tampered.setId("tampered");
-		RestClient tamperedClient = new RestClient(REST_ENDPOINT, RestClient.EAuthType.TOKEN, tampered.getId(),
-				logService);
+		RestClient tamperedClient = new RestClient(REST_ENDPOINT, RestClient.EAuthType.TOKEN, tampered.getId(), logger);
 		JSONObject folder = createTestFolder();
 		RestResult<JSONObject> result = tamperedClient.post("list", folder);
 		assertEquals(Status.UNAUTHORIZED.getStatusCode(), result.getResponse().getStatus());

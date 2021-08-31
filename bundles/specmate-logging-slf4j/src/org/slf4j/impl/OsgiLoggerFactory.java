@@ -9,5 +9,4 @@ public class OsgiLoggerFactory implements ILoggerFactory {
 	public Logger getLogger(String name) {
 		return new OsgiLogger();
 	}
-
 }

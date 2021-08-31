@@ -9,7 +9,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.config.api.IConfigService;
@@ -36,7 +37,9 @@ import com.specmate.xtext.XTextException;
 public class GenerateModelFromRequirementService extends RestServiceBase {
 
 	INLPService tagger;
-	private LogService logService;
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 	private IConfigService configService;
 	private IMetricsService metricsService;
 	private ICounter modelGenCounter;
@@ -61,12 +64,12 @@ public class GenerateModelFromRequirementService extends RestServiceBase {
 		CEGModel model = (CEGModel) parent;
 
 		try {
-			logService.log(LogService.LOG_INFO, "Model Generation STARTED");
+			logger.info("Model Generation STARTED");
 			model = generateModelFromDescription(model);
-			logService.log(LogService.LOG_INFO, "Model Generation FINISHED");
+			logger.info("Model Generation FINISHED");
 			modelGenCounter.inc();
 		} catch (SpecmateException e) {
-			logService.log(LogService.LOG_ERROR, "Model Generation failed with following error:\n" + e.getMessage());
+			logger.error("Model Generation failed with following error:\n" + e.getMessage());
 			return new RestResult<>(Response.Status.INTERNAL_SERVER_ERROR);
 		}
 		return new RestResult<>(Response.Status.OK);
@@ -93,29 +96,23 @@ public class GenerateModelFromRequirementService extends RestServiceBase {
 		if (lang == ELanguage.PSEUDO) {
 			generator = new GenerateModelFromPseudoCode();
 		} else {
-			generator = new PatternbasedCEGGenerator(lang, tagger, configService, logService);
+			generator = new PatternbasedCEGGenerator(lang, tagger, configService, logger);
 		}
 
 		try {
 			generator.createModel(model, text);
 		} catch (SpecmateException e) {
 			// Generation Backof
-			logService.log(LogService.LOG_INFO,
-					"NLP model generation failed with the following error: \"" + e.getMessage() + "\"");
-			logService.log(LogService.LOG_INFO, "Backing off to rule based generation...");
+			logger.info("NLP model generation failed with the following error: \"" + e.getMessage() + "\"");
+			logger.info("Backing off to rule based generation...");
 			if (lang == ELanguage.DE) {
-				generator = new GermanCEGFromRequirementGenerator(logService, tagger);
+				generator = new GermanCEGFromRequirementGenerator(logger, tagger);
 			} else {
-				generator = new EnglishCEGFromRequirementGenerator(logService, tagger);
+				generator = new EnglishCEGFromRequirementGenerator(logger, tagger);
 			}
 			generator.createModel(model, text);
 		}
 		return model;
-	}
-
-	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
 	}
 
 	@Reference

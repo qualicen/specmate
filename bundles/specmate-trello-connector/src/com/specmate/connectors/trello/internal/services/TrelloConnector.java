@@ -18,7 +18,8 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
@@ -41,7 +42,9 @@ public class TrelloConnector extends ConnectorBase {
 
 	private static final String TRELLO_API_BASE_URL = "https://api.trello.com";
 	private static final int TIMEOUT = 5000;
-	private LogService logService;
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 	private RestClient restClient;
 	private String boardId;
 	private String key;
@@ -55,7 +58,7 @@ public class TrelloConnector extends ConnectorBase {
 		key = (String) properties.get(TrelloConnectorConfig.KEY_TRELLO_KEY);
 		token = (String) properties.get(TrelloConnectorConfig.KEY_TRELLO_TOKEN);
 		id = (String) properties.get(IProjectConfigService.KEY_CONNECTOR_ID);
-		restClient = new RestClient(TRELLO_API_BASE_URL, TIMEOUT, logService);
+		restClient = new RestClient(TRELLO_API_BASE_URL, TIMEOUT, logger);
 	}
 
 	private void validateConfig(Map<String, Object> properties) throws SpecmateException {
@@ -66,11 +69,6 @@ public class TrelloConnector extends ConnectorBase {
 		if (isEmpty(aBoardId) || isEmpty(aKey) || isEmpty(aToken)) {
 			throw new SpecmateInternalException(ErrorCode.CONFIGURATION, "Trello Connector is not well configured.");
 		}
-	}
-
-	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
 	}
 
 	@Override

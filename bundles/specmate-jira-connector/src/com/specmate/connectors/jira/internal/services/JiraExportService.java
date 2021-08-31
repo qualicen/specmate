@@ -8,6 +8,8 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.atlassian.jira.rest.client.api.domain.input.IssueInputBuilder;
 import com.specmate.common.exception.SpecmateException;
@@ -21,8 +23,9 @@ import com.specmate.model.testspecification.TestStep;
 @Component(immediate = true, service = IExporter.class, configurationPid = JiraConfigConstants.EXPORTER_PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
 public class JiraExportService extends JiraExportServiceBase {
 
-	/** Reference to the logging service */
-	LogService logService;
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 
 	public JiraExportService() {
 		super("Atlassian JIRA");
@@ -47,10 +50,4 @@ public class JiraExportService extends JiraExportServiceBase {
 		}
 		issueBuilder.setDescription(builder.toString());
 	}
-
-	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
-	}
-
 }

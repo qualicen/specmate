@@ -9,7 +9,8 @@ import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.http.HttpService;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
@@ -40,8 +41,9 @@ public class MetricsServiceImpl implements IMetricsService {
 	/** The http service */
 	private HttpService httpService;
 
-	/** The log service */
-	private LogService logService;
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 
 	private static Map<String, Object> collectors = new HashMap<>();
 
@@ -65,7 +67,7 @@ public class MetricsServiceImpl implements IMetricsService {
 		try {
 			this.httpService.registerServlet("/metrics", metricsServlet, null, null);
 		} catch (Exception e) {
-			this.logService.log(LogService.LOG_ERROR, "Could not initialize metrics servlet.", e);
+			this.logger.error("Could not initialize metrics servlet.", e);
 			throw new SpecmateInternalException(ErrorCode.METRICS, e);
 		}
 	}
@@ -125,10 +127,5 @@ public class MetricsServiceImpl implements IMetricsService {
 	public void setHttpService(HttpService httpService) throws SpecmateException {
 		this.httpService = httpService;
 		configureMetricsServlet();
-	}
-
-	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
 	}
 }

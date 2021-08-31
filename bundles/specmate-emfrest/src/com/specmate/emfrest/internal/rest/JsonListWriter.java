@@ -14,7 +14,7 @@ import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 
 import org.eclipse.emf.ecore.EObject;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
 
 import com.specmate.common.ISerializationConfiguration;
 import com.specmate.urihandler.IURIFactory;
@@ -27,9 +27,9 @@ public class JsonListWriter implements MessageBodyWriter<List<EObject>> {
 	private JsonWriter writer;
 
 	/** constructor */
-	public JsonListWriter(@Context LogService logService, @Context IURIFactory factory,
+	public JsonListWriter(@Context Logger logger, @Context IURIFactory factory,
 			@Context ISerializationConfiguration serializationConfig) {
-		this.writer = new JsonWriter(logService, factory, serializationConfig);
+		this.writer = new JsonWriter(logger, factory, serializationConfig);
 	}
 
 	/** {@inheritDoc} */

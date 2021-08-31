@@ -11,7 +11,8 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.atlassian.jira.rest.client.api.domain.BasicIssue;
 import com.specmate.common.exception.SpecmateException;
@@ -34,6 +35,10 @@ public class XrayServerExportService extends JiraExportServiceBase {
 		super("Xray");
 	}
 
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
+
 	@Override
 	@Activate
 	public void activate(Map<String, Object> properties) throws SpecmateException {
@@ -43,7 +48,7 @@ public class XrayServerExportService extends JiraExportServiceBase {
 	@Override
 	protected void exportTestStepsPost(TestProcedure procedure, BasicIssue issue) throws SpecmateException {
 		String basicAuth = Base64.getEncoder().encodeToString(String.format("%s:%s", username, password).getBytes());
-		RestClient restClient = new RestClient(url, EAuthType.BASIC, basicAuth, 10000, logService);
+		RestClient restClient = new RestClient(url, EAuthType.BASIC, basicAuth, 10000, logger);
 		try (restClient) {
 			List<TestStep> steps = SpecmateEcoreUtil.getStepsSorted(procedure);
 			for (TestStep step : steps) {
@@ -56,10 +61,4 @@ public class XrayServerExportService extends JiraExportServiceBase {
 			}
 		}
 	}
-
-	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
-	}
-
 }

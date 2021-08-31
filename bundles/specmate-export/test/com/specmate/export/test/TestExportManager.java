@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
 
 import com.specmate.auth.api.ISessionListener;
 import com.specmate.auth.api.ISessionService;
@@ -43,8 +44,8 @@ public class TestExportManager {
 	private void testExportManagerWithParameters(boolean projectIsNull, boolean userAuthorizedForProject,
 			boolean userAuthorizedForExporter, boolean exportAvailable) throws SpecmateException {
 		ExportManagerService exportManagerService = new ExportManagerService();
-		LogService logService = mock(LogService.class);
-		exportManagerService.setLogService(logService);
+		Logger logger = mock(Logger.class);
+		exportManagerService.setLogger(logger);
 
 		ISessionService sessionService = mock(ISessionService.class);
 		Mockito.doAnswer(new Answer<Void>() {

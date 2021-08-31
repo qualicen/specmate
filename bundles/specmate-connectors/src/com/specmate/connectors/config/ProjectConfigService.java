@@ -10,7 +10,8 @@ import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.common.OSGiUtil;
 import com.specmate.common.exception.SpecmateException;
@@ -39,8 +40,9 @@ public class ProjectConfigService implements IProjectConfigService {
 	/** The config admin service. */
 	private ConfigurationAdmin configAdmin;
 
-	/** The log service. */
-	private LogService logService;
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 
 	/** The persistency service to access the model data */
 	private IPersistencyService persistencyService;
@@ -78,7 +80,7 @@ public class ProjectConfigService implements IProjectConfigService {
 				configureProject(projectID, connector, exporter);
 				bootstrapProjectLibrary(projectID);
 			} catch (SpecmateException e) {
-				logService.log(LogService.LOG_ERROR, "Could not create project " + projectID, e);
+				logger.error("Could not create project " + projectID, e);
 			}
 		}
 	}
@@ -96,7 +98,7 @@ public class ProjectConfigService implements IProjectConfigService {
 				}
 				configureMultiProject(multiProjectID, multiConnector);
 			} catch (SpecmateException e) {
-				logService.log(LogService.LOG_ERROR, "Could not create multi project " + multiProjectID, e);
+				logger.error("Could not create multi project " + multiProjectID, e);
 			}
 		}
 	}
@@ -192,7 +194,7 @@ public class ProjectConfigService implements IProjectConfigService {
 		if (projectNamePattern != null) {
 			multiProjectConfig.put(IProjectConfigService.KEY_MULTIPROJECT_PROJECTNAMEPATTERN, projectNamePattern);
 		}
-		
+
 		// multiproject.<projectname>.maxprojects
 		String maxprojects = configService.getConfigurationProperty(IProjectConfigService.MULTIPROJECT_PREFIX
 				+ multiProjectID + "." + IProjectConfigService.KEY_MULTIPROJECT_MAXNUMBEROFPROJECTS);
@@ -225,7 +227,7 @@ public class ProjectConfigService implements IProjectConfigService {
 			if (!projectConfig.containsKey(newConfigEntryKey)) {
 				projectConfig.put((String) newConfigEntry.getKey(), (String) newConfigEntry.getValue());
 			} else {
-				logService.log(LogService.LOG_WARNING, "Duplicated config entries for key " + newConfigEntryKey);
+				logger.warn("Duplicated config entries for key " + newConfigEntryKey);
 			}
 		}
 	}
@@ -286,8 +288,8 @@ public class ProjectConfigService implements IProjectConfigService {
 		try {
 			OSGiUtil.configureFactory(configAdmin, configurable.getPid(), configurable.getConfig());
 		} catch (SpecmateException e) {
-			logService.log(LogService.LOG_ERROR, "Failed attempt to configure " + configurable.getPid()
-					+ " with config " + OSGiUtil.configDictionaryToString(configurable.getConfig()), e);
+			logger.error("Failed attempt to configure " + configurable.getPid() + " with config "
+					+ OSGiUtil.configDictionaryToString(configurable.getConfig()), e);
 		}
 	}
 
@@ -391,11 +393,6 @@ public class ProjectConfigService implements IProjectConfigService {
 	@Reference
 	public void setConfigurationAdmin(ConfigurationAdmin configAdmin) {
 		this.configAdmin = configAdmin;
-	}
-
-	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
 	}
 
 	@Reference

@@ -10,7 +10,7 @@ import javax.ws.rs.core.Context;
 
 import org.eclipse.emf.ecore.EObject;
 import org.osgi.framework.BundleContext;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
 
 import com.specmate.persistency.ITransaction;
 import com.specmate.urihandler.IURIFactory;
@@ -29,7 +29,7 @@ public class RootResource extends SpecmateResource {
 
 	/** The OSGi logging service */
 	@Inject
-	LogService logService;
+	Logger logger;
 
 	/** The OSGI bundle context of the containing bundle */
 	@Inject

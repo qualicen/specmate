@@ -9,7 +9,8 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
@@ -26,8 +27,9 @@ import com.specmate.model.administration.ErrorCode;
 @Component(immediate = true, service = IMultiConnector.class, configurationPid = JiraConfigConstants.MULTICONNECTOR_PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
 public class JiraMultiConnector implements IMultiConnector {
 
-	/** The log service reference */
-	private LogService logService;
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 
 	/** The configured id of this connector */
 	private String id;
@@ -53,7 +55,7 @@ public class JiraMultiConnector implements IMultiConnector {
 		username = (String) properties.get(JiraConfigConstants.KEY_JIRA_USERNAME);
 		password = (String) properties.get(JiraConfigConstants.KEY_JIRA_PASSWORD);
 
-		logService.log(LogService.LOG_DEBUG, "Initialized Jira Multi Connector with " + properties.toString() + ".");
+		logger.debug("Initialized Jira Multi Connector with " + properties.toString() + ".");
 	}
 
 	private void validateConfig(Map<String, Object> properties) throws SpecmateException {
@@ -78,11 +80,6 @@ public class JiraMultiConnector implements IMultiConnector {
 		this.multiProject = multiProject;
 	}
 
-	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
-	}
-
 	@Override
 	public String getId() {
 		return id;
@@ -101,7 +98,6 @@ public class JiraMultiConnector implements IMultiConnector {
 	}
 
 	private Map<String, String> getProjectConfig(String jiraProjectId) {
-
 		HashMap<String, String> projectConfig = new HashMap<>();
 
 		projectConfig.put(KEY_CONNECTOR + KEY_PID, JiraConfigConstants.CONNECTOR_PID);

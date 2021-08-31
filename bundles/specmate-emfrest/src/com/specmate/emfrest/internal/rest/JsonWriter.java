@@ -13,7 +13,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
 import org.eclipse.emf.ecore.EObject;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
 
 import com.specmate.common.ISerializationConfiguration;
 import com.specmate.emfjson.EMFJsonSerializer;
@@ -22,7 +22,7 @@ import com.specmate.urihandler.IURIFactory;
 /** Serializes EMF object to JSON */
 public class JsonWriter {
 
-	LogService logService;
+	Logger logger;
 
 	public static final String MEDIA_TYPE = MediaType.APPLICATION_JSON + ";charset=utf-8";
 
@@ -31,11 +31,11 @@ public class JsonWriter {
 	/**
 	 * constructor
 	 * 
-	 * @param logService2
+	 * @param logger
 	 */
-	public JsonWriter(LogService logService, IURIFactory factory, ISerializationConfiguration serializationConfig) {
+	public JsonWriter(Logger logger, IURIFactory factory, ISerializationConfiguration serializationConfig) {
 		this.serializer = new EMFJsonSerializer(factory, serializationConfig);
-		this.logService = logService;
+		this.logger = logger;
 	}
 
 	/** {@inheritDoc} */
@@ -45,8 +45,8 @@ public class JsonWriter {
 
 	/** {@inheritDoc} */
 	public boolean isWriteable(Class<?> clazz, Type type, Annotation[] annotation, MediaType mediaType) {
-		return mediaType.toString().equals(MEDIA_TYPE)
-				&& (EObject.class.isAssignableFrom(clazz) || List.class.isAssignableFrom(clazz) || Map.class.isAssignableFrom(clazz));
+		return mediaType.toString().equals(MEDIA_TYPE) && (EObject.class.isAssignableFrom(clazz)
+				|| List.class.isAssignableFrom(clazz) || Map.class.isAssignableFrom(clazz));
 	}
 
 	/**
@@ -62,21 +62,21 @@ public class JsonWriter {
 			try {
 				result = serializer.serialize((EObject) obj).toString();
 			} catch (Exception e) {
-				logService.log(LogService.LOG_ERROR, "Could not serialize object.", e);
+				logger.error("Could not serialize object.", e);
 				throw new WebApplicationException(e);
 			}
 		} else if (obj instanceof List) {
 			try {
 				result = serializer.serialize((List<?>) obj).toString();
 			} catch (Exception e) {
-				logService.log(LogService.LOG_ERROR, "Could not serialize object.", e);
+				logger.error("Could not serialize object.", e);
 				throw new WebApplicationException(e);
 			}
 		} else if (obj instanceof Map) {
 			try {
 				result = serializer.serialize((Map<String, String>) obj).toString();
 			} catch (Exception e) {
-				logService.log(LogService.LOG_ERROR, "Could not serialize object.", e);
+				logger.error("Could not serialize object.", e);
 				throw new WebApplicationException(e);
 			}
 		} else {
@@ -87,5 +87,4 @@ public class JsonWriter {
 		writer.write(result);
 		writer.flush();
 	}
-
 }

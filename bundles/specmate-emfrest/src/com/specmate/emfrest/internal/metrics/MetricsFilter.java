@@ -12,7 +12,7 @@ import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.MultivaluedMap;
 
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
 
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.metrics.ICounter;
@@ -31,7 +31,7 @@ public class MetricsFilter implements ContainerRequestFilter, ContainerResponseF
 
 	private IMetricsService metricsService;
 
-	private LogService logService;
+	private Logger logger;
 
 	private ICounter response_5xx;
 
@@ -46,20 +46,18 @@ public class MetricsFilter implements ContainerRequestFilter, ContainerResponseF
 	/**
 	 * Registers a filter specifically for the defined method.
 	 *
-	 * @param resourceInfo
-	 *            - the resource (uri ==> class + method) we are registering this
-	 *            filter for
-	 * @param prefix
-	 *            - the prefix we should apply to all metrics (if any)
+	 * @param resourceInfo - the resource (uri ==> class + method) we are
+	 *                     registering this filter for
+	 * @param prefix       - the prefix we should apply to all metrics (if any)
 	 * @param annotation
 	 * @throws SpecmateException
 	 */
-	public MetricsFilter(IMetricsService metricsService, LogService logService, ResourceInfo resourceInfo,
-			AMetric annotation) throws SpecmateException {
+	public MetricsFilter(IMetricsService metricsService, Logger logger, ResourceInfo resourceInfo, AMetric annotation)
+			throws SpecmateException {
 		this.resourceInfo = resourceInfo;
 		this.annotation = annotation;
 		this.metricsService = metricsService;
-		this.logService = logService;
+		this.logger = logger;
 
 		getGeneralMetics();
 
@@ -78,15 +76,14 @@ public class MetricsFilter implements ContainerRequestFilter, ContainerResponseF
 	/**
 	 * if the annotation is fully specified, use it.
 	 *
-	 * @param annotation
-	 *            - provides us a name and help
+	 * @param annotation - provides us a name and help
 	 */
 	private void buildTimerFromAnnotation(AMetric annotation) {
 		if (annotation != null && annotation.help().length() > 0 && annotation.name().length() > 0) {
 			try {
 				tracker = metricsService.createHistogram(annotation.name(), annotation.help());
 			} catch (SpecmateException e) {
-				logService.log(LogService.LOG_ERROR, "Could not register jersey metric " + annotation.name() + ".", e);
+				logger.error("Could not register jersey metric " + annotation.name() + ".", e);
 			}
 		}
 	}
@@ -98,7 +95,7 @@ public class MetricsFilter implements ContainerRequestFilter, ContainerResponseF
 			try {
 				buildTracker(requestContext);
 			} catch (SpecmateException e) {
-				logService.log(LogService.LOG_ERROR, "Could not create metrics tracker.", e);
+				logger.error("Could not create metrics tracker.", e);
 			}
 		}
 

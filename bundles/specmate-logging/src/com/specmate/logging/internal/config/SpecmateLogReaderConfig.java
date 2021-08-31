@@ -45,5 +45,4 @@ public class SpecmateLogReaderConfig {
 	public void setConfigurationService(IConfigService configService) {
 		this.configService = configService;
 	}
-
 }

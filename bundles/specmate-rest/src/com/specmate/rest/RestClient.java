@@ -18,7 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
 
 import com.specmate.common.AssertUtil;
 
@@ -27,7 +27,7 @@ public class RestClient implements AutoCloseable {
 	private Client restClient;
 	private String restUrl;
 	private int timeout;
-	private LogService logService;
+	private Logger logger;
 	private String authorization;
 
 	public enum EAuthType {
@@ -46,11 +46,11 @@ public class RestClient implements AutoCloseable {
 		}
 	}
 
-	public RestClient(String restUrl, EAuthType authType, String credentials, int timeout, LogService logService) {
+	public RestClient(String restUrl, EAuthType authType, String credentials, int timeout, Logger logger) {
 		restClient = initializeClient();
 		this.restUrl = restUrl;
 		this.timeout = timeout;
-		this.logService = logService;
+		this.logger = logger;
 		setAuthorization(authType, credentials);
 	}
 
@@ -63,12 +63,12 @@ public class RestClient implements AutoCloseable {
 		restClient.close();
 	}
 
-	public RestClient(String restUrl, EAuthType authType, String authentication, LogService logService) {
-		this(restUrl, authType, authentication, 5000, logService);
+	public RestClient(String restUrl, EAuthType authType, String authentication, Logger logger) {
+		this(restUrl, authType, authentication, 5000, logger);
 	}
 
-	public RestClient(String restUrl, int timeout, LogService logService) {
-		this(restUrl, null, null, timeout, logService);
+	public RestClient(String restUrl, int timeout, Logger logger) {
+		this(restUrl, null, null, timeout, logger);
 	}
 
 	private Client initializeClient() {
@@ -93,8 +93,8 @@ public class RestClient implements AutoCloseable {
 			params.forEach((key, val) -> uriBuilder.queryParam(key, val));
 		}
 
-		if (logService != null) {
-			logService.log(LogService.LOG_DEBUG, "Building Invocation for " + uriBuilder);
+		if (logger != null) {
+			logger.debug("Building Invocation for " + uriBuilder);
 		}
 		WebTarget getTarget = restClient.target(uriBuilder);
 		Invocation.Builder invocationBuilder = getTarget.request();
@@ -215,10 +215,9 @@ public class RestClient implements AutoCloseable {
 				}
 				return new RestResult<T>(response, url, object);
 			} catch (JSONException e) {
-				logService.log(LogService.LOG_WARNING, e.getMessage());
+				logger.warn(e.getMessage());
 			}
 		}
-
 		return new RestResult<>(response, url, null);
 	}
 }

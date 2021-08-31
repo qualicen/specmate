@@ -44,7 +44,7 @@ public class AuthenticationTest extends EmfRestTest {
 	@Test
 	public void testUnauthorizedPost() throws SpecmateException {
 		UserSession session = authenticationService.authenticate("resttest", "resttest", projectAName);
-		RestClient clientProjectA = new RestClient(REST_ENDPOINT, EAuthType.TOKEN, session.getId(), logService);
+		RestClient clientProjectA = new RestClient(REST_ENDPOINT, EAuthType.TOKEN, session.getId(), logger);
 
 		RestResult<JSONObject> result = clientProjectA.post(listUrl(), requirementB);
 		assertEquals(Status.OK.getStatusCode(), result.getResponse().getStatus());
@@ -65,7 +65,7 @@ public class AuthenticationTest extends EmfRestTest {
 
 	@Test
 	public void testWrongProjectAtLogin() throws SpecmateException {
-		RestClient clientProjectA = new RestClient(REST_ENDPOINT, EAuthType.TOKEN, session.getId(), logService);
+		RestClient clientProjectA = new RestClient(REST_ENDPOINT, EAuthType.TOKEN, session.getId(), logger);
 
 		// correct login
 		String rightLoginJson = "{\"___nsuri\":\"" + UsermodelPackage.eNS_URI
@@ -97,7 +97,7 @@ public class AuthenticationTest extends EmfRestTest {
 	@Test
 	public void testUnauthorizedGet() throws SpecmateException {
 		UserSession session = authenticationService.authenticate("resttest", "resttest", projectAName);
-		RestClient clientProjectA = new RestClient(REST_ENDPOINT, EAuthType.TOKEN, session.getId(), logService);
+		RestClient clientProjectA = new RestClient(REST_ENDPOINT, EAuthType.TOKEN, session.getId(), logger);
 
 		RestResult<JSONObject> result = clientProjectA.get(detailUrl());
 		assertEquals(Status.OK.getStatusCode(), result.getResponse().getStatus());

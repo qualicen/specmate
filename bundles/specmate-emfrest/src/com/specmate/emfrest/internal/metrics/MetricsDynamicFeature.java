@@ -6,7 +6,7 @@ import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.FeatureContext;
 import javax.ws.rs.ext.Provider;
 
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
 
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.metrics.IMetricsService;
@@ -17,17 +17,16 @@ public class MetricsDynamicFeature implements DynamicFeature {
 	@Inject
 	IMetricsService metricsService;
 	@Inject
-	LogService logService;
+	Logger logger;
 
 	@Override
 	public void configure(ResourceInfo resourceInfo, FeatureContext context) {
 		AMetric annotation = resourceInfo.getResourceClass().getAnnotation(AMetric.class);
 
 		try {
-			context.register(new MetricsFilter(metricsService, logService, resourceInfo, annotation));
+			context.register(new MetricsFilter(metricsService, logger, resourceInfo, annotation));
 		} catch (SpecmateException e) {
-			logService.log(LogService.LOG_ERROR, "Could not register metrics filter.", e);
+			logger.error("Could not register metrics filter.", e);
 		}
-
 	}
 }

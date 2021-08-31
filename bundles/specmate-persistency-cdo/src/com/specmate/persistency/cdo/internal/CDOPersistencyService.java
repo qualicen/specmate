@@ -51,7 +51,8 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 import org.osgi.service.event.EventAdmin;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.administration.api.IStatusService;
 import com.specmate.common.exception.SpecmateException;
@@ -105,8 +106,9 @@ public class CDOPersistencyService implements IPersistencyService, IListener {
 	/** The configured CDO host and port to connect to */
 	private String hostAndPort;
 
-	/** Reference to the log servcie */
-	private LogService logService;
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 
 	/** Reference to the event admin */
 	private EventAdmin eventAdmin;
@@ -237,10 +239,10 @@ public class CDOPersistencyService implements IPersistencyService, IListener {
 					CDOSessionRecoveryEvent recoveryEvent = (CDOSessionRecoveryEvent) event;
 					switch (recoveryEvent.getType()) {
 					case STARTED:
-						logService.log(LogService.LOG_WARNING, "Reconnecting CDO session started.");
+						logger.warn("Reconnecting CDO session started.");
 						break;
 					case FINISHED:
-						logService.log(LogService.LOG_WARNING, "Reconnecting CDO session finished.");
+						logger.warn("Reconnecting CDO session finished.");
 						break;
 					}
 				}
@@ -257,7 +259,7 @@ public class CDOPersistencyService implements IPersistencyService, IListener {
 		try {
 			transaction.commit();
 		} catch (CommitException e) {
-			logService.log(LogService.LOG_ERROR, "Could not create resource " + resourceName, e);
+			logger.error("Could not create resource " + resourceName, e);
 		}
 	}
 
@@ -266,7 +268,7 @@ public class CDOPersistencyService implements IPersistencyService, IListener {
 		CDOResource resource = transaction.getOrCreateResource("dummy");
 		for (EPackage pack : packageProvider.getPackages()) {
 			if (session.getPackageRegistry().getEPackage(pack.getNsURI()) == null) {
-				logService.log(LogService.LOG_INFO, "Registering package " + pack.getNsURI());
+				logger.info("Registering package " + pack.getNsURI());
 				EClass eClass = getAnyConcreteEClass(pack);
 				EObject object = pack.getEFactoryInstance().create(eClass);
 				resource.getContents().add(object);
@@ -275,7 +277,7 @@ public class CDOPersistencyService implements IPersistencyService, IListener {
 		try {
 			transaction.commit();
 		} catch (Exception e) {
-			logService.log(LogService.LOG_ERROR, "Could not commit packages to dummy resource", e);
+			logger.error("Could not commit packages to dummy resource", e);
 		}
 		transaction.close();
 	}
@@ -301,7 +303,7 @@ public class CDOPersistencyService implements IPersistencyService, IListener {
 					"Attempt to open transaction when persistency service is not active");
 		}
 		CDOTransaction cdoTransaction = openCDOTransaction();
-		TransactionImpl transaction = new TransactionImpl(this, cdoTransaction, alterantiveResourceName, logService,
+		TransactionImpl transaction = new TransactionImpl(this, cdoTransaction, alterantiveResourceName, logger,
 				statusService, attachCommitListeners ? listeners : Collections.emptyList());
 
 		this.openTransactions.add(transaction);
@@ -322,7 +324,7 @@ public class CDOPersistencyService implements IPersistencyService, IListener {
 					"Attempt to open transaction when persistency service is not active");
 		}
 		CDOView cdoView = openCDOView();
-		ViewImpl view = new ViewImpl(this, cdoView, this.resourceName, logService);
+		ViewImpl view = new ViewImpl(this, cdoView, this.resourceName, logger);
 
 		this.openViews.add(view);
 		this.transactionGauge.inc();
@@ -339,7 +341,7 @@ public class CDOPersistencyService implements IPersistencyService, IListener {
 		transaction.options().addChangeSubscriptionPolicy(CDOAdapterPolicy.ALL);
 		transaction.options().setInvalidationNotificationEnabled(true);
 		transaction.options().addConflictResolver(new CDOMergingConflictResolver());
-		logService.log(LogService.LOG_DEBUG, "Transaction initialized: " + transaction.getViewID());
+		logger.debug("Transaction initialized: " + transaction.getViewID());
 		return transaction;
 	}
 
@@ -347,7 +349,7 @@ public class CDOPersistencyService implements IPersistencyService, IListener {
 		CDOView view = session.openView();
 		view.options().addChangeSubscriptionPolicy(CDOAdapterPolicy.ALL);
 		view.options().setInvalidationNotificationEnabled(true);
-		logService.log(LogService.LOG_DEBUG, "View initialized: " + view.getViewID());
+		logger.debug("View initialized: " + view.getViewID());
 		return view;
 	}
 
@@ -383,7 +385,7 @@ public class CDOPersistencyService implements IPersistencyService, IListener {
 		try {
 			processor.process();
 		} catch (SpecmateValidationException e) {
-			logService.log(LogService.LOG_ERROR, e.getMessage());
+			logger.error(e.getMessage());
 		}
 	}
 
@@ -409,7 +411,7 @@ public class CDOPersistencyService implements IPersistencyService, IListener {
 			optUri = resolveUri(eventView, id);
 		}
 		if (!optUri.isPresent()) {
-			logService.log(LogService.LOG_ERROR, "Could not determine uri for object");
+			logger.error("Could not determine uri for object");
 			return;
 		}
 		String uri = optUri.get();
@@ -443,7 +445,7 @@ public class CDOPersistencyService implements IPersistencyService, IListener {
 			event = new ModelEvent(idAsString, null, null, null, EChangeKind.DELETE);
 			break;
 		default:
-			logService.log(LogService.LOG_ERROR, "Unsupported Delta type:" + changeKind.toString());
+			logger.error("Unsupported Delta type:" + changeKind.toString());
 		}
 		if (event != null) {
 			eventAdmin.postEvent(event);
@@ -524,10 +526,5 @@ public class CDOPersistencyService implements IPersistencyService, IListener {
 	@Reference
 	public void setMetricsService(IMetricsService metricsService) {
 		this.metricsService = metricsService;
-	}
-
-	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
 	}
 }

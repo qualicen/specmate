@@ -8,7 +8,7 @@ import org.json.JSONObject;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
 
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.persistency.event.ModelEvent;
@@ -37,13 +37,13 @@ class ModelEventHandler implements EventHandler {
 	private IURIFactory uriFactory;
 
 	/** The OSGi logging service */
-	private LogService logService;
+	private Logger logger;
 
-	/** construcgtor */
-	public ModelEventHandler(EventOutput eventOutput, IURIFactory uriFactory, LogService logService) {
+	/** constructor */
+	public ModelEventHandler(EventOutput eventOutput, IURIFactory uriFactory, Logger logger) {
 		this.eventOutput = eventOutput;
 		this.uriFactory = uriFactory;
-		this.logService = logService;
+		this.logger = logger;
 	}
 
 	/** Sets the OSGi service registration */
@@ -63,7 +63,7 @@ class ModelEventHandler implements EventHandler {
 		try {
 			jsonEvent = createJSONEvent(modelEvent);
 		} catch (SpecmateException e) {
-			logService.log(LogService.LOG_ERROR, "Could not serialize event.", e);
+			logger.error("Could not serialize event.", e);
 		}
 		if (jsonEvent != null) {
 			sendEvent(jsonEvent);
@@ -93,18 +93,16 @@ class ModelEventHandler implements EventHandler {
 			}
 		} catch (IOException e) {
 			registration.unregister();
-			logService.log(LogService.LOG_ERROR, "Could not write REST event.");
+			logger.error("Could not write REST event.");
 		}
 	}
 
 	/**
 	 * Produces a {@link JSONObject} from a {@link ModelEvent}
 	 *
-	 * @param modelEvent
-	 *            The model event to encode.
+	 * @param modelEvent The model event to encode.
 	 * @return The produced {@link JSONObject}
-	 * @throws SpecmateException
-	 *             When the serialization fails
+	 * @throws SpecmateException When the serialization fails
 	 */
 	private JSONObject createJSONEvent(ModelEvent modelEvent) throws SpecmateException {
 		JSONObject jsonEvent = new JSONObject();
@@ -135,5 +133,4 @@ class ModelEventHandler implements EventHandler {
 		// }
 		return jsonEvent;
 	}
-
 }

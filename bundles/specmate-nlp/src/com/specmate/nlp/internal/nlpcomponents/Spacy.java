@@ -21,7 +21,7 @@ import org.json.JSONObject;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
@@ -50,28 +50,28 @@ public class Spacy extends JCasAnnotator_ImplBase {
 
 	private static final int TIMEOUT = 5000;
 
-	private LogService logService;
+	private Logger logger;
 
 	public Spacy() {
 		BundleContext context = FrameworkUtil.getBundle(Spacy.class).getBundleContext();
-		ServiceTracker<LogService, LogService> logServiceTracker = new ServiceTracker<>(context, LogService.class,
+		ServiceTracker<Logger, Logger> loggerTracker = new ServiceTracker<>(context, Logger.class,
 				new ServiceTrackerCustomizer<>() {
 
 					@Override
-					public LogService addingService(ServiceReference<LogService> reference) {
-						logService = context.getService(reference);
-						return logService;
+					public Logger addingService(ServiceReference<Logger> reference) {
+						logger = context.getService(reference);
+						return logger;
 					}
 
 					@Override
-					public void modifiedService(ServiceReference<LogService> reference, LogService service) {
+					public void modifiedService(ServiceReference<Logger> reference, Logger service) {
 					}
 
 					@Override
-					public void removedService(ServiceReference<LogService> reference, LogService service) {
+					public void removedService(ServiceReference<Logger> reference, Logger service) {
 					}
 				});
-		logServiceTracker.open();
+		loggerTracker.open();
 	}
 
 	@Override
@@ -100,7 +100,7 @@ public class Spacy extends JCasAnnotator_ImplBase {
 
 	private JSONArray accessSpacyAPI(String requirement) throws SpecmateInternalException {
 
-		RestClient restClient = new RestClient(SPACY_API_BASE_URL, TIMEOUT, logService);
+		RestClient restClient = new RestClient(SPACY_API_BASE_URL, TIMEOUT, logger);
 		try (restClient) {
 			// Set model parameters
 			JSONObject request = new JSONObject();

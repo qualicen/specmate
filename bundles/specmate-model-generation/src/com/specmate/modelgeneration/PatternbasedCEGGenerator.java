@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
 
 import com.specmate.cause_effect_patterns.parse.matcher.MatchResult;
 import com.specmate.cause_effect_patterns.parse.wrapper.BinaryMatchResultTreeNode;
@@ -32,27 +32,27 @@ public class PatternbasedCEGGenerator implements ICEGFromRequirementGenerator {
 	private final CEGCreation creation;
 	private final ELanguage lang;
 	private final RuleMatcher matcher;
-	private final LogService log;
+	private final Logger logger;
 	private final TextPreProcessor preProcessor;
 
-	public PatternbasedCEGGenerator(ELanguage lang, INLPService tagger, IConfigService configService,
-			LogService logService) throws SpecmateException {
+	public PatternbasedCEGGenerator(ELanguage lang, INLPService tagger, IConfigService configService, Logger logger)
+			throws SpecmateException {
 		this.tagger = tagger;
 		creation = new CEGCreation();
 		this.lang = lang;
 		matcher = new RuleMatcher(this.tagger, configService, lang);
-		log = logService;
+		this.logger = logger;
 		preProcessor = new TextPreProcessor(lang, tagger);
 	}
 
 	@Override
 	public CEGModel createModel(CEGModel originalModel, String input) throws SpecmateException {
-		log.log(LogService.LOG_INFO, "Textinput: " + input);
+		logger.info("Textinput: " + input);
 		List<String> texts = preProcessor.preProcess(input);
 		List<Pair<String, CEGModel>> candidates = new ArrayList<>();
 
 		for (String text : texts) {
-			log.log(LogService.LOG_INFO, "Text Pre Processing: " + text);
+			logger.info("Text Pre Processing: " + text);
 			final List<MatchResult> results = matcher.matchText(text);
 
 			final MatchTreeBuilder builder = new MatchTreeBuilder();
@@ -82,8 +82,7 @@ public class PatternbasedCEGGenerator implements ICEGFromRequirementGenerator {
 					CEGModel model = graphLayouter.createModel(graph);
 					candidates.add(Pair.of(text, model));
 				} catch (Throwable t) {
-					log.log(LogService.LOG_DEBUG,
-							"Error occured processing the dependency parse tree: " + t.getMessage(), t);
+					logger.debug("Error occured processing the dependency parse tree: " + t.getMessage(), t);
 				}
 			}
 

@@ -14,7 +14,8 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.http.HttpContext;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.emfrest.api.IRestEndpoint;
 
@@ -22,7 +23,9 @@ import com.specmate.emfrest.api.IRestEndpoint;
 public class ResourceRegistration {
 
 	private HttpService httpService;
-	private LogService logService;
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 	private IRestEndpoint iRestEndpoint;
 
 	@Activate
@@ -31,7 +34,7 @@ public class ResourceRegistration {
 			this.httpService.registerResources("/", "/webcontent", null);
 			registerDocFolder();
 		} catch (NamespaceException e) {
-			this.logService.log(LogService.LOG_ERROR, "Could not register frontend with http service: ", e);
+			this.logger.error("Could not register frontend with http service: ", e);
 		}
 	}
 
@@ -69,13 +72,7 @@ public class ResourceRegistration {
 	}
 
 	@Reference
-	public void setLogServicve(LogService logService) {
-		this.logService = logService;
-	}
-
-	@Reference
 	public void setiRestEndpoint(IRestEndpoint iRestEndpoint) {
 		this.iRestEndpoint = iRestEndpoint;
 	}
-
 }

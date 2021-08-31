@@ -14,7 +14,8 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
@@ -46,8 +47,9 @@ public class XrayCloudExportService extends ExporterBase {
 
 	public static final String PID = "com.specmate.connectors.jira.XrayCloudExportService";
 
-	/** Reference to the logging service */
-	private LogService logService;
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 
 	/** The issue type for tests */
 	private String testType;
@@ -94,7 +96,7 @@ public class XrayCloudExportService extends ExporterBase {
 					"No or empty client secret given for xray cloud exporter.");
 		}
 		if (StringUtils.isBlank(testType)) {
-			logService.log(LogService.LOG_WARNING, "No test type provided for xray cloud export, assuming \"Manual\"");
+			logger.warn("No test type provided for xray cloud export, assuming \"Manual\"");
 			testType = "Manual";
 		}
 	}
@@ -126,7 +128,7 @@ public class XrayCloudExportService extends ExporterBase {
 	}
 
 	public Optional<Export> exportTestProcedure(TestProcedure testProcedure) throws SpecmateException {
-		RestClient restClient = new RestClient(url, 10000, logService);
+		RestClient restClient = new RestClient(url, 10000, logger);
 		try {
 			authenticate(restClient);
 			JSONArray exportObjs = getExportObjects(testProcedure);
@@ -189,10 +191,4 @@ public class XrayCloudExportService extends ExporterBase {
 		// we cannot check on a per user basis, assume true
 		return true;
 	}
-
-	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
-	}
-
 }

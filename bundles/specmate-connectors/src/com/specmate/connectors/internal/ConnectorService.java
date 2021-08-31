@@ -13,6 +13,8 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.connectors.api.IConnector;
@@ -26,14 +28,13 @@ import com.specmate.scheduler.SchedulerIteratorFactory;
 import com.specmate.scheduler.SchedulerTask;
 import com.specmate.search.api.IModelSearchService;
 
-@Component(
-		immediate = true,
-		configurationPid = ConnectorServiceConfig.PID,
-		configurationPolicy = ConfigurationPolicy.REQUIRE)
+@Component(immediate = true, configurationPid = ConnectorServiceConfig.PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
 public class ConnectorService {
 	CDOWithID id;
 	List<IConnector> connectors = new ArrayList<>();
-	private LogService logService;
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 	private IPersistencyService persistencyService;
 	private IModelSearchService modelSearchService;
 	private ITransaction transaction;
@@ -41,10 +42,11 @@ public class ConnectorService {
 	@Activate
 	public void activate(Map<String, Object> properties) throws SpecmateException {
 		validateConfig(properties);
+		logger.debug("TESTTEST");
 
 		String schedule = (String) properties.get(PollKeys.KEY_POLL_SCHEDULE);
 		if (schedule == null) {
-			logService.log(LogService.LOG_INFO, "Polling interval '" + PollKeys.KEY_POLL_SCHEDULE + "' not set.");
+			logger.info("Polling interval '" + PollKeys.KEY_POLL_SCHEDULE + "' not set.");
 			return;
 		}
 
@@ -52,7 +54,7 @@ public class ConnectorService {
 		this.transaction.removeValidator(TopLevelValidator.class.getName());
 
 		ConnectorService connectorService = this;
-		
+
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -60,23 +62,23 @@ public class ConnectorService {
 				// Ensure that requirements source are loaded.
 				while (connectors.size() == 0) {
 					try {
-						logService.log(LogService.LOG_INFO, "No connectors here yet. Waiting.");
+						logger.info("No connectors here yet. Waiting.");
 						// Connectors could be added after the component is activated
 						Thread.sleep(20 * 1000);
 					} catch (InterruptedException e) {
-						logService.log(LogService.LOG_ERROR, e.getMessage());
+						logger.error(e.getMessage());
 					}
 				}
 
 				try {
-					SchedulerTask connectorRunnable = new ConnectorTask(connectorService, transaction, logService);
+					SchedulerTask connectorRunnable = new ConnectorTask(connectorService, transaction, logger);
 					connectorRunnable.run();
 					modelSearchService.startReIndex();
-					Scheduler scheduler = new Scheduler(logService);
+					Scheduler scheduler = new Scheduler(logger);
 					scheduler.schedule(connectorRunnable, SchedulerIteratorFactory.create(schedule));
 				} catch (SpecmateException e) {
 					e.printStackTrace();
-					logService.log(LogService.LOG_ERROR, "Could not create schedule iterator.", e);
+					logger.error("Could not create schedule iterator.", e);
 				}
 			}
 		}, "connector-service-initializer").start();
@@ -84,7 +86,7 @@ public class ConnectorService {
 
 	private void validateConfig(Map<String, Object> properties) throws SpecmateException {
 		SchedulerIteratorFactory.validate((String) properties.get(PollKeys.KEY_POLL_SCHEDULE));
-		logService.log(LogService.LOG_DEBUG, "Connector service config validated.");
+		logger.debug("Connector service config validated.");
 	}
 
 	@Deactivate
@@ -100,14 +102,9 @@ public class ConnectorService {
 	public void removeConnector(IConnector source) {
 		this.connectors.remove(source);
 	}
-	
-	public List<IConnector> getConnectors() {
-		return List.copyOf( connectors );
-	}
 
-	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
+	public List<IConnector> getConnectors() {
+		return List.copyOf(connectors);
 	}
 
 	@Reference
@@ -123,6 +120,4 @@ public class ConnectorService {
 	public void unsetPersistency(IPersistencyService persistencyService) {
 		this.persistencyService = null;
 	}
-
-
 }

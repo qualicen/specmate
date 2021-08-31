@@ -13,7 +13,8 @@ import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.config.api.IConfigService;
@@ -38,7 +39,9 @@ public class MultiConnectorService {
 
 	private List<IMultiConnector> multiConnectors = new ArrayList<>();
 
-	private LogService logService;
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 	private IConfigService configService;
 	private IProjectConfigService projectConfigService;
 	private Scheduler scheduler;
@@ -50,12 +53,12 @@ public class MultiConnectorService {
 
 		String schedule = (String) properties.get(PollKeys.KEY_POLL_SCHEDULE);
 		if (schedule == null) {
-			logService.log(LogService.LOG_INFO, "Polling interval '" + PollKeys.KEY_POLL_SCHEDULE + "' not set.");
+			logger.info("Polling interval '" + PollKeys.KEY_POLL_SCHEDULE + "' not set.");
 			return;
 		}
 
-		Scheduler scheduler = new Scheduler(logService);
-		scheduler.schedule(new MultiConnectorTask(this, logService), SchedulerIteratorFactory.create(schedule));
+		Scheduler scheduler = new Scheduler(logger);
+		scheduler.schedule(new MultiConnectorTask(this, logger), SchedulerIteratorFactory.create(schedule));
 	}
 
 	@Deactivate
@@ -79,11 +82,11 @@ public class MultiConnectorService {
 	private class MultiConnectorTask extends SchedulerTask {
 
 		private MultiConnectorService multiConnectorService;
-		private LogService logService;
+		private Logger logger;
 
-		public MultiConnectorTask(MultiConnectorService multiConnectorService, LogService logService) {
+		public MultiConnectorTask(MultiConnectorService multiConnectorService, Logger logger) {
 			this.multiConnectorService = multiConnectorService;
-			this.logService = logService;
+			this.logger = logger;
 		}
 
 		@Override
@@ -91,16 +94,16 @@ public class MultiConnectorService {
 
 			for (IMultiConnector multiConnector : multiConnectorService.getMultiConnectors()) {
 
-				logService.log(LogService.LOG_INFO, "Syncing multi connector " + multiConnector.getId());
-				
+				logger.info("Syncing multi connector " + multiConnector.getId());
+
 				int maxNoProjects = multiConnector.getMultiProject().getMaxNumberOfProjectsConfig();
 				int noProjects = 0;
 
 				try {
 					for (Map.Entry<String, Map<String, String>> projectConfigMapEntry : multiConnector
 							.getProjectConfigs().entrySet()) {
-												
-						if (noProjects++ >= maxNoProjects ) {
+
+						if (noProjects++ >= maxNoProjects) {
 							break;
 						}
 
@@ -119,7 +122,7 @@ public class MultiConnectorService {
 
 						if (!configuredProjects.contains(specmateProjectId)) {
 
-							logService.log(LogService.LOG_INFO, "Adding project " + specmateProjectId);
+							logger.info("Adding project " + specmateProjectId);
 
 							// add template entries to project config
 							Map<String, String> templateConfigEntries = multiProject.getTemplateConfigEntries();
@@ -141,10 +144,10 @@ public class MultiConnectorService {
 							// trigger project creation.
 							// this could be removed in case ProjectConfigService would monitor the config!
 							projectConfigService.configureProjects(new String[] { specmateProjectId });
-						} 
+						}
 					}
 				} catch (SpecmateException e) {
-					logService.log(LogService.LOG_ERROR, "Error syncing projects for " + multiConnector.getId(), e);
+					logger.error("Error syncing projects for " + multiConnector.getId(), e);
 				}
 
 			}
@@ -223,11 +226,6 @@ public class MultiConnectorService {
 	}
 
 	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
-	}
-
-	@Reference
 	public void setConfigService(IConfigService configService) {
 		this.configService = configService;
 	}
@@ -239,6 +237,6 @@ public class MultiConnectorService {
 
 	private void validateConfig(Map<String, Object> properties) throws SpecmateException {
 		SchedulerIteratorFactory.validate((String) properties.get(PollKeys.KEY_POLL_SCHEDULE));
-		logService.log(LogService.LOG_DEBUG, "Multi connector service config validated.");
+		logger.debug("Multi connector service config validated.");
 	}
 }

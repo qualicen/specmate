@@ -16,8 +16,8 @@ import java.util.function.Function;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerConsumer;
 
 import com.atlassian.jira.rest.client.api.AuditRestClient;
 import com.atlassian.jira.rest.client.api.ComponentRestClient;
@@ -75,7 +75,7 @@ public class JiraConnectorMemoryTest {
 		Map<String, Object> config = getConnectorConfig();
 		connector.setJiraRestClientFactory(new TestJiraClientFactory());
 		connector.setCacheService(new TestCacheService());
-		connector.setLogService(new TestLogService());
+		connector.setLogger(new TestLogger());
 		connector.activate(config);
 		for (int i = 1; i <= 2; i++) {
 			connector.getRequirements();
@@ -360,22 +360,152 @@ public class JiraConnectorMemoryTest {
 
 	}
 
-	private class TestLogService implements LogService {
+	private class TestLogger implements Logger {
 
 		@Override
-		public void log(int level, String message) {
+		public void audit(String arg0) {
 		}
 
 		@Override
-		public void log(int level, String message, Throwable exception) {
+		public void audit(String arg0, Object arg1) {
 		}
 
 		@Override
-		public void log(ServiceReference sr, int level, String message) {
+		public void audit(String arg0, Object... arg1) {
 		}
 
 		@Override
-		public void log(ServiceReference sr, int level, String message, Throwable exception) {
+		public void audit(String arg0, Object arg1, Object arg2) {
+		}
+
+		@Override
+		public void debug(String arg0) {
+		}
+
+		@Override
+		public <E extends Exception> void debug(LoggerConsumer<E> arg0) throws E {
+		}
+
+		@Override
+		public void debug(String arg0, Object arg1) {
+		}
+
+		@Override
+		public void debug(String arg0, Object... arg1) {
+		}
+
+		@Override
+		public void debug(String arg0, Object arg1, Object arg2) {
+		}
+
+		@Override
+		public void error(String arg0) {
+		}
+
+		@Override
+		public <E extends Exception> void error(LoggerConsumer<E> arg0) throws E {
+		}
+
+		@Override
+		public void error(String arg0, Object arg1) {
+		}
+
+		@Override
+		public void error(String arg0, Object... arg1) {
+		}
+
+		@Override
+		public void error(String arg0, Object arg1, Object arg2) {
+		}
+
+		@Override
+		public String getName() {
+			return null;
+		}
+
+		@Override
+		public void info(String arg0) {
+		}
+
+		@Override
+		public <E extends Exception> void info(LoggerConsumer<E> arg0) throws E {
+		}
+
+		@Override
+		public void info(String arg0, Object arg1) {
+		}
+
+		@Override
+		public void info(String arg0, Object... arg1) {
+		}
+
+		@Override
+		public void info(String arg0, Object arg1, Object arg2) {
+		}
+
+		@Override
+		public boolean isDebugEnabled() {
+			return false;
+		}
+
+		@Override
+		public boolean isErrorEnabled() {
+			return false;
+		}
+
+		@Override
+		public boolean isInfoEnabled() {
+			return false;
+		}
+
+		@Override
+		public boolean isTraceEnabled() {
+			return false;
+		}
+
+		@Override
+		public boolean isWarnEnabled() {
+			return false;
+		}
+
+		@Override
+		public void trace(String arg0) {
+		}
+
+		@Override
+		public <E extends Exception> void trace(LoggerConsumer<E> arg0) throws E {
+		}
+
+		@Override
+		public void trace(String arg0, Object arg1) {
+		}
+
+		@Override
+		public void trace(String arg0, Object... arg1) {
+		}
+
+		@Override
+		public void trace(String arg0, Object arg1, Object arg2) {
+		}
+
+		@Override
+		public void warn(String arg0) {
+		}
+
+		@Override
+		public <E extends Exception> void warn(LoggerConsumer<E> arg0) throws E {
+		}
+
+		@Override
+		public void warn(String arg0, Object arg1) {
+		}
+
+		@Override
+		public void warn(String arg0, Object... arg1) {
+		}
+
+		@Override
+		public void warn(String arg0, Object arg1, Object arg2) {
 		}
 
 	}

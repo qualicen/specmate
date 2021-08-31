@@ -10,7 +10,8 @@
 	org.eclipse.emf.cdo.server.db,\
 	org.eclipse.net4j.db,\
 	org.eclipse.net4j.db.h2,\
-	specmate-model-gen;version=latest
+	specmate-model-gen;version=latest,\
+	org.eclipse.osgi
 Export-Package: \
 	specmate.dbprovider.h2.config,\
 	specmate.dbprovider.h2

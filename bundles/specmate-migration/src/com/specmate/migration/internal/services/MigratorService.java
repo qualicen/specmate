@@ -21,6 +21,8 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 import org.osgi.util.tracker.ServiceTracker;
 
 import com.specmate.common.exception.SpecmateException;
@@ -39,7 +41,9 @@ public class MigratorService implements IMigratorService {
 	private static final String TABLE_PACKAGE_INFOS = "CDO_PACKAGE_INFOS";
 	private static final String TABLE_EXTERNAL_REFS = "CDO_EXTERNAL_REFS";
 
-	private LogService logService;
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 	private IDBProvider dbProviderService;
 
 	private Pattern versionPattern = Pattern.compile("http://specmate.com/(\\d+)/.*");
@@ -71,10 +75,10 @@ public class MigratorService implements IMigratorService {
 		boolean needsMigration = !currentVersion.equals(targetVersion);
 
 		if (needsMigration) {
-			this.logService.log(LogService.LOG_INFO, "Migration needed. Current version: " + currentVersion
+			this.logger.info("Migration needed. Current version: " + currentVersion
 					+ " / Target version: " + targetVersion + ".");
 		} else {
-			this.logService.log(LogService.LOG_INFO, "No migration needed. Current version: " + currentVersion + ".");
+			this.logger.info("No migration needed. Current version: " + currentVersion + ".");
 		}
 
 		return needsMigration;
@@ -86,9 +90,9 @@ public class MigratorService implements IMigratorService {
 		try {
 			performMigration(currentVersion);
 			updatePackageUnits();
-			this.logService.log(LogService.LOG_INFO, "Migration succeeded.");
+			this.logger.info("Migration succeeded.");
 		} catch (SpecmateException e) {
-			this.logService.log(LogService.LOG_ERROR, "Migration failed.", e);
+			this.logger.error("Migration failed.", e);
 			// TODO: handle failed migration
 			// rollback
 			throw e;
@@ -255,15 +259,9 @@ public class MigratorService implements IMigratorService {
 	public void setModelProviderService(IPackageProvider packageProvider) {
 		this.packageProvider = packageProvider;
 	}
-
-	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
-	}
-
+	
 	@Reference
 	public void setDBProviderService(IDBProvider dbProviderService) {
 		this.dbProviderService = dbProviderService;
 	}
-
 }

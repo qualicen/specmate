@@ -7,7 +7,8 @@ import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.common.OSGiUtil;
 import com.specmate.common.exception.SpecmateException;
@@ -21,7 +22,9 @@ public class TrelloConnectorConfig {
 	public static final String KEY_TRELLO_KEY = "trello.key";
 	public static final String KEY_TRELLO_TOKEN = "trello.token";
 	private ConfigurationAdmin configurationAdmin;
-	private LogService logService;
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 	private IConfigService configService;
 
 	/**
@@ -40,8 +43,7 @@ public class TrelloConnectorConfig {
 			properties.put(KEY_BOARD_ID, boardId);
 			properties.put(KEY_TRELLO_KEY, key);
 			properties.put(KEY_TRELLO_TOKEN, token);
-			logService.log(LogService.LOG_DEBUG,
-					"Configuring Trello Connector with:\n" + OSGiUtil.configDictionaryToString(properties));
+			logger.debug("Configuring Trello Connector with:\n" + OSGiUtil.configDictionaryToString(properties));
 
 			OSGiUtil.configureService(configurationAdmin, PID, properties);
 		}
@@ -59,10 +61,4 @@ public class TrelloConnectorConfig {
 	public void setConfigurationService(IConfigService configService) {
 		this.configService = configService;
 	}
-
-	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
-	}
-
 }

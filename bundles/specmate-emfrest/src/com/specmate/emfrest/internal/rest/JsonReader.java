@@ -16,7 +16,7 @@ import javax.ws.rs.ext.Provider;
 import org.eclipse.emf.ecore.EObject;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
 
 import com.specmate.emfjson.EMFJsonDeserializer;
 import com.specmate.persistency.ITransaction;
@@ -32,7 +32,7 @@ public class JsonReader implements MessageBodyReader<EObject> {
 
 	/** The OSGi logging service */
 	@Inject
-	LogService logService;
+	Logger logger;
 
 	/** The object resolver to obtain objects from URIs */
 	@Inject
@@ -55,7 +55,7 @@ public class JsonReader implements MessageBodyReader<EObject> {
 			EMFJsonDeserializer emfJsonDeserializer = new EMFJsonDeserializer(resolver, transaction.getResource());
 			deserializedEObject = emfJsonDeserializer.deserializeEObject(jsonObject);
 		} catch (Exception e) {
-			logService.log(LogService.LOG_ERROR, "Could not parse the json input.", e);
+			logger.error("Could not parse the json input.", e);
 			throw new WebApplicationException("Could not parse the json input.");
 		}
 		return deserializedEObject;

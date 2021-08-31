@@ -7,7 +7,8 @@ import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.common.OSGiUtil;
 import com.specmate.common.exception.SpecmateException;
@@ -39,8 +40,9 @@ public class LuceneBasedSearchServiceConfig {
 	/** The config service instance */
 	private IConfigService configService;
 
-	/** The loging service instance */
-	private LogService logService;
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 
 	/**
 	 * Retrieves config properties from the config service and instantiates the
@@ -61,7 +63,7 @@ public class LuceneBasedSearchServiceConfig {
 		properties.put(KEY_MAX_SEARCH_RESULTS, maxSearchResults);
 
 		properties.put(KEY_ALLOWED_FIELDS, allowedFields);
-		logService.log(LogService.LOG_DEBUG,
+		logger.debug(
 				"Configuring LuceneBasedModelSearchService with:\n" + OSGiUtil.configDictionaryToString(properties));
 		OSGiUtil.configureService(configurationAdmin, PID, properties);
 	}
@@ -76,11 +78,5 @@ public class LuceneBasedSearchServiceConfig {
 	@Reference
 	public void setConfigurationService(IConfigService configService) {
 		this.configService = configService;
-	}
-
-	/** Service reference of the log service */
-	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
 	}
 }

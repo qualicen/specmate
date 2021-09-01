@@ -9,7 +9,6 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.osgi.service.log.LogService;
 import org.osgi.service.log.Logger;
 
 import com.specmate.auth.api.ISessionListener;

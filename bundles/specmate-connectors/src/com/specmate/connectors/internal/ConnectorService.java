@@ -12,7 +12,6 @@ import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
-import org.osgi.service.log.LogService;
 import org.osgi.service.log.Logger;
 import org.osgi.service.log.LoggerFactory;
 

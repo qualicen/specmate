@@ -11,8 +11,8 @@ import java.util.Spliterators;
 import java.util.stream.StreamSupport;
 
 import org.apache.commons.lang3.StringUtils;
-import org.eclipse.equinox.log.Logger;
 import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.log.Logger;
 
 import com.atlassian.jira.rest.client.api.JiraRestClient;
 import com.atlassian.jira.rest.client.api.domain.BasicIssue;

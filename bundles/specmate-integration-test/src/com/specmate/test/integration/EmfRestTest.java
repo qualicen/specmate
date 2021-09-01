@@ -11,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 import org.osgi.util.tracker.ServiceTracker;
 
 import com.specmate.auth.api.IAuthenticationService;
@@ -33,6 +34,7 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 	static final String ECLASS = EMFJsonSerializer.KEY_ECLASS;
 	static final String URL = EMFJsonSerializer.KEY_URI;
 	static IView view;
+
 	static Logger logger;
 	static RestClient restClient;
 	static IAuthenticationService authenticationService;
@@ -71,9 +73,11 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 	}
 
 	private Logger getLogger() throws InterruptedException {
-		ServiceTracker<Logger, Logger> logTracker = new ServiceTracker<>(context, Logger.class.getName(), null);
+		ServiceTracker<LoggerFactory, LoggerFactory> logTracker = new ServiceTracker<>(context, LoggerFactory.class,
+				null);
 		logTracker.open();
-		Logger logger = logTracker.waitForService(10000);
+		LoggerFactory factory = logTracker.waitForService(10000);
+		Logger logger = factory.getLogger(this.getClass());
 		Assert.assertNotNull(logger);
 		return logger;
 	}

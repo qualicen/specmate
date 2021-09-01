@@ -41,8 +41,7 @@ public class ConnectorService {
 	@Activate
 	public void activate(Map<String, Object> properties) throws SpecmateException {
 		validateConfig(properties);
-		logger.debug("TESTTEST");
-
+		
 		String schedule = (String) properties.get(PollKeys.KEY_POLL_SCHEDULE);
 		if (schedule == null) {
 			logger.info("Polling interval '" + PollKeys.KEY_POLL_SCHEDULE + "' not set.");

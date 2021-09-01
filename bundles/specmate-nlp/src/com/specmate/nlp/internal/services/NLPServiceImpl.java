@@ -164,7 +164,7 @@ public class NLPServiceImpl implements INLPService {
 
 			engines.put(lang, engine);
 		} catch (Throwable e) {
-			// logService.log(LogService.LOG_ERROR, "OpenNLP NLP service failed
+			// logger.error("OpenNLP NLP service failed
 			// when starting. Reason: " + e.getMessage());
 			throw new SpecmateInternalException(ErrorCode.NLP,
 					"OpenNLP NLP service failed when starting. Reason: " + e.getMessage());

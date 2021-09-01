@@ -7,7 +7,8 @@ import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.common.OSGiUtil;
 import com.specmate.common.exception.SpecmateException;
@@ -20,7 +21,10 @@ public class FileConnectorConfig {
 	public static final String KEY_USER = "fileConnector.user";
 	public static final String KEY_PASSWORD = "fileConnector.password";
 	private IConfigService configService;
-	private LogService logService;
+
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 	private ConfigurationAdmin configurationAdmin;
 
 	/**
@@ -35,12 +39,10 @@ public class FileConnectorConfig {
 
 		if (folder != null) {
 			properties.put(KEY_FOLDER, folder);
-			logService.log(LogService.LOG_DEBUG,
-					"Configuring CDO with:\n" + OSGiUtil.configDictionaryToString(properties) + ".");
+			logger.debug("Configuring CDO with:\n" + OSGiUtil.configDictionaryToString(properties) + ".");
 
 			OSGiUtil.configureService(configurationAdmin, PID, properties);
 		}
-
 	}
 
 	/** Service reference for config admin */
@@ -53,10 +55,5 @@ public class FileConnectorConfig {
 	@Reference
 	public void setConfigurationService(IConfigService configService) {
 		this.configService = configService;
-	}
-
-	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
 	}
 }

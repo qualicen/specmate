@@ -7,7 +7,6 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.log.LogService;
 import org.osgi.service.log.Logger;
 import org.osgi.service.log.LoggerFactory;
 

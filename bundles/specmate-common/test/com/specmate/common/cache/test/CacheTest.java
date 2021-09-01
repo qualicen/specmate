@@ -42,7 +42,7 @@ public class CacheTest {
 		}
 	};
 
-	@SuppressWarnings("unchecked")
+
 	@Test
 	public void testCreateCache() {
 		GuavaCacheServiceImpl cacheService = new GuavaCacheServiceImpl();

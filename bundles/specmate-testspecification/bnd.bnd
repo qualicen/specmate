@@ -23,7 +23,6 @@
 	specmate-metrics;version=latest,\
 	osgi.core;version=6.0
 Private-Package: \
-	com.specmate.testspecification.internal.services,\
-	com.specmate.testspecification.internal.exporters
+	com.specmate.testspecification.internal.services
 -privatepackage: com.specmate.testspecification.internal.generators
 Export-Package: com.specmate.testspecification.api

@@ -20,12 +20,12 @@ import com.specmate.urihandler.IURIFactory;
  */
 class ModelEventHandler implements EventHandler {
 
-	private static final String VALUE_KEY = "value";
-	private static final String FEATURE_NAME_KEY = "featureName";
-	private static final String URI_KEY = "uri";
-	private static final String TYPE_KEY = "type";
+//	private static final String VALUE_KEY = "value";
+//	private static final String FEATURE_NAME_KEY = "featureName";
+//	private static final String URI_KEY = "uri";
+//	private static final String TYPE_KEY = "type";
 	private static final String EVENT_MESSAGE_NAME = "specmate_model_event";
-	private static final String INDEX_KEY = "index";
+//	private static final String INDEX_KEY = "index";
 
 	/** The event output to propagate the model changes */
 	private EventOutput eventOutput;

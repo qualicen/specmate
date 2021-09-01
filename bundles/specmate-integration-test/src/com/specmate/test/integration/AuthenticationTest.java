@@ -61,6 +61,7 @@ public class AuthenticationTest extends EmfRestTest {
 		result.getResponse().close();
 
 		resetSelectedProject();
+		clientProjectA.close();
 	}
 
 	@Test
@@ -92,6 +93,7 @@ public class AuthenticationTest extends EmfRestTest {
 		result.getResponse().close();
 
 		resetSelectedProject();
+		clientProjectA.close();
 	}
 
 	@Test
@@ -114,5 +116,6 @@ public class AuthenticationTest extends EmfRestTest {
 		result.getResponse().close();
 
 		resetSelectedProject();
+		clientProjectA.close();
 	}
 }

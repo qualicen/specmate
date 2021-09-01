@@ -281,9 +281,7 @@ Export-Package: \
 	com.specmate.nlp.util,\
 	org.apache.uima.internal.util,\
 	org.apache.uima.jcas,\
-	org.apache.uima.fit.util,\
 	org.apache.uima.cas.text,\
-	org.apache.uima.jcas,\
 	org.apache.uima.jcas.tcas,\
 	org.apache.uima.jcas.cas,\
 	org.apache.uima.util,\

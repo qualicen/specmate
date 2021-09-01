@@ -202,7 +202,7 @@ public class ConnectorUtilTest {
 
 			@Override
 			public Void answer(InvocationOnMock inv) throws Throwable {
-				IChange change = inv.getArgument(0);
+				IChange<?> change = inv.getArgument(0);
 				change.doChange();
 				return null;
 			}
@@ -220,7 +220,7 @@ public class ConnectorUtilTest {
 
 			@Override
 			public Void answer(InvocationOnMock inv) throws Throwable {
-				IChange change = inv.getArgument(0);
+				IChange<?> change = inv.getArgument(0);
 				change.doChange();
 				return null;
 			}

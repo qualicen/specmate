@@ -8,7 +8,7 @@ import org.slf4j.helpers.MarkerIgnoringBase;
 import org.slf4j.helpers.MessageFormatter;
 
 public class OsgiLogger extends MarkerIgnoringBase {
-
+	private static final long serialVersionUID = 3625656256575950457L;
 	ServiceTracker<Logger, Logger> tracker;
 
 	public OsgiLogger() {

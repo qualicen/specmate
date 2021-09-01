@@ -26,8 +26,6 @@ public class ResourceRegistration {
 	/** Reference to the log service */
 	@Reference(service = LoggerFactory.class)
 	private Logger logger;
-	private IRestEndpoint iRestEndpoint;
-
 	@Activate
 	public void activate() {
 		try {
@@ -69,10 +67,5 @@ public class ResourceRegistration {
 	@Reference
 	public void setHttpService(HttpService http) {
 		this.httpService = http;
-	}
-
-	@Reference
-	public void setiRestEndpoint(IRestEndpoint iRestEndpoint) {
-		this.iRestEndpoint = iRestEndpoint;
 	}
 }

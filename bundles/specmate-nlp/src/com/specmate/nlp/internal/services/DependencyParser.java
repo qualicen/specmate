@@ -67,7 +67,6 @@ public class DependencyParser extends MaltParser {
 	}
 
 	private void spacyProcess(JCas jcas) throws SpecmateInternalException {
-		String text = jcas.getDocumentText();
 
 		// Call Spacy API
 		JSONObject result = null;

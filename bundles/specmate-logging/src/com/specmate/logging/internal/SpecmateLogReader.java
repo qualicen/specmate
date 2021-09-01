@@ -60,7 +60,7 @@ public class SpecmateLogReader implements LogListener {
 			logLevel = LogLevel.INFO;
 		}
 		System.out.println("Setting log level to " + level2String.get(logLevel));
-		Enumeration log = logReaderService.getLog();
+		Enumeration<?> log = logReaderService.getLog();
 		while (log.hasMoreElements()) {
 			logged((LogEntry) log.nextElement());
 		}

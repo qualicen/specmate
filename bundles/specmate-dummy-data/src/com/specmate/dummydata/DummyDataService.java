@@ -37,17 +37,9 @@ import com.specmate.search.api.IModelSearchService;
 public class DummyDataService {
 	CDOWithID id;
 	private IPersistencyService persistencyService;
-	private IModelSearchService searchService;
-
 	@Reference
 	public void setPersistency(IPersistencyService persistencyService) {
 		this.persistencyService = persistencyService;
-	}
-
-	@Reference
-	public void setSearchService(IModelSearchService searchService) {
-		// ensure search service is activated before writing dummy data
-		this.searchService = searchService;
 	}
 
 	/** Reference to the log service */

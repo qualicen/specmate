@@ -20,9 +20,6 @@
 	specmate-rest;version=latest,\
 	org.eclipse.osgi
 
-javac.source: 1.8
-javac.target: 1.8
-
 Bundle-Version: 0.0.0.${tstamp}
 Private-Package: com.specmate.search.internal.services
 Export-Package: \

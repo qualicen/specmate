@@ -8,6 +8,7 @@ import com.specmate.model.administration.ErrorCode;
  *
  */
 public class SpecmateInternalException extends SpecmateException {
+	private static final long serialVersionUID = -3409999913440740340L;
 
 	public SpecmateInternalException(ErrorCode ecode, String msg) {
 		super(ecode, msg);

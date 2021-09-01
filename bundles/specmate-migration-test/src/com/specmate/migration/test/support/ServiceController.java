@@ -1,5 +1,6 @@
 package com.specmate.migration.test.support;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Dictionary;
 
 import org.osgi.framework.BundleContext;
@@ -11,7 +12,7 @@ import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.model.administration.ErrorCode;
 
 public class ServiceController<T> {
-	private ServiceRegistration sr;
+	private ServiceRegistration<?> sr;
 	private BundleContext bc;
 	private Class<T> serviceImplementation;
 
@@ -23,9 +24,10 @@ public class ServiceController<T> {
 			Dictionary<String, Object> serviceProperties) throws SpecmateException {
 		this.serviceImplementation = serviceImplementation;
 		try {
-			Object obj = serviceImplementation.newInstance();
+			Object obj = serviceImplementation.getDeclaredConstructor().newInstance();
 			sr = bc.registerService(serviceInterface.getName(), obj, serviceProperties);
-		} catch (SecurityException | IllegalAccessException | InstantiationException e) {
+		} catch (SecurityException | IllegalAccessException | InstantiationException | IllegalArgumentException
+				| InvocationTargetException | NoSuchMethodException e) {
 			throw new SpecmateInternalException(ErrorCode.MIGRATION,
 					"Could not register service " + serviceImplementation.getName() + ".");
 		}
@@ -39,7 +41,7 @@ public class ServiceController<T> {
 		sr.unregister();
 	}
 
-	public ServiceReference getServiceReference() {
+	public ServiceReference<?> getServiceReference() {
 		return sr.getReference();
 	}
 

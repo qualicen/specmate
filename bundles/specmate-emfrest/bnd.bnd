@@ -54,5 +54,4 @@ Export-Package: \
 	com.specmate.emfrest.search,\
 	com.specmate.emfrest.config,\
 	com.specmate.emfrest.authentication,\
-	com.specmate.emfrest.history,\
-	com.specmate.emfrest.config
+	com.specmate.emfrest.history

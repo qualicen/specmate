@@ -18,7 +18,6 @@ import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.constituent.Constituent;
 
 public class GermanPatternMatcher implements ICauseEffectPatternMatcher {
 
-	private static final String CONSTITUENT_TYPE_SENTENCE = "S";
 	private static final String POS_COMMA = "$,";
 	private static final String WENN = "Wenn";
 

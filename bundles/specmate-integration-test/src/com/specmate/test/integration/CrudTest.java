@@ -1045,7 +1045,7 @@ public class CrudTest extends EmfRestTest {
 		JSONObject ceg = postCEG(folderName, requirementName);
 		String cegName = getId(ceg);
 
-		JSONObject testSpec = postTestSpecification(folderName, requirementName, cegName);
+		postTestSpecification(folderName, requirementName, cegName);
 
 		recycleObject(folderName, requirementName, cegName);
 		deleteObject(folderName, requirementName, cegName);

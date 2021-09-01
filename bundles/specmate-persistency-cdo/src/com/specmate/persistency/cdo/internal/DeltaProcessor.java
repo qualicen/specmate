@@ -93,6 +93,8 @@ public abstract class DeltaProcessor {
 			CDOClearFeatureDelta clearDelta = (CDOClearFeatureDelta) delta;
 			changedObject(id, clearDelta.getFeature(), EChangeKind.CLEAR, null, null, 0, objectClassName);
 			break;
+		default:
+			break;
 		}
 	}
 

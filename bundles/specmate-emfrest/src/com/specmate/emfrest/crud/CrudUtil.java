@@ -237,6 +237,7 @@ public class CrudUtil {
 	}
 
 	public static class CopierWithBidirectionalReferences extends EcoreUtil.Copier {
+		private static final long serialVersionUID = -6704932029832629363L;
 
 		// Copied from EcoreUtil.copyReference and removed check for bidirectional
 		// references

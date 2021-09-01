@@ -8,6 +8,7 @@ import com.specmate.model.administration.ErrorCode;
  *
  */
 public class SpecmateValidationException extends SpecmateException {
+	private static final long serialVersionUID = 8321850755220663255L;
 	private String validatorName;
 	private String validatedObjectName;
 

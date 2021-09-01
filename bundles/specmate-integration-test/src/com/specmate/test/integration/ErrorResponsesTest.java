@@ -69,5 +69,6 @@ public class ErrorResponsesTest extends EmfRestTest {
 		assertNotNull(obj);
 		assertEquals(ErrorCode.NO_AUTHORIZATION.getLiteral(), obj.get("ecode"));
 		result.getResponse().close();
+		tamperedClient.close();
 	}
 }

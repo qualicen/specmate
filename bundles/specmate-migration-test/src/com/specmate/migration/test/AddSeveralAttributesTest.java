@@ -45,7 +45,7 @@ public class AddSeveralAttributesTest extends MigrationTestBase {
 		d0.setName("d0");
 		assertFalse(d0.getLinked());
 		assertNull(d0.getLength());
-		assertEquals(new Integer(-1), d0.getAmount());
+		assertEquals(Integer.valueOf(-1), d0.getAmount());
 		assertEquals(-1, d0.getIntamount());
 		assertEquals(0.0, d0.getDoublelength(), 0.0);
 		assertFalse(d0.isBooleanlinked());

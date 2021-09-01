@@ -8,6 +8,7 @@ import com.specmate.model.administration.ErrorCode;
  *
  */
 public abstract class SpecmateException extends Exception {
+	private static final long serialVersionUID = 2176613058079104314L;
 	private ErrorCode ecode;
 
 	/** constructor */

@@ -58,8 +58,7 @@ Private-Package: \
 	com.atlassian.jira.rest.client.auth,\
 	com.atlassian.jira.rest.client.internal.domain.input,\
 	com.atlassian.jira.rest.client.internal.json,\
-	com.atlassian.jira.rest.client.internal.json.gen,\
-	org.apache.http.impl.client.cache
+	com.atlassian.jira.rest.client.internal.json.gen
 	
 	
 Export-Package: com.specmate.connectors.jira.config

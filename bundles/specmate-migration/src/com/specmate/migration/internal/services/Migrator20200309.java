@@ -10,7 +10,6 @@ import com.specmate.dbprovider.api.IDBProvider;
 import com.specmate.dbprovider.api.migration.IAttributeToSQLMapper;
 import com.specmate.dbprovider.api.migration.IObjectToSQLMapper;
 import com.specmate.migration.api.IMigrator;
-import com.specmate.model.base.BasePackage;
 
 @Component(property = "sourceVersion=20200309", service = IMigrator.class)
 public class Migrator20200309 implements IMigrator {

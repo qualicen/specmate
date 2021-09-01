@@ -1,58 +1,49 @@
 package com.specmate.test.integration;
 
-import javax.ws.rs.core.Response.Status;
-
-import org.json.JSONObject;
-import org.junit.Assert;
-
-import com.specmate.administration.api.ESpecmateStatus;
-import com.specmate.model.administration.AdministrationPackage;
-import com.specmate.rest.RestResult;
-
 public class AdministrationTest extends EmfRestTest {
 
 	public AdministrationTest() throws Exception {
 		super();
 	}
 
-	private JSONObject getStatusObject(String mode) {
-		JSONObject maintenandeStatus = new JSONObject();
-		maintenandeStatus.put(NSURI_KEY, AdministrationPackage.eNS_URI);
-		maintenandeStatus.put(ECLASS, AdministrationPackage.Literals.STATUS.getName());
-		maintenandeStatus.put(AdministrationPackage.Literals.STATUS__VALUE.getName(), mode);
-		return maintenandeStatus;
-	}
-
-	private void enterMode(String mode) {
-		JSONObject status = getStatusObject(mode);
-		String statusUrl = buildUrl("status");
-		RestResult<JSONObject> result = restClient.post(statusUrl, status);
-		Assert.assertEquals(Status.OK.getStatusCode(), result.getResponse().getStatus());
-	}
-
-	private void enterMaintenanceMode() {
-		enterMode(ESpecmateStatus.MAINTENANCE_NAME);
-	}
-
-	private void enterNormalMode() {
-		enterMode(ESpecmateStatus.NORMAL_NAME);
-	}
-
-	private void checkIsInMode(String mode) {
-		String url = buildUrl("status");
-		JSONObject status = getObjectByUrl(Status.OK.getStatusCode(), url);
-		Assert.assertEquals(status.get(AdministrationPackage.Literals.STATUS__VALUE.getName()), mode);
-	}
-
-	private void checkIsInMaintenanceMode() {
-		checkIsInMode(ESpecmateStatus.MAINTENANCE_NAME);
-	}
-
-	private void checkIsInNormalMode() {
-		checkIsInMode(ESpecmateStatus.NORMAL_NAME);
-	}
-
-	//@Test
+//	private JSONObject getStatusObject(String mode) {
+//		JSONObject maintenandeStatus = new JSONObject();
+//		maintenandeStatus.put(NSURI_KEY, AdministrationPackage.eNS_URI);
+//		maintenandeStatus.put(ECLASS, AdministrationPackage.Literals.STATUS.getName());
+//		maintenandeStatus.put(AdministrationPackage.Literals.STATUS__VALUE.getName(), mode);
+//		return maintenandeStatus;
+//	}
+//
+//	private void enterMode(String mode) {
+//		JSONObject status = getStatusObject(mode);
+//		String statusUrl = buildUrl("status");
+//		RestResult<JSONObject> result = restClient.post(statusUrl, status);
+//		Assert.assertEquals(Status.OK.getStatusCode(), result.getResponse().getStatus());
+//	}
+//
+//	private void enterMaintenanceMode() {
+//		enterMode(ESpecmateStatus.MAINTENANCE_NAME);
+//	}
+//
+//	private void enterNormalMode() {
+//		enterMode(ESpecmateStatus.NORMAL_NAME);
+//	}
+//
+//	private void checkIsInMode(String mode) {
+//		String url = buildUrl("status");
+//		JSONObject status = getObjectByUrl(Status.OK.getStatusCode(), url);
+//		Assert.assertEquals(status.get(AdministrationPackage.Literals.STATUS__VALUE.getName()), mode);
+//	}
+//
+//	private void checkIsInMaintenanceMode() {
+//		checkIsInMode(ESpecmateStatus.MAINTENANCE_NAME);
+//	}
+//
+//	private void checkIsInNormalMode() {
+//		checkIsInMode(ESpecmateStatus.NORMAL_NAME);
+//	}
+//
+//	@Test
 //	public void testMaintenanceMode() {
 //		JSONObject folder = postFolderToRoot();
 //		String folderId = getId(folder);
@@ -83,6 +74,5 @@ public class AdministrationTest extends EmfRestTest {
 //
 //		postFolderToRoot();
 //
-//	}
-
+//	
 }

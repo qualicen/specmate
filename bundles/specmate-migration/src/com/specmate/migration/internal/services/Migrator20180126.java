@@ -61,8 +61,8 @@ public class Migrator20180126 implements IMigrator {
 			stmt = connection.prepareStatement("update " + TABLE_EXTERNAL_REFS
 					+ " set URI=REGEXP_REPLACE(URI,'http://specmate.com/model/20180126/model',"
 					+ "'http://specmate.com/20180412/model')");
-			boolean result = stmt.execute();
-			int update = stmt.getUpdateCount();
+			stmt.execute();
+			stmt.getUpdateCount();
 			stmt.close();
 		} catch (SQLException e) {
 			throw new SpecmateInternalException(ErrorCode.MIGRATION, "Could not update external references table.", e);

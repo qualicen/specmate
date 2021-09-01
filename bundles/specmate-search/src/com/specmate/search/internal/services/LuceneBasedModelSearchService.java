@@ -80,9 +80,6 @@ import com.specmate.search.config.LuceneBasedSearchServiceConfig;
 				"event.topics=com/specmate/model/notification", "event.topics=com/specmate/model/notification/*" })
 public class LuceneBasedModelSearchService extends RestServiceBase implements EventHandler, IModelSearchService {
 
-	/** The name of the UserSession class */
-	private static final String USER_SESSION = "UserSession";
-
 	/** Time to wait in seconds before committing the changes to the index */
 	private static final int COMMIT_RATE = 30;
 

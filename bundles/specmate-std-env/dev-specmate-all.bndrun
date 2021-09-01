@@ -31,7 +31,7 @@
 	osgi.identity;filter:='(&(osgi.identity=org.eclipse.jetty.rewrite)(version>=9.4.32))',\
 	osgi.identity;filter:='(osgi.identity=specmate-jettystarter)',\
 	osgi.identity;filter:='(osgi.identity=org.eclipse.emf.cdo.server.ocl)',\
-	osgi.identity;filter:='(osgi.identity=org.json)',\
+	osgi.identity;filter:='(osgi.identity=json)',\
 	osgi.identity;filter:='(osgi.identity=specmate-file-connector)',\
 	osgi.identity;filter:='(osgi.identity=specmate-search)',\
 	osgi.identity;filter:='(osgi.identity=specmate-migration)',\
@@ -146,7 +146,7 @@
 	org.eclipse.xtext.util;version='[2.10.0,2.10.1)',\
 	org.eclipse.xtext.xbase.lib;version='[2.10.0,2.10.1)',\
 	org.apache.commons.collections4;version='[4.0.0,4.0.1)',\
-	org.json;version='[0.0.0,0.0.1)',\
+	json;version=latest,\
 	specmate-administration;version='[0.0.0,0.0.1)',\
 	specmate-auth;version='[0.0.0,0.0.1)',\
 	specmate-auth-api;version='[0.0.0,0.0.1)',\

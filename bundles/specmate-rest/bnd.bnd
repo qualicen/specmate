@@ -5,7 +5,7 @@ Export-Package: com.specmate.rest
 	org.glassfish.jersey.core.jersey-client,\
 	org.glassfish.jersey.core.jersey-common,\
 	javax.ws.rs-api,\
-	org.json;version=latest,\
+	json;version=latest,\
 	osgi.cmpn,\
 	osgi.core,\
 	org.apache.commons.lang3,\

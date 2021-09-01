@@ -23,7 +23,7 @@ Test-Cases: \
 	org.eclipse.emf.common,\
 	specmate-emfrest;version=latest,\
 	org.eclipse.osgi.services,\
-	org.json;version=latest,\
+	json;version=latest,\
 	org.eclipse.emf.cdo,\
 	org.eclipse.emf.cdo.common,\
 	specmate-model-gen;version=latest,\

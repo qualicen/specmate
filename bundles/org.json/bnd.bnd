@@ -1,4 +1,0 @@
-Bundle-Version: 0.0.0.${tstamp}
-Bundle-Name: org.json
-Export-Package:  \
-	org.json

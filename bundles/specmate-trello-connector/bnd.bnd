@@ -3,7 +3,7 @@
 	specmate-common;version=latest,\
 	osgi.core,\
 	osgi.cmpn,\
-	org.json;version=latest,\
+	json;version=latest,\
 	javax.ws.rs-api,\
 	org.apache.commons.lang3,\
 	specmate-config-api;version=latest,\

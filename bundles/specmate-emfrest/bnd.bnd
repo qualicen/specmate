@@ -3,7 +3,7 @@ Bundle-Version: 0.0.0.${tstamp}
 	org.eclipse.emf.ecore,\
 	javax.ws.rs-api,\
 	org.eclipse.emf.common,\
-	org.json;version=latest,\
+	json;version=latest,\
 	specmate-model-support;version=latest,\
 	org.apache.commons.lang3,\
 	org.eclipse.osgi.services,\

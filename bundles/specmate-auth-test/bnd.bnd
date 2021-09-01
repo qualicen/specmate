@@ -39,7 +39,7 @@ Test-Cases: \
 	osgi.identity;filter:='(osgi.identity=specmate-common)',\
 	osgi.identity;filter:='(osgi.identity=specmate-logging)',\
 	osgi.identity;filter:='(osgi.identity=specmate-logging-slf4j)',\
-	osgi.identity;filter:='(osgi.identity=org.json)',\
+	osgi.identity;filter:='(osgi.identity=json)',\
 	osgi.identity;filter:='(osgi.identity=specmate-logging-slf4j-julbridge)',\
 	osgi.identity;filter:='(osgi.identity=org.eclipse.equinox.event)',\
 	osgi.identity;filter:='(osgi.identity=org.eclipse.equinox.cm)',\
@@ -93,7 +93,7 @@ Test-Cases: \
 	org.eclipse.equinox.registry;version='[3.9.0,3.9.1)',\
 	org.eclipse.osgi.services;version='[3.9.0,3.9.1)',\
 	org.eclipse.osgi.util;version='[3.5.300,3.5.301)',\
-	org.json;version='[0.0.0,0.0.1)',\
+	json;version=latest,\
 	specmate-auth;version='[0.0.0,0.0.1)',\
 	specmate-auth-api;version='[0.0.0,0.0.1)',\
 	specmate-common;version='[0.0.0,0.0.1)',\

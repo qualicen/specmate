@@ -79,7 +79,7 @@
 	specmate-emfrest-api;version=latest,\
 	specmate-rest;version=latest,\
 	org.apache.servicemix.bundles.junit,\
-	org.json,\
+	json,\
 	specmate-config-api,\
 	osgi.core;version=6.0,\
 	osgi.cmpn;version=6.0

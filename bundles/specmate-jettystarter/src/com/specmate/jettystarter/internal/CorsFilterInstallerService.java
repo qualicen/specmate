@@ -11,7 +11,8 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.http.HttpService;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 /** Service to install a cross-origin-filter in the http service */
 @Component(immediate = true)
@@ -20,8 +21,9 @@ public class CorsFilterInstallerService {
 	/** The http service */
 	private ExtendedHttpService httpService;
 
-	/** Logging service */
-	private LogService logService;
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 
 	@Activate
 	private void activate() {
@@ -33,17 +35,12 @@ public class CorsFilterInstallerService {
 		try {
 			httpService.registerFilter("/", corsFilter, params, null);
 		} catch (Exception e) {
-			logService.log(LogService.LOG_ERROR, "Could not install CORS-Filter");
+			logger.error("Could not install CORS-Filter");
 		}
 	}
 
 	@Reference
 	public void setHttpService(HttpService service) {
 		httpService = (ExtendedHttpService) service;
-	}
-
-	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
 	}
 }

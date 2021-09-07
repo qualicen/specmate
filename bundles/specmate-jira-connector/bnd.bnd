@@ -37,7 +37,8 @@
 	specmate-export-api;version=latest,\
 	com.google.guava;version=26.0,\
 	org.json;version=latest,\
-	org.eclipse.net4j.util
+	org.eclipse.net4j.util,\
+	org.eclipse.osgi
 
 Private-Package: \
 	com.specmate.connectors.jira.internal.services,\

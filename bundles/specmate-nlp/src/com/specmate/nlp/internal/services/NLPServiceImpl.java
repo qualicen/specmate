@@ -14,7 +14,8 @@ import org.apache.uima.jcas.JCas;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
@@ -44,7 +45,10 @@ public class NLPServiceImpl implements INLPService {
 	private static final String KEY_SPACY_URL = "nlp.spacy.url";
 	private static final String KEY_SPACY_MODEL = "nlp.spacy.model";
 	private Map<String, AnalysisEngine> engines = new HashMap<String, AnalysisEngine>();
-	private LogService logService;
+
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 	private IConfigService configService;
 
 	/**
@@ -60,13 +64,12 @@ public class NLPServiceImpl implements INLPService {
 	}
 
 	private void createEnglishPipeline() throws SpecmateInternalException {
-		logService.log(LogService.LOG_INFO, "Initializing english NLP pipeline");
+		logger.info("Initializing english NLP pipeline");
 
 		String spacyUrl = configService.getConfigurationProperty(KEY_SPACY_URL);
 
 		if (spacyUrl != null) {
-			logService.log(LogService.LOG_INFO,
-					"Spacy URL found. Configuring spacy pipeline with spacy at:" + spacyUrl);
+			logger.info("Spacy URL found. Configuring spacy pipeline with spacy at:" + spacyUrl);
 			buildSpacyEngine(spacyUrl);
 		} else {
 			buildEngine();
@@ -129,7 +132,7 @@ public class NLPServiceImpl implements INLPService {
 	}
 
 	private void createGermanPipeline() throws SpecmateInternalException {
-		logService.log(LogService.LOG_INFO, "Initializing german NLP pipeline");
+		logger.info("Initializing german NLP pipeline");
 		AnalysisEngineDescription segmenter = null;
 		AnalysisEngineDescription lemmatizer = null;
 		AnalysisEngineDescription posTagger = null;
@@ -161,7 +164,7 @@ public class NLPServiceImpl implements INLPService {
 
 			engines.put(lang, engine);
 		} catch (Throwable e) {
-			// logService.log(LogService.LOG_ERROR, "OpenNLP NLP service failed
+			// logger.error("OpenNLP NLP service failed
 			// when starting. Reason: " + e.getMessage());
 			throw new SpecmateInternalException(ErrorCode.NLP,
 					"OpenNLP NLP service failed when starting. Reason: " + e.getMessage());
@@ -209,13 +212,7 @@ public class NLPServiceImpl implements INLPService {
 	}
 
 	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
-	}
-
-	@Reference
 	public void setConfigurationService(IConfigService configService) {
 		this.configService = configService;
 	}
-
 }

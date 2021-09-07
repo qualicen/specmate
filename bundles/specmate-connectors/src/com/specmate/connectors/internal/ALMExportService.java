@@ -6,7 +6,8 @@ import javax.ws.rs.core.Response;
 import org.eclipse.emf.ecore.EObject;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.auth.api.IAuthenticationService;
 import com.specmate.common.exception.SpecmateAuthorizationException;
@@ -25,7 +26,8 @@ import com.specmate.usermodel.AccessRights;
 public class ALMExportService extends RestServiceBase {
 
 	/** The log service */
-	private LogService logService;
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 
 	/** The project service */
 	private IProjectService projectService;
@@ -49,19 +51,13 @@ public class ALMExportService extends RestServiceBase {
 		if (isAuthorizedToExport(token)) {
 			TestProcedure testProcedure = (TestProcedure) target;
 			String projectName = SpecmateEcoreUtil.getProjectId((EObject) target);
-			logService.log(LogService.LOG_INFO, "Synchronizing test procedure " + testProcedure.getName());
+			logger.info("Synchronizing test procedure " + testProcedure.getName());
 			IProject project = projectService.getProject(projectName);
 			project.getExporter().export(testProcedure);
 			return new RestResult<>(Response.Status.OK, testProcedure);
 		} else {
 			throw new SpecmateAuthorizationException("User is not authorized to export.");
 		}
-	}
-
-	/** Service reference */
-	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
 	}
 
 	@Reference

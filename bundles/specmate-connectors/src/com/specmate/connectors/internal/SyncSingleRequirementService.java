@@ -6,12 +6,13 @@ import javax.ws.rs.core.Response;
 import org.eclipse.emf.ecore.EObject;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.common.exception.SpecmateException;
+import com.specmate.connectors.api.IConnector;
 import com.specmate.connectors.api.IProject;
 import com.specmate.connectors.api.IProjectService;
-import com.specmate.connectors.api.IConnector;
 import com.specmate.emfrest.api.IRestService;
 import com.specmate.emfrest.api.RestServiceBase;
 import com.specmate.model.base.Folder;
@@ -24,8 +25,9 @@ import com.specmate.rest.RestResult;
 @Component(immediate = true, service = IRestService.class)
 public class SyncSingleRequirementService extends RestServiceBase {
 
-	/** The log service */
-	private LogService logService;
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 
 	/** The persistence service */
 	private IPersistencyService persistencyService;
@@ -62,7 +64,7 @@ public class SyncSingleRequirementService extends RestServiceBase {
 				@Override
 				public void run() {
 					try {
-						ConnectorUtil.syncRequirementById(id, source, transaction, logService);
+						ConnectorUtil.syncRequirementById(id, source, transaction, logger);
 					} finally {
 						transaction.close();
 					}
@@ -73,12 +75,6 @@ public class SyncSingleRequirementService extends RestServiceBase {
 					"This function is executed asynchronously. The OK does not indicate whether the sync was successful or not.");
 		}
 		return new RestResult<>(Response.Status.BAD_REQUEST);
-	}
-
-	/** Service reference */
-	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
 	}
 
 	@Reference

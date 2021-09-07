@@ -8,7 +8,7 @@ import org.eclipse.emf.cdo.view.CDOQuery;
 import org.eclipse.emf.cdo.view.CDOView;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
 
 import com.specmate.persistency.IView;
 
@@ -18,7 +18,7 @@ public class ViewImpl implements IView {
 	private String resourceName;
 	protected CDOPersistencyService persistency;
 
-	public ViewImpl(CDOPersistencyService persistency, CDOView view, String resourceName, LogService logService) {
+	public ViewImpl(CDOPersistencyService persistency, CDOView view, String resourceName, Logger logger) {
 		super();
 		this.view = view;
 		this.resourceName = resourceName;
@@ -56,20 +56,20 @@ public class ViewImpl implements IView {
 		CDOQuery cdoQuery = this.view.createQuery("ocl", queryString, context);
 		return cdoQuery.getResult();
 	}
-	
+
 	@Override
 	public List<Object> querySQL(String queryString, Object context, long lastActive) {
 		CDOQuery cdoSQLQuery = this.view.createQuery("sql", queryString);
-		//CDOQuery cdoSQLQuery = this.view.createQuery("sql", queryString, context);
+		// CDOQuery cdoSQLQuery = this.view.createQuery("sql", queryString, context);
 		cdoSQLQuery.setParameter("cdoObjectQuery", false);
 		cdoSQLQuery.setParameter("time", lastActive);
 		return cdoSQLQuery.getResult();
 	}
-	
-	@Override 
+
+	@Override
 	public List<Object> querySQLWithName(String queryString, Object context, String userName, long lastActive) {
 		CDOQuery cdoSQLQuery = this.view.createQuery("sql", queryString);
-		//CDOQuery cdoSQLQuery = this.view.createQuery("sql", queryString, context);
+		// CDOQuery cdoSQLQuery = this.view.createQuery("sql", queryString, context);
 		cdoSQLQuery.setParameter("cdoObjectQuery", false);
 		cdoSQLQuery.setParameter("name", userName);
 		cdoSQLQuery.setParameter("time", lastActive);
@@ -84,5 +84,4 @@ public class ViewImpl implements IView {
 		view.close();
 		persistency.closedView(this);
 	}
-
 }

@@ -10,7 +10,8 @@ import javax.ws.rs.core.Response.Status;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Assert;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 import org.osgi.util.tracker.ServiceTracker;
 
 import com.specmate.auth.api.IAuthenticationService;
@@ -33,7 +34,8 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 	static final String ECLASS = EMFJsonSerializer.KEY_ECLASS;
 	static final String URL = EMFJsonSerializer.KEY_URI;
 	static IView view;
-	static LogService logService;
+
+	static Logger logger;
 	static RestClient restClient;
 	static IAuthenticationService authenticationService;
 	static UserSession session;
@@ -48,8 +50,8 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 		if (view == null) {
 			view = persistency.openView();
 		}
-		if (logService == null) {
-			logService = getLogger();
+		if (logger == null) {
+			logger = getLogger();
 		}
 		if (projectService == null) {
 			projectService = getProjectService();
@@ -59,7 +61,7 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 			session = authenticationService.authenticate("resttest", "resttest");
 
 			if (restClient == null) {
-				restClient = new RestClient(REST_ENDPOINT, RestClient.EAuthType.TOKEN, session.getId(), logService);
+				restClient = new RestClient(REST_ENDPOINT, RestClient.EAuthType.TOKEN, session.getId(), logger);
 			}
 		}
 
@@ -70,13 +72,14 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 		}
 	}
 
-	private LogService getLogger() throws InterruptedException {
-		ServiceTracker<LogService, LogService> logTracker = new ServiceTracker<>(context, LogService.class.getName(),
+	private Logger getLogger() throws InterruptedException {
+		ServiceTracker<LoggerFactory, LoggerFactory> logTracker = new ServiceTracker<>(context, LoggerFactory.class,
 				null);
 		logTracker.open();
-		LogService logService = logTracker.waitForService(10000);
-		Assert.assertNotNull(logService);
-		return logService;
+		LoggerFactory factory = logTracker.waitForService(10000);
+		Logger logger = factory.getLogger(this.getClass());
+		Assert.assertNotNull(logger);
+		return logger;
 	}
 
 	private IAuthenticationService getAuthenticationService() throws InterruptedException {
@@ -422,7 +425,7 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 
 	protected JSONObject postObject(int statusCode, JSONObject object, String... segments) {
 		String postUrl = listUrl(segments);
-		logService.log(LogService.LOG_DEBUG, "Posting the object " + object.toString() + " to url " + postUrl);
+		logger.debug("Posting the object " + object.toString() + " to url " + postUrl);
 		RestResult<JSONObject> result = restClient.post(postUrl, object);
 		Assert.assertEquals(statusCode, result.getResponse().getStatus());
 		try {
@@ -440,7 +443,7 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 
 	protected void updateObject(int statusCode, JSONObject object, String... segments) {
 		String updateUrl = detailUrl(segments);
-		logService.log(LogService.LOG_DEBUG, "Updateing the object " + object.toString() + " at url " + updateUrl);
+		logger.debug("Updateing the object " + object.toString() + " at url " + updateUrl);
 		RestResult<JSONObject> putResult = restClient.put(updateUrl, object);
 		Assert.assertEquals(statusCode, putResult.getResponse().getStatus());
 		putResult.getResponse().close();
@@ -455,10 +458,9 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 		RestResult<JSONObject> getResult = restClient.get(url);
 		JSONObject retrievedObject = getResult.getPayload();
 		if (retrievedObject != null) {
-			logService.log(LogService.LOG_DEBUG,
-					"Retrieved the object " + retrievedObject.toString() + " from url " + url);
+			logger.debug("Retrieved the object " + retrievedObject.toString() + " from url " + url);
 		} else {
-			logService.log(LogService.LOG_DEBUG, "Empty result from url " + url);
+			logger.debug("Empty result from url " + url);
 		}
 		Assert.assertEquals(statusCode, getResult.getResponse().getStatus());
 		getResult.getResponse().close();
@@ -480,23 +482,23 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 	protected void deleteObject(String... segments) {
 		// Delete folder
 		String deleteUrl = deleteUrl(segments);
-		logService.log(LogService.LOG_DEBUG, "Deleting object with URL " + deleteUrl);
+		logger.debug("Deleting object with URL " + deleteUrl);
 		RestResult<JSONObject> deleteResult = restClient.delete(deleteUrl);
 		Assert.assertEquals(Status.OK.getStatusCode(), deleteResult.getResponse().getStatus());
 		deleteResult.getResponse().close();
 	}
-	
+
 	protected void recycleObject(String... segments) {
 		String recycleUrl = recycleUrl(segments);
-		logService.log(LogService.LOG_DEBUG, "Recycling object with URL " + recycleUrl);
+		logger.debug("Recycling object with URL " + recycleUrl);
 		RestResult<JSONObject> recycleResult = restClient.post(recycleUrl, null);
 		Assert.assertEquals(Status.OK.getStatusCode(), recycleResult.getResponse().getStatus());
 		recycleResult.getResponse().close();
 	}
-	
+
 	protected void restoreObject(String... segments) {
 		String restoreUrl = restoreUrl(segments);
-		logService.log(LogService.LOG_DEBUG, "Restore object with URL " + restoreUrl);
+		logger.debug("Restore object with URL " + restoreUrl);
 		RestResult<JSONObject> restoreResult = restClient.post(restoreUrl, null);
 		Assert.assertEquals(Status.OK.getStatusCode(), restoreResult.getResponse().getStatus());
 		restoreResult.getResponse().close();
@@ -513,11 +515,11 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 	protected String deleteUrl(String... segments) {
 		return buildUrl("delete", segments);
 	}
-	
+
 	protected String recycleUrl(String... segments) {
 		return buildUrl("recycle", segments);
 	}
-	
+
 	protected String restoreUrl(String... segments) {
 		return buildUrl("restore", segments);
 	}

@@ -1,14 +1,14 @@
 package com.specmate.modelgeneration.legacy;
 
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
 
 import com.specmate.nlp.api.ELanguage;
 import com.specmate.nlp.api.INLPService;
 
 public class EnglishCEGFromRequirementGenerator extends CEGFromRequirementGenerator {
 
-	public EnglishCEGFromRequirementGenerator(LogService logService, INLPService tagger) {
-		super(logService, tagger);
+	public EnglishCEGFromRequirementGenerator(Logger logger, INLPService tagger) {
+		super(logger, tagger);
 	}
 
 	@Override
@@ -43,5 +43,4 @@ public class EnglishCEGFromRequirementGenerator extends CEGFromRequirementGenera
 	protected ELanguage getLanguage() {
 		return ELanguage.EN;
 	}
-
 }

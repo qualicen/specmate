@@ -14,7 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
 
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.connectors.api.IConnector;
@@ -42,13 +42,14 @@ public class ConnectorUtil {
 	 * Retrieves requirements from all sources and processes them in batches of
 	 * BATCH_SIZE
 	 */
-	public static void syncConnectors(List<IConnector> connectors, ITransaction transaction, LogService logService) {
+	public static void syncConnectors(List<IConnector> connectors, ITransaction transaction, Logger logger) {
 		lock.lock();
 		try {
-			logService.log(LogService.LOG_INFO, "Synchronizing connectors");
+
+			logger.info("Synchronizing connectors");
 			Resource resource = transaction.getResource();
 			for (IConnector connector : connectors) {
-				logService.log(LogService.LOG_INFO, "Retrieving requirements from " + connector.getId());
+				logger.info("Retrieving requirements from " + connector.getId());
 				try {
 					Collection<Requirement> requirements = connector.getRequirements();
 					if (requirements == null) {
@@ -69,11 +70,10 @@ public class ConnectorUtil {
 						List<Requirement> tosync = Arrays.asList(current);
 
 						doAndCommitTransaction(transaction, localRootContainer, localRequirementsMap, tosync, connector,
-								logService);
+								logger);
 					}
 				} catch (Exception e) {
-					logService.log(LogService.LOG_ERROR,
-							"An error occured synching requirements. Reason: " + e.getMessage(), e);
+					logger.error("An error occured synching requirements. Reason: " + e.getMessage(), e);
 					transaction.rollback();
 				}
 			}
@@ -85,13 +85,12 @@ public class ConnectorUtil {
 	/**
 	 * Retrieves a single requirement with a given id
 	 */
-	public static void syncRequirementById(String id, IConnector source, ITransaction transaction,
-			LogService logService) {
+	public static void syncRequirementById(String id, IConnector source, ITransaction transaction, Logger logger) {
 		lock.lock();
 		try {
-			logService.log(LogService.LOG_INFO, "Synchronizing requirement by id");
+			logger.info("Synchronizing requirement by id");
 			Resource resource = transaction.getResource();
-			logService.log(LogService.LOG_INFO, "Retrieving single requirement from " + source.getId());
+			logger.info("Retrieving single requirement from " + source.getId());
 			try {
 				Requirement requirement = source.getRequirementById(id);
 				if (requirement != null) {
@@ -110,7 +109,7 @@ public class ConnectorUtil {
 								}
 							});
 						} catch (Exception e) {
-							logService.log(LogService.LOG_ERROR,
+							logger.error(
 									"An error occured while committing synced requirement. Reason:" + e.getMessage(),
 									e);
 							transaction.rollback();
@@ -120,12 +119,11 @@ public class ConnectorUtil {
 						tosync.add(requirement);
 
 						doAndCommitTransaction(transaction, localRootContainer, localRequirementsMap, tosync, source,
-								logService);
+								logger);
 					}
 				}
 			} catch (Exception e) {
-				logService.log(LogService.LOG_ERROR, "An error occured synching requirement. Reason: " + e.getMessage(),
-						e);
+				logger.error("An error occured synching requirement. Reason: " + e.getMessage(), e);
 				transaction.rollback();
 			}
 		} finally {
@@ -137,7 +135,7 @@ public class ConnectorUtil {
 	 * Syncs remote requirements with locally available requirements.
 	 */
 	private static void syncContainers(IContainer localRootContainer, HashMap<String, EObject> localRequirementsMap,
-			Collection<Requirement> requirements, IConnector source, LogService logService) {
+			Collection<Requirement> requirements, IConnector source, Logger logger) {
 		// Build hashset (extid -> requirement) for remote requirements
 		HashMap<String, EObject> remoteRequirementsMap = new HashMap<>();
 		buildExtIdMap(requirements.iterator(), remoteRequirementsMap);
@@ -150,11 +148,11 @@ public class ConnectorUtil {
 				reqContainer = source.getContainerForRequirement((Requirement) entry.getValue());
 
 			} catch (SpecmateException e) {
-				logService.log(LogService.LOG_ERROR, e.getMessage());
+				logger.error(e.getMessage());
 				continue;
 			}
 
-			IContainer foundContainer = getOrCreateLocalSubContainer(localRootContainer, reqContainer, logService);
+			IContainer foundContainer = getOrCreateLocalSubContainer(localRootContainer, reqContainer, logger);
 			if (foundContainer == null) {
 				continue;
 			}
@@ -162,7 +160,7 @@ public class ConnectorUtil {
 			Requirement requirementToAdd = (Requirement) entry.getValue();
 			boolean valid = ensureValid(requirementToAdd);
 			if (!valid) {
-				logService.log(LogService.LOG_WARNING, "Found invalid requirement with id " + requirementToAdd.getId());
+				logger.warn("Found invalid requirement with id " + requirementToAdd.getId());
 				continue;
 			}
 
@@ -178,7 +176,7 @@ public class ConnectorUtil {
 			}
 
 			// new requirement: add to folder
-			logService.log(LogService.LOG_DEBUG, "Adding requirement " + requirementToAdd.getId());
+			logger.debug("Adding requirement " + requirementToAdd.getId());
 			foundContainer.getContents().add(requirementToAdd);
 		}
 	}
@@ -209,18 +207,18 @@ public class ConnectorUtil {
 	 * @return
 	 */
 	private static IContainer getOrCreateLocalSubContainer(IContainer rootContainer, IContainer reqContainer,
-			LogService logService) {
+			Logger logger) {
 		IContainer foundContainer = rootContainer;
 		if (reqContainer != null) {
 			foundContainer = (IContainer) SpecmateEcoreUtil.getEObjectWithId(reqContainer.getId(),
 					rootContainer.eContents());
 			if (foundContainer == null) {
-				logService.log(LogService.LOG_DEBUG, "Creating new folder " + reqContainer.getName());
+				logger.debug("Creating new folder " + reqContainer.getName());
 				foundContainer = BaseFactory.eINSTANCE.createFolder();
 				SpecmateEcoreUtil.copyAttributeValues(reqContainer, foundContainer, true);
 				boolean valid = ensureValid(foundContainer);
 				if (!valid) {
-					logService.log(LogService.LOG_WARNING, "Found invalid folder with id " + foundContainer.getId());
+					logger.warn("Found invalid folder with id " + foundContainer.getId());
 					return null;
 				}
 				rootContainer.getContents().add(foundContainer);
@@ -287,19 +285,17 @@ public class ConnectorUtil {
 	}
 
 	private static void doAndCommitTransaction(ITransaction transaction, IContainer localRootContainer,
-			HashMap<String, EObject> localRequirementsMap, List<Requirement> tosync, IConnector source,
-			LogService logService) {
+			HashMap<String, EObject> localRequirementsMap, List<Requirement> tosync, IConnector source, Logger logger) {
 		try {
 			transaction.doAndCommit(new IChange<Object>() {
 				@Override
 				public Object doChange() throws SpecmateException {
-					syncContainers(localRootContainer, localRequirementsMap, tosync, source, logService);
+					syncContainers(localRootContainer, localRequirementsMap, tosync, source, logger);
 					return null;
 				}
 			});
 		} catch (Exception e) {
-			logService.log(LogService.LOG_ERROR,
-					"An error occured while committing synced requirement(s). Reason:" + e.getMessage(), e);
+			logger.error("An error occured while committing synced requirement(s). Reason:" + e.getMessage(), e);
 			transaction.rollback();
 		}
 	}

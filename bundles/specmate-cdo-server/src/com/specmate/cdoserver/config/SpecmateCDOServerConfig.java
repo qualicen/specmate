@@ -8,7 +8,8 @@ import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.common.OSGiUtil;
 import com.specmate.common.exception.SpecmateException;
@@ -28,7 +29,9 @@ public class SpecmateCDOServerConfig {
 
 	private IConfigService configService;
 
-	private LogService logService;
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 
 	private String serverPort;
 
@@ -52,8 +55,7 @@ public class SpecmateCDOServerConfig {
 			properties.put(KEY_REPOSITORY_NAME, repositoryName);
 			properties.put(KEY_CDO_USER, cdoUser);
 			properties.put(KEY_CDO_PASSWORD, cdoPassword);
-			logService.log(LogService.LOG_DEBUG,
-					"Configuring CDO with:\n" + OSGiUtil.configDictionaryToString(properties));
+			logger.debug("Configuring CDO with:\n" + OSGiUtil.configDictionaryToString(properties));
 			OSGiUtil.configureService(configurationAdmin, PID, properties);
 		}
 	}
@@ -68,10 +70,5 @@ public class SpecmateCDOServerConfig {
 	@Reference
 	public void setConfigurationService(IConfigService configService) {
 		this.configService = configService;
-	}
-
-	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
 	}
 }

@@ -1,6 +1,6 @@
 package com.specmate.connectors.internal;
 
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
 
 import com.specmate.persistency.ITransaction;
 import com.specmate.scheduler.SchedulerTask;
@@ -8,19 +8,18 @@ import com.specmate.scheduler.SchedulerTask;
 public class ConnectorTask extends SchedulerTask {
 
 	private ITransaction transaction;
-	private LogService logService;
 	private ConnectorService connectorService;
+	private Logger logger;
 
-	public ConnectorTask(ConnectorService connectorService, ITransaction transaction,
-			LogService logService) {
+	public ConnectorTask(ConnectorService connectorService, ITransaction transaction, Logger logger) {
 		super();
 		this.connectorService = connectorService;
 		this.transaction = transaction;
-		this.logService = logService;
+		this.logger = logger;
 	}
 
 	@Override
-	public void run() {		
-		ConnectorUtil.syncConnectors(connectorService.getConnectors(), transaction, logService);
+	public void run() {
+		ConnectorUtil.syncConnectors(connectorService.getConnectors(), transaction, logger);
 	}
 }

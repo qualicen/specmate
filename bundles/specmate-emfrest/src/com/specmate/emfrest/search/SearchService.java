@@ -12,7 +12,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateValidationException;
@@ -25,12 +26,14 @@ import com.specmate.search.api.IModelSearchService;
 @Component(immediate = true, service = IRestService.class)
 public class SearchService extends RestServiceBase {
 
-	private LogService logService;
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 	private IModelSearchService searchService;
 
 	@Activate
 	public void activate(Map<String, Object> properties) {
-		this.logService.log(LogService.LOG_INFO, "Initialized search service " + properties.toString());
+		this.logger.info("Initialized search service " + properties.toString());
 	}
 
 	@Override
@@ -62,13 +65,7 @@ public class SearchService extends RestServiceBase {
 	}
 
 	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
-	}
-
-	@Reference
 	public void setSearchService(IModelSearchService searchService) {
 		this.searchService = searchService;
 	}
-
 }

@@ -7,7 +7,8 @@ import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.common.OSGiUtil;
 import com.specmate.common.exception.SpecmateException;
@@ -18,25 +19,27 @@ public class ConnectorServiceConfig {
 
 	public static final String PID = "com.specmate.connectors.ConnectorService";
 
-
 	private ConfigurationAdmin configurationAdmin;
 	private IConfigService configService;
-	private LogService logService;
+
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 
 	/** Configures the connector service. */
 	@Activate
 	public void configureConnectorService() throws SpecmateException {
 		Dictionary<String, Object> properties = new Hashtable<>();
-		String connectorScheduleStr = configService.getConfigurationProperty(PollKeys.KEY_POLL_SCHEDULE, PollKeys.DISABLED_STRING);
+		String connectorScheduleStr = configService.getConfigurationProperty(PollKeys.KEY_POLL_SCHEDULE,
+				PollKeys.DISABLED_STRING);
 
 		if (connectorScheduleStr.equalsIgnoreCase(PollKeys.DISABLED_STRING)) {
-			logService.log(LogService.LOG_INFO, "Connectors service disabled.");
+			logger.info("Connectors service disabled.");
 			return;
 		}
 
 		properties.put(PollKeys.KEY_POLL_SCHEDULE, connectorScheduleStr);
-		logService.log(LogService.LOG_DEBUG,
-				"Configuring Connectors with:\n" + OSGiUtil.configDictionaryToString(properties));
+		logger.debug("Configuring Connectors with:\n" + OSGiUtil.configDictionaryToString(properties));
 
 		OSGiUtil.configureService(configurationAdmin, PID, properties);
 	}
@@ -53,8 +56,7 @@ public class ConnectorServiceConfig {
 		this.configService = configService;
 	}
 
-	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
+	public void setLogger(Logger logger) {
+		this.logger = logger;
 	}
 }

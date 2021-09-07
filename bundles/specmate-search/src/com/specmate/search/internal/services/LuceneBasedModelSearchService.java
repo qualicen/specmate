@@ -51,7 +51,8 @@ import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
@@ -103,8 +104,9 @@ public class LuceneBasedModelSearchService extends RestServiceBase implements Ev
 	/** Search manager to perform searches on the lucene database. */
 	private SearcherManager searcherManager;
 
-	/** Service for message logging. */
-	private LogService logService;
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 
 	/** Periodic scheduler for the periodic commit */
 	private ScheduledExecutorService scheduledExecutor;
@@ -148,7 +150,7 @@ public class LuceneBasedModelSearchService extends RestServiceBase implements Ev
 			startPeriodicCommitThread();
 			initIndexThreadPool();
 		} catch (IOException e) {
-			logService.log(LogService.LOG_ERROR, "Could not open index for full-text search.");
+			logger.error("Could not open index for full-text search.");
 		}
 	}
 
@@ -163,7 +165,7 @@ public class LuceneBasedModelSearchService extends RestServiceBase implements Ev
 			try {
 				this.indexWriter.close();
 			} catch (IOException e) {
-				logService.log(LogService.LOG_ERROR, "Could not close full-text index.");
+				logger.error("Could not close full-text index.");
 			}
 		}
 		if (this.scheduledExecutor != null) {
@@ -226,7 +228,7 @@ public class LuceneBasedModelSearchService extends RestServiceBase implements Ev
 			query = queryParser.parse(projectPrefix + queryString);
 		} catch (ParseException e) {
 			String msg = "Could not parse query: " + queryString + ".";
-			logService.log(LogService.LOG_ERROR, msg, e);
+			logger.error(msg, e);
 			throw new SpecmateValidationException(msg, e);
 		}
 
@@ -245,7 +247,7 @@ public class LuceneBasedModelSearchService extends RestServiceBase implements Ev
 			try {
 				searcherManager.release(isearcher);
 			} catch (IOException e) {
-				logService.log(LogService.LOG_ERROR, "Error while releasing lucene searcher.", e);
+				logger.error("Error while releasing lucene searcher.", e);
 			}
 		}
 	}
@@ -276,12 +278,12 @@ public class LuceneBasedModelSearchService extends RestServiceBase implements Ev
 		if (!start) {
 			return;
 		}
-		logService.log(LogService.LOG_INFO, "Re-indexing started.");
+		logger.info("Re-indexing started.");
 		TreeIterator<EObject> iterator = this.view.getResource().getAllContents();
 		try {
 			clear();
 		} catch (SpecmateException e) {
-			logService.log(LogService.LOG_ERROR, "Error while clearing search index.", e);
+			logger.error("Error while clearing search index.", e);
 			throw e;
 		}
 		while (iterator.hasNext()) {
@@ -297,12 +299,12 @@ public class LuceneBasedModelSearchService extends RestServiceBase implements Ev
 					updateIndex(id, next, project);
 				});
 			} else {
-				logService.log(LogService.LOG_ERROR, "Could not reindex object.");
+				logger.error("Could not reindex object.");
 			}
 		}
 		// when all reindex jobs have run, reset the flag
 		indexThreadPool.submit(() -> {
-			logService.log(LogService.LOG_INFO, "Re-indexing completed.");
+			logger.info("Re-indexing completed.");
 			isReindexRunning.set(false);
 		});
 	}
@@ -325,8 +327,7 @@ public class LuceneBasedModelSearchService extends RestServiceBase implements Ev
 				// object not found, probably it was deleted but the index is
 				// not
 				// yet updated. No action taken except logging.
-				logService.log(LogService.LOG_WARNING,
-						"The search returned an object id, but no object with this id was found.");
+				logger.warn("The search returned an object id, but no object with this id was found.");
 			}
 
 		}
@@ -376,8 +377,7 @@ public class LuceneBasedModelSearchService extends RestServiceBase implements Ev
 			try {
 				indexWriter.deleteDocuments(new Term(FieldConstants.FIELD_ID, modelEvent.getId()));
 			} catch (IOException e) {
-				this.logService.log(LogService.LOG_ERROR,
-						"Could not delete document from index: " + modelEvent.getTopic(), e);
+				this.logger.error("Could not delete document from index: " + modelEvent.getTopic(), e);
 			}
 		});
 	}
@@ -392,8 +392,7 @@ public class LuceneBasedModelSearchService extends RestServiceBase implements Ev
 			try {
 				indexWriter.addDocument(document);
 			} catch (IOException e) {
-				this.logService.log(LogService.LOG_ERROR, "Could not add document to index: " + modelEvent.getTopic(),
-						e);
+				this.logger.error("Could not add document to index: " + modelEvent.getTopic(), e);
 			}
 		});
 	}
@@ -431,7 +430,7 @@ public class LuceneBasedModelSearchService extends RestServiceBase implements Ev
 		try {
 			indexWriter.updateDocument(new Term(FieldConstants.FIELD_ID, id), doc);
 		} catch (IOException e) {
-			this.logService.log(LogService.LOG_ERROR, "Could not update index: " + id, e);
+			this.logger.error("Could not update index: " + id, e);
 		}
 	}
 
@@ -473,11 +472,4 @@ public class LuceneBasedModelSearchService extends RestServiceBase implements Ev
 	public void setPersistency(IPersistencyService persistencyService) {
 		this.persistencyService = persistencyService;
 	}
-
-	/** Sets the log service. */
-	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
-	}
-
 }

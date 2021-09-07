@@ -22,7 +22,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.config.api.IConfigService;
 
@@ -42,8 +43,9 @@ public class ConfigService implements IConfigService {
 	/** The current configuration */
 	private Properties configuration = new Properties();
 
-	/** The LogService instance */
-	private LogService logService;
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 
 	/** The bundle context of the containing bundle */
 	private BundleContext bundleContext;
@@ -85,11 +87,11 @@ public class ConfigService implements IConfigService {
 			}
 			properties.load(new InputStreamReader(configInputStream, Charset.forName("UTF-8")));
 		} catch (FileNotFoundException e) {
-			logService.log(LogService.LOG_ERROR, "Configuration file " + configurationFileLocation
+			logger.error("Configuration file " + configurationFileLocation
 					+ " does not exist. Using default configuration.");
 			return;
 		} catch (IOException e) {
-			logService.log(LogService.LOG_ERROR, "Configuration file " + configurationFileLocation
+			logger.error("Configuration file " + configurationFileLocation
 					+ " could not be read. Using default configuration.", e);
 			return;
 		} finally {
@@ -198,12 +200,6 @@ public class ConfigService implements IConfigService {
 		}
 
 		commandLineArguments = l.toArray(new String[0]);
-	}
-
-	/** Sets the LogService reference. */
-	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
 	}
 
 	@Override

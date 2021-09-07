@@ -20,7 +20,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
 
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.connectors.api.ConnectorBase;
@@ -208,7 +208,7 @@ public class ConnectorUtilTest {
 			}
 
 		});
-		ConnectorUtil.syncConnectors(Arrays.asList(reqSource), transaction, mock(LogService.class));
+		ConnectorUtil.syncConnectors(Arrays.asList(reqSource), transaction, mock(Logger.class));
 	}
 
 	private void runConnectorUtilWithSourceSingleSync(String id, IConnector reqSource) throws SpecmateException {
@@ -226,7 +226,7 @@ public class ConnectorUtilTest {
 			}
 
 		});
-		ConnectorUtil.syncRequirementById(id, reqSource, transaction, mock(LogService.class));
+		ConnectorUtil.syncRequirementById(id, reqSource, transaction, mock(Logger.class));
 	}
 
 	private abstract class TestRequirementSourceBase extends ConnectorBase {

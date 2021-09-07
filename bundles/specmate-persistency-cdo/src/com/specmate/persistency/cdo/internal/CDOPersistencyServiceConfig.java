@@ -17,7 +17,8 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.common.OSGiUtil;
 import com.specmate.common.exception.SpecmateException;
@@ -36,7 +37,9 @@ public class CDOPersistencyServiceConfig {
 	public static final String KEY_SERVER_HOST_PORT = "cdo.serverHostAndPort";
 	private ConfigurationAdmin configurationAdmin;
 	private IConfigService configService;
-	private LogService logService;
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 	private String specmateRepository;
 	private String specmateResource;
 	private String host;
@@ -63,8 +66,8 @@ public class CDOPersistencyServiceConfig {
 		this.connected = false;
 		String[] hostport = StringUtils.split(this.host, ":");
 		if (hostport == null || !(hostport.length == 2)) {
-			throw new SpecmateInternalException(ErrorCode.CONFIGURATION,
-					"Invalid format for CDO host " + KEY_SERVER_HOST_PORT + ": " + this.host + ". The expected format is [hostName]:[port]");
+			throw new SpecmateInternalException(ErrorCode.CONFIGURATION, "Invalid format for CDO host "
+					+ KEY_SERVER_HOST_PORT + ": " + this.host + ". The expected format is [hostName]:[port]");
 		}
 		this.hostName = hostport[0];
 		this.port = Integer.parseInt(hostport[1]);
@@ -77,8 +80,7 @@ public class CDOPersistencyServiceConfig {
 	}
 
 	/**
-	 * Starts a thread that periodically checks if the CDO server is still
-	 * reachable
+	 * Starts a thread that periodically checks if the CDO server is still reachable
 	 */
 	private void startMonitoringThread() {
 
@@ -90,19 +92,19 @@ public class CDOPersistencyServiceConfig {
 					try {
 						removeConfiguration();
 						this.connected = false;
-						this.logService.log(LogService.LOG_WARNING, "Lost connection to CDO server.");
+						this.logger.warn("Lost connection to CDO server.");
 					} catch (SpecmateException e) {
-						this.logService.log(LogService.LOG_ERROR, "Could not stop persistency.");
+						this.logger.error("Could not stop persistency.");
 					}
 				}
 			} else {
 				if (checkConnection()) {
 					try {
-						this.logService.log(LogService.LOG_INFO, "Connection to CDO server established.");
+						this.logger.info("Connection to CDO server established.");
 						registerConfiguration();
 						this.connected = true;
 					} catch (SpecmateException e) {
-						this.logService.log(LogService.LOG_ERROR, "Could not restart persistency.");
+						this.logger.error("Could not restart persistency.");
 					}
 				}
 			}
@@ -121,8 +123,7 @@ public class CDOPersistencyServiceConfig {
 			properties.put(KEY_SERVER_HOST_PORT, this.host);
 			properties.put(KEY_CDO_USER, this.cdoUser);
 			properties.put(KEY_CDO_PASSWORD, this.cdoPassword);
-			this.logService.log(LogService.LOG_DEBUG,
-					"Configuring CDO with:\n" + OSGiUtil.configDictionaryToString(properties));
+			this.logger.debug("Configuring CDO with:\n" + OSGiUtil.configDictionaryToString(properties));
 			this.configuration = OSGiUtil.configureService(this.configurationAdmin, PID, properties);
 		}
 	}
@@ -156,10 +157,5 @@ public class CDOPersistencyServiceConfig {
 	@Reference
 	public void setConfigurationService(IConfigService configService) {
 		this.configService = configService;
-	}
-
-	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
 	}
 }

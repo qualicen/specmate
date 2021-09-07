@@ -27,7 +27,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil.EqualityHelper;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
 import org.sat4j.core.VecInt;
 import org.sat4j.maxsat.SolverFactory;
 import org.sat4j.maxsat.WeightedMaxSatDecorator;
@@ -66,15 +66,15 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 
 	private Comparator<CEGNodeEvaluation> nodeEvalSetComparator;
 	private boolean considerLinks;
-	private LogService logService;
+	private Logger logger;
 	private boolean germanLanguage;
 
 	public CEGTestCaseGenerator(TestSpecification specification, boolean considerLinks, boolean germanLanguage,
-			LogService logService) {
+			Logger logger) {
 		super(specification, CEGModel.class, CEGNode.class);
 		this.considerLinks = considerLinks;
 		this.germanLanguage = germanLanguage;
-		this.logService = logService;
+		this.logger = logger;
 		if (considerLinks) {
 			addLinkedNodes();
 		}
@@ -130,7 +130,7 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 				reached.add(currentNode);
 				currentNode.getIncomingConnections().stream().forEach(conn -> workList.add((CEGNode) conn.getSource()));
 			} else {
-				logService.log(LogService.LOG_WARNING, "Found a cicle in the CEG when generating test cases.");
+				logger.warn("Found a cicle in the CEG when generating test cases.");
 			}
 		}
 		return reached;
@@ -321,7 +321,7 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 		SortedSet<CEGNodeEvaluation> relaxedEvaluations = new TreeSet<CEGNodeEvaluation>(nodeEvalSetComparator);
 		evaluationList.stream().forEach(e -> {
 			try {
-				CEGNodeEvaluation relaxed = (CEGNodeEvaluation)e.clone();
+				CEGNodeEvaluation relaxed = (CEGNodeEvaluation) e.clone();
 				relaxConstraints(relaxed);
 				relaxedEvaluations.add(relaxed);
 			} catch (SpecmateInternalException e1) {
@@ -817,5 +817,4 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 			return super.haveEqualFeature(eObject1, eObject2, feature);
 		}
 	}
-
 }

@@ -9,7 +9,8 @@ import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
@@ -26,7 +27,9 @@ public class Migrator20181108 implements IMigrator {
 
 	private IDBProvider dbProvider;
 	private IConfigService configService;
-	private LogService logService;
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 
 	@Override
 	public String getSourceVersion() {
@@ -58,8 +61,7 @@ public class Migrator20181108 implements IMigrator {
 						try {
 							foldersToUpdate = filterLibraryFolders(projectID, libraryFolders, connection);
 						} catch (SpecmateException e) {
-							this.logService.log(LogService.LOG_WARNING,
-									"Failed to retrieve library folder for project " + projectID);
+							this.logger.warn("Failed to retrieve library folder for project " + projectID);
 						}
 						for (Integer cdo_id : foldersToUpdate) {
 							String trueLiteral = this.dbProvider.getTrueLiteral();
@@ -107,7 +109,6 @@ public class Migrator20181108 implements IMigrator {
 				}
 			}
 		}
-
 		return foldersToUpdate;
 	}
 
@@ -119,10 +120,5 @@ public class Migrator20181108 implements IMigrator {
 	@Reference
 	public void setConfigService(IConfigService configService) {
 		this.configService = configService;
-	}
-
-	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
 	}
 }

@@ -12,7 +12,8 @@
 	org.eclipse.emf,\
 	org.eclipse.emf.common,\
 	specmate-config-api;version=latest,\
-	specmate-connectors-api;version=latest
+	specmate-connectors-api;version=latest,\
+	org.eclipse.osgi
 
 Bundle-Version: 0.0.0.${tstamp}
 Private-Package: \

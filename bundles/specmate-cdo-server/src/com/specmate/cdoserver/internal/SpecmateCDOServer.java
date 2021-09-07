@@ -20,7 +20,8 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.cdoserver.ICDOServer;
 import com.specmate.cdoserver.config.SpecmateCDOServerConfig;
@@ -58,7 +59,9 @@ public class SpecmateCDOServer implements DBConfigChangedCallback, ICDOServer {
 
 	private String cdoPassword;
 
-	private LogService logService;
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 
 	private boolean active = false;
 
@@ -77,8 +80,7 @@ public class SpecmateCDOServer implements DBConfigChangedCallback, ICDOServer {
 	 * Reads the config properties
 	 *
 	 * @param properties
-	 * @throws SpecmateInternalException
-	 *             if the configuration is invalid
+	 * @throws SpecmateInternalException if the configuration is invalid
 	 */
 	private void readConfig(Map<String, Object> properties) throws SpecmateInternalException {
 		this.hostAndPort = (String) properties.get(SpecmateCDOServerConfig.KEY_SERVER_HOST_PORT);
@@ -168,10 +170,10 @@ public class SpecmateCDOServer implements DBConfigChangedCallback, ICDOServer {
 
 	/** Creates the TCP acceptor */
 	private void createAcceptors() {
-		logService.log(LogService.LOG_INFO, "Starting server on " + this.hostAndPort);
+		logger.info("Starting server on " + this.hostAndPort);
 		this.acceptorTCP = (IAcceptor) IPluginContainer.INSTANCE.getElement("org.eclipse.net4j.acceptors", "tcp",
 				hostAndPort);
-		logService.log(LogService.LOG_INFO, "Server started");
+		logger.info("Server started");
 	}
 
 	/**
@@ -197,10 +199,5 @@ public class SpecmateCDOServer implements DBConfigChangedCallback, ICDOServer {
 	@Reference
 	public void setMigrationService(IMigratorService migrationService) {
 		this.migrationService = migrationService;
-	}
-
-	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
 	}
 }

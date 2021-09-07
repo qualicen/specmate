@@ -13,7 +13,8 @@
 	specmate-migration-api;version=latest,\
 	specmate-config-api;version=latest,\
 	org.eclipse.equinox.common,\
-	specmate-model-gen;version=latest
+	specmate-model-gen;version=latest,\
+	org.eclipse.osgi
 Private-Package: com.specmate.cdoserver.internal
 Export-Package: \
 	com.specmate.cdoserver.config,\

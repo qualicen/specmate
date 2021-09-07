@@ -21,7 +21,7 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import org.eclipse.emf.ecore.EObject;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
 
 import com.specmate.administration.api.IStatusService;
 import com.specmate.common.exception.SpecmateAuthorizationException;
@@ -68,7 +68,7 @@ public abstract class SpecmateResource {
 
 	/** OSGi logging service */
 	@Inject
-	LogService logService;
+	Logger logger;
 
 	@Secured
 	@Path(SERVICE_PATTERN)
@@ -141,7 +141,7 @@ public abstract class SpecmateResource {
 
 			if (commitTransaction && statusService.getCurrentStatus().isReadOnly()
 					&& !(service instanceof IStatusService)) {
-				logService.log(LogService.LOG_ERROR, "Attempt to access writing resource when in read-only mode");
+				logger.error("Attempt to access writing resource when in read-only mode");
 
 				Status status = Status.SERVICE_UNAVAILABLE;
 				ProblemDetail pd = AdministrationFactory.eINSTANCE.createProblemDetail();
@@ -158,7 +158,7 @@ public abstract class SpecmateResource {
 						"Service time for service " + service.getServiceName());
 				timer = histogram.startTimer();
 			} catch (SpecmateException e) {
-				logService.log(LogService.LOG_ERROR, "Could not obtain metric.", e);
+				logger.error("Could not obtain metric.", e);
 			}
 
 			try {
@@ -179,7 +179,7 @@ public abstract class SpecmateResource {
 				} catch (SpecmateValidationException e) {
 					transaction.rollback();
 
-					logService.log(LogService.LOG_ERROR, e.getMessage());
+					logger.error(e.getMessage());
 
 					Status status = Status.BAD_REQUEST;
 					ProblemDetail pd = AdministrationFactory.eINSTANCE.createProblemDetail();
@@ -191,7 +191,7 @@ public abstract class SpecmateResource {
 					return Response.status(status).entity(pd).build();
 				} catch (SpecmateAuthorizationException e) {
 					transaction.rollback();
-					logService.log(LogService.LOG_ERROR, e.getMessage());
+					logger.error(e.getMessage());
 
 					Status status = Status.UNAUTHORIZED;
 					ProblemDetail pd = AdministrationFactory.eINSTANCE.createProblemDetail();
@@ -203,7 +203,7 @@ public abstract class SpecmateResource {
 
 				} catch (SpecmateException e) {
 					transaction.rollback();
-					logService.log(LogService.LOG_ERROR, e.getMessage());
+					logger.error(e.getMessage());
 
 					Status status = Status.INTERNAL_SERVER_ERROR;
 					ProblemDetail pd = AdministrationFactory.eINSTANCE.createProblemDetail();
@@ -221,7 +221,7 @@ public abstract class SpecmateResource {
 			}
 		}
 
-		logService.log(LogService.LOG_ERROR, "No suitable service found.");
+		logger.error("No suitable service found.");
 
 		Status status = Status.NOT_FOUND;
 		ProblemDetail pd = AdministrationFactory.eINSTANCE.createProblemDetail();
@@ -237,7 +237,7 @@ public abstract class SpecmateResource {
 		List<EObject> objects = doGetChildren();
 		EObject object = SpecmateEcoreUtil.getEObjectWithId(name, objects);
 		if (object == null) {
-			logService.log(LogService.LOG_ERROR, "Resource not found:" + httpRequest.getRequestURL());
+			logger.error("Resource not found:" + httpRequest.getRequestURL());
 
 			Status status = Status.NOT_FOUND;
 			ProblemDetail pd = AdministrationFactory.eINSTANCE.createProblemDetail();

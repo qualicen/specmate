@@ -20,7 +20,8 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.google.common.io.PatternFilenameFilter;
 import com.specmate.common.exception.SpecmateException;
@@ -42,8 +43,9 @@ import com.specmate.model.requirements.RequirementsFactory;
 @Component(service = IConnector.class, immediate = true, configurationPid = FileConnectorConfig.PID, configurationPolicy = ConfigurationPolicy.REQUIRE)
 public class FileConnector extends ConnectorBase {
 
-	/** The log service */
-	private LogService logService;
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 
 	/** The folder where to look for requirements */
 	private String folder;
@@ -70,7 +72,7 @@ public class FileConnector extends ConnectorBase {
 		defaultFolder = BaseFactory.eINSTANCE.createFolder();
 		defaultFolder.setId("default");
 		defaultFolder.setName("default");
-		logService.log(LogService.LOG_INFO, "Initialized file connector with " + properties.toString() + ".");
+		logger.info("Initialized file connector with " + properties.toString() + ".");
 	}
 
 	private void validateConfig(Map<String, Object> properties) throws SpecmateException {
@@ -107,7 +109,7 @@ public class FileConnector extends ConnectorBase {
 			buffReader = new BufferedReader(reader);
 
 		} catch (FileNotFoundException e) {
-			logService.log(LogService.LOG_ERROR, "File not found " + file.getAbsolutePath() + ".");
+			logger.error("File not found " + file.getAbsolutePath() + ".");
 		}
 
 		String line;
@@ -146,19 +148,17 @@ public class FileConnector extends ConnectorBase {
 			}
 			return requirements;
 		} catch (IOException e) {
-			logService.log(LogService.LOG_ERROR, "Could not read from file " + file.getAbsolutePath() + ".");
+			logger.error("Could not read from file " + file.getAbsolutePath() + ".");
 			return Collections.emptyList();
 		} finally {
 			if (buffReader != null) {
 				try {
 					buffReader.close();
 				} catch (IOException e) {
-					logService.log(LogService.LOG_ERROR,
-							"Could not close file stream to " + file.getAbsolutePath() + ".");
+					logger.error("Could not close file stream to " + file.getAbsolutePath() + ".");
 				}
 			}
 		}
-
 	}
 
 	@Override
@@ -182,12 +182,6 @@ public class FileConnector extends ConnectorBase {
 		} else {
 			return new HashSet<IProject>();
 		}
-	}
-
-	/** Service reference */
-	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
 	}
 
 	@Override

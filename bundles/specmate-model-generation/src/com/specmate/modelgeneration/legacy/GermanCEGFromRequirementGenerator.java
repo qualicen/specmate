@@ -5,7 +5,7 @@ import java.util.StringJoiner;
 
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
 
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.nlp.api.ELanguage;
@@ -16,8 +16,8 @@ import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 
 public class GermanCEGFromRequirementGenerator extends CEGFromRequirementGenerator {
 
-	public GermanCEGFromRequirementGenerator(LogService logService, INLPService tagger) {
-		super(logService, tagger);
+	public GermanCEGFromRequirementGenerator(Logger logger, INLPService tagger) {
+		super(logger, tagger);
 	}
 
 	@Override
@@ -63,5 +63,4 @@ public class GermanCEGFromRequirementGenerator extends CEGFromRequirementGenerat
 	protected ELanguage getLanguage() {
 		return ELanguage.DE;
 	}
-
 }

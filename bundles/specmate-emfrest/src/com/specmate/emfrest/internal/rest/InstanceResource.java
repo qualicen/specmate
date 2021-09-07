@@ -8,7 +8,7 @@ import javax.ws.rs.core.Context;
 
 import org.eclipse.emf.ecore.EObject;
 import org.osgi.framework.BundleContext;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
 
 import com.specmate.urihandler.IURIFactory;
 
@@ -20,7 +20,7 @@ public class InstanceResource extends SpecmateResource {
 
 	/** The OSGi logging service */
 	@Inject
-	LogService logService;
+	Logger logger;
 
 	/** The OSGi bundle context */
 	@Inject
@@ -51,5 +51,4 @@ public class InstanceResource extends SpecmateResource {
 	Object getResourceObject() {
 		return this.instance;
 	}
-
 }

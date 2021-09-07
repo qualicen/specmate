@@ -13,7 +13,7 @@ import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 
 import org.eclipse.emf.ecore.EObject;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
 
 import com.specmate.common.ISerializationConfiguration;
 import com.specmate.urihandler.IURIFactory;
@@ -26,9 +26,9 @@ public class JsonEObjectWriter implements MessageBodyWriter<EObject> {
 	private JsonWriter writer;
 
 	/** constructor */
-	public JsonEObjectWriter(@Context LogService logService, @Context IURIFactory factory,
+	public JsonEObjectWriter(@Context Logger logger, @Context IURIFactory factory,
 			@Context ISerializationConfiguration serializationConfig) {
-		this.writer = new JsonWriter(logService, factory, serializationConfig);
+		this.writer = new JsonWriter(logger, factory, serializationConfig);
 	}
 
 	/** {@inheritDoc} */

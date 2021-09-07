@@ -16,7 +16,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateValidationException;
@@ -37,7 +38,9 @@ public class HistoryProviderImpl implements IHistoryProvider {
 
 	private IPersistencyService persistency;
 
-	private LogService logService;
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 
 	@Override
 	public History getHistory(EObject object) throws SpecmateException {
@@ -118,7 +121,7 @@ public class HistoryProviderImpl implements IHistoryProvider {
 		try {
 			deltaProcessor.process();
 		} catch (SpecmateValidationException e) {
-			logService.log(LogService.LOG_ERROR, e.getMessage());
+			logger.error(e.getMessage());
 		}
 		historyEntry.getChanges().addAll(deltaProcessor.getChanges());
 		historyEntry.setTimestamp(cdoHistoryElement.getTimeStamp());
@@ -153,7 +156,7 @@ public class HistoryProviderImpl implements IHistoryProvider {
 
 	private CDOCommitInfo[] getCDOHistoryElements(CDOObject cdoObject) {
 		CDOObjectHistory cdoHistory = cdoObject.cdoHistory();
-		if(cdoHistory == null) {
+		if (cdoHistory == null) {
 			return new CDOCommitInfo[0];
 		}
 		CDOCommitInfo[] cdoHistoryElements = cdoHistory.getElements();
@@ -265,7 +268,7 @@ public class HistoryProviderImpl implements IHistoryProvider {
 					objectName = ((INamed) obj).getName();
 				}
 			} catch (SpecmateException e) {
-				logService.log(LogService.LOG_ERROR, "Could not create change object for " + id.toString(), e);
+				logger.error("Could not create change object for " + id.toString(), e);
 			} finally {
 				if (transaction != null) {
 					transaction.close();
@@ -280,10 +283,5 @@ public class HistoryProviderImpl implements IHistoryProvider {
 	@Reference
 	public void setPersistencyService(IPersistencyService persistency) {
 		this.persistency = persistency;
-	}
-
-	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
 	}
 }

@@ -4,7 +4,8 @@ Private-Package: com.specmate.ui.core
 	specmate-emfrest-api;version=latest,\
 	osgi.cmpn,\
 	osgi.core,\
-	org.eclipse.jetty.osgi-servlet-api
+	org.eclipse.jetty.osgi-servlet-api,\
+	org.eclipse.osgi
 Include-Resource: webcontent=webcontent
 -dsannotations:  \
 	*

@@ -14,7 +14,8 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
@@ -42,8 +43,9 @@ public class HPConnector extends DetailsService implements IConnector, IRestServ
 	/** The associated project */
 	private IProject project;
 
-	/** Logging service */
-	private LogService logService;
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 
 	/** The connection to the hp proxy */
 	private HPProxyConnection hpConnection;
@@ -86,7 +88,7 @@ public class HPConnector extends DetailsService implements IConnector, IRestServ
 			throw new SpecmateInternalException(ErrorCode.CONFIGURATION, "HP Connector: connector id is empty");
 		}
 
-		hpConnection = new HPProxyConnection(host, port, timeout, logService);
+		hpConnection = new HPProxyConnection(host, port, timeout, logger);
 	}
 
 	/** Returns the list of requirements. */
@@ -100,7 +102,7 @@ public class HPConnector extends DetailsService implements IConnector, IRestServ
 	public IContainer getContainerForRequirement(Requirement localRequirement) throws SpecmateException {
 		Folder folder = BaseFactory.eINSTANCE.createFolder();
 		String extId = localRequirement.getExtId();
-		logService.log(LogService.LOG_DEBUG, "Retrieving requirements details for " + extId + ".");
+		logger.debug("Retrieving requirements details for " + extId + ".");
 
 		Requirement retrievedRequirement = hpConnection.getRequirementsDetails(localRequirement.getExtId());
 
@@ -195,11 +197,5 @@ public class HPConnector extends DetailsService implements IConnector, IRestServ
 	@Override
 	public void setProject(IProject project) {
 		this.project = project;
-	}
-
-	/** Service reference */
-	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
 	}
 }

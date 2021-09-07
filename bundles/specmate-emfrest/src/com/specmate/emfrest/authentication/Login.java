@@ -2,7 +2,8 @@ package com.specmate.emfrest.authentication;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.auth.api.IAuthenticationService;
 import com.specmate.common.exception.SpecmateException;
@@ -15,7 +16,10 @@ public class Login extends AuthRestServiceBase {
 	public static final String SERVICE_NAME = "login";
 
 	private IAuthenticationService authService;
-	private LogService logService;
+
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 
 	@Override
 	public String getServiceName() {
@@ -32,19 +36,13 @@ public class Login extends AuthRestServiceBase {
 		this.authService = authService;
 	}
 
-	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
-	}
-
 	@Override
 	protected UserSessionAndUser getUserSessionAndUser(Object parent, Object child, String token)
 			throws SpecmateException {
 		User user = (User) child;
 
 		UserSession session = authService.authenticate(user.getUserName(), user.getPassWord(), user.getProjectName());
-		logService.log(LogService.LOG_INFO,
-				"Session " + session.getId() + " for user " + user.getUserName() + " created.");
+		logger.info("Session " + session.getId() + " for user " + user.getUserName() + " created.");
 		return new UserSessionAndUser(user, session);
 	}
 }

@@ -7,7 +7,8 @@ import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.common.OSGiUtil;
 import com.specmate.common.exception.SpecmateException;
@@ -23,7 +24,9 @@ public class OracleProviderConfig {
 	public static final String KEY_PASSWORD = DB_PREFIX + "password";
 	private ConfigurationAdmin configurationAdmin;
 	private IConfigService configService;
-	private LogService logService;
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 
 	@Activate
 	private void configure() throws SpecmateException {
@@ -37,7 +40,7 @@ public class OracleProviderConfig {
 			properties.put(KEY_JDBC_CONNECTION, specmateJDBCConnection);
 		}
 
-		logService.log(LogService.LOG_DEBUG, "Configuring CDO with:\n" + OSGiUtil.configDictionaryToString(properties));
+		logger.debug("Configuring CDO with:\n" + OSGiUtil.configDictionaryToString(properties));
 
 		// Don't log username/password
 		if (specmateUsername != null) {
@@ -61,10 +64,5 @@ public class OracleProviderConfig {
 	@Reference
 	public void setConfigurationService(IConfigService configService) {
 		this.configService = configService;
-	}
-
-	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
 	}
 }

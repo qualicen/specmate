@@ -17,7 +17,8 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.auth.api.ISessionListener;
 import com.specmate.auth.api.ISessionService;
@@ -43,8 +44,9 @@ public class ExportManagerService {
 	/** Collects all exporters that can export test specifications */
 	private List<IExporter> testProcedureExporters = new ArrayList<IExporter>();
 
-	/** Reference to the logging service */
-	private LogService logService;
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 
 	/** Reference to the session service */
 	private ISessionService sessionService;
@@ -79,7 +81,7 @@ public class ExportManagerService {
 			allowedExporters = determineAllowedExporters(session, userName, password);
 			allowedExportersMap.put(session.getId(), allowedExporters);
 		} catch (SpecmateException e) {
-			logService.log(LogService.LOG_WARNING, "Could not determine the list of allowed exporters.");
+			logger.warn("Could not determine the list of allowed exporters.");
 		}
 	}
 
@@ -174,13 +176,11 @@ public class ExportManagerService {
 	}
 
 	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
-	}
-
-	@Reference
 	public void setSessionService(ISessionService sessionService) {
 		this.sessionService = sessionService;
 	}
 
+	public void setLogger(Logger logger) {
+		this.logger = logger;
+	}
 }

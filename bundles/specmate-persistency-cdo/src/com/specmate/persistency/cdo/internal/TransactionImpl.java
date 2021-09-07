@@ -14,7 +14,7 @@ import org.eclipse.emf.cdo.transaction.CDOTransaction;
 import org.eclipse.emf.cdo.util.CommitException;
 import org.eclipse.emf.cdo.view.CDOQuery;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
 
 import com.specmate.administration.api.IStatusService;
 import com.specmate.common.exception.SpecmateException;
@@ -44,7 +44,7 @@ public class TransactionImpl extends ViewImpl implements ITransaction {
 	private CDOTransaction transaction;
 
 	/* The log service */
-	private LogService logService;
+	private Logger logger;
 
 	/* Listeners that are notified on commits */
 	private List<IChangeListener> changeListeners;
@@ -56,10 +56,10 @@ public class TransactionImpl extends ViewImpl implements ITransaction {
 	private IStatusService statusService;
 
 	public TransactionImpl(CDOPersistencyService persistency, CDOTransaction transaction, String resourceName,
-			LogService logService, IStatusService statusService, List<IChangeListener> listeners) {
-		super(persistency, transaction, resourceName, logService);
+			Logger logger, IStatusService statusService, List<IChangeListener> listeners) {
+		super(persistency, transaction, resourceName, logger);
 		this.transaction = transaction;
-		this.logService = logService;
+		this.logger = logger;
 		this.statusService = statusService;
 		changeListeners = listeners;
 
@@ -78,7 +78,7 @@ public class TransactionImpl extends ViewImpl implements ITransaction {
 			transaction.close();
 			persistency.closedTransaction(this);
 		}
-		logService.log(LogService.LOG_DEBUG, "Transaction closed: " + transaction.getViewID());
+		logger.debug("Transaction closed: " + transaction.getViewID());
 	}
 
 	private <T> void commit(T object) throws SpecmateException {
@@ -102,14 +102,14 @@ public class TransactionImpl extends ViewImpl implements ITransaction {
 				}
 			} catch (SpecmateValidationException s) {
 				transaction.rollback();
-				logService.log(LogService.LOG_ERROR, "Error during commit due to invalid data.", s);
+				logger.error("Error during commit due to invalid data.", s);
 				throw s;
 			}
 			setMetadata(object, detachedObjects);
 			transaction.commit();
 		} catch (CommitException e) {
 			transaction.rollback();
-			logService.log(LogService.LOG_DEBUG, "Error during commit, transaction rolled back.", e);
+			logger.debug("Error during commit, transaction rolled back.", e);
 			throw new SpecmateInternalException(ErrorCode.PERSISTENCY, "Error during commit, transaction rolled back.",
 					e);
 		}
@@ -129,7 +129,7 @@ public class TransactionImpl extends ViewImpl implements ITransaction {
 			try {
 				commit(result);
 			} catch (SpecmateInternalException e) {
-				logService.log(LogService.LOG_WARNING, "Exception when comitting: " + e.getMessage(), e);
+				logger.warn("Exception when comitting: " + e.getMessage(), e);
 				try {
 					Thread.sleep(attempts * 50);
 				} catch (InterruptedException ie) {

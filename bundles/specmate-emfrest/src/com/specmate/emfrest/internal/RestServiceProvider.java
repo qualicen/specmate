@@ -6,7 +6,8 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
-import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
+import org.osgi.service.log.LoggerFactory;
 
 import com.google.common.collect.TreeMultimap;
 import com.specmate.emfrest.api.IRestService;
@@ -14,15 +15,12 @@ import com.specmate.emfrest.api.IRestService;
 @Component(immediate = true, service = RestServiceProvider.class)
 public class RestServiceProvider {
 	TreeMultimap<String, IRestService> restServices = TreeMultimap.create();
-	private LogService logService;
+	/** Reference to the log service */
+	@Reference(service = LoggerFactory.class)
+	private Logger logger;
 
 	public void activate() {
-		this.logService.log(LogService.LOG_DEBUG, "Activating RestServiceProvider.");
-	}
-
-	@Reference
-	public void setLogService(LogService logService) {
-		this.logService = logService;
+		this.logger.debug("Activating RestServiceProvider.");
 	}
 
 	@Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
@@ -45,5 +43,4 @@ public class RestServiceProvider {
 	public SortedSet<IRestService> getAllRestServices(String name) {
 		return restServices.get(name);
 	}
-
 }

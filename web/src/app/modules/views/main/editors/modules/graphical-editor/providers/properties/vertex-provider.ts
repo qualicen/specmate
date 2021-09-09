@@ -7,7 +7,6 @@ import { IContainer } from '../../../../../../../../model/IContainer';
 import { IModelNode } from '../../../../../../../../model/IModelNode';
 import { Type } from '../../../../../../../../util/type';
 import { EditorStyle } from '../../components/editor-components/editor-style';
-import { GraphicalEditor } from '../../components/graphical-editor.component';
 import { CEGNodeTypeUtil } from '../../components/util/ceg-node-type-util';
 import { StyleChanger } from '../../components/util/style-changer';
 import { ConverterBase } from '../../converters/converter-base';
@@ -78,7 +77,7 @@ export class VertexProvider extends ProviderBase {
                 let tr1 = document.createElement('tr');
                 let tdIcons = document.createElement('td');
                 tdIcons.rowSpan = 2;
-                tdIcons.style.width = '15px';
+                tdIcons.style.width = '20px';
 
                 let td1 = document.createElement('td');
                 td1.style.textAlign = 'center';
@@ -193,6 +192,7 @@ export class VertexProvider extends ProviderBase {
             let icon = document.createElement('i');
             icon.className = 'fa fa-exclamation-circle';
             icon.setAttribute('aria-hidden', 'true');
+            icon.style.fontSize = '18px';
             tdIcons.appendChild(icon);
         }
     }

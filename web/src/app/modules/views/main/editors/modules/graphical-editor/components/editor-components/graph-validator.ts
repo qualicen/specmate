@@ -76,18 +76,18 @@ export class GraphValidator {
         let offset;
 
         if (Type.is(element, CEGNode) || Type.is(element, CEGLinkedNode)) {
-            offset = new mx.mxPoint(-13, -12);
+            offset = new mx.mxPoint(-15, -14);
         }
         if (Type.is(element, ProcessStep)) {
-            offset = new mx.mxPoint(-13, -12);
+            offset = new mx.mxPoint(-15, -14);
         }
         if (Type.is(element, ProcessStart) || Type.is(element, ProcessEnd)) {
             align = mx.mxConstants.ALIGN_CENTER;
-            offset = new mx.mxPoint(0, -13);
+            offset = new mx.mxPoint(29, -5);
         }
         if (Type.is(element, ProcessDecision)) {
             align = mx.mxConstants.ALIGN_CENTER;
-            offset = new mx.mxPoint(0, -18);
+            offset = new mx.mxPoint(0, -22);
         }
         return new mx.mxCellOverlay(graph.warningImage, message, align, undefined, offset);
     }

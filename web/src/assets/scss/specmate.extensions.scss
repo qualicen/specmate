@@ -168,18 +168,19 @@ textarea:focus,
 }
 
 .nav-tabs .nav-link {
-  color: #495057;
+  color: $primary;
   background-color: transparent;
   outline: none;
 }
 
 .nav-tabs .nav-link:hover {
-  background-color: rgba(0, 0, 0, 0.1);
+  color: $white;
+  background-color: $primary;
 }
 
 .nav-tabs .nav-link.active {
-  color: $primary;
-  background-color: rgba(0, 0, 0, 0.1);
+  color: $white;
+  background-color: $primary;
 }
 
 .btn.btn-sm.expand {

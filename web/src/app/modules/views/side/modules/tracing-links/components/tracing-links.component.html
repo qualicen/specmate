@@ -3,9 +3,10 @@
         {{'Traces' | translate}}
         <div class="input-group input-group-sm">
             <button id="traces-expand-button" type="button" class="btn btn-sm btn-secondary pull-right"
-                (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed"
-                aria-controls="collapseExample"><i *ngIf="isCollapsed" class="fa fa-angle-double-down"></i><i
-                    *ngIf="!isCollapsed" class="fa fa-angle-double-up"></i></button>
+                (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample"
+                title="{{ isCollapsed ? ('expand' | translate) : ('collapse' | translate) }}">
+                <i *ngIf="isCollapsed" class="fa fa-angle-double-down"></i>
+                <i *ngIf="!isCollapsed" class="fa fa-angle-double-up"></i></button>
         </div>
     </h5>
     <div class="card-body" [ngbCollapse]="isCollapsed">

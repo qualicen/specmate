@@ -4,6 +4,15 @@ $color-selected-bright: $primary;
 
 $font-size-sm: 0.9375rem;
 
+specmate {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100vh;
+    width: 100%;
+    hyphens: auto;
+}
+
 input[type="text"]::-ms-clear {
   display: none;
 }
@@ -67,8 +76,8 @@ a.selected {
 }
 
 .specmate-container {
-  height: calc(100vh - 64px);
-  margin-top: 64px;
+  height: 100%;
+  overflow: auto;
 }
 
 .dnd-sortable-drag {

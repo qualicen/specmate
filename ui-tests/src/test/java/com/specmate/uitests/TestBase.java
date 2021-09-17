@@ -70,7 +70,7 @@ public class TestBase implements SauceOnDemandSessionIdProvider {
 	public static LinkedList<String[]> browsersStrings() {
 		LinkedList<String[]> browsers = new LinkedList<String[]>();
 
-		browsers.add(new String[] { "Windows 10", "88.0", "Chrome", null, null });
+		browsers.add(new String[] { "Windows 10", "93.0", "Chrome", null, null });
 		// browsers.add(new String[]{"Windows 10", "18.17763", "MicrosoftEdge", null,
 		// null});
 		// browsers.add(new String[]{"Windows 10", "73.0", "firefox", null, null});
@@ -101,6 +101,7 @@ public class TestBase implements SauceOnDemandSessionIdProvider {
 					new URL("https://" + username + ":" + accesskey + seleniumURI + "/wd/hub"), capabilities);
 		} else {
 			// TODO Adapt the path
+			// The version of the driver must be the same as the browser, download here: https://chromedriver.chromium.org/downloads
 			System.setProperty("webdriver.chrome.driver", "Q:\\chromedriver.exe");
 			driver = new ChromeDriver();
 		}

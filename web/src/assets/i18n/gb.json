@@ -136,6 +136,7 @@
 	"doYouReallyWantToDeleteFolderPermanent": "Do you really want to delete folder \"{{name}}\" and all its contents permanently?",
 	"doYouReallyWantToDeletePermanent": "Do you really want to delete \"{{name}}\" permanently?",
 	"doYouReallyWantToRestore": "Do you really want to restore \"{{name}}\"?",
+	"downloadDocumentation": "Download Documentation",
 	"duplicate": "Duplicate",
 	"elementCouldNotBeDeleted": "Could not delete element",
 	"elementCouldNotBeRead": "Could not read element",

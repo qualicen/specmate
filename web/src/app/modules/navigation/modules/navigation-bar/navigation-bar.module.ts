@@ -8,6 +8,7 @@ import { SpecmateSharedModule } from '../../../specmate/specmate.shared.module';
 import { LogoutModule } from '../../../views/main/authentication/modules/logout/logout.module';
 import { ItemSearchModule } from '../item-search/item-search.module';
 import { NavigationBar } from './components/navigation-bar.component';
+import { DocumentationExportButtonModule } from '../../../actions/modules/documentation-export-button/documentation-export-button.module';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { NavigationBar } from './components/navigation-bar.component';
     LogoutModule,
     BrowserVersionCheckerModule,
     ChooseProjectModule,
-    ItemSearchModule
+    ItemSearchModule,
+    DocumentationExportButtonModule
   ],
   declarations: [
     // COMPONENTS IN THIS MODULE

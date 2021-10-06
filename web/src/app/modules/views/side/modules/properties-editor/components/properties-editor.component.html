@@ -5,7 +5,9 @@
                 {{'Properties' | translate}}
                 <button id="properties-expand-button" type="button" class="btn btn-sm btn-secondary pull-right"
                     (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed"
-                    aria-controls="collapseExample"><em *ngIf="isCollapsed" class="fa fa-angle-double-down"></em>
+                    aria-controls="collapseExample"
+                    title="{{ isCollapsed ? ('expand' | translate) : ('collapse' | translate) }}">
+                    <em *ngIf="isCollapsed" class="fa fa-angle-double-down"></em>
                     <em *ngIf="!isCollapsed" class="fa fa-angle-double-up"></em>
                 </button>
             </h5>
@@ -23,7 +25,9 @@
             <li class="list-group-item">
                 <ul class="linking-model-list">
                     <li *ngFor="let linkingModel of linkingModels" class="linking-model-item">
-                        <a [navigationTarget]="linkingModel"><icon-selector [model]="linkingModel"></icon-selector>&nbsp;{{linkingModel.name}}</a>
+                        <a [navigationTarget]="linkingModel">
+                            <icon-selector [model]="linkingModel"></icon-selector>&nbsp;{{linkingModel.name}}
+                        </a>
                     </li>
                 </ul>
             </li>
@@ -34,7 +38,9 @@
             </h6>
         </li>
         <li class="list-group-item" *ngIf="hasLinkedNode">
-            <a [navigationTarget]="linkedModel"><icon-selector [model]="linkedModel"></icon-selector>&nbsp;{{linkedModel.name}}</a>
+            <a [navigationTarget]="linkedModel">
+                <icon-selector [model]="linkedModel"></icon-selector>&nbsp;{{linkedModel.name}}
+            </a>
         </li>
         <li class="list-group-item" *ngIf="showLinkingButton">
             <link-model-button [element]="selectedElement"></link-model-button>

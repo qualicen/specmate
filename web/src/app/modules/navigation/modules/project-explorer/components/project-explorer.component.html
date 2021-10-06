@@ -3,21 +3,22 @@
         <ul role="tablist" class="nav nav-tabs justify-content-start" id="explorer">
             <li *ngIf="config?.enableProjectExplorer === 'true'" class="nav-item">
                 <button [ngClass]="{'active' : currentActiveTab === ActiveTab.project}" role="tab"
-                    (click)="switchToProject()" class="nav-link" id="ngb-tab-0" aria-disabled="false"
+                    (click)="switchToProject()" class="nav-link" title="{{'project' | translate}}" id="ngb-tab-0" aria-disabled="false"
                     [attr.aria-expanded]="currentActiveTab === ActiveTab.project ? 'true' : 'false'"
                     [attr.aria-controls]="currentActiveTab === ActiveTab.project ? 'ngb-tab-0-panel' : null">{{'project'
                     | translate}}</button>
             </li>
             <li class="nav-item">
                 <button [ngClass]="{'active' : currentActiveTab === ActiveTab.library}" role="tab"
-                    (click)="switchToLibrary()" class="nav-link" id="ngb-tab-1" aria-disabled="false"
+                    (click)="switchToLibrary()" class="nav-link" title="{{'library' | translate}}" id="ngb-tab-1" aria-disabled="false"
                     [attr.aria-expanded]="currentActiveTab === ActiveTab.library ? 'true' : 'false'"
                     [attr.aria-controls]="currentActiveTab === ActiveTab.library ? 'ngb-tab-1-panel' : null">{{'library'
-                    | translate}}</button>
+                    | translate}}
+                </button>
             </li>
             <li class="nav-item">
                 <button [ngClass]="{'active' : currentActiveTab === ActiveTab.recycleBin}" role="tab"
-                    (click)="switchToRecycleBin()" class="nav-link" id="ngb-tab-1" aria-disabled="false"
+                    (click)="switchToRecycleBin()" class="nav-link" title="{{'recycleBin' | translate}}" id="ngb-tab-1" aria-disabled="false"
                     [attr.aria-expanded]="currentActiveTab === ActiveTab.recycleBin ? 'true' : 'false'"
                     [attr.aria-controls]="currentActiveTab === ActiveTab.recycleBin ? 'ngb-tab-1-panel' : null">
                     <i class="fa fa-trash" aria-hidden="true"></i>

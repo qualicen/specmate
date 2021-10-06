@@ -21,6 +21,9 @@ button,
 .btn {
   cursor: pointer;
 }
+.btn:disabled {
+    pointer-events: all;
+}
 
 a {
   color: $primary;

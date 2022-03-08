@@ -14,7 +14,7 @@
     <div class="input-group-prepend">
         <div class="input-group-text"><span class="fa fa-search adjusted-height-input-group-prepend"></span></div>
     </div>
-    <input id="item-search-bar-input" type="text" class="form-control form-control-sm" placeholder="{{'search' | translate}}"
+    <input attr.aria-label="{{'search' | translate}}" id="item-search-bar-input" type="text" class="form-control form-control-sm" placeholder="{{'search' | translate}}"
         [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter" [(ngModel)]="selectedElement"
         [editable]="false" />
 </div>

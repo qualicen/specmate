@@ -10,8 +10,8 @@
 </div>
 <div class="modal-footer">
     <!--Buttons-->
-    <button type="button" class="btn btn-sm expand btn-outline-success" (click)="link()"
+    <button attr.aria-label="{{'linkingDialog.confirm' | translate}}" type="button" class="btn btn-sm expand btn-outline-success" (click)="link()"
         [disabled]="!(hasLink | async)">{{'linkingDialog.confirm' | translate}}</button>
-    <button type="button" class="btn btn-sm expand btn-outline-danger"
+    <button attr.aria-label="{{'cancel' | translate}}" type="button" class="btn btn-sm expand btn-outline-danger"
         (click)="close()">{{'cancel' | translate}}</button>
 </div>

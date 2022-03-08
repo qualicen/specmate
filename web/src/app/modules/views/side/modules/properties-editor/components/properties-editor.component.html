@@ -3,7 +3,7 @@
         <li>
             <h5 class="card-header">
                 {{'Properties' | translate}}
-                <button id="properties-expand-button" type="button" class="btn btn-sm btn-secondary pull-right"
+                <button attr.aria-label="{{ isCollapsed ? ('expand' | translate) : ('collapse' | translate) }}" id="properties-expand-button" type="button" class="btn btn-sm btn-secondary pull-right"
                     (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed"
                     aria-controls="collapseExample"
                     title="{{ isCollapsed ? ('expand' | translate) : ('collapse' | translate) }}">

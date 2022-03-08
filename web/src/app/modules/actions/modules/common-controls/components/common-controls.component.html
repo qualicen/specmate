@@ -1,20 +1,20 @@
 <div class="input-group input-group-sm"></div>
 <form *ngIf="isEnabled && connected" class="form-inline">
-    <button id="commoncontrol-save-button" class="btn btn-sm expand btn-secondary brighter-secondary-outline"
+    <button attr.aria-label="{{'save' | translate}}" id="commoncontrol-save-button" class="btn btn-sm expand btn-secondary brighter-secondary-outline"
         title="{{'save' | translate}}" [disabled]="!isSaveEnabled" (click)="cancelEvent($event); save()"><i
             class="fa fa-save" aria-hidden="true"></i></button>
     <validate-button [textEnabled]="false"></validate-button>
-    <button id="commoncontrol-undo-button" class="btn btn-sm expand btn-secondary brighter-secondary-outline"
+    <button attr.aria-label="{{'undo' | translate}}" id="commoncontrol-undo-button" class="btn btn-sm expand btn-secondary brighter-secondary-outline"
         title="{{'undo' | translate}}" [disabled]="!isUndoEnabled" (click)="cancelEvent($event); undo()"><i
             class="fa fa-undo" aria-hidden="true"></i></button>
-    <button *ngIf="isModel" id="commoncontrol-redo-button"
+    <button attr.aria-label="{{'redo' | translate}}" *ngIf="isModel" id="commoncontrol-redo-button"
         class="btn btn-sm expand btn-secondary brighter-secondary-outline" title="{{'redo' | translate}}"
         [disabled]="!isRedoEnabled" (click)="cancelEvent($event); redo()"><i class="fa fa-repeat"
             aria-hidden="true"></i></button>
-    <button id="commoncontrol-forward-button" class="btn btn-sm expand btn-secondary brighter-secondary-outline"
+    <button attr.aria-label="{{'navigate.back' | translate}}" id="commoncontrol-forward-button" class="btn btn-sm expand btn-secondary brighter-secondary-outline"
         title="{{'navigate.back' | translate}}" [disabled]="!isBackEnabled" (click)="cancelEvent($event); back()"><i
             class="fa fa-arrow-circle-left" aria-hidden="true"></i></button>
-    <button id="commoncontrol-back-button" class="btn btn-sm expand btn-secondary brighter-secondary-outline"
+    <button attr.aria-label="{{'navigate.forward' | translate}}" id="commoncontrol-back-button" class="btn btn-sm expand btn-secondary brighter-secondary-outline"
         title="{{'navigate.forward' | translate}}" [disabled]="!isForwardEnabled"
         (click)="cancelEvent($event); forward()"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i></button>
 </form>

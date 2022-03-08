@@ -94,7 +94,7 @@
 	"Variable": "Variable",
 	"addARequirement": "Anforderung hinzufügen",
 	"addInputColumn": "Eingabespalte hinzufügen",
-	"addNode": "",
+	"addNode": "Knoten hinzufügen",
 	"addOutputColumn": "Ausgabespalte hinzufügen",
 	"attentionNumberOfTestCasesWillBeDeleted": "Achtung: {{num}} Testfälle werden gelöscht!",
 	"browserUnsupported": "Der aktuelle Browser wird nicht unterstützt. Empfohlene Browser: {{supportedBrowsers}}",
@@ -147,7 +147,7 @@
 	"expand": "Ausklappen",
 	"export": "Exportieren",
 	"exportSuccessful": "Export erfolgreich",
-	"exportTestprocedure": "",
+	"exportTestprocedure": "Testprozedur exportieren",
 	"failed": "Fehler",
 	"fieldInvalid": "Feld ungültig",
 	"graphicalEditorErrorTitle": "Fehler im Editor",
@@ -194,7 +194,7 @@
 	"navigateTo": "Navigiere nach \"{{name}}\"",
 	"navigated": "Navigiert",
 	"navigationWasNotPerformed": "Navigation wurde nicht ausgeführt",
-	"negate": "",
+	"negate": "Negieren",
 	"negated": "Negiert",
 	"noCommandsLeft": "Keine Befehle übrig",
 	"noEffectsFound": "Keine Effekt-Knoten gefunden",
@@ -210,8 +210,8 @@
 	"notAuthorizedToExport": "Benutzer nicht zum Exportieren authorisiert",
 	"notDeleteTestParameter": "Löschen nicht möglich, da der Parameter in einer Testprozedur verwendet wird",
 	"null": {
-		"Requirement": "",
-		"restoreZoom": ""
+		"Requirement": "Anforderung",
+		"restoreZoom": "Zoom Wiederherstellen"
 	},
 	"ok": "OK",
 	"operation": "Operation",

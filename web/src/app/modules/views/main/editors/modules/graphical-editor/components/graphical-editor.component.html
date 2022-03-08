@@ -2,13 +2,13 @@
     <h5 class="card-header">{{name}}
         <div class="pull-right">
             <!-- ZOOM -->
-            <button id="editor-zoomout-button" (click)="zoomOut(); editorGridButton.zoomOut()"
+            <button attr.aria-label="{{'zoomOut' | translate}}" id="editor-zoomout-button" (click)="zoomOut(); editorGridButton.zoomOut()"
                 class="btn btn-sm btn-secondary pull-left" title="{{'zoomOut' | translate}}"><i
                     class="fa fa-search-minus" aria-hidden="true"></i></button>
-            <button (click)="resetZoom(); editorGridButton.resetZoom()"
+            <button attr.aria-label="{{'restoreZoom' | translate}}" (click)="resetZoom(); editorGridButton.resetZoom()"
                 class="btn btn-sm btn-secondary pull-left zoom-indicator"
                 title="{{'restoreZoom' | translate}}">{{editorGridButton.zoomFactor * 100 | number: '1.0-0'}}%</button>
-            <button id="editor-zoomin-button" (click)="zoomIn(); editorGridButton.zoomIn()"
+            <button attr.aria-label="{{'zoomIn' | translate}}" id="editor-zoomin-button" (click)="zoomIn(); editorGridButton.zoomIn()"
                 class="btn btn-sm btn-secondary pull-left" title="{{'zoomIn' | translate}}"><i class="fa fa-search-plus"
                     aria-hidden="true"></i></button>
             <!-- GRID -->

@@ -98,6 +98,11 @@ a.selected {
   outline: none;
 }
 
+.btn-outline-primary {
+  color: #004766;
+  border-color: #004766;
+}
+
 .btn-secondary:focus,
 .btn-outline-secondary {
   box-shadow: 0 0 0 0.2rem rgba(51, 51, 51, 0.5);

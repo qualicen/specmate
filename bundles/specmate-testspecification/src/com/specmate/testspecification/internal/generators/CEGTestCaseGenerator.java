@@ -585,6 +585,9 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 		}
 		try {
 			int[] model = maxSat.findModel();
+			if (model == null) {
+				throw new SpecmateInternalException(ErrorCode.TESTGENERATION, "The provided model is inconsistent.");
+			}
 			return extractEnabledEvaluations(var2EvalMap, model);
 		} catch (TimeoutException e) {
 			throw new SpecmateInternalException(ErrorCode.TESTGENERATION, e);

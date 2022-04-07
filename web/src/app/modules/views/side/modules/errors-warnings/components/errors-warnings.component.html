@@ -1,7 +1,7 @@
 <div *ngIf="visible && showErrors" class="card">
     <h5 class="card-header">
         {{'ErrorsandWarnings' | translate}}
-        <button id="linksactions-expand-button" type="button" class="btn btn-sm btn-secondary pull-right"
+        <button attr.aria-label="{{ isCollapsed ? ('expand' | translate) : ('collapse' | translate) }}" id="linksactions-expand-button" type="button" class="btn btn-sm btn-secondary pull-right"
             (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample"
             title="{{ isCollapsed ? ('expand' | translate) : ('collapse' | translate) }}">
             <i *ngIf="isCollapsed" class="fa fa-angle-double-down"></i>

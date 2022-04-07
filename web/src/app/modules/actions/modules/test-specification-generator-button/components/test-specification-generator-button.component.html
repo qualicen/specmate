@@ -1,7 +1,7 @@
-<button *ngIf="enabled" id="generatetestspec-button" title="{{'testspec.generate' | translate}}" (click)="generate()"
+<button attr.aria-label="{{'testspec.generate' | translate}}" *ngIf="enabled" id="generatetestspec-button" title="{{'testspec.generate' | translate}}" (click)="generate()"
     class="btn btn-sm btn-outline-primary" [attr.disabled]="!enabled ? '' : null"><i class="fa fa-indent"
         aria-hidden="true"></i>&nbsp;{{'testspec.generate' | translate}}</button>
 <div class="form-check" *ngIf="enabled && hasLinkedNodes">
-    <input class="form-check-input" type="checkbox" id="considerLinksCheck" [checked]="considerLinks" (change)="considerLinks=!considerLinks">
+    <input attr.aria-label="{{'testspec.considerLinks' | translate}}" class="form-check-input" type="checkbox" id="considerLinksCheck" [checked]="considerLinks" (change)="considerLinks=!considerLinks">
     <label class="form-check-label" for="considerLinksCheck">{{'testspec.considerLinks' | translate}}</label>
 </div>

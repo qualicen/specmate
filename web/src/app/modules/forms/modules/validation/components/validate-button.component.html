@@ -1,4 +1,4 @@
-<button title="{{'validate' | translate}}" [disabled]="busy" [hidden]="!isValidationButtonVisible"
+<button attr.aria-label="{{'validate' | translate}}" title="{{'validate' | translate}}" [disabled]="busy" [hidden]="!isValidationButtonVisible"
     (click)="cancelEvent($event); validate()" class="btn btn-sm expand btn-secondary brighter-secondary-outline">
     <span *ngIf="!busy" class="fa-stack" style="font-size: 0.5em">
         <i class="fa fa-file-o fa-stack-2x fa-lg" aria-hidden="true"></i>

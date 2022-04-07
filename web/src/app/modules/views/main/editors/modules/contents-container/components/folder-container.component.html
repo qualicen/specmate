@@ -21,7 +21,7 @@
                             <span class="text-muted">{{folder.description | truncate: 60}}</span>
                         </td>
                         <td style="text-align:right">
-                            <button id="{{'folder-' + folder.name + '-deletefolder-button'}}"
+                            <button attr.aria-label="{{'delete' | translate}}" id="{{'folder-' + folder.name + '-deletefolder-button'}}"
                                 title="{{'delete' | translate}}" (click)="recycle(folder)"
                                 class="btn btn-sm expand btn-outline-danger">
                                 <i class="fa fa-trash" aria-hidden="true"></i>
@@ -36,10 +36,10 @@
         <div class="row">
             <div class="col">
                 <div class="input-group input-group-sm">
-                    <input type="text" #newNameInput (keyup)="0" class="form-control form-control-sm"
+                    <input attr.aria-label="{{'paste.name' | translate}}" type="text" #newNameInput (keyup)="0" class="form-control form-control-sm"
                         placeholder="{{'name' | translate}}" />
                     <div class="input-group-append">
-                        <button id="requirement-createfolder-button" (click)="create(newNameInput.value)"
+                        <button attr.aria-label="{{'createFolder' | translate}}" id="requirement-createfolder-button" (click)="create(newNameInput.value)"
                             class="btn btn-sm expand btn-outline-primary"
                             [disabled]="!isCreateButtonEnabled(newNameInput.value)"
                             [class.disabled]="!isCreateButtonEnabled(newNameInput.value)"

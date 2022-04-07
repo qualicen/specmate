@@ -2,14 +2,14 @@
     <div id="sticky-header-wrapper">
         <ul role="tablist" class="nav nav-tabs justify-content-start" id="explorer">
             <li *ngIf="config?.enableProjectExplorer === 'true'" class="nav-item">
-                <button [ngClass]="{'active' : currentActiveTab === ActiveTab.project}" role="tab"
+                <button attr.aria-label="{{'project'| translate}}" [ngClass]="{'active' : currentActiveTab === ActiveTab.project}" role="tab"
                     (click)="switchToProject()" class="nav-link" title="{{'project' | translate}}" id="ngb-tab-0" aria-disabled="false"
                     [attr.aria-expanded]="currentActiveTab === ActiveTab.project ? 'true' : 'false'"
                     [attr.aria-controls]="currentActiveTab === ActiveTab.project ? 'ngb-tab-0-panel' : null">{{'project'
                     | translate}}</button>
             </li>
             <li class="nav-item">
-                <button [ngClass]="{'active' : currentActiveTab === ActiveTab.library}" role="tab"
+                <button attr.aria-label="{{'library' | translate}}" [ngClass]="{'active' : currentActiveTab === ActiveTab.library}" role="tab"
                     (click)="switchToLibrary()" class="nav-link" title="{{'library' | translate}}" id="ngb-tab-1" aria-disabled="false"
                     [attr.aria-expanded]="currentActiveTab === ActiveTab.library ? 'true' : 'false'"
                     [attr.aria-controls]="currentActiveTab === ActiveTab.library ? 'ngb-tab-1-panel' : null">{{'library'
@@ -17,7 +17,7 @@
                 </button>
             </li>
             <li class="nav-item">
-                <button [ngClass]="{'active' : currentActiveTab === ActiveTab.recycleBin}" role="tab"
+                <button attr.aria-label="{{'recycleBin' | translate}}" [ngClass]="{'active' : currentActiveTab === ActiveTab.recycleBin}" role="tab"
                     (click)="switchToRecycleBin()" class="nav-link" title="{{'recycleBin' | translate}}" id="ngb-tab-1" aria-disabled="false"
                     [attr.aria-expanded]="currentActiveTab === ActiveTab.recycleBin ? 'true' : 'false'"
                     [attr.aria-controls]="currentActiveTab === ActiveTab.recycleBin ? 'ngb-tab-1-panel' : null">
@@ -31,7 +31,7 @@
             <element-tree *ngFor="let element of rootElements;" [baseUrl]="element.url"
                 [currentElement]="currentElement" [withExpand]="true"></element-tree>
             <li *ngIf="canLoadMoreProjectFolders">
-                <button (click)="loadMoreProjectFolders()" class="btn btn-sm btn-outline-primary btn-sm">
+                <button attr.aria-label="{{'loadMore' | translate}}" (click)="loadMoreProjectFolders()" class="btn btn-sm btn-outline-primary btn-sm">
                     <i class="fa fa-ellipsis-v"></i>&nbsp;{{'loadMore' | translate}}
                 </button>
             </li>
@@ -40,7 +40,7 @@
             <element-tree *ngFor="let element of rootLibraries;" [baseUrl]="element.url"
                 [currentElement]="currentElement" [withExpand]="true" [library]="true"></element-tree>
             <li *ngIf="canLoadMoreLibraryFolders">
-                <button (click)="loadMoreLibraryFolders()" class="btn btn-sm btn-outline-primary btn-sm">
+                <button attr.aria-label="{{'loadMore' | translate}}" (click)="loadMoreLibraryFolders()" class="btn btn-sm btn-outline-primary btn-sm">
                     <i class="fa fa-ellipsis-v"></i>&nbsp;{{'loadMore' | translate}}
                 </button>
             </li>
@@ -49,7 +49,7 @@
             <element-tree *ngFor="let element of rootRecycleBinProject;" [baseUrl]="element.url"
                 [currentElement]="currentElement" [withExpand]="true" [recycleBin]="true"></element-tree>
             <li *ngIf="canLoadMoreRecycleBinFoldersProject">
-                <button (click)="loadMoreRecycleBinProjectFolders()" class="btn btn-sm btn-outline-primary btn-sm">
+                <button attr.aria-label="{{'loadMore' | translate}}" (click)="loadMoreRecycleBinProjectFolders()" class="btn btn-sm btn-outline-primary btn-sm">
                     <i class="fa fa-ellipsis-v"></i>&nbsp;{{'loadMore' | translate}}
                 </button>
             </li>
@@ -59,7 +59,7 @@
                 [currentElement]="currentElement" [withExpand]="true" [library]="true" [recycleBin]="true">
             </element-tree>
             <li *ngIf="canLoadMoreRecycleBinFoldersLibrary">
-                <button (click)="loadMoreRecycleBinLibraryFolders()" class="btn btn-sm btn-outline-primary btn-sm">
+                <button attr.aria-label="{{'loadMore' | translate}}" (click)="loadMoreRecycleBinLibraryFolders()" class="btn btn-sm btn-outline-primary btn-sm">
                     <i class="fa fa-ellipsis-v"></i>&nbsp;{{'loadMore' | translate}}
                 </button>
             </li>

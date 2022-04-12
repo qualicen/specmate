@@ -1,5 +1,5 @@
 -buildpath: \
-	jar/oracle-driver-ojdbc-12.1.0.2.jar;version=file,\
+	jar/ojdbc10.jar;version=file,\
 	specmate-dbprovider-api;version=latest,\
 	specmate-common;version=latest,\
 	osgi.annotation,\
@@ -20,6 +20,9 @@ Private-Package: \
 	
 Import-Package: \
  	com.oracle.common.internal.net.ipclw.mql.*;resolution:=optional, \
+ 	com.oracle.common.internal.*;resolution:=optional, \
+ 	javax.json;resolution:=optional,\
+ 	javax.json.stream;resolution:=optional,\
 	com.oracle.common.io.*;resolution:=optional, \
 	com.oracle.common.net.*;resolution:=optional, \
 	com.oracle.common.base.*;resolution:=optional, \

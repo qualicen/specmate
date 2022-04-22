@@ -28,7 +28,6 @@ Private-Package: \
 	com.specmate.model.processes.impl,\
 	com.specmate.model.history.impl
 -buildpath: \
-	org.eclipse.emf,\
 	org.eclipse.emf.ecore,\
 	org.eclipse.emf.common,\
 	org.eclipse.emf.cdo,\

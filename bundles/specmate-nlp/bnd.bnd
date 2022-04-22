@@ -64,7 +64,6 @@
 	org.eclipse.emf.cdo,\
 	org.eclipse.emf.ecore,\
 	org.eclipse.osgi.services,\
-	org.eclipse.emf,\
 	org.eclipse.emf.common,\
 	org.eclipse.emf.cdo.common,\
 	specmate-model-support;version=latest,\
@@ -81,8 +80,8 @@
 	org.apache.servicemix.bundles.junit,\
 	org.json,\
 	specmate-config-api,\
-	osgi.core;version=6.0,\
-	osgi.cmpn;version=6.0
+	osgi.core;version='6.0',\
+	osgi.cmpn;version='6.0'
 
 
 Private-Package: \

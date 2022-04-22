@@ -7,7 +7,6 @@ Test-Cases: \
 	com.specmate.migration.test.ChangedTypesTest,\
 	com.specmate.migration.test.OnlyMetaChangeTest
 -buildpath: \
-	org.eclipse.emf,\
 	org.eclipse.emf.cdo,\
 	org.eclipse.emf.common,\
 	org.eclipse.emf.ecore,\
@@ -20,7 +19,7 @@ Test-Cases: \
 	specmate-common;version=latest,\
 	osgi.annotation,\
 	osgi.cmpn,\
-	osgi.core;version=6.0,\
+	osgi.core;version='6.0',\
 	specmate-administration;version=latest,\
 	specmate-auth;version=latest,\
 	specmate-config;version=latest,\
@@ -30,7 +29,6 @@ Test-Cases: \
 	specmate-emfrest;version=latest,\
 	specmate-emfrest-api;version=latest,\
 	specmate-file-connector;version=latest,\
-	specmate-hp-connector;version=latest,\
 	specmate-integration-test;version=latest,\
 	specmate-jettystarter;version=latest,\
 	specmate-logging;version=latest,\
@@ -73,9 +71,8 @@ Test-Cases: \
 	osgi.identity;filter:='(osgi.identity=specmate-dbprovider-h2)',\
 	osgi.identity;filter:='(osgi.identity=org.apache.felix.scr)',\
 	osgi.identity;filter:='(osgi.identity=specmate-cdo-server)',\
-	bnd.identity;id='log4j'
+	bnd.identity;id='org.apache.logging.log4j.core'
 -runbundles: \
-	javax.annotation-api;version='[1.2.0,1.2.1)',\
 	javax.validation.api;version='[1.1.0,1.1.1)',\
 	javax.ws.rs-api;version='[2.0.1,2.0.2)',\
 	jul.to.slf4j;version='[1.7.12,1.7.13)',\
@@ -84,11 +81,6 @@ Test-Cases: \
 	org.eclipse.core.runtime;version='[3.10.0,3.10.1)',\
 	org.eclipse.emf.cdo;version='[4.5.0,4.5.1)',\
 	org.eclipse.emf.cdo.common;version='[4.5.0,4.5.1)',\
-	org.eclipse.emf.cdo.ecore.retrofit;version='[4.2.300,4.2.301)',\
-	org.eclipse.emf.common;version='[2.12.0,2.12.1)',\
-	org.eclipse.emf.ecore;version='[2.12.0,2.12.1)',\
-	org.eclipse.emf.ecore.change;version='[2.11.0,2.11.1)',\
-	org.eclipse.emf.ecore.xmi;version='[2.12.0,2.12.1)',\
 	org.eclipse.net4j.util;version='[3.6.0,3.6.1)',\
 	org.glassfish.hk2.api;version='[2.4.0,2.4.1)',\
 	org.glassfish.hk2.external.aopalliance-repackaged;version='[2.4.0,2.4.1)',\
@@ -115,7 +107,6 @@ Test-Cases: \
 	org.eclipse.net4j.db;version='[4.5.0,4.5.1)',\
 	org.eclipse.net4j.db.h2;version='[4.2.300,4.2.301)',\
 	org.eclipse.net4j.db.jdbc;version='[4.3.100,4.3.101)',\
-	com.diffplug.osgi.extension.sun.misc;version='[0.0.0,0.0.1)',\
 	io.prometheus.simpleclient;version='[0.4.0,0.4.1)',\
 	io.prometheus.simpleclient_common;version='[0.4.0,0.4.1)',\
 	io.prometheus.simpleclient_hotspot;version='[0.4.0,0.4.1)',\
@@ -125,10 +116,8 @@ Test-Cases: \
 	org.eclipse.emf.cdo.server.db;version='[4.4.0,4.4.1)',\
 	org.apache.commons.lang3;version='[3.5.0,3.5.1)',\
 	slf4j.api;version='[1.7.25,1.7.26)',\
-	log4j;version='[1.2.17,1.2.18)',\
 	com.sun.activation.javax.activation;version='[1.2.0,1.2.1)',\
 	jaxb-api;version='[2.3.0,2.3.1)',\
-	com.google.guava;version='[26.0.0,26.0.1)',\
 	javax.activation-api;version='[1.2.0,1.2.1)',\
 	org.apache.felix.gogo.command;version='[1.0.2,1.0.3)',\
 	org.apache.felix.gogo.runtime;version='[1.1.0,1.1.1)',\
@@ -143,24 +132,33 @@ Test-Cases: \
 	org.eclipse.equinox.registry;version='[3.9.0,3.9.1)',\
 	org.eclipse.osgi.services;version='[3.9.0,3.9.1)',\
 	org.eclipse.osgi.util;version='[3.5.300,3.5.301)',\
-	org.json;version='[0.0.0,0.0.1)',\
-	specmate-administration;version='[0.0.0,0.0.1)',\
-	specmate-cdo-server;version='[0.0.0,0.0.1)',\
-	specmate-common;version='[0.0.0,0.0.1)',\
-	specmate-config-api;version='[0.0.0,0.0.1)',\
-	specmate-dbprovider-api;version='[0.0.0,0.0.1)',\
-	specmate-dbprovider-h2;version='[0.0.0,0.0.1)',\
-	specmate-emfrest-api;version='[0.0.0,0.0.1)',\
-	specmate-logging;version='[0.0.0,0.0.1)',\
-	specmate-logging-slf4j;version='[0.0.0,0.0.1)',\
-	specmate-logging-slf4j-julbridge;version='[1.6.0,1.6.1)',\
-	specmate-metrics;version='[0.0.0,0.0.1)',\
-	specmate-migration;version='[0.0.0,0.0.1)',\
-	specmate-model-gen;version='[0.0.0,0.0.1)',\
-	specmate-model-support;version='[0.0.0,0.0.1)',\
-	specmate-persistency-api;version='[0.0.0,0.0.1)',\
-	specmate-persistency-cdo;version='[0.0.0,0.0.1)',\
-	specmate-rest;version='[0.0.0,0.0.1)'
+	com.google.guava;version='[30.1.0,30.1.1)',\
+	com.google.guava.failureaccess;version='[1.0.1,1.0.2)',\
+	javax.annotation-api;version='[1.3.2,1.3.3)',\
+	org.apache.logging.log4j.api;version='[2.17.2,2.17.3)',\
+	org.apache.logging.log4j.core;version='[2.17.2,2.17.3)',\
+	org.eclipse.emf.common;version='[2.24.0,2.24.1)',\
+	org.eclipse.emf.ecore;version='[2.26.0,2.26.1)',\
+	org.eclipse.emf.ecore.change;version='[2.14.0,2.14.1)',\
+	org.eclipse.emf.ecore.xmi;version='[2.16.0,2.16.1)',\
+	org.json;version=snapshot,\
+	specmate-administration;version=snapshot,\
+	specmate-cdo-server;version=snapshot,\
+	specmate-common;version=snapshot,\
+	specmate-config-api;version=snapshot,\
+	specmate-dbprovider-api;version=snapshot,\
+	specmate-dbprovider-h2;version=snapshot,\
+	specmate-emfrest-api;version=snapshot,\
+	specmate-logging;version=snapshot,\
+	specmate-logging-slf4j;version=snapshot,\
+	specmate-logging-slf4j-julbridge;version=snapshot,\
+	specmate-metrics;version=snapshot,\
+	specmate-migration;version=snapshot,\
+	specmate-model-gen;version=snapshot,\
+	specmate-model-support;version=snapshot,\
+	specmate-persistency-api;version=snapshot,\
+	specmate-persistency-cdo;version=snapshot,\
+	specmate-rest;version=snapshot
 -runvm: -ea, -Djdk.crypto.KeyAgreement.legacyKDF=true
 -runproperties: \
 	jetty.http.port=8088,\

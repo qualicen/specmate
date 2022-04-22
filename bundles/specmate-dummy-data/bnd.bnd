@@ -7,9 +7,8 @@
 	org.eclipse.emf.ecore,\
 	specmate-model-support;version=latest,\
 	org.eclipse.emf.cdo,\
-	org.apache.commons.collections4,\
+	org.apache.commons.commons-collections4,\
 	org.apache.commons.lang3,\
-	org.eclipse.emf,\
 	org.eclipse.emf.cdo.common,\
 	specmate-search;version=latest,\
 	osgi.cmpn,\

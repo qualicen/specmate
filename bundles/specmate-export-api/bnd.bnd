@@ -3,7 +3,6 @@
 	osgi.core,\
 	specmate-model-gen;version=latest,\
 	specmate-model-support;version=latest,\
-	org.eclipse.emf,\
 	org.eclipse.emf.ecore,\
 	org.eclipse.emf.common,\
 	org.eclipse.emf.cdo,\

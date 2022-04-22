@@ -35,7 +35,6 @@ Test-Cases: \
 	specmate-persistency-cdo;version=latest,\
 	specmate-config-api;version=latest,\
 	specmate-file-connector;version=latest,\
-	specmate-hp-connector;version=latest,\
 	specmate-jettystarter;version=latest,\
 	specmate-logging;version=latest,\
 	specmate-logging-slf4j;version=latest,\
@@ -61,7 +60,7 @@ Test-Cases: \
 	specmate-connectors-api;version=latest,\
 	specmate-connectors;version=latest,\
 	specmate-export-api,\
-	osgi.core;version=6.0
+	osgi.core;version='6.0'
 
 -runee: JavaSE-11
 -runfw: org.eclipse.osgi;version='[3.16.0.v20200828-0759,3.16.0.v20200828-0759]'
@@ -91,7 +90,6 @@ Bundle-Version: 0.0.0.${tstamp}
 	osgi.identity;filter:='(osgi.identity=specmate-model-support)',\
 	osgi.identity;filter:='(osgi.identity=specmate-ui-core)',\
 	osgi.identity;filter:='(osgi.identity=specmate-testspecification)',\
-	osgi.identity;filter:='(osgi.identity=specmate-hp-connector)',\
 	osgi.identity;filter:='(osgi.identity=org.apache.felix.scr)',\
 	osgi.identity;filter:='(&(osgi.identity=org.apache.felix.webconsole)(version>=4.3.0))',\
 	osgi.identity;filter:='(&(osgi.identity=org.eclipse.jetty.osgi.boot)(version>=9.4.6))',\
@@ -116,20 +114,17 @@ Bundle-Version: 0.0.0.${tstamp}
 	osgi.identity;filter:='(osgi.identity=specmate-config)',\
 	osgi.identity;filter:='(osgi.identity=specmate-connectors)',\
 	osgi.identity;filter:='(osgi.identity=org.apache.servicemix.bundles.generex)',\
-	bnd.identity;id='specmate-nlp',\
-	bnd.identity;id='specmate-model-generation',\
-	bnd.identity;id='log4j',\
-	bnd.identity;id='specmate-export'
+	bnd.identity;id=specmate-nlp,\
+	bnd.identity;id=specmate-model-generation,\
+	bnd.identity;id=specmate-export,\
+	bnd.identity;id='org.apache.logging.log4j.core'
 -runbundles: \
-	javassist;version='[3.18.1,3.18.2)',\
-	javax.annotation-api;version='[1.2.0,1.2.1)',\
 	javax.validation.api;version='[1.1.0,1.1.1)',\
 	javax.ws.rs-api;version='[2.0.1,2.0.2)',\
 	jul.to.slf4j;version='[1.7.12,1.7.13)',\
 	org.eclipse.core.contenttype;version='[3.4.200,3.4.201)',\
 	org.eclipse.core.jobs;version='[3.6.1,3.6.2)',\
 	org.eclipse.core.runtime;version='[3.10.0,3.10.1)',\
-	org.eclipse.emf.ecore.change;version='[2.11.0,2.11.1)',\
 	org.eclipse.net4j.db.jdbc;version='[4.3.100,4.3.101)',\
 	org.glassfish.hk2.api;version='[2.4.0,2.4.1)',\
 	org.glassfish.hk2.external.aopalliance-repackaged;version='[2.4.0,2.4.1)',\
@@ -150,16 +145,11 @@ Bundle-Version: 0.0.0.${tstamp}
 	org.eclipse.emf.cdo.net4j;version='[4.1.400,4.1.401)',\
 	org.eclipse.emf.cdo.server;version='[4.5.0,4.5.1)',\
 	org.eclipse.emf.cdo.server.net4j;version='[4.1.300,4.1.301)',\
-	org.eclipse.emf.common;version='[2.12.0,2.12.1)',\
-	org.eclipse.emf.ecore;version='[2.12.0,2.12.1)',\
-	org.eclipse.emf.ecore.xmi;version='[2.12.0,2.12.1)',\
 	org.eclipse.net4j;version='[4.5.0,4.5.1)',\
 	org.eclipse.net4j.db;version='[4.5.0,4.5.1)',\
 	org.eclipse.net4j.db.h2;version='[4.2.300,4.2.301)',\
 	org.eclipse.net4j.tcp;version='[4.1.400,4.1.401)',\
 	org.eclipse.net4j.util;version='[3.6.0,3.6.1)',\
-	org.apache.commons.fileupload;version='[1.3.1,1.3.2)',\
-	org.apache.commons.io;version='[2.4.0,2.4.1)',\
 	org.apache.felix.webconsole;version='[4.3.0,4.3.1)',\
 	org.eclipse.jetty.osgi-servlet-api;version='[3.1.0,3.1.1)',\
 	lpg.runtime.java;version='[2.0.17,2.0.18)',\
@@ -178,7 +168,6 @@ Bundle-Version: 0.0.0.${tstamp}
 	org.apache.servicemix.bundles.lucene-queryparser;version='[7.2.0,7.2.1)',\
 	org.apache.servicemix.bundles.lucene-sandbox;version='[7.2.0,7.2.1)',\
 	org.apache.servicemix.bundles.junit;version='[4.12.0,4.12.1)',\
-	com.diffplug.osgi.extension.sun.misc;version='[0.0.0,0.0.1)',\
 	io.prometheus.simpleclient;version='[0.4.0,0.4.1)',\
 	io.prometheus.simpleclient_common;version='[0.4.0,0.4.1)',\
 	io.prometheus.simpleclient_hotspot;version='[0.4.0,0.4.1)',\
@@ -192,69 +181,19 @@ Bundle-Version: 0.0.0.${tstamp}
 	it.unimi.dsi.fastutil;version='[8.2.2,8.2.3)',\
 	javax.money.api;version='[1.0.1,1.0.2)',\
 	joda-time;version='[2.10.1,2.10.2)',\
-	org.apache.commons.commons-compress;version='[1.18.0,1.18.1)',\
 	org.apache.commons.commons-pool2;version='[2.6.0,2.6.1)',\
 	org.apache.commons.lang;version='[2.6.0,2.6.1)',\
 	org.apache.ivy;version='[2.4.0,2.4.1)',\
 	org.apache.opennlp.tools;version='[1.9.1,1.9.2)',\
 	org.reactivestreams.reactive-streams;version='[1.0.2,1.0.3)',\
-	com.google.guava;version='[18.0.0,18.0.1)',\
 	org.apache.commons.lang3;version='[3.5.0,3.5.1)',\
 	slf4j.api;version='[1.7.25,1.7.26)',\
 	org.apache.commons.logging;version='[1.2.0,1.2.1)',\
-	log4j;version='[1.2.17,1.2.18)',\
-	com.google.inject;version='[3.0.0,3.0.1)',\
 	org.antlr.runtime;version='[3.2.0,3.2.1)',\
 	org.eclipse.xtend.lib;version='[2.10.0,2.10.1)',\
 	org.eclipse.xtend.lib.macro;version='[2.10.0,2.10.1)',\
-	org.eclipse.xtext;version='[2.10.0,2.10.1)',\
-	org.eclipse.xtext.smap;version='[2.10.0,2.10.1)',\
-	org.eclipse.xtext.util;version='[2.10.0,2.10.1)',\
-	org.eclipse.xtext.xbase.lib;version='[2.10.0,2.10.1)',\
 	com.sun.activation.javax.activation;version='[1.2.0,1.2.1)',\
 	org.eclipse.emf.cdo.ecore.retrofit;version='[4.2.300,4.2.301)',\
-	org.apache.commons.collections4;version='[4.0.0,4.0.1)',\
-	org.json;version='[0.0.0,0.0.1)',\
-	specmate-administration;version='[0.0.0,0.0.1)',\
-	specmate-auth;version='[0.0.0,0.0.1)',\
-	specmate-auth-api;version='[0.0.0,0.0.1)',\
-	specmate-cause-effect-patterns;version='[0.0.0,0.0.1)',\
-	specmate-cdo-server;version='[0.0.0,0.0.1)',\
-	specmate-common;version='[0.0.0,0.0.1)',\
-	specmate-config;version='[0.0.0,0.0.1)',\
-	specmate-config-api;version='[0.0.0,0.0.1)',\
-	specmate-connectors;version='[0.0.0,0.0.1)',\
-	specmate-connectors-api;version='[0.0.0,0.0.1)',\
-	specmate-dbprovider-api;version='[0.0.0,0.0.1)',\
-	specmate-dbprovider-h2;version='[0.0.0,0.0.1)',\
-	specmate-emfjson;version='[0.0.0,0.0.1)',\
-	specmate-emfrest;version='[0.0.0,0.0.1)',\
-	specmate-emfrest-api;version='[0.0.0,0.0.1)',\
-	specmate-export;version='[0.0.0,0.0.1)',\
-	specmate-export-api;version='[0.0.0,0.0.1)',\
-	specmate-file-connector;version='[0.0.0,0.0.1)',\
-	specmate-hp-connector;version='[0.0.0,0.0.1)',\
-	specmate-integration-test;version='[0.0.0,0.0.1)',\
-	specmate-jettystarter;version='[0.0.0,0.0.1)',\
-	specmate-logging;version='[0.0.0,0.0.1)',\
-	specmate-logging-slf4j;version='[0.0.0,0.0.1)',\
-	specmate-logging-slf4j-julbridge;version='[1.6.0,1.6.1)',\
-	specmate-metrics;version='[0.0.0,0.0.1)',\
-	specmate-migration;version='[0.0.0,0.0.1)',\
-	specmate-migration-api;version='[0.0.0,0.0.1)',\
-	specmate-model-gen;version='[0.0.0,0.0.1)',\
-	specmate-model-generation;version='[0.0.0,0.0.1)',\
-	specmate-model-support;version='[0.0.0,0.0.1)',\
-	specmate-nlp;version='[0.0.0,0.0.1)',\
-	specmate-objectif;version='[0.0.0,0.0.1)',\
-	specmate-persistency-api;version='[0.0.0,0.0.1)',\
-	specmate-persistency-cdo;version='[0.0.0,0.0.1)',\
-	specmate-rest;version='[0.0.0,0.0.1)',\
-	specmate-search;version='[0.0.0,0.0.1)',\
-	specmate-testspecification;version='[0.0.0,0.0.1)',\
-	specmate-ui-core;version='[0.0.0,0.0.1)',\
-	specmate-xtext;version='[0.0.0,0.0.1)',\
-	com.google.guava;version='[26.0.0,26.0.1)',\
 	jaxb-api;version='[2.3.0,2.3.1)',\
 	org.apache.felix.gogo.command;version='[1.0.2,1.0.3)',\
 	org.apache.felix.gogo.runtime;version='[1.1.0,1.1.1)',\
@@ -269,21 +208,82 @@ Bundle-Version: 0.0.0.${tstamp}
 	org.eclipse.equinox.metatype;version='[1.5.300,1.5.301)',\
 	org.eclipse.equinox.preferences;version='[3.8.0,3.8.1)',\
 	org.eclipse.equinox.registry;version='[3.9.0,3.9.1)',\
-	org.eclipse.jetty.deploy;version='[9.4.32,9.4.33)',\
-	org.eclipse.jetty.http;version='[9.4.32,9.4.33)',\
-	org.eclipse.jetty.io;version='[9.4.32,9.4.33)',\
-	org.eclipse.jetty.osgi.boot;version='[9.4.32,9.4.33)',\
-	org.eclipse.jetty.osgi.httpservice;version='[9.4.32,9.4.33)',\
-	org.eclipse.jetty.rewrite;version='[9.4.32,9.4.33)',\
-	org.eclipse.jetty.security;version='[9.4.32,9.4.33)',\
-	org.eclipse.jetty.server;version='[9.4.32,9.4.33)',\
-	org.eclipse.jetty.servlet;version='[9.4.32,9.4.33)',\
-	org.eclipse.jetty.servlets;version='[9.4.32,9.4.33)',\
-	org.eclipse.jetty.util;version='[9.4.32,9.4.33)',\
-	org.eclipse.jetty.webapp;version='[9.4.32,9.4.33)',\
-	org.eclipse.jetty.xml;version='[9.4.32,9.4.33)',\
 	org.eclipse.osgi.services;version='[3.9.0,3.9.1)',\
-	org.eclipse.osgi.util;version='[3.5.300,3.5.301)'
+	org.eclipse.osgi.util;version='[3.5.300,3.5.301)',\
+	com.google.guava;version='[30.1.0,30.1.1)',\
+	com.google.guava.failureaccess;version='[1.0.1,1.0.2)',\
+	com.google.inject;version='[5.0.1,5.0.2)',\
+	javassist;version='[3.28.0,3.28.1)',\
+	javax.annotation-api;version='[1.3.2,1.3.3)',\
+	log4j.over.slf4j;version='[1.7.12,1.7.13)',\
+	org.apache.commons.commons-collections4;version='[4.4.0,4.4.1)',\
+	org.apache.commons.commons-compress;version='[1.21.0,1.21.1)',\
+	org.apache.commons.commons-fileupload;version='[1.4.0,1.4.1)',\
+	org.apache.commons.commons-io;version='[2.11.0,2.11.1)',\
+	org.apache.logging.log4j.api;version='[2.17.2,2.17.3)',\
+	org.apache.logging.log4j.core;version='[2.17.2,2.17.3)',\
+	org.eclipse.emf.common;version='[2.24.0,2.24.1)',\
+	org.eclipse.emf.ecore;version='[2.26.0,2.26.1)',\
+	org.eclipse.emf.ecore.change;version='[2.14.0,2.14.1)',\
+	org.eclipse.emf.ecore.xmi;version='[2.16.0,2.16.1)',\
+	org.eclipse.jetty.deploy;version='[9.4.46,9.4.47)',\
+	org.eclipse.jetty.http;version='[9.4.46,9.4.47)',\
+	org.eclipse.jetty.io;version='[9.4.46,9.4.47)',\
+	org.eclipse.jetty.osgi.boot;version='[9.4.46,9.4.47)',\
+	org.eclipse.jetty.osgi.httpservice;version='[9.4.46,9.4.47)',\
+	org.eclipse.jetty.rewrite;version='[9.4.46,9.4.47)',\
+	org.eclipse.jetty.security;version='[9.4.46,9.4.47)',\
+	org.eclipse.jetty.server;version='[9.4.46,9.4.47)',\
+	org.eclipse.jetty.servlet;version='[9.4.46,9.4.47)',\
+	org.eclipse.jetty.servlets;version='[9.4.46,9.4.47)',\
+	org.eclipse.jetty.util;version='[9.4.46,9.4.47)',\
+	org.eclipse.jetty.util.ajax;version='[9.4.46,9.4.47)',\
+	org.eclipse.jetty.webapp;version='[9.4.46,9.4.47)',\
+	org.eclipse.jetty.xml;version='[9.4.46,9.4.47)',\
+	org.eclipse.xtext;version='[2.26.0,2.26.1)',\
+	org.eclipse.xtext.util;version='[2.26.0,2.26.1)',\
+	org.eclipse.xtext.xbase.lib;version='[2.26.0,2.26.1)',\
+	org.json;version=snapshot,\
+	org.osgi.service.packageadmin;version='[1.2.1,1.2.2)',\
+	specmate-administration;version=snapshot,\
+	specmate-auth;version=snapshot,\
+	specmate-auth-api;version=snapshot,\
+	specmate-cause-effect-patterns;version=snapshot,\
+	specmate-cdo-server;version=snapshot,\
+	specmate-common;version=snapshot,\
+	specmate-config;version=snapshot,\
+	specmate-config-api;version=snapshot,\
+	specmate-connectors;version=snapshot,\
+	specmate-connectors-api;version=snapshot,\
+	specmate-dbprovider-api;version=snapshot,\
+	specmate-dbprovider-h2;version=snapshot,\
+	specmate-emfjson;version=snapshot,\
+	specmate-emfrest;version=snapshot,\
+	specmate-emfrest-api;version=snapshot,\
+	specmate-export;version=snapshot,\
+	specmate-export-api;version=snapshot,\
+	specmate-file-connector;version=snapshot,\
+	specmate-integration-test;version=snapshot,\
+	specmate-jettystarter;version=snapshot,\
+	specmate-logging;version=snapshot,\
+	specmate-logging-slf4j;version=snapshot,\
+	specmate-logging-slf4j-julbridge;version=snapshot,\
+	specmate-metrics;version=snapshot,\
+	specmate-migration;version=snapshot,\
+	specmate-migration-api;version=snapshot,\
+	specmate-model-gen;version=snapshot,\
+	specmate-model-generation;version=snapshot,\
+	specmate-model-support;version=snapshot,\
+	specmate-nlp;version=snapshot,\
+	specmate-objectif;version=snapshot,\
+	specmate-persistency-api;version=snapshot,\
+	specmate-persistency-cdo;version=snapshot,\
+	specmate-rest;version=snapshot,\
+	specmate-scheduler;version=snapshot,\
+	specmate-search;version=snapshot,\
+	specmate-testspecification;version=snapshot,\
+	specmate-ui-core;version=snapshot,\
+	specmate-xtext;version=snapshot
 
 -runproperties: \
 	jetty.http.port=8088,\

@@ -6,10 +6,9 @@ Export-Package: com.specmate.connectors.api
 	org.eclipse.emf.common,\
 	org.eclipse.emf.ecore,\
 	org.eclipse.emf.cdo,\
-	org.eclipse.emf,\
 	org.eclipse.emf.cdo.common,\
 	specmate-config-api;version=latest,\
-	osgi.core;version=6.0,\
+	osgi.core;version='6.0',\
 	specmate-emfrest-api;version=latest,\
 	javax.ws.rs-api,\
 	specmate-auth-api;version=latest,\

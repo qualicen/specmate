@@ -11,7 +11,6 @@
 	org.eclipse.emf.cdo,\
 	org.eclipse.emf.ecore,\
 	org.eclipse.osgi.services,\
-	org.eclipse.emf,\
 	org.eclipse.emf.common,\
 	org.eclipse.emf.cdo.common,\
 	specmate-common;version=latest,\

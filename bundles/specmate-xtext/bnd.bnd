@@ -6,7 +6,7 @@
 	org.antlr.runtime,\
 	org.eclipse.emf.common,\
 	org.eclipse.xtext.xbase.lib,\
-	com.google.guava,\
 	specmate-nlp,\
-	org.glassfish.hk2.external.javax.inject
+	org.glassfish.hk2.external.javax.inject,\
+	com.google.guava
 Export-Package: com.specmate.xtext

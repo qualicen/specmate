@@ -17,6 +17,6 @@ Export-Package: \
 	org.json;version=latest,\
 	specmate-config-api;version=latest,\
 	org.apache.servicemix.bundles.junit;version='4.12',\
-	com.google.guava;version='26.0',\
-	com.google.guava.failureaccess
+	com.google.guava.failureaccess,\
+	com.google.guava
 Private-Package: com.specmate.common.cache.internal

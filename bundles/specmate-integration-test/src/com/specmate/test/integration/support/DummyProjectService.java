@@ -3,7 +3,6 @@ package com.specmate.test.integration.support;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 import org.osgi.service.component.annotations.Component;
@@ -16,7 +15,7 @@ import com.specmate.connectors.api.IProjectService;
  * config service in the integration tests renders manual configuration
  * impossible.
  */
-@Component(immediate = true, property = { "service.ranking:Integer=1" })
+@Component(immediate = true, property = { "service.ranking:Integer=7" })
 public class DummyProjectService implements IProjectService {
 	private Map<String, IProject> projects = new HashMap<>();
 

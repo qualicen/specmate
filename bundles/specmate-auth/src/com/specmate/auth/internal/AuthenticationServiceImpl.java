@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 import com.specmate.auth.api.IAuthenticationService;
 import com.specmate.auth.api.ISessionService;
@@ -104,7 +105,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 		this.sessionService = sessionService;
 	}
 
-	@Reference
+	@Reference(policyOption = ReferencePolicyOption.GREEDY)
 	public void setProjectService(IProjectService projectService) {
 		this.projectService = projectService;
 	}

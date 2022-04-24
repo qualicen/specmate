@@ -65,7 +65,7 @@ public class ProjectImpl implements IProject {
 		this.id = id;
 	}
 
-	@Reference(name = "connector")
+	@Reference(cardinality = ReferenceCardinality.OPTIONAL, name = "connector")
 	public void setConnector(IConnector connector) {
 		connector.setProject(this);
 		this.connector = connector;

@@ -193,7 +193,9 @@ public class NLPServiceImpl implements INLPService {
 			SimplePipeline.runPipeline(jcas, engine);
 		} catch (Throwable e) {
 			// Catch any kind of runtime or checked exception
+
 			throw new SpecmateInternalException(ErrorCode.NLP, "NLP: Tagging failed. Reason: " + e.getMessage());
+
 		}
 		NLPUtil.refineNpChunks(jcas);
 		return jcas;

@@ -267,7 +267,7 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 		if (!nodeEval.value) {
 			condition = negateCondition(condition);
 		}
-		if (nodeEval.tag == ETag.ALL) {
+		if (nodeEval.tag != ETag.ALL) {
 			condition = "[ " + condition + " ]";
 		}
 		return condition;

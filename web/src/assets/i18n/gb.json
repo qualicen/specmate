@@ -194,6 +194,7 @@
 	"navigateTo": "Navigate to \"{{name}}\"",
 	"navigated": "Navigated",
 	"navigationWasNotPerformed": "Navigation was not performed",
+	"Negate":"Negate",
 	"negate": "Negate",
 	"negated": "Negated",
 	"noCommandsLeft": "No commands left",

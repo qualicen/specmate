@@ -69,14 +69,17 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 	private Logger logger;
 	private boolean germanLanguage;
 
-	public CEGTestCaseGenerator(TestSpecification specification, boolean considerLinks, boolean germanLanguage,
-			Logger logger) {
+	public CEGTestCaseGenerator(TestSpecification specification, boolean considerLinks, boolean boundaryAnalysis,
+			boolean germanLanguage, Logger logger) {
 		super(specification, CEGModel.class, CEGNode.class);
 		this.considerLinks = considerLinks;
 		this.germanLanguage = germanLanguage;
 		this.logger = logger;
 		if (considerLinks) {
 			addLinkedNodes();
+		}
+		if (boundaryAnalysis) {
+			addBoundaryNodes();
 		}
 	}
 
@@ -114,6 +117,21 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 				linkedNodes.addAll(newlinkedNodes);
 			}
 		}
+	}
+
+	private void addBoundaryNodes() {
+		List<CEGNode> additionalNodes = new ArrayList<>();
+		for (IModelNode node : nodes) {
+			CEGNode cegNode = (CEGNode) node;
+			List<CEGNode> extraNodes = addBoundaryNodesForNode(cegNode);
+			additionalNodes.addAll(extraNodes);
+		}
+		nodes.addAll(additionalNodes);
+	}
+
+	private List<CEGNode> addBoundaryNodesForNode(CEGNode cegNode) {
+		String regex = "^\s*\<="
+		if(cegNode.getCondition())
 	}
 
 	/**

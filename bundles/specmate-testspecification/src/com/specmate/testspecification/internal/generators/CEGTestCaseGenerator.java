@@ -20,6 +20,8 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -68,6 +70,9 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 	private boolean considerLinks;
 	private Logger logger;
 	private boolean germanLanguage;
+
+	private final String boundaryRegex = "^\\s*\\<=\\s*(?<leq>\\d+([,\\.]\\d+)?)";
+	private final Pattern boundaryPattern = Pattern.compile(boundaryRegex);
 
 	public CEGTestCaseGenerator(TestSpecification specification, boolean considerLinks, boolean boundaryAnalysis,
 			boolean germanLanguage, Logger logger) {
@@ -130,8 +135,14 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 	}
 
 	private List<CEGNode> addBoundaryNodesForNode(CEGNode cegNode) {
-		String regex = "^\s*\<="
-		if(cegNode.getCondition())
+
+		String cond = cegNode.getCondition();
+		Matcher matcher = boundaryPattern.matcher(cond);
+		if (matcher.find()) {
+			String leqCondition = matcher.group("leq");
+			double leqValue = Double.parseDouble(leqCondition);
+
+		}
 	}
 
 	/**

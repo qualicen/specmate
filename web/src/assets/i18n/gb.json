@@ -266,7 +266,8 @@
 		"errorMessage": "No logical testspecification could be generated due to the following errors. Please check your model.",
 		"errorTitle": "Generation not possible",
 		"generate": "Generate test specification",
-		"skeleton": "Download test specification skeletons"
+		"skeleton": "Download test specification skeletons",
+		"boundaryAnalysis": "Perform boundary analysis"
 	},
 	"toggleLog": "Toggle log",
 	"tools": {

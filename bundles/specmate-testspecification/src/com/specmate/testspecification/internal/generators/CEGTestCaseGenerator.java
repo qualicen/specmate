@@ -6,6 +6,8 @@ import static com.specmate.model.support.util.SpecmateEcoreUtil.getType;
 import static com.specmate.model.support.util.SpecmateEcoreUtil.getVariable;
 import static com.specmate.model.support.util.SpecmateEcoreUtil.pickInstancesOf;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -13,6 +15,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
@@ -41,7 +44,9 @@ import org.sat4j.specs.TimeoutException;
 import org.sat4j.tools.GateTranslator;
 
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.BoundType;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Range;
 import com.specmate.common.AssertUtil;
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
@@ -55,6 +60,7 @@ import com.specmate.model.requirements.CEGLinkedNode;
 import com.specmate.model.requirements.CEGModel;
 import com.specmate.model.requirements.CEGNode;
 import com.specmate.model.requirements.NodeType;
+import com.specmate.model.requirements.RequirementsFactory;
 import com.specmate.model.support.util.SpecmateEcoreUtil;
 import com.specmate.model.testspecification.ParameterAssignment;
 import com.specmate.model.testspecification.ParameterType;
@@ -66,13 +72,31 @@ import com.specmate.testspecification.internal.generators.TaggedBoolean.ETag;
 
 public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNode> {
 
+	private static final String HIDDEN = "___HIDDEN___";
 	private Comparator<CEGNodeEvaluation> nodeEvalSetComparator;
 	private boolean considerLinks;
 	private Logger logger;
 	private boolean germanLanguage;
 
-	private final String boundaryRegex = "^\\s*\\<=\\s*(?<leq>\\d+([,\\.]\\d+)?)";
+	private final String boundaryRegex = "\\<=\\s*(?<leq>\\d+([,\\.]\\d+)?)|" // x <= 5
+			+ "\\<\\s*(?<lt>\\d+([,\\.]\\d+)?)|" // x < 5
+			+ "\\>=\\s*(?<geq>\\d+([,\\.]\\d+)?)|" // x >= 5
+			+ "\\>\\s*(?<gt>\\d+([,\\.]\\d+)?)|" // x >5
+			+ "(?<geq2>\\d+([,\\.]\\d+)?)\\s*\\<=|" // 5 <= x
+			+ "(?<gt2>\\d+([,\\.]\\d+)?)\\s*\\<|" // 5 < x
+			+ "(?<leq2>\\d+([,\\.]\\d+)?)\\s*\\>=|" // 5 >= x
+			+ "(?<lt2>\\d+([,\\.]\\d+)?)\\s*\\>"; // 5 > x
 	private final Pattern boundaryPattern = Pattern.compile(boundaryRegex);
+	private Map<String, EObject> tempObjects = new HashMap<>();
+	private DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
+	private DecimalFormat valueFormat = new DecimalFormat("0.#####", symbols);
+
+	private Multimap<CEGNode, Range<Double>> rangeMap = ArrayListMultimap.create();
+	private List<Pair<String, Double>> valueNodes = new ArrayList<>();
+
+	private enum ECompOperator {
+		LEQ, LT, GEQ, GT
+	}
 
 	public CEGTestCaseGenerator(TestSpecification specification, boolean considerLinks, boolean boundaryAnalysis,
 			boolean germanLanguage, Logger logger) {
@@ -125,24 +149,169 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 	}
 
 	private void addBoundaryNodes() {
-		List<CEGNode> additionalNodes = new ArrayList<>();
 		for (IModelNode node : nodes) {
 			CEGNode cegNode = (CEGNode) node;
-			List<CEGNode> extraNodes = addBoundaryNodesForNode(cegNode);
-			additionalNodes.addAll(extraNodes);
+			if (!isCause(cegNode)) {
+				continue;
+			}
+			addBoundaryNodesForNode(cegNode);
+			cegNode.setType(NodeType.OR);
 		}
-		nodes.addAll(additionalNodes);
+		updateModelWithBoundaryNodes();
 	}
 
-	private List<CEGNode> addBoundaryNodesForNode(CEGNode cegNode) {
+	private void updateModelWithBoundaryNodes() {
+		for (Pair<String, Double> entry : valueNodes) {
+			CEGNode valueNode = createValueNode(entry.getKey(), entry.getValue());
+			for (CEGNode rangeNode : rangeMap.keySet()) {
+				if (entry.getKey().equals(rangeNode.getVariable())) {
+					Collection<Range<Double>> ranges = rangeMap.get(rangeNode);
+					if (ranges.stream().allMatch(r -> r.contains(entry.getValue()))) {
+						connect(valueNode, rangeNode);
+					}
+				}
+			}
 
-		String cond = cegNode.getCondition();
-		Matcher matcher = boundaryPattern.matcher(cond);
-		if (matcher.find()) {
-			String leqCondition = matcher.group("leq");
-			double leqValue = Double.parseDouble(leqCondition);
+			CEGNode hidden = createHiddenNode(entry.getKey());
+			connect(valueNode, hidden);
 
 		}
+	}
+
+	private void addBoundaryNodesForNode(CEGNode cegNode) {
+		String cond = cegNode.getCondition();
+		Matcher matcher = boundaryPattern.matcher(cond);
+		while (matcher.find()) {
+			String leqCondition = matcher.group("leq");
+			if (leqCondition != null) {
+				handleCondition(cegNode, ECompOperator.LEQ, leqCondition);
+			}
+
+			String leqCondition2 = matcher.group("leq2");
+			if (leqCondition2 != null) {
+				handleCondition(cegNode, ECompOperator.LEQ, leqCondition2);
+			}
+
+			String ltCondition = matcher.group("lt");
+			if (ltCondition != null) {
+				handleCondition(cegNode, ECompOperator.LT, ltCondition);
+			}
+
+			String ltCondition2 = matcher.group("lt2");
+			if (ltCondition2 != null) {
+				handleCondition(cegNode, ECompOperator.LT, ltCondition2);
+			}
+
+			String geqCondition = matcher.group("geq");
+			if (geqCondition != null) {
+				handleCondition(cegNode, ECompOperator.GEQ, geqCondition);
+			}
+
+			String geqCondition2 = matcher.group("geq2");
+			if (geqCondition2 != null) {
+				handleCondition(cegNode, ECompOperator.GEQ, geqCondition2);
+			}
+
+			String gtCondition = matcher.group("gt");
+			if (gtCondition != null) {
+				handleCondition(cegNode, ECompOperator.GT, gtCondition);
+			}
+
+			String gtCondition2 = matcher.group("gt2");
+			if (gtCondition2 != null) {
+				handleCondition(cegNode, ECompOperator.GT, gtCondition2);
+			}
+		}
+	}
+
+	private void handleCondition(CEGNode cegNode, ECompOperator op, String condition) {
+		double leqValue;
+		try {
+			leqValue = Double.parseDouble(condition);
+		} catch (Exception e) {
+			return;
+		}
+
+		Boundaries boundaries = getBoundaryValues(leqValue);
+		String nodeVar = cegNode.getVariable();
+
+//		createValueNode(nodeVar, boundaries.min);
+//		createValueNode(nodeVar, boundaries.eq);
+//		createValueNode(nodeVar, boundaries.max);
+
+		valueNodes.add(Pair.of(nodeVar, boundaries.min));
+		valueNodes.add(Pair.of(nodeVar, boundaries.eq));
+		valueNodes.add(Pair.of(nodeVar, boundaries.max));
+		Range<Double> range;
+
+		switch (op) {
+		case LEQ:
+			range = Range.upTo(leqValue, BoundType.CLOSED);
+			rangeMap.put(cegNode, range);
+			break;
+		case LT:
+			range = Range.upTo(leqValue, BoundType.OPEN);
+			rangeMap.put(cegNode, range);
+			break;
+		case GEQ:
+			range = Range.downTo(leqValue, BoundType.CLOSED);
+			rangeMap.put(cegNode, range);
+			break;
+		case GT:
+			range = Range.downTo(leqValue, BoundType.OPEN);
+			rangeMap.put(cegNode, range);
+			break;
+		}
+	}
+
+	private CEGConnection connect(CEGNode node1, CEGNode node2) {
+		String key = node1.getVariable() + "_" + node1.getCondition() + "_" + node2.getVariable() + "_"
+				+ node2.getCondition();
+		CEGConnection conn = (CEGConnection) tempObjects.get(key);
+		if (conn == null) {
+			conn = SpecmateEcoreUtil.connect(node1, node2);
+			tempObjects.put(key, conn);
+		}
+		return conn;
+	}
+
+	private CEGNode createValueNode(String var, double val) {
+		String key = var + "_" + val;
+		CEGNode node = (CEGNode) tempObjects.get(key);
+		if (node == null) {
+			node = RequirementsFactory.eINSTANCE.createCEGNode();
+			node.setVariable(var);
+			node.setCondition("= " + valueFormat.format(val));
+			tempObjects.put(key, node);
+			nodes.add(node);
+		}
+		return node;
+	}
+
+	private CEGNode createHiddenNode(String var) {
+		String key = HIDDEN + var;
+		CEGNode node = (CEGNode) tempObjects.get(key);
+		if (node == null) {
+			node = RequirementsFactory.eINSTANCE.createCEGNode();
+			node.setVariable(HIDDEN + var);
+			node.setCondition("is present");
+			node.setType(NodeType.OR);
+			tempObjects.put(key, node);
+			nodes.add(node);
+		}
+		return node;
+	}
+
+	private Boundaries getBoundaryValues(double value) {
+		double min = Math.floor(value);
+		if (min == value) {
+			min = value - 1;
+		}
+		double max = Math.ceil(value);
+		if (max == value) {
+			max = value + 1;
+		}
+		return new Boundaries(min, value, max);
 	}
 
 	/**
@@ -169,6 +338,9 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 	protected void generateParameters() {
 		for (IModelNode node : nodes) {
 			String name = getVariable(node);
+			if (name.startsWith(HIDDEN)) {
+				continue;
+			}
 			ParameterType type = determineParameterTypeForNode(node);
 			if (type != null && !parameterExists(specification, name, type)) {
 				TestParameter parameter = createTestParameter(name, type);
@@ -203,6 +375,13 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 			} else {
 				SpecmateEcoreUtil.detach(testCase);
 			}
+		}
+		removeTemporaryObject();
+	}
+
+	private void removeTemporaryObject() {
+		for (EObject obj : tempObjects.values()) {
+			SpecmateEcoreUtil.detach(obj);
 		}
 	}
 
@@ -270,7 +449,8 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 
 	private Collection<CEGNode> getRelevantNodes(CEGNodeEvaluation evaluation, String name) {
 		Multimap<String, CEGNode> variableToNodeMap = ArrayListMultimap.create();
-		evaluation.keySet().stream().forEach(n -> variableToNodeMap.put(getVariable(n), n));
+		evaluation.keySet().stream().filter(n -> isCause(n) || isEffect(n))
+				.forEach(n -> variableToNodeMap.put(getVariable(n), n));
 		Collection<CEGNode> allnodes = variableToNodeMap.get(name);
 
 		boolean allMutex = allnodes.stream().allMatch(c -> {
@@ -286,6 +466,14 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 			return positives;
 		}
 		return allnodes;
+	}
+
+	private boolean isCause(CEGNode node) {
+		return !(node instanceof CEGLinkedNode) && node.getIncomingConnections().isEmpty();
+	}
+
+	private boolean isEffect(CEGNode node) {
+		return node.getOutgoingConnections().isEmpty();
 	}
 
 	/**
@@ -347,24 +535,26 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 
 	private Pair<SortedSet<CEGNodeEvaluation>, SortedSet<CEGNodeEvaluation>> refineEvaluations(
 			SortedSet<CEGNodeEvaluation> evaluationList) throws SpecmateException {
-		SortedSet<CEGNodeEvaluation> relaxedEvaluations = new TreeSet<CEGNodeEvaluation>(nodeEvalSetComparator);
-		evaluationList.stream().forEach(e -> {
-			try {
-				CEGNodeEvaluation relaxed = (CEGNodeEvaluation) e.clone();
-				relaxConstraints(relaxed);
-				relaxedEvaluations.add(relaxed);
-			} catch (SpecmateInternalException e1) {
-				// do nothing, if we cannot relax the evaluation
-				relaxedEvaluations.add(e);
+		SortedSet<CEGNodeEvaluation> consistent = new TreeSet<CEGNodeEvaluation>(nodeEvalSetComparator);
+		SortedSet<CEGNodeEvaluation> inconsistent = new TreeSet<CEGNodeEvaluation>(nodeEvalSetComparator);
+
+		for (CEGNodeEvaluation e : evaluationList) {
+
+			CEGNodeEvaluation relaxed = (CEGNodeEvaluation) e.clone();
+			if (relaxConstraints(relaxed)) {
+				consistent.add(relaxed);
+			} else {
+				inconsistent.add(relaxed);
 			}
-		});
+
+		}
 
 		Pair<SortedSet<CEGNodeEvaluation>, SortedSet<CEGNodeEvaluation>> mergedEvals = mergeCompatibleEvaluations(
-				relaxedEvaluations);
-		SortedSet<CEGNodeEvaluation> merged = mergedEvals.getLeft();
-		SortedSet<CEGNodeEvaluation> inconsistent = mergedEvals.getRight();
+				consistent);
+		consistent = mergedEvals.getLeft();
+		inconsistent.addAll(mergedEvals.getRight());
 		SortedSet<CEGNodeEvaluation> filled = new TreeSet<CEGNodeEvaluation>(nodeEvalSetComparator);
-		for (CEGNodeEvaluation eval : merged) {
+		for (CEGNodeEvaluation eval : consistent) {
 			filled.add(fill(eval));
 		}
 		return Pair.of(filled, inconsistent);
@@ -542,7 +732,7 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 	 * @param eval
 	 * @throws SpecmateInternalException
 	 */
-	private void relaxConstraints(CEGNodeEvaluation eval) throws SpecmateInternalException {
+	private boolean relaxConstraints(CEGNodeEvaluation eval) throws SpecmateInternalException {
 		// Inititalize solver infrastructure
 		IPBSolver solver = org.sat4j.pb.SolverFactory.newResolution();
 		GateTranslator translator = new GateTranslator(solver);
@@ -575,11 +765,12 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 						}
 					}
 				}
+				return true;
 			}
 		} catch (ContradictionException | TimeoutException c) {
-			throw new SpecmateInternalException(ErrorCode.TESTGENERATION, c);
+			return false;
 		}
-
+		return false;
 	}
 
 	private SortedSet<CEGNodeEvaluation> getMergeCandiate(SortedSet<CEGNodeEvaluation> evaluations)
@@ -598,17 +789,12 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 		GateTranslator translator = new GateTranslator(solver);
 		WeightedMaxSatDecorator maxSat = new WeightedMaxSatDecorator(solver);
 
-		// We will need evaluations.size()+1 new variables, one set of varibles
-		// e_n to switch on and off each evaluation and one variable s to enable
-		// the implications s <==> (e=>n) where n is the evaluation result for a
-		// certain node.
-		// see pushEvaluations for the details
-		int maxVar = getAdditionalVar(evaluations.size() + 1);
+		int maxVar = getAdditionalVar(evaluations.size());
 		maxSat.newVar(maxVar);
 
 		try {
 			pushCEGStructure(translator);
-			var2EvalMap = pushEvaluations(evaluations, translator, maxSat, maxVar);
+			var2EvalMap = pushEvaluations(evaluations, translator, maxSat);
 		} catch (ContradictionException c) {
 			throw new SpecmateInternalException(ErrorCode.TESTGENERATION, c);
 		}
@@ -640,7 +826,7 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 	}
 
 	private TreeMap<Integer, CEGNodeEvaluation> pushEvaluations(SortedSet<CEGNodeEvaluation> evaluations,
-			GateTranslator translator, WeightedMaxSatDecorator maxSat, int maxVar) throws ContradictionException {
+			GateTranslator translator, WeightedMaxSatDecorator maxSat) throws ContradictionException {
 		TreeMap<Integer, CEGNodeEvaluation> var2EvalMap = new TreeMap<Integer, CEGNodeEvaluation>(
 				new Comparator<Integer>() {
 					@Override
@@ -650,6 +836,9 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 				});
 
 		int nextVar = 1;
+
+		IVecInt vector;
+
 		for (CEGNodeEvaluation evaluation : evaluations) {
 			int varForEval = getAdditionalVar(nextVar);
 			var2EvalMap.put(varForEval, evaluation);
@@ -660,15 +849,17 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 				TaggedBoolean value = evaluation.get(node);
 				if (value != null) {
 					if (value.value) {
-						translator.or(maxVar, getVectorForVariables(-varForEval, varForNode));
+						vector = getVectorForVariables(-varForEval, varForNode);
+						translator.addClause(vector);
 					} else {
-						translator.or(maxVar, getVectorForVariables(-varForEval, -varForNode));
+						vector = getVectorForVariables(-varForEval, -varForNode);
+						translator.addClause(vector);
 					}
 				}
 			}
-			maxSat.addSoftClause(1, getVectorForVariables(varForEval));
+			vector = getVectorForVariables(varForEval);
+			maxSat.addSoftClause(1, vector);
 		}
-		translator.gateTrue(maxVar);
 		return var2EvalMap;
 	}
 
@@ -770,8 +961,10 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 			if (vector.size() > 0) {
 				if (getType(node) == NodeType.AND) {
 					translator.and(varForNode, vector);
+					System.out.println(varForNode + " AND(" + vector.toString() + ")");
 				} else {
 					translator.or(varForNode, vector);
+					System.out.println(varForNode + " OR(" + vector.toString() + ")");
 				}
 			}
 		}
@@ -783,7 +976,9 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 		for (Collection<CEGNode> mutexSet : mutualExclusiveNodeSets) {
 			Integer[] variables = mutexSet.stream().map(node -> getVarForNode(node)).collect(Collectors.toList())
 					.toArray(new Integer[0]);
-			translator.addExactly(getVectorForVariables(variables), 1);
+			IVecInt vector = getVectorForVariables(variables);
+			translator.addExactly(vector, 1);
+			System.out.println("Exactly:" + vector);
 		}
 	}
 
@@ -847,6 +1042,17 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 				return true;
 			}
 			return super.haveEqualFeature(eObject1, eObject2, feature);
+		}
+	}
+
+	private class Boundaries {
+		public double min, eq, max;
+
+		public Boundaries(double min, double eq, double max) {
+			super();
+			this.min = min;
+			this.eq = eq;
+			this.max = max;
 		}
 	}
 }

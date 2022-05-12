@@ -1,5 +1,5 @@
 -buildpath: \
-	org.apache.servicemix.bundles.junit;version=4.12,\
+	org.apache.servicemix.bundles.junit;version='4.12',\
 	specmate-model-gen;version=latest,\
 	specmate-common;version=latest,\
 	org.eclipse.emf.cdo,\
@@ -17,11 +17,11 @@
 	org.sat4j.pb,\
 	specmate-emfrest-api;version=latest,\
 	specmate-rest;version=latest,\
-	org.apache.commons.lang3;version=3.5,\
+	org.apache.commons.lang3;version='3.5',\
 	org.eclipse.equinox.common,\
 	org.eclipse.net4j.util,\
 	specmate-metrics;version=latest,\
-	osgi.core;version=6.0
+	osgi.core;version='6.0'
 Private-Package: \
 	com.specmate.testspecification.internal.services,\
 	com.specmate.testspecification.internal.exporters

@@ -1,7 +1,7 @@
-<div [ngClass]="{'has-danger': control.invalid, 'has-success': control.valid}" class="form-group" style="width: 100%">
+<div [formGroup]="form" [ngClass]="{'has-danger': control.invalid, 'has-success': control.valid}" class="form-group" style="width: 100%">
+    <input [formControlName] = "meta.name" attr.aria-label="{{meta.shortDesc | translate}}" type="checkbox" class="form-check-input" id="{{'properties-' + meta.name + '-checkbox'}}"/>
     <label>
-        <input attr.aria-label="{{meta.shortDesc | translate}}" type="checkbox" class="form-check-input" />
-        <span class="data-item-title">{{meta.shortDesc | translate}}: </span>
+        <span class="data-item-title">{{meta.shortDesc | translate}}</span>
     </label>
     <div class="form-control-feedback">
         <span [hidden]="control.valid" class="form-text">{{errorMessage}}</span>

@@ -961,10 +961,8 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 			if (vector.size() > 0) {
 				if (getType(node) == NodeType.AND) {
 					translator.and(varForNode, vector);
-					System.out.println(varForNode + " AND(" + vector.toString() + ")");
 				} else {
 					translator.or(varForNode, vector);
-					System.out.println(varForNode + " OR(" + vector.toString() + ")");
 				}
 			}
 		}
@@ -978,7 +976,6 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 					.toArray(new Integer[0]);
 			IVecInt vector = getVectorForVariables(variables);
 			translator.addExactly(vector, 1);
-			System.out.println("Exactly:" + vector);
 		}
 	}
 

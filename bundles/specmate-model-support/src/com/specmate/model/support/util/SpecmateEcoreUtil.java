@@ -35,9 +35,11 @@ import com.specmate.model.base.IContentElement;
 import com.specmate.model.base.IModelConnection;
 import com.specmate.model.base.IModelNode;
 import com.specmate.model.base.IRecycled;
+import com.specmate.model.requirements.CEGConnection;
 import com.specmate.model.requirements.CEGLinkedNode;
 import com.specmate.model.requirements.CEGNode;
 import com.specmate.model.requirements.NodeType;
+import com.specmate.model.requirements.RequirementsFactory;
 import com.specmate.model.testspecification.TestProcedure;
 import com.specmate.model.testspecification.TestStep;
 
@@ -391,6 +393,16 @@ public class SpecmateEcoreUtil {
 		} else {
 			return null;
 		}
+	}
+
+	public static CEGConnection connect(CEGNode source, CEGNode target) {
+		CEGConnection cegConnection = RequirementsFactory.eINSTANCE.createCEGConnection();
+		cegConnection.setSource(source);
+		cegConnection.setTarget(target);
+		cegConnection.setId(getIdForChild());
+		// cegConnection.setName(getNameForChild((IContainer) source.eContainer(),
+		// cegConnection.eClass()));
+		return cegConnection;
 	}
 
 }

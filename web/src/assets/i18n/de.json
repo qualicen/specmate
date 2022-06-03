@@ -267,7 +267,8 @@
 		"errorMessage": "Es konnte keine logische Testfallspezifikation erzeugt werden, da das Modell die folgenden Fehler enthält. Bitte überprüfen Sie ihr Modell.",
 		"errorTitle": "Generierung nicht möglich",
 		"generate": "Testspezifikation generieren",
-		"skeleton": "Testspezifikationshüllen herunterladen"
+		"skeleton": "Testspezifikationshüllen herunterladen",
+		"boundaryAnalysis": "Grenzwertanalyse durchführen"
 	},
 	"toggleLog": "Log ein/ausblenden",
 	"tools": {

@@ -36,6 +36,7 @@ import com.specmate.testspecification.internal.generators.ProcessTestCaseGenerat
 public class TestGeneratorService extends RestServiceBase {
 
 	private static final String QUERY_KEY_CONSIDER_LINKS = "considerLinks";
+	private static final String QUERY_KEY_BOUNDARY_ANALYSIS = "boundaryAnalysis";
 	private static final String QUERY_KEY_LANGUAGE = "lang";
 	private IMetricsService metricsService;
 	private ICounter testGenCounter;
@@ -74,11 +75,15 @@ public class TestGeneratorService extends RestServiceBase {
 			boolean withLinks = withLinksParams != null && withLinksParams.size() > 0
 					&& withLinksParams.get(0).toLowerCase().equals("true");
 
+			List<String> boundaryAnalysisParams = queryParams.get(QUERY_KEY_BOUNDARY_ANALYSIS);
+			boolean boundaryAnalysis = boundaryAnalysisParams != null && boundaryAnalysisParams.size() > 0
+					&& boundaryAnalysisParams.get(0).toLowerCase().equals("true");
+
 			List<String> germanLangParams = queryParams.get(QUERY_KEY_LANGUAGE);
 			boolean germanLanguage = germanLangParams != null && germanLangParams.size() > 0
 					&& germanLangParams.get(0).toLowerCase().equals("de");
 
-			new CEGTestCaseGenerator(specification, withLinks, germanLanguage, logger).generate();
+			new CEGTestCaseGenerator(specification, withLinks, boundaryAnalysis, germanLanguage, logger).generate();
 			testGenCounter.inc();
 		} else if (container instanceof Process) {
 			new ProcessTestCaseGenerator(specification).generate();

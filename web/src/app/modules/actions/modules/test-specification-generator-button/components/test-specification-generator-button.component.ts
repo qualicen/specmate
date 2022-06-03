@@ -27,6 +27,8 @@ export class TestSpecificationGeneratorButton {
 
     public considerLinks = false;
 
+    public boundaryAnalysis = false;
+
     private contents: IContainer[];
 
     private _model: CEGModel | Process;
@@ -70,7 +72,7 @@ export class TestSpecificationGeneratorButton {
             .then(() => this.dataService.createElement(testSpec, true, Id.uuid))
             .then(() => this.dataService.commit(this.translate.instant('save')))
             .then(() => this.dataService
-                .performOperations(testSpec.url, 'generateTests', null, false, { 'considerLinks': String(this.considerLinks), 'lang': this.translate.currentLang }))
+                .performOperations(testSpec.url, 'generateTests', null, false, { 'considerLinks': String(this.considerLinks), 'boundaryAnalysis':String(this.boundaryAnalysis), 'lang': this.translate.currentLang }))
             .then(async () => {
                 let contents: IContainer[] = [];
 

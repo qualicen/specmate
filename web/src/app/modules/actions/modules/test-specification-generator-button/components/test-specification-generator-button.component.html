@@ -2,6 +2,10 @@
     class="btn btn-sm btn-outline-primary" [attr.disabled]="!enabled ? '' : null"><i class="fa fa-indent"
         aria-hidden="true"></i>&nbsp;{{'testspec.generate' | translate}}</button>
 <div class="form-check" *ngIf="enabled && hasLinkedNodes">
-    <input attr.aria-label="{{'testspec.considerLinks' | translate}}" class="form-check-input" type="checkbox" id="considerLinksCheck" [checked]="considerLinks" (change)="considerLinks=!considerLinks">
-    <label class="form-check-label" for="considerLinksCheck">{{'testspec.considerLinks' | translate}}</label>
+    <input attr.aria-label="{{'testspec.considerLinks' | translate}}" class="form-check-input" type="checkbox" id="considerLinksCheck" [checked]="considerLinks" (change)="considerLinks=!considerLinks" />
+    <label class="form-check-label" for="considerLinksCheck">{{'testspec.considerLinks' | translate}}</label><br />
+</div>
+<div class="form-check" *ngIf="enabled">
+    <input attr.aria-label="{{'testspec.boundaryAnalysis' | translate}}" class="form-check-input" type="checkbox" id="boundaryAnalysisCheck" [checked]="boundaryAnalysis" (change)="boundaryAnalysis=!boundaryAnalysis" />
+    <label class="form-check-label" for="boundaryAnalysisCheck">{{'testspec.boundaryAnalysis' | translate}}</label><br />
 </div>

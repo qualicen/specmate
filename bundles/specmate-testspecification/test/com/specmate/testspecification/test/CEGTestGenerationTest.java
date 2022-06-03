@@ -30,12 +30,12 @@ public class CEGTestGenerationTest {
 		Assert.assertTrue(testcases.stream().noneMatch(tc -> {
 			List<ParameterAssignment> assignments = SpecmateEcoreUtil.pickInstancesOf(tc.getContents(),
 					ParameterAssignment.class);
-			return assignments.stream().anyMatch(a -> a.getCondition().startsWith("[ nicht"));
+			return assignments.stream().anyMatch(a -> a.getCondition().startsWith("nicht"));
 		}));
 		Assert.assertTrue(testcases.stream().anyMatch(tc -> {
 			List<ParameterAssignment> assignments = SpecmateEcoreUtil.pickInstancesOf(tc.getContents(),
 					ParameterAssignment.class);
-			return assignments.stream().anyMatch(a -> a.getCondition().startsWith("[ not"));
+			return assignments.stream().anyMatch(a -> a.getCondition().startsWith("not"));
 		}));
 
 		spec = getTestSpecificationLanguage();
@@ -45,12 +45,12 @@ public class CEGTestGenerationTest {
 		Assert.assertTrue(testcases.stream().noneMatch(tc -> {
 			List<ParameterAssignment> assignments = SpecmateEcoreUtil.pickInstancesOf(tc.getContents(),
 					ParameterAssignment.class);
-			return assignments.stream().anyMatch(a -> a.getCondition().startsWith("[ not"));
+			return assignments.stream().anyMatch(a -> a.getCondition().startsWith("not"));
 		}));
 		Assert.assertTrue(testcases.stream().anyMatch(tc -> {
 			List<ParameterAssignment> assignments = SpecmateEcoreUtil.pickInstancesOf(tc.getContents(),
 					ParameterAssignment.class);
-			return assignments.stream().anyMatch(a -> a.getCondition().startsWith("[ nicht"));
+			return assignments.stream().anyMatch(a -> a.getCondition().startsWith("nicht"));
 		}));
 	}
 
@@ -144,12 +144,12 @@ public class CEGTestGenerationTest {
 		Assert.assertTrue(testcases.stream().anyMatch(tc -> {
 			List<ParameterAssignment> assignments = SpecmateEcoreUtil.pickInstancesOf(tc.getContents(),
 					ParameterAssignment.class);
-			return assignments.stream().anyMatch(a -> a.getCondition().equals("[ =A ]"));
+			return assignments.stream().anyMatch(a -> a.getCondition().equals("=A"));
 		}));
 		Assert.assertTrue(testcases.stream().anyMatch(tc -> {
 			List<ParameterAssignment> assignments = SpecmateEcoreUtil.pickInstancesOf(tc.getContents(),
 					ParameterAssignment.class);
-			return assignments.stream().anyMatch(a -> a.getCondition().equals("[ =B ]"));
+			return assignments.stream().anyMatch(a -> a.getCondition().equals("=B"));
 		}));
 	}
 

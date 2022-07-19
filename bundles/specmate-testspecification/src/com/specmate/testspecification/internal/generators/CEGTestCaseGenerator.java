@@ -77,6 +77,7 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 	private boolean considerLinks;
 	private Logger logger;
 	private boolean germanLanguage;
+	private boolean boundaryAnalysis;
 
 	private final String boundaryRegex = "\\<=\\s*(?<leq>\\d+([,\\.]\\d+)?)|" // x <= 5
 			+ "\\<\\s*(?<lt>\\d+([,\\.]\\d+)?)|" // x < 5
@@ -104,6 +105,7 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 		this.considerLinks = considerLinks;
 		this.germanLanguage = germanLanguage;
 		this.logger = logger;
+		this.boundaryAnalysis = boundaryAnalysis;
 		if (considerLinks) {
 			addLinkedNodes();
 		}
@@ -364,11 +366,28 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 		List<TestCase> inconsistentTestCases = new ArrayList<TestCase>();
 		for (CEGNodeEvaluation evaluation : inconsistent) {
 			TestCase testCase = createTestCase(evaluation, specification, false);
+			boolean hasNegations = false;
+			
+			List<TestParameter> parameters = SpecmateEcoreUtil.pickInstancesOf(specification.getContents(),
+					TestParameter.class);
+			for (TestParameter parameter : parameters) {
+				Collection<CEGNode> relevantNodes = getRelevantNodes(evaluation, parameter.getName());
+				for (IContainer node : relevantNodes) {
+					TaggedBoolean nodeEval = evaluation.get(node);
+					if(nodeEval != null && !nodeEval.value) {
+						hasNegations = true;
+						break;
+					}
+				}
+				if(hasNegations) {
+					break;
+				}
+			}
 			boolean newTc = !inconsistentTestCases.stream().anyMatch(tc -> {
 				EqualityHelper helper = new IdNamePositionIgnoreEqualityHelper();
 				return helper.equals(tc, testCase);
 			});
-			if (newTc) {
+			if (newTc && !(this.boundaryAnalysis && hasNegations)) {
 				inconsistentTestCases.add(testCase);
 				testCase.setPosition(position++);
 				specification.getContents().add(testCase);

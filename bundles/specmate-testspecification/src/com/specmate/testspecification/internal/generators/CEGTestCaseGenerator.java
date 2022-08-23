@@ -295,7 +295,7 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 		if (node == null) {
 			node = RequirementsFactory.eINSTANCE.createCEGNode();
 			node.setVariable(HIDDEN + var);
-			node.setCondition("blablabla");
+			node.setCondition("is present");
 			node.setType(NodeType.OR);
 			tempObjects.put(key, node);
 			nodes.add(node);
@@ -385,6 +385,7 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 		removeTemporaryObject();
 	}
 
+	@SuppressWarnings("unused")
 	private boolean hasNegations(CEGNodeEvaluation evaluation) {
 		boolean hasNegations = false;
 		

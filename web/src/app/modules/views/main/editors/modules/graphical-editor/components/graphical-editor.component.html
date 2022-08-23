@@ -13,7 +13,7 @@
                     aria-hidden="true"></i></button>
             <!-- GRID -->
             <editor-grid-button #editorGridButton></editor-grid-button>
-            <maximize-button></maximize-button>
+            <maximize-button *ngIf="showMaximizeButton"></maximize-button>
         </div>
     </h5>
     <div class="card-body">

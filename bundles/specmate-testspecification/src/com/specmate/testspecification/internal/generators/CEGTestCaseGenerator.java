@@ -176,7 +176,6 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 
 			CEGNode hidden = createHiddenNode(entry.getKey());
 			connect(valueNode, hidden);
-
 		}
 	}
 
@@ -366,36 +365,46 @@ public class CEGTestCaseGenerator extends TestCaseGeneratorBase<CEGModel, CEGNod
 		List<TestCase> inconsistentTestCases = new ArrayList<TestCase>();
 		for (CEGNodeEvaluation evaluation : inconsistent) {
 			TestCase testCase = createTestCase(evaluation, specification, false);
-			boolean hasNegations = false;
-			
-			List<TestParameter> parameters = SpecmateEcoreUtil.pickInstancesOf(specification.getContents(),
-					TestParameter.class);
-			for (TestParameter parameter : parameters) {
-				Collection<CEGNode> relevantNodes = getRelevantNodes(evaluation, parameter.getName());
-				for (IContainer node : relevantNodes) {
-					TaggedBoolean nodeEval = evaluation.get(node);
-					if(nodeEval != null && !nodeEval.value) {
-						hasNegations = true;
-						break;
-					}
-				}
-				if(hasNegations) {
-					break;
-				}
-			}
+			// boolean hasNegations = hasNegations(evaluation);
 			boolean newTc = !inconsistentTestCases.stream().anyMatch(tc -> {
 				EqualityHelper helper = new IdNamePositionIgnoreEqualityHelper();
 				return helper.equals(tc, testCase);
 			});
-			if (newTc && !(this.boundaryAnalysis && hasNegations)) {
+			if (newTc) {
 				inconsistentTestCases.add(testCase);
-				testCase.setPosition(position++);
-				specification.getContents().add(testCase);
+				if(this.boundaryAnalysis) {
+					SpecmateEcoreUtil.detach(testCase);
+				} else {
+					testCase.setPosition(position++);
+					specification.getContents().add(testCase);
+				}
 			} else {
 				SpecmateEcoreUtil.detach(testCase);
 			}
 		}
 		removeTemporaryObject();
+	}
+
+	@SuppressWarnings("unused")
+	private boolean hasNegations(CEGNodeEvaluation evaluation) {
+		boolean hasNegations = false;
+		
+		List<TestParameter> parameters = SpecmateEcoreUtil.pickInstancesOf(specification.getContents(),
+				TestParameter.class);
+		for (TestParameter parameter : parameters) {
+			Collection<CEGNode> relevantNodes = getRelevantNodes(evaluation, parameter.getName());
+			for (IContainer node : relevantNodes) {
+				TaggedBoolean nodeEval = evaluation.get(node);
+				if(nodeEval != null && !nodeEval.value) {
+					hasNegations = true;
+					break;
+				}
+			}
+			if(hasNegations) {
+				return hasNegations;
+			}
+		}
+		return false;
 	}
 
 	private void removeTemporaryObject() {

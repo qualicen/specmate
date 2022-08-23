@@ -13,13 +13,13 @@
     </div>
     <div class="right-controls">
         <span class="navbar-text" style="display: flex">
-            <span class="version-text">{{'version' | translate}}:&nbsp;{{version}}&nbsp;</span>
-            <item-search-bar></item-search-bar>&nbsp;
-            <choose-project></choose-project>&nbsp;
-            <operation-monitor></operation-monitor>&nbsp;
-            <language-chooser class="brighter-secondary-outline"></language-chooser>&nbsp;
-            <documentation-export-button></documentation-export-button>&nbsp;
-            <logout></logout>
+            <span  *ngIf="showVersion" class="version-text">{{'version' | translate}}:&nbsp;{{version}}&nbsp;</span>
+            <item-search-bar *ngIf="showSearchBar"></item-search-bar>&nbsp;
+            <choose-project *ngIf="showProjectChooser"></choose-project>&nbsp;
+            <operation-monitor *ngIf="showOperationMonitor"></operation-monitor>&nbsp;
+            <language-chooser *ngIf="showLanguageChooser" class="brighter-secondary-outline"></language-chooser>&nbsp;
+            <documentation-export-button *ngIf="showDocumentationButton"></documentation-export-button>&nbsp;
+            <logout *ngIf="showLogout"></logout>
         </span>
     </div>
 </nav>

@@ -9,6 +9,9 @@ import { LogoutModule } from '../../../views/main/authentication/modules/logout/
 import { ItemSearchModule } from '../item-search/item-search.module';
 import { NavigationBar } from './components/navigation-bar.component';
 import { DocumentationExportButtonModule } from '../../../actions/modules/documentation-export-button/documentation-export-button.module';
+import { ViewControllerModule } from 'src/app/modules/views/controller/modules/view-controller/view-controller.module';
+import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   imports: [
@@ -21,7 +24,10 @@ import { DocumentationExportButtonModule } from '../../../actions/modules/docume
     BrowserVersionCheckerModule,
     ChooseProjectModule,
     ItemSearchModule,
-    DocumentationExportButtonModule
+    DocumentationExportButtonModule,
+    ViewControllerModule,
+    BrowserModule,
+    CommonModule
   ],
   declarations: [
     // COMPONENTS IN THIS MODULE

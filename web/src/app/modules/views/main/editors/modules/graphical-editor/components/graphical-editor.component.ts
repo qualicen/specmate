@@ -8,6 +8,7 @@ import { ProcessConnection } from 'src/app/model/ProcessConnection';
 import { UndoService } from 'src/app/modules/actions/modules/common-controls/services/undo.service';
 import { NavigatorService } from 'src/app/modules/navigation/modules/navigator/services/navigator.service';
 import { ConfirmationModal } from 'src/app/modules/notification/modules/modals/services/confirmation-modal.service';
+import { ViewControllerService } from 'src/app/modules/views/controller/modules/view-controller/services/view-controller.service';
 import { IContainer } from '../../../../../../../model/IContainer';
 import { IModelConnection } from '../../../../../../../model/IModelConnection';
 import { IModelNode } from '../../../../../../../model/IModelNode';
@@ -72,6 +73,9 @@ export class GraphicalEditor implements OnDestroy {
 
     private graphMouseMove: (evt: any) => void;
 
+    public showMaximizeButton = true;
+    public showCommonControls = false;
+
     constructor(
         private dataService: SpecmateDataService,
         private editorToolsService: EditorToolsService,
@@ -82,7 +86,8 @@ export class GraphicalEditor implements OnDestroy {
         private undoService: UndoService,
         private modal: ConfirmationModal,
         private changeGuard: ChangeGuardService,
-        private graphicalEditorService: GraphicalEditorService) {
+        private graphicalEditorService: GraphicalEditorService,
+        private viewController: ViewControllerService) {
         const navigationStartSubscription = this.navigator.navigationStart.subscribe(() => {
             this.isInGraphTransition = true;
         });
@@ -119,6 +124,8 @@ export class GraphicalEditor implements OnDestroy {
             validationService.validateCurrent();
         });
         this.subscriptions.push(initModelSubscription);
+        this.showMaximizeButton = !this.viewController.isHeadless;
+        this.showCommonControls = this.viewController.isHeadless;
     }
 
     /*********************** MX Graph ***********************/

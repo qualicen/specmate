@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { EventEmitter, Injectable } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router, NavigationStart, NavigationCancel } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, NavigationStart, NavigationCancel, Params } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Config } from '../../../../../config/config';
 import { IContainer } from '../../../../../model/IContainer';
@@ -19,6 +19,7 @@ export class NavigatorService {
     private redirect: string;
     private _navigationStart: EventEmitter<void>;
     private _navigationCancel: EventEmitter<void>;
+    private queryParams: Params;
 
     private get currentElementUrl(): string {
         if (this.redirect !== undefined) {
@@ -53,6 +54,8 @@ export class NavigatorService {
             this.handleBrowserBackForwardButton(Url.stripBasePath(pse.url));
         });
 
+        this.route.queryParams.subscribe(params => this.queryParams = params);
+
         this.router.events.subscribe(async event => {
             if (event instanceof NavigationEnd && this.location && this.location.path()) {
                 let currentUrl: string = this.currentElementUrl;
@@ -75,8 +78,8 @@ export class NavigatorService {
             } else if (event instanceof NavigationStart) {
                 this.navigationStart.emit();
             } else if (event instanceof NavigationCancel) {
-              this.navigationCancel.emit();
-          }
+                this.navigationCancel.emit();
+            }
         });
     }
 
@@ -95,11 +98,11 @@ export class NavigatorService {
     }
 
     public get navigationCancel(): EventEmitter<void> {
-      if (!this._navigationCancel) {
-          this._navigationCancel = new EventEmitter();
-      }
-      return this._navigationCancel;
-  }
+        if (!this._navigationCancel) {
+            this._navigationCancel = new EventEmitter();
+        }
+        return this._navigationCancel;
+    }
 
     public navigateToWelcome(): void {
         this.router.navigate([Config.WELCOME_URL]);
@@ -138,18 +141,18 @@ export class NavigatorService {
 
     public forward(): void {
         if (this.hasNext) {
-            this.performNavigation(this.current + 1).catch(() => {});
+            this.performNavigation(this.current + 1).catch(() => { });
         }
     }
 
     public back(): void {
         if (this.hasPrevious) {
-            this.performNavigation(this.current - 1).catch(() => {});
+            this.performNavigation(this.current - 1).catch(() => { });
         }
     }
 
     private performNavigation(index: number): Promise<void> {
-        return this.router.navigate([Url.basePath(this.history[index]), this.history[index].url]).then((hasNavigated: boolean) => {
+        return this.router.navigate([Url.basePath(this.history[index]), this.history[index].url], { queryParams: this.queryParams }).then((hasNavigated: boolean) => {
             if (hasNavigated) {
                 this.current = index;
                 this.dataService.discardChanges();

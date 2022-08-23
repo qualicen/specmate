@@ -42,7 +42,11 @@ export class Url {
         }
         path = Url.decode(path);
         path = path.slice(Config.VIEW_URL_PREFIX.length);
-        return path.slice(path.indexOf(this.SEP, path.indexOf(this.SEP) + 1) + 1);
+        const stripped = path.slice(path.indexOf(this.SEP, path.indexOf(this.SEP) + 1) + 1);
+        if(stripped.indexOf('?') >= 0) {
+            return stripped.split('?')[0];
+        }
+        return stripped;
     }
 
     public static project(url: string): string {

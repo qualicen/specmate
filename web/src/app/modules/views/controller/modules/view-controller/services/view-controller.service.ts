@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Config } from '../../../../../../config/config';
 import { Folder } from '../../../../../../model/Folder';
 import { ProcessStep } from '../../../../../../model/ProcessStep';
@@ -6,10 +6,15 @@ import { Type } from '../../../../../../util/type';
 import { AuthenticationService } from '../../../../main/authentication/modules/auth/services/authentication.service';
 import { AdditionalInformationService } from '../../../../side/modules/links-actions/services/additional-information.service';
 import { SelectedElementService } from '../../../../side/modules/selected-element/services/selected-element.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Injectable()
 export class ViewControllerService {
 
+    public isHeadless = false;
+
+    public viewChanged = new EventEmitter();
+    
     private _isEditorMaximized = false;
     private _loggingOutputShown: boolean = Config.LOG_INITIALLY_SHOWN;
 
@@ -22,15 +27,15 @@ export class ViewControllerService {
     }
 
     public get projectExplorerShown(): boolean {
-        return this.isLoggedIn && true;
+        return this.isLoggedIn && !this.isHeadless;
     }
 
     public get historyShown(): boolean {
-        return this.isLoggedIn && this.selectedElementService.hasSelection && !this.isTopLibraryFolder;
+        return this.isLoggedIn && this.selectedElementService.hasSelection && !this.isTopLibraryFolder && !this.isHeadless;
     }
 
     public get loggingOutputShown(): boolean {
-        return this.isLoggedIn && this._loggingOutputShown;
+        return this.isLoggedIn && this._loggingOutputShown && !this.isHeadless;
     }
     public set loggingOutputShown(loggingOutputShown: boolean) {
         this._loggingOutputShown = loggingOutputShown;
@@ -64,7 +69,7 @@ export class ViewControllerService {
         let selected = this.selectedElementService.selectedElement;
         if (this.isLoggedIn && selected !== undefined) {
             if (Type.is(selected, ProcessStep) && selected['tracesTo']) {
-                return true;
+                return true && !this.isHeadless;
             }
         }
 
@@ -72,7 +77,7 @@ export class ViewControllerService {
     }
 
     public get linksActionsShown(): boolean {
-        return this.isLoggedIn && this.additionalInformationService.hasAdditionalInformation;
+        return this.isLoggedIn && this.additionalInformationService.hasAdditionalInformation && !this.isHeadless;
     }
 
     public get areFolderPropertiesEditable(): boolean {
@@ -90,5 +95,15 @@ export class ViewControllerService {
     constructor(
         private selectedElementService: SelectedElementService,
         private additionalInformationService: AdditionalInformationService,
-        private auth: AuthenticationService) { }
+        private auth: AuthenticationService,
+        private route: ActivatedRoute) {
+            this.route.queryParams.subscribe(params => {
+                if(params['hl'] !== undefined) {
+                    this.isHeadless = true;
+                } else {
+                    this.isHeadless = false;
+                }
+                this.viewChanged.emit();
+            });
+        }
 }

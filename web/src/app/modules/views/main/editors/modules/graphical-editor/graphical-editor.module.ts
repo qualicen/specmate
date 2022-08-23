@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { CommonControlsModule } from 'src/app/modules/actions/modules/common-controls/common-controls.module';
 import { SpecmateSharedModule } from '../../../../../specmate/specmate.shared.module';
 import { EditorGridButtonModule } from '../editor-grid-button/editor-grid-button.module';
 import { MaximizeButtonModule } from '../maximize-button/maximize-button.module';
@@ -16,7 +17,8 @@ import { ModelImageService } from './services/model-image.service';
     ToolPalletteModule,
     SpecmateSharedModule,
     BrowserModule,
-    EditorGridButtonModule
+    EditorGridButtonModule,
+    CommonControlsModule
   ],
   declarations: [
     // COMPONENTS IN THIS MODULE

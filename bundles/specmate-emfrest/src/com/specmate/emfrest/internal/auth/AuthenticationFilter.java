@@ -21,6 +21,7 @@ import com.specmate.common.exception.SpecmateException;
 import com.specmate.emfrest.authentication.Login;
 import com.specmate.emfrest.authentication.Logout;
 import com.specmate.emfrest.authentication.ProjectNames;
+import com.specmate.emfrest.authentication.SSOConfiguration;
 import com.specmate.model.administration.AdministrationFactory;
 import com.specmate.model.administration.ErrorCode;
 import com.specmate.model.administration.ProblemDetail;
@@ -31,6 +32,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 	private static final String REINDEX_SERVICE_NAME = "reindex";
 	private final String HEARTBEAT_PARAMETER = "heartbeat";
 	private final String REST_URL = ".+services/rest/";
+	private Pattern ssoConfigPattern = Pattern.compile(REST_URL + SSOConfiguration.SERVICE_NAME);
 	private Pattern loginPattern = Pattern.compile(REST_URL + Login.SERVICE_NAME);
 	private Pattern logoutPattern = Pattern.compile(REST_URL + Logout.SERVICE_NAME);
 	private Pattern projectNamesPattern = Pattern.compile(REST_URL + ProjectNames.SERVICE_NAME);
@@ -102,11 +104,12 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
 	private boolean isNotSecured(ContainerRequestContext requestContext) {
 		String path = requestContext.getUriInfo().getAbsolutePath().toString();
+		Matcher matcherSSOConfig = ssoConfigPattern.matcher(path);
 		Matcher matcherLogin = loginPattern.matcher(path);
 		Matcher matcherLogout = logoutPattern.matcher(path);
 		Matcher matcherProjectNames = projectNamesPattern.matcher(path);
 		Matcher matcherReindex = reindexPattern.matcher(path);
-		return matcherLogin.matches() || matcherLogout.matches() || matcherProjectNames.matches()
+		return matcherSSOConfig.matches() || matcherLogin.matches() || matcherLogout.matches() || matcherProjectNames.matches()
 				|| matcherReindex.matches();
 	}
 }

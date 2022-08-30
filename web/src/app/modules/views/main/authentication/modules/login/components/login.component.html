@@ -12,6 +12,11 @@
         <h1 class="card-title text-center mb-4 mt-1">{{'login' | translate}}</h1>
         <hr />
         <div class="form-group padding-bottom">
+            <button attr.aria-label="{{'sso-login' | translate}}" id="sso-login-button" title="{{'sso-login' | translate}}" (click)="ssoLogin()" class="btn btn-sm">
+                <em class="fa fa-sign-in"></em>&nbsp;{{'sso-login' | translate}}
+            </button>
+        </div>
+        <div class="form-group padding-bottom">
             <div class="input-group input-group-sm">
                 <div class="input-group-prepend">
                     <span class="input-group-text">

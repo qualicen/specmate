@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { User } from '../../../../../../../model/User';
 import { NavigatorService } from '../../../../../../navigation/modules/navigator/services/navigator.service';
 import { AuthenticationService } from '../../auth/services/authentication.service';
@@ -15,9 +16,12 @@ export class Login implements OnInit {
     public _project = '';
     public projectnames: string[];
 
+    isAuthenticated = false;
+    accessToken = 'unset';
+
     public isAuthenticating = false;
 
-    constructor(private auth: AuthenticationService, private navigator: NavigatorService) {
+    constructor(private auth: AuthenticationService, private navigator: NavigatorService, private oidcSecurityService: OidcSecurityService) {
         auth.getProjectNames().then(res => this.projectnames = res);
     }
 
@@ -32,6 +36,12 @@ export class Login implements OnInit {
 
     ngOnInit() {
         this.tryNavigateAway();
+        this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated, userData }) => {
+            console.info(isAuthenticated);
+            this.isAuthenticated = isAuthenticated;
+            console.info(userData);
+            this.accessToken = this.oidcSecurityService.getAccessToken();
+        });
     }
 
     private tryNavigateAway(): void {
@@ -70,7 +80,16 @@ export class Login implements OnInit {
     public get isInactivityLoggedOut(): boolean {
         return this.auth.inactivityLoggedOut;
     }
+
     public get isErrorLoggedOut(): boolean {
         return this.auth.errorLoggedOut;
+    }
+
+    public ssoLogin() {
+        this.oidcSecurityService.authorize();
+    }
+
+    public ssoLogout() {
+        this.oidcSecurityService.logoff();
     }
 }

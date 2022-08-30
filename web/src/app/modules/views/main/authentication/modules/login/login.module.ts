@@ -5,6 +5,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { I18NModule } from '../../../../../common/modules/i18n/i18n.module';
 import { SpecmateSharedModule } from '../../../../../specmate/specmate.shared.module';
 import { AuthModule } from '../auth/auth.module';
+import { SSOModule } from '../sso/sso.module';
 import { Login } from './components/login.component';
 
 @NgModule({
@@ -14,6 +15,7 @@ import { Login } from './components/login.component';
     CommonModule,
     FormsModule,
     AuthModule,
+    SSOModule,
     SpecmateSharedModule,
     NgbModule
   ],

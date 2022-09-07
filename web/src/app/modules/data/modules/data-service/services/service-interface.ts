@@ -24,6 +24,10 @@ export class ServiceInterface {
         }
     }
 
+    public async getSSOConfig(): Promise<any> {
+        return this.http.get<any>(Url.urlSSOConfig()).toPromise();
+    }
+
     public async config(token: UserToken): Promise<any> {
         return this.http.get<any>(Url.urlConfig(token)).toPromise();
     }

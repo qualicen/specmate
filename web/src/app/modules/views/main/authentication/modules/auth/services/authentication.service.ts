@@ -101,6 +101,11 @@ export class AuthenticationService {
         return this._authChanged;
     }
 
+    public async getIsSSSOEnabled(): Promise<boolean> {
+        const ssoConfig = await this.serviceInterface.getSSOConfig();
+        return ssoConfig['authority'] !== undefined;
+    }
+
     public async authenticate(user: User): Promise<UserToken> {
         try {
             const wasAuthenticated: boolean = this.isAuthenticated;

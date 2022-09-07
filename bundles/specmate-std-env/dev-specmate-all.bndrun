@@ -226,15 +226,15 @@
 	org.apache.commons.commons-codec;version='[1.15.0,1.15.1)'
 
 -runproperties: \
-	jetty.http.port=8080,\
+	jetty.http.port=8081,\
+	osgi.console=,\
+	jetty.home.bundle=specmate-jettystarter,\
 	#jetty.ssl.port=8443,\
 	#jetty.etc.config.urls='etc/jetty.xml,etc/jetty-ssl-context.xml,etc/jetty-http.xml,etc/jetty-ssl.xml,etc/jetty-https.xml,etc/jetty-deployer.xml,etc/jetty-rewrite.xml',\
 	jetty.etc.config.urls='etc/jetty.xml,etc/jetty-http.xml,etc/jetty-deployer.xml,etc/jetty-rewrite.xml',\
-	osgi.console=,\
-	jetty.home.bundle=specmate-jettystarter,\
+	org.osgi.service.log.admin.loglevel=DEBUG,\
 	osgi.compatibility.bootdelegation=true,\
-	equinox.log.history.max=1000,\
-	org.osgi.service.log.admin.loglevel=DEBUG 
+	equinox.log.history.max=1000
 -runrepos: \
 	Workspace,\
 	Local

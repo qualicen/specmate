@@ -11,12 +11,7 @@
     <div style="width: auto;">
         <h1 class="card-title text-center mb-4 mt-1">{{'login' | translate}}</h1>
         <hr />
-        <div class="form-group padding-bottom">
-            <button attr.aria-label="{{'sso-login' | translate}}" id="sso-login-button" title="{{'sso-login' | translate}}" (click)="ssoLogin()" class="btn btn-sm">
-                <em class="fa fa-sign-in"></em>&nbsp;{{'sso-login' | translate}}
-            </button>
-        </div>
-        <div class="form-group padding-bottom">
+        <div *ngIf="!isSSOEnabled" class="form-group padding-bottom">
             <div class="input-group input-group-sm">
                 <div class="input-group-prepend">
                     <span class="input-group-text">
@@ -27,7 +22,7 @@
                     placeholder="{{'username' | translate}}" type="text">
             </div>
         </div>
-        <div class="form-group padding-bottom">
+        <div *ngIf="!isSSOEnabled" class="form-group padding-bottom">
             <div class="input-group input-group-sm">
                 <div class="input-group-prepend">
                     <span class="input-group-text">
@@ -36,6 +31,13 @@
                 </div>
                 <input attr.aria-label="{{'password' | translate}}" [(ngModel)]="password" id="login-password-textfield" class="form-control form-control-sm"
                     placeholder="{{'password' | translate}}" type="password">
+            </div>
+        </div>
+        <div *ngIf="isSSOEnabled" class="form-group padding-bottom">
+            <div class="input-group input-group-sm">
+                <button *ngIf="!isSSOAuthenticated" class="btn btn-sm btn-outline-primary" attr.aria-label="{{'sso-login' | translate}}" id="sso-login-button" title="{{'sso-login' | translate}}" (click)="ssoLogin()">
+                    <em class="fa fa-sign-in"></em>&nbsp;{{'sso-login' | translate}}
+                </button>
             </div>
         </div>
         <div class="form-group padding-bottom">
@@ -70,6 +72,13 @@
             <span id="login-language-dropdown" class="pull-right">
                 <language-chooser></language-chooser>
             </span>
+        </div>
+        <div *ngIf="isSSOEnabled" class="form-group padding-bottom">
+            <div class="input-group input-group-sm">
+                <button *ngIf="isSSOAuthenticated" class="btn btn-sm btn-outline-primary" attr.aria-label="{{'sso-logoff' | translate}}" id="sso-logoff-button" title="{{'sso-logoff' | translate}}" (click)="ssoLogout()">
+                    <em class="fa fa-sign-out"></em>&nbsp;{{'sso-logoff' | translate}}&nbsp;({{ssoUserData['name']}})
+                </button>
+            </div>
         </div>
     </div>
 </div>

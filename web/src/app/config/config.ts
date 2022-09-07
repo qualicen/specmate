@@ -7,6 +7,8 @@ export class Config {
     public static URL_ELEMENT = '/details';
     public static URL_DELETE = '/delete';
 
+    public static URL_SSO_CONFIG = 'ssoconfig';
+
     // If you change this, you also need to change the Jetty Redirects (jetty-redirects.xml)
     public static VIEW_URL_PREFIX = '-/';
 

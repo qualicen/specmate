@@ -3,11 +3,13 @@ import { NgModule } from '@angular/core';
 
 import { AuthModule, StsConfigHttpLoader, StsConfigLoader } from 'angular-auth-oidc-client';
 import { map } from 'rxjs/operators';
+import { Url } from 'src/app/util/url';
 
 const defaults = {
-    redirectUrl: window.location.origin,
-    postLogoutRedirectUri: window.location.origin,
+    redirectUrl: location.protocol + '//' + location.host + '/-/login',
+    postLogoutRedirectUri: location.protocol + '//' + location.host + '/-/login',
     scope: 'openid profile offline_access ',
+    clientId: 'specmate',
     responseType: 'code',
     silentRenew: true,
     useRefreshToken: true,
@@ -15,8 +17,11 @@ const defaults = {
 }
 
 export const httpLoaderFactory = (httpClient: HttpClient) => {
-    const config$ = httpClient.get<any>(`http://localhost:8081/services/rest/ssoconfig`).pipe(
+    const config$ = httpClient.get<any>(Url.urlSSOConfig()).pipe(
         map((customConfig: any) => {
+            if(customConfig['authority'] === undefined) {
+                return undefined;
+            }
             return {
                 ...defaults,
                 ...customConfig

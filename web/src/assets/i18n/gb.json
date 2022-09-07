@@ -54,6 +54,7 @@
 	"Model Requirements": "Model Requirements",
 	"ModelHasErrors": "The Model has Errors",
 	"Name": "Name",
+	"Negate": "Negate",
 	"Negation of this connection": "Negation of this connection",
 	"NoWarnings": "No Warnings",
 	"Node": "Node",
@@ -194,7 +195,6 @@
 	"navigateTo": "Navigate to \"{{name}}\"",
 	"navigated": "Navigated",
 	"navigationWasNotPerformed": "Navigation was not performed",
-	"Negate":"Negate",
 	"negate": "Negate",
 	"negated": "Negated",
 	"noCommandsLeft": "No commands left",
@@ -261,14 +261,17 @@
 	"specmate": {
 		"logo": "Specmate Emblem"
 	},
+	"sso-login": "SSO Login",
+	"sso-logoff": "SSO Logout",
 	"successful": "Successful",
+	"testCaseValue": "",
 	"testspec": {
+		"boundaryAnalysis": "Perform boundary analysis",
 		"considerLinks": "Consider linked nodes",
 		"errorMessage": "No logical testspecification could be generated due to the following errors. Please check your model.",
 		"errorTitle": "Generation not possible",
 		"generate": "Generate test specification",
-		"skeleton": "Download test specification skeletons",
-		"boundaryAnalysis": "Perform boundary analysis"
+		"skeleton": "Download test specification skeletons"
 	},
 	"toggleLog": "Toggle log",
 	"tools": {

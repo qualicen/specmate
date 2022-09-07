@@ -16,8 +16,10 @@ export class Login implements OnInit {
     public _project = '';
     public projectnames: string[];
 
-    isAuthenticated = false;
-    accessToken = 'unset';
+    public isSSOEnabled = false;
+    public isSSOAuthenticated = false;
+    public accessTokenSSO = 'unset';
+    public ssoUserData: any = undefined;
 
     public isAuthenticating = false;
 
@@ -35,13 +37,19 @@ export class Login implements OnInit {
 
 
     ngOnInit() {
-        this.tryNavigateAway();
-        this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated, userData }) => {
-            console.info(isAuthenticated);
-            this.isAuthenticated = isAuthenticated;
-            console.info(userData);
-            this.accessToken = this.oidcSecurityService.getAccessToken();
+        this.auth.getIsSSSOEnabled().then(isSSOEnabled => {
+            this.isSSOEnabled = isSSOEnabled;
+            this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated, userData }) => {
+                if(isAuthenticated) {
+                    this.isSSOAuthenticated = isAuthenticated;
+                    const token = this.oidcSecurityService.getAccessToken();
+                    this.username = "SSO-ACCESS-TOKEN (" + userData['name']+ ")";
+                    this.password = token;
+                    this.ssoUserData = userData;
+                }
+            });
         });
+        this.tryNavigateAway();
     }
 
     private tryNavigateAway(): void {
@@ -54,9 +62,13 @@ export class Login implements OnInit {
         if (!this.canLogin) {
             return Promise.resolve(false);
         }
-        let user = new User();
-        user.userName = this.username;
-        user.passWord = this.password;
+        return this.doLogin(this.username, this.password);
+    }
+
+    private async doLogin(username: string, password: string): Promise<boolean> {
+        const user = new User();
+        user.userName = username;
+        user.passWord = password;
         user.projectName = this.project;
         this.isAuthenticating = true;
         await this.auth.authenticate(user);

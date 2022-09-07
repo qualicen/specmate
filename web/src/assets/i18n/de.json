@@ -54,6 +54,7 @@
 	"Model Requirements": "Modellanforderungen",
 	"ModelHasErrors": "Fehlerhaftes Modell",
 	"Name": "Name",
+	"Negate": "Negieren",
 	"Negation of this connection": "Negation der Verbindung",
 	"NoWarnings": "Keine Warnungen",
 	"Node": "Knoten",
@@ -194,7 +195,6 @@
 	"navigateTo": "Navigiere nach \"{{name}}\"",
 	"navigated": "Navigiert",
 	"navigationWasNotPerformed": "Navigation wurde nicht ausgeführt",
-	"Negate": "Negieren",
 	"negate": "Negieren",
 	"negated": "Negiert",
 	"noCommandsLeft": "Keine Befehle übrig",
@@ -261,14 +261,17 @@
 	"specmate": {
 		"logo": "Specmate Logo"
 	},
+	"sso-login": "SSO Anmeldung",
+	"sso-logoff": "SSO Abmeldung",
 	"successful": "Erfolgreich",
+	"testCaseValue": "",
 	"testspec": {
+		"boundaryAnalysis": "Grenzwertanalyse durchführen",
 		"considerLinks": "Verknüpfte Knoten beachten",
 		"errorMessage": "Es konnte keine logische Testfallspezifikation erzeugt werden, da das Modell die folgenden Fehler enthält. Bitte überprüfen Sie ihr Modell.",
 		"errorTitle": "Generierung nicht möglich",
 		"generate": "Testspezifikation generieren",
-		"skeleton": "Testspezifikationshüllen herunterladen",
-		"boundaryAnalysis": "Grenzwertanalyse durchführen"
+		"skeleton": "Testspezifikationshüllen herunterladen"
 	},
 	"toggleLog": "Log ein/ausblenden",
 	"tools": {

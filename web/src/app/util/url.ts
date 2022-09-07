@@ -149,6 +149,10 @@ export class Url {
         return Url.build([Config.URL_BASE, token.project, Config.URL_CONFIG]);
     }
 
+    public static urlSSOConfig(): string {
+        return Url.build([Config.URL_BASE, Config.URL_SSO_CONFIG]);
+    }
+
     public static urlCreate(url: string): string {
         return Url.build([Config.URL_BASE, Url.parent(Url.decode(url)), Config.URL_CONTENTS]);
     }

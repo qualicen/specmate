@@ -1,4 +1,4 @@
-package com.specmate.modelgeneration;
+package com.specmate.modelgeneration.legacy;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

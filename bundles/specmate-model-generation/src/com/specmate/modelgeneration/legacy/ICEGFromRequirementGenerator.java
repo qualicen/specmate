@@ -1,4 +1,4 @@
-package com.specmate.modelgeneration;
+package com.specmate.modelgeneration.legacy;
 
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.model.requirements.CEGModel;

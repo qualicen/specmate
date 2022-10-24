@@ -1,4 +1,4 @@
-package com.specmate.modelgeneration.stages;
+package com.specmate.modelgeneration.legacy.stages;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -10,9 +10,9 @@ import com.specmate.cause_effect_patterns.parse.wrapper.MatchResultTreeNode;
 import com.specmate.cause_effect_patterns.parse.wrapper.MatchResultTreeNode.RuleType;
 import com.specmate.cause_effect_patterns.parse.wrapper.NegationTreeNode;
 import com.specmate.model.requirements.NodeType;
-import com.specmate.modelgeneration.stages.graph.Graph;
-import com.specmate.modelgeneration.stages.graph.GraphNode;
-import com.specmate.modelgeneration.stages.processors.ConditionVariableNode;
+import com.specmate.modelgeneration.legacy.stages.graph.Graph;
+import com.specmate.modelgeneration.legacy.stages.graph.GraphNode;
+import com.specmate.modelgeneration.legacy.stages.processors.ConditionVariableNode;
 
 public class GraphBuilder {
 

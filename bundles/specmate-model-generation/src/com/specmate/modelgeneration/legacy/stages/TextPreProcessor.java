@@ -1,4 +1,4 @@
-package com.specmate.modelgeneration.stages;
+package com.specmate.modelgeneration.legacy.stages;
 
 import java.util.List;
 

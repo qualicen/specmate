@@ -1,14 +1,14 @@
-package com.specmate.modelgeneration.stages;
+package com.specmate.modelgeneration.legacy.stages;
 
 import java.util.HashMap;
 
 import com.specmate.model.requirements.CEGModel;
 import com.specmate.model.requirements.CEGNode;
 import com.specmate.model.requirements.RequirementsFactory;
-import com.specmate.modelgeneration.CEGCreation;
-import com.specmate.modelgeneration.stages.graph.Graph;
-import com.specmate.modelgeneration.stages.graph.GraphEdge;
-import com.specmate.modelgeneration.stages.graph.GraphNode;
+import com.specmate.modelgeneration.legacy.CEGCreation;
+import com.specmate.modelgeneration.legacy.stages.graph.Graph;
+import com.specmate.modelgeneration.legacy.stages.graph.GraphEdge;
+import com.specmate.modelgeneration.legacy.stages.graph.GraphNode;
 import com.specmate.nlp.api.ELanguage;
 
 public class GraphLayouter {

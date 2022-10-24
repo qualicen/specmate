@@ -1,4 +1,4 @@
-package com.specmate.modelgeneration;
+package com.specmate.modelgeneration.legacy;
 
 import java.util.ArrayList;
 import java.util.List;

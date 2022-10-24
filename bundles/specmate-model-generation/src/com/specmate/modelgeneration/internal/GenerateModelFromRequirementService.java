@@ -1,4 +1,4 @@
-package com.specmate.modelgeneration;
+package com.specmate.modelgeneration.internal;
 
 import java.net.URISyntaxException;
 
@@ -13,17 +13,13 @@ import org.osgi.service.log.Logger;
 import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.common.exception.SpecmateException;
-import com.specmate.config.api.IConfigService;
 import com.specmate.emfrest.api.IRestService;
 import com.specmate.emfrest.api.RestServiceBase;
 import com.specmate.metrics.ICounter;
 import com.specmate.metrics.IMetricsService;
 import com.specmate.model.requirements.CEGModel;
-import com.specmate.modelgeneration.legacy.EnglishCEGFromRequirementGenerator;
-import com.specmate.modelgeneration.legacy.GermanCEGFromRequirementGenerator;
-import com.specmate.nlp.api.ELanguage;
+import com.specmate.modelgeneration.api.ICEGModelGenerator;
 import com.specmate.nlp.api.INLPService;
-import com.specmate.nlp.util.NLPUtil;
 import com.specmate.rest.RestResult;
 import com.specmate.xtext.XTextException;
 
@@ -40,9 +36,9 @@ public class GenerateModelFromRequirementService extends RestServiceBase {
 	/** Reference to the log service */
 	@Reference(service = LoggerFactory.class)
 	private Logger logger;
-	private IConfigService configService;
 	private IMetricsService metricsService;
 	private ICounter modelGenCounter;
+	private ICEGModelGenerator modelGenerator;
 
 	@Activate
 	public void activate() throws SpecmateException {
@@ -65,7 +61,7 @@ public class GenerateModelFromRequirementService extends RestServiceBase {
 
 		try {
 			logger.info("Model Generation STARTED");
-			model = generateModelFromDescription(model);
+			generateModelFromDescription(model);
 			logger.info("Model Generation FINISHED");
 			modelGenCounter.inc();
 		} catch (SpecmateException e) {
@@ -83,47 +79,24 @@ public class GenerateModelFromRequirementService extends RestServiceBase {
 	 * @throws XTextException
 	 * @throws URISyntaxException
 	 */
-	private CEGModel generateModelFromDescription(CEGModel model) throws SpecmateException {
+	private void generateModelFromDescription(CEGModel model) throws SpecmateException {
 		String text = model.getModelRequirements();
 		if (text == null || StringUtils.isEmpty(text)) {
-			return model;
-		}
-		// Fixes some issues with the dkpro/spacy backoff.
-		text = text.replaceAll("[^,.!? ](?=[,.!?])", "$0 ").replaceAll("\\s+", " ");
-		// text = new PersonalPronounsReplacer(tagger).replacePronouns(text);
-		ELanguage lang = NLPUtil.detectLanguage(text);
-		ICEGFromRequirementGenerator generator;
-		if (lang == ELanguage.PSEUDO) {
-			generator = new GenerateModelFromPseudoCode();
-		} else {
-			generator = new PatternbasedCEGGenerator(lang, tagger, configService, logger);
+			return;
 		}
 
-		try {
-			generator.createModel(model, text);
-		} catch (SpecmateException e) {
-			// Generation Backof
-			logger.info("NLP model generation failed with the following error: \"" + e.getMessage() + "\"");
-			logger.info("Backing off to rule based generation...");
-			if (lang == ELanguage.DE) {
-				generator = new GermanCEGFromRequirementGenerator(logger, tagger);
-			} else {
-				generator = new EnglishCEGFromRequirementGenerator(logger, tagger);
-			}
-			generator.createModel(model, text);
-		}
-		return model;
+		modelGenerator.createModel(model);
+
+	}
+
+	@Reference
+	void setModelGenerator(ICEGModelGenerator modelGenerator) {
+		this.modelGenerator = modelGenerator;
 	}
 
 	@Reference
 	void setNlptagging(INLPService tagger) {
 		this.tagger = tagger;
-	}
-
-	/** Service reference for config service */
-	@Reference
-	public void setConfigurationService(IConfigService configService) {
-		this.configService = configService;
 	}
 
 	@Reference

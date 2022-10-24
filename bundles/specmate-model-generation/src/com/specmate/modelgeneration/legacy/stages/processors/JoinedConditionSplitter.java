@@ -1,4 +1,4 @@
-package com.specmate.modelgeneration.stages.processors;
+package com.specmate.modelgeneration.legacy.stages.processors;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

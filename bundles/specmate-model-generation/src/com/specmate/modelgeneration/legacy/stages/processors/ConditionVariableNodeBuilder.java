@@ -1,4 +1,4 @@
-package com.specmate.modelgeneration.stages.processors;
+package com.specmate.modelgeneration.legacy.stages.processors;
 
 import com.specmate.cause_effect_patterns.parse.wrapper.BinaryMatchResultTreeNode;
 import com.specmate.cause_effect_patterns.parse.wrapper.LeafTreeNode;

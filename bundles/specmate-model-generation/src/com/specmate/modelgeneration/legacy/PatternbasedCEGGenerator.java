@@ -1,4 +1,4 @@
-package com.specmate.modelgeneration;
+package com.specmate.modelgeneration.legacy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,12 +18,12 @@ import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.config.api.IConfigService;
 import com.specmate.model.administration.ErrorCode;
 import com.specmate.model.requirements.CEGModel;
-import com.specmate.modelgeneration.stages.GraphBuilder;
-import com.specmate.modelgeneration.stages.GraphLayouter;
-import com.specmate.modelgeneration.stages.MatcherPostProcesser;
-import com.specmate.modelgeneration.stages.RuleMatcher;
-import com.specmate.modelgeneration.stages.TextPreProcessor;
-import com.specmate.modelgeneration.stages.graph.Graph;
+import com.specmate.modelgeneration.legacy.stages.GraphBuilder;
+import com.specmate.modelgeneration.legacy.stages.GraphLayouter;
+import com.specmate.modelgeneration.legacy.stages.MatcherPostProcesser;
+import com.specmate.modelgeneration.legacy.stages.RuleMatcher;
+import com.specmate.modelgeneration.legacy.stages.TextPreProcessor;
+import com.specmate.modelgeneration.legacy.stages.graph.Graph;
 import com.specmate.nlp.api.ELanguage;
 import com.specmate.nlp.api.INLPService;
 

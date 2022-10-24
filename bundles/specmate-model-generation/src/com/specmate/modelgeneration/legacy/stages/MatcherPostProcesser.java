@@ -1,10 +1,10 @@
-package com.specmate.modelgeneration.stages;
+package com.specmate.modelgeneration.legacy.stages;
 
 import com.specmate.cause_effect_patterns.parse.wrapper.MatchResultTreeNode;
-import com.specmate.modelgeneration.stages.processors.ConditionVariableNodeBuilder;
-import com.specmate.modelgeneration.stages.processors.ConditionVariableTextCleaner;
-import com.specmate.modelgeneration.stages.processors.JoinedConditionSplitter;
-import com.specmate.modelgeneration.stages.processors.OperationOrderFixer;
+import com.specmate.modelgeneration.legacy.stages.processors.ConditionVariableNodeBuilder;
+import com.specmate.modelgeneration.legacy.stages.processors.ConditionVariableTextCleaner;
+import com.specmate.modelgeneration.legacy.stages.processors.JoinedConditionSplitter;
+import com.specmate.modelgeneration.legacy.stages.processors.OperationOrderFixer;
 import com.specmate.nlp.api.ELanguage;
 
 public class MatcherPostProcesser {

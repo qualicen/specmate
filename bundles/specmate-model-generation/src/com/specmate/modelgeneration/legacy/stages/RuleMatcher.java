@@ -1,4 +1,4 @@
-package com.specmate.modelgeneration.stages;
+package com.specmate.modelgeneration.legacy.stages;
 
 import java.net.URISyntaxException;
 import java.util.List;
@@ -19,7 +19,7 @@ import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.config.api.IConfigService;
 import com.specmate.model.administration.ErrorCode;
-import com.specmate.modelgeneration.PatternbasedCEGGenerator;
+import com.specmate.modelgeneration.legacy.PatternbasedCEGGenerator;
 import com.specmate.nlp.api.ELanguage;
 import com.specmate.nlp.api.INLPService;
 import com.specmate.xtext.XTextException;

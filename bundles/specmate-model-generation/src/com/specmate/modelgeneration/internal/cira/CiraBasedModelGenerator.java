@@ -1,4 +1,4 @@
-package com.specmate.modelgeneration.internal;
+package com.specmate.modelgeneration.internal.cira;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -16,7 +16,6 @@ import com.specmate.config.api.IConfigService;
 import com.specmate.model.administration.ErrorCode;
 import com.specmate.model.requirements.CEGModel;
 import com.specmate.modelgeneration.api.ICEGModelGenerator;
-import com.specmate.modelgeneration.internal.CiraClient.Label;
 import com.specmate.modelgeneration.internal.config.CiraConfig;
 
 @Component(immediate = true)
@@ -52,6 +51,8 @@ public class CiraBasedModelGenerator implements ICEGModelGenerator {
 		boolean causal = ciraClient.isCausal(text);
 		if (causal) {
 			List<Label> labels = ciraClient.getLabels(text);
+			CiraLabelToCEGTranslator translator = new CiraLabelToCEGTranslator();
+			translator.transform(model, text, labels);
 		} else {
 			// TODO: Can we get feedback to the user?
 		}

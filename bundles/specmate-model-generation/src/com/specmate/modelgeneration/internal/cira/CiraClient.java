@@ -1,4 +1,4 @@
-package com.specmate.modelgeneration.internal;
+package com.specmate.modelgeneration.internal.cira;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,22 +64,6 @@ public class CiraClient {
 		}
 
 		return labels;
-
-	}
-
-	class Label {
-		int begin;
-		int end;
-		String label;
-		String id;
-
-		public Label(int begin, int end, String label, String id) {
-			super();
-			this.begin = begin;
-			this.end = end;
-			this.label = label;
-			this.id = id;
-		}
 
 	}
 

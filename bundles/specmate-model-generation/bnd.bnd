@@ -32,5 +32,6 @@ Private-Package: \
 	com.specmate.modelgeneration.internal,\
 	com.specmate.modelgeneration.internal.config,\
 	com.specmate.modelgeneration.legacy.stages.graph,\
-	com.specmate.modelgeneration.legacy.stages.processors
+	com.specmate.modelgeneration.legacy.stages.processors,\
+	com.specmate.modelgeneration.internal.cira
 Export-Package: com.specmate.modelgeneration.api

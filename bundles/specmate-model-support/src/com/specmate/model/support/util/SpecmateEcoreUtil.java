@@ -400,8 +400,6 @@ public class SpecmateEcoreUtil {
 		cegConnection.setSource(source);
 		cegConnection.setTarget(target);
 		cegConnection.setId(getIdForChild());
-		// cegConnection.setName(getNameForChild((IContainer) source.eContainer(),
-		// cegConnection.eClass()));
 		return cegConnection;
 	}
 

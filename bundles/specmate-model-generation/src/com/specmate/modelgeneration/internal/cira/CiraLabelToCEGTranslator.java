@@ -16,8 +16,17 @@ import com.specmate.common.UUIDUtil;
 import com.specmate.model.requirements.CEGConnection;
 import com.specmate.model.requirements.CEGModel;
 import com.specmate.model.requirements.CEGNode;
+import com.specmate.model.requirements.NodeType;
 import com.specmate.model.requirements.RequirementsFactory;
 
+/**
+ * Translates Cira Labels to a CEG. This class has been ported from the
+ * javascript version here:
+ * https://github.com/JulianFrattini/cira-app/blob/baa38b6e1ca75682101dfade7486fd31575353d6/util/scripts/converters/labelstograph.js
+ *
+ * @author junkerm
+ *
+ */
 public class CiraLabelToCEGTranslator {
 	/**
 	 * Transforms a given sentence together with an appropriate set of labels into a
@@ -204,7 +213,7 @@ public class CiraLabelToCEGTranslator {
 		node.setVariableAssumed(variableAssumed);
 		node.setConditionAssumed(conditionAssumed);
 
-		node.negate = isNegated(node, labels, new ArrayList<PreCEGNode>());
+		node.setNegate(isNegated(node, labels, new ArrayList<PreCEGNode>()));
 		return node;
 	}
 
@@ -306,7 +315,7 @@ public class CiraLabelToCEGTranslator {
 	 * @returns True, if a negation label is encompassed by the node label
 	 */
 	private boolean isNegated(PreCEGNode node, Collection<Label> labels, List<PreCEGNode> additionalNegations) {
-		List<Label> negationsWithin = getLabelsEncompassed(labels, "Negation", node.labels);
+		List<Label> negationsWithin = getLabelsEncompassed(labels, "Negation", node.getLabels());
 		if (additionalNegations.indexOf(node) == -1) {
 			// if the node is not already negated from an outside node (e.g., exceptive
 			// clause), return true if the number of negations is uneven (to deal with
@@ -331,7 +340,7 @@ public class CiraLabelToCEGTranslator {
 		List<PreCEGEdge> edges = new ArrayList<>();
 		List<PreCEGNode> finalnodes = new ArrayList<>();
 
-		List<PreCEGNode> causeNodes = nodes.stream().filter(node -> (node.labels.get(0).label.startsWith("Cause")))
+		List<PreCEGNode> causeNodes = nodes.stream().filter(node -> (node.getLabels().get(0).label.startsWith("Cause")))
 				.collect(Collectors.toList());
 		List<PreCEGNode> additionalnegations = new ArrayList<PreCEGNode>();
 
@@ -348,9 +357,9 @@ public class CiraLabelToCEGTranslator {
 
 			for (var i = 0; i < causeNodes.size() - 1; i++) {
 				// get the indices of the space between the two adjacent cause nodes
-				List<Label> clabels = causeNodes.get(i).labels;
+				List<Label> clabels = causeNodes.get(i).getLabels();
 				int endOfCauseNode1 = clabels.get(clabels.size() - 1).end;
-				int beginOfCauseNode2 = causeNodes.get(i + 1).labels.get(0).begin;
+				int beginOfCauseNode2 = causeNodes.get(i + 1).getLabels().get(0).begin;
 
 				// count the occurrences of conjunctions and disjunctions in this space
 				int nconjunctions = getLabelsInbetween(labels, "Conjunction", endOfCauseNode1, beginOfCauseNode2)
@@ -452,8 +461,8 @@ public class CiraLabelToCEGTranslator {
 		}
 
 		// add the effects to the final nodes
-		List<PreCEGNode> effectnodes = nodes.stream().filter(node -> (node.labels.get(0).label.startsWith("Effect")))
-				.collect(Collectors.toList());
+		List<PreCEGNode> effectnodes = nodes.stream()
+				.filter(node -> (node.getLabels().get(0).label.startsWith("Effect"))).collect(Collectors.toList());
 		finalnodes.addAll(effectnodes);
 
 		// if the cause nodes consist of only one single cause node, there will not be
@@ -483,14 +492,13 @@ public class CiraLabelToCEGTranslator {
 			List<String> causejunctors) {
 		List<Label> negations = getLabelsOfType(labels, "Negation");
 		// filter, which of these labels are already within a cause or effect node
-		List<PreCEGNode> causalnodes = nodes.stream().filter(
-				node -> (node.labels.get(0).label.startsWith("Cause") || node.labels.get(0).label.startsWith("Effect")))
-				.collect(Collectors.toList());
+		List<PreCEGNode> causalnodes = nodes.stream().filter(node -> (node.getLabels().get(0).label.startsWith("Cause")
+				|| node.getLabels().get(0).label.startsWith("Effect"))).collect(Collectors.toList());
 		List<Label> unhandlednegations = new ArrayList<>();
 		for (Label negation : negations) {
 			boolean negationcovered = false;
 			for (PreCEGNode cnode : causalnodes) {
-				for (Label label : cnode.labels) {
+				for (Label label : cnode.getLabels()) {
 					if (label.begin <= negation.begin && label.end >= negation.end) {
 						negationcovered = true;
 						break;
@@ -507,8 +515,8 @@ public class CiraLabelToCEGTranslator {
 		// unhandled negations
 		var negatednodes = new ArrayList<PreCEGNode>();
 		if (unhandlednegations.size() > 0) {
-			List<PreCEGNode> causenodes = nodes.stream().filter(node -> node.labels.get(0).label.startsWith("Cause"))
-					.collect(Collectors.toList());
+			List<PreCEGNode> causenodes = nodes.stream()
+					.filter(node -> node.getLabels().get(0).label.startsWith("Cause")).collect(Collectors.toList());
 
 			for (Label negation : unhandlednegations) {
 				// starting from the next causal node after the unhandled negation, all causes
@@ -535,7 +543,7 @@ public class CiraLabelToCEGTranslator {
 	 */
 	private PreCEGNode getNextCausalNode(Label label, Collection<PreCEGNode> causalNodes) {
 		for (PreCEGNode causalLabel : causalNodes) {
-			if (label.end <= causalLabel.labels.get(0).begin) {
+			if (label.end <= causalLabel.getLabels().get(0).begin) {
 				return causalLabel;
 			}
 		}
@@ -556,8 +564,8 @@ public class CiraLabelToCEGTranslator {
 		edge.setTarget(target);
 		edge.setNegate(negate);
 
-		source.outgoingConnections.add(edge);
-		target.incomingConnections.add(edge);
+		source.getOutgoingConnections().add(edge);
+		target.getIncomingConnections().add(edge);
 
 		return edge;
 	}
@@ -570,8 +578,8 @@ public class CiraLabelToCEGTranslator {
 	 *          AND or OR as a type
 	 */
 	private boolean isIntermediateNode(PreCEGNode node) {
-		return StringUtils.isEmpty(node.variable) && StringUtils.isEmpty(node.condition)
-				&& (node.type.equals("AND") || node.type.equals("OR"));
+		return StringUtils.isEmpty(node.getVariable()) && StringUtils.isEmpty(node.getCondition())
+				&& (node.getType().equals("AND") || node.getType().equals("OR"));
 	}
 
 	/**
@@ -597,12 +605,12 @@ public class CiraLabelToCEGTranslator {
 					childintermediate = collapseIntermediateNodes(childintermediate, nodes, edges);
 
 					// collapse the two intermediate nodes if they are of the same type
-					if (childintermediate.type == currentnode.type) {
+					if (childintermediate.getType() == currentnode.getType()) {
 						// rewire the edges between the grandchildren and the child to the parent node
 						for (var grandchild : getChildNodes(childintermediate, nodes, edges)) {
 							PreCEGEdge edge = getEdgeBetween(grandchild, childintermediate, edges);
 							edge.setTarget(currentnode);
-							currentnode.incomingConnections.add(edge);
+							currentnode.getIncomingConnections().add(edge);
 						}
 
 						// delete the obsolete edge from the child node to the parent node
@@ -647,12 +655,12 @@ public class CiraLabelToCEGTranslator {
 	 * @returns Edge from the source to the target node, if it exists
 	 */
 	private PreCEGEdge getEdgeBetween(PreCEGNode source, PreCEGNode target, Collection<PreCEGEdge> edges) {
-		if (source.outgoingConnections.size() == 0 || target.incomingConnections.size() == 0) {
+		if (source.getOutgoingConnections().size() == 0 || target.getIncomingConnections().size() == 0) {
 			return null;
 		}
-		if (source.outgoingConnections.get(0).getTarget() != null) {
+		if (source.getOutgoingConnections().get(0).getTarget() != null) {
 			// test case, where edges are always referenced as an object
-			for (PreCEGEdge edge : source.outgoingConnections) {
+			for (PreCEGEdge edge : source.getOutgoingConnections()) {
 				if (edge.getTarget().equals(target)) {
 					return edge;
 				}
@@ -672,8 +680,8 @@ public class CiraLabelToCEGTranslator {
 	 * @returns Updated list of edge objects
 	 */
 	private Collection<PreCEGEdge> removeEdge(PreCEGEdge edge, Collection<PreCEGEdge> edges) {
-		edge.getSource().outgoingConnections.remove(edge);
-		edge.getTarget().incomingConnections.remove(edge);
+		edge.getSource().getOutgoingConnections().remove(edge);
+		edge.getTarget().getIncomingConnections().remove(edge);
 		edges.remove(edge);
 
 		return edges;
@@ -681,12 +689,21 @@ public class CiraLabelToCEGTranslator {
 
 	private void toSpecmateCEG(CEGModel ceg, PreCEGModel preCegModel) {
 		Map<PreCEGNode, CEGNode> nodeMap = new HashMap<>();
+		removeSuperfluousNodes(preCegModel);
+		int intermediateNodeCounter = 1;
 		for (PreCEGNode pnode : preCegModel.nodes) {
 			CEGNode node = RequirementsFactory.eINSTANCE.createCEGNode();
-			node.setVariable(pnode.variable);
-			node.setCondition(pnode.condition);
+			String var = pnode.getVariable();
+			String cond = pnode.getCondition();
+			if (StringUtils.isEmpty(var) && StringUtils.isEmpty(cond)) {
+				var = "IN";
+				cond = "" + intermediateNodeCounter++;
+			}
+			node.setVariable(var);
+			node.setCondition(cond);
 			node.setId(UUIDUtil.generateUUID());
 			node.setName(node.getId());
+			node.setType(pnode.getType() == null || pnode.getType().equals("AND") ? NodeType.AND : NodeType.OR);
 			nodeMap.put(pnode, node);
 			ceg.getContents().add(node);
 		}
@@ -696,7 +713,40 @@ public class CiraLabelToCEGTranslator {
 			conn.setTarget(nodeMap.get(pedge.getTarget()));
 			conn.setId(UUIDUtil.generateUUID());
 			conn.setName(conn.getId());
+			conn.setNegate(pedge.getSource().isNegate());
 			ceg.getContents().add(conn);
+		}
+
+	}
+
+	/**
+	 * Removes intermediate node with no variable and no condition that have a
+	 * single outgoing edge to node with only one incoming edge
+	 *
+	 * @param preCegModel
+	 */
+	private void removeSuperfluousNodes(PreCEGModel preCegModel) {
+		List<PreCEGNode> toRemove = preCegModel.nodes.stream().filter(n -> true &&
+		// only one outgoing connection
+				n.getOutgoingConnections().size() == 1 &&
+				// target node has only one incoming connection
+				n.getOutgoingConnections().get(0).getTarget().getIncomingConnections().size() == 1 &&
+				// condition empty
+				StringUtils.isEmpty(n.getCondition()) &&
+				// variable empty
+				StringUtils.isEmpty(n.getVariable())).collect(Collectors.toList());
+
+		for (PreCEGNode n : toRemove) {
+			preCegModel.nodes.remove(n);
+			PreCEGEdge outEdge = n.getOutgoingConnections().get(0);
+			preCegModel.edges.remove(outEdge);
+			PreCEGNode target = outEdge.getTarget();
+			target.setType(n.getType());
+			target.getIncomingConnections().clear();
+			target.getIncomingConnections().addAll(n.getIncomingConnections());
+			for (PreCEGEdge e : n.getIncomingConnections()) {
+				e.setTarget(target);
+			}
 		}
 	}
 }

@@ -4,16 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PreCEGNode {
-	String variable;
-	String condition;
-	List<Label> labels;
-	List<PreCEGEdge> incomingConnections = new ArrayList<>();
-	List<PreCEGEdge> outgoingConnections = new ArrayList<>();
-	boolean variableAssumed;
-	boolean conditionAssumed;
-	boolean negate;
-	String type;
-	String _id;
+	private String variable;
+	private String condition;
+	private List<Label> labels;
+	private List<PreCEGEdge> incomingConnections = new ArrayList<>();
+	private List<PreCEGEdge> outgoingConnections = new ArrayList<>();
+	private boolean variableAssumed;
+	private boolean conditionAssumed;
+	private boolean negate;
+	private String type;
 
 	public String getVariable() {
 		return variable;
@@ -43,16 +42,8 @@ public class PreCEGNode {
 		return incomingConnections;
 	}
 
-	public void setIncomingConnections(List<PreCEGEdge> incomingConnections) {
-		this.incomingConnections = incomingConnections;
-	}
-
 	public List<PreCEGEdge> getOutgoingConnections() {
 		return outgoingConnections;
-	}
-
-	public void setOutgoingConnections(List<PreCEGEdge> outgoingConnections) {
-		this.outgoingConnections = outgoingConnections;
 	}
 
 	public boolean getVariableAssumed() {

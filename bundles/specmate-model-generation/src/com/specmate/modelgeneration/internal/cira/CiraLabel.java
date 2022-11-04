@@ -1,12 +1,12 @@
 package com.specmate.modelgeneration.internal.cira;
 
-class Label {
+class CiraLabel {
 	int begin;
 	int end;
 	String label;
 	String id;
 
-	public Label(int begin, int end, String label, String id) {
+	public CiraLabel(int begin, int end, String label, String id) {
 		super();
 		this.begin = begin;
 		this.end = end;

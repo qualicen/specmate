@@ -1,16 +1,16 @@
 package com.specmate.modelgeneration.internal.cira;
 
-public class PreCEGEdge {
+public class CiraCEGEdge {
 
-	private PreCEGNode source;
-	private PreCEGNode target;
+	private CiraCEGNode source;
+	private CiraCEGNode target;
 	private boolean negate;
 
-	public void setSource(PreCEGNode source) {
+	public void setSource(CiraCEGNode source) {
 		this.source = source;
 	}
 
-	public void setTarget(PreCEGNode currentnode) {
+	public void setTarget(CiraCEGNode currentnode) {
 		target = currentnode;
 	}
 
@@ -18,11 +18,11 @@ public class PreCEGEdge {
 		this.negate = negate;
 	}
 
-	public PreCEGNode getSource() {
+	public CiraCEGNode getSource() {
 		return source;
 	}
 
-	public PreCEGNode getTarget() {
+	public CiraCEGNode getTarget() {
 		return target;
 	}
 

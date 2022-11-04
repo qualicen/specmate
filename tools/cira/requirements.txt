@@ -1,0 +1,5 @@
+fastapi
+uvicorn
+transformers
+torch
+pytorch_lightning

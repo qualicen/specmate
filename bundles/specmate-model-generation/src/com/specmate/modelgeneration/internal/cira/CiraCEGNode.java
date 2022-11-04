@@ -3,12 +3,12 @@ package com.specmate.modelgeneration.internal.cira;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PreCEGNode {
+public class CiraCEGNode {
 	private String variable;
 	private String condition;
-	private List<Label> labels;
-	private List<PreCEGEdge> incomingConnections = new ArrayList<>();
-	private List<PreCEGEdge> outgoingConnections = new ArrayList<>();
+	private List<CiraLabel> labels;
+	private List<CiraCEGEdge> incomingConnections = new ArrayList<>();
+	private List<CiraCEGEdge> outgoingConnections = new ArrayList<>();
 	private boolean variableAssumed;
 	private boolean conditionAssumed;
 	private boolean negate;
@@ -30,19 +30,19 @@ public class PreCEGNode {
 		this.condition = condition;
 	}
 
-	public List<Label> getLabels() {
+	public List<CiraLabel> getLabels() {
 		return labels;
 	}
 
-	public void setLabels(List<Label> labels) {
+	public void setLabels(List<CiraLabel> labels) {
 		this.labels = labels;
 	}
 
-	public List<PreCEGEdge> getIncomingConnections() {
+	public List<CiraCEGEdge> getIncomingConnections() {
 		return incomingConnections;
 	}
 
-	public List<PreCEGEdge> getOutgoingConnections() {
+	public List<CiraCEGEdge> getOutgoingConnections() {
 		return outgoingConnections;
 	}
 

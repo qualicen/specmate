@@ -15,6 +15,7 @@ import org.osgi.service.log.LoggerFactory;
 import org.osgi.util.tracker.ServiceTracker;
 
 import com.specmate.auth.api.IAuthenticationService;
+import com.specmate.common.UUIDUtil;
 import com.specmate.connectors.api.IProjectService;
 import com.specmate.emfjson.EMFJsonSerializer;
 import com.specmate.model.base.BasePackage;
@@ -135,7 +136,7 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 		requirement.put(NSURI_KEY, RequirementsPackage.eNS_URI);
 		requirement.put(ECLASS, RequirementsPackage.Literals.REQUIREMENT.getName());
 		requirement.put(BasePackage.Literals.INAMED__NAME.getName(), requirementsName);
-		requirement.put(BasePackage.Literals.IID__ID.getName(), requirementsName);
+		requirement.put(BasePackage.Literals.IID__ID.getName(), UUIDUtil.generateUUID());
 		requirement.put(BasePackage.Literals.IRECYCLED__RECYCLED.getName(), false);
 		requirement.put(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName(), false);
 		requirement.put(BasePackage.Literals.IDESCRIBED__DESCRIPTION.getName(), "description");

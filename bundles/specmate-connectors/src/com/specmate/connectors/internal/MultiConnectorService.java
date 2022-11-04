@@ -63,16 +63,18 @@ public class MultiConnectorService {
 
 	@Deactivate
 	public void deactivate() {
-		scheduler.cancel();
+		if (scheduler != null) {
+			scheduler.cancel();
+		}
 	}
 
 	@Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
 	public void addMultiConnector(IMultiConnector multiConnector) {
-		this.multiConnectors.add(multiConnector);
+		multiConnectors.add(multiConnector);
 	}
 
 	public void removeMultiConnector(IMultiConnector multiConnector) {
-		this.multiConnectors.remove(multiConnector);
+		multiConnectors.remove(multiConnector);
 	}
 
 	public List<IMultiConnector> getMultiConnectors() {

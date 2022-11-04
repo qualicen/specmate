@@ -21,7 +21,7 @@ import com.specmate.persistency.ITransaction;
 
 import specmate.dbprovider.h2.config.H2ProviderConfig;
 
-public class IntegrationTestBase {
+public class IntegrationTestBase{
 
 	// JUnits creates a new object for every test. Making these fields static
 	// avoids that

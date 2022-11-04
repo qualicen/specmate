@@ -7,7 +7,6 @@ import javax.ws.rs.core.Response.Status;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.osgi.service.log.Logger;
 import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.common.exception.SpecmateException;
@@ -22,15 +21,14 @@ import com.specmate.rest.RestResult;
  */
 public class CiraClient {
 
-	private Logger logger;
 	private RestClient client;
 
 	public CiraClient(String ciraUrl, LoggerFactory loggerFactory) {
 		client = new RestClient(ciraUrl, 10, loggerFactory.getLogger(RestClient.class));
-		logger = loggerFactory.getLogger(CiraClient.class);
 	}
 
 	public boolean isCausal(String sentence) throws SpecmateException {
+		sentence = sentence.trim();
 		JSONObject object = new JSONObject();
 		object.put("sentence", sentence);
 		object.put("language", "en");
@@ -43,8 +41,9 @@ public class CiraClient {
 
 	}
 
-	public List<Label> getLabels(String sentence) throws SpecmateInternalException {
-		List<Label> labels = new ArrayList<>();
+	public List<CiraLabel> getLabels(String sentence) throws SpecmateInternalException {
+		sentence = sentence.trim();
+		List<CiraLabel> labels = new ArrayList<>();
 		JSONObject object = new JSONObject();
 		object.put("sentence", sentence);
 		object.put("language", "en");
@@ -58,8 +57,8 @@ public class CiraClient {
 		for (int i = 0; i < jsonlabels.length(); i++) {
 			JSONObject jsonlabel = jsonlabels.getJSONObject(i);
 
-			Label label = new Label(jsonlabel.getInt("begin"), jsonlabel.getInt("end"), jsonlabel.getString("label"),
-					jsonlabel.getString("id"));
+			CiraLabel label = new CiraLabel(jsonlabel.getInt("begin"), jsonlabel.getInt("end"),
+					jsonlabel.getString("label"), jsonlabel.getString("id"));
 			labels.add(label);
 		}
 

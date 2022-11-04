@@ -48,14 +48,14 @@ public class CiraBasedModelGenerator implements ICEGModelGenerator {
 	@Override
 	public void createModel(CEGModel model) throws SpecmateException {
 		String text = model.getModelRequirements();
-		boolean causal = ciraClient.isCausal(text);
-		if (causal) {
-			List<Label> labels = ciraClient.getLabels(text);
-			CiraLabelToCEGTranslator translator = new CiraLabelToCEGTranslator();
-			translator.transform(model, text, labels);
-		} else {
-			// TODO: Can we get feedback to the user?
-		}
+//		boolean causal = ciraClient.isCausal(text);
+//		if (causal) {
+		List<CiraLabel> labels = ciraClient.getLabels(text);
+		CiraLabelToCEGTranslator translator = new CiraLabelToCEGTranslator();
+		translator.transform(model, text, labels);
+//		} else {
+		// TODO: Can we get feedback to the user?
+//		}
 
 	}
 

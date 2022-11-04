@@ -51,3 +51,9 @@ package-lock.json
 
 # Mac OS Files
 **/.DS_Store
+/tools/cira/bin
+/tools/cira/build
+/tools/cira/dist
+/tools/cira/venv
+/tools/cira/__pycache__
+/tools/cira/service.spec

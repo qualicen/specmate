@@ -5,20 +5,22 @@ import java.util.StringJoiner;
 
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
-import org.osgi.service.log.Logger;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 import com.specmate.common.exception.SpecmateException;
+import com.specmate.modelgeneration.api.ICEGModelGenerator;
 import com.specmate.nlp.api.ELanguage;
 import com.specmate.nlp.api.INLPService;
 import com.specmate.nlp.util.GermanSentenceUnfolder;
 
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 
+@Component(immediate = true, service = ICEGModelGenerator.class, property = { "service.ranking:Integer=50",
+		"languages=de" })
 public class GermanCEGFromRequirementGenerator extends CEGFromRequirementGenerator {
 
-	public GermanCEGFromRequirementGenerator(Logger logger, INLPService tagger) {
-		super(logger, tagger);
-	}
+	private INLPService tagger;
 
 	@Override
 	protected ICauseEffectPatternMatcher getPatternMatcher() {
@@ -63,4 +65,15 @@ public class GermanCEGFromRequirementGenerator extends CEGFromRequirementGenerat
 	protected ELanguage getLanguage() {
 		return ELanguage.DE;
 	}
+
+	@Reference
+	public void setTagger(INLPService tagger) {
+		this.tagger = tagger;
+	}
+
+	@Override
+	protected INLPService getTagger() {
+		return tagger;
+	}
+
 }

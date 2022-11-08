@@ -1,15 +1,17 @@
 package com.specmate.modelgeneration.legacy;
 
-import org.osgi.service.log.Logger;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
+import com.specmate.modelgeneration.api.ICEGModelGenerator;
 import com.specmate.nlp.api.ELanguage;
 import com.specmate.nlp.api.INLPService;
 
+@Component(immediate = true, service = ICEGModelGenerator.class, property = { "service.ranking:Integer=50",
+		"languages=en" })
 public class EnglishCEGFromRequirementGenerator extends CEGFromRequirementGenerator {
 
-	public EnglishCEGFromRequirementGenerator(Logger logger, INLPService tagger) {
-		super(logger, tagger);
-	}
+	private INLPService tagger;
 
 	@Override
 	protected ICauseEffectPatternMatcher getPatternMatcher() {
@@ -43,4 +45,15 @@ public class EnglishCEGFromRequirementGenerator extends CEGFromRequirementGenera
 	protected ELanguage getLanguage() {
 		return ELanguage.EN;
 	}
+
+	@Reference
+	public void setTagger(INLPService tagger) {
+		this.tagger = tagger;
+	}
+
+	@Override
+	protected INLPService getTagger() {
+		return tagger;
+	}
+
 }

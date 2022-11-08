@@ -5,6 +5,6 @@ import com.specmate.model.requirements.CEGModel;
 
 public interface ICEGModelGenerator {
 
-	void createModel(CEGModel model) throws SpecmateException;
+	boolean createModel(CEGModel model) throws SpecmateException;
 
 }

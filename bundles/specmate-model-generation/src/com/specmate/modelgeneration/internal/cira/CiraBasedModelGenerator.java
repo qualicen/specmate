@@ -18,7 +18,7 @@ import com.specmate.model.requirements.CEGModel;
 import com.specmate.modelgeneration.api.ICEGModelGenerator;
 import com.specmate.modelgeneration.internal.config.CiraConfig;
 
-@Component(immediate = true)
+@Component(immediate = true, property = { "service.ranking:Integer=100", "languages=en" })
 public class CiraBasedModelGenerator implements ICEGModelGenerator {
 
 	public static final String PID = "com.specmate.modelgeneration.CiraBasedModelGenerator";
@@ -46,17 +46,15 @@ public class CiraBasedModelGenerator implements ICEGModelGenerator {
 	}
 
 	@Override
-	public void createModel(CEGModel model) throws SpecmateException {
+	public boolean createModel(CEGModel model) throws SpecmateException {
 		String text = model.getModelRequirements();
+//		We could check for causality beforehand with the following statement.
+//		However this results sometimes in false negatives and therefore we avoid it here
 //		boolean causal = ciraClient.isCausal(text);
-//		if (causal) {
 		List<CiraLabel> labels = ciraClient.getLabels(text);
 		CiraLabelToCEGTranslator translator = new CiraLabelToCEGTranslator();
 		translator.transform(model, text, labels);
-//		} else {
-		// TODO: Can we get feedback to the user?
-//		}
-
+		return true;
 	}
 
 	@Reference

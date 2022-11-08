@@ -10,15 +10,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.tcas.Annotation;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.log.Logger;
-import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.common.exception.SpecmateException;
 import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.model.requirements.CEGModel;
 import com.specmate.model.requirements.CEGNode;
 import com.specmate.model.requirements.NodeType;
+import com.specmate.modelgeneration.api.ICEGModelGenerator;
 import com.specmate.nlp.api.ELanguage;
 import com.specmate.nlp.api.INLPService;
 import com.specmate.nlp.util.NLPUtil;
@@ -35,12 +33,8 @@ import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
  * @author Andreas Wehrle
  *
  */
-public abstract class CEGFromRequirementGenerator implements ICEGFromRequirementGenerator {
+public abstract class CEGFromRequirementGenerator implements ICEGModelGenerator {
 
-	/** Reference to the log service */
-	@Reference(service = LoggerFactory.class)
-	private Logger logger;
-	protected INLPService tagger;
 	private ICauseEffectPatternMatcher patternMatcher;
 	private IAndOrSplitter andOrSplitter;
 	private CEGCreation cegCreation;
@@ -51,10 +45,8 @@ public abstract class CEGFromRequirementGenerator implements ICEGFromRequirement
 	private int levelThreeX = 600;
 	private int levelThreeY = 150;
 
-	public CEGFromRequirementGenerator(Logger logger, INLPService tagger) {
+	public CEGFromRequirementGenerator() {
 		super();
-		this.logger = logger;
-		this.tagger = tagger;
 		patternMatcher = getPatternMatcher();
 		andOrSplitter = getAndOrSplitter();
 		cegCreation = new CEGCreation();
@@ -82,18 +74,24 @@ public abstract class CEGFromRequirementGenerator implements ICEGFromRequirement
 	 * @param text  text of the requirement
 	 * @return generated CEGModel
 	 */
-	public CEGModel createModel(CEGModel model, String text) throws SpecmateException {
+	@Override
+	public boolean createModel(CEGModel model) throws SpecmateException {
+		String text = model.getModelRequirements();
+		if (StringUtils.isEmpty(text)) {
+			return true;
+		}
 		text = preprocess(text);
-		JCas jcas = tagger.processText(text, getLanguage());
+		JCas jcas = getTagger().processText(text, getLanguage());
 		model.getContents().clear();
 		LinkedList<CEGNode> nodes = new LinkedList<CEGNode>();
 
 		for (Sentence sentence : JCasUtil.select(jcas, Sentence.class)) {
 			detectCausality(sentence, jcas, model, nodes);
 		}
-
-		return model;
+		return true;
 	}
+
+	protected abstract INLPService getTagger();
 
 	/**
 	 * To be overwritten by child classes
@@ -359,10 +357,5 @@ public abstract class CEGFromRequirementGenerator implements ICEGFromRequirement
 					.filter(c -> c.getChunkValue().contentEquals("NP")).findFirst();
 			return nounPhrase.isPresent() ? nounPhrase.get() : subjToken;
 		}).collect(Collectors.toList());
-	}
-
-	@Reference
-	void setNlptagging(INLPService tagger) {
-		this.tagger = tagger;
 	}
 }

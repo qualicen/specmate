@@ -81,7 +81,9 @@
 	org.json,\
 	specmate-config-api,\
 	osgi.core;version='6.0',\
-	osgi.cmpn;version='6.0'
+	osgi.cmpn;version='6.0',\
+	org.apache.logging.log4j.api;version='2.17',\
+	log4j.over.slf4j
 
 
 Private-Package: \
@@ -305,3 +307,4 @@ Export-Package: \
 	de.tudarmstadt.ukp.dkpro.core.api.featurepath,\
 	de.tudarmstadt.ukp.dkpro.core.api.io.sequencegenerator
 
+-privatepackage: org.apache.log4j

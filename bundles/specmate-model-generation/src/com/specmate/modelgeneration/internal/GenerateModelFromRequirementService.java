@@ -104,6 +104,7 @@ public class GenerateModelFromRequirementService extends RestServiceBase {
 						break;
 					}
 				} catch (Exception e) {
+					System.out.println("test");
 				}
 			}
 		}
@@ -114,7 +115,7 @@ public class GenerateModelFromRequirementService extends RestServiceBase {
 		List<String> languages;
 		Object languageProps = modelGeneratorRef.getProperty("languages");
 		if (languageProps instanceof String[]) {
-			languages = Arrays.asList((String) languageProps);
+			languages = Arrays.asList((String[]) languageProps);
 		} else {
 			languages = Arrays.asList((String) languageProps);
 		}

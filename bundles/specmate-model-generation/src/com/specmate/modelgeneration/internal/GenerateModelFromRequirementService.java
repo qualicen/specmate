@@ -100,11 +100,10 @@ public class GenerateModelFromRequirementService extends RestServiceBase {
 			if (modelGenerator != null) {
 				try {
 					boolean success = modelGenerator.createModel(model);
-					if (success) {
+					if (success && !model.getContents().isEmpty()) {
 						break;
 					}
 				} catch (Exception e) {
-					System.out.println("test");
 				}
 			}
 		}

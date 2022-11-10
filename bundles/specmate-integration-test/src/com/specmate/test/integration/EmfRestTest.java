@@ -67,7 +67,7 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 
 		// Give all services some time to startup before running the first test
 		if (firstTestRun) {
-			Thread.sleep(5000);
+			Thread.sleep(10000);
 			firstTestRun = false;
 		}
 	}

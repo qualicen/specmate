@@ -5,7 +5,6 @@ Test-Cases: \
 	com.specmate.test.integration.SearchTest,\
 	com.specmate.test.integration.CDOPersistencyShutdownTest,\
 	com.specmate.test.integration.CDOPersistencyValidationTest,\
-	com.specmate.test.integration.AdministrationTest,\
 	com.specmate.test.integration.CauseEffectPatternTest,\
 	com.specmate.test.integration.ModelGenerationTestDe,\
 	com.specmate.test.integration.NLPServiceTest,\

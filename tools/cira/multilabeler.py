@@ -59,7 +59,7 @@ class MultiLabelRoBERTaCustomModel(CustomModel):
 
     def define_model(self, model_to_use, num_labels):
         self.num_labels = num_labels
-        self.bert = RobertaModel.from_pretrained(model_to_use)    
+        self.bert = RobertaModel.from_pretrained(model_to_use, cache_dir="bin/")    
         self.dropout = nn.Dropout(self.hyperparams["dropout"])
         self.classifier = nn.Linear(self.bert.config.hidden_size, self.num_labels)
 
@@ -137,7 +137,7 @@ DROPOUT = 0.13780087432114646
 
 ##############Paramaters related to the BERT model type###################
 MODEL_TO_USE = 'roberta-base'
-TOKENIZER = RobertaTokenizerFast.from_pretrained(MODEL_TO_USE)
+TOKENIZER = RobertaTokenizerFast.from_pretrained(MODEL_TO_USE, cache_dir="bin/")
 MODEL_CLASS = MultiLabelRoBERTaCustomModel
 ###########################################################################
 

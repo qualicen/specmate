@@ -75,9 +75,12 @@ def delete_classification():
 if __name__ == '__main__':
     # parse arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument('--url', help='URL to be used to host the service', type=str, default='172.19.0.1')
+    parser.add_argument('--url', help='URL to be used to host the service', type=str, default='127.0.0.1')
     parser.add_argument('--port', help='Port to be used on the localhost for the service', type=int, default=8042)
+    parser.add_argument('--no-server-start', help='If set, inits the models but does not start the webserver', default=False, action="store_true")
     args = parser.parse_args()
 
-    # start the service
-    uvicorn.run(cira_api, host=args.url, port=args.port)
+	
+    if not args.no_server_start:
+	    # start the service
+	    uvicorn.run(cira_api, host=args.url, port=args.port)

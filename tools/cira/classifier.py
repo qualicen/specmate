@@ -25,7 +25,7 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 class CausalClassifier(nn.Module):
     def __init__(self, n_classes):
         super(CausalClassifier, self).__init__()
-        self.bert = BertModel.from_pretrained(PRE_TRAINED_MODEL_NAME)
+        self.bert = BertModel.from_pretrained(PRE_TRAINED_MODEL_NAME, cache_dir="bin/")
         self.drop = nn.Dropout(p=0.3)
         self.out = nn.Linear(self.bert.config.hidden_size, n_classes)
 
@@ -37,7 +37,7 @@ class CausalClassifier(nn.Module):
 class_names = ['not causal', 'causal']
 PRE_TRAINED_MODEL_NAME = 'bert-base-cased'
 
-tokenizer = BertTokenizer.from_pretrained(PRE_TRAINED_MODEL_NAME)
+tokenizer = BertTokenizer.from_pretrained(PRE_TRAINED_MODEL_NAME, cache_dir="bin/")
 
 model = CausalClassifier(len(class_names))
 #path = F"bertclassifier.bin"

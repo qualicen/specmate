@@ -46,6 +46,8 @@ jobs:
     - name: UI-Tests 
       run: |
         (cd bundles && ./gradlew --no-daemon export -x check)
-        (cd bundles/specmate-std-env/generated/distributions/executable/ && java -Xmx6000m -Djdk.crypto.KeyAgreement.legacyKDF=true -jar dev-specmate-all.jar &)    
+        unzip ui-tests/resources/database.zip -d bundles/specmate-std-env/generated/distributions/executable
+        cp ui-tests/resources/specmate-config.properties bundles/specmate-std-env/generated/distributions/executable/.
+        (cd bundles/specmate-std-env/generated/distributions/executable/ && java -Xmx6000m -Djdk.crypto.KeyAgreement.legacyKDF=true -jar dev-specmate-all.jar --configurationFile=specmate-config.properties &)    
         sleep 10    
         (cd ui-tests/ && mvn clean test)

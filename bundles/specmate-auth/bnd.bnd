@@ -15,7 +15,9 @@
 	specmate-auth-api;version=latest,\
 	specmate-metrics;version=latest,\
 	specmate-connectors-api;version=latest,\
-	specmate-export-api;version=latest
+	specmate-export-api;version=latest,\
+	org.eclipse.osgi,\
+	org.apache.commons.lang3
 Private-Package: \
 	com.specmate.auth.internal
 Export-Package: com.specmate.auth.config

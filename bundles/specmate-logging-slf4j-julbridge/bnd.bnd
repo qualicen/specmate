@@ -1,7 +1,6 @@
 Bundle-Version: 1.6.0.${tstamp}
 -buildpath: \
 	jul.to.slf4j,\
-	osgi.cmpn,\
 	osgi.core
 Bundle-Activator: com.specmate.logging.slf4j.julbridge.Activator
 Private-Package:  \

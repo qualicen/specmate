@@ -5,9 +5,11 @@ import java.util.stream.Collectors;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 import com.specmate.auth.api.IAuthenticationService;
+import com.specmate.auth.api.IGlobalUserService;
 import com.specmate.auth.api.ISessionService;
 import com.specmate.common.exception.SpecmateAuthorizationException;
 import com.specmate.common.exception.SpecmateException;
@@ -23,8 +25,15 @@ import com.specmate.usermodel.UserSession;
  */
 @Component(immediate = true, service = IAuthenticationService.class)
 public class AuthenticationServiceImpl implements IAuthenticationService {
+
+	@Reference
 	private ISessionService sessionService;
+
+	@Reference(policyOption = ReferencePolicyOption.GREEDY)
 	private IProjectService projectService;
+
+	@Reference(cardinality = ReferenceCardinality.OPTIONAL)
+	private IGlobalUserService globalUserService;
 
 	@Override
 	public UserSession authenticate(String username, String password, String projectname) throws SpecmateException {
@@ -32,27 +41,43 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 		if (project == null) {
 			throw new SpecmateAuthorizationException("Project " + projectname + " does not exist.");
 		}
-		Set<IProject> authenticatedProjects = project.getConnector().authenticate(username, password);
 
-		if (!authenticatedProjects.contains(project)) {
-			throw new SpecmateAuthorizationException("User " + username + " not authenticated.");
+		// Check if this is a global user
+		if (globalUserService != null) {
+			if (globalUserService.authenticate(username, password)) {
+				Set<String> allProjectIds = projectService.getProjectIds();
+				return sessionService.create(AccessRights.ALL, AccessRights.ALL, username, null, allProjectIds);
+
+			}
 		}
 
-		// TODO Access rights (source and target) are not handled yet!!!!
-		// This will be removed in future anyways.
-		AccessRights targetRights = retrieveTargetAccessRights(project, username, password);
+		if (project.getConnector() != null) {
+			// No global user, so check with all projects if a project user
+			Set<IProject> authenticatedProjects = project.getConnector().authenticate(username, password);
 
-		try {
+			if (!authenticatedProjects.contains(project)) {
+				throw new SpecmateAuthorizationException("User " + username + " not authenticated.");
+			}
 
-			Set<String> authenticatedProjectNames = authenticatedProjects.stream().map(p -> p.getID())
-					.collect(Collectors.toSet());
-			return sessionService.create(AccessRights.ALL, targetRights, username, password, authenticatedProjectNames);
+			// TODO Access rights (source and target) are not handled yet!!!!
+			// This will be removed in future anyways.
+			AccessRights targetRights = retrieveTargetAccessRights(project, username, password);
 
-		} catch (SpecmateException e) {
-			// Something went wrong when creating the session. We act as if the
-			// Authorization failed
-			throw new SpecmateAuthorizationException("Could not create a user session. Reason: " + e.getMessage(), e);
+			try {
+
+				Set<String> authenticatedProjectNames = authenticatedProjects.stream().map(p -> p.getID())
+						.collect(Collectors.toSet());
+				return sessionService.create(AccessRights.ALL, targetRights, username, password,
+						authenticatedProjectNames);
+
+			} catch (SpecmateException e) {
+				// Something went wrong when creating the session. We act as if the
+				// Authorization failed
+				throw new SpecmateAuthorizationException("Could not create a user session. Reason: " + e.getMessage(),
+						e);
+			}
 		}
+		throw new SpecmateAuthorizationException("User " + username + " not authenticated.");
 	}
 
 	/**
@@ -98,16 +123,6 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 	@Override
 	public AccessRights getTargetAccessRights(String token) throws SpecmateException {
 		return sessionService.getTargetAccessRights(token);
-	}
-
-	@Reference
-	public void setSessionService(ISessionService sessionService) {
-		this.sessionService = sessionService;
-	}
-
-	@Reference(policyOption = ReferencePolicyOption.GREEDY)
-	public void setProjectService(IProjectService projectService) {
-		this.projectService = projectService;
 	}
 
 	private AccessRights retrieveTargetAccessRights(IProject project, String username, String password) {

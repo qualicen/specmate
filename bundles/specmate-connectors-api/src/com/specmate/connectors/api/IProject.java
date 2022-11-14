@@ -1,7 +1,5 @@
 package com.specmate.connectors.api;
 
-import java.util.List;
-
 import com.specmate.export.api.IExporter;
 
 public interface IProject {
@@ -21,11 +19,5 @@ public interface IProject {
 	 *         <code>null</code>.
 	 */
 	IExporter getExporter();
-
-	/**
-	 * @return the list of defined library folders for the project, or
-	 *         <code>null</code>.
-	 */
-	List<String> getLibraryFolders();
 
 }

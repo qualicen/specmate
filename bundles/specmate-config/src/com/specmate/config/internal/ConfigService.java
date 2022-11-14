@@ -202,11 +202,13 @@ public class ConfigService implements IConfigService {
 		commandLineArguments = l.toArray(new String[0]);
 	}
 
+	/** Adds the given entries to the config */
 	@Override
 	public void addUpdateConfigurationProperties(Map<String, String> entries) {
 		configuration.putAll(entries);
 	}
 
+	/** Adds a single entry to the config */
 	@Override
 	public void addUpdateConfigurationProperty(String key, String value) {
 		configuration.put(key, value);

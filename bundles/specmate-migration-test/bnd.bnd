@@ -24,7 +24,6 @@ Test-Cases: \
 	specmate-auth;version=latest,\
 	specmate-config;version=latest,\
 	specmate-connectors;version=latest,\
-	specmate-dummy-data;version=latest,\
 	specmate-emfjson;version=latest,\
 	specmate-emfrest;version=latest,\
 	specmate-emfrest-api;version=latest,\

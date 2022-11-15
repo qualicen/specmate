@@ -1,7 +1,5 @@
 package com.specmate.connectors.internal;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -14,7 +12,6 @@ import org.osgi.service.component.annotations.ReferenceCardinality;
 import com.specmate.common.exception.SpecmateInternalException;
 import com.specmate.connectors.api.IConnector;
 import com.specmate.connectors.api.IProject;
-import com.specmate.connectors.api.IProjectConfigService;
 import com.specmate.connectors.config.ProjectConfigService;
 import com.specmate.export.api.IExporter;
 import com.specmate.model.administration.ErrorCode;
@@ -31,9 +28,6 @@ public class ProjectImpl implements IProject {
 	/** The exporter for the project */
 	private IExporter exporter = null;
 
-	/** Configured library folders */
-	private List<String> libraryFolders = null;
-
 	@Activate
 	public void activate(Map<String, Object> properties) throws SpecmateInternalException {
 		Object obj = properties.get(ProjectConfigService.KEY_PROJECT_ID);
@@ -47,11 +41,6 @@ public class ProjectImpl implements IProject {
 
 		if (getExporter() != null) {
 			getExporter().setProjectName(id);
-		}
-
-		obj = properties.get(IProjectConfigService.KEY_PROJECT_LIBRARY_FOLDERS);
-		if (obj != null && obj instanceof String[]) {
-			libraryFolders = Arrays.asList((String[]) obj);
 		}
 
 	}
@@ -85,10 +74,4 @@ public class ProjectImpl implements IProject {
 	public IExporter getExporter() {
 		return exporter;
 	}
-
-	@Override
-	public List<String> getLibraryFolders() {
-		return libraryFolders;
-	}
-
 }

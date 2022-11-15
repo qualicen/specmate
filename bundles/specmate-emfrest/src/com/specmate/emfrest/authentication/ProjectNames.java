@@ -31,7 +31,7 @@ public class ProjectNames extends RestServiceBase {
 
 	@Override
 	public RestResult<?> get(Object object, MultivaluedMap<String, String> queryParams, String token) {
-		return new RestResult<>(Response.Status.OK, new ArrayList<>(projectService.getProjectNames()));
+		return new RestResult<>(Response.Status.OK, new ArrayList<>(projectService.getProjectIds()));
 	}
 
 	@Reference

@@ -32,7 +32,7 @@ public class CiraClient {
 		JSONObject object = new JSONObject();
 		object.put("sentence", sentence);
 		object.put("language", "en");
-		RestResult<JSONObject> result = client.post("/api/classify", object);
+		RestResult<JSONObject> result = client.post("classify", object);
 		if (result.getResponse().getStatus() != Status.OK.getStatusCode()) {
 			throw new SpecmateInternalException(ErrorCode.INTERNAL_PROBLEM, "Error when accessing Cira Api.");
 		}
@@ -47,7 +47,7 @@ public class CiraClient {
 		JSONObject object = new JSONObject();
 		object.put("sentence", sentence);
 		object.put("language", "en");
-		RestResult<JSONObject> result = client.post("/api/label", object);
+		RestResult<JSONObject> result = client.post("label", object);
 		if (result.getResponse().getStatus() != Status.OK.getStatusCode()) {
 			throw new SpecmateInternalException(ErrorCode.INTERNAL_PROBLEM, "Error when accessing Cira Api.");
 		}

@@ -7,7 +7,6 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.log.Logger;
 import org.osgi.service.log.LoggerFactory;
 
 import com.specmate.common.exception.SpecmateException;
@@ -24,9 +23,11 @@ public class CiraBasedModelGenerator implements ICEGModelGenerator {
 	public static final String PID = "com.specmate.modelgeneration.CiraBasedModelGenerator";
 
 	CiraClient ciraClient;
-	private Logger logger;
+
+	@Reference
 	private LoggerFactory loggerFactory;
 
+	@Reference
 	private IConfigService configService;
 
 	public void activate() throws SpecmateException {
@@ -55,17 +56,6 @@ public class CiraBasedModelGenerator implements ICEGModelGenerator {
 		CiraLabelToCEGTranslator translator = new CiraLabelToCEGTranslator();
 		translator.transform(model, text, labels);
 		return true;
-	}
-
-	@Reference
-	public void setLoggerFactory(LoggerFactory loggerFactory) {
-		this.loggerFactory = loggerFactory;
-		logger = loggerFactory.getLogger(CiraBasedModelGenerator.class);
-	}
-
-	@Reference
-	public void setConfigService(IConfigService configService) {
-		this.configService = configService;
 	}
 
 }

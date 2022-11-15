@@ -9,12 +9,15 @@ import javax.ws.rs.core.Response.Status;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import com.specmate.model.base.BasePackage;
 import com.specmate.model.batch.BatchPackage;
 import com.specmate.rest.RestResult;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CrudTest extends EmfRestTest {
 
 	public CrudTest() throws Exception {

@@ -15,6 +15,7 @@ import org.osgi.service.log.LoggerFactory;
 import org.osgi.util.tracker.ServiceTracker;
 
 import com.specmate.auth.api.IAuthenticationService;
+import com.specmate.common.UUIDUtil;
 import com.specmate.connectors.api.IProjectService;
 import com.specmate.emfjson.EMFJsonSerializer;
 import com.specmate.model.base.BasePackage;
@@ -41,7 +42,6 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 	static UserSession session;
 	static IProjectService projectService;
 
-	private static int counter = 0;
 	private static boolean firstTestRun = true;
 
 	public EmfRestTest() throws Exception {
@@ -67,7 +67,7 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 
 		// Give all services some time to startup before running the first test
 		if (firstTestRun) {
-			Thread.sleep(5000);
+			Thread.sleep(10000);
 			firstTestRun = false;
 		}
 	}
@@ -121,12 +121,12 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 	}
 
 	protected JSONObject createTestFolder() {
-		String folderName = "TestFolder" + counter++;
+		String folderName = "TestFolder" + UUIDUtil.generateUUID();
 		return createTestFolder(folderName, folderName);
 	}
 
 	protected JSONObject createTestRequirement() {
-		String requirementsName = "TestRequirement" + counter++;
+		String requirementsName = "TestRequirement" + UUIDUtil.generateUUID();
 		return createTestRequirement(requirementsName);
 	}
 
@@ -135,7 +135,7 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 		requirement.put(NSURI_KEY, RequirementsPackage.eNS_URI);
 		requirement.put(ECLASS, RequirementsPackage.Literals.REQUIREMENT.getName());
 		requirement.put(BasePackage.Literals.INAMED__NAME.getName(), requirementsName);
-		requirement.put(BasePackage.Literals.IID__ID.getName(), requirementsName);
+		requirement.put(BasePackage.Literals.IID__ID.getName(), UUIDUtil.generateUUID());
 		requirement.put(BasePackage.Literals.IRECYCLED__RECYCLED.getName(), false);
 		requirement.put(BasePackage.Literals.IRECYCLED__HAS_RECYCLED_CHILDREN.getName(), false);
 		requirement.put(BasePackage.Literals.IDESCRIBED__DESCRIPTION.getName(), "description");
@@ -154,7 +154,7 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 	}
 
 	protected JSONObject createTestCegModel() {
-		String cegName = "TestCeg" + counter++;
+		String cegName = "TestCeg" + UUIDUtil.generateUUID();
 		return createTestCegModel(cegName);
 	}
 
@@ -170,7 +170,7 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 	}
 
 	protected JSONObject createTestProcessModel() {
-		String processName = "TestProcess" + counter++;
+		String processName = "TestProcess" + UUIDUtil.generateUUID();
 		JSONObject process = new JSONObject();
 		process.put(NSURI_KEY, ProcessesPackage.eNS_URI);
 		process.put(ECLASS, ProcessesPackage.Literals.PROCESS.getName());
@@ -182,13 +182,13 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 	}
 
 	protected JSONObject createTestCegNode() {
-		String variable = "Variable" + counter++;
-		String condition = "Condition" + counter++;
+		String variable = "Variable" + UUIDUtil.generateUUID();
+		String condition = "Condition" + UUIDUtil.generateUUID();
 		return createTestCegNode(variable, condition, NodeType.OR.getLiteral());
 	}
 
 	protected JSONObject createTestCegNode(String variable, String condition, String operation) {
-		String id = "TestCegNode" + counter++;
+		String id = "TestCegNode" + UUIDUtil.generateUUID();
 		JSONObject cegNode = new JSONObject();
 		cegNode.put(NSURI_KEY, RequirementsPackage.eNS_URI);
 		cegNode.put(ECLASS, RequirementsPackage.Literals.CEG_NODE.getName());
@@ -203,7 +203,7 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 	}
 
 	protected JSONObject createTestStartNode() {
-		String nodeName = "TestStartNode" + counter++;
+		String nodeName = "TestStartNode" + UUIDUtil.generateUUID();
 		JSONObject startNode = new JSONObject();
 		startNode.put(NSURI_KEY, ProcessesPackage.eNS_URI);
 		startNode.put(ECLASS, ProcessesPackage.Literals.PROCESS_START.getName());
@@ -215,7 +215,7 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 	}
 
 	protected JSONObject createTestEndNode() {
-		String nodeName = "TestEndNode" + counter++;
+		String nodeName = "TestEndNode" + UUIDUtil.generateUUID();
 		JSONObject endNode = new JSONObject();
 		endNode.put(NSURI_KEY, ProcessesPackage.eNS_URI);
 		endNode.put(ECLASS, ProcessesPackage.Literals.PROCESS_END.getName());
@@ -227,7 +227,7 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 	}
 
 	protected JSONObject createTestStepNode() {
-		String nodeName = "TestActivityNode" + counter++;
+		String nodeName = "TestActivityNode" + UUIDUtil.generateUUID();
 		JSONObject stepNode = new JSONObject();
 		stepNode.put(NSURI_KEY, ProcessesPackage.eNS_URI);
 		stepNode.put(ECLASS, ProcessesPackage.Literals.PROCESS_STEP.getName());
@@ -239,7 +239,7 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 	}
 
 	protected JSONObject createTestDecisionNode() {
-		String nodeName = "TestDecisionNode" + counter++;
+		String nodeName = "TestDecisionNode" + UUIDUtil.generateUUID();
 		JSONObject decisionNode = new JSONObject();
 		decisionNode.put(NSURI_KEY, ProcessesPackage.eNS_URI);
 		decisionNode.put(ECLASS, ProcessesPackage.Literals.PROCESS_DECISION.getName());
@@ -251,7 +251,7 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 	}
 
 	protected JSONObject createTestCEGConnection(JSONObject node1, JSONObject node2, boolean isNegated) {
-		String connectionName = "TestConnection" + counter++;
+		String connectionName = "TestConnection" + UUIDUtil.generateUUID();
 		JSONObject connection = new JSONObject();
 		connection.put(NSURI_KEY, RequirementsPackage.eNS_URI);
 		connection.put(ECLASS, RequirementsPackage.Literals.CEG_CONNECTION.getName());
@@ -266,7 +266,7 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 	}
 
 	protected JSONObject createTestStepConnection(JSONObject node1, JSONObject node2) {
-		String connectionName = "TestProcessStepConnection" + counter++;
+		String connectionName = "TestProcessStepConnection" + UUIDUtil.generateUUID();
 		JSONObject connection = new JSONObject();
 		connection.put(NSURI_KEY, ProcessesPackage.eNS_URI);
 		connection.put(ECLASS, ProcessesPackage.Literals.PROCESS_CONNECTION.getName());
@@ -282,7 +282,7 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 	}
 
 	protected JSONObject createTestDecisionConnection(JSONObject node1, JSONObject node2) {
-		String connectionName = "TestProcessDecisionConnection" + counter++;
+		String connectionName = "TestProcessDecisionConnection" + UUIDUtil.generateUUID();
 		JSONObject connection = new JSONObject();
 		connection.put(NSURI_KEY, ProcessesPackage.eNS_URI);
 		connection.put(ECLASS, ProcessesPackage.Literals.PROCESS_CONNECTION.getName());
@@ -294,12 +294,13 @@ public abstract class EmfRestTest extends IntegrationTestBase {
 		connection.put(BasePackage.Literals.IMODEL_CONNECTION__TARGET.getName(), EmfRestTestUtil.proxy(node2));
 		connection.put(ProcessesPackage.Literals.PROCESS_CONNECTION__LABEL_X.getName(), 0);
 		connection.put(ProcessesPackage.Literals.PROCESS_CONNECTION__LABEL_Y.getName(), 0);
-		connection.put(ProcessesPackage.Literals.PROCESS_CONNECTION__CONDITION.getName(), "condition" + counter++);
+		connection.put(ProcessesPackage.Literals.PROCESS_CONNECTION__CONDITION.getName(),
+				"condition" + UUIDUtil.generateUUID());
 		return connection;
 	}
 
 	protected JSONObject createTestTestSpecification() {
-		String testSpecName = "TestSpecification" + counter++;
+		String testSpecName = "TestSpecification" + UUIDUtil.generateUUID();
 		JSONObject testSpecification = new JSONObject();
 		testSpecification.put(NSURI_KEY, TestspecificationPackage.eNS_URI);
 		testSpecification.put(ECLASS, TestspecificationPackage.Literals.TEST_SPECIFICATION.getName());

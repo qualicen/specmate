@@ -46,6 +46,7 @@ then
       sed -i "s/\"version\": \"[^\"]*\"/\"version\": \"$VERSION\"/g" ../web/package.json
 
       cd ../web
+      npm install
       npm run build-prod
       cd $DIR
 

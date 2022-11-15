@@ -21,11 +21,21 @@
 	specmate-config-api;version=latest,\
 	specmate-xtext;version=latest,\
 	specmate-objectif,\
-	org.eclipse.xtext
-Private-Package: \
-	com.specmate.modelgeneration,\
-	com.specmate.modelgeneration.legacy
+	org.eclipse.xtext,\
+	org.json,\
+	org.codehaus.jettison.jettison
+Private-Package: com.specmate.modelgeneration
 -privatepackage: \
-	com.specmate.modelgeneration.stages,\
-	com.specmate.modelgeneration.stages.processors,\
-	com.specmate.modelgeneration.stages.graph
+	com.specmate.modelgeneration.legacy.stages,\
+	com.specmate.modelgeneration.internal,\
+	com.specmate.modelgeneration.internal.config,\
+	com.specmate.modelgeneration.internal.cira,\
+	com.specmate.modelgeneration.internal.legacy,\
+	com.specmate.modelgeneration.internal.legacy.util,\
+	com.specmate.modelgeneration.internal.legacy.rulebased,\
+	com.specmate.modelgeneration.internal.legacy.pseudocode,\
+	com.specmate.modelgeneration.internal.legacy.patternbased.stages.graph,\
+	com.specmate.modelgeneration.internal.legacy.patternbased.stages.processors,\
+	com.specmate.modelgeneration.internal.legacy.patternbased.stages,\
+	com.specmate.modelgeneration.internal.legacy.patternbased
+Export-Package: com.specmate.modelgeneration.api

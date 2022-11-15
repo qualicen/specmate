@@ -367,7 +367,7 @@ public class JiraConnector extends DetailsService implements IConnector, IRestSe
 		List<String> accessibleJiraProjectNames = JiraUtil.getProjects(serverUrl, username, password);
 		Set<IProject> accessibleSpecmateProjectNames = new HashSet<>();
 
-		for (String specmateProjectName : projectService.getProjectNames()) {
+		for (String specmateProjectName : projectService.getProjectIds()) {
 
 			IProject specmateProject = projectService.getProject(specmateProjectName);
 			IConnector connector = specmateProject.getConnector();

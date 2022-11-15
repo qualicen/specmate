@@ -19,7 +19,6 @@
 	osgi.identity;filter:='(osgi.identity=org.eclipse.equinox.metatype)',\
 	osgi.identity;filter:='(osgi.identity=specmate-model-support)',\
 	osgi.identity;filter:='(osgi.identity=specmate-ui-core)',\
-	osgi.identity;filter:='(osgi.identity=specmate-dummy-data)',\
 	osgi.identity;filter:='(osgi.identity=specmate-config)',\
 	osgi.identity;filter:='(osgi.identity=specmate-connectors)',\
 	osgi.identity;filter:='(osgi.identity=specmate-testspecification)',\
@@ -163,7 +162,6 @@
 	specmate-connectors-api;version=snapshot,\
 	specmate-dbprovider-api;version=snapshot,\
 	specmate-dbprovider-h2;version=snapshot,\
-	specmate-dummy-data;version=snapshot,\
 	specmate-emfjson;version=snapshot,\
 	specmate-emfrest;version=snapshot,\
 	specmate-emfrest-api;version=snapshot,\

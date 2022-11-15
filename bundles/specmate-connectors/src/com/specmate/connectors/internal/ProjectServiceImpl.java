@@ -24,7 +24,7 @@ public class ProjectServiceImpl implements IProjectService {
 	}
 
 	@Override
-	public Set<String> getProjectNames() {
+	public Set<String> getProjectIds() {
 		return Collections.unmodifiableSet(projects.keySet());
 	}
 

@@ -3,7 +3,6 @@ package com.specmate.test.integration.support;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -87,8 +86,4 @@ public class DummyProject implements IProject {
 		};
 	}
 
-	@Override
-	public List<String> getLibraryFolders() {
-		return null;
-	}
 }

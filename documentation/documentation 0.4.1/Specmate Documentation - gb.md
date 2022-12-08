@@ -43,6 +43,7 @@
         - [Type (And/Or)](#type-andor)
           - [Excursus: Exclusive Or](#excursus-exclusive-or)
         - [Validate](#validate)
+  - [Boundary Value Analysis](#boundary-value-analysis)
   - [Equivalence class analysis](#equivalence-class-analysis)
       - [Motivation and goal](#motivation-and-goal)
         - [Example 1](#example-1)
@@ -418,6 +419,14 @@ If you are creating or have created a CEG model or process model, you can see an
 Specmate displays the nodes differently depending on their position in the CEG model, as shown in the following figure:
 
 ![](Images_eng/node-types.png "Node types")
+
+## Boundary Value Analysis
+
+Often, errors occur at value boundaries. A system might enter a special state if a variable transgresses the fictive va
+
+Errors often occur precisely at the boundaries of value ranges. For example, if a variable exceeds the notional critical value of 100, a system might enter a special state. In this case, it is advisable to test the values 99, 100, and 101 for this variable to verify correct behavior. Specmate automatically generates test cases with the requested values as soon as the limit analysis is activated:
+
+![](https://user-images.githubusercontent.com/23170307/206422043-66838427-d2ba-4c2d-b868-238b92c5d46f.png)
 
 ## Equivalence class analysis
 

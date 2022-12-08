@@ -425,6 +425,11 @@ Specmate stellt die Knoten optisch unterschiedlich dar abhängig davon, welche P
 
 ![](Images_ger/Knotentypen.png "Knotentypen")
 
+## Grenzwertanalyse
+
+Fehler treten häufig genau an den Grenzen von Wertebereichen auf. Beispielsweise könnte ein System, wenn eine Variable den fiktiven kritischen Wert von 100 übersteigt, in einen besonderen Zustand kommen. In diesem Fall ist es ratsam, die Werte 99, 100 und 101 für diese Variable abzutesten, um das korrekte Verhalten zu prüfen. Specmate generiert automatisch Testfälle mit den gefragten Werten, sobald die Grenzwertanalyse aktiviert ist:
+![](https://user-images.githubusercontent.com/23170307/206421340-26414451-b955-4f83-987f-c555ecb0f1f7.png)
+
 ## Äquivalenzklassenanalyse
 
 ### Motivation und Ziel

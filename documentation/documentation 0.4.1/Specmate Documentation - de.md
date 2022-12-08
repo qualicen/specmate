@@ -43,6 +43,7 @@
 	- [Typ And/Or](#typ-andor)
 		- [Exkurs: Exklusives Oder](#exkurs-exklusives-oder)
 	- [Validieren](#validieren)
+- [Grenzwertanalyse](#grenzwertanalyse)
 - [Äquivalenklassenanalyse](#äquivalenzklassenanalyse)
 	- [Motivation und Ziel](#motivation-und-ziel)
 		- [Beispiel 1](#beispiel-1)

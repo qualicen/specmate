@@ -428,6 +428,8 @@ Errors often occur precisely at the boundaries of value ranges. For example, if 
 
 ![](https://user-images.githubusercontent.com/23170307/206422043-66838427-d2ba-4c2d-b868-238b92c5d46f.png)
 
+In order for the boudary values to be recognized, `> 100`, `< 100`, `>= 100` or `<= 100` must be specified in the value of the variable for a boundary value of 100.
+
 ## Equivalence class analysis
 
 ### Motivation and goal
